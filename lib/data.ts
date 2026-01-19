@@ -171,8 +171,8 @@ export const trips: Trip[] = [
 export const teamMembers: TeamMember[] = [
   {
     id: '1',
-    name: 'Sarah Chen',
-    role: 'Founder & Lead Guide',
+    name: 'April Contreras',
+    role: 'Founder',
     bio: 'Former search and rescue volunteer with 15 years of backcountry experience. Certified Wilderness First Responder.',
     favoriteTrail: 'Enchantments Traverse, WA',
     photo: '/images/team/sarah.jpg',

@@ -12,7 +12,7 @@ export function TutorialStep({
       <Checkbox
         id={title}
         name={title}
-        className={`absolute top-[3px] mr-2 peer`}
+        className={`absolute top-0.75 mr-2 peer`}
       />
       <label
         htmlFor={title}
