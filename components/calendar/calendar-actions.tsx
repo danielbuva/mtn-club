@@ -2,16 +2,13 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import type { MembershipState } from '@/lib/memberships/types'
-
 type CalendarActionsProps = {
-  membershipState: MembershipState
+  isMember: boolean
+  isLeader: boolean
 }
 
-export function CalendarActions({ membershipState }: CalendarActionsProps) {
-  const { isLeader, membershipId } = membershipState
-
-  if (!membershipId) {
+export function CalendarActions({ isMember, isLeader }: CalendarActionsProps) {
+  if (!isMember) {
     return null
   }
 

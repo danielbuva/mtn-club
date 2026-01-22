@@ -4,8 +4,9 @@ import { getMembershipState } from '@/lib/memberships/server'
 export default async function CalendarNewPage({
   searchParams,
 }: {
-  searchParams?: { type?: string }
+  searchParams?: Promise<{ type?: string }>
 }) {
   const membershipState = await getMembershipState()
-  return <NewEventPage initialType={searchParams?.type} membershipState={membershipState} />
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  return <NewEventPage initialType={resolvedSearchParams?.type} membershipState={membershipState} />
 }

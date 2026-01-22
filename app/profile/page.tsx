@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
-import { ProfileDataBoundary } from '@/app/profile/ProfileDataBoundary'
-import { ProfileSkeleton } from '@/components/profile/profile-skeleton'
+import { ProfilePageContent } from '@/app/profile/ProfilePageContent'
+import { ProfilePageFallback } from '@/components/profile/profile-page-fallback'
 
-export default function Profile() {
+export default function ProfilePage() {
   return (
-    <Suspense fallback={<ProfileSkeleton />}>
-      <ProfileDataBoundary />
+    <Suspense fallback={<ProfilePageFallback />}>
+      <ProfilePageContent />
     </Suspense>
   )
 }

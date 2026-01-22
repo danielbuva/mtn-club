@@ -1,15 +1,10 @@
-import { Suspense } from 'react'
-import { CalendarSkeleton } from '@/components/calendar/calendar-skeleton'
-import { CalendarDataBoundary } from '@/app/calendar/CalendarDataBoundary'
+import { CalendarPageContent } from '@/app/calendar/CalendarPageContent'
 
-export default function Calendar({
+export default async function CalendarPage({
   searchParams,
 }: {
-  searchParams: Promise<{ month?: string }>
+  searchParams?: Promise<{ month?: string }>
 }) {
-  return (
-    <Suspense fallback={<CalendarSkeleton />}>
-      <CalendarDataBoundary searchParams={searchParams} />
-    </Suspense>
-  )
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  return <CalendarPageContent searchParams={resolvedSearchParams} />
 }

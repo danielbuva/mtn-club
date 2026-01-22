@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Instagram, Mail, Mountain, Twitter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { MemberCTA } from '@/components/member-cta'
 
 export function Footer() {
   return (
@@ -70,10 +71,8 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-sm mb-4">Membership</h3>
             <ul className="space-y-3">
-              <li>
-                <Link href="/membership" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Become a Member
-                </Link>
+              <li className="empty:hidden">
+                <MemberCTA variant="link" />
               </li>
               <li>
                 <Link href="/membership#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

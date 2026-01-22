@@ -1,12 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Menu, Moon, Mountain, Sun } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { BadgeCheck, Calendar, LogOut, Menu, Moon, Mountain, Sun, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
+import { useViewer } from '@/components/auth/viewer-provider'
+import { MemberCTA } from '@/components/member-cta'
+import { createClient } from '@/lib/supabase/client'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -15,9 +27,27 @@ const navLinks = [
   { href: '/about', label: 'About' },
 ]
 
+const getInitials = (value: string | null | undefined) => {
+  if (!value) return 'MC'
+  const parts = value.trim().split(/\s+/).filter(Boolean)
+  const initials = parts.slice(0, 2).map((part) => part[0]).join('')
+  return initials.toUpperCase() || 'MC'
+}
+
 export function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const { theme, setTheme } = useTheme()
+  const viewer = useViewer()
+
+  const profileName = viewer.member?.fullName ?? viewer.email ?? 'Member'
+  const profileInitials = getInitials(profileName)
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/auth/login')
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -62,11 +92,61 @@ export function Header() {
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            <Link href="/membership" className="hidden sm:block">
-              <Button className="rounded-xl font-medium">
-                Become a Member
-              </Button>
-            </Link>
+            {viewer.isMember ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={viewer.member?.avatarUrl ?? undefined} alt={profileName} />
+                      <AvatarFallback>{profileInitials}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="flex flex-col gap-0.5">
+                    <span className="text-sm font-semibold">{profileName}</span>
+                    {viewer.email && (
+                      <span className="text-xs text-muted-foreground font-normal">
+                        {viewer.email}
+                      </span>
+                    )}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <User className="h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/membership">
+                      <BadgeCheck className="h-4 w-4" />
+                      Membership
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/calendar">
+                      <Calendar className="h-4 w-4" />
+                      Trips
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={(event) => {
+                      event.preventDefault()
+                      void handleSignOut()
+                    }}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden sm:block">
+                <MemberCTA className="rounded-xl font-medium" />
+              </div>
+            )}
 
             {/* Mobile Menu */}
             <Sheet>
@@ -92,11 +172,22 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                  <Link href="/membership" className="mt-4">
-                    <Button className="w-full rounded-xl font-medium">
-                      Become a Member
-                    </Button>
-                  </Link>
+                  {viewer.isMember && (
+                    <Link
+                      href="/profile"
+                      className={cn(
+                        'px-4 py-3 rounded-xl text-base font-medium transition-colors',
+                        pathname === '/profile'
+                          ? 'text-foreground bg-secondary'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                      )}
+                    >
+                      Profile
+                    </Link>
+                  )}
+                  <div className="mt-4 empty:hidden">
+                    <MemberCTA className="w-full rounded-xl font-medium" />
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>

@@ -1,9 +1,8 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { ArrowRight, Heart, Leaf, Mountain, Shield, Sparkles, Users } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { Button } from '@/components/ui/button'
+import { MemberCTA } from '@/components/member-cta'
 import { Card, CardContent } from '@/components/ui/card'
 
 const values = [
@@ -234,12 +233,11 @@ export default function AboutPage() {
             <p className="text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
               Become a member today for just $25/year and unlock access to all our trips, workshops, and community events.
             </p>
-            <Link href="/membership">
-              <Button size="lg" className="rounded-xl gap-2 text-lg px-8">
-                Become a Member
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </Link>
+            <MemberCTA
+              size="lg"
+              className="rounded-xl gap-2 text-lg px-8"
+              icon={<ArrowRight className="w-5 h-5" />}
+            />
           </div>
         </section>
       </main>

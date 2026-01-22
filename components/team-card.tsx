@@ -8,25 +8,15 @@ interface TeamCardProps {
   member: TeamMember
 }
 
-const avatarImages = [
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop',
-]
 
 export function TeamCard({ member }: TeamCardProps) {
-  const avatarIndex = parseInt(member.id) - 1
-  const avatar = avatarImages[avatarIndex % avatarImages.length]
 
   return (
     <Card className="group overflow-hidden bg-card border-border/50 hover:border-primary/20 hover:shadow-lg transition-all">
       {/* Photo */}
       <div className="relative aspect-square overflow-hidden bg-muted">
         <Image
-          src={avatar || "/placeholder.svg"}
+          src={"/placeholder.svg"}
           alt={member.name}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"

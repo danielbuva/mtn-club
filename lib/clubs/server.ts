@@ -1,9 +1,9 @@
-import { unstable_noStore } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { fetchPrimaryClubId } from '@/lib/clubs/queries'
+import { connection } from 'next/server'
 
 export async function getPrimaryClubId(): Promise<string | null> {
-  unstable_noStore()
+  connection()
   const supabase = await createClient()
 
   try {

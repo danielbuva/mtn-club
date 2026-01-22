@@ -1,9 +1,9 @@
 import { endOfMonth, startOfMonth } from 'date-fns'
-import { unstable_noStore } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { eventToCalendarTrip } from '@/lib/events/mappers'
 import { fetchEventsInRange, fetchPastTrips, fetchTripTeasersInRange } from '@/lib/events/queries'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
+import { connection } from 'next/server'
 
 type CalendarDataParams = {
   currentDate: Date
@@ -21,7 +21,7 @@ export async function getCalendarData({
   clubId,
   isMemberOrLeader,
 }: CalendarDataParams): Promise<CalendarData> {
-  unstable_noStore()
+  connection()
   const supabase = await createClient()
 
   const range = {
@@ -43,7 +43,7 @@ export async function getCalendarData({
 }
 
 export async function getPastTrips(options?: { limit?: number }): Promise<CalendarTrip[]> {
-  unstable_noStore()
+  connection()
   const supabase = await createClient()
   const events = await fetchPastTrips(supabase, options)
   return events.map(eventToCalendarTrip)

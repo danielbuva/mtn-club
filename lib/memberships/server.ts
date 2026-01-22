@@ -1,10 +1,10 @@
-import { unstable_noStore } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { fetchActiveMembership } from '@/lib/memberships/queries'
 import { isLeaderRole, type MembershipState } from '@/lib/memberships/types'
+import { connection } from 'next/server'
 
 export async function getMembershipState(): Promise<MembershipState> {
-  unstable_noStore()
+  connection()
   const supabase = await createClient()
 
   try {
