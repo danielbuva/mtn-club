@@ -3,17 +3,28 @@
 import { useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { type Trip } from '@/lib/data'
+import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
 interface CalendarViewProps {
-  trips: Trip[]
+  trips: CalendarTrip[]
   currentDate: Date
   onDateChange: (date: Date) => void
-  onTripClick: (trip: Trip) => void
+  onTripClick: (trip: CalendarTrip) => void
+  teasersByDay?: Map<string, TripTeaserDay>
+  showTeasers?: boolean
+  onTeaserClick?: (day: string, teaser: TripTeaserDay) => void
 }
 
-export function CalendarView({ trips, currentDate, onDateChange, onTripClick }: CalendarViewProps) {
+export function CalendarView({
+  trips,
+  currentDate,
+  onDateChange,
+  onTripClick,
+  teasersByDay,
+  showTeasers = false,
+  onTeaserClick,
+}: CalendarViewProps) {
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
 
@@ -23,7 +34,12 @@ export function CalendarView({ trips, currentDate, onDateChange, onTripClick }: 
     const startingDay = firstDay.getDay()
     const totalDays = lastDay.getDate()
 
-    const days: { day: number | null; trips: Trip[] }[] = []
+    const days: {
+      day: number | null
+      trips: CalendarTrip[]
+      teaser?: TripTeaserDay
+      dateStr?: string
+    }[] = []
 
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDay; i++) {
@@ -38,11 +54,12 @@ export function CalendarView({ trips, currentDate, onDateChange, onTripClick }: 
         const endDate = trip.dateEnd
         return dateStr >= startDate && dateStr <= endDate
       })
-      days.push({ day, trips: dayTrips })
+      const teaser = showTeasers ? teasersByDay?.get(dateStr) : undefined
+      days.push({ day, trips: dayTrips, teaser, dateStr })
     }
 
     return days
-  }, [year, month, trips])
+  }, [year, month, trips, teasersByDay, showTeasers])
 
   const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
@@ -99,50 +116,91 @@ export function CalendarView({ trips, currentDate, onDateChange, onTripClick }: 
 
       {/* Calendar grid */}
       <div className="grid grid-cols-7">
-        {calendarData.map((item, index) => (
-          <div
-            key={index}
-            className={cn(
-              'min-h-24 p-2 border-b border-r border-border',
-              index % 7 === 6 && 'border-r-0',
-              !item.day && 'bg-muted/30'
-            )}
-          >
-            {item.day && (
-              <>
-                <span
-                  className={cn(
-                    'inline-flex items-center justify-center w-7 h-7 text-sm font-medium rounded-full',
-                    isToday(item.day) && 'bg-primary text-primary-foreground'
-                  )}
-                >
-                  {item.day}
-                </span>
-                <div className="mt-1 space-y-1">
-                  {item.trips.slice(0, 2).map((trip) => (
+        {calendarData.map((item, index) => {
+          const teaserOnly = !!(
+            onTeaserClick &&
+            item.teaser &&
+            item.teaser.event_count > 0 &&
+            item.dateStr &&
+            item.trips.length === 0
+          )
+
+          return (
+            <div
+              key={index}
+              className={cn(
+                'min-h-24 p-2 border-b border-r border-border',
+                index % 7 === 6 && 'border-r-0',
+                !item.day && 'bg-muted/30'
+              )}
+            >
+              {item.day && (
+                <>
+                  {teaserOnly ? (
                     <button
-                      key={trip.id}
-                      onClick={() => onTripClick(trip)}
+                      type="button"
+                      onClick={() => {
+                        if (item.dateStr && item.teaser) {
+                          onTeaserClick?.(item.dateStr, item.teaser)
+                        }
+                      }}
                       className={cn(
-                        'w-full text-left text-xs px-2 py-1 rounded-md truncate transition-colors',
-                        trip.membersOnly
-                          ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                          : 'bg-secondary text-foreground hover:bg-secondary/80'
+                        'inline-flex items-center justify-center w-7 h-7 text-sm font-medium rounded-full',
+                        isToday(item.day) && 'bg-primary text-primary-foreground',
+                        'hover:bg-primary/10'
                       )}
                     >
-                      {trip.title}
+                      {item.day}
                     </button>
-                  ))}
-                  {item.trips.length > 2 && (
-                    <span className="text-xs text-muted-foreground px-2">
-                      +{item.trips.length - 2} more
+                  ) : (
+                    <span
+                      className={cn(
+                        'inline-flex items-center justify-center w-7 h-7 text-sm font-medium rounded-full',
+                        isToday(item.day) && 'bg-primary text-primary-foreground'
+                      )}
+                    >
+                      {item.day}
                     </span>
                   )}
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                  <div className="mt-1 space-y-1">
+                    {item.trips.slice(0, 2).map((trip) => (
+                      <button
+                        key={trip.id}
+                        onClick={() => onTripClick(trip)}
+                        className={cn(
+                          'w-full text-left text-xs px-2 py-1 rounded-md truncate transition-colors',
+                          trip.membersOnly
+                            ? 'bg-primary/10 text-primary hover:bg-primary/20'
+                            : 'bg-secondary text-foreground hover:bg-secondary/80'
+                        )}
+                      >
+                        {trip.title}
+                      </button>
+                    ))}
+                    {item.trips.length > 2 && (
+                      <span className="text-xs text-muted-foreground px-2">
+                        +{item.trips.length - 2} more
+                      </span>
+                    )}
+                    {teaserOnly && item.teaser && item.teaser.event_count > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (item.dateStr) {
+                            onTeaserClick?.(item.dateStr, item.teaser)
+                          }
+                        }}
+                        className="text-xs text-muted-foreground px-2 text-left hover:text-foreground"
+                      >
+                        • {item.teaser.event_count} upcoming
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

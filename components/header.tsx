@@ -28,7 +28,7 @@ export function Header() {
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
               <Mountain className="w-5 h-5" />
             </div>
-            <span className="font-semibold text-lg tracking-tight">Mountain Club</span>
+            <span className="font-semibold text-lg tracking-tight">UNLV Mountain Club</span>
           </Link>
 
           {/* Desktop Nav */}

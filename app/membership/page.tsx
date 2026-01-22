@@ -21,23 +21,23 @@ import { createCheckoutSession } from './actions'
 const benefits = [
   {
     icon: Ticket,
-    title: 'Access to Member Trips',
-    description: 'Join exclusive trips not available to the public, including technical climbs and multi-day adventures.',
+    title: 'Access to Upcoming Trips',
+    description: 'Unlock access to upcoming trips in our Trips Calendar to sign up for adventures.',
   },
   {
     icon: Calendar,
-    title: 'Early RSVP Windows',
-    description: 'Get 48-hour early access to reserve your spot before trips open to everyone.',
+    title: 'Access to Guidebook Library',
+    description: 'Explore our extensive library of guidebooks covering trails, safety tips, and gear reviews.',
+  },
+  {
+    icon: MessageSquare,
+    title: 'Gear Room',
+    description: 'Borrow essential outdoor gear from our Gear Room for your adventures.',
   },
   {
     icon: Camera,
     title: 'Trip Photo Archives',
     description: 'Access our complete library of professional trip photos and download high-resolution images.',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Member Community',
-    description: 'Join our private Discord server for trip planning, gear talk, and connecting with other members.',
   },
   {
     icon: Users,
@@ -57,6 +57,10 @@ const faqs = [
     answer: 'After completing checkout, you will receive a welcome email with instructions to set up your member profile, join our Discord community, and start RSVPing to trips. Your membership is active immediately.',
   },
   {
+    question: 'How do I participate in a trip?',
+    answer: 'Once you are a member, you can browse our Trips Calendar and RSVP for upcoming trips. You will receive email reminders with trip details a few days before the event. Just show up at the designated meeting point ready for adventure!',
+  },
+  {
     question: 'Can I cancel my membership?',
     answer: 'Yes, you can cancel your membership at any time. Your benefits will remain active until the end of your billing period. We do not offer prorated refunds, but you are welcome to rejoin at any time.',
   },
@@ -70,11 +74,11 @@ const faqs = [
   },
   {
     question: 'What safety measures do you have?',
-    answer: 'All trip leaders are trained in wilderness first aid. We carry emergency communication devices on all trips and maintain detailed safety protocols. Participants must sign a liability waiver before their first trip.',
+    answer: 'All trip leaders are trained in wilderness first aid. We carry emergency communication devices on all trips and maintain detailed safety protocols. Participants must sign a liability waiver before each trip.',
   },
   {
-    question: 'Can I gift a membership?',
-    answer: 'Yes! During checkout, you can choose to purchase a gift membership. You will receive a gift code to share with the recipient.',
+    question: 'Am I required to go on a specific number of trips every year?',
+    answer: 'No, there is no minimum trip requirement. You can join as many or as few trips as you like during your membership period.',
   },
 ]
 
@@ -120,7 +124,7 @@ export default function MembershipPage() {
               Join Mountain Club
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Unlock access to exclusive trips, early RSVPs, and a community of outdoor enthusiasts who share your passion.
+              Unlock access to our Upcoming Events, our Guidebook Library, Gear Room, and a community of outdoor enthusiasts who share your passion.
             </p>
           </div>
         </section>
@@ -139,11 +143,9 @@ export default function MembershipPage() {
               <CardContent className="p-6">
                 <ul className="space-y-3 mb-6">
                   {[
-                    'Unlimited trip RSVPs',
-                    'Access to members-only trips',
-                    '48-hour early RSVP window',
-                    'Photo archives access',
-                    'Private Discord community',
+                    'Access to Upcoming Trips in our Trips Calendar',
+                    'Access to Guidebook Library',
+                    'Access to Gear Room',
                     'Bring a guest once per quarter',
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3">
@@ -270,7 +272,7 @@ export default function MembershipPage() {
               Ready to Start Your Adventure?
             </h2>
             <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-              Join 2,000+ members exploring the best of the West Coast. Your next adventure is waiting.
+              Join 200+ members exploring the best of the West Coast. Your next adventure is waiting.
             </p>
             <Button
               size="lg"

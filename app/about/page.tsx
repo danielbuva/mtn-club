@@ -31,12 +31,12 @@ const values = [
 
 const activities = [
   {
-    title: 'Weekly Hikes',
-    description: 'Explore new trails every weekend with guided group hikes for all skill levels.',
+    title: 'Hikes',
+    description: 'Explore new trails with guided group hikes for all skill levels.',
     image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=400&fit=crop',
   },
   {
-    title: 'Technical Climbs',
+    title: 'Climbing',
     description: 'Rock climbing and mountaineering trips led by certified guides.',
     image: 'https://images.unsplash.com/photo-1522163182402-834f871fd851?w=600&h=400&fit=crop',
   },
@@ -61,12 +61,12 @@ const steps = [
   {
     number: '02',
     title: 'RSVP to Trips',
-    description: 'Browse our calendar and reserve your spot. Members get early access and priority booking.',
+    description: 'Browse our calendar and reserve your spot. Only members can browse upcoming trips.',
   },
   {
     number: '03',
     title: 'Meet & Explore',
-    description: 'Show up at the trailhead, meet your group, and embark on an unforgettable adventure.',
+    description: 'Show up at the meeting point, meet your group, and embark on an unforgettable adventure.',
   },
 ]
 
@@ -77,7 +77,7 @@ export default function AboutPage() {
 
       <main className="flex-1 pt-16">
         {/* Hero Section */}
-        <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        <section className="relative h-[70vh] min-h-125 flex items-center justify-center overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&h=1080&fit=crop"
             alt="Mountain landscape"
@@ -86,13 +86,13 @@ export default function AboutPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
+          <div className="absolute inset-0 bg-linear-to-b from-background/60 via-background/40 to-background" />
           <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
               Building Community Through Adventure
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Mountain Club connects outdoor enthusiasts across the Pacific Northwest and California for unforgettable experiences in nature.
+              UNLV Mountain Club connects outdoor enthusiasts across the Pacific Northwest and California for unforgettable experiences in nature.
             </p>
           </div>
         </section>
@@ -118,7 +118,7 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-              <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
+              <div className="relative aspect-4/3 rounded-3xl overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&h=600&fit=crop"
                   alt="Group hiking together"
@@ -147,7 +147,7 @@ export default function AboutPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {activities.map((activity) => (
                 <Card key={activity.title} className="group overflow-hidden bg-card border-border/50 hover:shadow-lg transition-shadow">
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-4/3 overflow-hidden">
                     <Image
                       src={activity.image || "/placeholder.svg"}
                       alt={activity.title}

@@ -5,16 +5,17 @@ import { Calendar, CalendarPlus, Clock, Lock, MapPin, Mountain, TrendingUp, User
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { type Trip, formatDateRange } from '@/lib/data'
+import { type CalendarTrip } from '@/lib/events/types'
+import { formatDateRange } from '@/lib/events/formatters'
 import { cn } from '@/lib/utils'
 
 interface TripDetailsDrawerProps {
-  trip: Trip | null
+  trip: CalendarTrip | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const difficultyColors: Record<Trip['difficulty'], string> = {
+const difficultyColors: Record<CalendarTrip['difficulty'], string> = {
   Easy: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
   Moderate: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
   Challenging: 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20',
@@ -45,7 +46,7 @@ export function TripDetailsDrawer({ trip, open, onOpenChange }: TripDetailsDrawe
           </button>
 
           {/* Hero Image */}
-          <div className="relative aspect-[16/10] bg-muted">
+          <div className="relative aspect-16/10 bg-muted">
             <Image
               src={tripImages[0] || "/placeholder.svg"}
               alt={trip.title}
@@ -96,14 +97,18 @@ export function TripDetailsDrawer({ trip, open, onOpenChange }: TripDetailsDrawe
                 <Mountain className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-xs text-muted-foreground">Distance</p>
-                  <p className="font-medium text-sm">{trip.miles} miles</p>
+                  <p className="font-medium text-sm">
+                    {trip.miles === null ? 'TBD' : `${trip.miles} miles`}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary">
                 <TrendingUp className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-xs text-muted-foreground">Elevation</p>
-                  <p className="font-medium text-sm">{trip.elevationGain.toLocaleString()} ft</p>
+                  <p className="font-medium text-sm">
+                    {trip.elevationGain === null ? 'TBD' : `${trip.elevationGain.toLocaleString()} ft`}
+                  </p>
                 </div>
               </div>
             </div>

@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { type Trip } from '@/lib/data'
+import { type CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
 interface MapShellProps {
-  trips: Trip[]
-  onTripSelect: (trip: Trip) => void
+  trips: CalendarTrip[]
+  onTripSelect: (trip: CalendarTrip) => void
   selectedTripId?: string
   className?: string
   is3D?: boolean
@@ -57,7 +57,7 @@ export function MapShell({ trips, onTripSelect, selectedTripId, className, is3D 
   }, [is3D, mapLoaded])
 
   // Create marker element
-  const createMarkerElement = useCallback((trip: Trip, isSelected: boolean) => {
+  const createMarkerElement = useCallback((trip: CalendarTrip, isSelected: boolean) => {
     const el = document.createElement('div')
     el.className = 'trip-marker'
     el.innerHTML = `

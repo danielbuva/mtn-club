@@ -4,17 +4,18 @@ import Image from 'next/image'
 import { Calendar, Lock, MapPin, Mountain, TrendingUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { type Trip, formatDateRange } from '@/lib/data'
+import { type CalendarTrip } from '@/lib/events/types'
+import { formatDateRange } from '@/lib/events/formatters'
 import { cn } from '@/lib/utils'
 
 interface TripCardProps {
-  trip: Trip
+  trip: CalendarTrip
   onClick?: () => void
   variant?: 'default' | 'compact'
   className?: string
 }
 
-const difficultyColors: Record<Trip['difficulty'], string> = {
+const difficultyColors: Record<CalendarTrip['difficulty'], string> = {
   Easy: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
   Moderate: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
   Challenging: 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20',
@@ -39,7 +40,7 @@ export function TripCard({ trip, onClick, variant = 'default', className }: Trip
       {/* Image */}
       <div className={cn(
         'relative overflow-hidden bg-muted',
-        isCompact ? 'w-24 h-24 shrink-0' : 'aspect-[4/3]'
+        isCompact ? 'w-24 h-24 shrink-0' : 'aspect-4/3'
       )}>
         <Image
           src={`https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=600&fit=crop`}
@@ -92,11 +93,11 @@ export function TripCard({ trip, onClick, variant = 'default', className }: Trip
           <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <Mountain className="w-4 h-4" />
-              {trip.miles} mi
+              {trip.miles === null ? 'TBD' : `${trip.miles} mi`}
             </span>
             <span className="flex items-center gap-1">
               <TrendingUp className="w-4 h-4" />
-              {trip.elevationGain.toLocaleString()} ft
+              {trip.elevationGain === null ? 'TBD' : `${trip.elevationGain.toLocaleString()} ft`}
             </span>
           </div>
         )}
