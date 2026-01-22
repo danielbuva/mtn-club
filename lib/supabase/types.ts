@@ -4616,6 +4616,8 @@ export type Database = {
       }
       is_active_member: { Args: { _club_id: string }; Returns: boolean }
       is_authenticated: { Args: never; Returns: boolean }
+      is_club_leader: { Args: { uid: string }; Returns: boolean }
+      is_club_member: { Args: { uid: string }; Returns: boolean }
       is_invited_or_participant: {
         Args: { _trip_id: string }
         Returns: boolean

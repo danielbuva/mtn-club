@@ -117,13 +117,19 @@ export function CalendarView({
       {/* Calendar grid */}
       <div className="grid grid-cols-7">
         {calendarData.map((item, index) => {
+          const teaser = item.teaser
+          const dateStr = item.dateStr
           const teaserOnly = !!(
             onTeaserClick &&
-            item.teaser &&
-            item.teaser.event_count > 0 &&
-            item.dateStr &&
+            teaser &&
+            teaser.event_count > 0 &&
+            dateStr &&
             item.trips.length === 0
           )
+          const handleTeaserClick = () => {
+            if (!dateStr || !teaser) return
+            onTeaserClick?.(dateStr, teaser)
+          }
 
           return (
             <div
@@ -139,11 +145,7 @@ export function CalendarView({
                   {teaserOnly ? (
                     <button
                       type="button"
-                      onClick={() => {
-                        if (item.dateStr && item.teaser) {
-                          onTeaserClick?.(item.dateStr, item.teaser)
-                        }
-                      }}
+                      onClick={handleTeaserClick}
                       className={cn(
                         'inline-flex items-center justify-center w-7 h-7 text-sm font-medium rounded-full',
                         isToday(item.day) && 'bg-primary text-primary-foreground',
@@ -182,17 +184,13 @@ export function CalendarView({
                         +{item.trips.length - 2} more
                       </span>
                     )}
-                    {teaserOnly && item.teaser && item.teaser.event_count > 0 && (
+                    {teaserOnly && teaser && teaser.event_count > 0 && (
                       <button
                         type="button"
-                        onClick={() => {
-                          if (item.dateStr) {
-                            onTeaserClick?.(item.dateStr, item.teaser)
-                          }
-                        }}
+                        onClick={handleTeaserClick}
                         className="text-xs text-muted-foreground px-2 text-left hover:text-foreground"
                       >
-                        • {item.teaser.event_count} upcoming
+                        • {teaser.event_count} upcoming
                       </button>
                     )}
                   </div>
