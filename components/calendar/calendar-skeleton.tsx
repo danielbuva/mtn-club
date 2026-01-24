@@ -48,8 +48,11 @@ export function CalendarSkeleton() {
                 <div className="h-8 w-36 bg-muted/40 rounded-xl animate-pulse" />
               </div>
               <div className="space-y-3">
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <div key={index} className="h-20 w-full bg-card border border-border rounded-2xl animate-pulse" />
+                {['row-1', 'row-2', 'row-3', 'row-4', 'row-5', 'row-6'].map((key) => (
+                  <div
+                    key={key}
+                    className="h-20 w-full bg-card border border-border rounded-2xl animate-pulse"
+                  />
                 ))}
               </div>
             </div>

@@ -1,7 +1,11 @@
 import { endOfMonth, startOfMonth } from 'date-fns'
 import { createPublicClient } from '@/lib/supabase/public'
 import { eventToCalendarTrip } from '@/lib/events/mappers'
-import { fetchEventsInRange, fetchPastTrips, fetchTripTeasersInRange } from '@/lib/events/queries'
+import {
+  fetchPastTripsInRangePublic,
+  fetchPastTripsPublic,
+  fetchTripTeasersInRangePublic,
+} from '@/lib/events/queries'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 
 export type HomeTripsArgs = {
@@ -11,7 +15,7 @@ export type HomeTripsArgs = {
 export async function getHomeTripsCached({ limit = 50 }: HomeTripsArgs): Promise<CalendarTrip[]> {
   'use cache'
   const supabase = createPublicClient()
-  const events = await fetchPastTrips(supabase, { limit })
+  const events = await fetchPastTripsPublic(supabase, { limit })
   return events.map(eventToCalendarTrip)
 }
 
@@ -21,7 +25,7 @@ export type CalendarDataArgs = {
 }
 
 export type CalendarCachedData = {
-  trips: CalendarTrip[]
+  pastTrips: CalendarTrip[]
   teasers: TripTeaserDay[]
 }
 
@@ -45,15 +49,15 @@ export async function getCalendarTripsCached({ month, clubId }: CalendarDataArgs
     end: endOfMonth(monthDate),
   }
 
-  const tripsPromise = fetchEventsInRange(supabase, range).then((events) =>
+  const pastTripsPromise = fetchPastTripsInRangePublic(supabase, range).then((events) =>
     events.map(eventToCalendarTrip)
   )
 
   const teasersPromise = clubId
-    ? fetchTripTeasersInRange(supabase, clubId, range)
+    ? fetchTripTeasersInRangePublic(supabase, clubId, range)
     : Promise.resolve<TripTeaserDay[]>([])
 
-  const [trips, teasers] = await Promise.all([tripsPromise, teasersPromise])
+  const [pastTrips, teasers] = await Promise.all([pastTripsPromise, teasersPromise])
 
-  return { trips, teasers }
+  return { pastTrips, teasers }
 }

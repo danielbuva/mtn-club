@@ -35,6 +35,7 @@ export function CalendarView({
     const totalDays = lastDay.getDate()
 
     const days: {
+      key: string
       day: number | null
       trips: CalendarTrip[]
       teaser?: TripTeaserDay
@@ -43,7 +44,7 @@ export function CalendarView({
 
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDay; i++) {
-      days.push({ day: null, trips: [] })
+      days.push({ key: `${year}-${month}-empty-${i}`, day: null, trips: [] })
     }
 
     // Add days of the month
@@ -55,7 +56,7 @@ export function CalendarView({
         return dateStr >= startDate && dateStr <= endDate
       })
       const teaser = showTeasers ? teasersByDay?.get(dateStr) : undefined
-      days.push({ day, trips: dayTrips, teaser, dateStr })
+      days.push({ key: dateStr, day, trips: dayTrips, teaser, dateStr })
     }
 
     return days
@@ -108,7 +109,7 @@ export function CalendarView({
       {/* Days of week header */}
       <div className="grid grid-cols-7 border-b border-border">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="p-3 text-center text-sm font-medium text-muted-foreground">
+          <div key={`weekday-${day}`} className="p-3 text-center text-sm font-medium text-muted-foreground">
             {day}
           </div>
         ))}
@@ -133,7 +134,7 @@ export function CalendarView({
 
           return (
             <div
-              key={index}
+              key={item.key}
               className={cn(
                 'min-h-24 p-2 border-b border-r border-border',
                 index % 7 === 6 && 'border-r-0',
@@ -188,9 +189,15 @@ export function CalendarView({
                       <button
                         type="button"
                         onClick={handleTeaserClick}
+                        aria-label={`${teaser.event_count} upcoming trips. Sign in to view details.`}
                         className="text-xs text-muted-foreground px-2 text-left hover:text-foreground"
                       >
-                        • {teaser.event_count} upcoming
+                        <span className="inline-flex items-center gap-1">
+                          <span>• {teaser.event_count} upcoming</span>
+                          <span className="text-[10px] uppercase tracking-widest text-muted-foreground/70 blur-[1px]">
+                            members
+                          </span>
+                        </span>
                       </button>
                     )}
                   </div>

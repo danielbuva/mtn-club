@@ -3,6 +3,8 @@
 import { Lock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
+import { getTripCategories } from '@/components/calendar/calendar-categories'
 import { type CalendarTrip } from '@/lib/events/types'
 import { formatDateRange } from '@/lib/events/formatters'
 
@@ -19,6 +21,8 @@ interface TripListItemProps {
 }
 
 export function TripListItem({ trip, onClick }: TripListItemProps) {
+  const categories = getTripCategories(trip)
+
   return (
     <Card
       className="overflow-hidden cursor-pointer hover:border-primary/20 hover:shadow-lg transition-all"
@@ -42,6 +46,7 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
             <div className="flex items-start justify-between gap-4 mb-2">
               <div>
                 <div className="flex items-center gap-2 mb-1">
+                  <CalendarCategoryPill categories={categories} className="shrink-0" />
                   <h3 className="font-semibold text-lg">{trip.title}</h3>
                   {trip.membersOnly && (
                     <Badge variant="secondary" className="gap-1">
