@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { BadgeCheck, Calendar, LogOut, Menu, Moon, Mountain, Sun, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -157,6 +157,9 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Mobile navigation</SheetTitle>
+                </SheetHeader>
                 <nav className="flex flex-col gap-2 mt-8">
                   {navLinks.map((link) => (
                     <Link

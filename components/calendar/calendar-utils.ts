@@ -2,7 +2,7 @@ import { addDays, format } from 'date-fns'
 import { formatDateOnly } from '@/lib/events/formatters'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 
-export type ViewMode = 'month' | 'list'
+export type ViewMode = 'calendar' | 'list'
 export type SemesterKey = 'spring' | 'summer' | 'fall' | 'winter' | 'all'
 
 export const SEMESTER_OPTIONS: { value: SemesterKey; label: string }[] = [

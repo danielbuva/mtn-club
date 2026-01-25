@@ -1,10 +1,10 @@
 import { format } from 'date-fns'
-import { unstable_noStore as noStore } from 'next/cache'
 import { CalendarPage } from '@/components/calendar/calendar-page'
 import { getViewer } from '@/lib/auth/viewer'
 import { getPrimaryClubId } from '@/lib/clubs/primary'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
 import { isLeaderRole } from '@/lib/memberships/types'
+import { connection } from 'next/server'
 
 const resolveMonthDate = (monthValue?: string): Date => {
   const match = monthValue ? /^(\d{4})-(\d{2})$/.exec(monthValue) : null
@@ -26,7 +26,7 @@ type CalendarPageContentProps = {
 }
 
 export async function CalendarPageContent({ searchParams }: CalendarPageContentProps) {
-  noStore()
+  connection()
   const monthDate = resolveMonthDate(searchParams?.month)
   const currentMonth = format(monthDate, 'yyyy-MM')
   const year = monthDate.getFullYear()

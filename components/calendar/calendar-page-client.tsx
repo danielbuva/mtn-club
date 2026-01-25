@@ -40,9 +40,8 @@ const defaultFilters: Filters = {
 
 const resolveViewMode = (value: string | null): ViewMode => {
   if (value === 'list') return 'list'
-  if (value === 'month') return 'month'
-  if (value === 'calendar') return 'month'
-  return 'month'
+  if (value === 'calendar') return 'calendar'
+  return 'calendar'
 }
 
 const isValidSemester = (value: string | null): value is SemesterKey =>
@@ -86,7 +85,7 @@ export function CalendarPageClient({
     [yearData.year]: yearData,
   }))
   const [filters, setFilters] = useState<Filters>(defaultFilters)
-  const [viewMode, setViewMode] = useState<ViewMode>('month')
+  const [viewMode, setViewMode] = useState<ViewMode>('calendar')
   const [semester, setSemester] = useState<SemesterKey>('all')
   const [filtersCollapsed, setFiltersCollapsed] = useState(true)
   const [currentDate, setCurrentDate] = useState<Date>(() => {
@@ -112,17 +111,17 @@ export function CalendarPageClient({
   const [monthRestoreToken, setMonthRestoreToken] = useState(0)
   const [monthScrollAdjustToken, setMonthScrollAdjustToken] = useState(0)
   const [scrollPosByView, setScrollPosByView] = useState<ScrollStateByView>(() => ({
-    month: { pos: 0, has: false },
+    calendar: { pos: 0, has: false },
     list: { pos: 0, has: false },
   }))
   const [scrollingByView, setScrollingByView] = useState<Record<CalendarViewOption, boolean>>(
-    () => ({ month: false, list: false })
+    () => ({ calendar: false, list: false })
   )
   const [pendingScrollAdjust, setPendingScrollAdjust] = useState<PendingScrollAdjust>(null)
   const monthScrollRef = useRef<HTMLDivElement | null>(null)
   const listScrollRef = useRef<HTMLDivElement | null>(null)
   const scrollTimeoutsRef = useRef<Record<CalendarViewOption, number | null>>({
-    month: null,
+    calendar: null,
     list: null,
   })
   const loadingYearsRef = useRef<Set<number>>(new Set())
@@ -179,7 +178,7 @@ export function CalendarPageClient({
     loadingYearsRef.current = new Set()
     setFocusedDay(null)
     setScrollPosByView({
-      month: { pos: 0, has: false },
+      calendar: { pos: 0, has: false },
       list: { pos: 0, has: false },
     })
   }, [initialMonth, viewerKey, yearData])
@@ -216,7 +215,7 @@ export function CalendarPageClient({
   }, [filtersCollapsed, filtersReady])
 
   useEffect(() => {
-    if (previousViewRef.current && viewMode === 'month' && previousViewRef.current !== 'month') {
+    if (previousViewRef.current && viewMode === 'calendar' && previousViewRef.current !== 'calendar') {
       setMonthRestoreToken((prev) => prev + 1)
     }
     previousViewRef.current = viewMode
@@ -383,7 +382,7 @@ export function CalendarPageClient({
 
   const getScrollRef = useCallback(
     (view: CalendarViewOption) => {
-      if (view === 'month') return monthScrollRef
+      if (view === 'calendar') return monthScrollRef
       return listScrollRef
     },
     [listScrollRef, monthScrollRef]
@@ -436,7 +435,6 @@ export function CalendarPageClient({
         <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">UNLV Outdoors</p>
               <h1 className="text-3xl font-semibold sm:text-4xl">Trip Calendar</h1>
               <p className="mt-2 text-muted-foreground">
                 Browse adventures, reserve spots, and plan your season in one view.
@@ -531,7 +529,7 @@ export function CalendarPageClient({
               </>
             }
           >
-            {viewMode === 'month' && (
+            {viewMode === 'calendar' && (
               <div
                 ref={monthScrollRef}
                 className={cn(
@@ -547,7 +545,7 @@ export function CalendarPageClient({
                   loadedYears={loadedYears}
                   scrollContainerRef={monthScrollRef}
                   scrollTarget={monthScrollTarget}
-                  restoreScrollTop={scrollPosByView.month.has ? scrollPosByView.month.pos : 0}
+                  restoreScrollTop={scrollPosByView.calendar.has ? scrollPosByView.calendar.pos : 0}
                   restoreToken={monthRestoreToken}
                   scrollAdjustToken={monthScrollAdjustToken}
                   onRequestYear={ensureYearLoaded}

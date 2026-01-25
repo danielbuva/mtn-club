@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export type CalendarViewOption = 'month' | 'list'
+export type CalendarViewOption = 'calendar' | 'list'
 
 interface CalendarControlsProps {
   view: CalendarViewOption
@@ -28,9 +28,9 @@ export function CalendarControls({
     <div className={cn('space-y-4', className)}>
       <Tabs value={view} onValueChange={(value) => onViewChange(value as CalendarViewOption)}>
         <TabsList className="w-full rounded-full">
-          <TabsTrigger value="month" className="rounded-full gap-2 flex-1">
+          <TabsTrigger value="calendar" className="rounded-full gap-2 flex-1">
             <CalendarDays className="h-4 w-4" />
-            Month
+            Calendar
           </TabsTrigger>
           <TabsTrigger value="list" className="rounded-full gap-2 flex-1">
             <List className="h-4 w-4" />
@@ -39,7 +39,7 @@ export function CalendarControls({
         </TabsList>
       </Tabs>
 
-      {view === 'month' && (
+      {view === 'calendar' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center justify-between gap-2">
             <Button

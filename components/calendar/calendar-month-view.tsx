@@ -368,7 +368,7 @@ export function CalendarMonthView({
             {week.monthLabel && (
               <div
                 className={cn(
-                  'pointer-events-none absolute left-2 top-2 text-[11px] font-semibold text-foreground/80 transition-opacity duration-200',
+                  'pointer-events-none absolute left-2 top-0 text-[11px] font-semibold text-foreground/80 transition-opacity duration-200',
                   isScrolling ? 'opacity-100' : 'opacity-0'
                 )}
               >
