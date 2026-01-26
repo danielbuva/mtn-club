@@ -121,6 +121,25 @@
   body {
     @apply bg-background text-foreground;
   }
+  :where(
+      button,
+      a[href],
+      input[type='button'],
+      input[type='submit'],
+      input[type='reset'],
+      summary,
+      label[for],
+      [role='button'],
+      [role='tab'],
+      [role='link'],
+      [role='menuitem'],
+      [role='option'],
+      [role='switch'],
+      [role='checkbox'],
+      [role='radio']
+    ) {
+    cursor: pointer;
+  }
 }
 
 .calendar-scroll {
