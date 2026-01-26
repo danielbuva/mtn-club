@@ -3,7 +3,6 @@ import { Card, CardContent } from '@/components/ui/card'
 export function CalendarSkeleton() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <div className="fixed top-0 left-0 right-0 z-50 h-16 bg-background/80 border-b border-border/50" />
       <main className="flex-1 pt-16">
         <section className="py-12 px-4 bg-secondary/30 border-b border-border">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -59,12 +58,6 @@ export function CalendarSkeleton() {
           </div>
         </section>
       </main>
-
-      <footer className="bg-card border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="h-20 bg-muted/40 rounded-2xl animate-pulse" />
-        </div>
-      </footer>
     </div>
   )
 }

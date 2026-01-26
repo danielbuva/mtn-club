@@ -38,7 +38,20 @@ export function MemberCTA({
     }
   }
 
-  const label = viewer.isAuthenticated ? 'Activate Membership' : 'Become a Member'
+  const membershipState = viewer.membershipState
+  const hasGoodStanding =
+    !!membershipState && !['banned', 'suspended'].includes(membershipState)
+  const shouldRenew =
+    viewer.isAuthenticated &&
+    !viewer.isMember &&
+    hasGoodStanding &&
+    ['inactive', 'past_due', 'canceled'].includes(membershipState ?? '')
+
+  const label = shouldRenew
+    ? 'Renew Membership'
+    : viewer.isAuthenticated
+      ? 'Activate Membership'
+      : 'Become a Member'
   const content = children ?? label
   const contentWithIcon = icon ? (
     <>

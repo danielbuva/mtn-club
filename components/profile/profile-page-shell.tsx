@@ -1,5 +1,3 @@
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import type { ReactNode } from 'react'
 
 type ProfilePageShellProps = {
@@ -9,8 +7,6 @@ type ProfilePageShellProps = {
 export function ProfilePageShell({ children }: ProfilePageShellProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
-
       <main className="flex-1 pt-16">
         <section className="py-12 px-4 bg-secondary/30 border-b border-border">
           <div className="max-w-4xl mx-auto">
@@ -23,8 +19,6 @@ export function ProfilePageShell({ children }: ProfilePageShellProps) {
           <div className="max-w-4xl mx-auto">{children}</div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

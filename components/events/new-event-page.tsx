@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { EventForm } from '@/components/events/event-form'
@@ -26,8 +24,6 @@ export function NewEventPage({ initialType, membershipState }: NewEventPageProps
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
-
       <main className="flex-1 pt-16">
         <section className="py-12 px-4 bg-secondary/30 border-b border-border">
           <div className="max-w-3xl mx-auto">
@@ -82,8 +78,6 @@ export function NewEventPage({ initialType, membershipState }: NewEventPageProps
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

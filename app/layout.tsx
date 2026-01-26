@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Suspense } from "react";
-import { ViewerGate } from "@/components/auth/viewer-gate";
-import { ViewerFallback } from "@/components/auth/viewer-fallback";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -28,11 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
-        <Suspense fallback={<ViewerFallback />}>
-          <ViewerGate>{children}</ViewerGate>
-        </Suspense>
-      </body>
+      <body className={`${geistSans.className} antialiased`}>{children}</body>
     </html>
   );
 }

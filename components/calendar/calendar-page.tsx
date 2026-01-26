@@ -1,5 +1,3 @@
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { CalendarPageClient } from '@/components/calendar/calendar-page-client'
 import { CalendarAuthSync } from '@/components/calendar/calendar-auth-sync'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
@@ -21,7 +19,6 @@ export function CalendarPage({
 }: CalendarPageProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
       <CalendarAuthSync />
       <CalendarPageClient
         yearData={yearData}
@@ -30,7 +27,6 @@ export function CalendarPage({
         isMember={isMember}
         isLeader={isLeader}
       />
-      <Footer />
     </div>
   )
 }

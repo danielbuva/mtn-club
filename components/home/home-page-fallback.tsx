@@ -1,8 +1,6 @@
 export function HomePageFallback() {
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="fixed top-0 left-0 right-0 z-50 h-16 bg-background/80 border-b border-border/50" />
-
       <main className="flex-1">
         <section className="relative h-screen w-full overflow-hidden">
           <div className="absolute inset-0 bg-linear-to-br from-muted/20 via-muted/30 to-muted/40 animate-pulse" />
@@ -29,11 +27,6 @@ export function HomePageFallback() {
             </div>
           </section>
 
-          <footer className="bg-card border-t border-border">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-              <div className="h-20 bg-muted/40 rounded-2xl animate-pulse" />
-            </div>
-          </footer>
         </div>
       </main>
     </div>

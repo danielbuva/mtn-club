@@ -1,4 +1,4 @@
-import { CalendarPageContent } from '@/app/calendar/CalendarPageContent'
+import { CalendarPageContent } from './CalendarPageContent'
 
 export default async function CalendarPage({
   searchParams,

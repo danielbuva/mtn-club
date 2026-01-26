@@ -1,7 +1,5 @@
 import Image from 'next/image'
 import { ArrowRight, Heart, Leaf, Mountain, Shield, Sparkles, Users } from 'lucide-react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { MemberCTA } from '@/components/member-cta'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -72,8 +70,6 @@ const steps = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
-
       <main className="flex-1 pt-16">
         {/* Hero Section */}
         <section className="relative h-[70vh] min-h-125 flex items-center justify-center overflow-hidden">
@@ -241,8 +237,6 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

@@ -8,6 +8,8 @@ const defaultViewer: Viewer = {
   userId: null,
   email: null,
   isMember: false,
+  membershipState: null,
+  membershipBannedAt: null,
   member: null,
 }
 

@@ -17,6 +17,8 @@ export type Viewer = {
   userId: string | null
   email?: string | null
   isMember: boolean
+  membershipState: MembershipRow['state'] | null
+  membershipBannedAt: string | null
   member?: MemberSummary | null
 }
 
@@ -60,6 +62,8 @@ export async function getViewer(): Promise<Viewer> {
       userId: null,
       email: null,
       isMember: false,
+      membershipState: null,
+      membershipBannedAt: null,
       member: null,
     }
   }
@@ -75,12 +79,10 @@ export async function getViewer(): Promise<Viewer> {
     supabase
       .from('club_memberships')
       .select(
-        'id, club_id, role, state, is_member, joined_on, membership_start, membership_end, auto_renew'
+        'id, club_id, role, state, is_member, joined_on, membership_start, membership_end, auto_renew, banned_at'
       )
       .eq('user_id', user.id)
-      .eq('state', 'active')
-      .eq('is_member', true)
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
   ])
@@ -97,13 +99,15 @@ export async function getViewer(): Promise<Viewer> {
   const membership = (membershipResult.data as MembershipSummaryRow | null) ?? null
   const fullName = buildFullName(profile)
 
-  const isMember = !!membership
+  const isMember = !!membership && membership.state === 'active' && membership.is_member && !membership.banned_at
 
   return {
     isAuthenticated: true,
     userId: user.id,
     email: user.email ?? profile?.email ?? null,
     isMember,
+    membershipState: membership?.state ?? null,
+    membershipBannedAt: membership?.banned_at ?? null,
     member: isMember
       ? {
           fullName,
