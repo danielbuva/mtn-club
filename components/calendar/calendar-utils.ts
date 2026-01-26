@@ -6,11 +6,11 @@ export type ViewMode = 'calendar' | 'list'
 export type SemesterKey = 'spring' | 'summer' | 'fall' | 'winter' | 'all'
 
 export const SEMESTER_OPTIONS: { value: SemesterKey; label: string }[] = [
+  { value: 'all', label: 'All year' },
   { value: 'spring', label: 'Spring' },
   { value: 'summer', label: 'Summer' },
   { value: 'fall', label: 'Fall' },
   { value: 'winter', label: 'Winter' },
-  { value: 'all', label: 'All year' },
 ]
 
 const monthPattern = /^(\d{4})-(\d{2})$/

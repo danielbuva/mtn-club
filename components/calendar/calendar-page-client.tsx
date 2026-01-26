@@ -4,7 +4,6 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { addMonths, format, startOfWeek } from 'date-fns'
 import { ExternalLink, Lock } from 'lucide-react'
 import { CalendarControls, type CalendarViewOption } from '@/components/calendar/calendar-controls'
-import { CalendarLayout } from '@/components/calendar/calendar-layout'
 import { CalendarMonthView } from '@/components/calendar/calendar-month-view'
 import { CalendarListView } from '@/components/calendar/calendar-list-view'
 import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
@@ -429,74 +428,87 @@ export function CalendarPageClient({
         </section>
 
         <section className="px-4 py-6">
-          <CalendarLayout
-            sidebar={
-              <>
-                <CalendarControls
-                  view={currentView}
-                  onViewChange={handleViewChange}
-                />
-
+          <div className="mx-auto w-full max-w-6xl space-y-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center">
+                <CalendarControls view={currentView} onViewChange={handleViewChange} />
                 {currentView === 'list' && (
-                  <div className="rounded-2xl border border-border bg-card p-4">
-                    <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-                      Semester
-                    </p>
-                    <div className="mt-3">
-                      <CalendarSemesterSelect value={semester} onChange={setSemester} />
-                    </div>
+                  <div className="hidden md:inline-flex h-9 items-center gap-0 rounded-full border border-border bg-card px-0 text-sm text-muted-foreground">
+                    <span className="pl-3 text-foreground/70">Semester</span>
+                    <span className="ml-2 mr-0 h-4 w-px bg-border" />
+                    <CalendarSemesterSelect
+                      value={semester}
+                      onChange={setSemester}
+                      triggerClassName="h-7 w-28 rounded-l-none rounded-r-full border-0 bg-transparent pl-2 pr-3 shadow-none justify-between"
+                    />
                   </div>
                 )}
+              </div>
+              <div className="hidden md:inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-3 text-sm text-muted-foreground">
+                <span className="text-foreground/70">Subscribe</span>
+                <span className="h-4 w-px bg-border" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 rounded-full px-2 text-muted-foreground hover:text-foreground"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  iCal
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 rounded-full px-2 text-muted-foreground hover:text-foreground"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Google
+                </Button>
+              </div>
+            </div>
 
-                <CalendarActions isMember={isMember} isLeader={isLeader} />
+            {currentView === 'list' && (
+              <div className="md:hidden rounded-2xl border border-border bg-card p-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Semester</p>
+                <div className="mt-3">
+                  <CalendarSemesterSelect
+                    value={semester}
+                    onChange={setSemester}
+                    triggerClassName="w-full rounded-full"
+                  />
+                </div>
+              </div>
+            )}
 
-                <Card className="border-border/60 bg-card hidden md:block">
-                  <CardContent className="p-4">
-                    <p className="text-sm font-medium">Subscribe</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
-                        <ExternalLink className="h-4 w-4" />
-                        iCal
-                      </Button>
-                      <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
-                        <ExternalLink className="h-4 w-4" />
-                        Google Calendar
-                      </Button>
+            {teaserMessage && viewerKey === 'public' && (
+              <Card className="border-primary/20 bg-primary/5">
+                <CardContent className="p-4 text-sm text-muted-foreground">
+                  {teaserMessage}{' '}
+                  <MemberCTA variant="link" className="underline text-foreground" />.
+                </CardContent>
+              </Card>
+            )}
+
+            {viewerKey === 'public' && hasUpcomingTeasers && (
+              <Card className="border-primary/20 bg-primary/5">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                      <Lock className="h-4 w-4 text-primary" />
                     </div>
-                  </CardContent>
-                </Card>
+                    <div>
+                      <p className="text-sm font-medium">Members-only trips</p>
+                      <p className="text-xs text-muted-foreground">
+                        Some upcoming adventures are hidden for members. Join to unlock details.
+                      </p>
+                      <MemberCTA size="sm" className="mt-3 rounded-full" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-                {teaserMessage && viewerKey === 'public' && (
-                  <Card className="border-primary/20 bg-primary/5">
-                    <CardContent className="p-4 text-sm text-muted-foreground">
-                      {teaserMessage}{' '}
-                      <MemberCTA variant="link" className="underline text-foreground" />.
-                    </CardContent>
-                  </Card>
-                )}
+            <CalendarActions isMember={isMember} isLeader={isLeader} />
 
-                {viewerKey === 'public' && hasUpcomingTeasers && (
-                  <Card className="border-primary/20 bg-primary/5">
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                          <Lock className="h-4 w-4 text-primary" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">Members-only trips</p>
-                          <p className="text-xs text-muted-foreground">
-                            Some upcoming adventures are hidden for members. Join to unlock
-                            details.
-                          </p>
-                          <MemberCTA size="sm" className="mt-3 rounded-full" />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </>
-            }
-          >
             {viewMode === 'calendar' && (
               <div
                 ref={monthScrollRef}
@@ -551,7 +563,7 @@ export function CalendarPageClient({
                 />
               </div>
             )}
-          </CalendarLayout>
+          </div>
         </section>
       </main>
 
