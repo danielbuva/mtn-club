@@ -443,6 +443,18 @@ export function CalendarPageClient({
                     />
                   </div>
                 )}
+                {viewerKey === 'public' && hasUpcomingTeasers && (
+                  <div className="hidden md:inline-flex h-9 items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 text-xs text-primary/80 whitespace-nowrap">
+                    <Lock className="h-3.5 w-3.5 text-primary" />
+                    <span>Upcoming adventures are hidden.</span>
+                    <MemberCTA
+                      variant="link"
+                      className="text-xs font-semibold text-primary hover:text-primary/80"
+                    >
+                      Join to unlock
+                    </MemberCTA>
+                  </div>
+                )}
               </div>
               <div className="hidden md:inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-3 text-sm text-muted-foreground">
                 <span className="text-foreground/70">Subscribe</span>
@@ -484,25 +496,6 @@ export function CalendarPageClient({
                 <CardContent className="p-4 text-sm text-muted-foreground">
                   {teaserMessage}{' '}
                   <MemberCTA variant="link" className="underline text-foreground" />.
-                </CardContent>
-              </Card>
-            )}
-
-            {viewerKey === 'public' && hasUpcomingTeasers && (
-              <Card className="border-primary/20 bg-primary/5">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                      <Lock className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Members-only trips</p>
-                      <p className="text-xs text-muted-foreground">
-                        Some upcoming adventures are hidden for members. Join to unlock details.
-                      </p>
-                      <MemberCTA size="sm" className="mt-3 rounded-full" />
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             )}
