@@ -33,6 +33,7 @@ type MembershipSummaryRow = Pick<
   | 'membership_start'
   | 'membership_end'
   | 'auto_renew'
+  | 'banned_at'
 >
 
 type ProfileSummaryRow = Pick<
