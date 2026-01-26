@@ -448,11 +448,7 @@ export function CalendarPageClient({
                   </div>
                 )}
 
-                <Card className="border-border/60 bg-card">
-                  <CardContent className="p-4">
-                    <CalendarActions isMember={isMember} isLeader={isLeader} />
-                  </CardContent>
-                </Card>
+                <CalendarActions isMember={isMember} isLeader={isLeader} />
 
                 <Card className="border-border/60 bg-card hidden md:block">
                   <CardContent className="p-4">
