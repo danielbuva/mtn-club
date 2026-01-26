@@ -545,12 +545,10 @@ export function CalendarPageClient({
               >
                 <CalendarListView
                   trips={filteredTrips}
-                  teasers={allTeasers}
                   semester={semester}
                   year={currentYear}
                   viewerKey={viewerKey}
                   onTripSelect={handleTripSelect}
-                  onTeaserClick={handleTeaserClick}
                   focusDate={focusedDay}
                   onClearFocus={() => setFocusedDay(null)}
                 />
