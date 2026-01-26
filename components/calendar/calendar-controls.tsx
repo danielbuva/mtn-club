@@ -1,8 +1,7 @@
 'use client'
 
-import { CalendarDays, List, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CalendarDays, List } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export type CalendarViewOption = 'calendar' | 'list'
@@ -10,18 +9,12 @@ export type CalendarViewOption = 'calendar' | 'list'
 interface CalendarControlsProps {
   view: CalendarViewOption
   onViewChange: (value: CalendarViewOption) => void
-  onToday: () => void
-  onPrevMonth: () => void
-  onNextMonth: () => void
   className?: string
 }
 
 export function CalendarControls({
   view,
   onViewChange,
-  onToday,
-  onPrevMonth,
-  onNextMonth,
   className,
 }: CalendarControlsProps) {
   return (
@@ -38,44 +31,6 @@ export function CalendarControls({
           </TabsTrigger>
         </TabsList>
       </Tabs>
-
-      {view === 'calendar' && (
-        <div className="rounded-2xl border border-border bg-card p-3">
-          <div className="flex items-center justify-between gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="rounded-full"
-              onClick={onToday}
-            >
-              Today
-            </Button>
-            <div className="flex items-center rounded-full border border-border">
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={onPrevMonth}
-                aria-label="Previous month"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={onNextMonth}
-                aria-label="Next month"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

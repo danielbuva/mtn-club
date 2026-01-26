@@ -16,13 +16,13 @@ export function CalendarActions({ isMember, isLeader }: CalendarActionsProps) {
     <div className="flex flex-wrap items-center gap-2">
       <Link href="/calendar/new?type=meetup">
         <Button variant="outline" size="sm" className="rounded-xl bg-transparent">
-          Post Meetup
+          Add Event
         </Button>
       </Link>
       {isLeader && (
         <Link href="/calendar/new?type=official">
           <Button size="sm" className="rounded-xl">
-            Add Official Trip
+            Add Event
           </Button>
         </Link>
       )}

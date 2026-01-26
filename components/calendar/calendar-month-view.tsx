@@ -2,18 +2,23 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { addDays, endOfWeek, format, startOfWeek } from 'date-fns'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
 import { getDayCategories, getTripCategories } from '@/components/calendar/calendar-categories'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 import type { ViewerKey } from '@/lib/events/calendar'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface CalendarMonthViewProps {
   currentDate: Date
+  tripsInYearCount: number
+  tripsYear: number
   tripsByDay: Map<string, CalendarTrip[]>
   teasersByDay: Map<string, TripTeaserDay>
   viewerKey: ViewerKey
   showTitles: boolean
+  isMobile: boolean
   loadedYears: number[]
   scrollContainerRef: RefObject<HTMLDivElement | null>
   scrollTarget: { kind: 'month' | 'week'; key: string; behavior: 'auto' | 'smooth' } | null
@@ -24,6 +29,9 @@ interface CalendarMonthViewProps {
   onScrollTargetHandled: () => void
   onDaySelect: (date: Date) => void
   onTeaserClick: (day: string, teaser: TripTeaserDay) => void
+  onToday: () => void
+  onPrevMonth: () => void
+  onNextMonth: () => void
 }
 
 type WeekRow = {
@@ -75,10 +83,13 @@ const buildWeekRows = (minYear: number, maxYear: number): WeekRow[] => {
 
 export function CalendarMonthView({
   currentDate,
+  tripsInYearCount,
+  tripsYear,
   tripsByDay,
   teasersByDay,
   viewerKey,
   showTitles,
+  isMobile,
   loadedYears,
   scrollContainerRef,
   scrollTarget,
@@ -89,6 +100,9 @@ export function CalendarMonthView({
   onScrollTargetHandled,
   onDaySelect,
   onTeaserClick,
+  onToday,
+  onPrevMonth,
+  onNextMonth,
 }: CalendarMonthViewProps) {
   const monthAnchorRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const weekRowRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -340,7 +354,60 @@ export function CalendarMonthView({
         ref={headerBlockRef}
         className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur"
       >
-        <div className="px-2 py-3 text-base font-semibold">{headerMonth.label}</div>
+        <div className="px-2 py-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="text-base font-semibold">{headerMonth.label}</span>
+            <span className="text-sm font-normal text-muted-foreground">
+              {tripsInYearCount} trip{tripsInYearCount === 1 ? '' : 's'} in {tripsYear}
+            </span>
+          </div>
+          <div className="flex items-center">
+            {!isMobile && (
+              <div className="inline-flex overflow-hidden rounded-full border border-border">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-none"
+                  onClick={onPrevMonth}
+                  aria-label="Previous month"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-none border-x border-border h-9 px-4 text-xs"
+                  onClick={onToday}
+                >
+                  Today
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-none"
+                  onClick={onNextMonth}
+                  aria-label="Next month"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+            {isMobile && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="rounded-full"
+                onClick={onToday}
+              >
+                Today
+              </Button>
+            )}
+          </div>
+        </div>
         <div className="grid grid-cols-7 text-xs uppercase tracking-widest text-muted-foreground">
           {weekDays.map((day, index) => (
             <div key={`weekday-${index}`} className="py-2 text-center">

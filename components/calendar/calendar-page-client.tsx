@@ -7,7 +7,6 @@ import { CalendarControls, type CalendarViewOption } from '@/components/calendar
 import { CalendarLayout } from '@/components/calendar/calendar-layout'
 import { CalendarMonthView } from '@/components/calendar/calendar-month-view'
 import { CalendarListView } from '@/components/calendar/calendar-list-view'
-import { CalendarFilters } from '@/components/calendar/calendar-filters'
 import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
 import { useMediaQuery } from '@/components/calendar/use-media-query'
 import { CalendarActions } from '@/components/calendar/calendar-actions'
@@ -15,11 +14,9 @@ import { TripDetailsDrawer } from '@/components/trip-details-drawer'
 import { MemberCTA } from '@/components/member-cta'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { filterTrips } from '@/lib/events/filters'
 import { cn } from '@/lib/utils'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
-import type { Filters } from '@/components/filters-panel'
 import {
   buildTeaserMap,
   formatMonthParam,
@@ -29,14 +26,6 @@ import {
   type SemesterKey,
   type ViewMode,
 } from '@/components/calendar/calendar-utils'
-
-const defaultFilters: Filters = {
-  search: '',
-  season: 'All Seasons',
-  difficulty: 'All Levels',
-  activity: 'All Activities',
-  membersOnly: false,
-}
 
 const resolveViewMode = (value: string | null): ViewMode => {
   if (value === 'list') return 'list'
@@ -84,10 +73,8 @@ export function CalendarPageClient({
   const [yearDataByYear, setYearDataByYear] = useState<Record<number, CalendarYearData>>(() => ({
     [yearData.year]: yearData,
   }))
-  const [filters, setFilters] = useState<Filters>(defaultFilters)
   const [viewMode, setViewMode] = useState<ViewMode>('calendar')
   const [semester, setSemester] = useState<SemesterKey>('all')
-  const [filtersCollapsed, setFiltersCollapsed] = useState(true)
   const [currentDate, setCurrentDate] = useState<Date>(() => {
     return parseMonthParam(initialMonth) ?? new Date(yearData.year, 0, 1)
   })
@@ -95,7 +82,6 @@ export function CalendarPageClient({
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [teaserMessage, setTeaserMessage] = useState<string | null>(null)
   const [hydrated, setHydrated] = useState(false)
-  const [filtersReady, setFiltersReady] = useState(false)
   const [focusedDay, setFocusedDay] = useState<string | null>(null)
   const [monthScrollTarget, setMonthScrollTarget] = useState<{
     kind: 'month' | 'week'
@@ -199,22 +185,6 @@ export function CalendarPageClient({
   }, [currentDate, hydrated, semester, viewMode])
 
   useEffect(() => {
-    if (!hydrated) return
-    const stored = window.localStorage.getItem('calendar:filters-collapsed')
-    if (stored !== null) {
-      setFiltersCollapsed(stored === 'true')
-    } else {
-      setFiltersCollapsed(isMobile)
-    }
-    setFiltersReady(true)
-  }, [hydrated, isMobile])
-
-  useEffect(() => {
-    if (!filtersReady) return
-    window.localStorage.setItem('calendar:filters-collapsed', String(filtersCollapsed))
-  }, [filtersCollapsed, filtersReady])
-
-  useEffect(() => {
     if (previousViewRef.current && viewMode === 'calendar' && previousViewRef.current !== 'calendar') {
       setMonthRestoreToken((prev) => prev + 1)
     }
@@ -246,9 +216,8 @@ export function CalendarPageClient({
     [loadedYears, yearDataByYear]
   )
 
-  const filteredTrips = useMemo(() => filterTrips(allTrips, filters), [allTrips, filters])
-
-  const tripsByDay = useMemo(() => groupTripsByDay(filteredTrips), [filteredTrips])
+  const filteredTrips = allTrips
+  const tripsByDay = useMemo(() => groupTripsByDay(allTrips), [allTrips])
   const teasersByDay = useMemo(() => buildTeaserMap(allTeasers), [allTeasers])
 
   useLayoutEffect(() => {
@@ -432,7 +401,7 @@ export function CalendarPageClient({
   return (
     <>
       <main className="flex-1 pt-16">
-        <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10">
+        <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10 md:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <h1 className="text-3xl font-semibold sm:text-4xl">Trip Calendar</h1>
@@ -463,18 +432,9 @@ export function CalendarPageClient({
           <CalendarLayout
             sidebar={
               <>
-                <CalendarFilters
-                  filters={filters}
-                  onFiltersChange={setFilters}
-                  collapsed={filtersCollapsed}
-                  onCollapsedChange={setFiltersCollapsed}
-                />
                 <CalendarControls
                   view={currentView}
                   onViewChange={handleViewChange}
-                  onToday={handleToday}
-                  onPrevMonth={handlePrevMonth}
-                  onNextMonth={handleNextMonth}
                 />
 
                 {currentView === 'list' && (
@@ -489,12 +449,24 @@ export function CalendarPageClient({
                 )}
 
                 <Card className="border-border/60 bg-card">
-                  <CardContent className="p-4 space-y-3">
-                    <p className="text-sm text-muted-foreground">
-                      {tripsInCurrentYear.length} trip
-                      {tripsInCurrentYear.length === 1 ? '' : 's'} in {currentYear}
-                    </p>
+                  <CardContent className="p-4">
                     <CalendarActions isMember={isMember} isLeader={isLeader} />
+                  </CardContent>
+                </Card>
+
+                <Card className="border-border/60 bg-card hidden md:block">
+                  <CardContent className="p-4">
+                    <p className="text-sm font-medium">Subscribe</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
+                        <ExternalLink className="h-4 w-4" />
+                        iCal
+                      </Button>
+                      <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
+                        <ExternalLink className="h-4 w-4" />
+                        Google Calendar
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -538,10 +510,13 @@ export function CalendarPageClient({
               >
                 <CalendarMonthView
                   currentDate={currentDate}
+                  tripsInYearCount={tripsInCurrentYear.length}
+                  tripsYear={currentYear}
                   tripsByDay={tripsByDay}
                   teasersByDay={teasersByDay}
                   viewerKey={viewerKey}
                   showTitles={!isMobile}
+                  isMobile={isMobile}
                   loadedYears={loadedYears}
                   scrollContainerRef={monthScrollRef}
                   scrollTarget={monthScrollTarget}
@@ -552,6 +527,9 @@ export function CalendarPageClient({
                   onScrollTargetHandled={() => setMonthScrollTarget(null)}
                   onDaySelect={handleDayOpen}
                   onTeaserClick={handleTeaserClick}
+                  onToday={handleToday}
+                  onPrevMonth={handlePrevMonth}
+                  onNextMonth={handleNextMonth}
                 />
               </div>
             )}
