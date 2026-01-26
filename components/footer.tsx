@@ -17,7 +17,7 @@ export function Footer() {
               <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground">
                 <Mountain className="w-5 h-5" />
               </div>
-              <span className="font-semibold text-lg tracking-tight">Mountain Club</span>
+              <span className="font-semibold text-lg tracking-tight">UNLV Mountain Club</span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Building community through outdoor adventure. Join us on the trail.
@@ -109,7 +109,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t border-border mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {new Date().getFullYear()} Mountain Club. All rights reserved.
+            {new Date().getFullYear()} UNLV Mountain Club. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

@@ -103,7 +103,7 @@ export default function AboutPage() {
                 </h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    Mountain Club was founded in 2018 by a group of friends who believed that the outdoors are best experienced together. What started as informal weekend hikes has grown into a thriving community of over 2,000 members.
+                    UNLV Mountain Club was founded in 2018 by a group of friends who believed that the outdoors are best experienced together. What started as informal weekend hikes has grown into a thriving community of over 2,000 members.
                   </p>
                   <p>
                     We exist to make outdoor adventure accessible, safe, and deeply communal. Our mission is simple: get more people outside, build lasting friendships, and foster a deep respect for the natural world.

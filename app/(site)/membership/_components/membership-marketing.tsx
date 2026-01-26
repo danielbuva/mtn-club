@@ -10,7 +10,7 @@ export function MembershipMarketing() {
     <main className="flex-1 pt-16">
       <MembershipHero
         badge="Limited Time Offer"
-        title="Join Mountain Club"
+        title="Join UNLV Mountain Club"
         description="Unlock access to our Upcoming Events, our Guidebook Library, Gear Room, and a community of outdoor enthusiasts who share your passion."
       />
 
