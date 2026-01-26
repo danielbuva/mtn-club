@@ -450,7 +450,7 @@ export function CalendarPageClient({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 rounded-full px-2 text-muted-foreground hover:text-foreground"
+                  className="h-7 rounded-full px-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   iCal
@@ -458,7 +458,7 @@ export function CalendarPageClient({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 rounded-full px-2 text-muted-foreground hover:text-foreground"
+                  className="h-7 rounded-full px-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   Google
