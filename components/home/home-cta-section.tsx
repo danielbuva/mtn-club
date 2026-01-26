@@ -54,7 +54,7 @@ export function HomeCTASection({ className }: HomeCTASectionProps) {
             size="lg"
             className="rounded-xl gap-2 px-8 bg-transparent"
           >
-            <Link href="/calendar">
+            <Link href="/calendar?view=calendar">
               <Calendar className="w-4 h-4" />
               View Calendar
             </Link>
