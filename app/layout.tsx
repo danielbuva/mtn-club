@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+// MapLibre styles should be loaded once at the app root.
+import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL

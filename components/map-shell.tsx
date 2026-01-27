@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import maplibregl from 'maplibre-gl'
-import 'maplibre-gl/dist/maplibre-gl.css'
 import { type CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
