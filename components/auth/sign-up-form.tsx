@@ -64,6 +64,9 @@ export function SignUpForm({
       if (error) throw error;
       clearStoredReturnTo();
       router.push("/auth/sign-up-success");
+      setTimeout(() => {
+        router.refresh();
+      }, 0);
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

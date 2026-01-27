@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-import { HomePageFallback } from '@/components/home/home-page-fallback'
-import { HomePageContent } from '@/app/HomePageContent'
+import { HomeBasicMap } from '@/components/home/home-basic'
 
 export default function Page() {
   return (
-    <Suspense fallback={<HomePageFallback />}>
-      <HomePageContent />
-    </Suspense>
+    <div className="min-h-screen flex flex-col bg-background">
+      <HomeBasicMap />
+    </div>
   )
 }

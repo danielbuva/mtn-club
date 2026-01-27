@@ -52,6 +52,9 @@ export function LoginForm({
         getReturnToFromSearchParams(searchParams) ?? takeStoredReturnTo() ?? "/";
       clearStoredReturnTo();
       router.push(returnTo);
+      setTimeout(() => {
+        router.refresh();
+      }, 0);
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
