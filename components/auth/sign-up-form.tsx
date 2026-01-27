@@ -13,8 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import {
+  clearStoredReturnTo,
+  getReturnToFromSearchParams,
+  storeReturnTo,
+} from "@/lib/auth/return-to";
 
 export function SignUpForm({
   className,
@@ -26,6 +31,11 @@ export function SignUpForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectParam = searchParams.get("redirect");
+  const redirectQuery = redirectParam
+    ? `?redirect=${encodeURIComponent(redirectParam)}`
+    : "";
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +50,10 @@ export function SignUpForm({
     }
 
     try {
+      const returnTo = getReturnToFromSearchParams(searchParams);
+      if (returnTo) {
+        storeReturnTo(returnTo);
+      }
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -48,6 +62,7 @@ export function SignUpForm({
         },
       });
       if (error) throw error;
+      clearStoredReturnTo();
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -108,7 +123,7 @@ export function SignUpForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
+              <Link href={`/auth/login${redirectQuery}`} className="underline underline-offset-4">
                 Login
               </Link>
             </div>

@@ -1,20 +1,16 @@
-import Link from 'next/link'
-import { X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { AuthCloseButton, AuthCloseFallback } from '@/components/auth/auth-close-button'
+import { AuthReturnTo } from '@/components/auth/auth-return-to'
+import { Suspense } from 'react'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-svh bg-background">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="fixed left-4 top-4 z-50 rounded-full"
-        asChild
-      >
-        <Link href="/" aria-label="Back to home">
-          <X className="h-4 w-4" />
-        </Link>
-      </Button>
+      <Suspense fallback={null}>
+        <AuthReturnTo />
+      </Suspense>
+      <Suspense fallback={<AuthCloseFallback />}>
+        <AuthCloseButton />
+      </Suspense>
       {children}
     </div>
   )

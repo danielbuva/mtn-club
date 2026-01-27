@@ -1,7 +1,5 @@
-import Link from 'next/link'
 import { connection } from 'next/server'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { redirect } from 'next/navigation'
 import { ProfileFormClient } from '@/components/profile/profile-form-client'
 import { ProfilePageShell } from '@/components/profile/profile-page-shell'
 import { fetchProfile } from '@/lib/profile/queries'
@@ -14,36 +12,36 @@ export async function ProfilePageContent() {
   try {
     const result = await fetchProfile(supabase)
 
+    if (!result.userId) {
+      redirect('/auth/login?redirect=/profile')
+    }
+
     return (
       <ProfilePageShell>
-        {!result.userId ? (
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Sign in to view and edit your profile.
-              </p>
-              <Link href="/auth/login">
-                <Button className="rounded-xl">Sign in</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        ) : (
-          <ProfileFormClient
-            initialProfile={result.profile}
-            userId={result.userId}
-            email={result.email}
-          />
-        )}
+        <ProfileFormClient
+          initialProfile={result.profile}
+          userId={result.userId}
+          email={result.email}
+        />
       </ProfilePageShell>
     )
   } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+      throw error
+    }
+    if (typeof error === 'object' && error && 'digest' in error) {
+      const digest = (error as { digest?: string }).digest
+      if (typeof digest === 'string' && digest.startsWith('NEXT_REDIRECT')) {
+        throw error
+      }
+    }
     const message = error instanceof Error ? error.message : 'Unable to load profile'
 
     return (
       <ProfilePageShell>
-        <Card className="border-destructive/50 bg-destructive/10">
-          <CardContent className="p-6 text-sm text-destructive">{message}</CardContent>
-        </Card>
+        <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-sm text-destructive">
+          {message}
+        </div>
       </ProfilePageShell>
     )
   }

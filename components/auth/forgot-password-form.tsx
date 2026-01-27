@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function ForgotPasswordForm({
@@ -23,6 +24,11 @@ export function ForgotPasswordForm({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectParam = searchParams.get("redirect");
+  const redirectQuery = redirectParam
+    ? `?redirect=${encodeURIComponent(redirectParam)}`
+    : "";
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +96,7 @@ export function ForgotPasswordForm({
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
                 <Link
-                  href="/auth/login"
+                  href={`/auth/login${redirectQuery}`}
                   className="underline underline-offset-4"
                 >
                   Login

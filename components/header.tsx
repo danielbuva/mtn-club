@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   BadgeCheck,
   Calendar,
@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils'
 import { useViewer } from '@/components/auth/viewer-provider'
 import { MemberCTA } from '@/components/member-cta'
 import { createClient } from '@/lib/supabase/client'
+import { clearStoredReturnTo } from '@/lib/auth/return-to'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -46,6 +47,7 @@ const getInitials = (value: string | null | undefined) => {
 
 export function Header() {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const router = useRouter()
   const { theme, setTheme } = useTheme()
   const viewer = useViewer()
@@ -76,8 +78,19 @@ export function Header() {
   const handleSignOut = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/auth/login')
+    clearStoredReturnTo()
+    if (pathname === '/profile') {
+      router.push('/')
+      return
+    }
+    const query = searchParams.toString()
+    const returnTo = `${pathname}${query ? `?${query}` : ''}`
+    router.push(returnTo)
   }
+
+  const authRedirect = encodeURIComponent(
+    `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
+  )
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -210,7 +223,7 @@ export function Header() {
                 </Button>
                 {!viewer.isAuthenticated && (
                   <Button variant="ghost" className="rounded-xl font-medium" asChild>
-                    <Link href="/auth/login">Sign in</Link>
+                    <Link href={`/auth/login?redirect=${authRedirect}`}>Sign in</Link>
                   </Button>
                 )}
                 <div className="hidden sm:block">
@@ -251,7 +264,7 @@ export function Header() {
                   ))}
                   {!viewer.isAuthenticated && (
                     <Link
-                      href="/auth/login"
+                      href={`/auth/login?redirect=${authRedirect}`}
                       className={cn(
                         'px-4 py-3 rounded-xl text-base font-medium transition-colors',
                         pathname === '/auth/login'
