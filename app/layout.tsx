@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 // MapLibre styles should be loaded once at the app root.
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
+import { Providers } from "./providers";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -27,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>{children}</body>
+      <body className={`${geistSans.className} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

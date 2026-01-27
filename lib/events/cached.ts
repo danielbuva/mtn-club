@@ -1,4 +1,6 @@
 import { endOfMonth, startOfMonth } from 'date-fns'
+import { cacheTag } from 'next/cache'
+import { AUTH_CACHE_TAG } from '@/lib/auth/tags'
 import { createPublicClient } from '@/lib/supabase/public'
 import { eventToCalendarTrip } from '@/lib/events/mappers'
 import {
@@ -14,6 +16,7 @@ export type HomeTripsArgs = {
 
 export async function getHomeTripsCached({ limit = 50 }: HomeTripsArgs): Promise<CalendarTrip[]> {
   'use cache'
+  cacheTag(AUTH_CACHE_TAG)
   const supabase = createPublicClient()
   const events = await fetchPastTripsPublic(supabase, { limit })
   return events.map(eventToCalendarTrip)
@@ -42,6 +45,7 @@ const parseMonthString = (month: string): Date => {
 
 export async function getCalendarTripsCached({ month, clubId }: CalendarDataArgs): Promise<CalendarCachedData> {
   'use cache'
+  cacheTag(AUTH_CACHE_TAG)
   const supabase = createPublicClient()
   const monthDate = parseMonthString(month)
   const range = {

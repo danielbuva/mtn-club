@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   BadgeCheck,
   Calendar,
@@ -28,8 +28,7 @@ import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { useViewer } from '@/components/auth/viewer-provider'
 import { MemberCTA } from '@/components/member-cta'
-import { createClient } from '@/lib/supabase/client'
-import { clearStoredReturnTo } from '@/lib/auth/return-to'
+import { signOutAction } from '@/app/actions/auth'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -48,9 +47,9 @@ const getInitials = (value: string | null | undefined) => {
 export function Header() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const router = useRouter()
   const { theme, setTheme } = useTheme()
   const viewer = useViewer()
+  const signOutFormId = 'header-signout-form'
 
   const profileName = viewer.member?.fullName ?? viewer.email ?? 'Member'
   const profileInitials = getInitials(profileName)
@@ -75,27 +74,20 @@ export function Header() {
         : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
     )
 
-  const handleSignOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    clearStoredReturnTo()
-    if (pathname === '/profile') {
-      router.push('/')
-      return
-    }
-    const query = searchParams.toString()
-    const returnTo = `${pathname}${query ? `?${query}` : ''}`
-    router.push(returnTo)
-  }
-
   const authRedirect = encodeURIComponent(
     `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
   )
+
+  const handleSignOut = () => {
+    const form = document.getElementById(signOutFormId) as HTMLFormElement | null
+    form?.requestSubmit()
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
+          <form id={signOutFormId} action={signOutAction} className="sr-only" />
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
@@ -201,8 +193,9 @@ export function Header() {
                   <DropdownMenuItem
                     onSelect={(event) => {
                       event.preventDefault()
-                      void handleSignOut()
+                      handleSignOut()
                     }}
+                    className="flex w-full items-center gap-2"
                   >
                     <LogOut className="h-4 w-4" />
                     Sign out

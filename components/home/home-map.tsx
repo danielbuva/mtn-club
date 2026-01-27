@@ -1,25 +1,30 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import MapGL, { Layer, Marker, Source, type MapRef, type ViewState } from 'react-map-gl/maplibre'
-import maplibregl, { type Map as MapLibreMap } from 'maplibre-gl'
+import maplibregl, { setWorkerUrl } from 'maplibre-gl'
 import Supercluster from 'supercluster'
-import { bbox as turfBbox, circle } from '@turf/turf'
-import type { Feature, FeatureCollection, Point } from 'geojson'
+import type { Feature, Point } from 'geojson'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { useHydrated } from '@/hooks/use-hydrated'
 
 const LAS_VEGAS = {
   lat: 36.1699,
   lon: -115.1398,
 }
 
-const RADIUS_KM = 483
 const LIGHT_BASEMAP_URL =
   'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
 const DARK_BASEMAP_URL =
   'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+
+if (typeof window !== 'undefined') {
+  try {
+    setWorkerUrl('/maplibre/maplibre-gl-worker.js')
+  } catch {}
+}
 
 type TripPointProperties = {
   pointId: string
@@ -43,11 +48,19 @@ type HomeMapProps = {
   className?: string
 }
 
+const isClusterFeature = (feature: ClusterOrPoint): feature is ClusterFeature =>
+  (feature.properties as ClusterProperties).cluster === true
+
 export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProps) {
   const { resolvedTheme } = useTheme()
-  const mapRef = useRef<MapRef | null>(null)
-  const rafRef = useRef<number | null>(null)
-  const [clusters, setClusters] = useState<ClusterOrPoint[]>([])
+  const hydrated = useHydrated()
+  const isMobile = useIsMobile()
+  const mapContainerRef = useRef<HTMLDivElement | null>(null)
+  const mapRef = useRef<maplibregl.Map | null>(null)
+  const markersRef = useRef<maplibregl.Marker[]>([])
+  const activeRef = useRef(true)
+  const [stableTheme, setStableTheme] = useState<'light' | 'dark'>('light')
+  const [mapLoaded, setMapLoaded] = useState(false)
 
   const tripPointsById = useMemo<Map<string, TripPoint>>(
     () => new Map<string, TripPoint>(tripPoints.map((point) => [point.id, point])),
@@ -74,34 +87,199 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
     }).load(features)
   }, [features])
 
-  const radiusPolygon = useMemo(() => {
-    return circle([LAS_VEGAS.lon, LAS_VEGAS.lat], RADIUS_KM, {
-      units: 'kilometers',
-      steps: 80,
-    })
+  useEffect(() => {
+    if (resolvedTheme === 'light' || resolvedTheme === 'dark') {
+      setStableTheme(resolvedTheme)
+    }
+  }, [resolvedTheme])
+
+  const mapStyle = stableTheme === 'dark' ? DARK_BASEMAP_URL : LIGHT_BASEMAP_URL
+
+  const clearMarkers = useCallback(() => {
+    markersRef.current.forEach((marker) => marker.remove())
+    markersRef.current = []
   }, [])
 
-  const radiusBounds = useMemo(
-    () => turfBbox(radiusPolygon) as [number, number, number, number],
-    [radiusPolygon]
+  const createImage = useCallback((src: string, alt: string) => {
+    const img = document.createElement('img')
+    img.src = src
+    img.alt = alt
+    img.loading = 'lazy'
+    img.style.width = '100%'
+    img.style.height = '100%'
+    img.style.objectFit = 'cover'
+    // img.onerror = () => {
+    //   if (img.src !== FALLBACK_PHOTO_URL) {
+    //     img.src = FALLBACK_PHOTO_URL
+    //   }
+    // }
+    return img
+  }, [])
+
+  const createTripMarkerElement = useCallback(
+    (trip: TripPoint, isSelected: boolean) => {
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.setAttribute('aria-label', `View trip details for ${trip.title}`)
+      button.style.position = 'relative'
+      button.style.cursor = 'pointer'
+      button.style.border = 'none'
+      button.style.background = 'transparent'
+      button.style.padding = '0'
+
+      const frame = document.createElement('span')
+      frame.style.display = 'block'
+      frame.style.width = '112px'
+      frame.style.height = '84px'
+      frame.style.borderRadius = '18px'
+      frame.style.overflow = 'hidden'
+      frame.style.border = isSelected ? '2px solid var(--primary)' : '1px solid rgba(148, 163, 184, 0.5)'
+      frame.style.background = 'rgba(255, 255, 255, 0.92)'
+      frame.style.boxShadow = '0 12px 24px rgba(15, 23, 42, 0.25)'
+      frame.style.transition = 'transform 0.2s ease'
+
+      frame.appendChild(createImage(trip.photos[0], trip.title))
+
+      const tail = document.createElement('span')
+      tail.style.position = 'absolute'
+      tail.style.left = '50%'
+      tail.style.bottom = '-12px'
+      tail.style.transform = 'translateX(-50%)'
+      tail.style.width = '0'
+      tail.style.height = '0'
+      tail.style.borderLeft = '12px solid transparent'
+      tail.style.borderRight = '12px solid transparent'
+      tail.style.borderTop = '12px solid rgba(148, 163, 184, 0.6)'
+
+      const tailInner = document.createElement('span')
+      tailInner.style.position = 'absolute'
+      tailInner.style.left = '50%'
+      tailInner.style.bottom = '-10px'
+      tailInner.style.transform = 'translateX(-50%)'
+      tailInner.style.width = '0'
+      tailInner.style.height = '0'
+      tailInner.style.borderLeft = '11px solid transparent'
+      tailInner.style.borderRight = '11px solid transparent'
+      tailInner.style.borderTop = '11px solid rgba(255, 255, 255, 0.92)'
+
+      button.appendChild(frame)
+      button.appendChild(tail)
+      button.appendChild(tailInner)
+
+      button.onmouseenter = () => {
+        frame.style.transform = 'scale(1.03)'
+      }
+      button.onmouseleave = () => {
+        frame.style.transform = 'scale(1)'
+      }
+
+      return button
+    },
+    [createImage]
   )
 
-  const radiusSource = useMemo<FeatureCollection>(() => {
-    return {
-      type: 'FeatureCollection',
-      features: [radiusPolygon],
-    }
-  }, [radiusPolygon])
+  const createClusterMarkerElement = useCallback(
+    (photoUrl: string, count: number, clusterId: number, lng: number, lat: number) => {
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.setAttribute('aria-label', `Zoom into ${count} trip locations`)
+      button.style.position = 'relative'
+      button.style.cursor = 'pointer'
+      button.style.border = 'none'
+      button.style.background = 'transparent'
+      button.style.padding = '0'
 
-  const getMapInstance = useCallback((): MapLibreMap | null => {
-    if (!mapRef.current) return null
-    const map = mapRef.current.getMap?.()
-    return map ?? (mapRef.current as unknown as MapLibreMap)
-  }, [])
+      const shadow = document.createElement('span')
+      shadow.style.position = 'absolute'
+      shadow.style.left = '50%'
+      shadow.style.top = '4px'
+      shadow.style.transform = 'translateX(-50%)'
+      shadow.style.width = '104px'
+      shadow.style.height = '76px'
+      shadow.style.borderRadius = '18px'
+      shadow.style.background = 'rgba(255, 255, 255, 0.75)'
+      shadow.style.border = '1px solid rgba(148, 163, 184, 0.4)'
+
+      const frame = document.createElement('span')
+      frame.style.position = 'relative'
+      frame.style.display = 'block'
+      frame.style.width = '116px'
+      frame.style.height = '88px'
+      frame.style.borderRadius = '18px'
+      frame.style.overflow = 'hidden'
+      frame.style.border = '1px solid rgba(148, 163, 184, 0.6)'
+      frame.style.background = 'rgba(255, 255, 255, 0.95)'
+      frame.style.boxShadow = '0 18px 30px rgba(15, 23, 42, 0.25)'
+      frame.style.transition = 'transform 0.2s ease'
+
+      frame.appendChild(createImage(photoUrl, 'Cluster photo'))
+
+      const countBadge = document.createElement('span')
+      countBadge.textContent = String(count)
+      countBadge.style.position = 'absolute'
+      countBadge.style.left = '10px'
+      countBadge.style.bottom = '10px'
+      countBadge.style.padding = '2px 8px'
+      countBadge.style.borderRadius = '999px'
+      countBadge.style.background = 'rgba(15, 23, 42, 0.8)'
+      countBadge.style.color = 'white'
+      countBadge.style.fontSize = '10px'
+      countBadge.style.fontWeight = '600'
+
+      const tail = document.createElement('span')
+      tail.style.position = 'absolute'
+      tail.style.left = '50%'
+      tail.style.bottom = '-12px'
+      tail.style.transform = 'translateX(-50%)'
+      tail.style.width = '0'
+      tail.style.height = '0'
+      tail.style.borderLeft = '12px solid transparent'
+      tail.style.borderRight = '12px solid transparent'
+      tail.style.borderTop = '12px solid rgba(148, 163, 184, 0.6)'
+
+      const tailInner = document.createElement('span')
+      tailInner.style.position = 'absolute'
+      tailInner.style.left = '50%'
+      tailInner.style.bottom = '-10px'
+      tailInner.style.transform = 'translateX(-50%)'
+      tailInner.style.width = '0'
+      tailInner.style.height = '0'
+      tailInner.style.borderLeft = '11px solid transparent'
+      tailInner.style.borderRight = '11px solid transparent'
+      tailInner.style.borderTop = '11px solid rgba(255, 255, 255, 0.95)'
+
+      button.appendChild(shadow)
+      button.appendChild(frame)
+      button.appendChild(countBadge)
+      button.appendChild(tail)
+      button.appendChild(tailInner)
+
+      button.onmouseenter = () => {
+        frame.style.transform = 'scale(1.03)'
+      }
+      button.onmouseleave = () => {
+        frame.style.transform = 'scale(1)'
+      }
+
+      button.onclick = (event) => {
+        event.stopPropagation()
+        const map = mapRef.current
+        if (!map) return
+        const expansionZoom = clusterIndex.getClusterExpansionZoom(clusterId)
+        const targetZoom = Math.min(expansionZoom ?? map.getZoom() + 2, 12)
+        map.easeTo({ center: [lng, lat], zoom: targetZoom, duration: 800 })
+      }
+
+      return button
+    },
+    [clusterIndex, createImage]
+  )
 
   const updateClusters = useCallback(() => {
-    const map = getMapInstance()
-    if (!map) return
+    const map = mapRef.current
+    if (!map || !activeRef.current) return
+    if (!map.isStyleLoaded()) return
+
     const bounds = map.getBounds()
     const bbox: [number, number, number, number] = [
       bounds.getWest(),
@@ -110,178 +288,126 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       bounds.getNorth(),
     ]
     const zoom = Math.round(map.getZoom())
-    setClusters(clusterIndex.getClusters(bbox, zoom) as ClusterOrPoint[])
-  }, [clusterIndex, getMapInstance])
+    const nextClusters = clusterIndex.getClusters(bbox, zoom) as ClusterOrPoint[]
 
-  const scheduleClusterUpdate = useCallback(() => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = requestAnimationFrame(() => {
-      updateClusters()
-      rafRef.current = null
+    clearMarkers()
+
+    nextClusters.forEach((feature) => {
+      const [lng, lat] = feature.geometry.coordinates as [number, number]
+      if (isClusterFeature(feature)) {
+        const { cluster_id: clusterId, point_count: pointCount } = feature.properties
+        const leaves = clusterIndex.getLeaves(clusterId, pointCount) as PointFeature[]
+        const mostRecentTrip = leaves
+          .map((leaf) => tripPointsById.get(leaf.properties.pointId))
+          .filter((trip): trip is TripPoint => Boolean(trip))
+          .sort((a, b) => (b.occurredOn ?? '').localeCompare(a.occurredOn ?? ''))[0]
+        const clusterPhoto = mostRecentTrip?.photos[0]
+
+        const el = createClusterMarkerElement(clusterPhoto, pointCount, clusterId, lng, lat)
+        const marker = new maplibregl.Marker({ element: el })
+          .setLngLat([lng, lat])
+          .addTo(map)
+        markersRef.current.push(marker)
+        return
+      }
+
+      const trip = tripPointsById.get(feature.properties.pointId)
+      if (!trip) return
+      const isSelected = trip.id === selectedTripId
+      const el = createTripMarkerElement(trip, isSelected)
+      el.onclick = (event) => {
+        event.stopPropagation()
+        onTripSelect(trip)
+      }
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat([lng, lat])
+        .addTo(map)
+      markersRef.current.push(marker)
     })
-  }, [updateClusters])
+  }, [
+    clearMarkers,
+    clusterIndex,
+    createClusterMarkerElement,
+    createTripMarkerElement,
+    onTripSelect,
+    selectedTripId,
+    tripPointsById,
+  ])
 
   useEffect(() => {
-    scheduleClusterUpdate()
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
-  }, [scheduleClusterUpdate])
+    if (!hydrated) return
+    if (!mapContainerRef.current || mapRef.current) return
 
-  const isClusterFeature = (feature: ClusterOrPoint): feature is ClusterFeature =>
-    (feature.properties as ClusterProperties).cluster === true
+    mapContainerRef.current.style.position = 'absolute'
+    mapContainerRef.current.style.inset = '0'
+    mapContainerRef.current.style.width = '100%'
+    mapContainerRef.current.style.height = '100%'
 
-  const handleMapLoad = useCallback(() => {
-    const map = getMapInstance()
-    if (!map) return
-    map.fitBounds(
-      [
-        [radiusBounds[0], radiusBounds[1]],
-        [radiusBounds[2], radiusBounds[3]],
-      ],
-      {
-        padding: 64,
-        duration: 0,
-      }
-    )
-    updateClusters()
-  }, [radiusBounds, updateClusters, getMapInstance])
-
-  const handleClusterClick = useCallback(
-    (clusterId: number, lng: number, lat: number) => {
-      const map = getMapInstance()
-      if (!map) return
-      const currentZoom = map.getZoom()
-      const targetZoom = Math.min(currentZoom + 2, 12)
-      map.easeTo({
-        center: [lng, lat],
-        zoom: targetZoom,
-        duration: 800,
-      })
-    },
-    [getMapInstance]
-  )
-
-  const initialViewState = useMemo<ViewState>(
-    () => ({
-      longitude: LAS_VEGAS.lon,
-      latitude: LAS_VEGAS.lat,
-      zoom: 5,
+    const map = new maplibregl.Map({
+      container: mapContainerRef.current,
+      style: mapStyle,
+      center: [LAS_VEGAS.lon, LAS_VEGAS.lat],
+      zoom: isMobile ? 6.2 : 9.1,
       bearing: 0,
       pitch: 0,
-      padding: { top: 0, bottom: 0, left: 0, right: 0 },
-    }),
-    []
-  )
+    })
 
-  const mapStyle = resolvedTheme === 'dark' ? DARK_BASEMAP_URL : LIGHT_BASEMAP_URL
+    mapRef.current = map
+    map.on('load', () => {
+      setMapLoaded(true)
+      const canvas = map.getCanvas()
+      canvas.style.width = '100%'
+      canvas.style.height = '100%'
+      map.resize()
+      updateClusters()
+    })
+    map.on('moveend', updateClusters)
+    map.on('zoomend', updateClusters)
+    map.on('dragend', updateClusters)
+    map.on('style.load', updateClusters)
+
+    const resizeObserver = new ResizeObserver(() => {
+      const canvas = map.getCanvas()
+      canvas.style.width = '100%'
+      canvas.style.height = '100%'
+      map.resize()
+    })
+    resizeObserver.observe(mapContainerRef.current)
+
+    requestAnimationFrame(() => {
+      const canvas = map.getCanvas()
+      canvas.style.width = '100%'
+      canvas.style.height = '100%'
+      map.resize()
+    })
+
+    return () => {
+      map.off('moveend', updateClusters)
+      map.off('zoomend', updateClusters)
+      map.off('dragend', updateClusters)
+      map.off('style.load', updateClusters)
+      resizeObserver.disconnect()
+      map.remove()
+      mapRef.current = null
+      clearMarkers()
+    }
+  }, [clearMarkers, hydrated, isMobile, mapStyle, updateClusters])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapLoaded) return
+    if (map.getStyle()?.sprite === mapStyle) return
+    map.setStyle(mapStyle)
+  }, [mapLoaded, mapStyle])
+
+  useEffect(() => {
+    if (!mapLoaded) return
+    updateClusters()
+  }, [mapLoaded, selectedTripId, updateClusters])
 
   return (
     <div className={cn('absolute inset-0', className)}>
-      <MapGL
-        ref={mapRef}
-        mapLib={maplibregl}
-        initialViewState={initialViewState}
-        mapStyle={mapStyle}
-        onLoad={handleMapLoad}
-        onMove={scheduleClusterUpdate}
-        dragRotate={false}
-        touchPitch={false}
-        reuseMaps
-      >
-        <Source id="radius-circle" type="geojson" data={radiusSource}>
-          <Layer
-            id="radius-fill"
-            type="fill"
-            paint={{
-              'fill-color': '#6b7280',
-              'fill-opacity': 0.08,
-            }}
-          />
-          <Layer
-            id="radius-outline"
-            type="line"
-            paint={{
-              'line-color': '#111827',
-              'line-opacity': 0.35,
-              'line-width': 2,
-            }}
-          />
-        </Source>
-
-        {clusters.map((feature) => {
-          const [lng, lat] = feature.geometry.coordinates as [number, number]
-
-          if (isClusterFeature(feature)) {
-            const { cluster_id: clusterId, point_count: pointCount } = feature.properties
-            const leaves = clusterIndex.getLeaves(clusterId, 4) as PointFeature[]
-            const thumbnails = leaves
-              .map((leaf) => tripPointsById.get(leaf.properties.pointId)?.photos[0])
-              .filter((photo): photo is string => Boolean(photo))
-
-            return (
-              <Marker key={`cluster-${clusterId}`} longitude={lng} latitude={lat} anchor="center">
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    handleClusterClick(clusterId, lng, lat)
-                  }}
-                  className="relative grid h-16 w-16 grid-cols-2 grid-rows-2 gap-0.5 rounded-2xl border border-white/80 bg-white/90 p-1 shadow-lg backdrop-blur transition-transform hover:scale-105"
-                  aria-label={`Zoom into ${pointCount} trip locations`}
-                >
-                  {thumbnails.map((photo) => (
-                    <span key={photo} className="overflow-hidden rounded-md">
-                      <img
-                        src={photo}
-                        alt="Cluster photo"
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    </span>
-                  ))}
-                  {pointCount > 4 ? (
-                    <span className="absolute -right-2 -top-2 rounded-full bg-black/80 px-2 py-0.5 text-[10px] font-semibold text-white">
-                      +{pointCount - 4}
-                    </span>
-                  ) : null}
-                </button>
-              </Marker>
-            )
-          }
-
-          const trip = tripPointsById.get(feature.properties.pointId)
-          if (!trip) return null
-          const isSelected = trip.id === selectedTripId
-
-          return (
-            <Marker key={trip.id} longitude={lng} latitude={lat} anchor="center">
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation()
-                  onTripSelect(trip)
-                }}
-                className={cn(
-                  'group relative h-11 w-11 overflow-hidden rounded-xl border border-white/80 shadow-md transition-transform hover:scale-110',
-                  isSelected ? 'ring-2 ring-primary' : 'ring-0'
-                )}
-                aria-label={`View trip details for ${trip.title}`}
-              >
-                <img
-                  src={trip.photos[0]}
-                  alt={trip.title}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </button>
-            </Marker>
-          )
-        })}
-      </MapGL>
-      <div className="absolute left-4 top-4 rounded-full border border-border/70 bg-background/90 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
-        Approx. 5-hour drive radius from Las Vegas
-      </div>
+      <div ref={mapContainerRef} className="absolute inset-0" />
       <div className="absolute right-4 top-4 rounded-full border border-border/70 bg-background/90 px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur">
         TODO: swap to MapTiler or another provider
       </div>

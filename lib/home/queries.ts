@@ -1,4 +1,6 @@
 import { addMonths } from 'date-fns'
+import { cacheTag } from 'next/cache'
+import { AUTH_CACHE_TAG } from '@/lib/auth/tags'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/supabase/types'
 import { createClient } from '@/lib/supabase/server'
@@ -64,6 +66,7 @@ export async function getHomeTripsPublicCached({
   monthsAhead = 6,
 }: HomeTripsOptions): Promise<CalendarTrip[]> {
   'use cache'
+  cacheTag(AUTH_CACHE_TAG)
   const supabase = createPublicClient()
   const range = resolveHomeRange(monthsAhead)
   const events = await fetchHomeTripsInRange(supabase, range, limit)

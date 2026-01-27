@@ -1,5 +1,4 @@
 import { CalendarPageClient } from '@/components/calendar/calendar-page-client'
-import { CalendarAuthSync } from '@/components/calendar/calendar-auth-sync'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
 
 type CalendarPageProps = {
@@ -19,7 +18,6 @@ export function CalendarPage({
 }: CalendarPageProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <CalendarAuthSync />
       <CalendarPageClient
         yearData={yearData}
         viewerKey={viewerKey}

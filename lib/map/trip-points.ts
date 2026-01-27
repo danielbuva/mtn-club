@@ -20,6 +20,7 @@ const photos = [
   'https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1541976076758-347942db1970?auto=format&fit=crop&w=1200&q=80',
 ]
 
 export const tripPoints: TripPoint[] = [
@@ -139,7 +140,7 @@ export const tripPoints: TripPoint[] = [
     subtitle: 'Furnace Creek, CA',
     lat: 36.4626,
     lon: -116.8656,
-    photos: [photos[5], photos[9], photos[2]],
+    photos: [photos[10], photos[9], photos[2]],
     occurredOn: '2025-02-10',
     tags: ['Salt flats', 'Golden hour'],
   },
