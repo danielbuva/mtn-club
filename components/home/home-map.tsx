@@ -6,6 +6,7 @@ import maplibregl, { type Map as MapLibreMap } from 'maplibre-gl'
 import Supercluster from 'supercluster'
 import { bbox as turfBbox, circle } from '@turf/turf'
 import type { Feature, FeatureCollection, Point } from 'geojson'
+import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
 
@@ -15,6 +16,10 @@ const LAS_VEGAS = {
 }
 
 const RADIUS_KM = 483
+const LIGHT_BASEMAP_URL =
+  'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+const DARK_BASEMAP_URL =
+  'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
 type TripPointProperties = {
   pointId: string
@@ -39,6 +44,7 @@ type HomeMapProps = {
 }
 
 export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProps) {
+  const { resolvedTheme } = useTheme()
   const mapRef = useRef<MapRef | null>(null)
   const rafRef = useRef<number | null>(null)
   const [clusters, setClusters] = useState<ClusterOrPoint[]>([])
@@ -168,14 +174,15 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
     []
   )
 
+  const mapStyle = resolvedTheme === 'dark' ? DARK_BASEMAP_URL : LIGHT_BASEMAP_URL
+
   return (
     <div className={cn('absolute inset-0', className)}>
       <MapGL
         ref={mapRef}
         mapLib={maplibregl}
         initialViewState={initialViewState}
-        // TODO: Swap to MapTiler or another production tile provider.
-        mapStyle="https://demotiles.maplibre.org/style.json"
+        mapStyle={mapStyle}
         onLoad={handleMapLoad}
         onMove={scheduleClusterUpdate}
         dragRotate={false}
