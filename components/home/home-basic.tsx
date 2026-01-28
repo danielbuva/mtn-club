@@ -105,22 +105,18 @@ export function HomeBasicMap() {
       const button = document.createElement('button')
       button.type = 'button'
       button.className =
-        'relative grid h-16 w-16 grid-cols-2 grid-rows-2 gap-0.5 rounded-2xl border border-white/80 bg-white/90 p-1 shadow-lg backdrop-blur transition-transform hover:scale-105'
+        'relative h-20 w-28 overflow-hidden rounded-2xl border border-white/80 bg-white/90 shadow-lg backdrop-blur'
 
-      photos.forEach((photo) => {
-        const cell = document.createElement('span')
-        cell.className = 'overflow-hidden rounded-md'
-        cell.appendChild(createImage(photo, 'Cluster photo'))
-        button.appendChild(cell)
-      })
+      const cover = document.createElement('span')
+      cover.className = 'block h-full w-full overflow-hidden'
+      cover.appendChild(createImage(photos[0] ?? FALLBACK_PHOTO_URL, 'Cluster photo'))
+      button.appendChild(cover)
 
-      if (count > 4) {
-        const badge = document.createElement('span')
-        badge.className =
-          'absolute -right-2 -top-2 rounded-full bg-black/80 px-2 py-0.5 text-[10px] font-semibold text-white'
-        badge.textContent = `+${count - 4}`
-        button.appendChild(badge)
-      }
+      const badge = document.createElement('span')
+      badge.className =
+        'absolute left-2 bottom-2 rounded-full bg-black/80 px-2 py-0.5 text-xs font-semibold text-white'
+      badge.textContent = String(count)
+      button.appendChild(badge)
 
       return button
     },
@@ -132,7 +128,7 @@ export function HomeBasicMap() {
       const button = document.createElement('button')
       button.type = 'button'
       button.className =
-        'group relative h-11 w-11 overflow-hidden rounded-xl border border-white/80 shadow-md transition-transform hover:scale-110'
+        'relative h-20 w-28 overflow-hidden rounded-2xl border border-white/80 shadow-lg'
       button.appendChild(createImage(trip.photos[0], trip.title))
       return button
     },
