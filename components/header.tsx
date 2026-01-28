@@ -13,6 +13,7 @@ import {
   Monitor,
   User,
 } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -50,6 +51,7 @@ export function Header() {
   const { theme, setTheme } = useTheme()
   const viewer = useViewer()
   const signOutFormId = 'header-signout-form'
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const profileName = viewer.member?.fullName ?? viewer.email ?? 'Member'
   const profileInitials = getInitials(profileName)
@@ -66,12 +68,12 @@ export function Header() {
     !membershipSuspended &&
     ['inactive', 'past_due', 'canceled'].includes(membershipState ?? '')
 
-  const themeButtonClass = (value: 'light' | 'system' | 'dark') =>
+  const themePillButtonClass = (value: 'light' | 'system' | 'dark') =>
     cn(
-      'rounded-md p-1.5 transition-colors',
+      'inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-sm transition-colors',
       currentTheme === value
-        ? 'bg-secondary text-foreground'
-        : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
+        ? 'bg-background text-foreground shadow-sm'
+        : 'text-muted-foreground hover:text-foreground'
     )
 
   const authRedirect = encodeURIComponent(
@@ -81,6 +83,68 @@ export function Header() {
   const handleSignOut = () => {
     const form = document.getElementById(signOutFormId) as HTMLFormElement | null
     form?.requestSubmit()
+  }
+
+  const cycleTheme = () => {
+    const nextTheme =
+      currentTheme === 'system' ? 'light' : currentTheme === 'light' ? 'dark' : 'system'
+    setTheme(nextTheme)
+  }
+
+  const handleMobileNavClick = () => {
+    setIsMobileMenuOpen(false)
+  }
+
+  const ThemeTogglePill = ({ className }: { className?: string }) => (
+    <div
+      role="radiogroup"
+      aria-label="Theme"
+      className={cn(
+        'inline-flex items-center rounded-full border border-border/60 bg-secondary/40 p-1',
+        className
+      )}
+    >
+      <button
+        type="button"
+        role="radio"
+        aria-checked={currentTheme === 'light'}
+        onClick={() => setTheme('light')}
+        className={themePillButtonClass('light')}
+      >
+        <Sun className="h-4 w-4" />
+        <span className="sr-only">Light theme</span>
+      </button>
+      <button
+        type="button"
+        role="radio"
+        aria-checked={currentTheme === 'system'}
+        onClick={() => setTheme('system')}
+        className={themePillButtonClass('system')}
+      >
+        <Monitor className="h-4 w-4" />
+        <span className="sr-only">System theme</span>
+      </button>
+      <button
+        type="button"
+        role="radio"
+        aria-checked={currentTheme === 'dark'}
+        onClick={() => setTheme('dark')}
+        className={themePillButtonClass('dark')}
+      >
+        <Moon className="h-4 w-4" />
+        <span className="sr-only">Dark theme</span>
+      </button>
+    </div>
+  )
+
+  const ThemeCycleIcon = ({ className }: { className?: string }) => {
+    if (currentTheme === 'light') {
+      return <Sun className={className} />
+    }
+    if (currentTheme === 'dark') {
+      return <Moon className={className} />
+    }
+    return <Monitor className={className} />
   }
 
   return (
@@ -158,35 +222,16 @@ export function Header() {
                   <div className="px-2 py-1.5">
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-sm font-medium">Theme</span>
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() => setTheme('light')}
-                          className={themeButtonClass('light')}
-                          aria-pressed={currentTheme === 'light'}
-                          aria-label="Light theme"
-                        >
-                          <Sun className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setTheme('system')}
-                          className={themeButtonClass('system')}
-                          aria-pressed={currentTheme === 'system'}
-                          aria-label="System theme"
-                        >
-                          <Monitor className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setTheme('dark')}
-                          className={themeButtonClass('dark')}
-                          aria-pressed={currentTheme === 'dark'}
-                          aria-label="Dark theme"
-                        >
-                          <Moon className="h-4 w-4" />
-                        </button>
-                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={cycleTheme}
+                        className="rounded-lg"
+                        aria-label="Cycle theme"
+                      >
+                        <ThemeCycleIcon className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                   <DropdownMenuSeparator />
@@ -207,12 +252,11 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                  className="rounded-lg"
+                  onClick={cycleTheme}
+                  className="hidden md:inline-flex rounded-lg"
+                  aria-label="Cycle theme"
                 >
-                  <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  <span className="sr-only">Toggle theme</span>
+                  <ThemeCycleIcon className="h-5 w-5" />
                 </Button>
                 {!viewer.isAuthenticated && (
                   <Button variant="ghost" className="rounded-xl font-medium" asChild>
@@ -229,7 +273,7 @@ export function Header() {
             )}
 
             {/* Mobile Menu */}
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="icon" className="rounded-lg">
                   <Menu className="h-5 w-5" />
@@ -240,13 +284,14 @@ export function Header() {
                 <SheetHeader className="sr-only">
                   <SheetTitle>Mobile navigation</SheetTitle>
                 </SheetHeader>
-                <nav className="flex flex-col gap-2 mt-8">
+                <nav className="flex flex-col gap-2 mt-8 h-full">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
+                      onClick={handleMobileNavClick}
                       className={cn(
-                        'px-4 py-3 rounded-xl text-base font-medium transition-colors',
+                        'px-4 py-3 rounded-none text-base font-medium transition-colors',
                         pathname === link.href
                           ? 'text-foreground bg-secondary'
                           : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
@@ -258,8 +303,9 @@ export function Header() {
                   {!viewer.isAuthenticated && (
                     <Link
                       href={`/auth/login?redirect=${authRedirect}`}
+                      onClick={handleMobileNavClick}
                       className={cn(
-                        'px-4 py-3 rounded-xl text-base font-medium transition-colors',
+                        'px-4 py-3 rounded-none text-base font-medium transition-colors',
                         pathname === '/auth/login'
                           ? 'text-foreground bg-secondary'
                           : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
@@ -271,8 +317,9 @@ export function Header() {
                   {viewer.isMember && (
                     <Link
                       href="/profile"
+                      onClick={handleMobileNavClick}
                       className={cn(
-                        'px-4 py-3 rounded-xl text-base font-medium transition-colors',
+                        'px-4 py-3 rounded-none text-base font-medium transition-colors',
                         pathname === '/profile'
                           ? 'text-foreground bg-secondary'
                           : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
@@ -282,10 +329,15 @@ export function Header() {
                     </Link>
                   )}
                   <div className="mt-4 empty:hidden">
-                    <MemberCTA
-                      className="w-full rounded-xl font-medium"
-                      {...(shouldShowRenewCta ? { children: 'Renew Membership' } : {})}
-                    />
+                    <div onClick={handleMobileNavClick}>
+                      <MemberCTA
+                        className="w-full rounded-none font-medium"
+                        {...(shouldShowRenewCta ? { children: 'Renew Membership' } : {})}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-auto pb-6 ml-4">
+                    <ThemeTogglePill className="w-fit" />
                   </div>
                 </nav>
               </SheetContent>
