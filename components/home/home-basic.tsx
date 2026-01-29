@@ -5,6 +5,7 @@ import maplibregl, { setWorkerUrl } from 'maplibre-gl'
 import Supercluster from 'supercluster'
 import type { Feature, Point } from 'geojson'
 import { useTheme } from 'next-themes'
+import { ScrollIndicator } from '@/components/home/scroll-indicator'
 import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
 
 const LAS_VEGAS = {
@@ -39,7 +40,15 @@ if (typeof window !== 'undefined') {
   } catch {}
 }
 
-export function HomeBasicMap() {
+type HomeBasicMapProps = {
+  showScrollIndicator?: boolean
+  scrollTargetId?: string
+}
+
+export function HomeBasicMap({
+  showScrollIndicator = false,
+  scrollTargetId = 'home-cta',
+}: HomeBasicMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markersRef = useRef<maplibregl.Marker[]>([])
@@ -232,6 +241,19 @@ export function HomeBasicMap() {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       <div ref={containerRef} className="absolute inset-0" style={{ height: '100%' }} />
+      {showScrollIndicator ? (
+        <div
+          className="absolute left-1/2 -translate-x-1/2 z-10"
+          style={{ bottom: 'max(6.5rem, calc(env(safe-area-inset-bottom) + 5.5rem))' }}
+        >
+          <ScrollIndicator
+            onClick={() => {
+              const target = document.getElementById(scrollTargetId)
+              target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }}
+          />
+        </div>
+      ) : null}
     </section>
   )
 }
