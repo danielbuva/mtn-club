@@ -29,8 +29,23 @@ export function Footer() {
                 </a>
               </Button>
               <Button variant="outline" size="icon" className="rounded-xl bg-transparent" asChild>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                  <Twitter className="w-4 h-4" />
+                <a
+                  href="https://discord.gg/tcrxSQB4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Discord"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-4 h-4"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M20.317 4.369A19.791 19.791 0 0 0 15.884 3c-.186.332-.393.775-.538 1.129a18.525 18.525 0 0 0-4.692 0A12.355 12.355 0 0 0 10.116 3a19.739 19.739 0 0 0-4.433 1.369C2.86 8.164 2.07 11.83 2.37 15.45a19.92 19.92 0 0 0 5.993 3.063c.48-.654.908-1.348 1.278-2.079a12.901 12.901 0 0 1-2.012-.965c.169-.124.334-.253.496-.387 3.884 1.82 8.086 1.82 11.92 0 .162.134.327.263.496.387-.644.373-1.313.7-2.012.965.37.731.799 1.425 1.278 2.079a19.92 19.92 0 0 0 5.993-3.063c.35-4.36-.6-8.003-3.812-11.081ZM8.959 13.501c-1.07 0-1.952-.993-1.952-2.215s.86-2.215 1.952-2.215c1.093 0 1.974.993 1.953 2.215 0 1.222-.86 2.215-1.953 2.215Zm6.082 0c-1.07 0-1.952-.993-1.952-2.215s.86-2.215 1.952-2.215c1.093 0 1.974.993 1.953 2.215 0 1.222-.86 2.215-1.953 2.215Z"
+                    />
+                  </svg>
                 </a>
               </Button>
               <Button variant="outline" size="icon" className="rounded-xl bg-transparent" asChild>
