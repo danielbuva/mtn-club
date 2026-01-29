@@ -11,6 +11,10 @@ export const privacySettingsSchema = z.object({
   shareEmail: z.boolean().optional(),
   sharePhone: z.boolean().optional(),
   profileVisible: z.boolean().optional(),
+  shareGear: z.boolean().optional(),
+  shareCarpooling: z.boolean().optional(),
+  shareCarInfo: z.boolean().optional(),
+  shareNeighborhood: z.boolean().optional(),
 }).partial()
 
 export const travelProfileSchema = z.object({
@@ -40,6 +44,10 @@ export const notificationSettingsSchema = z.object({
   email: z.boolean().optional(),
   sms: z.boolean().optional(),
   announcements: z.boolean().optional(),
+  tripUpdates: z.boolean().optional(),
+  memberStories: z.boolean().optional(),
+  safetyAlerts: z.boolean().optional(),
+  digestFrequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
 }).partial()
 
 export const profileFormSchema = z.object({
@@ -59,6 +67,10 @@ export const profileFormSchema = z.object({
     shareEmail: z.boolean(),
     sharePhone: z.boolean(),
     profileVisible: z.boolean(),
+    shareGear: z.boolean(),
+    shareCarpooling: z.boolean(),
+    shareCarInfo: z.boolean(),
+    shareNeighborhood: z.boolean(),
   }),
   travelProfile: z.object({
     hasCar: z.boolean(),
@@ -83,6 +95,10 @@ export const profileFormSchema = z.object({
     email: z.boolean(),
     sms: z.boolean(),
     announcements: z.boolean(),
+    tripUpdates: z.boolean(),
+    memberStories: z.boolean(),
+    safetyAlerts: z.boolean(),
+    digestFrequency: z.enum(['daily', 'weekly', 'monthly']),
   }),
 })
 

@@ -15,6 +15,10 @@ export type PrivacySettings = {
   shareEmail: boolean
   sharePhone: boolean
   profileVisible: boolean
+  shareGear: boolean
+  shareCarpooling: boolean
+  shareCarInfo: boolean
+  shareNeighborhood: boolean
 }
 
 export type TravelProfile = {
@@ -44,6 +48,10 @@ export type NotificationSettings = {
   email: boolean
   sms: boolean
   announcements: boolean
+  tripUpdates: boolean
+  memberStories: boolean
+  safetyAlerts: boolean
+  digestFrequency: 'daily' | 'weekly' | 'monthly'
 }
 
 export type ProfileFormValues = ProfileFormInput

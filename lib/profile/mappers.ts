@@ -33,6 +33,10 @@ const emptyPrivacySettings: PrivacySettings = {
   shareEmail: false,
   sharePhone: false,
   profileVisible: true,
+  shareGear: true,
+  shareCarpooling: true,
+  shareCarInfo: false,
+  shareNeighborhood: true,
 }
 
 const emptyTravelProfile: TravelProfile = {
@@ -62,6 +66,10 @@ const emptyNotificationSettings: NotificationSettings = {
   email: true,
   sms: false,
   announcements: true,
+  tripUpdates: true,
+  memberStories: true,
+  safetyAlerts: true,
+  digestFrequency: 'weekly',
 }
 
 export const emptyProfileValues = (): ProfileFormValues => ({

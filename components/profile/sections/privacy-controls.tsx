@@ -44,6 +44,46 @@ export function PrivacyControlsSection({ value, onChange }: PrivacyControlsProps
           onCheckedChange={(checked) => onChange('sharePhone', checked)}
         />
       </div>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium">Share gear availability</p>
+          <p className="text-xs text-muted-foreground">Let members know what gear you can lend.</p>
+        </div>
+        <Switch
+          checked={value.shareGear}
+          onCheckedChange={(checked) => onChange('shareGear', checked)}
+        />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium">Share carpooling info</p>
+          <p className="text-xs text-muted-foreground">Include your ride availability.</p>
+        </div>
+        <Switch
+          checked={value.shareCarpooling}
+          onCheckedChange={(checked) => onChange('shareCarpooling', checked)}
+        />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium">Share car details</p>
+          <p className="text-xs text-muted-foreground">Show vehicle type and seats.</p>
+        </div>
+        <Switch
+          checked={value.shareCarInfo}
+          onCheckedChange={(checked) => onChange('shareCarInfo', checked)}
+        />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium">Share approximate area</p>
+          <p className="text-xs text-muted-foreground">Display your neighborhood for meetups.</p>
+        </div>
+        <Switch
+          checked={value.shareNeighborhood}
+          onCheckedChange={(checked) => onChange('shareNeighborhood', checked)}
+        />
+      </div>
       <div className="grid gap-2">
         <Label className="text-xs text-muted-foreground">
           Privacy settings are stored in your profile and can be updated anytime.
