@@ -13,5 +13,5 @@ export const getProfileOrRedirect = cache(async () => {
     redirect('/auth/login?redirect=/profile/user/account')
   }
 
-  return result
+  return { ...result, userId: result.userId }
 })
