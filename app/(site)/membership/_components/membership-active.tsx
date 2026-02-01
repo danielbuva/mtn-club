@@ -90,7 +90,7 @@ export function MembershipActive({ viewer }: MembershipActiveProps) {
                   <Link href="/profile">View Profile</Link>
                 </Button>
                 <Button variant="outline" className="rounded-xl bg-transparent" asChild>
-                  <Link href="/calendar">Browse Trips</Link>
+                  <Link href="/coming-soon">Browse Trips (Coming Soon)</Link>
                 </Button>
                 <ManageBillingButton className="rounded-xl bg-transparent" />
               </div>
@@ -122,7 +122,7 @@ export function MembershipActive({ viewer }: MembershipActiveProps) {
             Browse upcoming adventures and RSVP when you're ready to hit the trail.
           </p>
           <Button size="lg" variant="secondary" className="rounded-xl text-lg px-8" asChild>
-            <Link href="/calendar">Browse Trips</Link>
+            <Link href="/coming-soon">Browse Trips (Coming Soon)</Link>
           </Button>
         </div>
       </section>

@@ -67,7 +67,7 @@ export function MembershipCheckoutCard({ ctaLabel }: MembershipCheckoutCardProps
 
           <div className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <Lock className="w-4 h-4" />
-            <span>Secure checkout powered by Stripe</span>
+            <span>Stripe checkout coming soon</span>
           </div>
         </CardContent>
       </Card>

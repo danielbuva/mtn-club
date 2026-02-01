@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { MembershipBenefits } from './membership-benefits'
 import { MembershipCheckoutCard } from './membership-checkout-card'
 import { MembershipFaq } from './membership-faq'
@@ -13,6 +14,11 @@ export function MembershipMarketing() {
         title="Join UNLV Mountain Club"
         description="Unlock access to our Upcoming Events, our Guidebook Library, Gear Room, and a community of outdoor enthusiasts who share your passion."
       />
+      <div className="px-4">
+        <div className="max-w-4xl mx-auto text-sm text-muted-foreground">
+          New here? Start with <Link className="text-primary hover:underline" href="/get-started">Get Started</Link>.
+        </div>
+      </div>
 
       <section className="py-12 px-4">
         <MembershipCheckoutCard ctaLabel="Checkout" />

@@ -15,7 +15,7 @@ export function HeaderFallback() {
               Home
             </span>
             <span className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground">
-              Calendar
+              Get Started
             </span>
             <span className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground">
               Team

@@ -8,7 +8,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   return (
     <Suspense fallback={<ViewerFallback />}>
       <ViewerGate>
-        <div className="min-h-screen flex flex-col bg-background">
+        <div className="min-h-screen flex flex-col">
           <Header />
           <div className="flex-1">{children}</div>
           <Footer />

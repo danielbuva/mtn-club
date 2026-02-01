@@ -1,6 +1,8 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { ArrowRight, Heart, Leaf, Mountain, Shield, Sparkles, Users } from 'lucide-react'
 import { MemberCTA } from '@/components/member-cta'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
 const values = [
@@ -87,8 +89,16 @@ export default function AboutPage() {
               Building Community Through Adventure
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              UNLV Mountain Club connects outdoor enthusiasts across the Pacific Northwest and California for unforgettable experiences in nature.
+              UNLV Mountain Club connects outdoor enthusiasts for unforgettable experiences in nature.
             </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Button asChild className="rounded-xl">
+                <Link href="/membership">Become a member</Link>
+              </Button>
+              <Button variant="secondary" asChild className="rounded-xl">
+                <Link href="/get-started">Get started</Link>
+              </Button>
+            </div>
           </div>
         </section>
 

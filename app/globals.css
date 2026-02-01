@@ -118,8 +118,13 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    background-color: var(--background);
+  }
   body {
     @apply bg-background text-foreground;
+    
+   background-color: transparent;
   }
   :where(
       button,
@@ -139,6 +144,28 @@
       [role='radio']
     ) {
     cursor: pointer;
+  }
+
+    body::before {
+    background-color: transparent;
+    background: url("/pattern.webp") repeat;
+    mix-blend-mode: luminosity;
+    pointer-events: none;
+    position: fixed;
+    opacity: 0.15;
+    inset: 0;
+    z-index: 0;
+    content: "";
+  }
+
+  /* keep content above the overlay */
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+  .dark body {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0);
   }
 }
 

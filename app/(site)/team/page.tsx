@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Compass, Flag, Heart, Mail, Map, Shield } from 'lucide-react'
 import { TeamCard } from '@/components/team-card'
 import { Button } from '@/components/ui/button'
@@ -41,6 +42,14 @@ export default function TeamPage() {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Our leadership team brings decades of combined outdoor experience, certifications, and a shared passion for building community.
             </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Button asChild className="rounded-xl">
+                <Link href="/membership">Become a member</Link>
+              </Button>
+              <Button variant="secondary" asChild className="rounded-xl">
+                <Link href="/get-started">Get started</Link>
+              </Button>
+            </div>
           </div>
         </section>
 

@@ -33,7 +33,7 @@ import { signOutAction } from '@/app/actions/auth'
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/calendar', label: 'Calendar' },
+  { href: '/get-started', label: 'Get Started' },
   { href: '/team', label: 'Team' },
   { href: '/about', label: 'About' },
 ]
@@ -213,9 +213,9 @@ export function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/calendar">
+                    <Link href="/coming-soon">
                       <Calendar className="h-4 w-4" />
-                      Trips
+                      Trips (Coming Soon)
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -266,6 +266,11 @@ export function Header() {
                 <div className="hidden sm:block">
                   <MemberCTA
                     className="rounded-xl font-medium"
+                    memberFallback={(
+                      <Button className="rounded-xl font-medium" asChild>
+                        <Link href="/membership">Membership</Link>
+                      </Button>
+                    )}
                     {...(shouldShowRenewCta ? { children: 'Renew Membership' } : {})}
                   />
                 </div>
@@ -332,6 +337,11 @@ export function Header() {
                     <div onClick={handleMobileNavClick}>
                       <MemberCTA
                         className="w-full rounded-none font-medium"
+                        memberFallback={(
+                          <Button className="w-full rounded-none font-medium" asChild>
+                            <Link href="/membership">Membership</Link>
+                          </Button>
+                        )}
                         {...(shouldShowRenewCta ? { children: 'Renew Membership' } : {})}
                       />
                     </div>

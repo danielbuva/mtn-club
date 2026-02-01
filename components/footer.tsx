@@ -66,8 +66,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/calendar" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Trip Calendar
+                <Link href="/coming-soon" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Trips (Coming Soon)
                 </Link>
               </li>
               <li>
