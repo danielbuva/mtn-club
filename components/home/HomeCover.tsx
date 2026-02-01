@@ -125,25 +125,25 @@ export function HomeCover() {
             >
               <Link
                 href="/get-started"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
+                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
-                New here? Start here →
+                Starter Guide →
               </Link>
               <Link
                 href="/photos"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
+                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
                 Trips and Photos →
               </Link>
               <Link
                 href="/activities"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
+                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
                 Activities →
               </Link>
               <Link
                 href="/join"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
+                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
                 Join →
               </Link>
