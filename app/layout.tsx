@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Archivo_Narrow } from "next/font/google";
 // MapLibre styles should be loaded once at the app root.
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
@@ -21,6 +21,13 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const brand = Archivo_Narrow({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-brand",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${geistSans.className} ${brand.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

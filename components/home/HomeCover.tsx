@@ -116,7 +116,7 @@ export function HomeCover() {
           <UNLVMountainClub />
         </div>
 
-        <div className="pointer-events-auto absolute right-1 bottom-5 md:right-6 md:bottom-6">
+        <div className="pointer-events-auto absolute right-1 bottom-5 md:right-6 md:bottom-6 font-brand">
           <div className="relative text-right">
             <nav
               ref={navRef}
