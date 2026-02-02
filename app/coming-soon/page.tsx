@@ -2,13 +2,20 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 type ComingSoonPageProps = {
-  searchParams?: {
-    from?: string
-  }
+  searchParams?:
+    | {
+        from?: string
+      }
+    | Promise<{
+        from?: string
+      }>
 }
 
-export default function ComingSoonPage({ searchParams }: ComingSoonPageProps) {
-  const from = searchParams?.from
+export default async function ComingSoonPage({
+  searchParams,
+}: ComingSoonPageProps) {
+  const resolvedSearchParams = await searchParams
+  const from = resolvedSearchParams?.from
 
   return (
     <div className="min-h-screen bg-background">
