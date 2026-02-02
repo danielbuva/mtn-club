@@ -28,7 +28,8 @@
       "!!**/public/maplibre/maplibre-gl-worker-dev.js",
       "!!**/public/maplibre/maplibre-gl-worker.js",
       "!!**/public/maplibre/maplibre-gl-csp-worker.js"
-    ]
+    ],
+    "ignoreUnknown": true
   },
   "formatter": {
     "includes": [
