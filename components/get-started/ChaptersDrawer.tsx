@@ -120,7 +120,7 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
 
   return (
     <>
-      <div className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between px-4 py-3 text-xs text-muted-foreground">
+      <div className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between border-b border-border/50 bg-background/80 px-4 py-3 text-xs text-muted-foreground backdrop-blur">
         <a href="/" className="text-foreground/70 lowercase">
           ← back
         </a>
@@ -195,7 +195,7 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
       ) : null}
 
       <aside className="hidden md:block">
-        <div className="sticky top-10">
+        <div className="sticky top-12">
           <div className="rounded-2xl border border-border/50 bg-background/70 p-4 text-sm text-muted-foreground">
             <p className="text-xs uppercase tracking-widest">Chapters</p>
             <nav className="mt-4 space-y-3">

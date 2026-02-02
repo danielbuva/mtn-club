@@ -4,7 +4,7 @@ import { HeroMedia } from '@/components/get-started/HeroMedia'
 import { InsetPanel } from '@/components/get-started/InsetPanel'
 import { PullQuote } from '@/components/get-started/PullQuote'
 
-const scrollMarginClass = 'scroll-mt-8 md:scroll-mt-12'
+const scrollMarginClass = 'scroll-mt-12 md:scroll-mt-16'
 
 type StickyChapterProps = {
   section: Section
@@ -21,7 +21,7 @@ export function StickyChapter({ section, nextId }: StickyChapterProps) {
         <div className="md:hidden">
           <div className="relative -mx-4 px-4">
             <div className="h-[58vh] max-h-[520px] min-h-[320px]">
-              <div className="sticky top-0 z-10 pt-4 pb-4 bg-background/95 supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur">
+              <div className="sticky top-12 z-10 pt-4 pb-4 bg-background/95 supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur">
                 <div className="h-full overflow-hidden rounded-2xl">
                   <HeroMedia
                     caption={section.hero.caption}
@@ -33,7 +33,7 @@ export function StickyChapter({ section, nextId }: StickyChapterProps) {
             </div>
           </div>
         </div>
-        <div className="hidden md:block md:sticky md:top-6 md:pt-6">
+        <div className="hidden md:block md:sticky md:top-12 md:pt-6">
           <HeroMedia
             caption={section.hero.caption}
             variant={section.hero.type}
