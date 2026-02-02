@@ -1,5 +1,5 @@
-import type { Database } from '@/lib/supabase/types'
 import type { ProfileFormInput } from '@/lib/profile/schemas'
+import type { Database } from '@/lib/supabase/types'
 
 export type ProfileRow = Database['public']['Tables']['app_users']['Row']
 export type ProfileUpdate = Database['public']['Tables']['app_users']['Update']

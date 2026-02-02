@@ -15,15 +15,18 @@ export default function ComingSoonPage({ searchParams }: ComingSoonPageProps) {
       <main className="max-w-3xl mx-auto px-4 pt-24 pb-16">
         <div className="space-y-6">
           <div className="space-y-3">
-            <p className="text-sm uppercase tracking-widest text-muted-foreground">UNLV Mountain Club</p>
+            <p className="text-sm uppercase tracking-widest text-muted-foreground">
+              UNLV Mountain Club
+            </p>
             <h1 className="text-4xl md:text-5xl font-semibold">Coming soon</h1>
             <p className="text-base md:text-lg text-muted-foreground">
-              We’re shipping membership onboarding + dues first. Trips, calendar, gear closet, maps,
-              RSVPs are coming soon.
+              We’re shipping membership onboarding + dues first. Trips,
+              calendar, gear closet, maps, RSVPs are coming soon.
             </p>
             {from ? (
               <p className="text-sm text-muted-foreground">
-                You tried to visit: <span className="font-medium text-foreground">{from}</span>
+                You tried to visit:{' '}
+                <span className="font-medium text-foreground">{from}</span>
               </p>
             ) : null}
           </div>

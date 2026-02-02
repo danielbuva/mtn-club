@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { MembershipBenefits } from './membership-benefits'
 import { MembershipCheckoutCard } from './membership-checkout-card'
+import { marketingFaqs, membershipBenefits } from './membership-data'
 import { MembershipFaq } from './membership-faq'
 import { MembershipFinalCTA } from './membership-final-cta'
 import { MembershipHero } from './membership-hero'
-import { marketingFaqs, membershipBenefits } from './membership-data'
 
 export function MembershipMarketing() {
   return (
@@ -16,7 +16,11 @@ export function MembershipMarketing() {
       />
       <div className="px-4">
         <div className="max-w-4xl mx-auto text-sm text-muted-foreground">
-          New here? Start with <Link className="text-primary hover:underline" href="/get-started">Get Started</Link>.
+          New here? Start with{' '}
+          <Link className="text-primary hover:underline" href="/get-started">
+            Get Started
+          </Link>
+          .
         </div>
       </div>
 

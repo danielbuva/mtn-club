@@ -9,7 +9,5 @@ type ViewerGateProps = {
 export async function ViewerGate({ children }: ViewerGateProps) {
   const viewer = await getViewer()
 
-  return (
-    <ViewerProvider viewer={viewer}>{children}</ViewerProvider>
-  )
+  return <ViewerProvider viewer={viewer}>{children}</ViewerProvider>
 }

@@ -24,7 +24,9 @@ const resolveMonthDate = (monthValue: string): Date => {
   return new Date(year, monthIndex, 1)
 }
 
-export async function CalendarUpcomingTrips({ currentMonth }: CalendarUpcomingTripsProps) {
+export async function CalendarUpcomingTrips({
+  currentMonth,
+}: CalendarUpcomingTripsProps) {
   const viewer = await getViewer()
   if (!viewer.isMember) {
     return null

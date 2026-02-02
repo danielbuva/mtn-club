@@ -1,15 +1,19 @@
 import { z } from 'zod'
 import {
+  EVENT_CREATION_STATUSES,
   EVENT_DIFFICULTIES,
   EVENT_KINDS,
-  EVENT_CREATION_STATUSES,
   EVENT_VISIBILITIES,
 } from '@/lib/events/constants'
 
 export const eventFormSchema = z
   .object({
     title: z.string().min(1, 'Title is required'),
-    shortSummary: z.string().max(280, 'Summary is too long').optional().or(z.literal('')),
+    shortSummary: z
+      .string()
+      .max(280, 'Summary is too long')
+      .optional()
+      .or(z.literal('')),
     kind: z.enum(EVENT_KINDS),
     activityTypes: z.array(z.string()).optional(),
     startAt: z.string().min(1, 'Start date is required'),

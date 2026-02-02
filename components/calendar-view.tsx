@@ -1,7 +1,7 @@
 'use client'
 
-import { useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
@@ -50,7 +50,7 @@ export function CalendarView({
     // Add days of the month
     for (let day = 1; day <= totalDays; day++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-      const dayTrips = trips.filter((trip) => {
+      const dayTrips = trips.filter(trip => {
         const startDate = trip.dateStart
         const endDate = trip.dateEnd
         return dateStr >= startDate && dateStr <= endDate
@@ -62,7 +62,10 @@ export function CalendarView({
     return days
   }, [year, month, trips, teasersByDay, showTeasers])
 
-  const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  const monthName = currentDate.toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  })
 
   const goToPreviousMonth = () => {
     onDateChange(new Date(year, month - 1, 1))
@@ -92,14 +95,29 @@ export function CalendarView({
       <div className="flex items-center justify-between p-4 border-b border-border">
         <h2 className="text-xl font-semibold">{monthName}</h2>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="rounded-xl bg-transparent" onClick={goToToday}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-xl bg-transparent"
+            onClick={goToToday}
+          >
             Today
           </Button>
           <div className="flex items-center">
-            <Button variant="ghost" size="icon" className="rounded-xl" onClick={goToPreviousMonth}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-xl"
+              onClick={goToPreviousMonth}
+            >
               <ChevronLeft className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-xl" onClick={goToNextMonth}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-xl"
+              onClick={goToNextMonth}
+            >
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
@@ -108,8 +126,11 @@ export function CalendarView({
 
       {/* Days of week header */}
       <div className="grid grid-cols-7 border-b border-border">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={`weekday-${day}`} className="p-3 text-center text-sm font-medium text-muted-foreground">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div
+            key={`weekday-${day}`}
+            className="p-3 text-center text-sm font-medium text-muted-foreground"
+          >
             {day}
           </div>
         ))}
@@ -138,7 +159,7 @@ export function CalendarView({
               className={cn(
                 'min-h-24 p-2 border-b border-r border-border',
                 index % 7 === 6 && 'border-r-0',
-                !item.day && 'bg-muted/30'
+                !item.day && 'bg-muted/30',
               )}
             >
               {item.day && (
@@ -149,8 +170,9 @@ export function CalendarView({
                       onClick={handleTeaserClick}
                       className={cn(
                         'inline-flex items-center justify-center w-7 h-7 text-sm font-medium rounded-full',
-                        isToday(item.day) && 'bg-primary text-primary-foreground',
-                        'hover:bg-primary/10'
+                        isToday(item.day) &&
+                          'bg-primary text-primary-foreground',
+                        'hover:bg-primary/10',
                       )}
                     >
                       {item.day}
@@ -159,22 +181,24 @@ export function CalendarView({
                     <span
                       className={cn(
                         'inline-flex items-center justify-center w-7 h-7 text-sm font-medium rounded-full',
-                        isToday(item.day) && 'bg-primary text-primary-foreground'
+                        isToday(item.day) &&
+                          'bg-primary text-primary-foreground',
                       )}
                     >
                       {item.day}
                     </span>
                   )}
                   <div className="mt-1 space-y-1">
-                    {item.trips.slice(0, 2).map((trip) => (
+                    {item.trips.slice(0, 2).map(trip => (
                       <button
                         key={trip.id}
+                        type="button"
                         onClick={() => onTripClick(trip)}
                         className={cn(
                           'w-full text-left text-xs px-2 py-1 rounded-md truncate transition-colors',
                           trip.membersOnly
                             ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                            : 'bg-secondary text-foreground hover:bg-secondary/80'
+                            : 'bg-secondary text-foreground hover:bg-secondary/80',
                         )}
                       >
                         {trip.title}

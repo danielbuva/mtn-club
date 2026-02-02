@@ -1,22 +1,20 @@
-import Image from 'next/image'
 import { Instagram, Mail, MapPin } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { type TeamMember } from '@/lib/data'
+import { Card, CardContent } from '@/components/ui/card'
+import type { TeamMember } from '@/lib/data'
 
 interface TeamCardProps {
   member: TeamMember
 }
 
-
 export function TeamCard({ member }: TeamCardProps) {
-
   return (
     <Card className="group overflow-hidden bg-card border-border/50 hover:border-primary/20 hover:shadow-lg transition-all">
       {/* Photo */}
       <div className="relative aspect-square overflow-hidden bg-muted">
         <Image
-          src={"/placeholder.svg"}
+          src={'/placeholder.svg'}
           alt={member.name}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
@@ -47,7 +45,12 @@ export function TeamCard({ member }: TeamCardProps) {
         {member.social && (
           <div className="flex items-center gap-2">
             {member.social.instagram && (
-              <Button variant="outline" size="icon" className="rounded-xl h-9 w-9 bg-transparent" asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-xl h-9 w-9 bg-transparent"
+                asChild
+              >
                 <a
                   href={`https://instagram.com/${member.social.instagram.replace('@', '')}`}
                   target="_blank"
@@ -59,8 +62,16 @@ export function TeamCard({ member }: TeamCardProps) {
               </Button>
             )}
             {member.social.email && (
-              <Button variant="outline" size="icon" className="rounded-xl h-9 w-9 bg-transparent" asChild>
-                <a href={`mailto:${member.social.email}`} aria-label={`Email ${member.name}`}>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-xl h-9 w-9 bg-transparent"
+                asChild
+              >
+                <a
+                  href={`mailto:${member.social.email}`}
+                  aria-label={`Email ${member.name}`}
+                >
                   <Mail className="w-4 h-4" />
                 </a>
               </Button>

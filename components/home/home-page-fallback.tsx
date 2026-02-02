@@ -1,4 +1,6 @@
 export function HomePageFallback() {
+  const skeletonLines = ['line-1', 'line-2', 'line-3', 'line-4']
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
@@ -16,8 +18,11 @@ export function HomePageFallback() {
               <div className="h-8 w-72 bg-muted/40 rounded mx-auto animate-pulse" />
               <div className="h-4 w-80 bg-muted/30 rounded mx-auto animate-pulse" />
               <div className="space-y-3 max-w-md mx-auto">
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="h-4 bg-muted/30 rounded animate-pulse" />
+                {skeletonLines.map(line => (
+                  <div
+                    key={line}
+                    className="h-4 bg-muted/30 rounded animate-pulse"
+                  />
                 ))}
               </div>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -26,7 +31,6 @@ export function HomePageFallback() {
               </div>
             </div>
           </section>
-
         </div>
       </main>
     </div>

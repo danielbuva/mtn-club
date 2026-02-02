@@ -1,17 +1,19 @@
 'use client'
 
 import { Lock } from 'lucide-react'
+import { getTripCategories } from '@/components/calendar/calendar-categories'
+import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
-import { getTripCategories } from '@/components/calendar/calendar-categories'
-import { type CalendarTrip } from '@/lib/events/types'
 import { formatDateRange } from '@/lib/events/formatters'
+import type { CalendarTrip } from '@/lib/events/types'
 
 const difficultyColors: Record<CalendarTrip['difficulty'], string> = {
   Easy: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
-  Moderate: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
-  Challenging: 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20',
+  Moderate:
+    'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
+  Challenging:
+    'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20',
   Expert: 'bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20',
 }
 
@@ -32,7 +34,9 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
         <div className="flex flex-col sm:flex-row">
           <div className="sm:w-32 p-4 bg-secondary flex flex-row sm:flex-col items-center justify-center gap-2 sm:gap-1 text-center shrink-0">
             <span className="text-sm text-muted-foreground">
-              {new Date(trip.dateStart).toLocaleDateString('en-US', { month: 'short' })}
+              {new Date(trip.dateStart).toLocaleDateString('en-US', {
+                month: 'short',
+              })}
             </span>
             <span className="text-3xl font-bold">
               {new Date(trip.dateStart).getDate()}
@@ -46,7 +50,10 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
             <div className="flex items-start justify-between gap-4 mb-2">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <CalendarCategoryPill categories={categories} className="shrink-0" />
+                  <CalendarCategoryPill
+                    categories={categories}
+                    className="shrink-0"
+                  />
                   <h3 className="font-semibold text-lg">{trip.title}</h3>
                   {trip.membersOnly && (
                     <Badge variant="secondary" className="gap-1">
@@ -56,10 +63,14 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
                   )}
                 </div>
                 <p className="text-muted-foreground text-sm">
-                  {trip.state} &bull; {formatDateRange(trip.dateStart, trip.dateEnd)}
+                  {trip.state} &bull;{' '}
+                  {formatDateRange(trip.dateStart, trip.dateEnd)}
                 </p>
               </div>
-              <Badge variant="outline" className={difficultyColors[trip.difficulty]}>
+              <Badge
+                variant="outline"
+                className={difficultyColors[trip.difficulty]}
+              >
                 {trip.difficulty}
               </Badge>
             </div>

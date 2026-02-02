@@ -41,7 +41,9 @@ export function formatTime(value: string | null | undefined): string {
   })
 }
 
-export function getSeasonTag(value: Date): 'spring' | 'summer' | 'fall' | 'winter' {
+export function getSeasonTag(
+  value: Date,
+): 'spring' | 'summer' | 'fall' | 'winter' {
   const month = value.getMonth() + 1
   if (month >= 3 && month <= 5) return 'spring'
   if (month >= 6 && month <= 8) return 'summer'

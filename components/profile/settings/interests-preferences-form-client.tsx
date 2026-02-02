@@ -1,13 +1,17 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { InterestsPreferences, ProfileRow, ProfileUpdate } from '@/lib/profile/types'
-import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { createClient } from '@/lib/supabase/client'
 import { InterestsPreferencesSection } from '@/components/profile/sections/interests-preferences'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { profileRowToFormValues } from '@/lib/profile/mappers'
 import { upsertProfile } from '@/lib/profile/queries'
+import type {
+  InterestsPreferences,
+  ProfileRow,
+  ProfileUpdate,
+} from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type InterestsPreferencesFormClientProps = {
   initialProfile: ProfileRow | null
@@ -23,7 +27,7 @@ export function InterestsPreferencesFormClient({
 }: InterestsPreferencesFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).interestsPreferences,
-    [initialProfile]
+    [initialProfile],
   )
   const [values, setValues] = useState<InterestsPreferences>(initialValues)
   const [baseline, setBaseline] = useState<InterestsPreferences>(initialValues)
@@ -44,9 +48,9 @@ export function InterestsPreferencesFormClient({
 
   const updateField = <K extends keyof InterestsPreferences>(
     key: K,
-    value: InterestsPreferences[K]
+    value: InterestsPreferences[K],
   ) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -61,7 +65,9 @@ export function InterestsPreferencesFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }

@@ -1,22 +1,20 @@
-import { UpdatePasswordForm } from "@/components/auth/update-password-form";
+import { Suspense } from 'react'
+import { UpdatePasswordForm } from '@/components/auth/update-password-form'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Suspense } from "react";
+} from '@/components/ui/card'
 
 function UpdatePasswordFallback() {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-        <CardDescription>
-          Loading secure password reset form...
-        </CardDescription>
+        <CardDescription>Loading secure password reset form...</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-6">
@@ -30,7 +28,7 @@ function UpdatePasswordFallback() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 export default function Page() {
@@ -42,5 +40,5 @@ export default function Page() {
         </Suspense>
       </div>
     </div>
-  );
+  )
 }

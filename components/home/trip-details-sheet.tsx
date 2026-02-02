@@ -1,7 +1,7 @@
 'use client'
 
-import type { CalendarTrip } from '@/lib/events/types'
 import { TripDetailsDrawer } from '@/components/trip-details-drawer'
+import type { CalendarTrip } from '@/lib/events/types'
 
 type TripDetailsSheetProps = {
   trip: CalendarTrip | null
@@ -9,6 +9,12 @@ type TripDetailsSheetProps = {
   onOpenChange: (open: boolean) => void
 }
 
-export function TripDetailsSheet({ trip, open, onOpenChange }: TripDetailsSheetProps) {
-  return <TripDetailsDrawer trip={trip} open={open} onOpenChange={onOpenChange} />
+export function TripDetailsSheet({
+  trip,
+  open,
+  onOpenChange,
+}: TripDetailsSheetProps) {
+  return (
+    <TripDetailsDrawer trip={trip} open={open} onOpenChange={onOpenChange} />
+  )
 }

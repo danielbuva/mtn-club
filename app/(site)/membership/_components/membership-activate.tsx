@@ -1,9 +1,9 @@
 import { MembershipBenefits } from './membership-benefits'
 import { MembershipCheckoutCard } from './membership-checkout-card'
+import { activateFaqs, membershipBenefits } from './membership-data'
 import { MembershipFaq } from './membership-faq'
 import { MembershipFinalCTA } from './membership-final-cta'
 import { MembershipHero } from './membership-hero'
-import { activateFaqs, membershipBenefits } from './membership-data'
 
 export function MembershipActivate() {
   return (

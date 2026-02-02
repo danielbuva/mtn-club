@@ -16,7 +16,9 @@ export function ManageBillingButton({ className }: ManageBillingButtonProps) {
     try {
       const result = await createCustomerPortalSession()
       if (result.success && result.url) {
-        alert('Billing portal opened! In production, this would redirect to Stripe.')
+        alert(
+          'Billing portal opened! In production, this would redirect to Stripe.',
+        )
       }
     } catch (error) {
       console.error('Billing portal error:', error)

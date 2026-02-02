@@ -1,12 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import maplibregl, { setWorkerUrl } from 'maplibre-gl'
-import Supercluster from 'supercluster'
 import type { Feature, Point } from 'geojson'
+import maplibregl, { setWorkerUrl } from 'maplibre-gl'
 import { useTheme } from 'next-themes'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Supercluster from 'supercluster'
 import { ScrollIndicator } from '@/components/home/scroll-indicator'
-import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
+import { type TripPoint, tripPoints } from '@/lib/map/trip-points'
 
 const LAS_VEGAS = {
   lat: 36.1699,
@@ -60,19 +60,20 @@ export function HomeBasicMap({
       stableTheme === 'dark'
         ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
         : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
-    [stableTheme]
+    [stableTheme],
   )
 
   const themeReady = resolvedTheme === 'light' || resolvedTheme === 'dark'
 
   const tripPointsById = useMemo<Map<string, TripPoint>>(
-    () => new Map<string, TripPoint>(tripPoints.map((point) => [point.id, point])),
-    []
+    () =>
+      new Map<string, TripPoint>(tripPoints.map(point => [point.id, point])),
+    [],
   )
 
   const features = useMemo<TripPointFeature[]>(
     () =>
-      tripPoints.map((point) => ({
+      tripPoints.map(point => ({
         type: 'Feature',
         properties: { pointId: point.id },
         geometry: {
@@ -80,7 +81,7 @@ export function HomeBasicMap({
           coordinates: [point.lon, point.lat],
         },
       })),
-    []
+    [],
   )
 
   const clusterIndex = useMemo(() => {
@@ -91,7 +92,7 @@ export function HomeBasicMap({
   }, [features])
 
   const clearMarkers = useCallback(() => {
-    markersRef.current.forEach((marker) => marker.remove())
+    markersRef.current.forEach(marker => marker.remove())
     markersRef.current = []
   }, [])
 
@@ -118,7 +119,9 @@ export function HomeBasicMap({
 
       const cover = document.createElement('span')
       cover.className = 'block h-full w-full overflow-hidden'
-      cover.appendChild(createImage(photos[0] ?? FALLBACK_PHOTO_URL, 'Cluster photo'))
+      cover.appendChild(
+        createImage(photos[0] ?? FALLBACK_PHOTO_URL, 'Cluster photo'),
+      )
       button.appendChild(cover)
 
       const badge = document.createElement('span')
@@ -129,7 +132,7 @@ export function HomeBasicMap({
 
       return button
     },
-    [createImage]
+    [createImage],
   )
 
   const createTripMarkerElement = useCallback(
@@ -141,7 +144,7 @@ export function HomeBasicMap({
       button.appendChild(createImage(trip.photos[0], trip.title))
       return button
     },
-    [createImage]
+    [createImage],
   )
 
   const updateClusters = useCallback(() => {
@@ -156,17 +159,21 @@ export function HomeBasicMap({
       bounds.getNorth(),
     ]
     const zoom = Math.round(map.getZoom())
-    const nextClusters = clusterIndex.getClusters(bbox, zoom) as ClusterOrPoint[]
+    const nextClusters = clusterIndex.getClusters(
+      bbox,
+      zoom,
+    ) as ClusterOrPoint[]
 
     clearMarkers()
 
-    nextClusters.forEach((feature) => {
+    nextClusters.forEach(feature => {
       const [lng, lat] = feature.geometry.coordinates as [number, number]
       if (isClusterFeature(feature)) {
-        const { cluster_id: clusterId, point_count: pointCount } = feature.properties
+        const { cluster_id: clusterId, point_count: pointCount } =
+          feature.properties
         const leaves = clusterIndex.getLeaves(clusterId, 4) as PointFeature[]
         const thumbnails = leaves
-          .map((leaf) => tripPointsById.get(leaf.properties.pointId)?.photos[0])
+          .map(leaf => tripPointsById.get(leaf.properties.pointId)?.photos[0])
           .filter((photo): photo is string => Boolean(photo))
         const el = createClusterMarkerElement(thumbnails, pointCount)
         const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
@@ -184,7 +191,13 @@ export function HomeBasicMap({
         .addTo(map)
       markersRef.current.push(marker)
     })
-  }, [clearMarkers, clusterIndex, createClusterMarkerElement, createTripMarkerElement, tripPointsById])
+  }, [
+    clearMarkers,
+    clusterIndex,
+    createClusterMarkerElement,
+    createTripMarkerElement,
+    tripPointsById,
+  ])
 
   useEffect(() => {
     if (themeReady) {
@@ -240,11 +253,17 @@ export function HomeBasicMap({
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      <div ref={containerRef} className="absolute inset-0" style={{ height: '100%' }} />
+      <div
+        ref={containerRef}
+        className="absolute inset-0"
+        style={{ height: '100%' }}
+      />
       {showScrollIndicator ? (
         <div
           className="absolute left-1/2 -translate-x-1/2 z-10"
-          style={{ bottom: 'max(6.5rem, calc(env(safe-area-inset-bottom) + 5.5rem))' }}
+          style={{
+            bottom: 'max(6.5rem, calc(env(safe-area-inset-bottom) + 5.5rem))',
+          }}
         >
           <ScrollIndicator
             onClick={() => {

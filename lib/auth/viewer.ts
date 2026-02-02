@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
+import { connection } from 'next/server'
 import type { MembershipRow } from '@/lib/memberships/types'
 import type { ProfileRow } from '@/lib/profile/types'
-import { connection } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
 export type MemberSummary = {
   fullName?: string | null
@@ -46,7 +46,7 @@ const buildFullName = (profile: ProfileSummaryRow | null): string | null => {
   const displayName = profile.display_name?.trim()
   if (displayName) return displayName
   const parts = [profile.first_name, profile.last_name]
-    .map((value) => value?.trim())
+    .map(value => value?.trim())
     .filter((value): value is string => !!value)
   if (!parts.length) return null
   return parts.join(' ')
@@ -80,7 +80,7 @@ export async function getViewer(): Promise<Viewer> {
     supabase
       .from('club_memberships')
       .select(
-        'id, club_id, role, state, is_member, joined_on, membership_start, membership_end, auto_renew, banned_at'
+        'id, club_id, role, state, is_member, joined_on, membership_start, membership_end, auto_renew, banned_at',
       )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
@@ -97,10 +97,15 @@ export async function getViewer(): Promise<Viewer> {
   }
 
   const profile = (profileResult.data as ProfileSummaryRow | null) ?? null
-  const membership = (membershipResult.data as MembershipSummaryRow | null) ?? null
+  const membership =
+    (membershipResult.data as MembershipSummaryRow | null) ?? null
   const fullName = buildFullName(profile)
 
-  const isMember = !!membership && membership.state === 'active' && membership.is_member && !membership.banned_at
+  const isMember =
+    !!membership &&
+    membership.state === 'active' &&
+    membership.is_member &&
+    !membership.banned_at
 
   return {
     isAuthenticated: true,
@@ -113,7 +118,8 @@ export async function getViewer(): Promise<Viewer> {
       ? {
           fullName,
           avatarUrl: profile?.avatar_url ?? null,
-          joinedOn: membership?.joined_on ?? membership?.membership_start ?? null,
+          joinedOn:
+            membership?.joined_on ?? membership?.membership_start ?? null,
           expiresAt: membership?.membership_end ?? null,
           autoRenew: membership?.auto_renew ?? null,
           role: membership?.role,

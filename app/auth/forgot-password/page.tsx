@@ -1,12 +1,12 @@
-import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { Suspense } from 'react'
+import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Suspense } from "react";
+} from '@/components/ui/card'
 
 function ForgotPasswordFallback() {
   return (
@@ -29,7 +29,7 @@ function ForgotPasswordFallback() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 export default function Page() {
@@ -41,5 +41,5 @@ export default function Page() {
         </Suspense>
       </div>
     </div>
-  );
+  )
 }

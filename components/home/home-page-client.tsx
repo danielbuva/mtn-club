@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { ScrollIndicator } from '@/components/home/scroll-indicator'
 import { TripPhotoSheet } from '@/components/home/trip-photo-sheet'
-import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
 import type { CalendarTrip } from '@/lib/events/types'
+import { type TripPoint, tripPoints } from '@/lib/map/trip-points'
 
 const MapView = dynamic(
-  () => import('@/components/home/home-map').then((mod) => mod.HomeMap),
-  { ssr: false }
+  () => import('@/components/home/home-map').then(mod => mod.HomeMap),
+  { ssr: false },
 )
 
 type HomePageProps = {
@@ -35,14 +35,19 @@ export function HomePageClient({
   return (
     <>
       <section className="relative h-screen w-full overflow-hidden">
-        <MapView onTripSelect={handleTripSelect} selectedTripId={selectedTrip?.id} />
+        <MapView
+          onTripSelect={handleTripSelect}
+          selectedTripId={selectedTrip?.id}
+        />
 
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-background/10 via-transparent to-background/50" />
 
         {showScrollIndicator ? (
           <div
             className="absolute left-1/2 -translate-x-1/2 z-10"
-            style={{ bottom: 'max(6.5rem, calc(env(safe-area-inset-bottom) + 5.5rem))' }}
+            style={{
+              bottom: 'max(6.5rem, calc(env(safe-area-inset-bottom) + 5.5rem))',
+            }}
           >
             <ScrollIndicator
               onClick={() => {

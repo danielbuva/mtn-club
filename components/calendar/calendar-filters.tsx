@@ -1,8 +1,8 @@
 'use client'
 
 import { ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react'
+import { type Filters, FiltersPanel } from '@/components/filters-panel'
 import { Button } from '@/components/ui/button'
-import { FiltersPanel, type Filters } from '@/components/filters-panel'
 import { cn } from '@/lib/utils'
 
 interface CalendarFiltersProps {
@@ -21,7 +21,9 @@ export function CalendarFilters({
   className,
 }: CalendarFiltersProps) {
   return (
-    <div className={cn('rounded-2xl border border-border bg-card p-4', className)}>
+    <div
+      className={cn('rounded-2xl border border-border bg-card p-4', className)}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
@@ -34,7 +36,11 @@ export function CalendarFilters({
           className="rounded-full"
           onClick={() => onCollapsedChange(!collapsed)}
         >
-          {collapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+          {collapsed ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronUp className="h-4 w-4" />
+          )}
         </Button>
       </div>
 

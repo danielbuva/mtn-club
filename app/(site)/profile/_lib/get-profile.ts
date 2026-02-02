@@ -1,8 +1,8 @@
-import { cache } from 'react'
-import { connection } from 'next/server'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { connection } from 'next/server'
+import { cache } from 'react'
 import { fetchProfile } from '@/lib/profile/queries'
+import { createClient } from '@/lib/supabase/server'
 
 export const getProfileOrRedirect = cache(async () => {
   connection()

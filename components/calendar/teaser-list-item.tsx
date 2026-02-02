@@ -2,9 +2,9 @@
 
 import { format } from 'date-fns'
 import { Lock } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { MemberCTA } from '@/components/member-cta'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import type { TripTeaserDay } from '@/lib/events/types'
 
 interface TeaserListItemProps {
@@ -25,12 +25,18 @@ export function TeaserListItem({ teaser, onClick }: TeaserListItemProps) {
           <div>
             <p className="text-sm font-semibold">Members-only adventures</p>
             <p className="text-xs text-muted-foreground">
-              {format(date, 'EEE, MMM d')} - {teaser.event_count} upcoming trip{teaser.event_count === 1 ? '' : 's'}
+              {format(date, 'EEE, MMM d')} - {teaser.event_count} upcoming trip
+              {teaser.event_count === 1 ? '' : 's'}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="rounded-full" onClick={onClick}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="rounded-full"
+            onClick={onClick}
+          >
             View details
           </Button>
           <MemberCTA size="sm" className="rounded-full" />

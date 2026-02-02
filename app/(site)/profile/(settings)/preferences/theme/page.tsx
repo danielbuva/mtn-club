@@ -1,6 +1,6 @@
+import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
 import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 import { ThemePreferencesClient } from '@/components/profile/settings/theme-preferences-client'
-import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
 
 export default function ThemePreferencesPage() {
   return (

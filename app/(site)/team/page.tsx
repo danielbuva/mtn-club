@@ -1,5 +1,12 @@
+import {
+  Compass,
+  Flag,
+  Heart,
+  Mail,
+  Map as MapIcon,
+  Shield,
+} from 'lucide-react'
 import Link from 'next/link'
-import { Compass, Flag, Heart, Mail, Map, Shield } from 'lucide-react'
 import { TeamCard } from '@/components/team-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -9,22 +16,26 @@ const roles = [
   {
     icon: Flag,
     title: 'Trip Lead',
-    description: 'Responsible for overall trip planning, navigation, and group management. Sets the pace and makes go/no-go decisions.',
+    description:
+      'Responsible for overall trip planning, navigation, and group management. Sets the pace and makes go/no-go decisions.',
   },
   {
     icon: Compass,
     title: 'Sweep',
-    description: 'Stays at the back of the group to ensure no one falls behind. Assists slower hikers and handles rear communications.',
+    description:
+      'Stays at the back of the group to ensure no one falls behind. Assists slower hikers and handles rear communications.',
   },
   {
     icon: Shield,
     title: 'First Aid',
-    description: 'Certified in wilderness first aid. Carries the group first aid kit and responds to any medical situations.',
+    description:
+      'Certified in wilderness first aid. Carries the group first aid kit and responds to any medical situations.',
   },
   {
-    icon: Map,
+    icon: MapIcon,
     title: 'Route Planning',
-    description: 'Scouts routes in advance, identifies hazards, and prepares detailed trip itineraries with backup options.',
+    description:
+      'Scouts routes in advance, identifies hazards, and prepares detailed trip itineraries with backup options.',
   },
 ]
 
@@ -35,12 +46,15 @@ export default function TeamPage() {
         {/* Hero */}
         <section className="py-24 px-4 bg-secondary/30">
           <div className="max-w-4xl mx-auto text-center">
-            <span className="text-primary font-medium text-sm uppercase tracking-wider">Our Team</span>
+            <span className="text-primary font-medium text-sm uppercase tracking-wider">
+              Our Team
+            </span>
             <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4 text-balance">
               Meet the People Behind the Adventures
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our leadership team brings decades of combined outdoor experience, certifications, and a shared passion for building community.
+              Our leadership team brings decades of combined outdoor experience,
+              certifications, and a shared passion for building community.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="rounded-xl">
@@ -57,7 +71,7 @@ export default function TeamPage() {
         <section className="py-24 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamMembers.map((member) => (
+              {teamMembers.map(member => (
                 <TeamCard key={member.id} member={member} />
               ))}
             </div>
@@ -68,23 +82,28 @@ export default function TeamPage() {
         <section className="py-24 px-4 bg-secondary/30">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <span className="text-primary font-medium text-sm uppercase tracking-wider">Trip Safety</span>
+              <span className="text-primary font-medium text-sm uppercase tracking-wider">
+                Trip Safety
+              </span>
               <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4 text-balance">
                 Safety Roles & Responsibilities
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Every trip has designated roles to ensure a safe and enjoyable experience for all participants.
+                Every trip has designated roles to ensure a safe and enjoyable
+                experience for all participants.
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {roles.map((role) => (
+              {roles.map(role => (
                 <Card key={role.title} className="p-6 bg-card border-border/50">
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
                     <role.icon className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{role.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{role.description}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {role.description}
+                  </p>
                 </Card>
               ))}
             </div>
@@ -105,7 +124,10 @@ export default function TeamPage() {
                       Interested in Joining Leadership?
                     </h2>
                     <p className="text-muted-foreground leading-relaxed mb-6">
-                      We are always looking for passionate, experienced outdoor enthusiasts to join our team. Leadership roles include trip leads, workshop instructors, and community organizers.
+                      We are always looking for passionate, experienced outdoor
+                      enthusiasts to join our team. Leadership roles include
+                      trip leads, workshop instructors, and community
+                      organizers.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center gap-4">
                       <Button size="lg" className="rounded-xl gap-2" asChild>

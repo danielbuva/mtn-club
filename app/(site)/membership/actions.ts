@@ -9,10 +9,10 @@ export type CheckoutSessionResult = {
 export async function createCheckoutSession(): Promise<CheckoutSessionResult> {
   // Stub server action for Stripe Checkout
   // In production, this would create a real Stripe Checkout session
-  
+
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 1000))
-  
+
   // Return a mock checkout URL
   // In production: return stripe.checkout.sessions.create({ ... }).url
   return {

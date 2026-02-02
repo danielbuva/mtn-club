@@ -1,6 +1,6 @@
-import { Suspense } from 'react'
-import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 import { ProfilePageFallback } from '@/components/profile/profile-page-fallback'
 import { createClient } from '@/lib/supabase/server'
 
@@ -18,7 +18,10 @@ const getReturnPathFromHeaders = async () => {
   try {
     const url = new URL(referer)
     if (url.origin !== origin) return null
-    if (url.pathname.startsWith('/auth') || url.pathname.startsWith('/profile')) {
+    if (
+      url.pathname.startsWith('/auth') ||
+      url.pathname.startsWith('/profile')
+    ) {
       return null
     }
     return `${url.pathname}${url.search}${url.hash}`
@@ -27,18 +30,20 @@ const getReturnPathFromHeaders = async () => {
   }
 }
 
-export default async function ProfileLayout({ children }: { children: React.ReactNode }) {
+export default async function ProfileLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
   if (!data.user) {
     const returnTo = await getReturnPathFromHeaders()
-    const redirectParam = returnTo ? `?redirect=${encodeURIComponent(returnTo)}` : '?redirect=/'
+    const redirectParam = returnTo
+      ? `?redirect=${encodeURIComponent(returnTo)}`
+      : '?redirect=/'
     redirect(`/auth/login${redirectParam}`)
   }
 
-  return (
-    <Suspense fallback={<ProfilePageFallback />}>
-      {children}
-    </Suspense>
-  )
+  return <Suspense fallback={<ProfilePageFallback />}>{children}</Suspense>
 }

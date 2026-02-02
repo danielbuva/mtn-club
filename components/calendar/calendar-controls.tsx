@@ -19,7 +19,10 @@ export function CalendarControls({
 }: CalendarControlsProps) {
   return (
     <div className={cn('space-y-4', className)}>
-      <Tabs value={view} onValueChange={(value) => onViewChange(value as CalendarViewOption)}>
+      <Tabs
+        value={view}
+        onValueChange={value => onViewChange(value as CalendarViewOption)}
+      >
         <TabsList className="w-full rounded-full">
           <TabsTrigger value="calendar" className="rounded-full gap-2 flex-1">
             <CalendarDays className="h-4 w-4" />

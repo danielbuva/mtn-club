@@ -3,12 +3,13 @@ import { getViewer } from '@/lib/auth/viewer'
 import { getPrimaryClubId } from '@/lib/clubs/primary'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
 
-const isValidYear = (value: number) => Number.isInteger(value) && value >= 1970 && value <= 2100
+const isValidYear = (value: number) =>
+  Number.isInteger(value) && value >= 1970 && value <= 2100
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const yearParam = searchParams.get('year')
-  const year = yearParam ? Number(yearParam) : NaN
+  const year = yearParam ? Number(yearParam) : Number.NaN
 
   if (!isValidYear(year)) {
     return NextResponse.json({ error: 'Invalid year.' }, { status: 400 })

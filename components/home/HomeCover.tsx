@@ -1,10 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import UNLVMountainClub from '@/components/unlv-mountain-club'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { covers } from '@/components/home/covers'
+import UNLVMountainClub from '@/components/unlv-mountain-club'
 import useIsMd from '@/hooks/use-is-md'
 import { cn } from '@/lib/utils'
 
@@ -49,13 +49,14 @@ export function HomeCover() {
         window.sessionStorage.setItem(storageKey, String(nextIndex))
       }
     },
-    [coverIndex]
+    [coverIndex],
   )
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedValue = window.sessionStorage.getItem(storageKey)
-      const parsedValue = storedValue !== null ? Number.parseInt(storedValue, 10) : NaN
+      const parsedValue =
+        storedValue !== null ? Number.parseInt(storedValue, 10) : Number.NaN
       const prevIndex =
         Number.isFinite(parsedValue) && parsedValue >= 0
           ? parsedValue % covers.length
@@ -80,7 +81,7 @@ export function HomeCover() {
           onLoadingComplete={() => setImageLoaded(true)}
           className={cn(
             'pointer-events-none object-cover transition-opacity duration-500 z-0',
-            imageLoaded ? 'opacity-100' : 'opacity-0'
+            imageLoaded ? 'opacity-100' : 'opacity-0',
           )}
           style={{
             objectPosition: isMd ? cover.posDesktop : cover.posMobile,
@@ -101,14 +102,13 @@ export function HomeCover() {
 
       <div
         className="absolute inset-0 z-20"
-        onPointerUpCapture={(event) => {
+        onPointerUpCapture={event => {
           if (navRef.current?.contains(event.target as Node)) {
             return
           }
           advanceCover()
         }}
       />
-
 
       <div className="pointer-events-none absolute z-30" style={frameStyle}>
         <div className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-[56%] -translate-y-1/2 w-[min(86vw,320px)] sm:w-[min(86vw,360px)] md:w-[min(520px,40vw)] lg:top-6 lg:left-6 lg:translate-x-0 lg:translate-y-0 lg:w-[min(520px,40vw)]">

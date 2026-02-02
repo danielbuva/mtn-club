@@ -1,7 +1,7 @@
-import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
-import { SkillsPreferencesFormClient } from '@/components/profile/settings/skills-preferences-form-client'
 import { getProfileOrRedirect } from '@/app/(site)/profile/_lib/get-profile'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
+import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
+import { SkillsPreferencesFormClient } from '@/components/profile/settings/skills-preferences-form-client'
 
 export default async function SkillsPreferencesPage() {
   const { profile, userId } = await getProfileOrRedirect()

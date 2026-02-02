@@ -1,5 +1,11 @@
-import { type ReactNode } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import type { ReactNode } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 type SettingsCardProps = {
   title: string
@@ -8,7 +14,12 @@ type SettingsCardProps = {
   footer?: ReactNode
 }
 
-export function SettingsCard({ title, description, children, footer }: SettingsCardProps) {
+export function SettingsCard({
+  title,
+  description,
+  children,
+  footer,
+}: SettingsCardProps) {
   return (
     <Card className="border-border/60 bg-card/80 shadow-sm">
       <CardHeader>

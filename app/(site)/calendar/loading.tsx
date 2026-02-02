@@ -5,7 +5,9 @@ import { CalendarSkeleton } from '@/components/calendar/calendar-skeleton'
 
 export default function Loading() {
   const [view, setView] = useState<'calendar' | 'list'>('calendar')
-  const [semester, setSemester] = useState<'spring' | 'summer' | 'fall' | 'winter' | 'all'>('all')
+  const [semester, setSemester] = useState<
+    'spring' | 'summer' | 'fall' | 'winter' | 'all'
+  >('all')
 
   useEffect(() => {
     if (typeof window === 'undefined') return

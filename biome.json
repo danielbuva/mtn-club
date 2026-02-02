@@ -1,85 +1,94 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
-	"assist": {
-		"actions": {
-			"source": {
-				"organizeImports": "on",
-				"useSortedAttributes": "off",
-				"useSortedKeys": "off",
-				"useSortedProperties": "off"
-			}
-		},
-		"enabled": true,
-		"includes": ["**"]
-	},
-	"css": {
-		"linter": {
-			"enabled": true
-		},
-		"parser": {
-			"tailwindDirectives": true
-		}
-	},
-	"files": {
-		"includes": ["**"]
-	},
-	"formatter": {
-		"includes": ["**"],
-		"indentStyle": "space",
-		"indentWidth": 2,
-		"lineWidth": 80
-	},
-	"javascript": {
-		"formatter": {
-			"arrowParentheses": "asNeeded",
-			"quoteStyle": "single",
-			"semicolons": "asNeeded",
-			"trailingCommas": "all"
-		}
-	},
-	"json": {
-		"formatter": {
-			"indentStyle": "space",
-			"lineWidth": 1
-		}
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"correctness": {
-				"noUndeclaredDependencies": "off",
-				"noUnusedImports": "warn",
-				"noUnusedVariables": "warn"
-			},
-			"nursery": {
-				"noFloatingPromises": "error",
-				"noImportCycles": "error"
-			},
-			"recommended": true,
-			"style": {
-				"noInferrableTypes": "error",
-				"noParameterAssign": "error",
-				"noUnusedTemplateLiteral": "error",
-				"noUselessElse": "error",
-				"noNonNullAssertion": "off",
-				"useAsConstAssertion": "error",
-				"useConst": "error",
-				"useDefaultParameterLast": "error",
-				"useEnumInitializers": "error",
-				"useNumberNamespace": "error",
-				"useSelfClosingElements": "error",
-				"useSingleVarDeclarator": "error",
-				"useTemplate": "off"
-			},
-			"suspicious": {
-				"noVar": "on",
-				"useIterableCallbackReturn": "off"
-			}
-		}
-	},
-	"vcs": {
-		"clientKind": "git",
-		"enabled": true,
-		"useIgnoreFile": true
-	}
+  "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        "useSortedAttributes": "off",
+        "useSortedKeys": "off",
+        "useSortedProperties": "off"
+      }
+    },
+    "enabled": true,
+    "includes": [
+      "**"
+    ]
+  },
+  "css": {
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!!**/public/maplibre/maplibre-gl-worker-dev.js",
+      "!!**/public/maplibre/maplibre-gl-worker.js",
+      "!!**/public/maplibre/maplibre-gl-csp-worker.js"
+    ]
+  },
+  "formatter": {
+    "includes": [
+      "**"
+    ],
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "all"
+    }
+  },
+  "json": {
+    "formatter": {
+      "indentStyle": "space",
+      "lineWidth": 1
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "noUndeclaredDependencies": "off",
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn"
+      },
+      "nursery": {
+        "noFloatingPromises": "error",
+        "noImportCycles": "error"
+      },
+      "recommended": true,
+      "style": {
+        "noInferrableTypes": "error",
+        "noParameterAssign": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noUselessElse": "error",
+        "noNonNullAssertion": "off",
+        "useAsConstAssertion": "error",
+        "useConst": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useNumberNamespace": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "off"
+      },
+      "suspicious": {
+        "noVar": "on",
+        "useIterableCallbackReturn": "off"
+      }
+    }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
 }

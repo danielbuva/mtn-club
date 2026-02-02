@@ -1,7 +1,7 @@
 'use client'
 
-import { SettingsNav } from '@/components/profile/settings/settings-nav'
 import { SettingsDirtyProvider } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsNav } from '@/components/profile/settings/settings-nav'
 
 export function SettingsShell({ children }: { children: React.ReactNode }) {
   return (
@@ -12,9 +12,7 @@ export function SettingsShell({ children }: { children: React.ReactNode }) {
             <SettingsNav />
           </div>
         </aside>
-        <div className="flex-1 space-y-6">
-          {children}
-        </div>
+        <div className="flex-1 space-y-6">{children}</div>
       </div>
     </SettingsDirtyProvider>
   )

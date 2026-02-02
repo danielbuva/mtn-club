@@ -1,5 +1,12 @@
-import { Calendar, Camera, MessageSquare, Shield, Ticket, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import {
+  Calendar,
+  Camera,
+  MessageSquare,
+  Shield,
+  Ticket,
+  Users,
+} from 'lucide-react'
 
 export type MembershipBenefit = {
   icon: LucideIcon
@@ -16,32 +23,38 @@ export const membershipBenefits: MembershipBenefit[] = [
   {
     icon: Ticket,
     title: 'Access to Upcoming Trips',
-    description: 'Unlock access to upcoming trips in our Trips Calendar to sign up for adventures.',
+    description:
+      'Unlock access to upcoming trips in our Trips Calendar to sign up for adventures.',
   },
   {
     icon: Calendar,
     title: 'Access to Guidebook Library',
-    description: 'Explore our extensive library of guidebooks covering trails, safety tips, and gear reviews.',
+    description:
+      'Explore our extensive library of guidebooks covering trails, safety tips, and gear reviews.',
   },
   {
     icon: MessageSquare,
     title: 'Gear Room',
-    description: 'Borrow essential outdoor gear from our Gear Room for your adventures.',
+    description:
+      'Borrow essential outdoor gear from our Gear Room for your adventures.',
   },
   {
     icon: Camera,
     title: 'Trip Photo Archives',
-    description: 'Access our complete library of professional trip photos and download high-resolution images.',
+    description:
+      'Access our complete library of professional trip photos and download high-resolution images.',
   },
   {
     icon: Users,
     title: 'Bring a Guest',
-    description: 'Members can bring one guest per quarter to experience a trip before joining.',
+    description:
+      'Members can bring one guest per quarter to experience a trip before joining.',
   },
   {
     icon: Shield,
     title: 'Trip Insurance',
-    description: 'Basic trip cancellation coverage included with your membership.',
+    description:
+      'Basic trip cancellation coverage included with your membership.',
   },
 ]
 
@@ -49,22 +62,26 @@ export const memberPerks: MembershipBenefit[] = [
   {
     icon: Ticket,
     title: 'Access to Upcoming Trips',
-    description: 'Browse and RSVP to upcoming trips directly in the Trips Calendar.',
+    description:
+      'Browse and RSVP to upcoming trips directly in the Trips Calendar.',
   },
   {
     icon: Calendar,
     title: 'Access to Guidebook Library',
-    description: 'Tap into guidebooks covering trails, safety tips, and gear reviews.',
+    description:
+      'Tap into guidebooks covering trails, safety tips, and gear reviews.',
   },
   {
     icon: MessageSquare,
     title: 'Gear Room',
-    description: 'Reserve essential outdoor gear from the Gear Room for your adventures.',
+    description:
+      'Reserve essential outdoor gear from the Gear Room for your adventures.',
   },
   {
     icon: Camera,
     title: 'Trip Photo Archives',
-    description: 'Download high-resolution photos from recent trips and events.',
+    description:
+      'Download high-resolution photos from recent trips and events.',
   },
   {
     icon: Users,

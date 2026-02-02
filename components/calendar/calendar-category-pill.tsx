@@ -9,17 +9,29 @@ interface CalendarCategoryPillProps {
   className?: string
 }
 
-export function CalendarCategoryPill({ categories, className }: CalendarCategoryPillProps) {
+export function CalendarCategoryPill({
+  categories,
+  className,
+}: CalendarCategoryPillProps) {
   if (categories.length === 0) return null
 
   if (categories.length === 1) {
     const color = CATEGORY_COLORS[categories[0]]
-    return <span className={cn('inline-flex h-1.5 w-8 rounded-full', color, className)} />
+    return (
+      <span
+        className={cn('inline-flex h-1.5 w-8 rounded-full', color, className)}
+      />
+    )
   }
 
   return (
-    <span className={cn('inline-flex h-1.5 w-10 overflow-hidden rounded-full', className)}>
-      {categories.map((category) => (
+    <span
+      className={cn(
+        'inline-flex h-1.5 w-10 overflow-hidden rounded-full',
+        className,
+      )}
+    >
+      {categories.map(category => (
         <span
           key={category}
           className={cn('flex-1', CATEGORY_COLORS[category])}

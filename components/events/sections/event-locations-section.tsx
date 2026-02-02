@@ -7,10 +7,17 @@ import type { EventFormValues } from '@/lib/events/schema'
 interface EventLocationsSectionProps {
   values: EventFormValues
   fieldErrors: Record<string, string>
-  onFieldChange: <K extends keyof EventFormValues>(key: K, value: EventFormValues[K]) => void
+  onFieldChange: <K extends keyof EventFormValues>(
+    key: K,
+    value: EventFormValues[K],
+  ) => void
 }
 
-export function EventLocationsSection({ values, fieldErrors, onFieldChange }: EventLocationsSectionProps) {
+export function EventLocationsSection({
+  values,
+  fieldErrors,
+  onFieldChange,
+}: EventLocationsSectionProps) {
   return (
     <Card>
       <CardContent className="p-6 space-y-4">
@@ -24,11 +31,15 @@ export function EventLocationsSection({ values, fieldErrors, onFieldChange }: Ev
             <Input
               id="primaryLocation"
               value={values.primaryLocationName}
-              onChange={(e) => onFieldChange('primaryLocationName', e.target.value)}
+              onChange={e =>
+                onFieldChange('primaryLocationName', e.target.value)
+              }
               placeholder="Trailhead, park, venue"
             />
             {fieldErrors.primaryLocationName && (
-              <p className="text-xs text-red-500">{fieldErrors.primaryLocationName}</p>
+              <p className="text-xs text-red-500">
+                {fieldErrors.primaryLocationName}
+              </p>
             )}
           </div>
           <div className="grid gap-2">
@@ -36,7 +47,9 @@ export function EventLocationsSection({ values, fieldErrors, onFieldChange }: Ev
             <Input
               id="meetingLocation"
               value={values.meetingLocationName ?? ''}
-              onChange={(e) => onFieldChange('meetingLocationName', e.target.value)}
+              onChange={e =>
+                onFieldChange('meetingLocationName', e.target.value)
+              }
               placeholder="Optional meetup spot"
             />
           </div>

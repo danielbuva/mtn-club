@@ -8,5 +8,10 @@ export default async function CalendarNewPage({
 }) {
   const membershipState = await getMembershipState()
   const resolvedSearchParams = searchParams ? await searchParams : undefined
-  return <NewEventPage initialType={resolvedSearchParams?.type} membershipState={membershipState} />
+  return (
+    <NewEventPage
+      initialType={resolvedSearchParams?.type}
+      membershipState={membershipState}
+    />
+  )
 }

@@ -1,10 +1,14 @@
 import { Suspense } from 'react'
-import { ViewerGate } from '@/components/auth/viewer-gate'
 import { ViewerFallback } from '@/components/auth/viewer-fallback'
-import { Header } from '@/components/header'
+import { ViewerGate } from '@/components/auth/viewer-gate'
 import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <Suspense fallback={<ViewerFallback />}>
       <ViewerGate>

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, type ReactNode } from 'react'
+import { createContext, type ReactNode, useContext } from 'react'
 import type { Viewer } from '@/lib/auth/viewer'
 
 const defaultViewer: Viewer = {
@@ -21,7 +21,9 @@ type ViewerProviderProps = {
 }
 
 export function ViewerProvider({ viewer, children }: ViewerProviderProps) {
-  return <ViewerContext.Provider value={viewer}>{children}</ViewerContext.Provider>
+  return (
+    <ViewerContext.Provider value={viewer}>{children}</ViewerContext.Provider>
+  )
 }
 
 export function useViewer(): Viewer {

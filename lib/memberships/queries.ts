@@ -1,14 +1,17 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@/lib/supabase/types'
 import type { MembershipRow } from '@/lib/memberships/types'
+import type { Database } from '@/lib/supabase/types'
 
 export type MembershipLookup = {
   userId: string | null
-  membership: Pick<MembershipRow, 'id' | 'club_id' | 'role' | 'state' | 'is_member'> | null
+  membership: Pick<
+    MembershipRow,
+    'id' | 'club_id' | 'role' | 'state' | 'is_member'
+  > | null
 }
 
 export async function fetchActiveMembership(
-  client: SupabaseClient<Database>
+  client: SupabaseClient<Database>,
 ): Promise<MembershipLookup> {
   const { data: authData, error: authError } = await client.auth.getUser()
 

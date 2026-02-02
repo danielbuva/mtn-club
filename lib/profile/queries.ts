@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@/lib/supabase/types'
 import type { ProfileRow, ProfileUpdate } from '@/lib/profile/types'
+import type { Database } from '@/lib/supabase/types'
 
 export type ProfileLookup = {
   userId: string | null
@@ -9,7 +9,7 @@ export type ProfileLookup = {
 }
 
 export async function fetchProfile(
-  client: SupabaseClient<Database>
+  client: SupabaseClient<Database>,
 ): Promise<ProfileLookup> {
   const { data: authData, error: authError } = await client.auth.getUser()
   if (authError) {
@@ -41,7 +41,7 @@ export async function fetchProfile(
 export async function upsertProfile(
   client: SupabaseClient<Database>,
   userId: string,
-  payload: ProfileUpdate
+  payload: ProfileUpdate,
 ): Promise<ProfileRow> {
   const { data, error } = await client
     .from('app_users')

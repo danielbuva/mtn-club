@@ -1,14 +1,14 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import maplibregl, { setWorkerUrl } from 'maplibre-gl'
-import Supercluster from 'supercluster'
 import type { Feature, Point } from 'geojson'
+import maplibregl, { setWorkerUrl } from 'maplibre-gl'
 import { useTheme } from 'next-themes'
-import { cn } from '@/lib/utils'
-import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Supercluster from 'supercluster'
 import { useHydrated } from '@/hooks/use-hydrated'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { type TripPoint, tripPoints } from '@/lib/map/trip-points'
+import { cn } from '@/lib/utils'
 
 const LAS_VEGAS = {
   lat: 36.1699,
@@ -51,7 +51,11 @@ type HomeMapProps = {
 const isClusterFeature = (feature: ClusterOrPoint): feature is ClusterFeature =>
   (feature.properties as ClusterProperties).cluster === true
 
-export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProps) {
+export function HomeMap({
+  selectedTripId,
+  onTripSelect,
+  className,
+}: HomeMapProps) {
   const { resolvedTheme } = useTheme()
   const hydrated = useHydrated()
   const isMobile = useIsMobile()
@@ -67,13 +71,14 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
   const [mapLoaded, setMapLoaded] = useState(false)
 
   const tripPointsById = useMemo<Map<string, TripPoint>>(
-    () => new Map<string, TripPoint>(tripPoints.map((point) => [point.id, point])),
-    []
+    () =>
+      new Map<string, TripPoint>(tripPoints.map(point => [point.id, point])),
+    [],
   )
 
   const features = useMemo<TripPointFeature[]>(
     () =>
-      tripPoints.map((point) => ({
+      tripPoints.map(point => ({
         type: 'Feature',
         properties: { pointId: point.id },
         geometry: {
@@ -81,7 +86,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
           coordinates: [point.lon, point.lat],
         },
       })),
-    []
+    [],
   )
 
   const clusterIndex = useMemo(() => {
@@ -100,7 +105,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
   const mapStyle = stableTheme === 'dark' ? DARK_BASEMAP_URL : LIGHT_BASEMAP_URL
 
   const clearMarkers = useCallback(() => {
-    markersRef.current.forEach((marker) => marker.remove())
+    markersRef.current.forEach(marker => marker.remove())
     markersRef.current = []
     markersByIdRef.current.clear()
   }, [])
@@ -139,7 +144,9 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       frame.style.height = '84px'
       frame.style.borderRadius = '18px'
       frame.style.overflow = 'hidden'
-      frame.style.border = isSelected ? '2px solid var(--primary)' : '1px solid rgba(148, 163, 184, 0.5)'
+      frame.style.border = isSelected
+        ? '2px solid var(--primary)'
+        : '1px solid rgba(148, 163, 184, 0.5)'
       frame.style.background = 'rgba(255, 255, 255, 0.92)'
       frame.style.boxShadow = '0 12px 24px rgba(15, 23, 42, 0.25)'
       frame.style.transition = 'transform 0.2s ease'
@@ -181,19 +188,30 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
 
       return button
     },
-    [createImage]
+    [createImage],
   )
 
-  const updateTripMarkerElement = useCallback((el: HTMLElement, isSelected: boolean) => {
-    const frame = el.querySelector('[data-role="frame"]') as HTMLElement | null
-    if (!frame) return
-    frame.style.border = isSelected
-      ? '2px solid var(--primary)'
-      : '1px solid rgba(148, 163, 184, 0.5)'
-  }, [])
+  const updateTripMarkerElement = useCallback(
+    (el: HTMLElement, isSelected: boolean) => {
+      const frame = el.querySelector(
+        '[data-role="frame"]',
+      ) as HTMLElement | null
+      if (!frame) return
+      frame.style.border = isSelected
+        ? '2px solid var(--primary)'
+        : '1px solid rgba(148, 163, 184, 0.5)'
+    },
+    [],
+  )
 
   const createClusterMarkerElement = useCallback(
-    (photoUrl: string, count: number, clusterId: number, lng: number, lat: number) => {
+    (
+      photoUrl: string,
+      count: number,
+      clusterId: number,
+      lng: number,
+      lat: number,
+    ) => {
       const button = document.createElement('button')
       button.type = 'button'
       button.setAttribute('aria-label', `Zoom into ${count} trip locations`)
@@ -282,34 +300,50 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       button.dataset.clusterId = String(clusterId)
       button.dataset.lng = String(lng)
       button.dataset.lat = String(lat)
-      button.onclick = (event) => {
+      button.onclick = event => {
         event.stopPropagation()
         const map = mapRef.current
         if (!map) return
         const id = Number(button.dataset.clusterId)
         const centerLng = Number(button.dataset.lng)
         const centerLat = Number(button.dataset.lat)
-        if (!Number.isFinite(id) || !Number.isFinite(centerLng) || !Number.isFinite(centerLat)) return
+        if (
+          !Number.isFinite(id) ||
+          !Number.isFinite(centerLng) ||
+          !Number.isFinite(centerLat)
+        )
+          return
         const expansionZoom = clusterIndex.getClusterExpansionZoom(id)
         const targetZoom = Math.min(expansionZoom ?? map.getZoom() + 2, 12)
-        map.easeTo({ center: [centerLng, centerLat], zoom: targetZoom, duration: 800 })
+        map.easeTo({
+          center: [centerLng, centerLat],
+          zoom: targetZoom,
+          duration: 800,
+        })
       }
 
       return button
     },
-    [clusterIndex, createImage]
+    [clusterIndex, createImage],
   )
 
-  const updateClusterMarkerElement = useCallback((el: HTMLElement, photoUrl: string, count: number) => {
-    const image = el.querySelector('[data-role="image"]') as HTMLImageElement | null
-    if (image && image.src !== photoUrl) {
-      image.src = photoUrl
-    }
-    const countBadge = el.querySelector('[data-role="count"]') as HTMLElement | null
-    if (countBadge) {
-      countBadge.textContent = String(count)
-    }
-  }, [])
+  const updateClusterMarkerElement = useCallback(
+    (el: HTMLElement, photoUrl: string, count: number) => {
+      const image = el.querySelector(
+        '[data-role="image"]',
+      ) as HTMLImageElement | null
+      if (image && image.src !== photoUrl) {
+        image.src = photoUrl
+      }
+      const countBadge = el.querySelector(
+        '[data-role="count"]',
+      ) as HTMLElement | null
+      if (countBadge) {
+        countBadge.textContent = String(count)
+      }
+    },
+    [],
+  )
 
   const updateClusters = useCallback(() => {
     const map = mapRef.current
@@ -324,33 +358,55 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       bounds.getNorth(),
     ]
     const zoom = Math.round(map.getZoom())
-    const nextClusters = clusterIndex.getClusters(bbox, zoom) as ClusterOrPoint[]
+    const nextClusters = clusterIndex.getClusters(
+      bbox,
+      zoom,
+    ) as ClusterOrPoint[]
     const nextIds = new Set<string>()
 
-    nextClusters.forEach((feature) => {
+    nextClusters.forEach(feature => {
       const [lng, lat] = feature.geometry.coordinates as [number, number]
       if (isClusterFeature(feature)) {
-        const { cluster_id: clusterId, point_count: pointCount } = feature.properties
+        const { cluster_id: clusterId, point_count: pointCount } =
+          feature.properties
         const markerId = `cluster-${clusterId}`
         nextIds.add(markerId)
-        const leaves = clusterIndex.getLeaves(clusterId, pointCount) as PointFeature[]
+        const leaves = clusterIndex.getLeaves(
+          clusterId,
+          pointCount,
+        ) as PointFeature[]
         const mostRecentTrip = leaves
-          .map((leaf) => tripPointsById.get(leaf.properties.pointId))
+          .map(leaf => tripPointsById.get(leaf.properties.pointId))
           .filter((trip): trip is TripPoint => Boolean(trip))
-          .sort((a, b) => (b.occurredOn ?? '').localeCompare(a.occurredOn ?? ''))[0]
+          .sort((a, b) =>
+            (b.occurredOn ?? '').localeCompare(a.occurredOn ?? ''),
+          )[0]
         const clusterPhoto = mostRecentTrip?.photos[0]
 
         const existing = markersByIdRef.current.get(markerId)
         if (existing) {
           existing.marker.setLngLat([lng, lat])
-          updateClusterMarkerElement(existing.marker.getElement(), clusterPhoto, pointCount)
+          updateClusterMarkerElement(
+            existing.marker.getElement(),
+            clusterPhoto,
+            pointCount,
+          )
           const el = existing.marker.getElement()
           el.dataset.clusterId = String(clusterId)
           el.dataset.lng = String(lng)
           el.dataset.lat = String(lat)
         } else {
-          const el = createClusterMarkerElement(clusterPhoto, pointCount, clusterId, lng, lat)
-          const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+          const el = createClusterMarkerElement(
+            clusterPhoto,
+            pointCount,
+            clusterId,
+            lng,
+            lat,
+          )
+          const marker = new maplibregl.Marker({
+            element: el,
+            anchor: 'bottom',
+          })
             .setLngLat([lng, lat])
             .addTo(map)
           markersRef.current.push(marker)
@@ -370,7 +426,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
         updateTripMarkerElement(existing.marker.getElement(), isSelected)
       } else {
         const el = createTripMarkerElement(trip, isSelected)
-        el.onclick = (event) => {
+        el.onclick = event => {
           event.stopPropagation()
           onTripSelect(trip)
         }
@@ -385,10 +441,11 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       if (nextIds.has(id)) return
       entry.marker.remove()
       markersByIdRef.current.delete(id)
-      markersRef.current = markersRef.current.filter((marker) => marker !== entry.marker)
+      markersRef.current = markersRef.current.filter(
+        marker => marker !== entry.marker,
+      )
     })
   }, [
-    clearMarkers,
     clusterIndex,
     createClusterMarkerElement,
     createTripMarkerElement,
@@ -476,7 +533,14 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       mapRef.current = null
       clearMarkers()
     }
-  }, [clearMarkers, hydrated, isMobile, mapStyle, scheduleUpdate, updateClusters])
+  }, [
+    clearMarkers,
+    hydrated,
+    isMobile,
+    mapStyle,
+    scheduleUpdate,
+    updateClusters,
+  ])
 
   useEffect(() => {
     const map = mapRef.current
@@ -488,7 +552,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
   useEffect(() => {
     if (!mapLoaded) return
     scheduleUpdate()
-  }, [mapLoaded, scheduleUpdate, selectedTripId])
+  }, [mapLoaded, scheduleUpdate])
 
   return (
     <div className={cn('absolute inset-0', className)}>

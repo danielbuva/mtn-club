@@ -14,7 +14,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['hike', 'iconic', 'spring'],
     photos: ['/images/half-dome-1.jpg', '/images/half-dome-2.jpg'],
     membersOnly: true,
-    description: 'Tackle one of the most iconic hikes in the world. Cable route to the summit of Half Dome with stunning views of Yosemite Valley.',
+    description:
+      'Tackle one of the most iconic hikes in the world. Cable route to the summit of Half Dome with stunning views of Yosemite Valley.',
     meetingTime: '5:00 AM',
     meetingLocation: 'Happy Isles Trailhead, Yosemite',
     isOfficial: true,
@@ -32,7 +33,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['climb', 'snow', 'summer', 'multi-day'],
     photos: ['/images/rainier-1.jpg', '/images/rainier-2.jpg'],
     membersOnly: true,
-    description: 'A classic Pacific Northwest mountaineering objective. Multi-day glacier climb to the summit of Washington\'s highest peak.',
+    description:
+      "A classic Pacific Northwest mountaineering objective. Multi-day glacier climb to the summit of Washington's highest peak.",
     meetingTime: '6:00 AM',
     meetingLocation: 'Paradise Visitor Center',
     isOfficial: true,
@@ -50,7 +52,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['hike', 'camp', 'coast', 'summer'],
     photos: ['/images/olympic-1.jpg', '/images/olympic-2.jpg'],
     membersOnly: false,
-    description: 'Wild beaches, sea stacks, and tide pools. A stunning coastal backpacking route through Olympic National Park.',
+    description:
+      'Wild beaches, sea stacks, and tide pools. A stunning coastal backpacking route through Olympic National Park.',
     meetingTime: '8:00 AM',
     meetingLocation: 'Rialto Beach Parking',
     isOfficial: true,
@@ -68,7 +71,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['climb', 'spring'],
     photos: ['/images/smith-rock-1.jpg', '/images/smith-rock-2.jpg'],
     membersOnly: false,
-    description: 'World-class sport climbing at the birthplace of American sport climbing. Routes for all skill levels.',
+    description:
+      'World-class sport climbing at the birthplace of American sport climbing. Routes for all skill levels.',
     meetingTime: '7:00 AM',
     meetingLocation: 'Bivy Campground',
     isOfficial: true,
@@ -86,7 +90,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['hike', 'camp', 'desert', 'winter'],
     photos: ['/images/joshua-tree-1.jpg', '/images/joshua-tree-2.jpg'],
     membersOnly: false,
-    description: 'Desert exploration among iconic Joshua Trees. Perfect winter escape with hiking, stargazing, and optional rock scrambling.',
+    description:
+      'Desert exploration among iconic Joshua Trees. Perfect winter escape with hiking, stargazing, and optional rock scrambling.',
     meetingTime: '10:00 AM',
     meetingLocation: 'Hidden Valley Campground',
     isOfficial: true,
@@ -104,7 +109,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['snow', 'winter', 'hike'],
     photos: ['/images/crater-lake-1.jpg', '/images/crater-lake-2.jpg'],
     membersOnly: true,
-    description: 'Snowshoe along the rim of America\'s deepest lake. Stunning blue waters surrounded by pristine winter snow.',
+    description:
+      "Snowshoe along the rim of America's deepest lake. Stunning blue waters surrounded by pristine winter snow.",
     meetingTime: '9:00 AM',
     meetingLocation: 'Rim Village Visitor Center',
     isOfficial: true,
@@ -122,7 +128,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['hike', 'run', 'spring', 'coast'],
     photos: ['/images/big-sur-1.jpg', '/images/big-sur-2.jpg'],
     membersOnly: false,
-    description: 'Trail running through redwood groves to coastal views. A challenging but rewarding route along the Big Sur coast.',
+    description:
+      'Trail running through redwood groves to coastal views. A challenging but rewarding route along the Big Sur coast.',
     meetingTime: '6:30 AM',
     meetingLocation: 'Pfeiffer Big Sur State Park',
     isOfficial: true,
@@ -140,7 +147,8 @@ export const mockTrips: CalendarTrip[] = [
     tags: ['climb', 'hike', 'summer', 'alpine'],
     photos: ['/images/cascades-1.jpg', '/images/cascades-2.jpg'],
     membersOnly: true,
-    description: 'Technical alpine climbing in the "American Alps." Dramatic peaks, glaciers, and wilderness as far as the eye can see.',
+    description:
+      'Technical alpine climbing in the "American Alps." Dramatic peaks, glaciers, and wilderness as far as the eye can see.',
     meetingTime: '4:00 AM',
     meetingLocation: 'Marblemount Ranger Station',
     isOfficial: true,

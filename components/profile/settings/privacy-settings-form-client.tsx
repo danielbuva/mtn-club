@@ -1,14 +1,18 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { ProfileRow, PrivacySettings, ProfileUpdate } from '@/lib/profile/types'
-import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { createClient } from '@/lib/supabase/client'
-import { Switch } from '@/components/ui/switch'
 import { SettingsCard } from '@/components/profile/settings/settings-card'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { Switch } from '@/components/ui/switch'
+import { profileRowToFormValues } from '@/lib/profile/mappers'
 import { upsertProfile } from '@/lib/profile/queries'
+import type {
+  PrivacySettings,
+  ProfileRow,
+  ProfileUpdate,
+} from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type PrivacySettingsFormClientProps = {
   initialProfile: ProfileRow | null
@@ -24,7 +28,7 @@ export function PrivacySettingsFormClient({
 }: PrivacySettingsFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).privacySettings,
-    [initialProfile]
+    [initialProfile],
   )
   const [values, setValues] = useState<PrivacySettings>(initialValues)
   const [baseline, setBaseline] = useState<PrivacySettings>(initialValues)
@@ -44,7 +48,7 @@ export function PrivacySettingsFormClient({
   }, [isDirty, setIsDirty])
 
   const updateField = (key: keyof PrivacySettings, value: boolean) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -59,7 +63,9 @@ export function PrivacySettingsFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }
@@ -86,7 +92,9 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.profileVisible}
-              onCheckedChange={(checked) => updateField('profileVisible', checked)}
+              onCheckedChange={checked =>
+                updateField('profileVisible', checked)
+              }
             />
           </div>
           <div className="flex items-center justify-between gap-4">
@@ -98,7 +106,7 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.shareEmail}
-              onCheckedChange={(checked) => updateField('shareEmail', checked)}
+              onCheckedChange={checked => updateField('shareEmail', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
@@ -110,7 +118,7 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.sharePhone}
-              onCheckedChange={(checked) => updateField('sharePhone', checked)}
+              onCheckedChange={checked => updateField('sharePhone', checked)}
             />
           </div>
         </div>
@@ -130,7 +138,7 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.shareGear}
-              onCheckedChange={(checked) => updateField('shareGear', checked)}
+              onCheckedChange={checked => updateField('shareGear', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
@@ -142,7 +150,9 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.shareCarpooling}
-              onCheckedChange={(checked) => updateField('shareCarpooling', checked)}
+              onCheckedChange={checked =>
+                updateField('shareCarpooling', checked)
+              }
             />
           </div>
           <div className="flex items-center justify-between gap-4">
@@ -154,7 +164,7 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.shareCarInfo}
-              onCheckedChange={(checked) => updateField('shareCarInfo', checked)}
+              onCheckedChange={checked => updateField('shareCarInfo', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
@@ -166,7 +176,9 @@ export function PrivacySettingsFormClient({
             </div>
             <Switch
               checked={values.shareNeighborhood}
-              onCheckedChange={(checked) => updateField('shareNeighborhood', checked)}
+              onCheckedChange={checked =>
+                updateField('shareNeighborhood', checked)
+              }
             />
           </div>
         </div>

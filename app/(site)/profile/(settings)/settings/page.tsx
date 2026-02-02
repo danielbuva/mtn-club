@@ -1,6 +1,6 @@
-import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 import { MobileSettingsIndex } from '@/components/profile/settings/mobile-settings-index'
 import { SettingsCard } from '@/components/profile/settings/settings-card'
+import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 
 export default function SettingsIndexPage() {
   return (
@@ -16,7 +16,8 @@ export default function SettingsIndexPage() {
           description="Choose a category from the left to edit your profile."
         >
           <p className="text-sm text-muted-foreground">
-            Tip: use the sidebar to navigate between sections without losing your place.
+            Tip: use the sidebar to navigate between sections without losing
+            your place.
           </p>
         </SettingsCard>
       </div>

@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { NotificationSettings, ProfileRow, ProfileUpdate } from '@/lib/profile/types'
-import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { createClient } from '@/lib/supabase/client'
-import { Switch } from '@/components/ui/switch'
+import { SettingsCard } from '@/components/profile/settings/settings-card'
+import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import {
   Select,
   SelectContent,
@@ -12,10 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SettingsCard } from '@/components/profile/settings/settings-card'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
-import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { Switch } from '@/components/ui/switch'
+import { profileRowToFormValues } from '@/lib/profile/mappers'
 import { upsertProfile } from '@/lib/profile/queries'
+import type {
+  NotificationSettings,
+  ProfileRow,
+  ProfileUpdate,
+} from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type NotificationsSettingsFormClientProps = {
   initialProfile: ProfileRow | null
@@ -31,7 +35,7 @@ export function NotificationsSettingsFormClient({
 }: NotificationsSettingsFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).notificationSettings,
-    [initialProfile]
+    [initialProfile],
   )
   const [values, setValues] = useState<NotificationSettings>(initialValues)
   const [baseline, setBaseline] = useState<NotificationSettings>(initialValues)
@@ -50,8 +54,11 @@ export function NotificationsSettingsFormClient({
     setIsDirty(isDirty)
   }, [isDirty, setIsDirty])
 
-  const updateField = (key: keyof NotificationSettings, value: NotificationSettings[keyof NotificationSettings]) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+  const updateField = (
+    key: keyof NotificationSettings,
+    value: NotificationSettings[keyof NotificationSettings],
+  ) => {
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -66,7 +73,9 @@ export function NotificationsSettingsFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }
@@ -87,31 +96,37 @@ export function NotificationsSettingsFormClient({
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Trip updates</p>
-              <p className="text-xs text-muted-foreground">New trips and schedule changes.</p>
+              <p className="text-xs text-muted-foreground">
+                New trips and schedule changes.
+              </p>
             </div>
             <Switch
               checked={values.tripUpdates}
-              onCheckedChange={(checked) => updateField('tripUpdates', checked)}
+              onCheckedChange={checked => updateField('tripUpdates', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Member stories</p>
-              <p className="text-xs text-muted-foreground">Spotlights and community highlights.</p>
+              <p className="text-xs text-muted-foreground">
+                Spotlights and community highlights.
+              </p>
             </div>
             <Switch
               checked={values.memberStories}
-              onCheckedChange={(checked) => updateField('memberStories', checked)}
+              onCheckedChange={checked => updateField('memberStories', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Safety alerts</p>
-              <p className="text-xs text-muted-foreground">Urgent notifications for trip changes.</p>
+              <p className="text-xs text-muted-foreground">
+                Urgent notifications for trip changes.
+              </p>
             </div>
             <Switch
               checked={values.safetyAlerts}
-              onCheckedChange={(checked) => updateField('safetyAlerts', checked)}
+              onCheckedChange={checked => updateField('safetyAlerts', checked)}
             />
           </div>
         </div>
@@ -125,31 +140,37 @@ export function NotificationsSettingsFormClient({
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Email updates</p>
-              <p className="text-xs text-muted-foreground">General club communications.</p>
+              <p className="text-xs text-muted-foreground">
+                General club communications.
+              </p>
             </div>
             <Switch
               checked={values.email}
-              onCheckedChange={(checked) => updateField('email', checked)}
+              onCheckedChange={checked => updateField('email', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">SMS alerts</p>
-              <p className="text-xs text-muted-foreground">Time-sensitive reminders.</p>
+              <p className="text-xs text-muted-foreground">
+                Time-sensitive reminders.
+              </p>
             </div>
             <Switch
               checked={values.sms}
-              onCheckedChange={(checked) => updateField('sms', checked)}
+              onCheckedChange={checked => updateField('sms', checked)}
             />
           </div>
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Club announcements</p>
-              <p className="text-xs text-muted-foreground">Important club-wide notices.</p>
+              <p className="text-xs text-muted-foreground">
+                Important club-wide notices.
+              </p>
             </div>
             <Switch
               checked={values.announcements}
-              onCheckedChange={(checked) => updateField('announcements', checked)}
+              onCheckedChange={checked => updateField('announcements', checked)}
             />
           </div>
         </div>
@@ -162,8 +183,11 @@ export function NotificationsSettingsFormClient({
         <div className="max-w-xs">
           <Select
             value={values.digestFrequency}
-            onValueChange={(value) =>
-              updateField('digestFrequency', value as NotificationSettings['digestFrequency'])
+            onValueChange={value =>
+              updateField(
+                'digestFrequency',
+                value as NotificationSettings['digestFrequency'],
+              )
             }
           >
             <SelectTrigger>

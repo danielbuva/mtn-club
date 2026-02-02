@@ -1,11 +1,11 @@
- 'use client'
+'use client'
 
-import { useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { Button } from '@/components/ui/button'
+import { useEffect, useMemo, useState } from 'react'
 import { SettingsCard } from '@/components/profile/settings/settings-card'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 type ThemeOption = 'system' | 'light' | 'dark'
@@ -14,7 +14,7 @@ export function ThemePreferencesClient() {
   const { theme, setTheme } = useTheme()
   const normalizedTheme = useMemo<ThemeOption>(
     () => (theme === 'light' || theme === 'dark' ? theme : 'system'),
-    [theme]
+    [theme],
   )
   const [selectedTheme, setSelectedTheme] =
     useState<ThemeOption>(normalizedTheme)
@@ -50,7 +50,7 @@ export function ThemePreferencesClient() {
         description="Choose how the app should look on this device."
       >
         <div className="grid gap-3 sm:grid-cols-3">
-          {(['system', 'light', 'dark'] as ThemeOption[]).map((option) => (
+          {(['system', 'light', 'dark'] as ThemeOption[]).map(option => (
             <Button
               key={option}
               type="button"
@@ -58,7 +58,7 @@ export function ThemePreferencesClient() {
               className={cn(
                 'justify-start capitalize',
                 selectedTheme === option &&
-                  'border-primary/60 bg-primary/10 text-primary'
+                  'border-primary/60 bg-primary/10 text-primary',
               )}
               onClick={() => setSelectedTheme(option)}
             >

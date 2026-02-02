@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import { addDays, format } from 'date-fns'
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 import { CalendarControls } from '@/components/calendar/calendar-controls'
 import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,10 @@ type CalendarSkeletonProps = {
   semester?: 'spring' | 'summer' | 'fall' | 'winter' | 'all'
 }
 
-export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: CalendarSkeletonProps) {
+export function CalendarSkeleton({
+  view = 'calendar',
+  semester = 'all',
+}: CalendarSkeletonProps) {
   const isListView = view === 'list'
   const start = new Date(2025, 11, 28)
   const days = Array.from({ length: 35 }, (_, index) => addDays(start, index))
@@ -24,20 +27,31 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
         <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10 md:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="text-3xl font-semibold sm:text-4xl">Trip Calendar</h1>
+              <h1 className="text-3xl font-semibold sm:text-4xl">
+                Trip Calendar
+              </h1>
               <p className="mt-2 text-muted-foreground">
-                Browse adventures, reserve spots, and plan your season in one view.
+                Browse adventures, reserve spots, and plan your season in one
+                view.
               </p>
             </div>
             <Card className="border-border/60 bg-card">
               <CardContent className="p-4">
                 <p className="text-sm font-medium">Subscribe</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full gap-2 bg-transparent"
+                  >
                     <ExternalLink className="h-4 w-4" />
                     iCal
                   </Button>
-                  <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full gap-2 bg-transparent"
+                  >
                     <ExternalLink className="h-4 w-4" />
                     Google Calendar
                   </Button>
@@ -51,7 +65,10 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
           <div className="mx-auto w-full max-w-6xl space-y-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-col gap-3 md:flex-row md:items-center">
-                <CalendarControls view={isListView ? 'list' : 'calendar'} onViewChange={() => {}} />
+                <CalendarControls
+                  view={isListView ? 'list' : 'calendar'}
+                  onViewChange={() => {}}
+                />
                 {isListView && (
                   <div className="hidden md:inline-flex h-9 items-center gap-0 rounded-full border border-border bg-card px-0 text-sm text-muted-foreground">
                     <span className="pl-3 text-foreground/70">Semester</span>
@@ -88,7 +105,9 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
 
             {isListView && (
               <Card className="md:hidden rounded-2xl border border-border bg-card p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Semester</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Semester
+                </p>
                 <div className="mt-3">
                   <CalendarSemesterSelect
                     value={semester}
@@ -103,7 +122,9 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
               <div className="calendar-scroll max-h-[70vh] overflow-y-auto pr-2 lg:max-h-[75vh]">
                 <div className="space-y-4">
                   <Card className="p-12 text-center">
-                    <p className="text-muted-foreground">No trips match your filters.</p>
+                    <p className="text-muted-foreground">
+                      No trips match your filters.
+                    </p>
                   </Card>
                 </div>
               </div>
@@ -117,7 +138,12 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
                     </div>
                     <div className="flex items-center">
                       <div className="hidden md:inline-flex overflow-hidden rounded-full border border-border">
-                        <Button variant="ghost" size="icon" className="rounded-none" type="button">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-none"
+                          type="button"
+                        >
                           <ChevronLeft className="h-4 w-4" />
                         </Button>
                         <Button
@@ -128,7 +154,12 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
                         >
                           Today
                         </Button>
-                        <Button variant="ghost" size="icon" className="rounded-none" type="button">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-none"
+                          type="button"
+                        >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       </div>
@@ -143,7 +174,7 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
                     </div>
                   </div>
                   <div className="grid grid-cols-7 text-xs uppercase tracking-widest text-muted-foreground">
-                    {weekDays.map((day) => (
+                    {weekDays.map(day => (
                       <div key={day} className="py-2 text-center">
                         {day}
                       </div>
@@ -154,7 +185,8 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
                 <div className="grid grid-cols-7">
                   {days.map((day, index) => {
                     const dateKey = format(day, 'yyyy-MM-dd')
-                    const inMonth = day.getFullYear() === 2026 && day.getMonth() === 0
+                    const inMonth =
+                      day.getFullYear() === 2026 && day.getMonth() === 0
                     const rowIndex = Math.floor(index / 7)
                     const isLastRow = rowIndex === 4
                     const isLastCol = (index + 1) % 7 === 0
@@ -165,7 +197,7 @@ export function CalendarSkeleton({ view = 'calendar', semester = 'all' }: Calend
                           'flex h-24 flex-col gap-2 border-border px-2 py-2 text-left sm:h-28',
                           !isLastRow && 'border-b',
                           !isLastCol && 'border-r',
-                          !inMonth && 'text-muted-foreground/60'
+                          !inMonth && 'text-muted-foreground/60',
                         )}
                       >
                         <div className="flex items-center justify-between">

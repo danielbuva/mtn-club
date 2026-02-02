@@ -1,13 +1,13 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { addMonths } from 'date-fns'
 import { cacheTag } from 'next/cache'
 import { AUTH_CACHE_TAG } from '@/lib/auth/tags'
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@/lib/supabase/types'
-import { createClient } from '@/lib/supabase/server'
-import { createPublicClient } from '@/lib/supabase/public'
-import { homeTripRowToCalendarTrip } from '@/lib/home/mappers'
 import type { CalendarTrip } from '@/lib/events/types'
+import { homeTripRowToCalendarTrip } from '@/lib/home/mappers'
 import type { HomeTripRow } from '@/lib/home/types'
+import { createPublicClient } from '@/lib/supabase/public'
+import { createClient } from '@/lib/supabase/server'
+import type { Database } from '@/lib/supabase/types'
 
 export type HomeTripsOptions = {
   limit?: number
@@ -25,7 +25,7 @@ const HOME_TRIP_FIELDS =
 const buildHomeTripsRangeQuery = (
   client: SupabaseClient<Database>,
   range: DateRange,
-  limit: number
+  limit: number,
 ) => {
   const startIso = range.start.toISOString()
   const endIso = range.end.toISOString()
@@ -42,7 +42,7 @@ const buildHomeTripsRangeQuery = (
 async function fetchHomeTripsInRange(
   client: SupabaseClient<Database>,
   range: DateRange,
-  limit: number
+  limit: number,
 ): Promise<HomeTripRow[]> {
   const { data, error } = await buildHomeTripsRangeQuery(client, range, limit)
   if (error) {

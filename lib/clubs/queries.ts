@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/supabase/types'
 
 export async function fetchPrimaryClubId(
-  client: SupabaseClient<Database>
+  client: SupabaseClient<Database>,
 ): Promise<string | null> {
   const { data, error } = await client
     .from('clubs')

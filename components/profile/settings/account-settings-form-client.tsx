@@ -1,15 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import type { ProfileRow, ProfileUpdate } from '@/lib/profile/types'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useEffect, useMemo, useState } from 'react'
 import { SettingsCard } from '@/components/profile/settings/settings-card'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +16,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { upsertProfile } from '@/lib/profile/queries'
+import type { ProfileRow, ProfileUpdate } from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type AccountSettingsFormClientProps = {
   initialProfile: ProfileRow | null
@@ -48,7 +48,7 @@ export function AccountSettingsFormClient({
       lastName: initialProfile?.last_name ?? '',
       phone: initialProfile?.phone ?? '',
     }),
-    [initialProfile]
+    [initialProfile],
   )
 
   const [values, setValues] = useState<AccountFormState>(initialValues)
@@ -81,7 +81,7 @@ export function AccountSettingsFormClient({
   }, [isDirty, setIsDirty])
 
   const handleFieldChange = (key: keyof AccountFormState, value: string) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -99,7 +99,9 @@ export function AccountSettingsFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }
@@ -129,7 +131,11 @@ export function AccountSettingsFormClient({
       setPasswordMessage('No email address found for your account.')
       return
     }
-    if (!passwordValues.current || !passwordValues.next || !passwordValues.confirm) {
+    if (
+      !passwordValues.current ||
+      !passwordValues.next ||
+      !passwordValues.confirm
+    ) {
       setPasswordMessage('Complete all password fields to continue.')
       return
     }
@@ -143,15 +149,19 @@ export function AccountSettingsFormClient({
     }
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.updateUser({ password: passwordValues.next })
+      const { error } = await supabase.auth.updateUser({
+        password: passwordValues.next,
+      })
       if (error) throw error
       setPasswordValues({ current: '', next: '', confirm: '' })
-      setPasswordMessage('Password updated. Use your new password next time you sign in.')
+      setPasswordMessage(
+        'Password updated. Use your new password next time you sign in.',
+      )
     } catch (error) {
       setPasswordMessage(
         error instanceof Error
           ? error.message
-          : 'Unable to update password. Try again later.'
+          : 'Unable to update password. Try again later.',
       )
     }
   }
@@ -162,7 +172,9 @@ export function AccountSettingsFormClient({
       setDeleteError('Type DELETE to confirm account removal.')
       return
     }
-    setDeleteError('Account deletion is not enabled yet. Contact support to proceed.')
+    setDeleteError(
+      'Account deletion is not enabled yet. Contact support to proceed.',
+    )
   }
 
   return (
@@ -177,7 +189,9 @@ export function AccountSettingsFormClient({
             <Input
               id="display-name"
               value={values.displayName}
-              onChange={(event) => handleFieldChange('displayName', event.target.value)}
+              onChange={event =>
+                handleFieldChange('displayName', event.target.value)
+              }
               placeholder="Your public name"
             />
           </div>
@@ -186,7 +200,7 @@ export function AccountSettingsFormClient({
             <Input
               id="phone"
               value={values.phone}
-              onChange={(event) => handleFieldChange('phone', event.target.value)}
+              onChange={event => handleFieldChange('phone', event.target.value)}
               placeholder="(702) 555-1234"
             />
           </div>
@@ -198,7 +212,9 @@ export function AccountSettingsFormClient({
             <Input
               id="first-name"
               value={values.firstName}
-              onChange={(event) => handleFieldChange('firstName', event.target.value)}
+              onChange={event =>
+                handleFieldChange('firstName', event.target.value)
+              }
             />
           </div>
           <div className="grid gap-2">
@@ -206,7 +222,9 @@ export function AccountSettingsFormClient({
             <Input
               id="last-name"
               value={values.lastName}
-              onChange={(event) => handleFieldChange('lastName', event.target.value)}
+              onChange={event =>
+                handleFieldChange('lastName', event.target.value)
+              }
             />
           </div>
         </div>
@@ -231,12 +249,19 @@ export function AccountSettingsFormClient({
         <div className="grid gap-4 md:grid-cols-2">
           <div className="grid gap-2">
             <Label htmlFor="auth-email">Account email</Label>
-            <Input id="auth-email" value={email ?? ''} disabled placeholder="Not set" />
+            <Input
+              id="auth-email"
+              value={email ?? ''}
+              disabled
+              placeholder="Not set"
+            />
           </div>
           <div className="grid gap-2">
             <Label className="opacity-0">Change email</Label>
             <Button asChild variant="outline" className="justify-center">
-              <Link href="mailto:hello@mountainclub.com">Request email change</Link>
+              <Link href="mailto:hello@mountainclub.com">
+                Request email change
+              </Link>
             </Button>
             <p className="text-xs text-muted-foreground">
               Email changes are handled by club admins for now.
@@ -249,7 +274,9 @@ export function AccountSettingsFormClient({
         title="Change password"
         description="Use a strong password to secure your account."
         footer={
-          passwordMessage ? <p className="text-xs text-muted-foreground">{passwordMessage}</p> : null
+          passwordMessage ? (
+            <p className="text-xs text-muted-foreground">{passwordMessage}</p>
+          ) : null
         }
       >
         <div className="grid gap-4 md:grid-cols-3">
@@ -259,8 +286,11 @@ export function AccountSettingsFormClient({
               id="current-password"
               type="password"
               value={passwordValues.current}
-              onChange={(event) =>
-                setPasswordValues((prev) => ({ ...prev, current: event.target.value }))
+              onChange={event =>
+                setPasswordValues(prev => ({
+                  ...prev,
+                  current: event.target.value,
+                }))
               }
             />
           </div>
@@ -270,8 +300,11 @@ export function AccountSettingsFormClient({
               id="new-password"
               type="password"
               value={passwordValues.next}
-              onChange={(event) =>
-                setPasswordValues((prev) => ({ ...prev, next: event.target.value }))
+              onChange={event =>
+                setPasswordValues(prev => ({
+                  ...prev,
+                  next: event.target.value,
+                }))
               }
             />
           </div>
@@ -281,8 +314,11 @@ export function AccountSettingsFormClient({
               id="confirm-password"
               type="password"
               value={passwordValues.confirm}
-              onChange={(event) =>
-                setPasswordValues((prev) => ({ ...prev, confirm: event.target.value }))
+              onChange={event =>
+                setPasswordValues(prev => ({
+                  ...prev,
+                  confirm: event.target.value,
+                }))
               }
             />
           </div>
@@ -295,7 +331,10 @@ export function AccountSettingsFormClient({
         </div>
         <div className="text-xs text-muted-foreground">
           If you run into issues, you can also{' '}
-          <Link className="underline underline-offset-4" href="/auth/forgot-password">
+          <Link
+            className="underline underline-offset-4"
+            href="/auth/forgot-password"
+          >
             send a reset email
           </Link>
           .
@@ -318,8 +357,8 @@ export function AccountSettingsFormClient({
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete your account?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This removes your profile, memberships, and saved preferences. Type DELETE to
-                  confirm.
+                  This removes your profile, memberships, and saved preferences.
+                  Type DELETE to confirm.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <div className="mt-4 grid gap-2">
@@ -327,10 +366,12 @@ export function AccountSettingsFormClient({
                 <Input
                   id="delete-confirm"
                   value={deleteConfirm}
-                  onChange={(event) => setDeleteConfirm(event.target.value)}
+                  onChange={event => setDeleteConfirm(event.target.value)}
                   placeholder="DELETE"
                 />
-                {deleteError ? <p className="text-xs text-destructive">{deleteError}</p> : null}
+                {deleteError ? (
+                  <p className="text-xs text-destructive">{deleteError}</p>
+                ) : null}
               </div>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>

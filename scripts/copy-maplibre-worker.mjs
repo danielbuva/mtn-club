@@ -1,10 +1,16 @@
-import { mkdir, copyFile, access } from 'node:fs/promises'
+import { access, copyFile, mkdir } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const srcWorker = resolve(root, 'node_modules/maplibre-gl/dist/maplibre-gl-csp-worker.js')
-const srcWorkerDev = resolve(root, 'node_modules/maplibre-gl/dist/maplibre-gl-csp-worker-dev.js')
+const srcWorker = resolve(
+  root,
+  'node_modules/maplibre-gl/dist/maplibre-gl-csp-worker.js',
+)
+const srcWorkerDev = resolve(
+  root,
+  'node_modules/maplibre-gl/dist/maplibre-gl-csp-worker-dev.js',
+)
 const destWorker = resolve(root, 'public/maplibre/maplibre-gl-worker.js')
 const destWorkerDev = resolve(root, 'public/maplibre/maplibre-gl-worker-dev.js')
 

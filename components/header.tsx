@@ -1,22 +1,25 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
 import {
   BadgeCheck,
   Calendar,
   LogOut,
   Menu,
+  Monitor,
   Moon,
   Mountain,
   Sun,
-  Monitor,
   User,
 } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { signOutAction } from '@/app/actions/auth'
+import { useViewer } from '@/components/auth/viewer-provider'
+import { MemberCTA } from '@/components/member-cta'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,11 +28,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useTheme } from 'next-themes'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
-import { useViewer } from '@/components/auth/viewer-provider'
-import { MemberCTA } from '@/components/member-cta'
-import { signOutAction } from '@/app/actions/auth'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -41,7 +47,10 @@ const navLinks = [
 const getInitials = (value: string | null | undefined) => {
   if (!value) return 'MC'
   const parts = value.trim().split(/\s+/).filter(Boolean)
-  const initials = parts.slice(0, 2).map((part) => part[0]).join('')
+  const initials = parts
+    .slice(0, 2)
+    .map(part => part[0])
+    .join('')
   return initials.toUpperCase() || 'MC'
 }
 
@@ -73,21 +82,27 @@ export function Header() {
       'inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-sm transition-colors',
       currentTheme === value
         ? 'bg-background text-foreground shadow-sm'
-        : 'text-muted-foreground hover:text-foreground'
+        : 'text-muted-foreground hover:text-foreground',
     )
 
   const authRedirect = encodeURIComponent(
-    `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
+    `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`,
   )
 
   const handleSignOut = () => {
-    const form = document.getElementById(signOutFormId) as HTMLFormElement | null
+    const form = document.getElementById(
+      signOutFormId,
+    ) as HTMLFormElement | null
     form?.requestSubmit()
   }
 
   const cycleTheme = () => {
     const nextTheme =
-      currentTheme === 'system' ? 'light' : currentTheme === 'light' ? 'dark' : 'system'
+      currentTheme === 'system'
+        ? 'light'
+        : currentTheme === 'light'
+          ? 'dark'
+          : 'system'
     setTheme(nextTheme)
   }
 
@@ -101,39 +116,45 @@ export function Header() {
       aria-label="Theme"
       className={cn(
         'inline-flex items-center rounded-full border border-border/60 bg-secondary/40 p-1',
-        className
+        className,
       )}
     >
-      <button
-        type="button"
-        role="radio"
-        aria-checked={currentTheme === 'light'}
-        onClick={() => setTheme('light')}
-        className={themePillButtonClass('light')}
-      >
+      <label className={themePillButtonClass('light')}>
+        <input
+          type="radio"
+          name="theme"
+          value="light"
+          checked={currentTheme === 'light'}
+          onChange={() => setTheme('light')}
+          className="sr-only"
+        />
         <Sun className="h-4 w-4" />
         <span className="sr-only">Light theme</span>
-      </button>
-      <button
-        type="button"
-        role="radio"
-        aria-checked={currentTheme === 'system'}
-        onClick={() => setTheme('system')}
-        className={themePillButtonClass('system')}
-      >
+      </label>
+      <label className={themePillButtonClass('system')}>
+        <input
+          type="radio"
+          name="theme"
+          value="system"
+          checked={currentTheme === 'system'}
+          onChange={() => setTheme('system')}
+          className="sr-only"
+        />
         <Monitor className="h-4 w-4" />
         <span className="sr-only">System theme</span>
-      </button>
-      <button
-        type="button"
-        role="radio"
-        aria-checked={currentTheme === 'dark'}
-        onClick={() => setTheme('dark')}
-        className={themePillButtonClass('dark')}
-      >
+      </label>
+      <label className={themePillButtonClass('dark')}>
+        <input
+          type="radio"
+          name="theme"
+          value="dark"
+          checked={currentTheme === 'dark'}
+          onChange={() => setTheme('dark')}
+          className="sr-only"
+        />
         <Moon className="h-4 w-4" />
         <span className="sr-only">Dark theme</span>
-      </button>
+      </label>
     </div>
   )
 
@@ -157,12 +178,14 @@ export function Header() {
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
               <Mountain className="w-5 h-5" />
             </div>
-            <span className="font-semibold text-lg tracking-tight">UNLV Mountain Club</span>
+            <span className="font-semibold text-lg tracking-tight">
+              UNLV Mountain Club
+            </span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
-            {navLinks.map((link) => (
+            {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -170,7 +193,7 @@ export function Header() {
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   pathname === link.href
                     ? 'text-foreground bg-secondary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
                 )}
               >
                 {link.label}
@@ -185,7 +208,10 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src={viewer.member?.avatarUrl ?? undefined} alt={profileName} />
+                      <AvatarImage
+                        src={viewer.member?.avatarUrl ?? undefined}
+                        alt={profileName}
+                      />
                       <AvatarFallback>{profileInitials}</AvatarFallback>
                     </Avatar>
                   </Button>
@@ -236,7 +262,7 @@ export function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onSelect={(event) => {
+                    onSelect={event => {
                       event.preventDefault()
                       handleSignOut()
                     }}
@@ -259,19 +285,27 @@ export function Header() {
                   <ThemeCycleIcon className="h-5 w-5" />
                 </Button>
                 {!viewer.isAuthenticated && (
-                  <Button variant="ghost" className="rounded-xl font-medium" asChild>
-                    <Link href={`/auth/login?redirect=${authRedirect}`}>Sign in</Link>
+                  <Button
+                    variant="ghost"
+                    className="rounded-xl font-medium"
+                    asChild
+                  >
+                    <Link href={`/auth/login?redirect=${authRedirect}`}>
+                      Sign in
+                    </Link>
                   </Button>
                 )}
                 <div className="hidden sm:block">
                   <MemberCTA
                     className="rounded-xl font-medium"
-                    memberFallback={(
+                    memberFallback={
                       <Button className="rounded-xl font-medium" asChild>
                         <Link href="/membership">Membership</Link>
                       </Button>
-                    )}
-                    {...(shouldShowRenewCta ? { children: 'Renew Membership' } : {})}
+                    }
+                    {...(shouldShowRenewCta
+                      ? { children: 'Renew Membership' }
+                      : {})}
                   />
                 </div>
               </>
@@ -290,7 +324,7 @@ export function Header() {
                   <SheetTitle>Mobile navigation</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-2 mt-8 h-full">
-                  {navLinks.map((link) => (
+                  {navLinks.map(link => (
                     <Link
                       key={link.href}
                       href={link.href}
@@ -299,7 +333,7 @@ export function Header() {
                         'px-4 py-3 rounded-none text-base font-medium transition-colors',
                         pathname === link.href
                           ? 'text-foreground bg-secondary'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
                       )}
                     >
                       {link.label}
@@ -313,7 +347,7 @@ export function Header() {
                         'px-4 py-3 rounded-none text-base font-medium transition-colors',
                         pathname === '/auth/login'
                           ? 'text-foreground bg-secondary'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
                       )}
                     >
                       Sign in
@@ -327,24 +361,28 @@ export function Header() {
                         'px-4 py-3 rounded-none text-base font-medium transition-colors',
                         pathname === '/profile'
                           ? 'text-foreground bg-secondary'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
                       )}
                     >
                       Profile
                     </Link>
                   )}
                   <div className="mt-4 empty:hidden">
-                    <div onClick={handleMobileNavClick}>
-                      <MemberCTA
-                        className="w-full rounded-none font-medium"
-                        memberFallback={(
-                          <Button className="w-full rounded-none font-medium" asChild>
-                            <Link href="/membership">Membership</Link>
-                          </Button>
-                        )}
-                        {...(shouldShowRenewCta ? { children: 'Renew Membership' } : {})}
-                      />
-                    </div>
+                    <MemberCTA
+                      className="w-full rounded-none font-medium"
+                      onClick={handleMobileNavClick}
+                      memberFallback={
+                        <Button
+                          className="w-full rounded-none font-medium"
+                          asChild
+                        >
+                          <Link href="/membership">Membership</Link>
+                        </Button>
+                      }
+                      {...(shouldShowRenewCta
+                        ? { children: 'Renew Membership' }
+                        : {})}
+                    />
                   </div>
                   <div className="mt-auto pb-6 ml-4">
                     <ThemeTogglePill className="w-fit" />

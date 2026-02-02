@@ -1,6 +1,6 @@
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import { ProfileSection } from '@/components/profile/profile-section'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import type { GearProfile } from '@/lib/profile/types'
 
 interface GearProfileProps {
@@ -20,7 +20,7 @@ export function GearProfileSection({ value, onChange }: GearProfileProps) {
           <Textarea
             id="gearOwned"
             value={value.gearOwned}
-            onChange={(e) => onChange('gearOwned', e.target.value)}
+            onChange={e => onChange('gearOwned', e.target.value)}
             placeholder="Tent, snowshoes, climbing rack"
           />
         </div>
@@ -29,7 +29,7 @@ export function GearProfileSection({ value, onChange }: GearProfileProps) {
           <Textarea
             id="gearNeeded"
             value={value.gearNeeded}
-            onChange={(e) => onChange('gearNeeded', e.target.value)}
+            onChange={e => onChange('gearNeeded', e.target.value)}
             placeholder="Borrow/need list"
           />
         </div>

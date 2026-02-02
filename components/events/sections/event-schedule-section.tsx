@@ -7,10 +7,17 @@ import type { EventFormValues } from '@/lib/events/schema'
 interface EventScheduleSectionProps {
   values: EventFormValues
   fieldErrors: Record<string, string>
-  onFieldChange: <K extends keyof EventFormValues>(key: K, value: EventFormValues[K]) => void
+  onFieldChange: <K extends keyof EventFormValues>(
+    key: K,
+    value: EventFormValues[K],
+  ) => void
 }
 
-export function EventScheduleSection({ values, fieldErrors, onFieldChange }: EventScheduleSectionProps) {
+export function EventScheduleSection({
+  values,
+  fieldErrors,
+  onFieldChange,
+}: EventScheduleSectionProps) {
   return (
     <Card>
       <CardContent className="p-6 space-y-4">
@@ -25,9 +32,11 @@ export function EventScheduleSection({ values, fieldErrors, onFieldChange }: Eve
               id="startAt"
               type="datetime-local"
               value={values.startAt}
-              onChange={(e) => onFieldChange('startAt', e.target.value)}
+              onChange={e => onFieldChange('startAt', e.target.value)}
             />
-            {fieldErrors.startAt && <p className="text-xs text-red-500">{fieldErrors.startAt}</p>}
+            {fieldErrors.startAt && (
+              <p className="text-xs text-red-500">{fieldErrors.startAt}</p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="endAt">End</Label>
@@ -35,9 +44,11 @@ export function EventScheduleSection({ values, fieldErrors, onFieldChange }: Eve
               id="endAt"
               type="datetime-local"
               value={values.endAt}
-              onChange={(e) => onFieldChange('endAt', e.target.value)}
+              onChange={e => onFieldChange('endAt', e.target.value)}
             />
-            {fieldErrors.endAt && <p className="text-xs text-red-500">{fieldErrors.endAt}</p>}
+            {fieldErrors.endAt && (
+              <p className="text-xs text-red-500">{fieldErrors.endAt}</p>
+            )}
           </div>
         </div>
 
@@ -46,7 +57,7 @@ export function EventScheduleSection({ values, fieldErrors, onFieldChange }: Eve
           <Input
             id="timezone"
             value={values.timezone}
-            onChange={(e) => onFieldChange('timezone', e.target.value)}
+            onChange={e => onFieldChange('timezone', e.target.value)}
           />
           {fieldErrors.timezone && (
             <p className="text-xs text-red-500">{fieldErrors.timezone}</p>

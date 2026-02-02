@@ -1,7 +1,7 @@
-import { z } from 'zod'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@/lib/supabase/types'
+import { z } from 'zod'
 import type { EventInsert, EventRow, TripTeaserDay } from '@/lib/events/types'
+import type { Database } from '@/lib/supabase/types'
 
 export type DateRange = {
   start: Date
@@ -10,7 +10,7 @@ export type DateRange = {
 
 const buildTripsRangeQuery = (
   client: SupabaseClient<Database>,
-  range: DateRange
+  range: DateRange,
 ) => {
   const startIso = range.start.toISOString()
   const endIso = range.end.toISOString()
@@ -25,7 +25,7 @@ const buildTripsRangeQuery = (
 
 export async function fetchTripsInRange(
   client: SupabaseClient<Database>,
-  range: DateRange
+  range: DateRange,
 ): Promise<EventRow[]> {
   const { data, error } = await buildTripsRangeQuery(client, range)
 
@@ -39,7 +39,7 @@ export async function fetchTripsInRange(
 
 export async function fetchPastTripsInRangePublic(
   client: SupabaseClient<Database>,
-  range: DateRange
+  range: DateRange,
 ): Promise<EventRow[]> {
   // Public client relies on RLS for past-only visibility; we only bound the date window.
   const { data, error } = await buildTripsRangeQuery(client, range)
@@ -54,7 +54,7 @@ export async function fetchPastTripsInRangePublic(
 
 export async function fetchUpcomingTripsInRangeMember(
   client: SupabaseClient<Database>,
-  range: DateRange
+  range: DateRange,
 ): Promise<EventRow[]> {
   // Member access is enforced by RLS; we only bound the date window to "upcoming".
   const now = new Date()
@@ -78,7 +78,7 @@ export async function fetchUpcomingTripsInRangeMember(
 
 export async function fetchPastTripsPublic(
   client: SupabaseClient<Database>,
-  options?: { limit?: number }
+  options?: { limit?: number },
 ): Promise<EventRow[]> {
   const limit = options?.limit ?? 50
   const nowIso = new Date().toISOString()
@@ -103,7 +103,7 @@ export type CreateEventPayload = EventInsert & {
 
 export async function createEvent(
   client: SupabaseClient<Database>,
-  payload: CreateEventPayload
+  payload: CreateEventPayload,
 ): Promise<EventRow> {
   const { data, error } = await client
     .from('trips')
@@ -129,7 +129,7 @@ const tripTeaserListSchema = z.array(tripTeaserDaySchema)
 export async function fetchTripTeasersInRangePublic(
   client: SupabaseClient<Database>,
   clubId: string,
-  range: { start: Date; end: Date }
+  range: { start: Date; end: Date },
 ): Promise<TripTeaserDay[]> {
   const { data, error } = await client.rpc('get_trip_teasers_in_range', {
     _club_id: clubId,

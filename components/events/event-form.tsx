@@ -1,16 +1,16 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { EventBasicsSection } from '@/components/events/sections/event-basics-section'
+import { EventLocationsSection } from '@/components/events/sections/event-locations-section'
+import { EventScheduleSection } from '@/components/events/sections/event-schedule-section'
+import { EventSettingsSection } from '@/components/events/sections/event-settings-section'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { createClient } from '@/lib/supabase/client'
-import { eventFormSchema, type EventFormValues } from '@/lib/events/schema'
 import { createEvent } from '@/lib/events/queries'
-import { EventBasicsSection } from '@/components/events/sections/event-basics-section'
-import { EventScheduleSection } from '@/components/events/sections/event-schedule-section'
-import { EventLocationsSection } from '@/components/events/sections/event-locations-section'
-import { EventSettingsSection } from '@/components/events/sections/event-settings-section'
+import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
+import { createClient } from '@/lib/supabase/client'
 
 const timezoneFallback = Intl.DateTimeFormat().resolvedOptions().timeZone
 
@@ -38,28 +38,38 @@ type EventFormProps = {
   initialIsOfficial: boolean
 }
 
-export function EventForm({ clubId, membershipId, canChooseOfficial, initialIsOfficial }: EventFormProps) {
+export function EventForm({
+  clubId,
+  membershipId,
+  canChooseOfficial,
+  initialIsOfficial,
+}: EventFormProps) {
   const router = useRouter()
   const supabase = useMemo(() => createClient(), [])
-  const [values, setValues] = useState<EventFormValues>(() => emptyValues(initialIsOfficial))
+  const [values, setValues] = useState<EventFormValues>(() =>
+    emptyValues(initialIsOfficial),
+  )
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    setValues((prev) => ({
+    setValues(prev => ({
       ...prev,
       isOfficial: canChooseOfficial ? prev.isOfficial : false,
       status: canChooseOfficial ? prev.status : 'published',
     }))
   }, [canChooseOfficial])
 
-  const updateField = <K extends keyof EventFormValues>(key: K, value: EventFormValues[K]) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+  const updateField = <K extends keyof EventFormValues>(
+    key: K,
+    value: EventFormValues[K],
+  ) => {
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const toggleActivity = (activity: string) => {
-    setValues((prev) => {
+    setValues(prev => {
       const next = new Set(prev.activityTypes ?? [])
       if (next.has(activity)) {
         next.delete(activity)
@@ -99,7 +109,7 @@ export function EventForm({ clubId, membershipId, canChooseOfficial, initialIsOf
     if (maxParticipantsRaw) {
       const parsedMax = Number.parseInt(maxParticipantsRaw, 10)
       if (!Number.isFinite(parsedMax) || parsedMax <= 0) {
-        setFieldErrors((prev) => ({
+        setFieldErrors(prev => ({
           ...prev,
           maxParticipants: 'Enter a valid participant limit',
         }))
@@ -133,7 +143,9 @@ export function EventForm({ clubId, membershipId, canChooseOfficial, initialIsOf
       await createEvent(supabase, payload)
       router.push('/calendar')
     } catch (error: unknown) {
-      setFormError(error instanceof Error ? error.message : 'Unable to create event')
+      setFormError(
+        error instanceof Error ? error.message : 'Unable to create event',
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -143,7 +155,9 @@ export function EventForm({ clubId, membershipId, canChooseOfficial, initialIsOf
     <form className="space-y-6" onSubmit={handleSubmit}>
       {formError && (
         <Card className="border-destructive/50 bg-destructive/10">
-          <CardContent className="p-4 text-sm text-destructive">{formError}</CardContent>
+          <CardContent className="p-4 text-sm text-destructive">
+            {formError}
+          </CardContent>
         </Card>
       )}
 
@@ -175,11 +189,19 @@ export function EventForm({ clubId, membershipId, canChooseOfficial, initialIsOf
       />
 
       <div className="flex items-center justify-between">
-        <Button type="button" variant="ghost" onClick={() => router.push('/calendar')}>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => router.push('/calendar')}
+        >
           Cancel
         </Button>
         <Button type="submit" disabled={isSubmitting} className="rounded-xl">
-          {isSubmitting ? 'Saving...' : values.isOfficial ? 'Create Official Trip' : 'Post Meetup'}
+          {isSubmitting
+            ? 'Saving...'
+            : values.isOfficial
+              ? 'Create Official Trip'
+              : 'Post Meetup'}
         </Button>
       </div>
     </form>

@@ -1,6 +1,6 @@
-import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 import { BillingSettingsClient } from '@/components/profile/settings/billing-settings-client'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
+import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 
 export default function BillingSettingsPage() {
   return (

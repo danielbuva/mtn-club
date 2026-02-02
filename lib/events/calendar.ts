@@ -1,9 +1,13 @@
 import { endOfYear, startOfYear } from 'date-fns'
-import { createClient } from '@/lib/supabase/server'
-import { createPublicClient } from '@/lib/supabase/public'
 import { eventToCalendarTrip } from '@/lib/events/mappers'
-import { fetchPastTripsInRangePublic, fetchTripTeasersInRangePublic, fetchTripsInRange } from '@/lib/events/queries'
+import {
+  fetchPastTripsInRangePublic,
+  fetchTripsInRange,
+  fetchTripTeasersInRangePublic,
+} from '@/lib/events/queries'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
+import { createPublicClient } from '@/lib/supabase/public'
+import { createClient } from '@/lib/supabase/server'
 
 export type ViewerKey = 'public' | 'member'
 

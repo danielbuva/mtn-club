@@ -1,6 +1,6 @@
+import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/proxy'
 import { isPaymentsOnlyMode } from '@/src/lib/releaseMode'
-import { NextResponse, type NextRequest } from 'next/server'
 
 const publicPrefixes = [
   '/get-started',
@@ -25,7 +25,7 @@ const isPublicAsset = (pathname: string) =>
 
 const isAllowedPath = (pathname: string) => {
   if (publicExact.has(pathname)) return true
-  if (publicPrefixes.some((prefix) => pathname.startsWith(prefix))) return true
+  if (publicPrefixes.some(prefix => pathname.startsWith(prefix))) return true
   if (isPublicAsset(pathname)) return true
   return false
 }

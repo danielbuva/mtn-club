@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import type { ReactNode } from 'react'
-import { Button, type ButtonProps } from '@/components/ui/button'
+import type { MouseEventHandler, ReactNode } from 'react'
 import { useViewer } from '@/components/auth/viewer-provider'
+import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export type MemberCTAProps = {
@@ -15,6 +15,7 @@ export type MemberCTAProps = {
   memberFallback?: ReactNode
   icon?: ReactNode
   href?: string
+  onClick?: MouseEventHandler<HTMLAnchorElement>
 }
 
 export function MemberCTA({
@@ -26,6 +27,7 @@ export function MemberCTA({
   memberFallback,
   icon,
   href = '/membership',
+  onClick,
 }: MemberCTAProps) {
   const viewer = useViewer()
 
@@ -66,9 +68,10 @@ export function MemberCTA({
     return (
       <Link
         href={href}
+        onClick={onClick}
         className={cn(
           'text-sm text-muted-foreground hover:text-foreground transition-colors',
-          className
+          className,
         )}
       >
         {contentWithIcon}
@@ -76,16 +79,14 @@ export function MemberCTA({
     )
   }
 
-  const buttonVariant: ButtonProps['variant'] = variant === 'ghost' ? 'ghost' : 'default'
+  const buttonVariant: ButtonProps['variant'] =
+    variant === 'ghost' ? 'ghost' : 'default'
 
   return (
-    <Button
-      variant={buttonVariant}
-      size={size}
-      className={className}
-      asChild
-    >
-      <Link href={href}>{contentWithIcon}</Link>
+    <Button variant={buttonVariant} size={size} className={className} asChild>
+      <Link href={href} onClick={onClick}>
+        {contentWithIcon}
+      </Link>
     </Button>
   )
 }

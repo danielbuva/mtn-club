@@ -1,8 +1,17 @@
 'use client'
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  SEMESTER_OPTIONS,
+  type SemesterKey,
+} from '@/components/calendar/calendar-utils'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { cn } from '@/lib/utils'
-import { SEMESTER_OPTIONS, type SemesterKey } from '@/components/calendar/calendar-utils'
 
 interface CalendarSemesterSelectProps {
   value: SemesterKey
@@ -18,7 +27,7 @@ export function CalendarSemesterSelect({
   contentClassName,
 }: CalendarSemesterSelectProps) {
   return (
-    <Select value={value} onValueChange={(next) => onChange(next as SemesterKey)}>
+    <Select value={value} onValueChange={next => onChange(next as SemesterKey)}>
       <SelectTrigger
         className={cn('w-auto rounded-full', triggerClassName)}
         size="sm"
@@ -29,9 +38,12 @@ export function CalendarSemesterSelect({
         align="start"
         side="bottom"
         position="popper"
-        className={cn('min-w-[var(--radix-select-trigger-width)]', contentClassName)}
+        className={cn(
+          'min-w-[var(--radix-select-trigger-width)]',
+          contentClassName,
+        )}
       >
-        {SEMESTER_OPTIONS.map((option) => (
+        {SEMESTER_OPTIONS.map(option => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}
           </SelectItem>

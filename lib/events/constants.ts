@@ -31,4 +31,10 @@ export const EVENT_DIFFICULTIES = [
   'Expert',
 ] as const
 
-export const ACTIVITY_OPTIONS = ['Hike', 'Climb', 'Snow', 'Camp', 'Run'] as const
+export const ACTIVITY_OPTIONS = [
+  'Hike',
+  'Climb',
+  'Snow',
+  'Camp',
+  'Run',
+] as const

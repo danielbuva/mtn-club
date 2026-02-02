@@ -1,20 +1,25 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { GearProfile, ProfileRow, ProfileUpdate } from '@/lib/profile/types'
-import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { createClient } from '@/lib/supabase/client'
 import { GearProfileSection } from '@/components/profile/sections/gear-profile'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { profileRowToFormValues } from '@/lib/profile/mappers'
 import { upsertProfile } from '@/lib/profile/queries'
+import type {
+  GearProfile,
+  ProfileRow,
+  ProfileUpdate,
+} from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type GearPreferencesFormClientProps = {
   initialProfile: ProfileRow | null
   userId: string
 }
 
-const isEqual = (a: GearProfile, b: GearProfile) => JSON.stringify(a) === JSON.stringify(b)
+const isEqual = (a: GearProfile, b: GearProfile) =>
+  JSON.stringify(a) === JSON.stringify(b)
 
 export function GearPreferencesFormClient({
   initialProfile,
@@ -22,7 +27,7 @@ export function GearPreferencesFormClient({
 }: GearPreferencesFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).gearProfile,
-    [initialProfile]
+    [initialProfile],
   )
   const [values, setValues] = useState<GearProfile>(initialValues)
   const [baseline, setBaseline] = useState<GearProfile>(initialValues)
@@ -41,8 +46,11 @@ export function GearPreferencesFormClient({
     setIsDirty(isDirty)
   }, [isDirty, setIsDirty])
 
-  const updateField = <K extends keyof GearProfile>(key: K, value: GearProfile[K]) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+  const updateField = <K extends keyof GearProfile>(
+    key: K,
+    value: GearProfile[K],
+  ) => {
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -57,7 +65,9 @@ export function GearPreferencesFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }

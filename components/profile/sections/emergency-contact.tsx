@@ -1,15 +1,21 @@
+import { ProfileSection } from '@/components/profile/profile-section'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { ProfileSection } from '@/components/profile/profile-section'
 import type { EmergencyContact } from '@/lib/profile/types'
 
 interface EmergencyContactProps {
   value: EmergencyContact
-  onChange: <K extends keyof EmergencyContact>(key: K, value: EmergencyContact[K]) => void
+  onChange: <K extends keyof EmergencyContact>(
+    key: K,
+    value: EmergencyContact[K],
+  ) => void
 }
 
-export function EmergencyContactSection({ value, onChange }: EmergencyContactProps) {
+export function EmergencyContactSection({
+  value,
+  onChange,
+}: EmergencyContactProps) {
   return (
     <ProfileSection
       title="Emergency contact"
@@ -21,7 +27,7 @@ export function EmergencyContactSection({ value, onChange }: EmergencyContactPro
           <Input
             id="emergencyName"
             value={value.name}
-            onChange={(e) => onChange('name', e.target.value)}
+            onChange={e => onChange('name', e.target.value)}
           />
         </div>
         <div className="grid gap-2">
@@ -29,7 +35,7 @@ export function EmergencyContactSection({ value, onChange }: EmergencyContactPro
           <Input
             id="emergencyRelationship"
             value={value.relationship}
-            onChange={(e) => onChange('relationship', e.target.value)}
+            onChange={e => onChange('relationship', e.target.value)}
           />
         </div>
       </div>
@@ -40,7 +46,7 @@ export function EmergencyContactSection({ value, onChange }: EmergencyContactPro
           <Input
             id="emergencyPhone"
             value={value.phone}
-            onChange={(e) => onChange('phone', e.target.value)}
+            onChange={e => onChange('phone', e.target.value)}
           />
         </div>
         <div className="grid gap-2">
@@ -48,7 +54,7 @@ export function EmergencyContactSection({ value, onChange }: EmergencyContactPro
           <Textarea
             id="emergencyNotes"
             value={value.notes}
-            onChange={(e) => onChange('notes', e.target.value)}
+            onChange={e => onChange('notes', e.target.value)}
             placeholder="Allergies, medical info, etc."
           />
         </div>

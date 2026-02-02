@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { Check, CreditCard, Lock } from 'lucide-react'
+import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
@@ -18,7 +18,9 @@ type MembershipCheckoutCardProps = {
   ctaLabel: string
 }
 
-export function MembershipCheckoutCard({ ctaLabel }: MembershipCheckoutCardProps) {
+export function MembershipCheckoutCard({
+  ctaLabel,
+}: MembershipCheckoutCardProps) {
   const [autoRenew, setAutoRenew] = useState(true)
 
   return (
@@ -33,7 +35,7 @@ export function MembershipCheckoutCard({ ctaLabel }: MembershipCheckoutCardProps
         </div>
         <CardContent className="p-6">
           <ul className="space-y-3 mb-6">
-            {features.map((item) => (
+            {features.map(item => (
               <li key={item} className="flex items-center gap-3">
                 <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                   <Check className="w-3 h-3 text-primary" />
@@ -45,11 +47,18 @@ export function MembershipCheckoutCard({ ctaLabel }: MembershipCheckoutCardProps
 
           <div className="flex items-center justify-between p-4 rounded-xl bg-secondary mb-6">
             <div className="flex items-center gap-3">
-              <Label htmlFor="auto-renew" className="text-sm font-medium cursor-pointer">
+              <Label
+                htmlFor="auto-renew"
+                className="text-sm font-medium cursor-pointer"
+              >
                 Auto-renew annually
               </Label>
             </div>
-            <Switch id="auto-renew" checked={autoRenew} onCheckedChange={setAutoRenew} />
+            <Switch
+              id="auto-renew"
+              checked={autoRenew}
+              onCheckedChange={setAutoRenew}
+            />
           </div>
 
           <CheckoutButton

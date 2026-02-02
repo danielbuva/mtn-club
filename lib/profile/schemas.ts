@@ -1,54 +1,68 @@
 import { z } from 'zod'
 
-export const emergencyContactSchema = z.object({
-  name: z.string().optional(),
-  relationship: z.string().optional(),
-  phone: z.string().optional(),
-  notes: z.string().optional(),
-}).partial()
+export const emergencyContactSchema = z
+  .object({
+    name: z.string().optional(),
+    relationship: z.string().optional(),
+    phone: z.string().optional(),
+    notes: z.string().optional(),
+  })
+  .partial()
 
-export const privacySettingsSchema = z.object({
-  shareEmail: z.boolean().optional(),
-  sharePhone: z.boolean().optional(),
-  profileVisible: z.boolean().optional(),
-  shareGear: z.boolean().optional(),
-  shareCarpooling: z.boolean().optional(),
-  shareCarInfo: z.boolean().optional(),
-  shareNeighborhood: z.boolean().optional(),
-}).partial()
+export const privacySettingsSchema = z
+  .object({
+    shareEmail: z.boolean().optional(),
+    sharePhone: z.boolean().optional(),
+    profileVisible: z.boolean().optional(),
+    shareGear: z.boolean().optional(),
+    shareCarpooling: z.boolean().optional(),
+    shareCarInfo: z.boolean().optional(),
+    shareNeighborhood: z.boolean().optional(),
+  })
+  .partial()
 
-export const travelProfileSchema = z.object({
-  hasCar: z.boolean().optional(),
-  seats: z.string().optional(),
-  departureCity: z.string().optional(),
-  willingToDrive: z.boolean().optional(),
-}).partial()
+export const travelProfileSchema = z
+  .object({
+    hasCar: z.boolean().optional(),
+    seats: z.string().optional(),
+    departureCity: z.string().optional(),
+    willingToDrive: z.boolean().optional(),
+  })
+  .partial()
 
-export const gearProfileSchema = z.object({
-  gearOwned: z.string().optional(),
-  gearNeeded: z.string().optional(),
-}).partial()
+export const gearProfileSchema = z
+  .object({
+    gearOwned: z.string().optional(),
+    gearNeeded: z.string().optional(),
+  })
+  .partial()
 
-export const skillsCertsSchema = z.object({
-  skills: z.string().optional(),
-  certifications: z.string().optional(),
-}).partial()
+export const skillsCertsSchema = z
+  .object({
+    skills: z.string().optional(),
+    certifications: z.string().optional(),
+  })
+  .partial()
 
-export const interestsPreferencesSchema = z.object({
-  interests: z.string().optional(),
-  preferredActivities: z.string().optional(),
-  availability: z.string().optional(),
-}).partial()
+export const interestsPreferencesSchema = z
+  .object({
+    interests: z.string().optional(),
+    preferredActivities: z.string().optional(),
+    availability: z.string().optional(),
+  })
+  .partial()
 
-export const notificationSettingsSchema = z.object({
-  email: z.boolean().optional(),
-  sms: z.boolean().optional(),
-  announcements: z.boolean().optional(),
-  tripUpdates: z.boolean().optional(),
-  memberStories: z.boolean().optional(),
-  safetyAlerts: z.boolean().optional(),
-  digestFrequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
-}).partial()
+export const notificationSettingsSchema = z
+  .object({
+    email: z.boolean().optional(),
+    sms: z.boolean().optional(),
+    announcements: z.boolean().optional(),
+    tripUpdates: z.boolean().optional(),
+    memberStories: z.boolean().optional(),
+    safetyAlerts: z.boolean().optional(),
+    digestFrequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
+  })
+  .partial()
 
 export const profileFormSchema = z.object({
   displayName: z.string(),

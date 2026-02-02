@@ -1,14 +1,20 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import MapLibre, { Layer, Marker, Source, type MapRef, type ViewState } from 'react-map-gl/maplibre'
-import maplibregl, { setWorkerUrl, type Map as MapLibreMap } from 'maplibre-gl'
-import Supercluster from 'supercluster'
-import { bbox as turfBbox, circle } from '@turf/turf'
+import { circle, bbox as turfBbox } from '@turf/turf'
 import type { Feature, FeatureCollection, Point } from 'geojson'
+import maplibregl, { type Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl'
 import { useTheme } from 'next-themes'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import MapLibre, {
+  Layer,
+  type MapRef,
+  Marker,
+  Source,
+  type ViewState,
+} from 'react-map-gl/maplibre'
+import Supercluster from 'supercluster'
+import { type TripPoint, tripPoints } from '@/lib/map/trip-points'
 import { cn } from '@/lib/utils'
-import { tripPoints, type TripPoint } from '@/lib/map/trip-points'
 
 const LAS_VEGAS = {
   lat: 36.1699,
@@ -49,7 +55,11 @@ type HomeMapProps = {
   className?: string
 }
 
-export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProps) {
+export function HomeMap({
+  selectedTripId,
+  onTripSelect,
+  className,
+}: HomeMapProps) {
   const mapRef = useRef<MapRef | null>(null)
   const rafRef = useRef<number | null>(null)
   const [clusters, setClusters] = useState<ClusterOrPoint[]>([])
@@ -57,13 +67,14 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
   const [stableTheme, setStableTheme] = useState<'light' | 'dark'>('light')
 
   const tripPointsById = useMemo<Map<string, TripPoint>>(
-    () => new Map<string, TripPoint>(tripPoints.map((point) => [point.id, point])),
-    []
+    () =>
+      new Map<string, TripPoint>(tripPoints.map(point => [point.id, point])),
+    [],
   )
 
   const features = useMemo<TripPointFeature[]>(
     () =>
-      tripPoints.map((point) => ({
+      tripPoints.map(point => ({
         type: 'Feature',
         properties: { pointId: point.id },
         geometry: {
@@ -71,7 +82,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
           coordinates: [point.lon, point.lat],
         },
       })),
-    []
+    [],
   )
 
   const clusterIndex = useMemo(() => {
@@ -90,7 +101,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
 
   const radiusBounds = useMemo(
     () => turfBbox(radiusPolygon) as [number, number, number, number],
-    [radiusPolygon]
+    [radiusPolygon],
   )
 
   const radiusSource = useMemo<FeatureCollection>(() => {
@@ -178,7 +189,9 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
     }
   }, [getMapInstance, scheduleClusterUpdate])
 
-  const isClusterFeature = (feature: ClusterOrPoint): feature is ClusterFeature =>
+  const isClusterFeature = (
+    feature: ClusterOrPoint,
+  ): feature is ClusterFeature =>
     (feature.properties as ClusterProperties).cluster === true
 
   const handleMapLoad = useCallback(() => {
@@ -192,13 +205,13 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       {
         padding: 64,
         duration: 0,
-      }
+      },
     )
     updateClusters()
   }, [radiusBounds, updateClusters, getMapInstance])
 
   const handleClusterClick = useCallback(
-    (clusterId: number, lng: number, lat: number) => {
+    (_clusterId: number, lng: number, lat: number) => {
       const map = getMapInstance()
       if (!map) return
       const currentZoom = map.getZoom()
@@ -209,7 +222,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
         duration: 800,
       })
     },
-    [getMapInstance]
+    [getMapInstance],
   )
 
   const initialViewState = useMemo<ViewState>(
@@ -221,7 +234,7 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
       pitch: 0,
       padding: { top: 0, bottom: 0, left: 0, right: 0 },
     }),
-    []
+    [],
   )
   const mapStyle = stableTheme === 'dark' ? DARK_BASEMAP_URL : LIGHT_BASEMAP_URL
 
@@ -259,32 +272,43 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
           />
         </Source>
 
-        {clusters.map((feature) => {
+        {clusters.map(feature => {
           const [lng, lat] = feature.geometry.coordinates as [number, number]
 
           if (isClusterFeature(feature)) {
-            const { cluster_id: clusterId, point_count: pointCount } = feature.properties
-            const leaves = clusterIndex.getLeaves(clusterId, 4) as PointFeature[]
+            const { cluster_id: clusterId, point_count: pointCount } =
+              feature.properties
+            const leaves = clusterIndex.getLeaves(
+              clusterId,
+              4,
+            ) as PointFeature[]
             const thumbnails = leaves
-              .map((leaf) => tripPointsById.get(leaf.properties.pointId)?.photos[0])
+              .map(
+                leaf => tripPointsById.get(leaf.properties.pointId)?.photos[0],
+              )
               .filter((photo): photo is string => Boolean(photo))
 
             return (
-              <Marker key={`cluster-${clusterId}`} longitude={lng} latitude={lat} anchor="center">
+              <Marker
+                key={`cluster-${clusterId}`}
+                longitude={lng}
+                latitude={lat}
+                anchor="center"
+              >
                 <button
                   type="button"
-                  onClick={(event) => {
+                  onClick={event => {
                     event.stopPropagation()
                     handleClusterClick(clusterId, lng, lat)
                   }}
                   className="relative grid h-16 w-16 grid-cols-2 grid-rows-2 gap-0.5 rounded-2xl border border-white/80 bg-white/90 p-1 shadow-lg backdrop-blur transition-transform hover:scale-105"
                   aria-label={`Zoom into ${pointCount} trip locations`}
                 >
-                  {thumbnails.map((photo) => (
+                  {thumbnails.map(photo => (
                     <span key={photo} className="overflow-hidden rounded-md">
                       <img
                         src={photo}
-                        alt="Cluster photo"
+                        alt="Cluster"
                         className="h-full w-full object-cover"
                         loading="lazy"
                       />
@@ -305,16 +329,21 @@ export function HomeMap({ selectedTripId, onTripSelect, className }: HomeMapProp
           const isSelected = trip.id === selectedTripId
 
           return (
-            <Marker key={trip.id} longitude={lng} latitude={lat} anchor="center">
+            <Marker
+              key={trip.id}
+              longitude={lng}
+              latitude={lat}
+              anchor="center"
+            >
               <button
                 type="button"
-                onClick={(event) => {
+                onClick={event => {
                   event.stopPropagation()
                   onTripSelect(trip)
                 }}
                 className={cn(
                   'group relative h-11 w-11 overflow-hidden rounded-xl border border-white/80 shadow-md transition-transform hover:scale-110',
-                  isSelected ? 'ring-2 ring-primary' : 'ring-0'
+                  isSelected ? 'ring-2 ring-primary' : 'ring-0',
                 )}
                 aria-label={`View trip details for ${trip.title}`}
               >

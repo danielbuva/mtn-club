@@ -1,16 +1,31 @@
- 'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
-import { Switch } from '@/components/ui/switch'
-import { Button } from '@/components/ui/button'
 import { SettingsCard } from '@/components/profile/settings/settings-card'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
 
 const mockTransactions = [
-  { date: '2025-10-12', description: 'Annual membership', amount: '$25.00', status: 'Paid' },
-  { date: '2024-10-12', description: 'Annual membership', amount: '$25.00', status: 'Paid' },
-  { date: '2023-10-12', description: 'Annual membership', amount: '$25.00', status: 'Paid' },
+  {
+    date: '2025-10-12',
+    description: 'Annual membership',
+    amount: '$25.00',
+    status: 'Paid',
+  },
+  {
+    date: '2024-10-12',
+    description: 'Annual membership',
+    amount: '$25.00',
+    status: 'Paid',
+  },
+  {
+    date: '2023-10-12',
+    description: 'Annual membership',
+    amount: '$25.00',
+    status: 'Paid',
+  },
 ]
 
 export function BillingSettingsClient() {
@@ -44,12 +59,14 @@ export function BillingSettingsClient() {
           <div>
             <p className="text-sm font-medium">Auto-renew membership</p>
             <p className="text-xs text-muted-foreground">
-              {autoRenew ? 'Renews on Oct 12, 2026.' : 'Expires on Oct 12, 2026.'}
+              {autoRenew
+                ? 'Renews on Oct 12, 2026.'
+                : 'Expires on Oct 12, 2026.'}
             </p>
           </div>
           <Switch
             checked={autoRenew}
-            onCheckedChange={(checked) => {
+            onCheckedChange={checked => {
               setAutoRenew(checked)
               setDirty(true)
             }}
@@ -87,9 +104,14 @@ export function BillingSettingsClient() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
-              {mockTransactions.map((row) => (
-                <tr key={`${row.date}-${row.description}`} className="bg-background">
-                  <td className="px-4 py-3 text-muted-foreground">{row.date}</td>
+              {mockTransactions.map(row => (
+                <tr
+                  key={`${row.date}-${row.description}`}
+                  className="bg-background"
+                >
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {row.date}
+                  </td>
                   <td className="px-4 py-3">{row.description}</td>
                   <td className="px-4 py-3">{row.amount}</td>
                   <td className="px-4 py-3 text-emerald-600">{row.status}</td>

@@ -1,14 +1,20 @@
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import { ProfileSection } from '@/components/profile/profile-section'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import type { InterestsPreferences } from '@/lib/profile/types'
 
 interface InterestsPreferencesProps {
   value: InterestsPreferences
-  onChange: <K extends keyof InterestsPreferences>(key: K, value: InterestsPreferences[K]) => void
+  onChange: <K extends keyof InterestsPreferences>(
+    key: K,
+    value: InterestsPreferences[K],
+  ) => void
 }
 
-export function InterestsPreferencesSection({ value, onChange }: InterestsPreferencesProps) {
+export function InterestsPreferencesSection({
+  value,
+  onChange,
+}: InterestsPreferencesProps) {
   return (
     <ProfileSection
       title="Interests & preferences"
@@ -20,7 +26,7 @@ export function InterestsPreferencesSection({ value, onChange }: InterestsPrefer
           <Textarea
             id="interests"
             value={value.interests}
-            onChange={(e) => onChange('interests', e.target.value)}
+            onChange={e => onChange('interests', e.target.value)}
             placeholder="Hiking, climbing, stargazing"
           />
         </div>
@@ -29,7 +35,7 @@ export function InterestsPreferencesSection({ value, onChange }: InterestsPrefer
           <Textarea
             id="preferredActivities"
             value={value.preferredActivities}
-            onChange={(e) => onChange('preferredActivities', e.target.value)}
+            onChange={e => onChange('preferredActivities', e.target.value)}
             placeholder="Sunrise hikes, service trips"
           />
         </div>
@@ -39,7 +45,7 @@ export function InterestsPreferencesSection({ value, onChange }: InterestsPrefer
         <Textarea
           id="availability"
           value={value.availability}
-          onChange={(e) => onChange('availability', e.target.value)}
+          onChange={e => onChange('availability', e.target.value)}
           placeholder="Weekends, weekday evenings"
         />
       </div>

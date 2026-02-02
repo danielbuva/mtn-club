@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { EventForm } from '@/components/events/event-form'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import type { MembershipState } from '@/lib/memberships/types'
 
 type NewEventPageProps = {
@@ -11,14 +11,12 @@ type NewEventPageProps = {
   membershipState: MembershipState
 }
 
-export function NewEventPage({ initialType, membershipState }: NewEventPageProps) {
-  const {
-    isAuthenticated,
-    isLeader,
-    clubId,
-    membershipId,
-    error,
-  } = membershipState
+export function NewEventPage({
+  initialType,
+  membershipState,
+}: NewEventPageProps) {
+  const { isAuthenticated, isLeader, clubId, membershipId, error } =
+    membershipState
 
   const initialIsOfficial = initialType === 'official' && isLeader
 

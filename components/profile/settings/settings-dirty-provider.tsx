@@ -9,9 +9,15 @@ type SettingsDirtyContextValue = {
   confirmDiscard: () => boolean
 }
 
-const SettingsDirtyContext = createContext<SettingsDirtyContextValue | null>(null)
+const SettingsDirtyContext = createContext<SettingsDirtyContextValue | null>(
+  null,
+)
 
-export function SettingsDirtyProvider({ children }: { children: React.ReactNode }) {
+export function SettingsDirtyProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [isDirty, setIsDirty] = useState(false)
   const { confirmDiscard } = useUnsavedChangesPrompt(isDirty)
 
@@ -21,7 +27,7 @@ export function SettingsDirtyProvider({ children }: { children: React.ReactNode 
       setIsDirty,
       confirmDiscard,
     }),
-    [isDirty, confirmDiscard]
+    [isDirty, confirmDiscard],
   )
 
   return (
@@ -34,7 +40,9 @@ export function SettingsDirtyProvider({ children }: { children: React.ReactNode 
 export function useSettingsDirty() {
   const context = useContext(SettingsDirtyContext)
   if (!context) {
-    throw new Error('useSettingsDirty must be used within SettingsDirtyProvider')
+    throw new Error(
+      'useSettingsDirty must be used within SettingsDirtyProvider',
+    )
   }
   return context
 }

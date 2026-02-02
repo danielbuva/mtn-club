@@ -1,12 +1,15 @@
-import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
-import { SettingsCard } from '@/components/profile/settings/settings-card'
-import { Button } from '@/components/ui/button'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
+import { SettingsCard } from '@/components/profile/settings/settings-card'
+import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
+import { Button } from '@/components/ui/button'
 
 export default function LiabilityWaiverPage() {
   return (
     <div className="space-y-6">
-      <MobileSettingsHeader title="Liability waiver" backHref="/profile/settings" />
+      <MobileSettingsHeader
+        title="Liability waiver"
+        backHref="/profile/settings"
+      />
       <SettingsPageHeader
         title="Liability waiver"
         description="Track your waiver status for upcoming events."
@@ -17,7 +20,9 @@ export default function LiabilityWaiverPage() {
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-foreground">Status: Not signed</p>
+            <p className="text-sm font-medium text-foreground">
+              Status: Not signed
+            </p>
             <p className="text-xs text-muted-foreground">
               TODO: Connect document signature flow.
             </p>

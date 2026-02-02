@@ -4,21 +4,28 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import type { MembershipFaq } from './membership-data'
+import type { MembershipFaq as MembershipFaqItem } from './membership-data'
 
 type MembershipFaqProps = {
   eyebrow: string
   title: string
   description: string
-  faqs: MembershipFaq[]
+  faqs: MembershipFaqItem[]
 }
 
-export function MembershipFaq({ eyebrow, title, description, faqs }: MembershipFaqProps) {
+export function MembershipFaq({
+  eyebrow,
+  title,
+  description,
+  faqs,
+}: MembershipFaqProps) {
   return (
     <section id="faq" className="py-24 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-primary font-medium text-sm uppercase tracking-wider">{eyebrow}</span>
+          <span className="text-primary font-medium text-sm uppercase tracking-wider">
+            {eyebrow}
+          </span>
           <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4 text-balance">
             {title}
           </h2>

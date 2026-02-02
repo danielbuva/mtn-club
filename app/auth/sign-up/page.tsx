@@ -1,12 +1,12 @@
-import { SignUpForm } from "@/components/auth/sign-up-form";
+import { Suspense } from 'react'
+import { SignUpForm } from '@/components/auth/sign-up-form'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Suspense } from "react";
+} from '@/components/ui/card'
 
 function SignUpFallback() {
   return (
@@ -34,7 +34,7 @@ function SignUpFallback() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 export default function Page() {
@@ -46,5 +46,5 @@ export default function Page() {
         </Suspense>
       </div>
     </div>
-  );
+  )
 }

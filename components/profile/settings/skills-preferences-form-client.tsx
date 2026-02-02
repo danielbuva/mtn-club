@@ -1,20 +1,25 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { ProfileRow, ProfileUpdate, SkillsCerts } from '@/lib/profile/types'
-import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { createClient } from '@/lib/supabase/client'
 import { SkillsCertsSection } from '@/components/profile/sections/skills-certs'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { profileRowToFormValues } from '@/lib/profile/mappers'
 import { upsertProfile } from '@/lib/profile/queries'
+import type {
+  ProfileRow,
+  ProfileUpdate,
+  SkillsCerts,
+} from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type SkillsPreferencesFormClientProps = {
   initialProfile: ProfileRow | null
   userId: string
 }
 
-const isEqual = (a: SkillsCerts, b: SkillsCerts) => JSON.stringify(a) === JSON.stringify(b)
+const isEqual = (a: SkillsCerts, b: SkillsCerts) =>
+  JSON.stringify(a) === JSON.stringify(b)
 
 export function SkillsPreferencesFormClient({
   initialProfile,
@@ -22,7 +27,7 @@ export function SkillsPreferencesFormClient({
 }: SkillsPreferencesFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).skillsCerts,
-    [initialProfile]
+    [initialProfile],
   )
   const [values, setValues] = useState<SkillsCerts>(initialValues)
   const [baseline, setBaseline] = useState<SkillsCerts>(initialValues)
@@ -41,8 +46,11 @@ export function SkillsPreferencesFormClient({
     setIsDirty(isDirty)
   }, [isDirty, setIsDirty])
 
-  const updateField = <K extends keyof SkillsCerts>(key: K, value: SkillsCerts[K]) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+  const updateField = <K extends keyof SkillsCerts>(
+    key: K,
+    value: SkillsCerts[K],
+  ) => {
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -57,7 +65,9 @@ export function SkillsPreferencesFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }

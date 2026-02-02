@@ -48,7 +48,9 @@ export const takeStoredReturnTo = () => {
   return value
 }
 
-export const getReturnToFromSearchParams = (searchParams?: { get: (key: string) => string | null }) => {
+export const getReturnToFromSearchParams = (searchParams?: {
+  get: (key: string) => string | null
+}) => {
   if (!searchParams) return null
   const fromRedirect = sanitizeReturnTo(searchParams.get('redirect'))
   if (fromRedirect) return fromRedirect

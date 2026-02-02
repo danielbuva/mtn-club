@@ -1,17 +1,22 @@
 'use client'
 
-import Link from 'next/link'
 import { X } from 'lucide-react'
-import { useMemo } from 'react'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { getReturnToFromSearchParams, getStoredReturnTo } from '@/lib/auth/return-to'
+import {
+  getReturnToFromSearchParams,
+  getStoredReturnTo,
+} from '@/lib/auth/return-to'
 
 export function AuthCloseButton() {
   const searchParams = useSearchParams()
 
   const href = useMemo(() => {
-    return getReturnToFromSearchParams(searchParams) ?? getStoredReturnTo() ?? '/'
+    return (
+      getReturnToFromSearchParams(searchParams) ?? getStoredReturnTo() ?? '/'
+    )
   }, [searchParams])
 
   return (

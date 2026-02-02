@@ -2,12 +2,12 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { MembershipBenefits } from './membership-benefits'
-import { MembershipFaq } from './membership-faq'
-import { MembershipHero } from './membership-hero'
-import { activeFaqs, memberPerks } from './membership-data'
 import type { Viewer } from '@/lib/auth/viewer'
 import { ManageBillingButton } from './manage-billing-button'
+import { MembershipBenefits } from './membership-benefits'
+import { activeFaqs, memberPerks } from './membership-data'
+import { MembershipFaq } from './membership-faq'
+import { MembershipHero } from './membership-hero'
 
 const formatDate = (value?: string | null) => {
   if (!value) return 'N/A'
@@ -28,7 +28,9 @@ type StatusRowProps = {
 function StatusRow({ label, value }: StatusRowProps) {
   return (
     <div className="space-y-1">
-      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+        {label}
+      </p>
       <p className="text-sm font-medium text-foreground">{value}</p>
     </div>
   )
@@ -78,10 +80,7 @@ export function MembershipActive({ viewer }: MembershipActiveProps) {
                 <StatusRow label="Status" value="Active" />
                 <StatusRow label="Member since" value={memberSince} />
                 <StatusRow label={renewalLabel} value={renewalValue} />
-                <StatusRow
-                  label="Auto-renew"
-                  value={autoRenewValue}
-                />
+                <StatusRow label="Auto-renew" value={autoRenewValue} />
                 <StatusRow label="Role" value={roleLabel} />
               </div>
 
@@ -89,7 +88,11 @@ export function MembershipActive({ viewer }: MembershipActiveProps) {
                 <Button asChild className="rounded-xl">
                   <Link href="/profile">View Profile</Link>
                 </Button>
-                <Button variant="outline" className="rounded-xl bg-transparent" asChild>
+                <Button
+                  variant="outline"
+                  className="rounded-xl bg-transparent"
+                  asChild
+                >
                   <Link href="/coming-soon">Browse Trips (Coming Soon)</Link>
                 </Button>
                 <ManageBillingButton className="rounded-xl bg-transparent" />
@@ -119,9 +122,15 @@ export function MembershipActive({ viewer }: MembershipActiveProps) {
             Plan your next trip
           </h2>
           <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-            Browse upcoming adventures and RSVP when you're ready to hit the trail.
+            Browse upcoming adventures and RSVP when you're ready to hit the
+            trail.
           </p>
-          <Button size="lg" variant="secondary" className="rounded-xl text-lg px-8" asChild>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="rounded-xl text-lg px-8"
+            asChild
+          >
             <Link href="/coming-soon">Browse Trips (Coming Soon)</Link>
           </Button>
         </div>

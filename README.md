@@ -56,7 +56,14 @@ NEXT_PUBLIC_STRIPE_SECRET_KEY=
 - `pnpm dev`: start Next.js in development mode
 - `pnpm build`: create production build
 - `pnpm start`: run production server
-- `pnpm lint`: run eslint
+- `pnpm lint`: run biome
+
+## Git hooks
+
+This repo uses Lefthook for pre-commit and pre-push checks.
+
+- `pnpm install` runs `pnpm prepare`, which installs Git hooks
+- If you installed dependencies before hooks were added, run `pnpm prepare` once
 
 ## Repository layout
 

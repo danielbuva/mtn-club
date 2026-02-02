@@ -1,10 +1,13 @@
-import { Switch } from '@/components/ui/switch'
 import { ProfileSection } from '@/components/profile/profile-section'
+import { Switch } from '@/components/ui/switch'
 import type { NotificationSettings } from '@/lib/profile/types'
 
 interface NotificationsProps {
   value: NotificationSettings
-  onChange: <K extends keyof NotificationSettings>(key: K, value: NotificationSettings[K]) => void
+  onChange: <K extends keyof NotificationSettings>(
+    key: K,
+    value: NotificationSettings[K],
+  ) => void
 }
 
 export function NotificationsSection({ value, onChange }: NotificationsProps) {
@@ -16,41 +19,49 @@ export function NotificationsSection({ value, onChange }: NotificationsProps) {
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium">Email updates</p>
-          <p className="text-xs text-muted-foreground">Trip announcements and changes.</p>
+          <p className="text-xs text-muted-foreground">
+            Trip announcements and changes.
+          </p>
         </div>
         <Switch
           checked={value.email}
-          onCheckedChange={(checked) => onChange('email', checked)}
+          onCheckedChange={checked => onChange('email', checked)}
         />
       </div>
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium">SMS alerts</p>
-          <p className="text-xs text-muted-foreground">Time-sensitive reminders.</p>
+          <p className="text-xs text-muted-foreground">
+            Time-sensitive reminders.
+          </p>
         </div>
         <Switch
           checked={value.sms}
-          onCheckedChange={(checked) => onChange('sms', checked)}
+          onCheckedChange={checked => onChange('sms', checked)}
         />
       </div>
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium">Club announcements</p>
-          <p className="text-xs text-muted-foreground">News and community updates.</p>
+          <p className="text-xs text-muted-foreground">
+            News and community updates.
+          </p>
         </div>
         <Switch
           checked={value.announcements}
-          onCheckedChange={(checked) => onChange('announcements', checked)}
+          onCheckedChange={checked => onChange('announcements', checked)}
         />
       </div>
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium">Trip updates</p>
-          <p className="text-xs text-muted-foreground">New trips and schedule changes.</p>
+          <p className="text-xs text-muted-foreground">
+            New trips and schedule changes.
+          </p>
         </div>
         <Switch
           checked={value.tripUpdates}
-          onCheckedChange={(checked) => onChange('tripUpdates', checked)}
+          onCheckedChange={checked => onChange('tripUpdates', checked)}
         />
       </div>
       <div className="flex items-center justify-between gap-4">
@@ -60,17 +71,19 @@ export function NotificationsSection({ value, onChange }: NotificationsProps) {
         </div>
         <Switch
           checked={value.memberStories}
-          onCheckedChange={(checked) => onChange('memberStories', checked)}
+          onCheckedChange={checked => onChange('memberStories', checked)}
         />
       </div>
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium">Safety alerts</p>
-          <p className="text-xs text-muted-foreground">Urgent trip notifications.</p>
+          <p className="text-xs text-muted-foreground">
+            Urgent trip notifications.
+          </p>
         </div>
         <Switch
           checked={value.safetyAlerts}
-          onCheckedChange={(checked) => onChange('safetyAlerts', checked)}
+          onCheckedChange={checked => onChange('safetyAlerts', checked)}
         />
       </div>
     </ProfileSection>

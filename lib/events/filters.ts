@@ -1,9 +1,12 @@
 import type { Filters } from '@/components/filters-panel'
 import type { CalendarTrip } from '@/lib/events/types'
 
-export function filterTrips(trips: CalendarTrip[], filters: Filters): CalendarTrip[] {
+export function filterTrips(
+  trips: CalendarTrip[],
+  filters: Filters,
+): CalendarTrip[] {
   return trips
-    .filter((trip) => {
+    .filter(trip => {
       if (filters.search) {
         const searchLower = filters.search.toLowerCase()
         if (
@@ -32,5 +35,8 @@ export function filterTrips(trips: CalendarTrip[], filters: Filters): CalendarTr
 
       return true
     })
-    .sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime())
+    .sort(
+      (a, b) =>
+        new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime(),
+    )
 }

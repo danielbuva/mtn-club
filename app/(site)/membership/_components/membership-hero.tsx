@@ -7,7 +7,11 @@ type MembershipHeroProps = {
   description: string
 }
 
-export function MembershipHero({ badge, title, description }: MembershipHeroProps) {
+export function MembershipHero({
+  badge,
+  title,
+  description,
+}: MembershipHeroProps) {
   return (
     <section className="relative py-24 px-4 overflow-hidden">
       <div className="absolute inset-0 -z-10">

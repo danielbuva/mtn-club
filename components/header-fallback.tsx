@@ -7,7 +7,9 @@ export function HeaderFallback() {
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground">
               <span className="text-xs font-semibold">MC</span>
             </div>
-            <span className="font-semibold text-lg tracking-tight">UNLV Mountain Club</span>
+            <span className="font-semibold text-lg tracking-tight">
+              UNLV Mountain Club
+            </span>
           </div>
 
           <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">

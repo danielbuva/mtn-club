@@ -31,7 +31,9 @@ export function formatMonthParam(value: Date): string {
   return format(value, 'yyyy-MM')
 }
 
-export function groupTripsByDay(trips: CalendarTrip[]): Map<string, CalendarTrip[]> {
+export function groupTripsByDay(
+  trips: CalendarTrip[],
+): Map<string, CalendarTrip[]> {
   const map = new Map<string, CalendarTrip[]>()
 
   for (const trip of trips) {
@@ -54,7 +56,9 @@ export function groupTripsByDay(trips: CalendarTrip[]): Map<string, CalendarTrip
   return map
 }
 
-export function buildTeaserMap(teasers: TripTeaserDay[]): Map<string, TripTeaserDay> {
+export function buildTeaserMap(
+  teasers: TripTeaserDay[],
+): Map<string, TripTeaserDay> {
   const map = new Map<string, TripTeaserDay>()
   for (const teaser of teasers) {
     map.set(teaser.day, teaser)
@@ -77,7 +81,7 @@ export function setQueryParams(params: Record<string, string | undefined>) {
 
 export function getSemesterRange(
   year: number,
-  semester: SemesterKey
+  semester: SemesterKey,
 ): { start: Date; end: Date } | null {
   switch (semester) {
     case 'spring':
@@ -88,17 +92,22 @@ export function getSemesterRange(
       return { start: new Date(year, 8, 1), end: new Date(year, 10, 30) }
     case 'winter':
       return { start: new Date(year, 11, 1), end: new Date(year, 11, 31) }
-    case 'all':
     default:
       return null
   }
 }
 
-export function isDateInRange(date: Date, range: { start: Date; end: Date }): boolean {
+export function isDateInRange(
+  date: Date,
+  range: { start: Date; end: Date },
+): boolean {
   return date >= range.start && date <= range.end
 }
 
-export function isTripInRange(trip: CalendarTrip, range: { start: Date; end: Date }): boolean {
+export function isTripInRange(
+  trip: CalendarTrip,
+  range: { start: Date; end: Date },
+): boolean {
   const start = new Date(trip.dateStart)
   const end = new Date(trip.dateEnd)
   return start <= range.end && end >= range.start

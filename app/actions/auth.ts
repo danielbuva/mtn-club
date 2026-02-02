@@ -2,8 +2,8 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { AUTH_CACHE_TAG, authUserTag } from '@/lib/auth/tags'
+import { createClient } from '@/lib/supabase/server'
 
 export async function signOutAction(): Promise<void> {
   const supabase = await createClient()

@@ -1,7 +1,7 @@
-import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
-import { AccountSettingsFormClient } from '@/components/profile/settings/account-settings-form-client'
 import { getProfileOrRedirect } from '@/app/(site)/profile/_lib/get-profile'
+import { AccountSettingsFormClient } from '@/components/profile/settings/account-settings-form-client'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
+import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 
 export default async function AccountSettingsPage() {
   const { profile, userId, email } = await getProfileOrRedirect()
@@ -13,7 +13,11 @@ export default async function AccountSettingsPage() {
         title="Account"
         description="Manage your personal details and security settings."
       />
-      <AccountSettingsFormClient initialProfile={profile} userId={userId} email={email} />
+      <AccountSettingsFormClient
+        initialProfile={profile}
+        userId={userId}
+        email={email}
+      />
     </div>
   )
 }

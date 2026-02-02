@@ -1,7 +1,7 @@
-import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
-import { GearPreferencesFormClient } from '@/components/profile/settings/gear-preferences-form-client'
 import { getProfileOrRedirect } from '@/app/(site)/profile/_lib/get-profile'
+import { GearPreferencesFormClient } from '@/components/profile/settings/gear-preferences-form-client'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
+import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
 
 export default async function GearPreferencesPage() {
   const { profile, userId } = await getProfileOrRedirect()

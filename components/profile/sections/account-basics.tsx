@@ -1,12 +1,15 @@
+import { ProfileSection } from '@/components/profile/profile-section'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { ProfileSection } from '@/components/profile/profile-section'
 import type { ProfileFormValues } from '@/lib/profile/types'
 
 interface AccountBasicsProps {
   values: ProfileFormValues
-  onChange: <K extends keyof ProfileFormValues>(key: K, value: ProfileFormValues[K]) => void
+  onChange: <K extends keyof ProfileFormValues>(
+    key: K,
+    value: ProfileFormValues[K],
+  ) => void
 }
 
 export function AccountBasicsSection({ values, onChange }: AccountBasicsProps) {
@@ -21,7 +24,7 @@ export function AccountBasicsSection({ values, onChange }: AccountBasicsProps) {
           <Input
             id="displayName"
             value={values.displayName}
-            onChange={(e) => onChange('displayName', e.target.value)}
+            onChange={e => onChange('displayName', e.target.value)}
           />
         </div>
         <div className="grid gap-2">
@@ -29,7 +32,7 @@ export function AccountBasicsSection({ values, onChange }: AccountBasicsProps) {
           <Input
             id="username"
             value={values.username}
-            onChange={(e) => onChange('username', e.target.value)}
+            onChange={e => onChange('username', e.target.value)}
           />
         </div>
       </div>
@@ -40,7 +43,7 @@ export function AccountBasicsSection({ values, onChange }: AccountBasicsProps) {
           <Input
             id="avatarUrl"
             value={values.avatarUrl}
-            onChange={(e) => onChange('avatarUrl', e.target.value)}
+            onChange={e => onChange('avatarUrl', e.target.value)}
             placeholder="https://"
           />
         </div>
@@ -49,7 +52,7 @@ export function AccountBasicsSection({ values, onChange }: AccountBasicsProps) {
           <Input
             id="pronouns"
             value={values.pronouns}
-            onChange={(e) => onChange('pronouns', e.target.value)}
+            onChange={e => onChange('pronouns', e.target.value)}
             placeholder="she/her, they/them"
           />
         </div>
@@ -60,7 +63,7 @@ export function AccountBasicsSection({ values, onChange }: AccountBasicsProps) {
         <Textarea
           id="bio"
           value={values.bio}
-          onChange={(e) => onChange('bio', e.target.value)}
+          onChange={e => onChange('bio', e.target.value)}
           placeholder="Tell the club about yourself"
         />
       </div>

@@ -1,5 +1,4 @@
-import { z } from 'zod'
-import { type Json } from '@/lib/supabase/types'
+import type { z } from 'zod'
 import {
   emergencyContactSchema,
   gearProfileSchema,
@@ -21,6 +20,7 @@ import type {
   SkillsCerts,
   TravelProfile,
 } from '@/lib/profile/types'
+import type { Json } from '@/lib/supabase/types'
 
 const emptyEmergencyContact: EmergencyContact = {
   name: '',
@@ -91,7 +91,7 @@ export const emptyProfileValues = (): ProfileFormValues => ({
 function parseSection<T extends Record<string, unknown>>(
   value: Json | null | undefined,
   schema: z.ZodType<Partial<T>>,
-  fallback: T
+  fallback: T,
 ): T {
   if (!value) return { ...fallback }
   const parsed = schema.safeParse(value)
@@ -99,7 +99,9 @@ function parseSection<T extends Record<string, unknown>>(
   return { ...fallback, ...parsed.data }
 }
 
-export function profileRowToFormValues(profile: ProfileRow | null): ProfileFormValues {
+export function profileRowToFormValues(
+  profile: ProfileRow | null,
+): ProfileFormValues {
   if (!profile) {
     return emptyProfileValues()
   }
@@ -111,13 +113,41 @@ export function profileRowToFormValues(profile: ProfileRow | null): ProfileFormV
     bio: profile.bio ?? '',
     pronouns: profile.pronouns ?? '',
     phone: profile.phone ?? '',
-    emergencyContact: parseSection(profile.emergency_contact, emergencyContactSchema, emptyEmergencyContact),
-    privacySettings: parseSection(profile.privacy_settings, privacySettingsSchema, emptyPrivacySettings),
-    travelProfile: parseSection(profile.travel_profile, travelProfileSchema, emptyTravelProfile),
-    gearProfile: parseSection(profile.gear_profile, gearProfileSchema, emptyGearProfile),
-    skillsCerts: parseSection(profile.skills_certs, skillsCertsSchema, emptySkillsCerts),
-    interestsPreferences: parseSection(profile.interests_preferences, interestsPreferencesSchema, emptyInterestsPreferences),
-    notificationSettings: parseSection(profile.notification_settings, notificationSettingsSchema, emptyNotificationSettings),
+    emergencyContact: parseSection(
+      profile.emergency_contact,
+      emergencyContactSchema,
+      emptyEmergencyContact,
+    ),
+    privacySettings: parseSection(
+      profile.privacy_settings,
+      privacySettingsSchema,
+      emptyPrivacySettings,
+    ),
+    travelProfile: parseSection(
+      profile.travel_profile,
+      travelProfileSchema,
+      emptyTravelProfile,
+    ),
+    gearProfile: parseSection(
+      profile.gear_profile,
+      gearProfileSchema,
+      emptyGearProfile,
+    ),
+    skillsCerts: parseSection(
+      profile.skills_certs,
+      skillsCertsSchema,
+      emptySkillsCerts,
+    ),
+    interestsPreferences: parseSection(
+      profile.interests_preferences,
+      interestsPreferencesSchema,
+      emptyInterestsPreferences,
+    ),
+    notificationSettings: parseSection(
+      profile.notification_settings,
+      notificationSettingsSchema,
+      emptyNotificationSettings,
+    ),
   }
 }
 

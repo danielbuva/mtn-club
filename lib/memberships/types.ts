@@ -1,6 +1,7 @@
 import type { Database } from '@/lib/supabase/types'
 
-export type MembershipRow = Database['public']['Tables']['club_memberships']['Row']
+export type MembershipRow =
+  Database['public']['Tables']['club_memberships']['Row']
 
 export type MembershipState = {
   isAuthenticated: boolean
@@ -20,6 +21,8 @@ export const LEADER_ROLES = [
 
 export type LeaderRole = (typeof LEADER_ROLES)[number]
 
-export function isLeaderRole(role: MembershipRow['role'] | null | undefined): boolean {
+export function isLeaderRole(
+  role: MembershipRow['role'] | null | undefined,
+): boolean {
   return !!role && (LEADER_ROLES as readonly string[]).includes(role)
 }

@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { ArrowRight, Calendar, Check, Mountain } from 'lucide-react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -16,7 +16,10 @@ type HomeCTASectionProps = {
 
 export function HomeCTASection({ className }: HomeCTASectionProps) {
   return (
-    <section id="home-cta" className={cn('py-24 px-4 sm:px-6 lg:px-8', className)}>
+    <section
+      id="home-cta"
+      className={cn('py-24 px-4 sm:px-6 lg:px-8', className)}
+    >
       <div className="max-w-3xl mx-auto text-center">
         <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-primary text-primary-foreground mx-auto mb-6">
           <Mountain className="w-8 h-8" />
@@ -27,11 +30,12 @@ export function HomeCTASection({ className }: HomeCTASectionProps) {
         </h2>
 
         <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-          Explore the West Coast with a community of outdoor enthusiasts. New trips added every month.
+          Explore the West Coast with a community of outdoor enthusiasts. New
+          trips added every month.
         </p>
 
         <ul className="text-left max-w-md mx-auto mb-10 space-y-3">
-          {benefits.map((benefit) => (
+          {benefits.map(benefit => (
             <li key={benefit} className="flex items-start gap-3">
               <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary shrink-0 mt-0.5">
                 <Check className="w-3 h-3" />

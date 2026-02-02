@@ -1,5 +1,5 @@
-import { connection } from 'next/server'
 import { redirect } from 'next/navigation'
+import { connection } from 'next/server'
 import { ProfileFormClient } from '@/components/profile/profile-form-client'
 import { ProfilePageShell } from '@/components/profile/profile-page-shell'
 import { fetchProfile } from '@/lib/profile/queries'
@@ -35,7 +35,8 @@ export async function ProfilePageContent() {
         throw error
       }
     }
-    const message = error instanceof Error ? error.message : 'Unable to load profile'
+    const message =
+      error instanceof Error ? error.message : 'Unable to load profile'
 
     return (
       <ProfilePageShell>

@@ -1,30 +1,40 @@
 'use client'
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { addMonths, format, startOfWeek } from 'date-fns'
 import { ExternalLink, Lock } from 'lucide-react'
-import { CalendarControls, type CalendarViewOption } from '@/components/calendar/calendar-controls'
-import { CalendarMonthView } from '@/components/calendar/calendar-month-view'
-import { CalendarListView } from '@/components/calendar/calendar-list-view'
-import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
-import { useMediaQuery } from '@/components/calendar/use-media-query'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { CalendarActions } from '@/components/calendar/calendar-actions'
-import { TripDetailsDrawer } from '@/components/trip-details-drawer'
-import { MemberCTA } from '@/components/member-cta'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
-import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
+import {
+  CalendarControls,
+  type CalendarViewOption,
+} from '@/components/calendar/calendar-controls'
+import { CalendarListView } from '@/components/calendar/calendar-list-view'
+import { CalendarMonthView } from '@/components/calendar/calendar-month-view'
+import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
 import {
   buildTeaserMap,
   formatMonthParam,
   groupTripsByDay,
   parseMonthParam,
-  setQueryParams,
   type SemesterKey,
+  setQueryParams,
   type ViewMode,
 } from '@/components/calendar/calendar-utils'
+import { useMediaQuery } from '@/components/calendar/use-media-query'
+import { MemberCTA } from '@/components/member-cta'
+import { TripDetailsDrawer } from '@/components/trip-details-drawer'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
+import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
+import { cn } from '@/lib/utils'
 
 const resolveViewMode = (value: string | null): ViewMode => {
   if (value === 'list') return 'list'
@@ -33,7 +43,11 @@ const resolveViewMode = (value: string | null): ViewMode => {
 }
 
 const isValidSemester = (value: string | null): value is SemesterKey =>
-  value === 'spring' || value === 'summer' || value === 'fall' || value === 'winter' || value === 'all'
+  value === 'spring' ||
+  value === 'summer' ||
+  value === 'fall' ||
+  value === 'winter' ||
+  value === 'all'
 
 const clampDateToBounds = (date: Date) => {
   const year = date.getFullYear()
@@ -69,7 +83,9 @@ export function CalendarPageClient({
   isLeader,
 }: CalendarPageClientProps) {
   const isMobile = useMediaQuery('(max-width: 768px)')
-  const [yearDataByYear, setYearDataByYear] = useState<Record<number, CalendarYearData>>(() => ({
+  const [yearDataByYear, setYearDataByYear] = useState<
+    Record<number, CalendarYearData>
+  >(() => ({
     [yearData.year]: yearData,
   }))
   const [viewMode, setViewMode] = useState<ViewMode>('calendar')
@@ -89,20 +105,24 @@ export function CalendarPageClient({
   } | null>(() => {
     return {
       kind: 'month',
-      key: formatMonthParam(parseMonthParam(initialMonth) ?? new Date(yearData.year, 0, 1)),
+      key: formatMonthParam(
+        parseMonthParam(initialMonth) ?? new Date(yearData.year, 0, 1),
+      ),
       behavior: 'auto',
     }
   })
-  const [monthRestoreToken, setMonthRestoreToken] = useState(0)
   const [monthScrollAdjustToken, setMonthScrollAdjustToken] = useState(0)
-  const [scrollPosByView, setScrollPosByView] = useState<ScrollStateByView>(() => ({
-    calendar: { pos: 0, has: false },
-    list: { pos: 0, has: false },
-  }))
-  const [scrollingByView, setScrollingByView] = useState<Record<CalendarViewOption, boolean>>(
-    () => ({ calendar: false, list: false })
+  const [scrollPosByView, setScrollPosByView] = useState<ScrollStateByView>(
+    () => ({
+      calendar: { pos: 0, has: false },
+      list: { pos: 0, has: false },
+    }),
   )
-  const [pendingScrollAdjust, setPendingScrollAdjust] = useState<PendingScrollAdjust>(null)
+  const [scrollingByView, setScrollingByView] = useState<
+    Record<CalendarViewOption, boolean>
+  >(() => ({ calendar: false, list: false }))
+  const [pendingScrollAdjust, setPendingScrollAdjust] =
+    useState<PendingScrollAdjust>(null)
   const monthScrollRef = useRef<HTMLDivElement | null>(null)
   const listScrollRef = useRef<HTMLDivElement | null>(null)
   const scrollTimeoutsRef = useRef<Record<CalendarViewOption, number | null>>({
@@ -136,7 +156,7 @@ export function CalendarPageClient({
         : initialMonth
 
     const resolvedDate = clampDateToBounds(
-      parseMonthParam(resolvedMonthString) ?? new Date(yearData.year, 0, 1)
+      parseMonthParam(resolvedMonthString) ?? new Date(yearData.year, 0, 1),
     )
 
     setViewMode(resolvedView)
@@ -166,7 +186,7 @@ export function CalendarPageClient({
       calendar: { pos: 0, has: false },
       list: { pos: 0, has: false },
     })
-  }, [initialMonth, viewerKey, yearData])
+  }, [yearData])
 
   useEffect(() => {
     if (!hydrated) return
@@ -184,15 +204,12 @@ export function CalendarPageClient({
   }, [currentDate, hydrated, semester, viewMode])
 
   useEffect(() => {
-    if (previousViewRef.current && viewMode === 'calendar' && previousViewRef.current !== 'calendar') {
-      setMonthRestoreToken((prev) => prev + 1)
-    }
     previousViewRef.current = viewMode
   }, [viewMode])
 
   useEffect(() => {
     return () => {
-      Object.values(scrollTimeoutsRef.current).forEach((timeoutId) => {
+      Object.values(scrollTimeoutsRef.current).forEach(timeoutId => {
         if (timeoutId) {
           window.clearTimeout(timeoutId)
         }
@@ -201,18 +218,21 @@ export function CalendarPageClient({
   }, [])
 
   const loadedYears = useMemo(
-    () => Object.keys(yearDataByYear).map(Number).sort((a, b) => a - b),
-    [yearDataByYear]
+    () =>
+      Object.keys(yearDataByYear)
+        .map(Number)
+        .sort((a, b) => a - b),
+    [yearDataByYear],
   )
 
   const allTrips = useMemo(
-    () => loadedYears.flatMap((year) => yearDataByYear[year]?.trips ?? []),
-    [loadedYears, yearDataByYear]
+    () => loadedYears.flatMap(year => yearDataByYear[year]?.trips ?? []),
+    [loadedYears, yearDataByYear],
   )
 
   const allTeasers = useMemo(
-    () => loadedYears.flatMap((year) => yearDataByYear[year]?.teasers ?? []),
-    [loadedYears, yearDataByYear]
+    () => loadedYears.flatMap(year => yearDataByYear[year]?.teasers ?? []),
+    [loadedYears, yearDataByYear],
   )
 
   const filteredTrips = allTrips
@@ -228,10 +248,11 @@ export function CalendarPageClient({
     }
     const nextHeight = container.scrollHeight
     container.scrollTop =
-      pendingScrollAdjust.prevScrollTop + (nextHeight - pendingScrollAdjust.prevHeight)
+      pendingScrollAdjust.prevScrollTop +
+      (nextHeight - pendingScrollAdjust.prevHeight)
     setPendingScrollAdjust(null)
-    setMonthScrollAdjustToken((prev) => prev + 1)
-  }, [loadedYears.length, pendingScrollAdjust])
+    setMonthScrollAdjustToken(prev => prev + 1)
+  }, [pendingScrollAdjust])
 
   const handleTripSelect = (trip: CalendarTrip) => {
     setSelectedTrip(trip)
@@ -257,7 +278,10 @@ export function CalendarPageClient({
     setFocusedDay(dayKey)
   }
 
-  const scrollToMonth = async (monthKey: string, behavior: 'auto' | 'smooth') => {
+  const scrollToMonth = async (
+    monthKey: string,
+    behavior: 'auto' | 'smooth',
+  ) => {
     const monthDate = parseMonthParam(monthKey) ?? new Date()
     await ensureYearsLoaded([monthDate.getFullYear()])
     setCurrentDate(clampDateToBounds(monthDate))
@@ -266,7 +290,10 @@ export function CalendarPageClient({
 
   const handleToday = async () => {
     const today = clampDateToBounds(new Date())
-    const weekStartKey = format(startOfWeek(today, { weekStartsOn: 0 }), 'yyyy-MM-dd')
+    const weekStartKey = format(
+      startOfWeek(today, { weekStartsOn: 0 }),
+      'yyyy-MM-dd',
+    )
     await ensureYearsLoaded([today.getFullYear()])
     setCurrentDate(today)
     setMonthScrollTarget({ kind: 'week', key: weekStartKey, behavior: 'auto' })
@@ -302,7 +329,7 @@ export function CalendarPageClient({
           return
         }
         const payload = (await response.json()) as { data: CalendarYearData }
-        setYearDataByYear((prev) => {
+        setYearDataByYear(prev => {
           if (prev[year]) return prev
           return { ...prev, [year]: payload.data }
         })
@@ -310,7 +337,7 @@ export function CalendarPageClient({
         loadingYearsRef.current.delete(year)
       }
     },
-    [yearDataByYear]
+    [yearDataByYear],
   )
 
   const ensureYearsLoaded = useCallback(
@@ -320,52 +347,56 @@ export function CalendarPageClient({
       const minLoaded = loadedYears[0] ?? uniqueYears[0]
       const maxLoaded = loadedYears[loadedYears.length - 1] ?? uniqueYears[0]
       await Promise.all(
-        uniqueYears.map(async (year) => {
+        uniqueYears.map(async year => {
           if (yearDataByYear[year]) return
-          const direction = year < minLoaded ? 'prepend' : year > maxLoaded ? 'append' : 'append'
+          const direction =
+            year < minLoaded
+              ? 'prepend'
+              : year > maxLoaded
+                ? 'append'
+                : 'append'
           await ensureYearLoaded(year, direction)
-        })
+        }),
       )
     },
-    [ensureYearLoaded, loadedYears, yearDataByYear]
+    [ensureYearLoaded, loadedYears, yearDataByYear],
   )
 
   const hasUpcomingTeasers = useMemo(() => {
     if (viewerKey !== 'public') return false
     const now = new Date()
-    return allTeasers.some((teaser) => new Date(teaser.day) >= now && teaser.event_count > 0)
+    return allTeasers.some(
+      teaser => new Date(teaser.day) >= now && teaser.event_count > 0,
+    )
   }, [allTeasers, viewerKey])
 
   const currentView: CalendarViewOption = viewMode
   const currentYear = currentDate.getFullYear()
   const tripsInCurrentYear = useMemo(
     () =>
-      filteredTrips.filter((trip) => {
+      filteredTrips.filter(trip => {
         const startYear = new Date(trip.dateStart).getFullYear()
         const endYear = new Date(trip.dateEnd).getFullYear()
         return startYear === currentYear || endYear === currentYear
       }),
-    [currentYear, filteredTrips]
+    [currentYear, filteredTrips],
   )
 
-  const getScrollRef = useCallback(
-    (view: CalendarViewOption) => {
-      if (view === 'calendar') return monthScrollRef
-      return listScrollRef
-    },
-    [listScrollRef, monthScrollRef]
-  )
+  const getScrollRef = useCallback((view: CalendarViewOption) => {
+    if (view === 'calendar') return monthScrollRef
+    return listScrollRef
+  }, [])
 
   const saveScrollPosition = useCallback(
     (view: CalendarViewOption) => {
       const ref = getScrollRef(view)
       if (!ref.current) return
-      setScrollPosByView((prev) => ({
+      setScrollPosByView(prev => ({
         ...prev,
         [view]: { pos: ref.current?.scrollTop ?? 0, has: true },
       }))
     },
-    [getScrollRef]
+    [getScrollRef],
   )
 
   const handleViewChange = (nextView: CalendarViewOption) => {
@@ -385,16 +416,16 @@ export function CalendarPageClient({
 
   const handleScroll = useCallback(
     (view: CalendarViewOption) => () => {
-      setScrollingByView((prev) => ({ ...prev, [view]: true }))
+      setScrollingByView(prev => ({ ...prev, [view]: true }))
       const existing = scrollTimeoutsRef.current[view]
       if (existing) {
         window.clearTimeout(existing)
       }
       scrollTimeoutsRef.current[view] = window.setTimeout(() => {
-        setScrollingByView((prev) => ({ ...prev, [view]: false }))
+        setScrollingByView(prev => ({ ...prev, [view]: false }))
       }, 700)
     },
-    []
+    [],
   )
 
   return (
@@ -403,9 +434,12 @@ export function CalendarPageClient({
         <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10 md:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="text-3xl font-semibold sm:text-4xl">Trip Calendar</h1>
+              <h1 className="text-3xl font-semibold sm:text-4xl">
+                Trip Calendar
+              </h1>
               <p className="mt-2 text-muted-foreground">
-                Browse adventures, reserve spots, and plan your season in one view.
+                Browse adventures, reserve spots, and plan your season in one
+                view.
               </p>
             </div>
 
@@ -413,11 +447,19 @@ export function CalendarPageClient({
               <CardContent className="p-4">
                 <p className="text-sm font-medium">Subscribe</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full gap-2 bg-transparent"
+                  >
                     <ExternalLink className="h-4 w-4" />
                     iCal
                   </Button>
-                  <Button variant="outline" size="sm" className="rounded-full gap-2 bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full gap-2 bg-transparent"
+                  >
                     <ExternalLink className="h-4 w-4" />
                     Google Calendar
                   </Button>
@@ -431,7 +473,10 @@ export function CalendarPageClient({
           <div className="mx-auto w-full max-w-6xl space-y-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-col gap-3 md:flex-row md:items-center">
-                <CalendarControls view={currentView} onViewChange={handleViewChange} />
+                <CalendarControls
+                  view={currentView}
+                  onViewChange={handleViewChange}
+                />
                 {currentView === 'list' && (
                   <div className="hidden md:inline-flex h-9 items-center gap-0 rounded-full border border-border bg-card px-0 text-sm text-muted-foreground">
                     <span className="pl-3 text-foreground/70">Semester</span>
@@ -480,7 +525,9 @@ export function CalendarPageClient({
 
             {currentView === 'list' && (
               <div className="md:hidden rounded-2xl border border-border bg-card p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Semester</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Semester
+                </p>
                 <div className="mt-3">
                   <CalendarSemesterSelect
                     value={semester}
@@ -495,7 +542,11 @@ export function CalendarPageClient({
               <Card className="border-primary/20 bg-primary/5">
                 <CardContent className="p-4 text-sm text-muted-foreground">
                   {teaserMessage}{' '}
-                  <MemberCTA variant="link" className="underline text-foreground" />.
+                  <MemberCTA
+                    variant="link"
+                    className="underline text-foreground"
+                  />
+                  .
                 </CardContent>
               </Card>
             )}
@@ -506,7 +557,7 @@ export function CalendarPageClient({
               <div
                 ref={monthScrollRef}
                 className={cn(
-                  'calendar-scroll calendar-month-scroll max-h-[70vh] overflow-y-auto pr-2 lg:max-h-[75vh]'
+                  'calendar-scroll calendar-month-scroll max-h-[70vh] overflow-y-auto pr-2 lg:max-h-[75vh]',
                 )}
               >
                 <CalendarMonthView
@@ -521,8 +572,11 @@ export function CalendarPageClient({
                   loadedYears={loadedYears}
                   scrollContainerRef={monthScrollRef}
                   scrollTarget={monthScrollTarget}
-                  restoreScrollTop={scrollPosByView.calendar.has ? scrollPosByView.calendar.pos : 0}
-                  restoreToken={monthRestoreToken}
+                  restoreScrollTop={
+                    scrollPosByView.calendar.has
+                      ? scrollPosByView.calendar.pos
+                      : 0
+                  }
                   scrollAdjustToken={monthScrollAdjustToken}
                   onRequestYear={ensureYearLoaded}
                   onScrollTargetHandled={() => setMonthScrollTarget(null)}
@@ -540,7 +594,7 @@ export function CalendarPageClient({
                 onScroll={handleScroll('list')}
                 className={cn(
                   'calendar-scroll max-h-[70vh] overflow-y-auto pr-2 lg:max-h-[75vh]',
-                  scrollingByView.list && 'is-scrolling'
+                  scrollingByView.list && 'is-scrolling',
                 )}
               >
                 <CalendarListView
@@ -558,7 +612,11 @@ export function CalendarPageClient({
         </section>
       </main>
 
-      <TripDetailsDrawer trip={selectedTrip} open={drawerOpen} onOpenChange={setDrawerOpen} />
+      <TripDetailsDrawer
+        trip={selectedTrip}
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+      />
     </>
   )
 }

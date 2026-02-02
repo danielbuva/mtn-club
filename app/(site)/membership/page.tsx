@@ -1,6 +1,6 @@
 import { getViewer } from '@/lib/auth/viewer'
-import { MembershipActive } from './_components/membership-active'
 import { MembershipActivate } from './_components/membership-activate'
+import { MembershipActive } from './_components/membership-active'
 import { MembershipMarketing } from './_components/membership-marketing'
 
 export default async function MembershipPage() {

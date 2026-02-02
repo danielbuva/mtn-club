@@ -1,20 +1,25 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { EmergencyContact, ProfileRow, ProfileUpdate } from '@/lib/profile/types'
-import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { createClient } from '@/lib/supabase/client'
 import { EmergencyContactSection } from '@/components/profile/sections/emergency-contact'
-import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
+import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
+import { profileRowToFormValues } from '@/lib/profile/mappers'
 import { upsertProfile } from '@/lib/profile/queries'
+import type {
+  EmergencyContact,
+  ProfileRow,
+  ProfileUpdate,
+} from '@/lib/profile/types'
+import { createClient } from '@/lib/supabase/client'
 
 type EmergencyContactFormClientProps = {
   initialProfile: ProfileRow | null
   userId: string
 }
 
-const isEqual = (a: EmergencyContact, b: EmergencyContact) => JSON.stringify(a) === JSON.stringify(b)
+const isEqual = (a: EmergencyContact, b: EmergencyContact) =>
+  JSON.stringify(a) === JSON.stringify(b)
 
 export function EmergencyContactFormClient({
   initialProfile,
@@ -22,7 +27,7 @@ export function EmergencyContactFormClient({
 }: EmergencyContactFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).emergencyContact,
-    [initialProfile]
+    [initialProfile],
   )
   const [values, setValues] = useState<EmergencyContact>(initialValues)
   const [baseline, setBaseline] = useState<EmergencyContact>(initialValues)
@@ -43,9 +48,9 @@ export function EmergencyContactFormClient({
 
   const updateField = <K extends keyof EmergencyContact>(
     key: K,
-    value: EmergencyContact[K]
+    value: EmergencyContact[K],
   ) => {
-    setValues((prev) => ({ ...prev, [key]: value }))
+    setValues(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
@@ -60,7 +65,9 @@ export function EmergencyContactFormClient({
       await upsertProfile(supabase, userId, payload)
       setBaseline(values)
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : 'Unable to save changes')
+      setSaveError(
+        error instanceof Error ? error.message : 'Unable to save changes',
+      )
     } finally {
       setIsSaving(false)
     }

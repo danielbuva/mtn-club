@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
+import { connection } from 'next/server'
 import { fetchActiveMembership } from '@/lib/memberships/queries'
 import { isLeaderRole, type MembershipState } from '@/lib/memberships/types'
-import { connection } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function getMembershipState(): Promise<MembershipState> {
   connection()
@@ -23,7 +23,8 @@ export async function getMembershipState(): Promise<MembershipState> {
       isLeader: false,
       membershipId: null,
       clubId: null,
-      error: error instanceof Error ? error.message : 'Unable to load membership',
+      error:
+        error instanceof Error ? error.message : 'Unable to load membership',
     }
   }
 }

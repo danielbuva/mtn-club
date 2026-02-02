@@ -1,15 +1,19 @@
 'use client'
 
-import { useMemo } from 'react'
 import { format } from 'date-fns'
 import { Lock } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { MemberCTA } from '@/components/member-cta'
+import { useMemo } from 'react'
+import {
+  getSemesterRange,
+  isTripInRange,
+  type SemesterKey,
+} from '@/components/calendar/calendar-utils'
 import { TripListItem } from '@/components/calendar/trip-list-item'
-import { getSemesterRange, isTripInRange, type SemesterKey } from '@/components/calendar/calendar-utils'
-import type { CalendarTrip } from '@/lib/events/types'
+import { MemberCTA } from '@/components/member-cta'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import type { ViewerKey } from '@/lib/events/calendar'
+import type { CalendarTrip } from '@/lib/events/types'
 
 interface CalendarListViewProps {
   trips: CalendarTrip[]
@@ -36,15 +40,16 @@ export function CalendarListView({
     const focusRange = focusDay ? { start: focusDay, end: focusDay } : null
 
     const filteredTrips = range
-      ? trips.filter((trip) => isTripInRange(trip, range))
+      ? trips.filter(trip => isTripInRange(trip, range))
       : trips
 
     const tripsInRange = focusRange
-      ? filteredTrips.filter((trip) => isTripInRange(trip, focusRange))
+      ? filteredTrips.filter(trip => isTripInRange(trip, focusRange))
       : filteredTrips
 
     return [...tripsInRange].sort(
-      (a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime()
+      (a, b) =>
+        new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime(),
     )
   }, [focusDate, semester, trips, year])
 
@@ -64,19 +69,30 @@ export function CalendarListView({
         <Card className="border-border/60 bg-card p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Day</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Day
+              </p>
               <p className="text-sm font-semibold">
                 {format(new Date(focusDate), 'EEEE, MMM d')}
               </p>
             </div>
-            <Button type="button" variant="outline" size="sm" onClick={onClearFocus}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onClearFocus}
+            >
               View full list
             </Button>
           </div>
         </Card>
       )}
-      {visibleTrips.map((trip) => (
-        <TripListItem key={`trip-${trip.id}`} trip={trip} onClick={() => onTripSelect(trip)} />
+      {visibleTrips.map(trip => (
+        <TripListItem
+          key={`trip-${trip.id}`}
+          trip={trip}
+          onClick={() => onTripSelect(trip)}
+        />
       ))}
       {isPublic && <LockedTripsBlock />}
     </div>
@@ -84,14 +100,16 @@ export function CalendarListView({
 }
 
 function LockedTripsBlock() {
+  const lockedTripKeys = ['locked-1', 'locked-2', 'locked-3']
+
   return (
     <Card className="relative overflow-hidden border-primary/20 bg-primary/5">
       <CardContent className="p-6">
         <div className="relative">
           <div className="space-y-3 blur-[1.5px] grayscale opacity-70">
-            {Array.from({ length: 3 }).map((_, index) => (
+            {lockedTripKeys.map(key => (
               <div
-                key={`locked-trip-${index}`}
+                key={key}
                 className="flex items-center gap-4 rounded-xl border border-border/60 bg-card px-4 py-3"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-muted-foreground">

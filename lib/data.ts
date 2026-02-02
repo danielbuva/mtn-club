@@ -18,7 +18,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Founder',
     bio: 'Former search and rescue volunteer with 15 years of backcountry experience. Certified Wilderness First Responder.',
     favoriteTrail: 'Enchantments Traverse, WA',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -30,7 +30,7 @@ export const teamMembers: TeamMember[] = [
     role: 'President',
     bio: 'AMGA certified rock guide and former competitive climber. Specializes in trad climbing and alpine routes.',
     favoriteTrail: 'The Nose, El Capitan',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -42,7 +42,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Gear Manager',
     bio: 'Passionate about making the outdoors accessible to everyone. Organizes beginner-friendly trips and workshops.',
     favoriteTrail: 'Rattlesnake Ledge, WA',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -54,7 +54,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Scheduling Liason',
     bio: 'EMT and Wilderness First Responder instructor. Ensures all trips meet the highest safety standards.',
     favoriteTrail: 'Mount Whitney, CA',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -66,7 +66,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Community Director',
     bio: 'Ski mountaineering enthusiast and avalanche safety certified. Leads winter backcountry adventures.',
     favoriteTrail: 'Mount Baker Ski Descent',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -78,7 +78,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Treasurer',
     bio: 'Ultra-marathon runner and certified running coach. Leads trail running clinics and group runs.',
     favoriteTrail: 'Western States Trail, CA',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -90,7 +90,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Trip Leader',
     bio: 'Ultra-marathon runner and certified running coach. Leads trail running clinics and group runs.',
     favoriteTrail: 'Western States Trail, CA',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
@@ -102,10 +102,10 @@ export const teamMembers: TeamMember[] = [
     role: 'Trip Leader',
     bio: 'Ultra-marathon runner and certified running coach. Leads trail running clinics and group runs.',
     favoriteTrail: 'Western States Trail, CA',
-    photo: ''
+    photo: '',
     // social: {
     //   instagram: '',
     //   email: '',
     // }
-  }
+  },
 ]

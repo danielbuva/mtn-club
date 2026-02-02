@@ -1,7 +1,7 @@
-import { HomePageClient } from '@/components/home/home-page-client'
 import { HomeCTASection } from '@/components/home/home-cta-section'
-import type { CalendarTrip } from '@/lib/events/types'
+import { HomePageClient } from '@/components/home/home-page-client'
 import type { Viewer } from '@/lib/auth/viewer'
+import type { CalendarTrip } from '@/lib/events/types'
 
 type HomePageProps = {
   trips: CalendarTrip[]

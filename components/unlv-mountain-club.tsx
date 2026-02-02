@@ -1,4 +1,5 @@
-import { SVGProps } from "react"
+import type { SVGProps } from 'react'
+
 const UNLVMountainClub = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -7,6 +8,7 @@ const UNLVMountainClub = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     {...props}
   >
+    <title>UNLV Mountain Club</title>
     <mask
       id="a"
       width={101}

@@ -11,6 +11,6 @@ export function createPublicClient() {
         autoRefreshToken: false,
         detectSessionInUrl: false,
       },
-    }
+    },
   )
 }

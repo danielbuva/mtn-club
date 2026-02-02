@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: '14.1'
   }
   graphql_public: {
     Tables: {
@@ -57,11 +57,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "activities_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'activities_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -176,25 +176,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "audit_log_actor_membership_id_fkey"
-            columns: ["actor_membership_id"]
+            foreignKeyName: 'audit_log_actor_membership_id_fkey'
+            columns: ['actor_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "audit_log_actor_membership_id_fkey"
-            columns: ["actor_membership_id"]
+            foreignKeyName: 'audit_log_actor_membership_id_fkey'
+            columns: ['actor_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "audit_log_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'audit_log_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -222,11 +222,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "badges_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'badges_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -254,18 +254,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "billing_customers_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'billing_customers_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "billing_customers_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'billing_customers_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -285,7 +285,7 @@ export type Database = {
           processor_payment_id: string | null
           product_id: string | null
           refunded_at: string | null
-          status: Database["public"]["Enums"]["payment_status"]
+          status: Database['public']['Enums']['payment_status']
         }
         Insert: {
           amount_cents: number
@@ -302,7 +302,7 @@ export type Database = {
           processor_payment_id?: string | null
           product_id?: string | null
           refunded_at?: string | null
-          status?: Database["public"]["Enums"]["payment_status"]
+          status?: Database['public']['Enums']['payment_status']
         }
         Update: {
           amount_cents?: number
@@ -319,36 +319,36 @@ export type Database = {
           processor_payment_id?: string | null
           product_id?: string | null
           refunded_at?: string | null
-          status?: Database["public"]["Enums"]["payment_status"]
+          status?: Database['public']['Enums']['payment_status']
         }
         Relationships: [
           {
-            foreignKeyName: "billing_payments_customer_id_fkey"
-            columns: ["customer_id"]
+            foreignKeyName: 'billing_payments_customer_id_fkey'
+            columns: ['customer_id']
             isOneToOne: false
-            referencedRelation: "billing_customers"
-            referencedColumns: ["id"]
+            referencedRelation: 'billing_customers'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "billing_payments_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'billing_payments_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "billing_payments_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'billing_payments_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "billing_payments_product_id_fkey"
-            columns: ["product_id"]
+            foreignKeyName: 'billing_payments_product_id_fkey'
+            columns: ['product_id']
             isOneToOne: false
-            referencedRelation: "billing_products"
-            referencedColumns: ["id"]
+            referencedRelation: 'billing_products'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -391,11 +391,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "billing_products_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'billing_products_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -447,32 +447,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "billing_subscriptions_customer_id_fkey"
-            columns: ["customer_id"]
+            foreignKeyName: 'billing_subscriptions_customer_id_fkey'
+            columns: ['customer_id']
             isOneToOne: false
-            referencedRelation: "billing_customers"
-            referencedColumns: ["id"]
+            referencedRelation: 'billing_customers'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "billing_subscriptions_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'billing_subscriptions_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "billing_subscriptions_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'billing_subscriptions_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "billing_subscriptions_product_id_fkey"
-            columns: ["product_id"]
+            foreignKeyName: 'billing_subscriptions_product_id_fkey'
+            columns: ['product_id']
             isOneToOne: false
-            referencedRelation: "billing_products"
-            referencedColumns: ["id"]
+            referencedRelation: 'billing_products'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -500,11 +500,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "certifications_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'certifications_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -535,11 +535,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "checklist_template_items_template_id_fkey"
-            columns: ["template_id"]
+            foreignKeyName: 'checklist_template_items_template_id_fkey'
+            columns: ['template_id']
             isOneToOne: false
-            referencedRelation: "checklist_templates"
-            referencedColumns: ["id"]
+            referencedRelation: 'checklist_templates'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -570,11 +570,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "checklist_templates_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'checklist_templates_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -592,8 +592,8 @@ export type Database = {
           last_login_at: string | null
           membership_end: string | null
           membership_start: string | null
-          role: Database["public"]["Enums"]["member_role"]
-          state: Database["public"]["Enums"]["membership_state"]
+          role: Database['public']['Enums']['member_role']
+          state: Database['public']['Enums']['membership_state']
           suspended_until: string | null
           updated_at: string
           user_id: string
@@ -611,8 +611,8 @@ export type Database = {
           last_login_at?: string | null
           membership_end?: string | null
           membership_start?: string | null
-          role?: Database["public"]["Enums"]["member_role"]
-          state?: Database["public"]["Enums"]["membership_state"]
+          role?: Database['public']['Enums']['member_role']
+          state?: Database['public']['Enums']['membership_state']
           suspended_until?: string | null
           updated_at?: string
           user_id: string
@@ -630,47 +630,47 @@ export type Database = {
           last_login_at?: string | null
           membership_end?: string | null
           membership_start?: string | null
-          role?: Database["public"]["Enums"]["member_role"]
-          state?: Database["public"]["Enums"]["membership_state"]
+          role?: Database['public']['Enums']['member_role']
+          state?: Database['public']['Enums']['membership_state']
           suspended_until?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "club_memberships_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'club_memberships_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "club_memberships_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'club_memberships_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "app_users"
-            referencedColumns: ["id"]
+            referencedRelation: 'app_users'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "club_memberships_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'club_memberships_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["user_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['user_id']
           },
           {
-            foreignKeyName: "club_memberships_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'club_memberships_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "my_profile"
-            referencedColumns: ["id"]
+            referencedRelation: 'my_profile'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "club_memberships_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'club_memberships_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "user_public_profiles"
-            referencedColumns: ["id"]
+            referencedRelation: 'user_public_profiles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -725,11 +725,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "endorsement_tags_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'endorsement_tags_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -754,11 +754,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "gear_categories_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'gear_categories_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -766,7 +766,7 @@ export type Database = {
         Row: {
           brand: string | null
           category_id: string | null
-          condition: Database["public"]["Enums"]["gear_condition"]
+          condition: Database['public']['Enums']['gear_condition']
           created_at: string
           id: string
           is_retired: boolean
@@ -783,7 +783,7 @@ export type Database = {
         Insert: {
           brand?: string | null
           category_id?: string | null
-          condition?: Database["public"]["Enums"]["gear_condition"]
+          condition?: Database['public']['Enums']['gear_condition']
           created_at?: string
           id?: string
           is_retired?: boolean
@@ -800,7 +800,7 @@ export type Database = {
         Update: {
           brand?: string | null
           category_id?: string | null
-          condition?: Database["public"]["Enums"]["gear_condition"]
+          condition?: Database['public']['Enums']['gear_condition']
           created_at?: string
           id?: string
           is_retired?: boolean
@@ -816,25 +816,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "gear_items_category_id_fkey"
-            columns: ["category_id"]
+            foreignKeyName: 'gear_items_category_id_fkey'
+            columns: ['category_id']
             isOneToOne: false
-            referencedRelation: "gear_categories"
-            referencedColumns: ["id"]
+            referencedRelation: 'gear_categories'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "gear_items_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'gear_items_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "gear_items_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'gear_items_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -868,25 +868,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "gear_wishlist_items_category_id_fkey"
-            columns: ["category_id"]
+            foreignKeyName: 'gear_wishlist_items_category_id_fkey'
+            columns: ['category_id']
             isOneToOne: false
-            referencedRelation: "gear_categories"
-            referencedColumns: ["id"]
+            referencedRelation: 'gear_categories'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "gear_wishlist_items_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'gear_wishlist_items_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "gear_wishlist_items_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'gear_wishlist_items_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -911,11 +911,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "interests_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'interests_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -970,11 +970,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "locations_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'locations_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1032,25 +1032,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "media_assets_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'media_assets_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "media_assets_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'media_assets_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "media_assets_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'media_assets_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1078,25 +1078,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_activity_levels_activity_id_fkey"
-            columns: ["activity_id"]
+            foreignKeyName: 'member_activity_levels_activity_id_fkey'
+            columns: ['activity_id']
             isOneToOne: false
-            referencedRelation: "activities"
-            referencedColumns: ["id"]
+            referencedRelation: 'activities'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_activity_levels_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_activity_levels_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_activity_levels_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_activity_levels_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1124,39 +1124,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_badges_badge_id_fkey"
-            columns: ["badge_id"]
+            foreignKeyName: 'member_badges_badge_id_fkey'
+            columns: ['badge_id']
             isOneToOne: false
-            referencedRelation: "badges"
-            referencedColumns: ["id"]
+            referencedRelation: 'badges'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_badges_granted_by_membership_id_fkey"
-            columns: ["granted_by_membership_id"]
+            foreignKeyName: 'member_badges_granted_by_membership_id_fkey'
+            columns: ['granted_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_badges_granted_by_membership_id_fkey"
-            columns: ["granted_by_membership_id"]
+            foreignKeyName: 'member_badges_granted_by_membership_id_fkey'
+            columns: ['granted_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_badges_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_badges_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_badges_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_badges_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1184,39 +1184,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_blocks_blocked_membership_id_fkey"
-            columns: ["blocked_membership_id"]
+            foreignKeyName: 'member_blocks_blocked_membership_id_fkey'
+            columns: ['blocked_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_blocks_blocked_membership_id_fkey"
-            columns: ["blocked_membership_id"]
+            foreignKeyName: 'member_blocks_blocked_membership_id_fkey'
+            columns: ['blocked_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_blocks_blocker_membership_id_fkey"
-            columns: ["blocker_membership_id"]
+            foreignKeyName: 'member_blocks_blocker_membership_id_fkey'
+            columns: ['blocker_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_blocks_blocker_membership_id_fkey"
-            columns: ["blocker_membership_id"]
+            foreignKeyName: 'member_blocks_blocker_membership_id_fkey'
+            columns: ['blocker_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_blocks_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'member_blocks_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1253,39 +1253,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_certifications_certification_id_fkey"
-            columns: ["certification_id"]
+            foreignKeyName: 'member_certifications_certification_id_fkey'
+            columns: ['certification_id']
             isOneToOne: false
-            referencedRelation: "certifications"
-            referencedColumns: ["id"]
+            referencedRelation: 'certifications'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_certifications_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_certifications_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_certifications_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_certifications_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_certifications_proof_media_fk"
-            columns: ["proof_media_asset_id"]
+            foreignKeyName: 'member_certifications_proof_media_fk'
+            columns: ['proof_media_asset_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_certifications_proof_media_fk"
-            columns: ["proof_media_asset_id"]
+            foreignKeyName: 'member_certifications_proof_media_fk'
+            columns: ['proof_media_asset_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
         ]
       }
@@ -1325,18 +1325,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_emergency_contacts_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_emergency_contacts_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_emergency_contacts_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_emergency_contacts_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1370,46 +1370,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_endorsements_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'member_endorsements_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_endorsements_endorsement_tag_id_fkey"
-            columns: ["endorsement_tag_id"]
+            foreignKeyName: 'member_endorsements_endorsement_tag_id_fkey'
+            columns: ['endorsement_tag_id']
             isOneToOne: false
-            referencedRelation: "endorsement_tags"
-            referencedColumns: ["id"]
+            referencedRelation: 'endorsement_tags'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_endorsements_from_membership_id_fkey"
-            columns: ["from_membership_id"]
+            foreignKeyName: 'member_endorsements_from_membership_id_fkey'
+            columns: ['from_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_endorsements_from_membership_id_fkey"
-            columns: ["from_membership_id"]
+            foreignKeyName: 'member_endorsements_from_membership_id_fkey'
+            columns: ['from_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_endorsements_to_membership_id_fkey"
-            columns: ["to_membership_id"]
+            foreignKeyName: 'member_endorsements_to_membership_id_fkey'
+            columns: ['to_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_endorsements_to_membership_id_fkey"
-            columns: ["to_membership_id"]
+            foreignKeyName: 'member_endorsements_to_membership_id_fkey'
+            columns: ['to_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1434,25 +1434,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_interests_interest_id_fkey"
-            columns: ["interest_id"]
+            foreignKeyName: 'member_interests_interest_id_fkey'
+            columns: ['interest_id']
             isOneToOne: false
-            referencedRelation: "interests"
-            referencedColumns: ["id"]
+            referencedRelation: 'interests'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_interests_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_interests_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_interests_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_interests_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1463,7 +1463,7 @@ export type Database = {
           id: string
           media_asset_id: string
           membership_id: string
-          visibility: Database["public"]["Enums"]["privacy_visibility"]
+          visibility: Database['public']['Enums']['privacy_visibility']
         }
         Insert: {
           caption?: string | null
@@ -1471,7 +1471,7 @@ export type Database = {
           id?: string
           media_asset_id: string
           membership_id: string
-          visibility?: Database["public"]["Enums"]["privacy_visibility"]
+          visibility?: Database['public']['Enums']['privacy_visibility']
         }
         Update: {
           caption?: string | null
@@ -1479,36 +1479,36 @@ export type Database = {
           id?: string
           media_asset_id?: string
           membership_id?: string
-          visibility?: Database["public"]["Enums"]["privacy_visibility"]
+          visibility?: Database['public']['Enums']['privacy_visibility']
         }
         Relationships: [
           {
-            foreignKeyName: "member_media_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'member_media_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_media_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'member_media_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
           {
-            foreignKeyName: "member_media_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_media_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_media_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_media_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1542,46 +1542,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_mutes_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'member_mutes_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_mutes_muted_membership_id_fkey"
-            columns: ["muted_membership_id"]
+            foreignKeyName: 'member_mutes_muted_membership_id_fkey'
+            columns: ['muted_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_mutes_muted_membership_id_fkey"
-            columns: ["muted_membership_id"]
+            foreignKeyName: 'member_mutes_muted_membership_id_fkey'
+            columns: ['muted_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_mutes_muter_membership_id_fkey"
-            columns: ["muter_membership_id"]
+            foreignKeyName: 'member_mutes_muter_membership_id_fkey'
+            columns: ['muter_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_mutes_muter_membership_id_fkey"
-            columns: ["muter_membership_id"]
+            foreignKeyName: 'member_mutes_muter_membership_id_fkey'
+            columns: ['muter_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_mutes_thread_id_fkey"
-            columns: ["thread_id"]
+            foreignKeyName: 'member_mutes_thread_id_fkey'
+            columns: ['thread_id']
             isOneToOne: false
-            referencedRelation: "message_threads"
-            referencedColumns: ["id"]
+            referencedRelation: 'message_threads'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1627,18 +1627,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_preferences_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_preferences_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_preferences_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_preferences_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1649,12 +1649,12 @@ export type Database = {
           created_at: string
           home_area_precision: string
           membership_id: string
-          show_discord: Database["public"]["Enums"]["privacy_visibility"]
-          show_email: Database["public"]["Enums"]["privacy_visibility"]
-          show_gear_list: Database["public"]["Enums"]["privacy_visibility"]
-          show_home_area: Database["public"]["Enums"]["privacy_visibility"]
-          show_phone: Database["public"]["Enums"]["privacy_visibility"]
-          show_trip_history: Database["public"]["Enums"]["privacy_visibility"]
+          show_discord: Database['public']['Enums']['privacy_visibility']
+          show_email: Database['public']['Enums']['privacy_visibility']
+          show_gear_list: Database['public']['Enums']['privacy_visibility']
+          show_home_area: Database['public']['Enums']['privacy_visibility']
+          show_phone: Database['public']['Enums']['privacy_visibility']
+          show_trip_history: Database['public']['Enums']['privacy_visibility']
           updated_at: string
         }
         Insert: {
@@ -1663,12 +1663,12 @@ export type Database = {
           created_at?: string
           home_area_precision?: string
           membership_id: string
-          show_discord?: Database["public"]["Enums"]["privacy_visibility"]
-          show_email?: Database["public"]["Enums"]["privacy_visibility"]
-          show_gear_list?: Database["public"]["Enums"]["privacy_visibility"]
-          show_home_area?: Database["public"]["Enums"]["privacy_visibility"]
-          show_phone?: Database["public"]["Enums"]["privacy_visibility"]
-          show_trip_history?: Database["public"]["Enums"]["privacy_visibility"]
+          show_discord?: Database['public']['Enums']['privacy_visibility']
+          show_email?: Database['public']['Enums']['privacy_visibility']
+          show_gear_list?: Database['public']['Enums']['privacy_visibility']
+          show_home_area?: Database['public']['Enums']['privacy_visibility']
+          show_phone?: Database['public']['Enums']['privacy_visibility']
+          show_trip_history?: Database['public']['Enums']['privacy_visibility']
           updated_at?: string
         }
         Update: {
@@ -1677,28 +1677,28 @@ export type Database = {
           created_at?: string
           home_area_precision?: string
           membership_id?: string
-          show_discord?: Database["public"]["Enums"]["privacy_visibility"]
-          show_email?: Database["public"]["Enums"]["privacy_visibility"]
-          show_gear_list?: Database["public"]["Enums"]["privacy_visibility"]
-          show_home_area?: Database["public"]["Enums"]["privacy_visibility"]
-          show_phone?: Database["public"]["Enums"]["privacy_visibility"]
-          show_trip_history?: Database["public"]["Enums"]["privacy_visibility"]
+          show_discord?: Database['public']['Enums']['privacy_visibility']
+          show_email?: Database['public']['Enums']['privacy_visibility']
+          show_gear_list?: Database['public']['Enums']['privacy_visibility']
+          show_home_area?: Database['public']['Enums']['privacy_visibility']
+          show_phone?: Database['public']['Enums']['privacy_visibility']
+          show_trip_history?: Database['public']['Enums']['privacy_visibility']
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "member_privacy_settings_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_privacy_settings_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_privacy_settings_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_privacy_settings_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1729,25 +1729,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_saved_locations_location_id_fkey"
-            columns: ["location_id"]
+            foreignKeyName: 'member_saved_locations_location_id_fkey'
+            columns: ['location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_saved_locations_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_saved_locations_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_saved_locations_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_saved_locations_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1778,25 +1778,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_skills_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_skills_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_skills_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_skills_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_skills_skill_id_fkey"
-            columns: ["skill_id"]
+            foreignKeyName: 'member_skills_skill_id_fkey'
+            columns: ['skill_id']
             isOneToOne: false
-            referencedRelation: "skills"
-            referencedColumns: ["id"]
+            referencedRelation: 'skills'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1833,18 +1833,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_stats_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_stats_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_stats_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_stats_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1893,18 +1893,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_travel_profiles_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_travel_profiles_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_travel_profiles_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_travel_profiles_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -1926,7 +1926,7 @@ export type Database = {
           seats_total: number | null
           snow_chains_compatible: boolean
           updated_at: string
-          vehicle_type: Database["public"]["Enums"]["vehicle_type"]
+          vehicle_type: Database['public']['Enums']['vehicle_type']
           wants_gas_money: boolean
         }
         Insert: {
@@ -1946,7 +1946,7 @@ export type Database = {
           seats_total?: number | null
           snow_chains_compatible?: boolean
           updated_at?: string
-          vehicle_type?: Database["public"]["Enums"]["vehicle_type"]
+          vehicle_type?: Database['public']['Enums']['vehicle_type']
           wants_gas_money?: boolean
         }
         Update: {
@@ -1966,23 +1966,23 @@ export type Database = {
           seats_total?: number | null
           snow_chains_compatible?: boolean
           updated_at?: string
-          vehicle_type?: Database["public"]["Enums"]["vehicle_type"]
+          vehicle_type?: Database['public']['Enums']['vehicle_type']
           wants_gas_money?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "member_vehicles_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_vehicles_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_vehicles_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_vehicles_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -2019,25 +2019,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "member_waiver_signatures_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_waiver_signatures_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "member_waiver_signatures_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'member_waiver_signatures_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "member_waiver_signatures_waiver_version_id_fkey"
-            columns: ["waiver_version_id"]
+            foreignKeyName: 'member_waiver_signatures_waiver_version_id_fkey'
+            columns: ['waiver_version_id']
             isOneToOne: false
-            referencedRelation: "waiver_versions"
-            referencedColumns: ["id"]
+            referencedRelation: 'waiver_versions'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2062,25 +2062,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "message_thread_members_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'message_thread_members_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "message_thread_members_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'message_thread_members_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "message_thread_members_thread_id_fkey"
-            columns: ["thread_id"]
+            foreignKeyName: 'message_thread_members_thread_id_fkey'
+            columns: ['thread_id']
             isOneToOne: false
-            referencedRelation: "message_threads"
-            referencedColumns: ["id"]
+            referencedRelation: 'message_threads'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2114,46 +2114,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "message_threads_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'message_threads_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "message_threads_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'message_threads_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "message_threads_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'message_threads_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "message_threads_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'message_threads_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "message_threads_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'message_threads_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "message_threads_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'message_threads_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2193,45 +2193,45 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "messages_author_membership_id_fkey"
-            columns: ["author_membership_id"]
+            foreignKeyName: 'messages_author_membership_id_fkey'
+            columns: ['author_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "messages_author_membership_id_fkey"
-            columns: ["author_membership_id"]
+            foreignKeyName: 'messages_author_membership_id_fkey'
+            columns: ['author_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "messages_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'messages_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "messages_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'messages_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
           {
-            foreignKeyName: "messages_thread_id_fkey"
-            columns: ["thread_id"]
+            foreignKeyName: 'messages_thread_id_fkey'
+            columns: ['thread_id']
             isOneToOne: false
-            referencedRelation: "message_threads"
-            referencedColumns: ["id"]
+            referencedRelation: 'message_threads'
+            referencedColumns: ['id']
           },
         ]
       }
       moderation_actions: {
         Row: {
-          action_type: Database["public"]["Enums"]["moderation_action_type"]
+          action_type: Database['public']['Enums']['moderation_action_type']
           club_id: string
           created_at: string
           ends_at: string | null
@@ -2246,7 +2246,7 @@ export type Database = {
           target_trip_id: string | null
         }
         Insert: {
-          action_type: Database["public"]["Enums"]["moderation_action_type"]
+          action_type: Database['public']['Enums']['moderation_action_type']
           club_id: string
           created_at?: string
           ends_at?: string | null
@@ -2261,7 +2261,7 @@ export type Database = {
           target_trip_id?: string | null
         }
         Update: {
-          action_type?: Database["public"]["Enums"]["moderation_action_type"]
+          action_type?: Database['public']['Enums']['moderation_action_type']
           club_id?: string
           created_at?: string
           ends_at?: string | null
@@ -2277,74 +2277,74 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "moderation_actions_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'moderation_actions_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_actions_performed_by_membership_id_fkey"
-            columns: ["performed_by_membership_id"]
+            foreignKeyName: 'moderation_actions_performed_by_membership_id_fkey'
+            columns: ['performed_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_actions_performed_by_membership_id_fkey"
-            columns: ["performed_by_membership_id"]
+            foreignKeyName: 'moderation_actions_performed_by_membership_id_fkey'
+            columns: ['performed_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "moderation_actions_report_id_fkey"
-            columns: ["report_id"]
+            foreignKeyName: 'moderation_actions_report_id_fkey'
+            columns: ['report_id']
             isOneToOne: false
-            referencedRelation: "moderation_reports"
-            referencedColumns: ["id"]
+            referencedRelation: 'moderation_reports'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_actions_target_membership_id_fkey"
-            columns: ["target_membership_id"]
+            foreignKeyName: 'moderation_actions_target_membership_id_fkey'
+            columns: ['target_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_actions_target_membership_id_fkey"
-            columns: ["target_membership_id"]
+            foreignKeyName: 'moderation_actions_target_membership_id_fkey'
+            columns: ['target_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "moderation_actions_target_message_id_fkey"
-            columns: ["target_message_id"]
+            foreignKeyName: 'moderation_actions_target_message_id_fkey'
+            columns: ['target_message_id']
             isOneToOne: false
-            referencedRelation: "messages"
-            referencedColumns: ["id"]
+            referencedRelation: 'messages'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_actions_target_trip_id_fkey"
-            columns: ["target_trip_id"]
+            foreignKeyName: 'moderation_actions_target_trip_id_fkey'
+            columns: ['target_trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_actions_target_trip_id_fkey"
-            columns: ["target_trip_id"]
+            foreignKeyName: 'moderation_actions_target_trip_id_fkey'
+            columns: ['target_trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "moderation_actions_target_trip_id_fkey"
-            columns: ["target_trip_id"]
+            foreignKeyName: 'moderation_actions_target_trip_id_fkey'
+            columns: ['target_trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2361,7 +2361,7 @@ export type Database = {
           reported_message_id: string | null
           reported_trip_id: string | null
           reporter_membership_id: string | null
-          status: Database["public"]["Enums"]["moderation_report_status"]
+          status: Database['public']['Enums']['moderation_report_status']
           updated_at: string
         }
         Insert: {
@@ -2376,7 +2376,7 @@ export type Database = {
           reported_message_id?: string | null
           reported_trip_id?: string | null
           reporter_membership_id?: string | null
-          status?: Database["public"]["Enums"]["moderation_report_status"]
+          status?: Database['public']['Enums']['moderation_report_status']
           updated_at?: string
         }
         Update: {
@@ -2391,106 +2391,106 @@ export type Database = {
           reported_message_id?: string | null
           reported_trip_id?: string | null
           reporter_membership_id?: string | null
-          status?: Database["public"]["Enums"]["moderation_report_status"]
+          status?: Database['public']['Enums']['moderation_report_status']
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "moderation_reports_assigned_to_membership_id_fkey"
-            columns: ["assigned_to_membership_id"]
+            foreignKeyName: 'moderation_reports_assigned_to_membership_id_fkey'
+            columns: ['assigned_to_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_assigned_to_membership_id_fkey"
-            columns: ["assigned_to_membership_id"]
+            foreignKeyName: 'moderation_reports_assigned_to_membership_id_fkey'
+            columns: ['assigned_to_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "moderation_reports_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'moderation_reports_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_media_id_fkey"
-            columns: ["reported_media_id"]
+            foreignKeyName: 'moderation_reports_reported_media_id_fkey'
+            columns: ['reported_media_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_media_id_fkey"
-            columns: ["reported_media_id"]
+            foreignKeyName: 'moderation_reports_reported_media_id_fkey'
+            columns: ['reported_media_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_membership_id_fkey"
-            columns: ["reported_membership_id"]
+            foreignKeyName: 'moderation_reports_reported_membership_id_fkey'
+            columns: ['reported_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_membership_id_fkey"
-            columns: ["reported_membership_id"]
+            foreignKeyName: 'moderation_reports_reported_membership_id_fkey'
+            columns: ['reported_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_message_id_fkey"
-            columns: ["reported_message_id"]
+            foreignKeyName: 'moderation_reports_reported_message_id_fkey'
+            columns: ['reported_message_id']
             isOneToOne: false
-            referencedRelation: "messages"
-            referencedColumns: ["id"]
+            referencedRelation: 'messages'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_trip_id_fkey"
-            columns: ["reported_trip_id"]
+            foreignKeyName: 'moderation_reports_reported_trip_id_fkey'
+            columns: ['reported_trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_trip_id_fkey"
-            columns: ["reported_trip_id"]
+            foreignKeyName: 'moderation_reports_reported_trip_id_fkey'
+            columns: ['reported_trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "moderation_reports_reported_trip_id_fkey"
-            columns: ["reported_trip_id"]
+            foreignKeyName: 'moderation_reports_reported_trip_id_fkey'
+            columns: ['reported_trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reporter_membership_id_fkey"
-            columns: ["reporter_membership_id"]
+            foreignKeyName: 'moderation_reports_reporter_membership_id_fkey'
+            columns: ['reporter_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "moderation_reports_reporter_membership_id_fkey"
-            columns: ["reporter_membership_id"]
+            foreignKeyName: 'moderation_reports_reporter_membership_id_fkey'
+            columns: ['reporter_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
       notification_devices: {
         Row: {
-          channel: Database["public"]["Enums"]["notification_channel"]
+          channel: Database['public']['Enums']['notification_channel']
           created_at: string
           id: string
           is_active: boolean
@@ -2498,7 +2498,7 @@ export type Database = {
           token: string
         }
         Insert: {
-          channel: Database["public"]["Enums"]["notification_channel"]
+          channel: Database['public']['Enums']['notification_channel']
           created_at?: string
           id?: string
           is_active?: boolean
@@ -2506,7 +2506,7 @@ export type Database = {
           token: string
         }
         Update: {
-          channel?: Database["public"]["Enums"]["notification_channel"]
+          channel?: Database['public']['Enums']['notification_channel']
           created_at?: string
           id?: string
           is_active?: boolean
@@ -2515,18 +2515,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "notification_devices_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'notification_devices_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "notification_devices_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'notification_devices_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -2578,25 +2578,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "notification_preferences_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'notification_preferences_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "notification_preferences_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'notification_preferences_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: true
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
       notifications: {
         Row: {
           body: string | null
-          channel: Database["public"]["Enums"]["notification_channel"]
+          channel: Database['public']['Enums']['notification_channel']
           club_id: string
           created_at: string
           data: Json
@@ -2608,7 +2608,7 @@ export type Database = {
         }
         Insert: {
           body?: string | null
-          channel: Database["public"]["Enums"]["notification_channel"]
+          channel: Database['public']['Enums']['notification_channel']
           club_id: string
           created_at?: string
           data?: Json
@@ -2620,7 +2620,7 @@ export type Database = {
         }
         Update: {
           body?: string | null
-          channel?: Database["public"]["Enums"]["notification_channel"]
+          channel?: Database['public']['Enums']['notification_channel']
           club_id?: string
           created_at?: string
           data?: Json
@@ -2632,25 +2632,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "notifications_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'notifications_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "notifications_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'notifications_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "notifications_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'notifications_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -2675,11 +2675,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "skills_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'skills_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2713,67 +2713,67 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "taggings_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'taggings_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "taggings_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'taggings_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "taggings_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'taggings_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
           {
-            foreignKeyName: "taggings_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'taggings_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "taggings_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'taggings_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "taggings_tag_id_fkey"
-            columns: ["tag_id"]
+            foreignKeyName: 'taggings_tag_id_fkey'
+            columns: ['tag_id']
             isOneToOne: false
-            referencedRelation: "tags"
-            referencedColumns: ["id"]
+            referencedRelation: 'tags'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "taggings_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'taggings_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "taggings_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'taggings_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "taggings_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'taggings_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2795,11 +2795,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tags_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'tags_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2824,25 +2824,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_carpool_group_members_carpool_group_id_fkey"
-            columns: ["carpool_group_id"]
+            foreignKeyName: 'trip_carpool_group_members_carpool_group_id_fkey'
+            columns: ['carpool_group_id']
             isOneToOne: false
-            referencedRelation: "trip_carpool_groups"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_carpool_groups'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_carpool_group_members_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_carpool_group_members_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_carpool_group_members_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_carpool_group_members_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -2879,53 +2879,53 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_carpool_groups_driver_membership_id_fkey"
-            columns: ["driver_membership_id"]
+            foreignKeyName: 'trip_carpool_groups_driver_membership_id_fkey'
+            columns: ['driver_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_carpool_groups_driver_membership_id_fkey"
-            columns: ["driver_membership_id"]
+            foreignKeyName: 'trip_carpool_groups_driver_membership_id_fkey'
+            columns: ['driver_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_carpool_groups_pickup_location_id_fkey"
-            columns: ["pickup_location_id"]
+            foreignKeyName: 'trip_carpool_groups_pickup_location_id_fkey'
+            columns: ['pickup_location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_carpool_groups_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_carpool_groups_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_carpool_groups_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_carpool_groups_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_carpool_groups_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_carpool_groups_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_carpool_groups_vehicle_id_fkey"
-            columns: ["vehicle_id"]
+            foreignKeyName: 'trip_carpool_groups_vehicle_id_fkey'
+            columns: ['vehicle_id']
             isOneToOne: false
-            referencedRelation: "member_vehicles"
-            referencedColumns: ["id"]
+            referencedRelation: 'member_vehicles'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -2953,25 +2953,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_checklist_item_completions_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_checklist_item_completions_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_checklist_item_completions_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_checklist_item_completions_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_checklist_item_completions_trip_checklist_item_id_fkey"
-            columns: ["trip_checklist_item_id"]
+            foreignKeyName: 'trip_checklist_item_completions_trip_checklist_item_id_fkey'
+            columns: ['trip_checklist_item_id']
             isOneToOne: false
-            referencedRelation: "trip_checklist_items"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_checklist_items'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3002,11 +3002,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_checklist_items_trip_checklist_id_fkey"
-            columns: ["trip_checklist_id"]
+            foreignKeyName: 'trip_checklist_items_trip_checklist_id_fkey'
+            columns: ['trip_checklist_id']
             isOneToOne: false
-            referencedRelation: "trip_checklists"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_checklists'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3034,32 +3034,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_checklists_template_id_fkey"
-            columns: ["template_id"]
+            foreignKeyName: 'trip_checklists_template_id_fkey'
+            columns: ['template_id']
             isOneToOne: false
-            referencedRelation: "checklist_templates"
-            referencedColumns: ["id"]
+            referencedRelation: 'checklist_templates'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_checklists_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_checklists_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_checklists_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_checklists_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_checklists_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_checklists_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3090,46 +3090,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_custom_answers_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_custom_answers_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_custom_answers_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_custom_answers_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_custom_answers_question_id_fkey"
-            columns: ["question_id"]
+            foreignKeyName: 'trip_custom_answers_question_id_fkey'
+            columns: ['question_id']
             isOneToOne: false
-            referencedRelation: "trip_custom_questions"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_custom_questions'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_custom_answers_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_custom_answers_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_custom_answers_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_custom_answers_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_custom_answers_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_custom_answers_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3163,11 +3163,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_custom_question_options_question_id_fkey"
-            columns: ["question_id"]
+            foreignKeyName: 'trip_custom_question_options_question_id_fkey'
+            columns: ['question_id']
             isOneToOne: false
-            referencedRelation: "trip_custom_questions"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_custom_questions'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3179,7 +3179,7 @@ export type Database = {
           description: string | null
           id: string
           prompt: string
-          question_type: Database["public"]["Enums"]["custom_question_type"]
+          question_type: Database['public']['Enums']['custom_question_type']
           required: boolean
           sort_order: number
           trip_id: string
@@ -3192,7 +3192,7 @@ export type Database = {
           description?: string | null
           id?: string
           prompt: string
-          question_type: Database["public"]["Enums"]["custom_question_type"]
+          question_type: Database['public']['Enums']['custom_question_type']
           required?: boolean
           sort_order?: number
           trip_id: string
@@ -3205,7 +3205,7 @@ export type Database = {
           description?: string | null
           id?: string
           prompt?: string
-          question_type?: Database["public"]["Enums"]["custom_question_type"]
+          question_type?: Database['public']['Enums']['custom_question_type']
           required?: boolean
           sort_order?: number
           trip_id?: string
@@ -3213,39 +3213,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_custom_questions_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trip_custom_questions_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_custom_questions_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trip_custom_questions_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_custom_questions_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_custom_questions_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_custom_questions_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_custom_questions_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_custom_questions_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_custom_questions_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3255,7 +3255,7 @@ export type Database = {
           details: string | null
           ends_at: string | null
           id: string
-          kind: Database["public"]["Enums"]["itinerary_segment_kind"]
+          kind: Database['public']['Enums']['itinerary_segment_kind']
           label: string
           lat: number | null
           location_id: string | null
@@ -3270,7 +3270,7 @@ export type Database = {
           details?: string | null
           ends_at?: string | null
           id?: string
-          kind?: Database["public"]["Enums"]["itinerary_segment_kind"]
+          kind?: Database['public']['Enums']['itinerary_segment_kind']
           label: string
           lat?: number | null
           location_id?: string | null
@@ -3285,7 +3285,7 @@ export type Database = {
           details?: string | null
           ends_at?: string | null
           id?: string
-          kind?: Database["public"]["Enums"]["itinerary_segment_kind"]
+          kind?: Database['public']['Enums']['itinerary_segment_kind']
           label?: string
           lat?: number | null
           location_id?: string | null
@@ -3297,32 +3297,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_itinerary_segments_location_id_fkey"
-            columns: ["location_id"]
+            foreignKeyName: 'trip_itinerary_segments_location_id_fkey'
+            columns: ['location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_itinerary_segments_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_itinerary_segments_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_itinerary_segments_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_itinerary_segments_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_itinerary_segments_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_itinerary_segments_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3334,7 +3334,7 @@ export type Database = {
           media_asset_id: string
           trip_id: string
           uploaded_by_membership_id: string | null
-          visibility: Database["public"]["Enums"]["privacy_visibility"]
+          visibility: Database['public']['Enums']['privacy_visibility']
         }
         Insert: {
           caption?: string | null
@@ -3343,7 +3343,7 @@ export type Database = {
           media_asset_id: string
           trip_id: string
           uploaded_by_membership_id?: string | null
-          visibility?: Database["public"]["Enums"]["privacy_visibility"]
+          visibility?: Database['public']['Enums']['privacy_visibility']
         }
         Update: {
           caption?: string | null
@@ -3352,57 +3352,57 @@ export type Database = {
           media_asset_id?: string
           trip_id?: string
           uploaded_by_membership_id?: string | null
-          visibility?: Database["public"]["Enums"]["privacy_visibility"]
+          visibility?: Database['public']['Enums']['privacy_visibility']
         }
         Relationships: [
           {
-            foreignKeyName: "trip_media_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'trip_media_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_media_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'trip_media_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
           {
-            foreignKeyName: "trip_media_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_media_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_media_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_media_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_media_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_media_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_media_uploaded_by_membership_id_fkey"
-            columns: ["uploaded_by_membership_id"]
+            foreignKeyName: 'trip_media_uploaded_by_membership_id_fkey'
+            columns: ['uploaded_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_media_uploaded_by_membership_id_fkey"
-            columns: ["uploaded_by_membership_id"]
+            foreignKeyName: 'trip_media_uploaded_by_membership_id_fkey'
+            columns: ['uploaded_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
         ]
       }
@@ -3430,45 +3430,45 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_member_private_notes_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_member_private_notes_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_member_private_notes_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_member_private_notes_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_member_private_notes_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_member_private_notes_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_member_private_notes_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_member_private_notes_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_member_private_notes_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_member_private_notes_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
       trip_participants: {
         Row: {
-          attendance: Database["public"]["Enums"]["attendance_status"]
+          attendance: Database['public']['Enums']['attendance_status']
           can_drive: boolean
           joined_at: string
           membership_id: string
@@ -3476,8 +3476,8 @@ export type Database = {
           participant_notes: string | null
           private_notes: string | null
           removed_reason: string | null
-          role: Database["public"]["Enums"]["trip_participant_role"]
-          rsvp_status: Database["public"]["Enums"]["trip_rsvp_status"]
+          role: Database['public']['Enums']['trip_participant_role']
+          rsvp_status: Database['public']['Enums']['trip_rsvp_status']
           rsvp_updated_at: string | null
           seats_offered: number | null
           seats_requested: number | null
@@ -3485,7 +3485,7 @@ export type Database = {
           trip_id: string
         }
         Insert: {
-          attendance?: Database["public"]["Enums"]["attendance_status"]
+          attendance?: Database['public']['Enums']['attendance_status']
           can_drive?: boolean
           joined_at?: string
           membership_id: string
@@ -3493,8 +3493,8 @@ export type Database = {
           participant_notes?: string | null
           private_notes?: string | null
           removed_reason?: string | null
-          role?: Database["public"]["Enums"]["trip_participant_role"]
-          rsvp_status?: Database["public"]["Enums"]["trip_rsvp_status"]
+          role?: Database['public']['Enums']['trip_participant_role']
+          rsvp_status?: Database['public']['Enums']['trip_rsvp_status']
           rsvp_updated_at?: string | null
           seats_offered?: number | null
           seats_requested?: number | null
@@ -3502,7 +3502,7 @@ export type Database = {
           trip_id: string
         }
         Update: {
-          attendance?: Database["public"]["Enums"]["attendance_status"]
+          attendance?: Database['public']['Enums']['attendance_status']
           can_drive?: boolean
           joined_at?: string
           membership_id?: string
@@ -3510,8 +3510,8 @@ export type Database = {
           participant_notes?: string | null
           private_notes?: string | null
           removed_reason?: string | null
-          role?: Database["public"]["Enums"]["trip_participant_role"]
-          rsvp_status?: Database["public"]["Enums"]["trip_rsvp_status"]
+          role?: Database['public']['Enums']['trip_participant_role']
+          rsvp_status?: Database['public']['Enums']['trip_rsvp_status']
           rsvp_updated_at?: string | null
           seats_offered?: number | null
           seats_requested?: number | null
@@ -3520,46 +3520,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_participants_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_participants_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_participants_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_participants_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_participants_selected_meeting_location_id_fkey"
-            columns: ["selected_meeting_location_id"]
+            foreignKeyName: 'trip_participants_selected_meeting_location_id_fkey'
+            columns: ['selected_meeting_location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_participants_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_participants_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_participants_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_participants_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_participants_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_participants_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3590,11 +3590,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_poll_options_poll_id_fkey"
-            columns: ["poll_id"]
+            foreignKeyName: 'trip_poll_options_poll_id_fkey'
+            columns: ['poll_id']
             isOneToOne: false
-            referencedRelation: "trip_polls"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_polls'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3622,32 +3622,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_poll_votes_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_poll_votes_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_poll_votes_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_poll_votes_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_poll_votes_option_id_fkey"
-            columns: ["option_id"]
+            foreignKeyName: 'trip_poll_votes_option_id_fkey'
+            columns: ['option_id']
             isOneToOne: false
-            referencedRelation: "trip_poll_options"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_poll_options'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_poll_votes_poll_id_fkey"
-            columns: ["poll_id"]
+            foreignKeyName: 'trip_poll_votes_poll_id_fkey'
+            columns: ['poll_id']
             isOneToOne: false
-            referencedRelation: "trip_polls"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_polls'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3660,7 +3660,7 @@ export type Database = {
           id: string
           is_open: boolean
           opens_at: string | null
-          poll_type: Database["public"]["Enums"]["poll_type"]
+          poll_type: Database['public']['Enums']['poll_type']
           title: string
           trip_id: string
           updated_at: string
@@ -3673,7 +3673,7 @@ export type Database = {
           id?: string
           is_open?: boolean
           opens_at?: string | null
-          poll_type?: Database["public"]["Enums"]["poll_type"]
+          poll_type?: Database['public']['Enums']['poll_type']
           title: string
           trip_id: string
           updated_at?: string
@@ -3686,46 +3686,46 @@ export type Database = {
           id?: string
           is_open?: boolean
           opens_at?: string | null
-          poll_type?: Database["public"]["Enums"]["poll_type"]
+          poll_type?: Database['public']['Enums']['poll_type']
           title?: string
           trip_id?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "trip_polls_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trip_polls_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_polls_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trip_polls_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_polls_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_polls_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_polls_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_polls_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_polls_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_polls_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3734,7 +3734,7 @@ export type Database = {
           created_at: string
           data: Json
           id: string
-          kind: Database["public"]["Enums"]["proposal_option_kind"]
+          kind: Database['public']['Enums']['proposal_option_kind']
           label: string
           proposal_id: string
           sort_order: number
@@ -3743,7 +3743,7 @@ export type Database = {
           created_at?: string
           data?: Json
           id?: string
-          kind: Database["public"]["Enums"]["proposal_option_kind"]
+          kind: Database['public']['Enums']['proposal_option_kind']
           label: string
           proposal_id: string
           sort_order?: number
@@ -3752,18 +3752,18 @@ export type Database = {
           created_at?: string
           data?: Json
           id?: string
-          kind?: Database["public"]["Enums"]["proposal_option_kind"]
+          kind?: Database['public']['Enums']['proposal_option_kind']
           label?: string
           proposal_id?: string
           sort_order?: number
         }
         Relationships: [
           {
-            foreignKeyName: "trip_proposal_options_proposal_id_fkey"
-            columns: ["proposal_id"]
+            foreignKeyName: 'trip_proposal_options_proposal_id_fkey'
+            columns: ['proposal_id']
             isOneToOne: false
-            referencedRelation: "trip_proposals"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_proposals'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3791,32 +3791,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_proposal_votes_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_proposal_votes_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_proposal_votes_membership_id_fkey"
-            columns: ["membership_id"]
+            foreignKeyName: 'trip_proposal_votes_membership_id_fkey'
+            columns: ['membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_proposal_votes_option_id_fkey"
-            columns: ["option_id"]
+            foreignKeyName: 'trip_proposal_votes_option_id_fkey'
+            columns: ['option_id']
             isOneToOne: false
-            referencedRelation: "trip_proposal_options"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_proposal_options'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_proposal_votes_proposal_id_fkey"
-            columns: ["proposal_id"]
+            foreignKeyName: 'trip_proposal_votes_proposal_id_fkey'
+            columns: ['proposal_id']
             isOneToOne: false
-            referencedRelation: "trip_proposals"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_proposals'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3830,8 +3830,8 @@ export type Database = {
           id: string
           latest_end_at: string | null
           spawned_trip_id: string | null
-          status: Database["public"]["Enums"]["proposal_status"]
-          target_visibility: Database["public"]["Enums"]["trip_visibility"]
+          status: Database['public']['Enums']['proposal_status']
+          target_visibility: Database['public']['Enums']['trip_visibility']
           timezone: string | null
           title: string
           updated_at: string
@@ -3845,8 +3845,8 @@ export type Database = {
           id?: string
           latest_end_at?: string | null
           spawned_trip_id?: string | null
-          status?: Database["public"]["Enums"]["proposal_status"]
-          target_visibility?: Database["public"]["Enums"]["trip_visibility"]
+          status?: Database['public']['Enums']['proposal_status']
+          target_visibility?: Database['public']['Enums']['trip_visibility']
           timezone?: string | null
           title: string
           updated_at?: string
@@ -3860,54 +3860,54 @@ export type Database = {
           id?: string
           latest_end_at?: string | null
           spawned_trip_id?: string | null
-          status?: Database["public"]["Enums"]["proposal_status"]
-          target_visibility?: Database["public"]["Enums"]["trip_visibility"]
+          status?: Database['public']['Enums']['proposal_status']
+          target_visibility?: Database['public']['Enums']['trip_visibility']
           timezone?: string | null
           title?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "trip_proposals_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'trip_proposals_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_proposals_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trip_proposals_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_proposals_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trip_proposals_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_proposals_spawned_trip_id_fkey"
-            columns: ["spawned_trip_id"]
+            foreignKeyName: 'trip_proposals_spawned_trip_id_fkey'
+            columns: ['spawned_trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_proposals_spawned_trip_id_fkey"
-            columns: ["spawned_trip_id"]
+            foreignKeyName: 'trip_proposals_spawned_trip_id_fkey'
+            columns: ['spawned_trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_proposals_spawned_trip_id_fkey"
-            columns: ["spawned_trip_id"]
+            foreignKeyName: 'trip_proposals_spawned_trip_id_fkey'
+            columns: ['spawned_trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -3920,7 +3920,7 @@ export type Database = {
           title: string | null
           trip_id: string
           updated_at: string
-          visibility: Database["public"]["Enums"]["privacy_visibility"]
+          visibility: Database['public']['Enums']['privacy_visibility']
         }
         Insert: {
           author_membership_id?: string | null
@@ -3930,7 +3930,7 @@ export type Database = {
           title?: string | null
           trip_id: string
           updated_at?: string
-          visibility?: Database["public"]["Enums"]["privacy_visibility"]
+          visibility?: Database['public']['Enums']['privacy_visibility']
         }
         Update: {
           author_membership_id?: string | null
@@ -3940,43 +3940,43 @@ export type Database = {
           title?: string | null
           trip_id?: string
           updated_at?: string
-          visibility?: Database["public"]["Enums"]["privacy_visibility"]
+          visibility?: Database['public']['Enums']['privacy_visibility']
         }
         Relationships: [
           {
-            foreignKeyName: "trip_reports_author_membership_id_fkey"
-            columns: ["author_membership_id"]
+            foreignKeyName: 'trip_reports_author_membership_id_fkey'
+            columns: ['author_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_reports_author_membership_id_fkey"
-            columns: ["author_membership_id"]
+            foreignKeyName: 'trip_reports_author_membership_id_fkey'
+            columns: ['author_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_reports_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_reports_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_reports_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_reports_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_reports_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_reports_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4004,39 +4004,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_route_files_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'trip_route_files_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "media_assets"
-            referencedColumns: ["id"]
+            referencedRelation: 'media_assets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_route_files_media_asset_id_fkey"
-            columns: ["media_asset_id"]
+            foreignKeyName: 'trip_route_files_media_asset_id_fkey'
+            columns: ['media_asset_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["media_asset_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['media_asset_id']
           },
           {
-            foreignKeyName: "trip_route_files_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_route_files_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_route_files_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_route_files_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_route_files_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_route_files_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4067,39 +4067,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_shared_notes_author_membership_id_fkey"
-            columns: ["author_membership_id"]
+            foreignKeyName: 'trip_shared_notes_author_membership_id_fkey'
+            columns: ['author_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_shared_notes_author_membership_id_fkey"
-            columns: ["author_membership_id"]
+            foreignKeyName: 'trip_shared_notes_author_membership_id_fkey'
+            columns: ['author_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trip_shared_notes_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_shared_notes_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_shared_notes_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_shared_notes_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_shared_notes_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_shared_notes_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4109,7 +4109,7 @@ export type Database = {
           elevation_m: number | null
           id: string
           itinerary_segment_id: string | null
-          kind: Database["public"]["Enums"]["waypoint_kind"]
+          kind: Database['public']['Enums']['waypoint_kind']
           lat: number
           lon: number
           name: string
@@ -4123,7 +4123,7 @@ export type Database = {
           elevation_m?: number | null
           id?: string
           itinerary_segment_id?: string | null
-          kind?: Database["public"]["Enums"]["waypoint_kind"]
+          kind?: Database['public']['Enums']['waypoint_kind']
           lat: number
           lon: number
           name: string
@@ -4137,7 +4137,7 @@ export type Database = {
           elevation_m?: number | null
           id?: string
           itinerary_segment_id?: string | null
-          kind?: Database["public"]["Enums"]["waypoint_kind"]
+          kind?: Database['public']['Enums']['waypoint_kind']
           lat?: number
           lon?: number
           name?: string
@@ -4148,32 +4148,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trip_waypoints_itinerary_segment_id_fkey"
-            columns: ["itinerary_segment_id"]
+            foreignKeyName: 'trip_waypoints_itinerary_segment_id_fkey'
+            columns: ['itinerary_segment_id']
             isOneToOne: false
-            referencedRelation: "trip_itinerary_segments"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_itinerary_segments'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_waypoints_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_waypoints_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive"
-            referencedColumns: ["id"]
+            referencedRelation: 'trip_archive'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trip_waypoints_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_waypoints_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trip_archive_media"
-            referencedColumns: ["trip_id"]
+            referencedRelation: 'trip_archive_media'
+            referencedColumns: ['trip_id']
           },
           {
-            foreignKeyName: "trip_waypoints_trip_id_fkey"
-            columns: ["trip_id"]
+            foreignKeyName: 'trip_waypoints_trip_id_fkey'
+            columns: ['trip_id']
             isOneToOne: false
-            referencedRelation: "trips"
-            referencedColumns: ["id"]
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4198,7 +4198,7 @@ export type Database = {
           hazard_notes: string | null
           id: string
           is_official: boolean
-          kind: Database["public"]["Enums"]["trip_kind"] | null
+          kind: Database['public']['Enums']['trip_kind'] | null
           last_updated_at: string | null
           lat: number | null
           leave_window_end: string | null
@@ -4218,11 +4218,11 @@ export type Database = {
           rsvp_deadline: string | null
           short_summary: string | null
           start_at: string
-          status: Database["public"]["Enums"]["trip_status"]
+          status: Database['public']['Enums']['trip_status']
           timezone: string | null
           title: string
           updated_at: string
-          visibility: Database["public"]["Enums"]["trip_visibility"]
+          visibility: Database['public']['Enums']['trip_visibility']
           waitlist_capacity: number | null
           waitlist_enabled: boolean
           weather_notes: string | null
@@ -4247,7 +4247,7 @@ export type Database = {
           hazard_notes?: string | null
           id?: string
           is_official?: boolean
-          kind?: Database["public"]["Enums"]["trip_kind"] | null
+          kind?: Database['public']['Enums']['trip_kind'] | null
           last_updated_at?: string | null
           lat?: number | null
           leave_window_end?: string | null
@@ -4267,11 +4267,11 @@ export type Database = {
           rsvp_deadline?: string | null
           short_summary?: string | null
           start_at: string
-          status?: Database["public"]["Enums"]["trip_status"]
+          status?: Database['public']['Enums']['trip_status']
           timezone?: string | null
           title: string
           updated_at?: string
-          visibility?: Database["public"]["Enums"]["trip_visibility"]
+          visibility?: Database['public']['Enums']['trip_visibility']
           waitlist_capacity?: number | null
           waitlist_enabled?: boolean
           weather_notes?: string | null
@@ -4296,7 +4296,7 @@ export type Database = {
           hazard_notes?: string | null
           id?: string
           is_official?: boolean
-          kind?: Database["public"]["Enums"]["trip_kind"] | null
+          kind?: Database['public']['Enums']['trip_kind'] | null
           last_updated_at?: string | null
           lat?: number | null
           leave_window_end?: string | null
@@ -4316,50 +4316,50 @@ export type Database = {
           rsvp_deadline?: string | null
           short_summary?: string | null
           start_at?: string
-          status?: Database["public"]["Enums"]["trip_status"]
+          status?: Database['public']['Enums']['trip_status']
           timezone?: string | null
           title?: string
           updated_at?: string
-          visibility?: Database["public"]["Enums"]["trip_visibility"]
+          visibility?: Database['public']['Enums']['trip_visibility']
           waitlist_capacity?: number | null
           waitlist_enabled?: boolean
           weather_notes?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "trips_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'trips_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trips_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trips_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "club_memberships"
-            referencedColumns: ["id"]
+            referencedRelation: 'club_memberships'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trips_created_by_membership_id_fkey"
-            columns: ["created_by_membership_id"]
+            foreignKeyName: 'trips_created_by_membership_id_fkey'
+            columns: ['created_by_membership_id']
             isOneToOne: false
-            referencedRelation: "member_directory"
-            referencedColumns: ["membership_id"]
+            referencedRelation: 'member_directory'
+            referencedColumns: ['membership_id']
           },
           {
-            foreignKeyName: "trips_meeting_location_id_fkey"
-            columns: ["meeting_location_id"]
+            foreignKeyName: 'trips_meeting_location_id_fkey'
+            columns: ['meeting_location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trips_primary_location_id_fkey"
-            columns: ["primary_location_id"]
+            foreignKeyName: 'trips_primary_location_id_fkey'
+            columns: ['primary_location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4399,11 +4399,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "waiver_versions_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'waiver_versions_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4423,17 +4423,17 @@ export type Database = {
           name: string | null
           phone: string | null
           pronouns: string | null
-          role: Database["public"]["Enums"]["member_role"] | null
-          state: Database["public"]["Enums"]["membership_state"] | null
+          role: Database['public']['Enums']['member_role'] | null
+          state: Database['public']['Enums']['membership_state'] | null
           user_id: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "club_memberships_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'club_memberships_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4513,25 +4513,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "trips_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: 'trips_club_id_fkey'
+            columns: ['club_id']
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trips_meeting_location_id_fkey"
-            columns: ["meeting_location_id"]
+            foreignKeyName: 'trips_meeting_location_id_fkey'
+            columns: ['meeting_location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "trips_primary_location_id_fkey"
-            columns: ["primary_location_id"]
+            foreignKeyName: 'trips_primary_location_id_fkey'
+            columns: ['primary_location_id']
             isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            referencedRelation: 'locations'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -4601,7 +4601,7 @@ export type Database = {
         Args: {
           _club_id: string
           _target_user_id: string
-          _visibility: Database["public"]["Enums"]["privacy_visibility"]
+          _visibility: Database['public']['Enums']['privacy_visibility']
         }
         Returns: boolean
       }
@@ -4635,14 +4635,14 @@ export type Database = {
           _processor: string
           _processor_payment_id: string
           _product_id: string
-          _status?: Database["public"]["Enums"]["payment_status"]
+          _status?: Database['public']['Enums']['payment_status']
         }
         Returns: string
       }
       rpc_broadcast_notification: {
         Args: {
           _body: string
-          _channel: Database["public"]["Enums"]["notification_channel"]
+          _channel: Database['public']['Enums']['notification_channel']
           _club_id: string
           _data?: Json
           _title: string
@@ -4675,7 +4675,7 @@ export type Database = {
       rpc_notify_trip_participants: {
         Args: {
           _body: string
-          _channel: Database["public"]["Enums"]["notification_channel"]
+          _channel: Database['public']['Enums']['notification_channel']
           _data?: Json
           _title: string
           _trip_id: string
@@ -4684,7 +4684,7 @@ export type Database = {
       }
       rpc_take_moderation_action: {
         Args: {
-          _action_type: Database["public"]["Enums"]["moderation_action_type"]
+          _action_type: Database['public']['Enums']['moderation_action_type']
           _club_id: string
           _ends_at?: string
           _notes?: string
@@ -4699,120 +4699,120 @@ export type Database = {
     }
     Enums: {
       attendance_status:
-        | "unknown"
-        | "attended"
-        | "no_show"
-        | "canceled"
-        | "left_early"
+        | 'unknown'
+        | 'attended'
+        | 'no_show'
+        | 'canceled'
+        | 'left_early'
       custom_question_type:
-        | "boolean"
-        | "number"
-        | "text"
-        | "select_one"
-        | "select_many"
-        | "slider"
-      gear_condition: "new" | "good" | "worn" | "needs_repair" | "retired"
+        | 'boolean'
+        | 'number'
+        | 'text'
+        | 'select_one'
+        | 'select_many'
+        | 'slider'
+      gear_condition: 'new' | 'good' | 'worn' | 'needs_repair' | 'retired'
       itinerary_segment_kind:
-        | "meetup"
-        | "drive"
-        | "approach"
-        | "objective"
-        | "break"
-        | "camp"
-        | "return"
-        | "food"
-        | "other"
+        | 'meetup'
+        | 'drive'
+        | 'approach'
+        | 'objective'
+        | 'break'
+        | 'camp'
+        | 'return'
+        | 'food'
+        | 'other'
       member_role:
-        | "regular"
-        | "leader"
-        | "admin"
-        | "board"
-        | "founder"
-        | "staff"
+        | 'regular'
+        | 'leader'
+        | 'admin'
+        | 'board'
+        | 'founder'
+        | 'staff'
       membership_state:
-        | "active"
-        | "inactive"
-        | "pending"
-        | "past_due"
-        | "canceled"
-        | "suspended"
-        | "banned"
+        | 'active'
+        | 'inactive'
+        | 'pending'
+        | 'past_due'
+        | 'canceled'
+        | 'suspended'
+        | 'banned'
       moderation_action_type:
-        | "warn"
-        | "mute"
-        | "suspend"
-        | "ban"
-        | "remove_from_trip"
-        | "delete_content"
-        | "other"
+        | 'warn'
+        | 'mute'
+        | 'suspend'
+        | 'ban'
+        | 'remove_from_trip'
+        | 'delete_content'
+        | 'other'
       moderation_report_status:
-        | "open"
-        | "under_review"
-        | "resolved"
-        | "dismissed"
-      notification_channel: "email" | "push" | "sms" | "discord"
+        | 'open'
+        | 'under_review'
+        | 'resolved'
+        | 'dismissed'
+      notification_channel: 'email' | 'push' | 'sms' | 'discord'
       payment_status:
-        | "succeeded"
-        | "failed"
-        | "pending"
-        | "refunded"
-        | "disputed"
-      poll_type: "single" | "multiple" | "ranked"
-      privacy_visibility: "private" | "leaders_only" | "members" | "public"
-      proposal_option_kind: "location" | "time_window" | "activity" | "other"
+        | 'succeeded'
+        | 'failed'
+        | 'pending'
+        | 'refunded'
+        | 'disputed'
+      poll_type: 'single' | 'multiple' | 'ranked'
+      privacy_visibility: 'private' | 'leaders_only' | 'members' | 'public'
+      proposal_option_kind: 'location' | 'time_window' | 'activity' | 'other'
       proposal_status:
-        | "draft"
-        | "open"
-        | "closed"
-        | "accepted"
-        | "rejected"
-        | "expired"
+        | 'draft'
+        | 'open'
+        | 'closed'
+        | 'accepted'
+        | 'rejected'
+        | 'expired'
       trip_kind:
-        | "outdoor"
-        | "indoor"
-        | "social"
-        | "service"
-        | "admin"
-        | "travel"
+        | 'outdoor'
+        | 'indoor'
+        | 'social'
+        | 'service'
+        | 'admin'
+        | 'travel'
       trip_participant_role:
-        | "participant"
-        | "leader"
-        | "co_leader"
-        | "sweeper"
-        | "medic"
-        | "photographer"
-        | "driver"
-        | "gear_coordinator"
+        | 'participant'
+        | 'leader'
+        | 'co_leader'
+        | 'sweeper'
+        | 'medic'
+        | 'photographer'
+        | 'driver'
+        | 'gear_coordinator'
       trip_rsvp_status:
-        | "going"
-        | "maybe"
-        | "not_going"
-        | "waitlisted"
-        | "invited"
-        | "removed"
-      trip_status: "draft" | "published" | "full" | "canceled" | "completed"
-      trip_visibility: "members" | "leaders_only" | "invite_only" | "public"
+        | 'going'
+        | 'maybe'
+        | 'not_going'
+        | 'waitlisted'
+        | 'invited'
+        | 'removed'
+      trip_status: 'draft' | 'published' | 'full' | 'canceled' | 'completed'
+      trip_visibility: 'members' | 'leaders_only' | 'invite_only' | 'public'
       vehicle_type:
-        | "sedan"
-        | "suv"
-        | "truck"
-        | "van"
-        | "wagon"
-        | "coupe"
-        | "motorcycle"
-        | "other"
+        | 'sedan'
+        | 'suv'
+        | 'truck'
+        | 'van'
+        | 'wagon'
+        | 'coupe'
+        | 'motorcycle'
+        | 'other'
       waypoint_kind:
-        | "meeting_spot"
-        | "parking"
-        | "trailhead"
-        | "junction"
-        | "water"
-        | "campsite"
-        | "objective"
-        | "viewpoint"
-        | "hazard"
-        | "bailout"
-        | "other"
+        | 'meeting_spot'
+        | 'parking'
+        | 'trailhead'
+        | 'junction'
+        | 'water'
+        | 'campsite'
+        | 'objective'
+        | 'viewpoint'
+        | 'hazard'
+        | 'bailout'
+        | 'other'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4820,33 +4820,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
+        DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] &
+        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -4855,23 +4855,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
+    | keyof DefaultSchema['Tables']
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -4880,23 +4880,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
+    | keyof DefaultSchema['Tables']
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -4905,36 +4905,36 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
+    | keyof DefaultSchema['Enums']
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
+    | keyof DefaultSchema['CompositeTypes']
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
@@ -4944,119 +4944,119 @@ export const Constants = {
   public: {
     Enums: {
       attendance_status: [
-        "unknown",
-        "attended",
-        "no_show",
-        "canceled",
-        "left_early",
+        'unknown',
+        'attended',
+        'no_show',
+        'canceled',
+        'left_early',
       ],
       custom_question_type: [
-        "boolean",
-        "number",
-        "text",
-        "select_one",
-        "select_many",
-        "slider",
+        'boolean',
+        'number',
+        'text',
+        'select_one',
+        'select_many',
+        'slider',
       ],
-      gear_condition: ["new", "good", "worn", "needs_repair", "retired"],
+      gear_condition: ['new', 'good', 'worn', 'needs_repair', 'retired'],
       itinerary_segment_kind: [
-        "meetup",
-        "drive",
-        "approach",
-        "objective",
-        "break",
-        "camp",
-        "return",
-        "food",
-        "other",
+        'meetup',
+        'drive',
+        'approach',
+        'objective',
+        'break',
+        'camp',
+        'return',
+        'food',
+        'other',
       ],
-      member_role: ["regular", "leader", "admin", "board", "founder", "staff"],
+      member_role: ['regular', 'leader', 'admin', 'board', 'founder', 'staff'],
       membership_state: [
-        "active",
-        "inactive",
-        "pending",
-        "past_due",
-        "canceled",
-        "suspended",
-        "banned",
+        'active',
+        'inactive',
+        'pending',
+        'past_due',
+        'canceled',
+        'suspended',
+        'banned',
       ],
       moderation_action_type: [
-        "warn",
-        "mute",
-        "suspend",
-        "ban",
-        "remove_from_trip",
-        "delete_content",
-        "other",
+        'warn',
+        'mute',
+        'suspend',
+        'ban',
+        'remove_from_trip',
+        'delete_content',
+        'other',
       ],
       moderation_report_status: [
-        "open",
-        "under_review",
-        "resolved",
-        "dismissed",
+        'open',
+        'under_review',
+        'resolved',
+        'dismissed',
       ],
-      notification_channel: ["email", "push", "sms", "discord"],
+      notification_channel: ['email', 'push', 'sms', 'discord'],
       payment_status: [
-        "succeeded",
-        "failed",
-        "pending",
-        "refunded",
-        "disputed",
+        'succeeded',
+        'failed',
+        'pending',
+        'refunded',
+        'disputed',
       ],
-      poll_type: ["single", "multiple", "ranked"],
-      privacy_visibility: ["private", "leaders_only", "members", "public"],
-      proposal_option_kind: ["location", "time_window", "activity", "other"],
+      poll_type: ['single', 'multiple', 'ranked'],
+      privacy_visibility: ['private', 'leaders_only', 'members', 'public'],
+      proposal_option_kind: ['location', 'time_window', 'activity', 'other'],
       proposal_status: [
-        "draft",
-        "open",
-        "closed",
-        "accepted",
-        "rejected",
-        "expired",
+        'draft',
+        'open',
+        'closed',
+        'accepted',
+        'rejected',
+        'expired',
       ],
-      trip_kind: ["outdoor", "indoor", "social", "service", "admin", "travel"],
+      trip_kind: ['outdoor', 'indoor', 'social', 'service', 'admin', 'travel'],
       trip_participant_role: [
-        "participant",
-        "leader",
-        "co_leader",
-        "sweeper",
-        "medic",
-        "photographer",
-        "driver",
-        "gear_coordinator",
+        'participant',
+        'leader',
+        'co_leader',
+        'sweeper',
+        'medic',
+        'photographer',
+        'driver',
+        'gear_coordinator',
       ],
       trip_rsvp_status: [
-        "going",
-        "maybe",
-        "not_going",
-        "waitlisted",
-        "invited",
-        "removed",
+        'going',
+        'maybe',
+        'not_going',
+        'waitlisted',
+        'invited',
+        'removed',
       ],
-      trip_status: ["draft", "published", "full", "canceled", "completed"],
-      trip_visibility: ["members", "leaders_only", "invite_only", "public"],
+      trip_status: ['draft', 'published', 'full', 'canceled', 'completed'],
+      trip_visibility: ['members', 'leaders_only', 'invite_only', 'public'],
       vehicle_type: [
-        "sedan",
-        "suv",
-        "truck",
-        "van",
-        "wagon",
-        "coupe",
-        "motorcycle",
-        "other",
+        'sedan',
+        'suv',
+        'truck',
+        'van',
+        'wagon',
+        'coupe',
+        'motorcycle',
+        'other',
       ],
       waypoint_kind: [
-        "meeting_spot",
-        "parking",
-        "trailhead",
-        "junction",
-        "water",
-        "campsite",
-        "objective",
-        "viewpoint",
-        "hazard",
-        "bailout",
-        "other",
+        'meeting_spot',
+        'parking',
+        'trailhead',
+        'junction',
+        'water',
+        'campsite',
+        'objective',
+        'viewpoint',
+        'hazard',
+        'bailout',
+        'other',
       ],
     },
   },

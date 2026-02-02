@@ -5,7 +5,7 @@ import { useEffect, useMemo } from 'react'
 export function useUnsavedChangesPrompt(isDirty: boolean, message?: string) {
   const promptMessage = useMemo(
     () => message ?? 'You have unsaved changes. Discard them?',
-    [message]
+    [message],
   )
 
   useEffect(() => {
