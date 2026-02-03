@@ -28,15 +28,21 @@ export function HomeCoverClient({
     })
   }, [])
 
-  const advanceCover = () => {
-    if (covers.length === 0) return
-    const nextIndex = (coverIndex + 1) % covers.length
-
+  const setCover = (nextIndex: number) => {
     // If we've already loaded this cover before, don't fade to black.
     const alreadyLoaded = loadedIndexesRef.current.has(nextIndex)
     setImageLoaded(alreadyLoaded)
-
     setCoverIndex(nextIndex)
+  }
+
+  const advanceCover = () => {
+    if (covers.length === 0) return
+    setCover((coverIndex + 1) % covers.length)
+  }
+
+  const retreatCover = () => {
+    if (covers.length === 0) return
+    setCover((coverIndex - 1 + covers.length) % covers.length)
   }
 
   return (
@@ -70,7 +76,15 @@ export function HomeCoverClient({
         onPointerUpCapture={event => {
           const target = event.target as HTMLElement | null
           if (target?.closest?.('[data-homecover-nav]')) return
-          advanceCover()
+          const viewportWidth =
+            typeof window !== 'undefined' ? window.innerWidth : 0
+          if (viewportWidth === 0) return
+          const isLeft = event.clientX < viewportWidth / 2
+          if (isLeft) {
+            retreatCover()
+          } else {
+            advanceCover()
+          }
         }}
       />
     </>
