@@ -1,9 +1,10 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/proxy'
 import { isPaymentsOnlyMode } from '@/src/lib/releaseMode'
 
 const publicPrefixes = [
-  '/get-started',
+  '/starter-guide',
   '/membership',
   '/about',
   '/team',
@@ -31,11 +32,11 @@ const isAllowedPath = (pathname: string) => {
 }
 
 export async function proxy(request: NextRequest) {
+  const { pathname, search } = request.nextUrl
+
   if (!isPaymentsOnlyMode()) {
     return await updateSession(request)
   }
-
-  const { pathname, search } = request.nextUrl
 
   if (pathname.startsWith('/api')) {
     return await updateSession(request)

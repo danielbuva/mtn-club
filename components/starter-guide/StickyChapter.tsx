@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import type { Section } from '@/app/(reader)/get-started/sections'
-import { HeroMedia } from '@/components/get-started/HeroMedia'
-import { InsetPanel } from '@/components/get-started/InsetPanel'
-import { PullQuote } from '@/components/get-started/PullQuote'
+import type { Section } from '@/app/(reader)/starter-guide/sections'
+import { HeroMedia } from '@/components/starter-guide/HeroMedia'
+import { InsetPanel } from '@/components/starter-guide/InsetPanel'
+import { PullQuote } from '@/components/starter-guide/PullQuote'
 
 const scrollMarginClass = 'scroll-mt-12 md:scroll-mt-16'
 
@@ -10,6 +10,8 @@ type StickyChapterProps = {
   section: Section
   nextId?: string
 }
+
+const subsectionScrollClass = 'scroll-mt-24 md:scroll-mt-28'
 
 export function StickyChapter({ section, nextId }: StickyChapterProps) {
   return (
@@ -20,8 +22,8 @@ export function StickyChapter({ section, nextId }: StickyChapterProps) {
       <div className="flex flex-col gap-8 md:grid md:grid-cols-[0.45fr_0.55fr] md:gap-10">
         <div className="md:hidden">
           <div className="relative -mx-4 px-4">
-            <div className="h-[58vh] max-h-[520px] min-h-[320px]">
-              <div className="sticky top-12 z-10 pt-4 pb-4 bg-background/95 supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur">
+            <div className="h-[58vh] max-h-130 min-h-80">
+              <div className="sticky top-12 z-10 pt-4 pb-4 bg-background/95 supports-backdrop-filter:bg-background/80 supports-backdrop-filter:backdrop-blur">
                 <div className="h-full overflow-hidden rounded-2xl">
                   <HeroMedia
                     caption={section.hero.caption}
@@ -42,16 +44,38 @@ export function StickyChapter({ section, nextId }: StickyChapterProps) {
         </div>
         <div className="space-y-6">
           <div>
-            <p className="text-xs uppercase tracking-widest text-muted-foreground">
-              {section.eyebrow}
-            </p>
+            {section.eyebrow ? (
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                {section.eyebrow}
+              </p>
+            ) : null}
             <h2 className="mt-2 text-3xl md:text-5xl font-semibold">
               {section.title}
             </h2>
-            <p className="mt-4 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-prose">
-              {section.lede}
-            </p>
+            {section.lede ? (
+              <p className="mt-4 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-prose">
+                {section.lede}
+              </p>
+            ) : null}
           </div>
+          {section.subsections.length ? (
+            <div className="space-y-6">
+              {section.subsections.map(subsection => (
+                <div
+                  key={subsection.id}
+                  id={subsection.id}
+                  className={`${subsectionScrollClass} space-y-2`}
+                >
+                  <h3 className="text-sm md:text-base font-semibold uppercase tracking-[0.12em] text-foreground/80">
+                    {subsection.title}
+                  </h3>
+                  <p className="text-sm md:text-base text-muted-foreground/80">
+                    Add details here.
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : null}
           {section.blocks.map((block, index) => {
             if (block.kind === 'p') {
               return (

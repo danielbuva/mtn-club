@@ -1,6 +1,24 @@
-export const covers = [
+import type { StaticImageData } from 'next/image'
+import bouldering from '@/public/club-covers/bouldering.jpg'
+import clubHike from '@/public/club-covers/club-hike.jpg'
+import daxClimbingPose from '@/public/club-covers/dax-climbing-pose.jpg'
+import hoawenLeadingCrack from '@/public/club-covers/hoawen-leading-a-crack.jpg'
+import leadClimbing from '@/public/club-covers/lead-climbing.jpg'
+import multiPitch from '@/public/club-covers/multi-pitch.jpg'
+
+type Cover = {
+  src: StaticImageData
+  posMobile: string
+  posDesktop: string
+  originMobile: string
+  originDesktop: string
+  scaleMobile: number
+  scaleDesktop: number
+}
+
+export const covers: Cover[] = [
   {
-    src: '/club-covers/lead-climbing.jpg',
+    src: leadClimbing,
     posMobile: '50% 35%',
     posDesktop: '45% 40%',
     originMobile: '50% 35%',
@@ -9,7 +27,7 @@ export const covers = [
     scaleDesktop: 1.05,
   },
   {
-    src: '/club-covers/club-hike.jpg',
+    src: clubHike,
     posMobile: '40% 45%',
     posDesktop: '45% 50%',
     originMobile: '40% 45%',
@@ -18,7 +36,7 @@ export const covers = [
     scaleDesktop: 1.06,
   },
   {
-    src: '/club-covers/bouldering.jpg',
+    src: bouldering,
     posMobile: '40% 35%',
     posDesktop: '45% 40%',
     originMobile: '40% 35%',
@@ -27,7 +45,7 @@ export const covers = [
     scaleDesktop: 1.08,
   },
   {
-    src: '/club-covers/dax-climbing-pose.jpg',
+    src: daxClimbingPose,
     posMobile: '48% 35%',
     posDesktop: '50% 40%',
     originMobile: '48% 35%',
@@ -36,7 +54,7 @@ export const covers = [
     scaleDesktop: 1.06,
   },
   {
-    src: '/club-covers/multi-pitch.jpg',
+    src: multiPitch,
     posMobile: '20% 90%',
     posDesktop: '20% 50%',
     originMobile: '20% 90%',
@@ -45,7 +63,7 @@ export const covers = [
     scaleDesktop: 1.12,
   },
   {
-    src: '/club-covers/hoawen-leading-a-crack.jpg',
+    src: hoawenLeadingCrack,
     posMobile: '70% 45%',
     posDesktop: '55% 45%',
     originMobile: '70% 45%',

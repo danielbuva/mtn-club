@@ -1,7 +1,8 @@
 'use client'
 
+import { ChevronRightIcon } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { Section } from '@/app/(reader)/get-started/sections'
+import type { Section } from '@/app/(reader)/starter-guide/sections'
 import { Button } from '@/components/ui/button'
 
 const HEADER_OFFSET = 72
@@ -20,6 +21,7 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
     sections[0]?.id ?? 'welcome',
   )
   const [open, setOpen] = useState(false)
+  const [expandedIds, setExpandedIds] = useState<Section['id'][]>([])
   const closeButtonRef = useRef<HTMLButtonElement | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
   const activeIndex = Math.max(
@@ -67,6 +69,11 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
   }, [open])
 
   useEffect(() => {
+    if (open) return
+    setExpandedIds([])
+  }, [open])
+
+  useEffect(() => {
     if (!open) return
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -110,12 +117,20 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
     }, 50)
   }, [])
 
-  const handleJump = (id: string) => {
+  const handleJump = (id: string, closeAfter = true) => {
     const target = document.getElementById(id)
     if (!target) return
     const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
     target.scrollIntoView({ behavior, block: 'start' })
-    setOpen(false)
+    if (closeAfter) setOpen(false)
+  }
+
+  const toggleExpanded = (id: Section['id']) => {
+    setExpandedIds(current =>
+      current.includes(id)
+        ? current.filter(sectionId => sectionId !== id)
+        : [...current, id],
+    )
   }
 
   return (
@@ -153,7 +168,7 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
             ref={panelRef}
             className="fixed right-0 top-0 h-dvh w-[min(320px,86vw)] border-l border-border/50 bg-background shadow-2xl"
           >
-            <div className="px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
+            <div className="flex h-dvh flex-col px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
               <div className="flex items-center justify-between py-4">
                 <div>
                   <h2 className="text-lg font-semibold">Chapters</h2>
@@ -170,23 +185,64 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
                   Close
                 </button>
               </div>
-              <nav className="mt-4 space-y-4">
+              <nav className="mt-4 flex-1 space-y-4 overflow-y-auto pb-6 pr-2 overscroll-contain">
                 {sections.map(section => (
-                  <button
-                    key={section.id}
-                    type="button"
-                    className={`text-left text-sm transition-colors ${
-                      activeId === section.id
-                        ? 'text-foreground'
-                        : 'text-muted-foreground'
-                    }`}
-                    onClick={() => handleJump(section.id)}
-                  >
-                    <div className="font-semibold">{section.tocLabel}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {section.tocDescription}
+                  <div key={section.id} className="space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <a
+                        href={`#${section.id}`}
+                        className={`block flex-1 text-left text-sm transition-colors ${
+                          activeId === section.id
+                            ? 'text-foreground'
+                            : 'text-muted-foreground'
+                        }`}
+                        onClick={() => handleJump(section.id, false)}
+                      >
+                        <div className="font-semibold">{section.tocLabel}</div>
+                        {section.tocDescription ? (
+                          <div className="text-xs text-muted-foreground">
+                            {section.tocDescription}
+                          </div>
+                        ) : null}
+                      </a>
+                      {section.subsections.length ? (
+                        <button
+                          type="button"
+                          className="flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground"
+                          aria-expanded={expandedIds.includes(section.id)}
+                          onClick={() => toggleExpanded(section.id)}
+                        >
+                          <ChevronRightIcon
+                            className={`h-3 w-3 transition-transform ${
+                              expandedIds.includes(section.id)
+                                ? 'rotate-90'
+                                : ''
+                            }`}
+                          />
+                          <span className="sr-only">
+                            {expandedIds.includes(section.id)
+                              ? 'Collapse'
+                              : 'Expand'}
+                          </span>
+                        </button>
+                      ) : null}
                     </div>
-                  </button>
+                    {section.subsections.length &&
+                    expandedIds.includes(section.id) ? (
+                      <div className="space-y-1 border-l border-border/60 pl-4">
+                        {section.subsections.map(subsection => (
+                          <a
+                            key={subsection.id}
+                            href={`#${subsection.id}`}
+                            className="block text-xs text-muted-foreground"
+                            onClick={() => handleJump(subsection.id)}
+                          >
+                            {subsection.title}
+                          </a>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
                 ))}
               </nav>
             </div>
@@ -200,18 +256,55 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
             <p className="text-xs uppercase tracking-widest">Chapters</p>
             <nav className="mt-4 space-y-3">
               {sections.map(section => (
-                <button
-                  key={section.id}
-                  type="button"
-                  onClick={() => handleJump(section.id)}
-                  className={`block text-left transition-colors ${
-                    activeId === section.id
-                      ? 'text-foreground'
-                      : 'text-muted-foreground'
-                  }`}
-                >
-                  {section.tocLabel}
-                </button>
+                <div key={section.id} className="space-y-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <a
+                      href={`#${section.id}`}
+                      onClick={() => handleJump(section.id, false)}
+                      className={`block text-left transition-colors ${
+                        activeId === section.id
+                          ? 'text-foreground'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      {section.tocLabel}
+                    </a>
+                    {section.subsections.length ? (
+                      <button
+                        type="button"
+                        className="flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground"
+                        aria-expanded={expandedIds.includes(section.id)}
+                        onClick={() => toggleExpanded(section.id)}
+                      >
+                        <ChevronRightIcon
+                          className={`h-3 w-3 transition-transform ${
+                            expandedIds.includes(section.id) ? 'rotate-90' : ''
+                          }`}
+                        />
+                        <span className="sr-only">
+                          {expandedIds.includes(section.id)
+                            ? 'Collapse'
+                            : 'Expand'}
+                        </span>
+                      </button>
+                    ) : null}
+                  </div>
+                  {section.subsections.length &&
+                  expandedIds.includes(section.id) ? (
+                    <div className="space-y-1 border-l border-border/60 pl-3">
+                      {section.subsections.map(subsection => (
+                        <a
+                          key={subsection.id}
+                          href={`#${subsection.id}`}
+                          onClick={() => handleJump(subsection.id)}
+                          className="block text-xs text-muted-foreground"
+                        >
+                          {subsection.title}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               ))}
             </nav>
           </div>

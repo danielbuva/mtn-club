@@ -1,6 +1,6 @@
-import { sections } from '@/app/(reader)/get-started/sections'
-import { ChaptersDrawer } from '@/components/get-started/ChaptersDrawer'
-import { StickyChapter } from '@/components/get-started/StickyChapter'
+import { sections } from '@/app/(reader)/starter-guide/sections'
+import { ChaptersDrawer } from '@/components/starter-guide/ChaptersDrawer'
+import { StickyChapter } from '@/components/starter-guide/StickyChapter'
 
 export default function GetStartedPage() {
   return (
