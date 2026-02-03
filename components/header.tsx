@@ -39,7 +39,7 @@ import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/starter-guide', label: 'Get Started' },
+  { href: '/start-here', label: 'Get Started' },
   { href: '/team', label: 'Team' },
   { href: '/about', label: 'About' },
 ]

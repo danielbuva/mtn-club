@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { Section } from '@/app/(reader)/starter-guide/sections'
+import type { Section } from '@/app/(reader)/start-here/sections'
 import { Button } from '@/components/ui/button'
 
 const HEADER_OFFSET = 72

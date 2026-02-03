@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import type { Section } from '@/app/(reader)/starter-guide/sections'
-import { HeroMedia } from '@/components/starter-guide/HeroMedia'
-import { InsetPanel } from '@/components/starter-guide/InsetPanel'
-import { PullQuote } from '@/components/starter-guide/PullQuote'
+import type { Section } from '@/app/(reader)/start-here/sections'
+import { HeroMedia } from '@/components/start-here/HeroMedia'
+import { InsetPanel } from '@/components/start-here/InsetPanel'
+import { PullQuote } from '@/components/start-here/PullQuote'
 
 const scrollMarginClass = 'scroll-mt-12 md:scroll-mt-16'
 

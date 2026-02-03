@@ -48,10 +48,10 @@ export default function HomeCover() {
               className="relative space-y-3 sm:space-y-3 py-1"
             >
               <Link
-                href="/starter-guide"
+                href="/start-here"
                 className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
-                Starter Guide →
+                Start Here →
               </Link>
               <Link
                 href="/photos"

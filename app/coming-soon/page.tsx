@@ -57,7 +57,7 @@ async function ComingSoonContent({ searchParams }: ComingSoonPageProps) {
           <Link href="/membership">Go to Membership</Link>
         </Button>
         <Button variant="secondary" asChild className="rounded-xl">
-          <Link href="/starter-guide">Get Started</Link>
+          <Link href="/start-here">Get Started</Link>
         </Button>
         <Button variant="ghost" asChild className="rounded-xl">
           <Link href="/about">About</Link>

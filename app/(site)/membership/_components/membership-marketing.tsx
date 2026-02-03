@@ -17,7 +17,7 @@ export function MembershipMarketing() {
       <div className="px-4">
         <div className="max-w-4xl mx-auto text-sm text-muted-foreground">
           New here? Start with{' '}
-          <Link className="text-primary hover:underline" href="/starter-guide">
+          <Link className="text-primary hover:underline" href="/start-here">
             Get Started
           </Link>
           .

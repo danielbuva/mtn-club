@@ -4,7 +4,7 @@ import { updateSession } from '@/lib/supabase/proxy'
 import { isPaymentsOnlyMode } from '@/src/lib/releaseMode'
 
 const publicPrefixes = [
-  '/starter-guide',
+  '/start-here',
   '/membership',
   '/about',
   '/team',

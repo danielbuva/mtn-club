@@ -61,7 +61,7 @@ export default function TeamPage() {
                 <Link href="/membership">Become a member</Link>
               </Button>
               <Button variant="secondary" asChild className="rounded-xl">
-                <Link href="/starter-guide">Get started</Link>
+                <Link href="/start-here">Get started</Link>
               </Button>
             </div>
           </div>
