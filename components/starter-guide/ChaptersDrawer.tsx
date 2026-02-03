@@ -36,31 +36,46 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
   )
 
   useEffect(() => {
-    const elements = ids
-      .map(id => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el))
+    if (typeof window === 'undefined') return
 
-    if (!elements.length) return
+    let ticking = false
 
-    const observer = new IntersectionObserver(
-      entries => {
-        const visible = entries
-          .filter(entry => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible[0]?.target) {
-          const { id } = visible[0].target
-          if (isSectionId(id)) setActiveId(id)
-        }
-      },
-      {
-        rootMargin: `-${HEADER_OFFSET}px 0px -55% 0px`,
-        threshold: [0.35, 0.6, 0.9],
-      },
-    )
+    const updateActive = () => {
+      const candidates = ids
+        .map(id => {
+          const element = document.getElementById(id)
+          if (!element) return null
+          const rect = element.getBoundingClientRect()
+          if (rect.bottom <= HEADER_OFFSET) return null
+          return { id, distance: Math.abs(rect.top - HEADER_OFFSET) }
+        })
+        .filter((value): value is { id: Section['id']; distance: number } =>
+          Boolean(value),
+        )
 
-    elements.forEach(el => observer.observe(el))
+      if (!candidates.length) return
+      candidates.sort((a, b) => a.distance - b.distance)
+      const nextId = candidates[0]?.id
+      if (nextId && isSectionId(nextId)) setActiveId(nextId)
+    }
 
-    return () => observer.disconnect()
+    const handleScroll = () => {
+      if (ticking) return
+      ticking = true
+      window.requestAnimationFrame(() => {
+        updateActive()
+        ticking = false
+      })
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [ids, isSectionId])
 
   useEffect(() => {
@@ -189,14 +204,17 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
                 {sections.map(section => (
                   <div key={section.id} className="space-y-2">
                     <div className="flex items-start justify-between gap-3">
-                      <a
-                        href={`#${section.id}`}
+                      <button
+                        type="button"
                         className={`block flex-1 text-left text-sm transition-colors ${
                           activeId === section.id
                             ? 'text-foreground'
                             : 'text-muted-foreground'
                         }`}
-                        onClick={() => handleJump(section.id, false)}
+                        onClick={() => {
+                          handleJump(section.id, false)
+                          toggleExpanded(section.id)
+                        }}
                       >
                         <div className="font-semibold">{section.tocLabel}</div>
                         {section.tocDescription ? (
@@ -204,7 +222,7 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
                             {section.tocDescription}
                           </div>
                         ) : null}
-                      </a>
+                      </button>
                       {section.subsections.length ? (
                         <button
                           type="button"
@@ -231,14 +249,14 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
                     expandedIds.includes(section.id) ? (
                       <div className="space-y-1 border-l border-border/60 pl-4">
                         {section.subsections.map(subsection => (
-                          <a
+                          <button
                             key={subsection.id}
-                            href={`#${subsection.id}`}
-                            className="block text-xs text-muted-foreground"
+                            type="button"
+                            className="block text-left text-xs text-muted-foreground"
                             onClick={() => handleJump(subsection.id)}
                           >
                             {subsection.title}
-                          </a>
+                          </button>
                         ))}
                       </div>
                     ) : null}
@@ -258,9 +276,12 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
               {sections.map(section => (
                 <div key={section.id} className="space-y-1">
                   <div className="flex items-start justify-between gap-3">
-                    <a
-                      href={`#${section.id}`}
-                      onClick={() => handleJump(section.id, false)}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleJump(section.id, false)
+                        toggleExpanded(section.id)
+                      }}
                       className={`block text-left transition-colors ${
                         activeId === section.id
                           ? 'text-foreground'
@@ -268,7 +289,7 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
                       }`}
                     >
                       {section.tocLabel}
-                    </a>
+                    </button>
                     {section.subsections.length ? (
                       <button
                         type="button"
@@ -293,14 +314,14 @@ export function ChaptersDrawer({ sections }: ChaptersDrawerProps) {
                   expandedIds.includes(section.id) ? (
                     <div className="space-y-1 border-l border-border/60 pl-3">
                       {section.subsections.map(subsection => (
-                        <a
+                        <button
                           key={subsection.id}
-                          href={`#${subsection.id}`}
+                          type="button"
                           onClick={() => handleJump(subsection.id)}
-                          className="block text-xs text-muted-foreground"
+                          className="block text-left text-xs text-muted-foreground"
                         >
                           {subsection.title}
-                        </a>
+                        </button>
                       ))}
                     </div>
                   ) : null}

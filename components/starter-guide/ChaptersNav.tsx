@@ -181,14 +181,17 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
                   {sections.map(section => (
                     <div key={section.id} className="space-y-2">
                       <div className="flex items-start justify-between gap-3">
-                        <a
-                          href={`#${section.id}`}
+                        <button
+                          type="button"
                           className={`block flex-1 text-left text-sm transition-colors ${
                             activeId === section.id
                               ? 'text-foreground'
                               : 'text-muted-foreground'
                           }`}
-                          onClick={() => handleJump(section.id, false)}
+                          onClick={() => {
+                            handleJump(section.id, false)
+                            toggleExpanded(section.id)
+                          }}
                         >
                           <div className="font-semibold">
                             {section.tocLabel}
@@ -198,7 +201,7 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
                               {section.tocDescription}
                             </div>
                           ) : null}
-                        </a>
+                        </button>
                         {section.subsections.length ? (
                           <button
                             type="button"
@@ -225,14 +228,14 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
                       expandedIds.includes(section.id) ? (
                         <div className="space-y-1 border-l border-border/60 pl-4">
                           {section.subsections.map(subsection => (
-                            <a
+                            <button
                               key={subsection.id}
-                              href={`#${subsection.id}`}
-                              className="block text-xs text-muted-foreground"
+                              type="button"
+                              className="block text-left text-xs text-muted-foreground"
                               onClick={() => handleJump(subsection.id)}
                             >
                               {subsection.title}
-                            </a>
+                            </button>
                           ))}
                         </div>
                       ) : null}
@@ -262,9 +265,12 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
             {sections.map(section => (
               <div key={section.id} className="space-y-1">
                 <div className="flex items-start justify-between gap-3">
-                  <a
-                    href={`#${section.id}`}
-                    onClick={() => handleJump(section.id, false)}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleJump(section.id, false)
+                      toggleExpanded(section.id)
+                    }}
                     className={`block text-left text-sm transition-colors ${
                       activeId === section.id
                         ? 'text-foreground'
@@ -272,7 +278,7 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
                     }`}
                   >
                     {section.tocLabel}
-                  </a>
+                  </button>
                   {section.subsections.length ? (
                     <button
                       type="button"
@@ -297,14 +303,14 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
                 expandedIds.includes(section.id) ? (
                   <div className="space-y-1 border-l border-border/60 pl-3">
                     {section.subsections.map(subsection => (
-                      <a
+                      <button
                         key={subsection.id}
-                        href={`#${subsection.id}`}
+                        type="button"
                         onClick={() => handleJump(subsection.id)}
-                        className="block text-xs text-muted-foreground"
+                        className="block text-left text-xs text-muted-foreground"
                       >
                         {subsection.title}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 ) : null}
