@@ -17,6 +17,8 @@ const frameStyle = {
   left: 'calc(var(--frame-padding) + env(safe-area-inset-left))',
 } as const
 
+const DISCORD_INVITE_LINK = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL
+
 export default function HomeCover() {
   const transitionDurationMs = 500
 
@@ -59,17 +61,21 @@ export default function HomeCover() {
               >
                 Trips and Photos →
               </Link>
-              <Link
-                href="/activities"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
-              >
-                Activities →
-              </Link>
+              {DISCORD_INVITE_LINK && (
+                <Link
+                  href={DISCORD_INVITE_LINK}
+                  className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    Join Discord →
+                  </span>
+                </Link>
+              )}
               <Link
                 href="/join"
                 className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
-                Join →
+                Become a Member →
               </Link>
             </nav>
           </div>
