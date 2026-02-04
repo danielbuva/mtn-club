@@ -13,13 +13,13 @@ export function GuideCtas({ links, className }: GuideCtasProps) {
 
   return (
     <div
-      className={cn('mt-6 md:mt-8 flex flex-col items-end gap-2', className)}
+      className={cn('mt-6 md:mt-8 flex flex-col items-end gap-4', className)}
     >
       {visibleLinks.map(link => (
         <Link
           key={link.href}
           href={link.href}
-          className="text-sm text-foreground/80 transition hover:text-foreground text-right"
+          className="text-base sm:text-xl md:text-2xl font-normal tracking-wide text-foreground/90 transition [text-shadow:0_1px_8px_rgba(0,0,0,0.12)] active:translate-x-0.5 active:opacity-75 text-right"
         >
           {link.label}
         </Link>
