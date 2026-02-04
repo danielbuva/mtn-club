@@ -5,6 +5,11 @@ import { isPaymentsOnlyMode } from '@/src/lib/releaseMode'
 
 const publicPrefixes = [
   '/start-here',
+  '/gear',
+  '/cost',
+  '/safety',
+  '/faq',
+  '/trips',
   '/membership',
   '/about',
   '/team',

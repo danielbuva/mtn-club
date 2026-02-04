@@ -103,7 +103,7 @@ export function TOC({ sections }: TocProps) {
 
   return (
     <>
-      {/* Mobile Chapters button */}
+      {/* Mobile Sections button */}
       <div className="md:hidden sticky top-16 z-40 flex justify-end px-4">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
@@ -111,14 +111,14 @@ export function TOC({ sections }: TocProps) {
               variant="secondary"
               className="rounded-full shadow-sm"
               aria-expanded={isOpen}
-              aria-controls="chapters-drawer"
+              aria-controls="sections-drawer"
             >
-              Chapters
+              Sections
             </Button>
           </SheetTrigger>
           <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto">
             <SheetHeader>
-              <SheetTitle id="chapters-drawer">Chapters</SheetTitle>
+              <SheetTitle id="sections-drawer">Sections</SheetTitle>
             </SheetHeader>
             <div className="mt-6 space-y-4">
               {sections.map(section => (
@@ -186,7 +186,7 @@ export function TOC({ sections }: TocProps) {
         <div className="sticky top-24">
           <div className="rounded-2xl border border-border/60 bg-background/70 p-4 backdrop-blur">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
-              Chapters
+              Sections
             </p>
             <nav className="mt-4 space-y-3">
               {sections.map(section => (

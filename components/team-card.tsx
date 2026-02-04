@@ -2,6 +2,7 @@ import { Instagram, Mail, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { INSTAGRAM_URL } from '@/lib/constants'
 import type { TeamMember } from '@/lib/data'
 
 interface TeamCardProps {
@@ -52,7 +53,7 @@ export function TeamCard({ member }: TeamCardProps) {
                 asChild
               >
                 <a
-                  href={`https://instagram.com/${member.social.instagram.replace('@', '')}`}
+                  href={INSTAGRAM_URL || 'https://instagram.com'}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Follow ${member.name} on Instagram`}

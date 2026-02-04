@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { MemberCTA } from '@/components/member-cta'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { DISCORD_INVITE_URL, INSTAGRAM_URL } from '@/lib/constants'
 
 export function Footer() {
   return (
@@ -33,7 +34,7 @@ export function Footer() {
                 asChild
               >
                 <a
-                  href="https://instagram.com"
+                  href={INSTAGRAM_URL || 'https://instagram.com'}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
@@ -48,7 +49,7 @@ export function Footer() {
                 asChild
               >
                 <a
-                  href="https://discord.gg/tcrxSQB4"
+                  href={DISCORD_INVITE_URL || 'https://discord.gg'}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Discord"

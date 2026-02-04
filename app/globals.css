@@ -231,6 +231,16 @@
     position: relative;
     z-index: 1;
   }
+
+  html[data-sections-drawer-open="true"] body::before {
+    opacity: 0;
+  }
+
+  html[data-sections-drawer-open="true"] [data-guide-scroll] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+  }
   .dark body {
     background-image: radial-gradient(
       circle at 1px 1px,

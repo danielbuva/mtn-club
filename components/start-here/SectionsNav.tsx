@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 
 const HEADER_OFFSET = 72
 
-type ChaptersNavProps = {
+type SectionsNavProps = {
   sections: Section[]
   variant: 'mobile' | 'desktop'
 }
@@ -17,7 +17,7 @@ const prefersReducedMotion = () =>
   window.matchMedia &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
+export function SectionsNav({ sections, variant }: SectionsNavProps) {
   const [activeId, setActiveId] = useState(sections[0]?.id ?? '')
   const [open, setOpen] = useState(false)
   const [expandedIds, setExpandedIds] = useState<Section['id'][]>([])
@@ -136,10 +136,10 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
             variant="secondary"
             className="rounded-full shadow-sm"
             aria-expanded={open}
-            aria-controls="chapters-drawer"
+            aria-controls="sections-drawer"
             onClick={() => setOpen(true)}
           >
-            Chapters
+            Sections
           </Button>
         </div>
 
@@ -147,12 +147,12 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
           <div
             role="dialog"
             aria-modal="true"
-            id="chapters-drawer"
+            id="sections-drawer"
             className="fixed inset-0 z-50"
           >
             <button
               type="button"
-              aria-label="Close chapters drawer"
+              aria-label="Close sections drawer"
               className="absolute inset-0 bg-black/20"
               onClick={() => setOpen(false)}
             />
@@ -163,7 +163,7 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
               <div className="relative flex h-dvh flex-col px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
                 <div className="flex items-center justify-between py-4">
                   <div>
-                    <h2 className="text-lg font-semibold">Chapters</h2>
+                    <h2 className="text-lg font-semibold">Sections</h2>
                     <p className="text-xs text-muted-foreground">
                       Jump to a section
                     </p>
@@ -259,7 +259,7 @@ export function ChaptersNav({ sections, variant }: ChaptersNavProps) {
       <div className="sticky top-24">
         <div className="rounded-2xl border border-border/60 bg-background/70 p-4 backdrop-blur">
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            Chapters
+            Sections
           </p>
           <nav className="mt-4 space-y-3">
             {sections.map(section => (
