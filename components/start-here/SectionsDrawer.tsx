@@ -101,11 +101,6 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
   }, [open])
 
   useEffect(() => {
-    if (open) return
-    setExpandedIds([])
-  }, [open])
-
-  useEffect(() => {
     if (!open) return
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -168,10 +163,14 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
   const handleSectionClick = (section: GuideSection) => {
     if (section.subsections?.length) {
       const isExpanded = expandedIds.includes(section.id)
+      handleJump(section.id, false)
       if (!isExpanded) {
-        handleJump(section.id, false)
+        toggleExpanded(section.id)
+        return
       }
-      toggleExpanded(section.id)
+      if (activeId === section.id) {
+        toggleExpanded(section.id)
+      }
       return
     }
     handleJump(section.id, false)
@@ -197,31 +196,36 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
         </Button>
       </div>
 
-      <AnimatePresence>
+      <AnimatePresence initial={false} mode="wait">
         {open ? (
-          <motion.div
+          <div
             role="dialog"
             aria-modal="true"
             id="sections-drawer"
             className="fixed inset-0 z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
           >
-            <button
+            <motion.button
               type="button"
               aria-label="Close sections drawer"
               className="absolute inset-0 border-0 bg-transparent p-0"
               onClick={() => setOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12 }}
             />
             <motion.div
               ref={panelRef}
               className="absolute right-0 top-0 h-dvh w-[min(320px,86vw)] border-l border-border/50 bg-background shadow-2xl"
               initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 420, damping: 40 }}
+              animate={{
+                x: 0,
+                transition: { type: 'spring', stiffness: 420, damping: 40 },
+              }}
+              exit={{
+                x: '100%',
+                transition: { duration: 0.18, ease: 'easeOut' },
+              }}
             >
               <div className="flex h-dvh flex-col px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
                 <div className="flex items-center justify-between py-4">
@@ -232,7 +236,8 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                     </p>
                   </div>
                 </div>
-                <nav className="mt-2 flex-1 space-y-4 overflow-y-auto pb-6 pr-2 overscroll-contain">
+                <div className="h-20" aria-hidden="true" />
+                <nav className="max-h-[70vh] space-y-4 overflow-y-auto pb-42 pr-2 overscroll-contain">
                   {tocSections.map(section => (
                     <div key={section.id} className="space-y-2">
                       <div className="flex items-start justify-between gap-3">
@@ -284,7 +289,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                               key={subsection.id}
                               type="button"
                               className="block text-left text-xs text-muted-foreground"
-                              onClick={() => handleJump(subsection.id)}
+                              onClick={() => handleJump(section.id, false)}
                             >
                               {subsection.title}
                             </button>
@@ -296,15 +301,23 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                 </nav>
               </div>
             </motion.div>
-            <button
-              ref={closeButtonRef}
-              type="button"
-              className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 text-sm text-muted-foreground"
-              onClick={() => setOpen(false)}
+            <motion.div
+              className="fixed inset-x-0 bottom-4 z-50 flex justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12 }}
             >
-              Close
-            </button>
-          </motion.div>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                className="px-10 py-4 text-sm text-muted-foreground"
+                onClick={() => setOpen(false)}
+              >
+                Close
+              </button>
+            </motion.div>
+          </div>
         ) : null}
       </AnimatePresence>
 
