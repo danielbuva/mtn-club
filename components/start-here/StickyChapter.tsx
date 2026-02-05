@@ -108,7 +108,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
               key={blockKey(block)}
               className="text-sm md:text-base leading-7 text-muted-foreground max-w-prose"
             >
-              <span className="flex flex-wrap gap-x-1 gap-y-0.5">
+              <span className="whitespace-pre-wrap">
                 {renderInlineParts(block.parts)}
               </span>
             </p>
@@ -141,7 +141,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
                   className="flex gap-2"
                 >
                   <span className="text-primary">•</span>
-                  <span className="flex flex-wrap gap-x-1 gap-y-0.5">
+                  <span className="whitespace-pre-wrap">
                     {renderInlineParts(parts)}
                   </span>
                 </li>
@@ -180,7 +180,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
                   <span className="text-primary tabular-nums">
                     {itemIndex + 1}.
                   </span>
-                  <span className="flex flex-wrap gap-x-1 gap-y-0.5">
+                  <span className="whitespace-pre-wrap">
                     {renderInlineParts(parts)}
                   </span>
                 </li>

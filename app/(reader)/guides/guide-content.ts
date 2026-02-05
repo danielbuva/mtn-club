@@ -57,7 +57,7 @@ export const startHereSections: GuideSection[] = [
           },
           {
             link: {
-              label: '(Read more about safety & expectations.)',
+              label: '(Read more about safety & expectations)',
               href: '/safety',
             },
           },
