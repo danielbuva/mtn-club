@@ -2,6 +2,7 @@
 
 import { ChevronRightIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
+import type { RefObject } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { GuideSection } from '@/app/(reader)/guides/types'
 import { BackButton } from '@/components/back-button'
@@ -18,93 +19,93 @@ const prefersReducedMotion = () =>
   window.matchMedia &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export function SectionsDrawer({ sections }: SectionsDrawerProps) {
-  const firstTocId = sections.find(section => !section.hideInToc)?.id ?? ''
-  const [activeId, setActiveId] = useState<GuideSection['id']>(firstTocId)
-  const [open, setOpen] = useState(false)
-  const [expandedIds, setExpandedIds] = useState<GuideSection['id'][]>([])
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
-  const panelRef = useRef<HTMLDivElement | null>(null)
+const useTocSections = (sections: GuideSection[]) =>
+  useMemo(() => sections.filter(section => !section.hideInToc), [sections])
 
-  const tocSections = useMemo(
-    () => sections.filter(section => !section.hideInToc),
-    [sections],
-  )
-  const ids = useMemo(
-    () => tocSections.map(section => section.id),
-    [tocSections],
-  )
-  const isSectionId = useCallback(
-    (id: string): id is GuideSection['id'] =>
-      ids.includes(id as GuideSection['id']),
-    [ids],
-  )
-
+const useInitialHashScroll = () => {
   useEffect(() => {
     if (typeof window === 'undefined') return
+    if (!window.location.hash) return
+
+    const id = window.location.hash.replace('#', '')
+    const target = document.getElementById(id)
+    if (!target) return
+
+    const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
+    window.setTimeout(() => {
+      target.scrollIntoView({ behavior, block: 'start' })
+    }, 50)
+  }, [])
+}
+
+const useScrollSpy = (ids: GuideSection['id'][]) => {
+  const [activeId, setActiveId] = useState<GuideSection['id']>(ids[0] ?? '')
+
+  useEffect(() => {
+    if (!ids.length || typeof window === 'undefined') return
+    setActiveId(current => (ids.includes(current) ? current : (ids[0] ?? '')))
+  }, [ids])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || ids.length === 0) return
+
+    let rafId: number | null = null
 
     const updateActive = () => {
-      const lastSectionId = tocSections[tocSections.length - 1]?.id
-      const nearBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 2
-      if (nearBottom && lastSectionId) {
-        if (isSectionId(lastSectionId)) setActiveId(lastSectionId)
-        return
+      rafId = null
+
+      let bestId: GuideSection['id'] | null = null
+      let bestDist = Number.POSITIVE_INFINITY
+
+      for (const id of ids) {
+        const element = document.getElementById(id)
+        if (!element) continue
+        const rect = element.getBoundingClientRect()
+        const dist = Math.abs(rect.top - HEADER_OFFSET)
+        if (dist < bestDist) {
+          bestDist = dist
+          bestId = id as GuideSection['id']
+        }
       }
 
-      const candidates = ids
-        .map(id => {
-          const element = document.getElementById(id)
-          if (!element) return null
-          const rect = element.getBoundingClientRect()
-          if (rect.bottom <= HEADER_OFFSET) return null
-          return { id, distance: Math.abs(rect.top - HEADER_OFFSET) }
-        })
-        .filter(
-          (value): value is { id: GuideSection['id']; distance: number } =>
-            Boolean(value),
-        )
-
-      if (!candidates.length) return
-      candidates.sort((a, b) => a.distance - b.distance)
-      const nextId = candidates[0]?.id
-      if (nextId && isSectionId(nextId)) setActiveId(nextId)
+      if (bestId) {
+        setActiveId(current => (current === bestId ? current : bestId))
+      }
     }
 
-    const handleScroll = () => {
-      updateActive()
+    const onScroll = () => {
+      if (rafId != null) return
+      rafId = window.requestAnimationFrame(updateActive)
     }
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('touchmove', handleScroll, { passive: true })
-    window.addEventListener('touchend', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('touchmove', handleScroll)
-      window.removeEventListener('touchend', handleScroll)
-      window.removeEventListener('resize', handleScroll)
+      if (rafId != null) window.cancelAnimationFrame(rafId)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
     }
-  }, [
-    ids,
-    isSectionId,
-    tocSections.length,
-    tocSections[tocSections.length - 1]?.id,
-  ])
+  }, [ids])
 
+  return activeId
+}
+
+const useDrawerFocusTrap = (
+  open: boolean,
+  panelRef: RefObject<HTMLDivElement | null>,
+  closeButtonRef: RefObject<HTMLButtonElement | null>,
+  openerRef: RefObject<HTMLElement | null>,
+  onClose: () => void,
+) => {
   useEffect(() => {
     if (!open) return
     closeButtonRef.current?.focus()
-  }, [open])
 
-  useEffect(() => {
-    if (!open) return
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setOpen(false)
+        onClose()
         return
       }
       if (event.key !== 'Tab') return
@@ -128,20 +129,56 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [open])
+  }, [closeButtonRef, onClose, open, panelRef])
+
+  useEffect(() => {
+    if (open) return
+    openerRef.current?.focus()
+  }, [open, openerRef])
+}
+
+export function SectionsDrawer({ sections }: SectionsDrawerProps) {
+  const [open, setOpen] = useState(false)
+  const [expandedIds, setExpandedIds] = useState<GuideSection['id'][]>([])
+  const [hideFab, setHideFab] = useState(false)
+  const highlightTimerRef = useRef<number | null>(null)
+  const highlightRafRef = useRef<number | null>(null)
+  const lastClickRef = useRef<GuideSection['id'] | null>(null)
+  const openerRef = useRef<HTMLElement | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
+  const panelRef = useRef<HTMLDivElement | null>(null)
+  const scrollHideTimerRef = useRef<number | null>(null)
+
+  const tocSections = useTocSections(sections)
+  const ids = useMemo(
+    () => tocSections.map(section => section.id),
+    [tocSections],
+  )
+  const activeId = useScrollSpy(ids)
+  const handleClose = useCallback(() => setOpen(false), [])
+  useDrawerFocusTrap(open, panelRef, closeButtonRef, openerRef, handleClose)
+  useInitialHashScroll()
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (!window.location.hash) return
 
-    const id = window.location.hash.replace('#', '')
-    const target = document.getElementById(id)
-    if (!target) return
+    const onScroll = () => {
+      setHideFab(true)
+      if (scrollHideTimerRef.current) {
+        window.clearTimeout(scrollHideTimerRef.current)
+      }
+      scrollHideTimerRef.current = window.setTimeout(() => {
+        setHideFab(false)
+      }, 180)
+    }
 
-    const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
-    window.setTimeout(() => {
-      target.scrollIntoView({ behavior, block: 'start' })
-    }, 50)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (scrollHideTimerRef.current) {
+        window.clearTimeout(scrollHideTimerRef.current)
+      }
+    }
   }, [])
 
   const handleJump = (id: string, closeAfter = true) => {
@@ -160,7 +197,34 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
     )
   }
 
+  const triggerHighlight = useCallback((id: GuideSection['id']) => {
+    if (highlightTimerRef.current) {
+      window.clearTimeout(highlightTimerRef.current)
+    }
+    if (highlightRafRef.current) {
+      window.cancelAnimationFrame(highlightRafRef.current)
+    }
+    highlightRafRef.current = window.requestAnimationFrame(() => {
+      const safeId =
+        typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(id) : id
+      const target = document.querySelector<HTMLElement>(
+        `[data-guide-highlight="${safeId}"]`,
+      )
+      if (!target) return
+      target.classList.remove('guide-highlight')
+      void target.offsetWidth
+      target.classList.add('guide-highlight')
+      highlightTimerRef.current = window.setTimeout(() => {
+        target.classList.remove('guide-highlight')
+      }, 700)
+    })
+  }, [])
+
   const handleSectionClick = (section: GuideSection) => {
+    if (lastClickRef.current === section.id) {
+      triggerHighlight(section.id)
+    }
+    lastClickRef.current = section.id
     if (section.subsections?.length) {
       const isExpanded = expandedIds.includes(section.id)
       handleJump(section.id, false)
@@ -176,6 +240,17 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
     handleJump(section.id, false)
   }
 
+  useEffect(() => {
+    return () => {
+      if (highlightTimerRef.current) {
+        window.clearTimeout(highlightTimerRef.current)
+      }
+      if (highlightRafRef.current) {
+        window.cancelAnimationFrame(highlightRafRef.current)
+      }
+    }
+  }, [])
+
   return (
     <>
       <div className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between border-b border-border/50 bg-background/80 px-4 py-3 text-xs text-muted-foreground backdrop-blur">
@@ -183,24 +258,38 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
         <div aria-hidden="true" />
       </div>
 
-      <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 md:hidden">
-        <Button
-          variant="secondary"
-          size="sm"
-          className="rounded-full"
-          aria-expanded={open}
-          aria-controls="sections-drawer"
-          onClick={() => setOpen(true)}
-        >
-          Sections
-        </Button>
-      </div>
+      <AnimatePresence>
+        {!hideFab ? (
+          <motion.div
+            className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 md:hidden"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+          >
+            <Button
+              variant="secondary"
+              size="sm"
+              className="rounded-full"
+              aria-expanded={open}
+              aria-controls="sections-drawer"
+              onClick={event => {
+                openerRef.current = event.currentTarget
+                setOpen(true)
+              }}
+            >
+              Sections
+            </Button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <AnimatePresence initial={false} mode="wait">
         {open ? (
           <div
             role="dialog"
             aria-modal="true"
+            aria-labelledby="sections-drawer-title"
             id="sections-drawer"
             className="fixed inset-0 z-50"
           >
@@ -216,7 +305,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
             />
             <motion.div
               ref={panelRef}
-              className="absolute right-0 top-0 h-dvh w-[min(320px,86vw)] border-l border-border/50 bg-background shadow-2xl"
+              className="absolute right-0 top-0 h-dvh w-[min(300px,77vw)] border-l border-border/50 bg-background shadow-2xl"
               initial={{ x: '100%' }}
               animate={{
                 x: 0,
@@ -230,20 +319,25 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
               <div className="flex h-dvh flex-col px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
                 <div className="flex items-center justify-between py-4">
                   <div>
-                    <h2 className="text-lg font-semibold">Sections</h2>
+                    <h2
+                      id="sections-drawer-title"
+                      className="text-lg font-semibold"
+                    >
+                      Sections
+                    </h2>
                     <p className="text-xs text-muted-foreground">
                       Jump to a section
                     </p>
                   </div>
                 </div>
-                <div className="h-20" aria-hidden="true" />
+                <div className="h-36" aria-hidden="true" />
                 <nav className="max-h-[70vh] space-y-4 overflow-y-auto pb-42 pr-2 overscroll-contain">
                   {tocSections.map(section => (
                     <div key={section.id} className="space-y-2">
                       <div className="flex items-start justify-between gap-3">
                         <button
                           type="button"
-                          className={`block flex-1 text-left text-sm transition-colors ${
+                          className={`block flex-1 rounded-md text-left text-sm transition-colors ${
                             activeId === section.id
                               ? 'text-foreground'
                               : 'text-muted-foreground'
@@ -289,7 +383,11 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                               key={subsection.id}
                               type="button"
                               className="block text-left text-xs text-muted-foreground"
-                              onClick={() => handleJump(section.id, false)}
+                              onClick={() => {
+                                triggerHighlight(subsection.id)
+                                lastClickRef.current = subsection.id
+                                handleJump(section.id, false)
+                              }}
                             >
                               {subsection.title}
                             </button>
@@ -331,7 +429,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                   <button
                     type="button"
                     onClick={() => handleSectionClick(section)}
-                    className={`block text-left transition-colors ${
+                    className={`block rounded-md text-left transition-colors ${
                       activeId === section.id
                         ? 'text-foreground'
                         : 'text-muted-foreground'
@@ -366,7 +464,11 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                       <button
                         key={subsection.id}
                         type="button"
-                        onClick={() => handleJump(subsection.id)}
+                        onClick={() => {
+                          triggerHighlight(subsection.id)
+                          lastClickRef.current = subsection.id
+                          handleJump(section.id, false)
+                        }}
                         className="block text-left text-xs text-muted-foreground"
                       >
                         {subsection.title}

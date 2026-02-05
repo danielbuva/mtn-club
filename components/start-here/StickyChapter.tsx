@@ -9,7 +9,7 @@ type StickyChapterProps = {
   section: GuideSection
 }
 
-const subsectionScrollClass = 'scroll-mt-20 md:scroll-mt-24'
+const subsectionScrollClass = 'scroll-mt-20'
 
 export function StickyChapter({ section }: StickyChapterProps) {
   const blockKey = (block: GuideSection['blocks'][number]) => {
@@ -78,7 +78,10 @@ export function StickyChapter({ section }: StickyChapterProps) {
               id={subsection.id}
               className={`${subsectionScrollClass} space-y-2`}
             >
-              <h3 className="text-sm md:text-base font-semibold uppercase tracking-[0.12em] text-foreground/80">
+              <h3
+                data-guide-highlight={subsection.id}
+                className="text-sm md:text-base font-semibold uppercase tracking-[0.12em] text-foreground/80"
+              >
                 {subsection.title}
               </h3>
               <p className="text-sm md:text-base leading-7 text-muted-foreground/80 max-w-prose">
@@ -283,6 +286,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
           ) : null}
           {section.title ? (
             <h2
+              data-guide-highlight={section.id}
               className={
                 isCard
                   ? 'text-2xl md:text-3xl font-semibold'

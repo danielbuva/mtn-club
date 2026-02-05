@@ -193,6 +193,7 @@ export const startHereSections: GuideSection[] = [
   {
     id: 'next',
     title: 'Where to go next',
+    hideInToc: true,
     blocks: [],
     ctaLinks: [
       { label: 'Join Discord →', href: DISCORD_INVITE_URL },
@@ -582,6 +583,7 @@ export const faqSections: GuideSection[] = [
   {
     id: 'cta',
     title: 'Next steps',
+    hideInToc: true,
     blocks: [],
     ctaLinks: [
       { label: 'Join Discord →', href: DISCORD_INVITE_URL },

@@ -9,13 +9,18 @@ type GuideSectionProps = {
 export function GuideSection({ id, children, className }: GuideSectionProps) {
   return (
     <section
-      id={id}
       className={cn(
-        'scroll-mt-20 md:scroll-mt-24 py-12 md:py-20 border-t border-border/20 first:border-t-0',
+        'border-t border-border/20 first:border-t-0',
         className,
       )}
     >
-      {children}
+      <span
+        id={id}
+        data-toc-anchor=""
+        aria-hidden="true"
+        className="block h-px scroll-mt-20"
+      />
+      <div className="py-12 md:py-20">{children}</div>
     </section>
   )
 }
