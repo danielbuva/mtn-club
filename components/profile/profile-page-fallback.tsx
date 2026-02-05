@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 export function ProfilePageFallback() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <main className="flex-1 pt-16">
         <section className="py-12 px-4 bg-secondary/30 border-b border-border">
           <div className="max-w-4xl mx-auto space-y-3">

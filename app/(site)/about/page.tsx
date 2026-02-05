@@ -85,7 +85,7 @@ const steps = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <main className="flex-1 pt-16">
         {/* Hero Section */}
         <section className="relative h-[70vh] min-h-125 flex items-center justify-center overflow-hidden">

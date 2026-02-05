@@ -22,7 +22,7 @@ export function CalendarSkeleton({
   const days = Array.from({ length: 35 }, (_, index) => addDays(start, index))
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <main className="flex-1 pt-16">
         <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10 md:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">

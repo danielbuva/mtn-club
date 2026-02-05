@@ -15,7 +15,7 @@ type ComingSoonPageProps = {
 
 export default function ComingSoonPage({ searchParams }: ComingSoonPageProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <div className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between px-4 py-3 text-xs text-muted-foreground">
         <BackButton />
         <div aria-hidden="true" />

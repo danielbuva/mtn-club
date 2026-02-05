@@ -9,10 +9,7 @@ type GuideSectionProps = {
 export function GuideSection({ id, children, className }: GuideSectionProps) {
   return (
     <section
-      className={cn(
-        'border-t border-border/20 first:border-t-0',
-        className,
-      )}
+      className={cn('border-t border-border/20 first:border-t-0', className)}
     >
       <span
         id={id}

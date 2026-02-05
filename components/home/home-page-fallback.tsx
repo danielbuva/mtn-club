@@ -11,7 +11,7 @@ export function HomePageFallback() {
           </div>
         </section>
 
-        <div className="min-h-screen flex flex-col border-t border-border bg-background">
+        <div className="min-h-screen flex flex-col border-t border-border">
           <section className="py-24 px-4 sm:px-6 lg:px-8 flex-1">
             <div className="mx-auto max-w-3xl text-center space-y-6">
               <div className="h-16 w-16 rounded-2xl bg-muted/40 mx-auto animate-pulse" />

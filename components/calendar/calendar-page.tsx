@@ -17,7 +17,7 @@ export function CalendarPage({
   isLeader,
 }: CalendarPageProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <CalendarPageClient
         yearData={yearData}
         viewerKey={viewerKey}

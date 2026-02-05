@@ -7,7 +7,7 @@ export default async function MembershipPage() {
   const viewer = await getViewer()
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       {viewer.isMember ? (
         <MembershipActive viewer={viewer} />
       ) : viewer.isAuthenticated ? (
