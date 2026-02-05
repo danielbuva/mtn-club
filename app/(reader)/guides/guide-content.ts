@@ -168,6 +168,11 @@ export const startHereSections: GuideSection[] = [
         kind: 'note',
         text: 'Membership is not required to see if this is your thing.',
       },
+      {
+        kind: 'notice',
+        text: 'Our PayPal is down right now, so we are not accepting payments yet. If you want to join, email us and we will get you set up.',
+        email: 'unlvmountainclub@gmail.com',
+      },
     ],
     ctaLinks: [
       { label: 'Join Discord →', href: DISCORD_INVITE_URL },
@@ -196,7 +201,7 @@ export const startHereSections: GuideSection[] = [
     blocks: [],
     ctaLinks: [
       { label: 'Join Discord →', href: DISCORD_INVITE_URL },
-      { label: 'View trips →', href: '/trips' },
+      // { label: 'View trips →', href: '/trips' }, // coming soon
       { label: 'Gear & what to bring →', href: '/gear' },
       { label: 'Costs & dues →', href: '/cost' },
       { label: 'Safety & expectations →', href: '/safety' },
@@ -559,8 +564,13 @@ export const faqSections: GuideSection[] = [
           [{ text: 'Pay annual membership dues' }],
         ],
       },
+      {
+        kind: 'notice',
+        text: 'Our PayPal is down right now, so we are not accepting payments yet. If you want to join, email us and we will get you set up.',
+        email: 'unlvmountainclub@gmail.com',
+      },
     ],
-    ctaLinks: [{ label: 'Pay membership dues →', href: '/membership' }],
+    // ctaLinks: [{ label: 'Pay membership dues →', href: '/membership' }], // coming soon
   },
   {
     id: 'platforms',

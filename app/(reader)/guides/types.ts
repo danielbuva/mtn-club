@@ -17,6 +17,7 @@ export type GuideBlock =
   | { kind: 'numbered'; items: string[] }
   | { kind: 'numberedRich'; items: GuideInlinePart[][] }
   | { kind: 'note'; text: string }
+  | { kind: 'notice'; text: string; email: string }
   | { kind: 'qa'; items: Array<{ question: string; answer: string }> }
   | { kind: 'inset'; title: string; rows: { label: string; value: string }[] }
   | { kind: 'callout'; text: string }

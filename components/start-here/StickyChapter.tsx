@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { GuideInlinePart, GuideSection } from '@/app/(reader)/guides/types'
+import { CopyEmailButton } from '@/components/guides/CopyEmailButton'
 import { GuideCtas } from '@/components/guides/GuideCtas'
 import { GuideSection as GuideSectionWrapper } from '@/components/guides/GuideSection'
 import { InsetPanel } from '@/components/start-here/InsetPanel'
@@ -24,6 +25,8 @@ export function StickyChapter({ section }: StickyChapterProps) {
         return `numbered-${block.items.join('|')}`
       case 'note':
         return `note-${block.text}`
+      case 'notice':
+        return `notice-${block.text}-${block.email}`
       case 'qa':
         return `qa-${block.items.map(item => item.question).join('|')}`
       case 'inset':
@@ -196,6 +199,30 @@ export function StickyChapter({ section }: StickyChapterProps) {
             >
               {block.text}
             </p>
+          )
+        }
+        if (block.kind === 'notice') {
+          return (
+            <div
+              key={blockKey(block)}
+              className="max-w-prose rounded-2xl border border-border/60 bg-secondary/20 p-4 md:p-5"
+            >
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                Note
+              </p>
+              <p className="mt-2 text-sm md:text-base leading-7 text-foreground/90">
+                {block.text}
+              </p>
+              <div className="mt-3 flex items-center gap-2 text-sm text-foreground">
+                <a
+                  href={`mailto:${block.email}`}
+                  className="font-medium underline decoration-foreground/30 underline-offset-4 transition hover:text-foreground"
+                >
+                  {block.email}
+                </a>
+                <CopyEmailButton value={block.email} />
+              </div>
+            </div>
           )
         }
         if (block.kind === 'qa') {
