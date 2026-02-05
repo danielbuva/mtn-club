@@ -55,12 +55,9 @@ export default function HomeCover() {
               >
                 Start Here →
               </Link>
-              <Link
-                href="/photos"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
-              >
-                Trips and Photos →
-              </Link>
+              {/* <p className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
+                (coming soon) Trips and Photos →
+              </p> */}
               {DISCORD_INVITE_LINK && (
                 <Link
                   href={DISCORD_INVITE_LINK}

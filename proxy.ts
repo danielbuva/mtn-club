@@ -10,6 +10,7 @@ const publicPrefixes = [
   '/safety',
   '/faq',
   '/trips',
+  '/join',
   '/membership',
   '/about',
   '/team',
