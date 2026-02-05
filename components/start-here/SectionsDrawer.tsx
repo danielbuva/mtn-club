@@ -253,7 +253,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
 
   return (
     <>
-      <div className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between border-b border-border/50 bg-background/80 px-4 py-3 text-xs text-muted-foreground backdrop-blur">
+      <div className="fixed left-0 right-0 top-0 z-40 hidden items-center justify-between border-b border-border/50 bg-background/80 px-4 py-3 text-xs text-muted-foreground backdrop-blur md:flex">
         <BackButton />
         <div aria-hidden="true" />
       </div>
@@ -267,19 +267,24 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
             exit={{ opacity: 0, y: 6 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
-            <Button
-              variant="secondary"
-              size="sm"
-              className="rounded-full"
-              aria-expanded={open}
-              aria-controls="sections-drawer"
-              onClick={event => {
-                openerRef.current = event.currentTarget
-                setOpen(true)
-              }}
-            >
-              Sections
-            </Button>
+            <div className="relative flex items-center">
+              <div className="absolute right-full mr-3 rounded-full border border-border/50 bg-background/80 backdrop-blur">
+                <BackButton className="px-4 py-2 text-xs text-foreground/70 lowercase whitespace-nowrap" />
+              </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="rounded-full"
+                aria-expanded={open}
+                aria-controls="sections-drawer"
+                onClick={event => {
+                  openerRef.current = event.currentTarget
+                  setOpen(true)
+                }}
+              >
+                Sections
+              </Button>
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>
