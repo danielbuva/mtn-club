@@ -274,6 +274,15 @@
   display: none;
 }
 
+.toc-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.toc-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 @layer utilities {
   .guide-highlight {
     animation: guide-highlight-pulse 1.4s ease-out forwards;

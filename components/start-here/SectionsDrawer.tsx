@@ -3,13 +3,12 @@
 import { ChevronRightIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { RefObject } from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { GuideSection } from '@/app/(reader)/guides/types'
 import { BackButton } from '@/components/back-button'
 import { Button } from '@/components/ui/button'
 
 const HEADER_OFFSET = 72
-
 type SectionsDrawerProps = {
   sections: GuideSection[]
 }
@@ -18,9 +17,6 @@ const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-const useTocSections = (sections: GuideSection[]) =>
-  useMemo(() => sections.filter(section => !section.hideInToc), [sections])
 
 const useInitialHashScroll = () => {
   useEffect(() => {
@@ -53,6 +49,16 @@ const useScrollSpy = (ids: GuideSection['id'][]) => {
 
     const updateActive = () => {
       rafId = null
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight
+      ) {
+        const lastId = ids[ids.length - 1]
+        if (lastId) {
+          setActiveId(current => (current === lastId ? current : lastId))
+        }
+        return
+      }
 
       let bestId: GuideSection['id'] | null = null
       let bestDist = Number.POSITIVE_INFINITY
@@ -149,11 +155,11 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
   const panelRef = useRef<HTMLDivElement | null>(null)
   const scrollHideTimerRef = useRef<number | null>(null)
 
-  const tocSections = useTocSections(sections)
-  const ids = useMemo(
-    () => tocSections.map(section => section.id),
-    [tocSections],
-  )
+  const tocSections = sections.filter(section => {
+    const label = (section.tocLabel ?? section.title).trim()
+    return label.length > 0
+  })
+  const ids = tocSections.map(section => section.id)
   const activeId = useScrollSpy(ids)
   const handleClose = useCallback(() => setOpen(false), [])
   useDrawerFocusTrap(open, panelRef, closeButtonRef, openerRef, handleClose)
@@ -336,7 +342,10 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
                   </div>
                 </div>
                 <div className="h-36" aria-hidden="true" />
-                <nav className="max-h-[70vh] space-y-4 overflow-y-auto pb-42 pr-2 overscroll-contain">
+                <nav
+                  className="toc-scroll max-h-[70vh] space-y-4 overflow-y-auto pb-42 pr-2 overscroll-contain"
+                  style={{ overflowAnchor: 'none' }}
+                >
                   {tocSections.map(section => (
                     <div key={section.id} className="space-y-2">
                       <div className="flex items-start justify-between gap-3">
