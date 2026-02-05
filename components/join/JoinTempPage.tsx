@@ -28,6 +28,8 @@ export function JoinTempPage() {
                 Join{' '}
                 <Link
                   href={DISCORD_INVITE_URL}
+                  target="_blank"
+                  rel="noreferrer"
                   className="underline decoration-foreground/30 underline-offset-4 transition hover:text-foreground"
                 >
                   Discord
@@ -41,6 +43,8 @@ export function JoinTempPage() {
                 If you are a UNLV student, join us in the{' '}
                 <Link
                   href={INVOLVEMENT_CENTER_URL}
+                  target="_blank"
+                  rel="noreferrer"
                   className="underline decoration-foreground/30 underline-offset-4 transition hover:text-foreground"
                 >
                   Involvement Center
@@ -54,6 +58,8 @@ export function JoinTempPage() {
                 Follow{' '}
                 <Link
                   href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noreferrer"
                   className="underline decoration-foreground/30 underline-offset-4 transition hover:text-foreground"
                 >
                   Instagram

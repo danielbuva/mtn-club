@@ -51,11 +51,16 @@ export function StickyChapter({ section }: StickyChapterProps) {
               {part.link.label}
             </span>
           )
+        const isExternal =
+          part.link.href.startsWith('http://') ||
+          part.link.href.startsWith('https://')
         return (
           <Link
             key={`${part.link.href}-${partIndex}`}
             href={part.link.href}
             className="underline decoration-foreground/30 underline-offset-4 transition hover:text-foreground"
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noreferrer' : undefined}
           >
             {part.link.label}
           </Link>
