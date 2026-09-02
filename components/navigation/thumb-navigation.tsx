@@ -32,7 +32,7 @@ export function ThumbNavigationBar({
         className={cn(
           'pointer-events-auto flex min-h-12 items-center gap-1 rounded-full border p-1.5 backdrop-blur-md',
           tone === 'paper'
-            ? 'border-[#211D18]/20 bg-[#F8F1DF]/92 text-[#211D18]'
+            ? 'border-[color:color-mix(in_srgb,var(--editorial-ink)_20%,transparent)] bg-[color:color-mix(in_srgb,var(--editorial-page)_92%,transparent)] text-[color:var(--editorial-ink)]'
             : 'border-border/60 bg-background/90 text-foreground',
           className,
         )}
