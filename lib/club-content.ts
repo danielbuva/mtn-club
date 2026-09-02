@@ -15,7 +15,7 @@ export type FallTrip = {
 }
 
 export const WEEKLY_MEETUP_NOTE =
-  'Meetups: Tuesdays @ NCC · Thursdays @ UNLV Rock Wall.'
+  'Meetups: Tuesdays at 5 p.m. @ NCC · Thursdays at 5 p.m. @ UNLV Rock Wall.'
 
 export const FALL_2026_TRIPS: FallTrip[] = [
   {

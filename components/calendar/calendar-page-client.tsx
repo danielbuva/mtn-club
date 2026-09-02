@@ -444,16 +444,11 @@ export function CalendarPageClient({
               <h1 className="font-brand text-4xl uppercase leading-[0.92] sm:text-5xl">
                 Trip Calendar
               </h1>
-              <p className="mt-2 text-muted-foreground">
-                Browse adventures, reserve spots, and plan your season in one
-                view.
+              <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+                Official dates are public. Exact meetup points, requirements,
+                RSVPs, and schedule changes are announced in Discord.
               </p>
             </div>
-
-            <p className="max-w-md text-sm leading-6 text-muted-foreground">
-              Official dates are public. Exact meetup points, requirements,
-              RSVPs, and schedule changes are announced in Discord.
-            </p>
           </div>
         </section>
 

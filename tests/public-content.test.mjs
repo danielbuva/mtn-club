@@ -9,7 +9,7 @@ import {
 test('publishes weekly meetups as one compact note', () => {
   assert.equal(
     WEEKLY_MEETUP_NOTE,
-    'Meetups: Tuesdays @ NCC · Thursdays @ UNLV Rock Wall.',
+    'Meetups: Tuesdays at 5 p.m. @ NCC · Thursdays at 5 p.m. @ UNLV Rock Wall.',
   )
 })
 
