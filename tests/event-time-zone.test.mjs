@@ -5,10 +5,7 @@ import { formatDateOnly, formatTimeRange } from '../lib/events/formatters.ts'
 test('keeps late-afternoon Las Vegas events on their local calendar day', () => {
   const startsAt = new Date('2026-09-02T00:00:00.000Z')
 
-  assert.equal(
-    formatDateOnly(startsAt, 'America/Los_Angeles'),
-    '2026-09-01',
-  )
+  assert.equal(formatDateOnly(startsAt, 'America/Los_Angeles'), '2026-09-01')
 })
 
 test('formats weekly meetup times in the event time zone', () => {
@@ -25,8 +22,5 @@ test('formats weekly meetup times in the event time zone', () => {
 test('keeps an all-day event end on its Las Vegas date', () => {
   const endsAt = new Date('2026-09-07T06:59:59.000Z')
 
-  assert.equal(
-    formatDateOnly(endsAt, 'America/Los_Angeles'),
-    '2026-09-06',
-  )
+  assert.equal(formatDateOnly(endsAt, 'America/Los_Angeles'), '2026-09-06')
 })
