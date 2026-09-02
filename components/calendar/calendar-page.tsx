@@ -5,25 +5,22 @@ type CalendarPageProps = {
   yearData: CalendarYearData
   viewerKey: ViewerKey
   initialMonth: string
-  isMember: boolean
-  isLeader: boolean
 }
 
 export function CalendarPage({
   yearData,
   viewerKey,
   initialMonth,
-  isMember,
-  isLeader,
 }: CalendarPageProps) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div
+      data-calendar-page
+      className="min-h-screen flex flex-col bg-background text-foreground"
+    >
       <CalendarPageClient
         yearData={yearData}
         viewerKey={viewerKey}
         initialMonth={initialMonth}
-        isMember={isMember}
-        isLeader={isLeader}
       />
     </div>
   )

@@ -5,10 +5,13 @@ import { getTripCategories } from '@/components/calendar/calendar-categories'
 import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { formatDateRange } from '@/lib/events/formatters'
+import { formatDateRange, parseCalendarDate } from '@/lib/events/formatters'
 import type { CalendarTrip } from '@/lib/events/types'
 
-const difficultyColors: Record<CalendarTrip['difficulty'], string> = {
+const difficultyColors: Record<
+  NonNullable<CalendarTrip['difficulty']>,
+  string
+> = {
   Easy: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
   Moderate:
     'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
@@ -27,22 +30,22 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
 
   return (
     <Card
-      className="overflow-hidden cursor-pointer hover:border-primary/20 hover:shadow-lg transition-all"
+      className="overflow-hidden rounded-none cursor-pointer hover:border-primary/20 hover:shadow-lg transition-all"
       onClick={onClick}
     >
       <CardContent className="p-0">
         <div className="flex flex-col sm:flex-row">
           <div className="sm:w-32 p-4 bg-secondary flex flex-row sm:flex-col items-center justify-center gap-2 sm:gap-1 text-center shrink-0">
             <span className="text-sm text-muted-foreground">
-              {new Date(trip.dateStart).toLocaleDateString('en-US', {
+              {parseCalendarDate(trip.dateStart).toLocaleDateString('en-US', {
                 month: 'short',
               })}
             </span>
             <span className="text-3xl font-bold">
-              {new Date(trip.dateStart).getDate()}
+              {parseCalendarDate(trip.dateStart).getDate()}
             </span>
             <span className="text-sm text-muted-foreground">
-              {new Date(trip.dateStart).getFullYear()}
+              {parseCalendarDate(trip.dateStart).getFullYear()}
             </span>
           </div>
 
@@ -56,7 +59,7 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
                   />
                   <h3 className="font-semibold text-lg">{trip.title}</h3>
                   {trip.membersOnly && (
-                    <Badge variant="secondary" className="gap-1">
+                    <Badge variant="secondary" className="rounded-none gap-1">
                       <Lock className="w-3 h-3" />
                       Members
                     </Badge>
@@ -67,12 +70,14 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
                   {formatDateRange(trip.dateStart, trip.dateEnd)}
                 </p>
               </div>
-              <Badge
-                variant="outline"
-                className={difficultyColors[trip.difficulty]}
-              >
-                {trip.difficulty}
-              </Badge>
+              {trip.difficulty && (
+                <Badge
+                  variant="outline"
+                  className={`rounded-none ${difficultyColors[trip.difficulty]}`}
+                >
+                  {trip.difficulty}
+                </Badge>
+              )}
             </div>
 
             <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
@@ -86,8 +91,18 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
                   ? 'TBD'
                   : `${trip.elevationGain.toLocaleString()} ft gain`}
               </span>
-              <span>Meet at {trip.meetingTime}</span>
+              <span>
+                {trip.isAllDay ? 'Time announced in Discord' : trip.meetingTime}
+              </span>
             </div>
+            {trip.hosts.length > 0 && (
+              <p className="mt-3 text-sm text-muted-foreground">
+                Hosted by{' '}
+                {trip.hosts
+                  .map(host => `${host.name} — ${host.title}`)
+                  .join('; ')}
+              </p>
+            )}
           </div>
         </div>
       </CardContent>

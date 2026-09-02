@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { getViewer } from '@/lib/auth/viewer'
-import { getPrimaryClubId } from '@/lib/clubs/primary'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
 
 const isValidYear = (value: number) =>
@@ -15,9 +14,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Invalid year.' }, { status: 400 })
   }
 
-  const [clubId, viewer] = await Promise.all([getPrimaryClubId(), getViewer()])
+  const viewer = await getViewer()
   const viewerKey: ViewerKey = viewer.isMember ? 'member' : 'public'
-  const data = await getCalendarYearData({ year, clubId, viewerKey })
+  const data = await getCalendarYearData({ year, viewerKey })
 
   return NextResponse.json({ data })
 }

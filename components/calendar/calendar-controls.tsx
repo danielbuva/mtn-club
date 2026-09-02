@@ -23,12 +23,12 @@ export function CalendarControls({
         value={view}
         onValueChange={value => onViewChange(value as CalendarViewOption)}
       >
-        <TabsList className="w-full rounded-full">
-          <TabsTrigger value="calendar" className="rounded-full gap-2 flex-1">
+        <TabsList className="w-full rounded-none border border-border bg-card p-0">
+          <TabsTrigger value="calendar" className="rounded-none gap-2 flex-1">
             <CalendarDays className="h-4 w-4" />
             Calendar
           </TabsTrigger>
-          <TabsTrigger value="list" className="rounded-full gap-2 flex-1">
+          <TabsTrigger value="list" className="rounded-none gap-2 flex-1">
             <List className="h-4 w-4" />
             List
           </TabsTrigger>

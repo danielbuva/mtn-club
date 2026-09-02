@@ -17,20 +17,11 @@ export function CalendarCategoryPill({
 
   if (categories.length === 1) {
     const color = CATEGORY_COLORS[categories[0]]
-    return (
-      <span
-        className={cn('inline-flex h-1.5 w-8 rounded-full', color, className)}
-      />
-    )
+    return <span className={cn('inline-flex h-1.5 w-8', color, className)} />
   }
 
   return (
-    <span
-      className={cn(
-        'inline-flex h-1.5 w-10 overflow-hidden rounded-full',
-        className,
-      )}
-    >
+    <span className={cn('inline-flex h-1.5 w-10 overflow-hidden', className)}>
       {categories.map(category => (
         <span
           key={category}

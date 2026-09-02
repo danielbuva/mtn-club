@@ -1,7 +1,6 @@
 'use client'
 
 import { addMonths, format, startOfWeek } from 'date-fns'
-import { ExternalLink, Lock } from 'lucide-react'
 import {
   useCallback,
   useEffect,
@@ -10,7 +9,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import { CalendarActions } from '@/components/calendar/calendar-actions'
 import {
   CalendarControls,
   type CalendarViewOption,
@@ -28,12 +26,10 @@ import {
   type ViewMode,
 } from '@/components/calendar/calendar-utils'
 import { useMediaQuery } from '@/components/calendar/use-media-query'
-import { MemberCTA } from '@/components/member-cta'
 import { TripDetailsDrawer } from '@/components/trip-details-drawer'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
-import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
+import { parseCalendarDate } from '@/lib/events/formatters'
+import type { CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
 const resolveViewMode = (value: string | null): ViewMode => {
@@ -71,16 +67,12 @@ interface CalendarPageClientProps {
   yearData: CalendarYearData
   viewerKey: ViewerKey
   initialMonth: string
-  isMember: boolean
-  isLeader: boolean
 }
 
 export function CalendarPageClient({
   yearData,
   viewerKey,
   initialMonth,
-  isMember,
-  isLeader,
 }: CalendarPageClientProps) {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [yearDataByYear, setYearDataByYear] = useState<
@@ -95,7 +87,6 @@ export function CalendarPageClient({
   })
   const [selectedTrip, setSelectedTrip] = useState<CalendarTrip | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [teaserMessage, setTeaserMessage] = useState<string | null>(null)
   const [hydrated, setHydrated] = useState(false)
   const [focusedDay, setFocusedDay] = useState<string | null>(null)
   const [monthScrollTarget, setMonthScrollTarget] = useState<{
@@ -259,11 +250,6 @@ export function CalendarPageClient({
     setDrawerOpen(true)
   }
 
-  const handleTeaserClick = (_day: string, _teaser: TripTeaserDay) => {
-    if (viewerKey === 'member') return
-    setTeaserMessage('Log in / become a member to view details.')
-  }
-
   const handleDayOpen = (date: Date) => {
     const dayKey = format(date, 'yyyy-MM-dd')
     const dayTrips = tripsByDay.get(dayKey) ?? []
@@ -362,21 +348,13 @@ export function CalendarPageClient({
     [ensureYearLoaded, loadedYears, yearDataByYear],
   )
 
-  const hasUpcomingTeasers = useMemo(() => {
-    if (viewerKey !== 'public') return false
-    const now = new Date()
-    return allTeasers.some(
-      teaser => new Date(teaser.day) >= now && teaser.event_count > 0,
-    )
-  }, [allTeasers, viewerKey])
-
   const currentView: CalendarViewOption = viewMode
   const currentYear = currentDate.getFullYear()
   const tripsInCurrentYear = useMemo(
     () =>
       filteredTrips.filter(trip => {
-        const startYear = new Date(trip.dateStart).getFullYear()
-        const endYear = new Date(trip.dateEnd).getFullYear()
+        const startYear = parseCalendarDate(trip.dateStart).getFullYear()
+        const endYear = parseCalendarDate(trip.dateEnd).getFullYear()
         return startYear === currentYear || endYear === currentYear
       }),
     [currentYear, filteredTrips],
@@ -430,11 +408,11 @@ export function CalendarPageClient({
 
   return (
     <>
-      <main className="flex-1 pt-16">
-        <section className="border-b border-border bg-linear-to-b from-muted/40 to-background px-4 py-10 md:hidden">
+      <main className="flex-1">
+        <section className="public-page-top border-b border-border bg-linear-to-b from-muted/40 to-background px-4 pb-10 md:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="text-3xl font-semibold sm:text-4xl">
+              <h1 className="font-brand text-4xl uppercase leading-[0.92] sm:text-5xl">
                 Trip Calendar
               </h1>
               <p className="mt-2 text-muted-foreground">
@@ -443,33 +421,14 @@ export function CalendarPageClient({
               </p>
             </div>
 
-            <Card className="border-border/60 bg-card">
-              <CardContent className="p-4">
-                <p className="text-sm font-medium">Subscribe</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full gap-2 bg-transparent"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    iCal
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full gap-2 bg-transparent"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    Google Calendar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <p className="max-w-md text-sm leading-6 text-muted-foreground">
+              Official dates are public. Exact meetup points, requirements,
+              RSVPs, and schedule changes are announced in Discord.
+            </p>
           </div>
         </section>
 
-        <section className="px-4 py-6">
+        <section className="px-4 pb-6 pt-6 md:pt-12">
           <div className="mx-auto w-full max-w-6xl space-y-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-col gap-3 md:flex-row md:items-center">
@@ -478,53 +437,21 @@ export function CalendarPageClient({
                   onViewChange={handleViewChange}
                 />
                 {currentView === 'list' && (
-                  <div className="hidden md:inline-flex h-9 items-center gap-0 rounded-full border border-border bg-card px-0 text-sm text-muted-foreground">
+                  <div className="hidden h-9 items-center gap-0 border border-border bg-card px-0 text-sm text-muted-foreground md:inline-flex">
                     <span className="pl-3 text-foreground/70">Semester</span>
                     <span className="ml-2 mr-0 h-4 w-px bg-border" />
                     <CalendarSemesterSelect
                       value={semester}
                       onChange={setSemester}
-                      triggerClassName="h-7 w-28 rounded-l-none rounded-r-full border-0 bg-transparent pl-2 pr-3 shadow-none justify-between"
+                      triggerClassName="h-7 w-28 rounded-none border-0 bg-transparent pl-2 pr-3 shadow-none justify-between"
                     />
                   </div>
                 )}
-                {viewerKey === 'public' && hasUpcomingTeasers && (
-                  <div className="hidden md:inline-flex h-9 items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 text-xs text-primary/80 whitespace-nowrap">
-                    <Lock className="h-3.5 w-3.5 text-primary" />
-                    <span>Upcoming adventures are hidden.</span>
-                    <MemberCTA
-                      variant="link"
-                      className="text-xs font-semibold text-primary hover:text-primary/80"
-                    >
-                      Join to unlock
-                    </MemberCTA>
-                  </div>
-                )}
-              </div>
-              <div className="hidden md:inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-3 text-sm text-muted-foreground">
-                <span className="text-foreground/70">Subscribe</span>
-                <span className="h-4 w-px bg-border" />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 rounded-full px-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  iCal
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 rounded-full px-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  Google
-                </Button>
               </div>
             </div>
 
             {currentView === 'list' && (
-              <div className="md:hidden rounded-2xl border border-border bg-card p-4">
+              <div className="border border-border bg-card p-4 md:hidden">
                 <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
                   Semester
                 </p>
@@ -532,26 +459,11 @@ export function CalendarPageClient({
                   <CalendarSemesterSelect
                     value={semester}
                     onChange={setSemester}
-                    triggerClassName="w-full rounded-full"
+                    triggerClassName="w-full rounded-none"
                   />
                 </div>
               </div>
             )}
-
-            {teaserMessage && viewerKey === 'public' && (
-              <Card className="border-primary/20 bg-primary/5">
-                <CardContent className="p-4 text-sm text-muted-foreground">
-                  {teaserMessage}{' '}
-                  <MemberCTA
-                    variant="link"
-                    className="underline text-foreground"
-                  />
-                  .
-                </CardContent>
-              </Card>
-            )}
-
-            <CalendarActions isMember={isMember} isLeader={isLeader} />
 
             {viewMode === 'calendar' && (
               <div
@@ -581,7 +493,7 @@ export function CalendarPageClient({
                   onRequestYear={ensureYearLoaded}
                   onScrollTargetHandled={() => setMonthScrollTarget(null)}
                   onDaySelect={handleDayOpen}
-                  onTeaserClick={handleTeaserClick}
+                  onTeaserClick={() => undefined}
                   onToday={handleToday}
                   onPrevMonth={handlePrevMonth}
                   onNextMonth={handleNextMonth}
@@ -601,7 +513,6 @@ export function CalendarPageClient({
                   trips={filteredTrips}
                   semester={semester}
                   year={currentYear}
-                  viewerKey={viewerKey}
                   onTripSelect={handleTripSelect}
                   focusDate={focusedDay}
                   onClearFocus={() => setFocusedDay(null)}

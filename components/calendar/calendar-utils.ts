@@ -1,5 +1,5 @@
 import { addDays, format } from 'date-fns'
-import { formatDateOnly } from '@/lib/events/formatters'
+import { formatDateOnly, parseCalendarDate } from '@/lib/events/formatters'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 
 export type ViewMode = 'calendar' | 'list'
@@ -37,8 +37,8 @@ export function groupTripsByDay(
   const map = new Map<string, CalendarTrip[]>()
 
   for (const trip of trips) {
-    const start = new Date(trip.dateStart)
-    const end = new Date(trip.dateEnd)
+    const start = parseCalendarDate(trip.dateStart)
+    const end = parseCalendarDate(trip.dateEnd)
     let cursor = new Date(start)
 
     while (cursor <= end) {
@@ -108,7 +108,7 @@ export function isTripInRange(
   trip: CalendarTrip,
   range: { start: Date; end: Date },
 ): boolean {
-  const start = new Date(trip.dateStart)
-  const end = new Date(trip.dateEnd)
+  const start = parseCalendarDate(trip.dateStart)
+  const end = parseCalendarDate(trip.dateEnd)
   return start <= range.end && end >= range.start
 }

@@ -1,16 +1,25 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  addTripTagOptionAction,
+  removeTripTagOptionsAction,
+} from '@/app/(reader)/trips/actions'
+import {
+  publishTripFormAction,
+  saveTripDraftAction,
+} from '@/app/(reader)/trips/draft-actions'
 import { EventBasicsSection } from '@/components/events/sections/event-basics-section'
+import { EventDescriptionSection } from '@/components/events/sections/event-description-section'
+import { EventDetailsSection } from '@/components/events/sections/event-details-section'
 import { EventLocationsSection } from '@/components/events/sections/event-locations-section'
 import { EventScheduleSection } from '@/components/events/sections/event-schedule-section'
 import { EventSettingsSection } from '@/components/events/sections/event-settings-section'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { createEvent } from '@/lib/events/queries'
+import { toEventFormValuesFromDraft } from '@/lib/events/drafts'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
-import { createClient } from '@/lib/supabase/client'
+import type { Database } from '@/lib/supabase/types'
 
 const timezoneFallback = Intl.DateTimeFormat().resolvedOptions().timeZone
 
@@ -24,42 +33,112 @@ const emptyValues = (isOfficial: boolean): EventFormValues => ({
   timezone: timezoneFallback,
   primaryLocationName: '',
   meetingLocationName: '',
+  locationNotes: '',
+  overviewWhat: '',
+  overviewWhere: '',
+  overviewWeather: '',
+  overviewEquipment: '',
+  overviewCarpoolNeedGear: '',
   visibility: 'members',
-  status: isOfficial ? 'draft' : 'published',
   maxParticipants: '',
   difficulty: undefined,
   isOfficial,
 })
 
-type EventFormProps = {
-  clubId: string
-  membershipId: string
+const resolveInitialFormState = ({
+  initialDraft,
+  canChooseOfficial,
+  initialIsOfficial,
+}: {
+  initialDraft: Database['public']['Tables']['trip_drafts']['Row'] | null
   canChooseOfficial: boolean
   initialIsOfficial: boolean
+}) => {
+  if (initialDraft) {
+    return toEventFormValuesFromDraft({
+      draft: initialDraft,
+      canChooseOfficial,
+      timezoneFallback,
+    })
+  }
+  return {
+    values: emptyValues(initialIsOfficial),
+    isNoLimitEnabled: true,
+  }
+}
+
+type EventFormProps = {
+  canChooseOfficial: boolean
+  canManageTags: boolean
+  initialIsOfficial: boolean
+  initialDraft: Database['public']['Tables']['trip_drafts']['Row'] | null
+  activityOptions: string[]
 }
 
 export function EventForm({
-  clubId,
-  membershipId,
   canChooseOfficial,
+  canManageTags,
   initialIsOfficial,
+  initialDraft,
+  activityOptions,
 }: EventFormProps) {
   const router = useRouter()
-  const supabase = useMemo(() => createClient(), [])
-  const [values, setValues] = useState<EventFormValues>(() =>
-    emptyValues(initialIsOfficial),
+  const initialState = resolveInitialFormState({
+    initialDraft,
+    canChooseOfficial,
+    initialIsOfficial,
+  })
+
+  const [currentDraftId, setCurrentDraftId] = useState<string | null>(
+    initialDraft?.id ?? null,
   )
+  const [values, setValues] = useState<EventFormValues>(initialState.values)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSavingDraft, setIsSavingDraft] = useState(false)
+  const [newActivityTag, setNewActivityTag] = useState('')
+  const [activityOptionValues, setActivityOptionValues] =
+    useState<string[]>(activityOptions)
+  const [isNoLimitEnabled, setIsNoLimitEnabled] = useState(
+    initialState.isNoLimitEnabled,
+  )
+
+  useEffect(() => {
+    const nextState = resolveInitialFormState({
+      initialDraft,
+      canChooseOfficial,
+      initialIsOfficial,
+    })
+    setValues(nextState.values)
+    setCurrentDraftId(initialDraft?.id ?? null)
+    setIsNoLimitEnabled(nextState.isNoLimitEnabled)
+    setFieldErrors({})
+    setFormError(null)
+  }, [initialDraft, canChooseOfficial, initialIsOfficial])
 
   useEffect(() => {
     setValues(prev => ({
       ...prev,
       isOfficial: canChooseOfficial ? prev.isOfficial : false,
-      status: canChooseOfficial ? prev.status : 'published',
+      visibility:
+        !canChooseOfficial && prev.visibility === 'leaders_only'
+          ? 'members'
+          : prev.visibility,
     }))
   }, [canChooseOfficial])
+
+  const resetForm = () => {
+    setValues(emptyValues(initialIsOfficial))
+    setCurrentDraftId(null)
+    setFieldErrors({})
+    setFormError(null)
+    setIsSubmitting(false)
+    setIsSavingDraft(false)
+    setNewActivityTag('')
+    setActivityOptionValues(activityOptions)
+    setIsNoLimitEnabled(true)
+  }
 
   const updateField = <K extends keyof EventFormValues>(
     key: K,
@@ -80,9 +159,90 @@ export function EventForm({
     })
   }
 
+  const setActivityTypes = (activityTypes: string[]) => {
+    setValues(prev => ({
+      ...prev,
+      activityTypes: Array.from(
+        new Set(activityTypes.map(activity => activity.trim().toLowerCase())),
+      ),
+    }))
+  }
+
+  const addActivityTag = () => {
+    const cleaned = newActivityTag.trim().toLowerCase()
+    if (!cleaned) {
+      return
+    }
+
+    setValues(prev => {
+      const next = new Set(
+        (prev.activityTypes ?? []).map(activity => activity.toLowerCase()),
+      )
+      next.add(cleaned)
+      return { ...prev, activityTypes: Array.from(next) }
+    })
+    setNewActivityTag('')
+
+    if (!canManageTags) {
+      return
+    }
+
+    addTripTagOptionAction(cleaned)
+      .then(() => {
+        setActivityOptionValues(current =>
+          current.includes(cleaned) ? current : [...current, cleaned],
+        )
+      })
+      .catch(error => {
+        setFormError(
+          error instanceof Error ? error.message : 'Unable to add tag option.',
+        )
+      })
+  }
+
+  const removeActivityTags = (tagsToRemove: string[]) => {
+    if (!canManageTags || !tagsToRemove.length) {
+      return
+    }
+
+    removeTripTagOptionsAction(tagsToRemove)
+      .then(() => {
+        setActivityOptionValues(current =>
+          current.filter(option => !tagsToRemove.includes(option)),
+        )
+      })
+      .catch(error => {
+        setFormError(
+          error instanceof Error
+            ? error.message
+            : 'Unable to remove tag options.',
+        )
+      })
+  }
+
   const setOfficial = (next: boolean) => {
     updateField('isOfficial', next)
-    updateField('status', next ? values.status : 'published')
+  }
+
+  const handleSaveDraft = async () => {
+    setFormError(null)
+    setFieldErrors({})
+    setIsSavingDraft(true)
+
+    try {
+      const result = await saveTripDraftAction(
+        { values, isNoLimitEnabled },
+        currentDraftId,
+      )
+      setCurrentDraftId(result.id)
+      router.replace(`/trips/new?draft=${result.id}`)
+    } catch (error: unknown) {
+      setFormError(
+        error instanceof Error ? error.message : 'Unable to save draft',
+      )
+    } finally {
+      setIsSavingDraft(false)
+    }
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -104,9 +264,7 @@ export function EventForm({
     }
 
     const maxParticipantsRaw = parsed.data.maxParticipants?.trim()
-    let maxParticipants: number | null = null
-
-    if (maxParticipantsRaw) {
+    if (!isNoLimitEnabled && maxParticipantsRaw) {
       const parsedMax = Number.parseInt(maxParticipantsRaw, 10)
       if (!Number.isFinite(parsedMax) || parsedMax <= 0) {
         setFieldErrors(prev => ({
@@ -115,33 +273,18 @@ export function EventForm({
         }))
         return
       }
-      maxParticipants = parsedMax
     }
 
     setIsSubmitting(true)
     try {
-      const payload = {
-        club_id: clubId,
-        created_by_membership_id: membershipId,
-        title: parsed.data.title,
-        short_summary: parsed.data.shortSummary?.trim() || null,
-        kind: parsed.data.kind,
-        activity_types: parsed.data.activityTypes ?? [],
-        start_at: new Date(parsed.data.startAt).toISOString(),
-        end_at: new Date(parsed.data.endAt).toISOString(),
-        timezone: parsed.data.timezone,
-        primary_location_name: parsed.data.primaryLocationName,
-        meeting_location_name: parsed.data.meetingLocationName?.trim() || null,
-        visibility: parsed.data.visibility,
-        status: parsed.data.isOfficial ? parsed.data.status : 'published',
-        capacity: maxParticipants,
-        difficulty: parsed.data.difficulty ?? null,
-        is_official: parsed.data.isOfficial,
-        last_updated_at: new Date().toISOString(),
-      }
+      await publishTripFormAction({
+        values: parsed.data,
+        isNoLimitEnabled,
+        sourceDraftId: currentDraftId,
+      })
 
-      await createEvent(supabase, payload)
-      router.push('/calendar')
+      resetForm()
+      router.push('/trips')
     } catch (error: unknown) {
       setFormError(
         error instanceof Error ? error.message : 'Unable to create event',
@@ -152,22 +295,37 @@ export function EventForm({
   }
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form
+      id="trip-event-form"
+      className="space-y-6 pb-8 md:pb-0"
+      onSubmit={handleSubmit}
+    >
       {formError && (
-        <Card className="border-destructive/50 bg-destructive/10">
-          <CardContent className="p-4 text-sm text-destructive">
-            {formError}
-          </CardContent>
-        </Card>
+        <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+          {formError}
+        </div>
       )}
 
       <EventBasicsSection
         values={values}
         fieldErrors={fieldErrors}
+        activityOptions={activityOptionValues}
+        canManageTags={canManageTags}
+        newActivityTag={newActivityTag}
         canChooseOfficial={canChooseOfficial}
         onOfficialChange={setOfficial}
         onFieldChange={updateField}
         onToggleActivity={toggleActivity}
+        onSetActivityTypes={setActivityTypes}
+        onNewActivityTagChange={setNewActivityTag}
+        onAddActivityTag={addActivityTag}
+        onRemoveActivityTags={removeActivityTags}
+      />
+
+      <EventDescriptionSection
+        values={values}
+        fieldErrors={fieldErrors}
+        onFieldChange={updateField}
       />
 
       <EventScheduleSection
@@ -182,27 +340,51 @@ export function EventForm({
         onFieldChange={updateField}
       />
 
+      <EventDetailsSection values={values} onFieldChange={updateField} />
+
       <EventSettingsSection
         values={values}
         fieldErrors={fieldErrors}
+        isNoLimitEnabled={isNoLimitEnabled}
+        canChooseLeaderVisibility={canChooseOfficial}
+        onNoLimitChange={setIsNoLimitEnabled}
         onFieldChange={updateField}
       />
 
-      <div className="flex items-center justify-between">
+      <div className="hidden items-center justify-between md:flex">
         <Button
           type="button"
           variant="ghost"
-          onClick={() => router.push('/calendar')}
+          onClick={() => {
+            resetForm()
+            router.push('/trips')
+          }}
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={isSubmitting} className="rounded-xl">
-          {isSubmitting
-            ? 'Saving...'
-            : values.isOfficial
-              ? 'Create Official Trip'
-              : 'Post Meetup'}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            id="trip-save-draft-btn"
+            type="button"
+            variant="outline"
+            className="rounded-xl"
+            disabled={isSubmitting || isSavingDraft}
+            onClick={handleSaveDraft}
+          >
+            {isSavingDraft ? 'Saving draft...' : 'Save as draft'}
+          </Button>
+          <Button
+            type="submit"
+            disabled={isSubmitting || isSavingDraft}
+            className="rounded-xl"
+          >
+            {isSubmitting
+              ? 'Saving...'
+              : values.isOfficial
+                ? 'Create Official Trip'
+                : 'Post Meetup'}
+          </Button>
+        </div>
       </div>
     </form>
   )

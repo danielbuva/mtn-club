@@ -29,7 +29,7 @@ export function CalendarSemesterSelect({
   return (
     <Select value={value} onValueChange={next => onChange(next as SemesterKey)}>
       <SelectTrigger
-        className={cn('w-auto rounded-full', triggerClassName)}
+        className={cn('w-auto rounded-none', triggerClassName)}
         size="sm"
       >
         <SelectValue placeholder="Semester" />

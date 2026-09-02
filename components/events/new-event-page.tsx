@@ -4,47 +4,33 @@ import Link from 'next/link'
 import { EventForm } from '@/components/events/event-form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import type { MembershipState } from '@/lib/memberships/types'
+import type { Database } from '@/lib/supabase/types'
 
 type NewEventPageProps = {
   initialType?: string
-  membershipState: MembershipState
+  initialDraft: Database['public']['Tables']['trip_drafts']['Row'] | null
+  isAuthenticated: boolean
+  canCreateOfficial: boolean
+  canManageTags: boolean
+  activityOptions: string[]
 }
 
 export function NewEventPage({
   initialType,
-  membershipState,
+  initialDraft,
+  isAuthenticated,
+  canCreateOfficial,
+  canManageTags,
+  activityOptions,
 }: NewEventPageProps) {
-  const { isAuthenticated, isLeader, clubId, membershipId, error } =
-    membershipState
-
-  const initialIsOfficial = initialType === 'official' && isLeader
+  const initialIsOfficial = initialType === 'official' && canCreateOfficial
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 pt-16">
-        <section className="py-12 px-4 bg-secondary/30 border-b border-border">
+      <main className="flex-1 px-4 py-8">
+        <section>
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
-              {initialIsOfficial ? 'Add Official Trip' : 'Post a Meetup'}
-            </h1>
-            <p className="text-muted-foreground">
-              Share a new event with the club calendar.
-            </p>
-          </div>
-        </section>
-
-        <section className="py-8 px-4">
-          <div className="max-w-3xl mx-auto">
-            {error && (
-              <Card>
-                <CardContent className="p-6 text-sm text-muted-foreground">
-                  {error}
-                </CardContent>
-              </Card>
-            )}
-
-            {!error && !isAuthenticated && (
+            {!isAuthenticated && (
               <Card>
                 <CardContent className="p-6 space-y-4">
                   <p className="text-sm text-muted-foreground">
@@ -57,20 +43,13 @@ export function NewEventPage({
               </Card>
             )}
 
-            {!error && isAuthenticated && (!clubId || !membershipId) && (
-              <Card>
-                <CardContent className="p-6 text-sm text-muted-foreground">
-                  An active membership is required to post events.
-                </CardContent>
-              </Card>
-            )}
-
-            {!error && isAuthenticated && clubId && membershipId && (
+            {isAuthenticated && (
               <EventForm
-                clubId={clubId}
-                membershipId={membershipId}
-                canChooseOfficial={isLeader}
+                canChooseOfficial={canCreateOfficial}
+                canManageTags={canManageTags}
                 initialIsOfficial={initialIsOfficial}
+                initialDraft={initialDraft}
+                activityOptions={activityOptions}
               />
             )}
           </div>

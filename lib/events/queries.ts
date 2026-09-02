@@ -1,12 +1,26 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { z } from 'zod'
-import type { EventInsert, EventRow, TripTeaserDay } from '@/lib/events/types'
+import type {
+  CalendarTrip,
+  EventInsert,
+  EventRow,
+  TripTeaserDay,
+} from '@/lib/events/types'
 import type { Database } from '@/lib/supabase/types'
 
 export type DateRange = {
   start: Date
   end: Date
 }
+
+export const LEGACY_PLACEHOLDER_TRIP_IDS = [
+  'cdc9d374-b3ae-4487-87f2-5d5ecb8bab82',
+  '568faa96-e369-4920-8f5f-decc22154f73',
+  '97565328-10e5-478a-864b-5b3bd21c269a',
+  'a0281b87-006f-4ad2-b46e-c3292848f316',
+] as const
+
+const legacyPlaceholderFilter = `(${LEGACY_PLACEHOLDER_TRIP_IDS.join(',')})`
 
 const buildTripsRangeQuery = (
   client: SupabaseClient<Database>,
@@ -18,9 +32,10 @@ const buildTripsRangeQuery = (
   return client
     .from('trips')
     .select('*')
-    .lte('start_at', endIso)
-    .or(`end_at.is.null,end_at.gte.${startIso}`)
-    .order('start_at', { ascending: true })
+    .not('id', 'in', legacyPlaceholderFilter)
+    .lte('starts_at', endIso)
+    .or(`ends_at.is.null,ends_at.gte.${startIso}`)
+    .order('starts_at', { ascending: true })
 }
 
 export async function fetchTripsInRange(
@@ -28,13 +43,49 @@ export async function fetchTripsInRange(
   range: DateRange,
 ): Promise<EventRow[]> {
   const { data, error } = await buildTripsRangeQuery(client, range)
-
   if (error) {
     console.error('TRIPS ERROR', error)
     throw error
   }
-
   return data ?? []
+}
+
+export async function fetchPublicHostsByTrip(
+  client: SupabaseClient<Database>,
+  tripIds: string[],
+): Promise<Map<string, CalendarTrip['hosts']>> {
+  const hostsByTrip = new Map<string, CalendarTrip['hosts']>()
+  if (tripIds.length === 0) return hostsByTrip
+
+  const [
+    { data: hosts, error: hostsError },
+    { data: credits, error: creditsError },
+  ] = await Promise.all([
+    client.from('club_hosts').select('id, public_name, club_title'),
+    client
+      .from('trip_hosts')
+      .select('trip_id, host_id, credited_title, sort_order')
+      .in('trip_id', tripIds)
+      .order('sort_order', { ascending: true }),
+  ])
+
+  if (hostsError || creditsError) {
+    return hostsByTrip
+  }
+
+  const hostsById = new Map((hosts ?? []).map(host => [host.id, host]))
+  for (const credit of credits ?? []) {
+    const host = hostsById.get(credit.host_id)
+    if (!host) continue
+    const current = hostsByTrip.get(credit.trip_id) ?? []
+    current.push({
+      name: host.public_name,
+      title: credit.credited_title || host.club_title,
+    })
+    hostsByTrip.set(credit.trip_id, current)
+  }
+
+  return hostsByTrip
 }
 
 export async function fetchPastTripsInRangePublic(
@@ -42,14 +93,7 @@ export async function fetchPastTripsInRangePublic(
   range: DateRange,
 ): Promise<EventRow[]> {
   // Public client relies on RLS for past-only visibility; we only bound the date window.
-  const { data, error } = await buildTripsRangeQuery(client, range)
-
-  if (error) {
-    console.error('TRIPS ERROR', error)
-    throw error
-  }
-
-  return data ?? []
+  return fetchTripsInRange(client, range)
 }
 
 export async function fetchUpcomingTripsInRangeMember(
@@ -63,17 +107,10 @@ export async function fetchUpcomingTripsInRangeMember(
     return []
   }
 
-  const { data, error } = await buildTripsRangeQuery(client, {
+  return fetchTripsInRange(client, {
     start: effectiveStart,
     end: range.end,
   })
-
-  if (error) {
-    console.error('TRIPS ERROR', error)
-    throw error
-  }
-
-  return data ?? []
 }
 
 export async function fetchPastTripsPublic(
@@ -86,8 +123,9 @@ export async function fetchPastTripsPublic(
   const { data, error } = await client
     .from('trips')
     .select('*')
-    .lt('start_at', nowIso)
-    .order('start_at', { ascending: false })
+    .not('id', 'in', legacyPlaceholderFilter)
+    .lt('starts_at', nowIso)
+    .order('starts_at', { ascending: false })
     .limit(limit)
 
   if (error) {
@@ -97,9 +135,7 @@ export async function fetchPastTripsPublic(
   return data ?? []
 }
 
-export type CreateEventPayload = EventInsert & {
-  activity_types?: string[]
-}
+export type CreateEventPayload = EventInsert
 
 export async function createEvent(
   client: SupabaseClient<Database>,
@@ -127,23 +163,13 @@ const tripTeaserDaySchema = z.object({
 const tripTeaserListSchema = z.array(tripTeaserDaySchema)
 
 export async function fetchTripTeasersInRangePublic(
-  client: SupabaseClient<Database>,
-  clubId: string,
-  range: { start: Date; end: Date },
+  _client: SupabaseClient<Database>,
+  _clubId: string,
+  _range: { start: Date; end: Date },
 ): Promise<TripTeaserDay[]> {
-  const { data, error } = await client.rpc('get_trip_teasers_in_range', {
-    _club_id: clubId,
-    _start: range.start.toISOString(),
-    _end: range.end.toISOString(),
-  })
-  if (error) {
-    throw error
-  }
-
-  const parsed = tripTeaserListSchema.safeParse(data ?? [])
+  const parsed = tripTeaserListSchema.safeParse([])
   if (!parsed.success) {
     throw new Error('Invalid trip teaser response')
   }
-
   return parsed.data
 }

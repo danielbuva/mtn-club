@@ -7,12 +7,7 @@ export const EVENT_KINDS = [
   'travel',
 ] as const
 
-export const EVENT_VISIBILITIES = [
-  'members',
-  'leaders_only',
-  'invite_only',
-  'public',
-] as const
+export const EVENT_VISIBILITIES = ['members', 'leaders_only', 'public'] as const
 
 export const EVENT_STATUSES = [
   'draft',
@@ -21,8 +16,6 @@ export const EVENT_STATUSES = [
   'canceled',
   'completed',
 ] as const
-
-export const EVENT_CREATION_STATUSES = ['draft', 'published'] as const
 
 export const EVENT_DIFFICULTIES = [
   'Easy',

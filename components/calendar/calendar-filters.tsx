@@ -21,9 +21,7 @@ export function CalendarFilters({
   className,
 }: CalendarFiltersProps) {
   return (
-    <div
-      className={cn('rounded-2xl border border-border bg-card p-4', className)}
-    >
+    <div className={cn('border border-border bg-card p-4', className)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
@@ -33,7 +31,7 @@ export function CalendarFilters({
           type="button"
           variant="ghost"
           size="sm"
-          className="rounded-full"
+          className="rounded-none"
           onClick={() => onCollapsedChange(!collapsed)}
         >
           {collapsed ? (

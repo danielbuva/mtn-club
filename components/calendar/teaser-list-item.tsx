@@ -16,10 +16,10 @@ export function TeaserListItem({ teaser, onClick }: TeaserListItemProps) {
   const date = new Date(teaser.day)
 
   return (
-    <Card className="border-primary/10 bg-primary/5">
+    <Card className="rounded-none border-primary/10 bg-primary/5">
       <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-background text-primary">
+          <div className="flex h-10 w-10 items-center justify-center bg-background text-primary">
             <Lock className="h-4 w-4" />
           </div>
           <div>
@@ -34,12 +34,12 @@ export function TeaserListItem({ teaser, onClick }: TeaserListItemProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-full"
+            className="rounded-none"
             onClick={onClick}
           >
             View details
           </Button>
-          <MemberCTA size="sm" className="rounded-full" />
+          <MemberCTA size="sm" className="rounded-none" />
         </div>
       </CardContent>
     </Card>

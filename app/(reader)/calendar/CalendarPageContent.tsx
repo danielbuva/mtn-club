@@ -2,9 +2,7 @@ import { format } from 'date-fns'
 import { connection } from 'next/server'
 import { CalendarPage } from '@/components/calendar/calendar-page'
 import { getViewer } from '@/lib/auth/viewer'
-import { getPrimaryClubId } from '@/lib/clubs/primary'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
-import { isLeaderRole } from '@/lib/memberships/types'
 
 const resolveMonthDate = (monthValue?: string): Date => {
   const match = monthValue ? /^(\d{4})-(\d{2})$/.exec(monthValue) : null
@@ -28,21 +26,19 @@ type CalendarPageContentProps = {
 export async function CalendarPageContent({
   searchParams,
 }: CalendarPageContentProps) {
-  connection()
+  await connection()
   const monthDate = resolveMonthDate(searchParams?.month)
   const currentMonth = format(monthDate, 'yyyy-MM')
   const year = monthDate.getFullYear()
-  const [clubId, viewer] = await Promise.all([getPrimaryClubId(), getViewer()])
+  const viewer = await getViewer()
   const viewerKey: ViewerKey = viewer.isMember ? 'member' : 'public'
-  const yearData = await getCalendarYearData({ year, clubId, viewerKey })
+  const yearData = await getCalendarYearData({ year, viewerKey })
 
   return (
     <CalendarPage
       yearData={yearData}
       viewerKey={viewerKey}
       initialMonth={currentMonth}
-      isMember={viewer.isMember}
-      isLeader={isLeaderRole(viewer.member?.role ?? null)}
     />
   )
 }

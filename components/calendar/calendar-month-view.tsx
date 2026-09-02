@@ -184,7 +184,7 @@ export function CalendarMonthView({
     if (programmaticTimeoutRef.current) {
       window.clearTimeout(programmaticTimeoutRef.current)
     }
-    const delay = behavior === 'smooth' ? 360 : 80
+    const delay = behavior === 'smooth' ? 500 : SCROLL_END_DEBOUNCE_MS + 80
     programmaticTimeoutRef.current = window.setTimeout(() => {
       isProgrammaticScrollRef.current = false
     }, delay)
@@ -410,7 +410,7 @@ export function CalendarMonthView({
           </div>
           <div className="flex items-center">
             {!isMobile && (
-              <div className="inline-flex overflow-hidden rounded-full border border-border">
+              <div className="inline-flex overflow-hidden border border-border">
                 <Button
                   type="button"
                   variant="ghost"
@@ -447,7 +447,7 @@ export function CalendarMonthView({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="rounded-full"
+                className="rounded-none"
                 onClick={onToday}
               >
                 Today
@@ -523,7 +523,7 @@ export function CalendarMonthView({
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        'inline-flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold',
+                        'inline-flex h-7 w-7 items-center justify-center text-xs font-semibold',
                         isToday && 'bg-primary text-primary-foreground',
                       )}
                     >
