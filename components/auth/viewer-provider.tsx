@@ -5,9 +5,12 @@ import type { Viewer } from '@/lib/auth/viewer'
 
 const defaultViewer: Viewer = {
   isAuthenticated: false,
+  canCreateEvent: false,
   userId: null,
   email: null,
   isMember: false,
+  canViewMemberContent: false,
+  membershipAccessLevel: 'none',
   membershipState: null,
   membershipBannedAt: null,
   member: null,

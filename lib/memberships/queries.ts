@@ -4,10 +4,7 @@ import type { Database } from '@/lib/supabase/types'
 
 export type MembershipLookup = {
   userId: string | null
-  membership: Pick<
-    MembershipRow,
-    'id' | 'club_id' | 'role' | 'state' | 'is_member'
-  > | null
+  membership: Pick<MembershipRow, 'user_id' | 'role' | 'status'> | null
 }
 
 export async function fetchActiveMembership(
@@ -24,11 +21,10 @@ export async function fetchActiveMembership(
   }
 
   const { data, error } = await client
-    .from('club_memberships')
-    .select('id, club_id, role, state, is_member')
+    .from('memberships')
+    .select('user_id, role, status')
     .eq('user_id', authData.user.id)
-    .eq('state', 'active')
-    .eq('is_member', true)
+    .eq('status', 'active')
     .order('created_at', { ascending: true })
     .limit(1)
     .maybeSingle()

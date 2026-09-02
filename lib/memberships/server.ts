@@ -13,8 +13,8 @@ export async function getMembershipState(): Promise<MembershipState> {
     return {
       isAuthenticated: !!result.userId,
       isLeader: !!result.membership && isLeaderRole(result.membership.role),
-      membershipId: result.membership?.id ?? null,
-      clubId: result.membership?.club_id ?? null,
+      membershipId: result.membership?.user_id ?? null,
+      clubId: null,
       error: null,
     }
   } catch (error: unknown) {

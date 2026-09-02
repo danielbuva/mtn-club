@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import {
   Card,
   CardContent,
@@ -16,13 +17,19 @@ export default function Page() {
               <CardTitle className="text-2xl">
                 Thank you for signing up!
               </CardTitle>
-              <CardDescription>Check your email to confirm</CardDescription>
+              <CardDescription>Your account is ready.</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                You&apos;ve successfully signed up. Please check your email to
-                confirm your account before signing in.
+                Continue to Mountain Club to explore upcoming trips and finish
+                setting up your profile.
               </p>
+              <Link
+                href="/"
+                className="mt-5 inline-flex min-h-10 items-center bg-primary px-4 text-sm font-semibold text-primary-foreground"
+              >
+                Continue
+              </Link>
             </CardContent>
           </Card>
         </div>

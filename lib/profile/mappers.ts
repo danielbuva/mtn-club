@@ -182,8 +182,13 @@ const normalizeSection = (section: Record<string, unknown>): Json | null => {
 }
 
 export function profileFormToUpdate(values: ProfileFormValues): ProfileUpdate {
+  const displayName =
+    normalizeString(values.displayName) ??
+    normalizeString(values.username) ??
+    'Member'
+
   return {
-    display_name: normalizeString(values.displayName),
+    display_name: displayName,
     username: normalizeString(values.username),
     avatar_url: normalizeString(values.avatarUrl),
     bio: normalizeString(values.bio),

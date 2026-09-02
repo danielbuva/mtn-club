@@ -1,21 +1,32 @@
 export const AUTH_RETURN_TO_KEY = 'auth:returnTo'
 
 const isClient = typeof window !== 'undefined'
+const RETURN_TO_ORIGIN = 'https://mtn-club.local'
 
-export const sanitizeReturnTo = (value: string | null) => {
+export const sanitizeReturnTo = (value: string | null): string | null => {
   if (!value) return null
 
-  if (value.startsWith('/')) {
-    if (value.startsWith('//') || value.startsWith('/auth')) return null
-    return value
+  const candidate = value.trim()
+  const hasControlCharacter = Array.from(candidate).some(character => {
+    const code = character.charCodeAt(0)
+    return code <= 31 || code === 127
+  })
+  if (
+    !candidate.startsWith('/') ||
+    candidate.startsWith('//') ||
+    candidate.includes('\\') ||
+    hasControlCharacter
+  ) {
+    return null
   }
 
-  if (!isClient) return null
-
   try {
-    const url = new URL(value, window.location.origin)
-    if (url.origin !== window.location.origin) return null
-    if (url.pathname.startsWith('/auth')) return null
+    const url = new URL(candidate, RETURN_TO_ORIGIN)
+    if (url.origin !== RETURN_TO_ORIGIN) return null
+    if (url.pathname === '/auth' || url.pathname.startsWith('/auth/')) {
+      return null
+    }
+
     return `${url.pathname}${url.search}${url.hash}`
   } catch {
     return null

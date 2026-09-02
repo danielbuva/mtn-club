@@ -1,7 +1,6 @@
 import { connection } from 'next/server'
-import type { MembershipRow } from '@/lib/memberships/types'
-import type { ProfileRow } from '@/lib/profile/types'
 import { createClient } from '@/lib/supabase/server'
+import type { Database } from '@/lib/supabase/types'
 
 export type MemberSummary = {
   fullName?: string | null
@@ -9,36 +8,27 @@ export type MemberSummary = {
   joinedOn?: string | null
   expiresAt?: string | null
   autoRenew?: boolean | null
-  role?: MembershipRow['role'] | null
+  role?: Database['public']['Enums']['club_role'] | null
 }
 
 export type Viewer = {
   isAuthenticated: boolean
+  canCreateEvent: boolean
   userId: string | null
   email?: string | null
   isMember: boolean
-  membershipState: MembershipRow['state'] | null
+  canViewMemberContent: boolean
+  membershipAccessLevel: 'none' | 'provisional' | 'full'
+  membershipState: Database['public']['Enums']['membership_status'] | null
   membershipBannedAt: string | null
   member?: MemberSummary | null
 }
 
-type MembershipSummaryRow = Pick<
-  MembershipRow,
-  | 'id'
-  | 'club_id'
-  | 'role'
-  | 'state'
-  | 'is_member'
-  | 'joined_on'
-  | 'membership_start'
-  | 'membership_end'
-  | 'auto_renew'
-  | 'banned_at'
->
+type MembershipSummaryRow = Database['public']['Tables']['memberships']['Row']
 
 type ProfileSummaryRow = Pick<
-  ProfileRow,
-  'id' | 'first_name' | 'last_name' | 'display_name' | 'avatar_url' | 'email'
+  Database['public']['Tables']['profiles']['Row'],
+  'user_id' | 'first_name' | 'last_name' | 'display_name' | 'avatar_url'
 >
 
 const buildFullName = (profile: ProfileSummaryRow | null): string | null => {
@@ -60,9 +50,12 @@ export async function getViewer(): Promise<Viewer> {
   if (authError || !authData.user) {
     return {
       isAuthenticated: false,
+      canCreateEvent: false,
       userId: null,
       email: null,
       isMember: false,
+      canViewMemberContent: false,
+      membershipAccessLevel: 'none',
       membershipState: null,
       membershipBannedAt: null,
       member: null,
@@ -71,21 +64,20 @@ export async function getViewer(): Promise<Viewer> {
 
   const user = authData.user
 
-  const [profileResult, membershipResult] = await Promise.all([
+  const [profileResult, membershipResult, accessResult] = await Promise.all([
     supabase
-      .from('app_users')
-      .select('id, first_name, last_name, display_name, avatar_url, email')
-      .eq('id', user.id)
+      .from('profiles')
+      .select('user_id, first_name, last_name, display_name, avatar_url')
+      .eq('user_id', user.id)
       .maybeSingle(),
     supabase
-      .from('club_memberships')
-      .select(
-        'id, club_id, role, state, is_member, joined_on, membership_start, membership_end, auto_renew, banned_at',
-      )
+      .from('memberships')
+      .select('role, status, joined_on, member_since')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
+    supabase.rpc('get_my_membership_access'),
   ])
 
   if (profileResult.error) {
@@ -100,28 +92,38 @@ export async function getViewer(): Promise<Viewer> {
   const membership =
     (membershipResult.data as MembershipSummaryRow | null) ?? null
   const fullName = buildFullName(profile)
-
-  const isMember =
-    !!membership &&
-    membership.state === 'active' &&
-    membership.is_member &&
-    !membership.banned_at
+  const access = accessResult.data?.[0] ?? null
+  const isMember = access?.access_active ?? membership?.status === 'active'
+  const provisionalAccess = access?.provisional_access ?? false
+  const restriction = access?.restriction
+  const membershipState =
+    restriction === 'suspended' || restriction === 'banned'
+      ? restriction
+      : isMember
+        ? 'active'
+        : (membership?.status ?? null)
 
   return {
     isAuthenticated: true,
+    canCreateEvent: Boolean(profile) && isMember,
     userId: user.id,
-    email: user.email ?? profile?.email ?? null,
+    email: user.email ?? null,
     isMember,
-    membershipState: membership?.state ?? null,
-    membershipBannedAt: membership?.banned_at ?? null,
+    canViewMemberContent: isMember || provisionalAccess,
+    membershipAccessLevel: isMember
+      ? 'full'
+      : provisionalAccess
+        ? 'provisional'
+        : 'none',
+    membershipState,
+    membershipBannedAt: null,
     member: isMember
       ? {
           fullName,
           avatarUrl: profile?.avatar_url ?? null,
-          joinedOn:
-            membership?.joined_on ?? membership?.membership_start ?? null,
-          expiresAt: membership?.membership_end ?? null,
-          autoRenew: membership?.auto_renew ?? null,
+          joinedOn: membership?.member_since ?? membership?.joined_on ?? null,
+          expiresAt: access?.expires_at ?? null,
+          autoRenew: null,
           role: membership?.role,
         }
       : null,

@@ -20,7 +20,7 @@ export async function signOutAction(): Promise<void> {
   revalidatePath('/')
   revalidatePath('/profile')
   revalidatePath('/calendar')
-  revalidatePath('/calendar/new')
+  revalidatePath('/trips/new')
   revalidatePath('/membership')
 
   // Manual smoke test:
