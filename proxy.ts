@@ -4,7 +4,8 @@ import { updateSession } from '@/lib/supabase/proxy'
 import { isPaymentsOnlyMode } from '@/src/lib/releaseMode'
 
 const publicPrefixes = [
-  '/start-here',
+  '/learn-more',
+  '/welcome',
   '/gear',
   '/cost',
   '/safety',
@@ -14,14 +15,21 @@ const publicPrefixes = [
   '/membership',
   '/about',
   '/team',
+  '/calendar',
+  '/schedule',
+  '/gallery',
   '/coming-soon',
+  '/input-test',
   '/auth',
   '/api',
   '/_next',
+  '/profile',
 ]
 
 const publicExact = new Set([
   '/',
+  // Let the removed legacy route reach Next.js so it returns a real 404.
+  '/start-here',
   '/favicon.ico',
   '/robots.txt',
   '/sitemap.xml',

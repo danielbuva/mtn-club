@@ -26,7 +26,7 @@ export function MemberCTA({
   hideWhenMember = true,
   memberFallback,
   icon,
-  href = '/membership',
+  href = '/membership-sign-up',
   onClick,
 }: MemberCTAProps) {
   const viewer = useViewer()
@@ -40,21 +40,7 @@ export function MemberCTA({
     }
   }
 
-  const membershipState = viewer.membershipState
-  const hasGoodStanding =
-    !!membershipState && !['banned', 'suspended'].includes(membershipState)
-  const shouldRenew =
-    viewer.isAuthenticated &&
-    !viewer.isMember &&
-    hasGoodStanding &&
-    ['inactive', 'past_due', 'canceled'].includes(membershipState ?? '')
-
-  const label = shouldRenew
-    ? 'Renew Membership'
-    : viewer.isAuthenticated
-      ? 'Activate Membership'
-      : 'Become a Member'
-  const content = children ?? label
+  const content = children ?? 'Annual Membership'
   const contentWithIcon = icon ? (
     <>
       {content}

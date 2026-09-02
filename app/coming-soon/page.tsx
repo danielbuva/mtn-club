@@ -54,10 +54,10 @@ async function ComingSoonContent({ searchParams }: ComingSoonPageProps) {
 
       <div className="flex flex-wrap gap-3">
         <Button asChild className="rounded-xl">
-          <Link href="/membership">Go to Membership</Link>
+          <Link href="/membership-sign-up">Membership sign up</Link>
         </Button>
         <Button variant="secondary" asChild className="rounded-xl">
-          <Link href="/start-here">Get Started</Link>
+          <Link href="/learn-more">Learn More</Link>
         </Button>
         <Button variant="ghost" asChild className="rounded-xl">
           <Link href="/about">About</Link>

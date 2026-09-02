@@ -39,7 +39,7 @@ import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/start-here', label: 'Get Started' },
+  { href: '/learn-more', label: 'Learn More' },
   { href: '/team', label: 'Team' },
   { href: '/about', label: 'About' },
 ]
@@ -65,18 +65,6 @@ export function Header() {
   const profileName = viewer.member?.fullName ?? viewer.email ?? 'Member'
   const profileInitials = getInitials(profileName)
   const currentTheme = theme ?? 'system'
-  const membershipState = viewer.membershipState
-  const membershipBanned =
-    membershipState === 'banned' || !!viewer.membershipBannedAt
-  const membershipSuspended = membershipState === 'suspended'
-  const shouldShowRenewCta =
-    viewer.isAuthenticated &&
-    !viewer.isMember &&
-    !!membershipState &&
-    !membershipBanned &&
-    !membershipSuspended &&
-    ['inactive', 'past_due', 'canceled'].includes(membershipState ?? '')
-
   const themePillButtonClass = (value: 'light' | 'system' | 'dark') =>
     cn(
       'inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-sm transition-colors',
@@ -303,10 +291,9 @@ export function Header() {
                         <Link href="/membership">Membership</Link>
                       </Button>
                     }
-                    {...(shouldShowRenewCta
-                      ? { children: 'Renew Membership' }
-                      : {})}
-                  />
+                  >
+                    Annual Membership
+                  </MemberCTA>
                 </div>
               </>
             )}
@@ -379,10 +366,9 @@ export function Header() {
                           <Link href="/membership">Membership</Link>
                         </Button>
                       }
-                      {...(shouldShowRenewCta
-                        ? { children: 'Renew Membership' }
-                        : {})}
-                    />
+                    >
+                      Annual Membership
+                    </MemberCTA>
                   </div>
                   <div className="mt-auto pb-6 ml-4">
                     <ThemeTogglePill className="w-fit" />

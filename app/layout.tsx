@@ -5,15 +5,20 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import './globals.css'
 import { Providers } from './providers'
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+const defaultUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'https://unlvmountainclub.com')
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'UNLV Mountain Club',
   description:
     'The official website of the UNLV Mountain Club, dedicated to outdoor adventures and community building.',
+  alternates: {
+    canonical: '/',
+  },
 }
 
 const geistSans = Geist({

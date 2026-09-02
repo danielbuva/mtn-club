@@ -86,7 +86,7 @@ const steps = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 pt-16">
+      <main className="flex-1">
         {/* Hero Section */}
         <section className="relative h-[70vh] min-h-125 flex items-center justify-center overflow-hidden">
           <Image
@@ -108,10 +108,10 @@ export default function AboutPage() {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="rounded-xl">
-                <Link href="/membership">Become a member</Link>
+                <Link href="/membership-sign-up">Become a member</Link>
               </Button>
               <Button variant="secondary" asChild className="rounded-xl">
-                <Link href="/start-here">Get started</Link>
+                <Link href="/learn-more">Learn more</Link>
               </Button>
             </div>
           </div>

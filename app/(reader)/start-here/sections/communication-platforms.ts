@@ -16,12 +16,8 @@ export const communicationPlatformsSection: Section = {
       id: 'communication-platforms--texts',
       title: 'Texts (day-of coordination)',
     },
-    { id: 'communication-platforms--eventbrite', title: 'Eventbrite (RSVPs)' },
+    { id: 'communication-platforms--calendar', title: 'Public calendar' },
     { id: 'communication-platforms--instagram', title: 'Instagram' },
-    {
-      id: 'communication-platforms--email-newsletter',
-      title: 'Email newsletter',
-    },
     {
       id: 'communication-platforms--web-app',
       title: 'Web app (what exists now vs coming soon)',

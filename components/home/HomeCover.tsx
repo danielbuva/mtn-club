@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { HomeCoverClient } from '@/components/home/HomeCoverClient'
 import UNLVMountainClub from '@/components/unlv-mountain-club'
+import { DISCORD_INVITE_URL } from '@/lib/constants'
 
 /*
 Tuning knobs:
@@ -16,8 +17,6 @@ const frameStyle = {
   bottom: 'calc(var(--frame-padding) + env(safe-area-inset-bottom))',
   left: 'calc(var(--frame-padding) + env(safe-area-inset-left))',
 } as const
-
-const DISCORD_INVITE_LINK = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL
 
 export default function HomeCover() {
   const transitionDurationMs = 500
@@ -50,17 +49,20 @@ export default function HomeCover() {
               className="relative space-y-3 sm:space-y-3 py-1"
             >
               <Link
-                href="/start-here"
+                href="/welcome"
                 className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
                 Start Here →
               </Link>
-              {/* <p className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
-                (coming soon) Trips and Photos →
-              </p> */}
-              {DISCORD_INVITE_LINK && (
+              <Link
+                href="/calendar"
+                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]"
+              >
+                Calendar →
+              </Link>
+              {DISCORD_INVITE_URL && (
                 <Link
-                  href={DISCORD_INVITE_LINK}
+                  href={DISCORD_INVITE_URL}
                   className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
                 >
                   <span className="inline-flex items-center gap-2">
@@ -72,7 +74,7 @@ export default function HomeCover() {
                 href="/join"
                 className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
               >
-                Become a Member →
+                Join the Club →
               </Link>
             </nav>
           </div>

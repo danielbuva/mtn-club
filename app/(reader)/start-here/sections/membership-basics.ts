@@ -17,7 +17,7 @@ export const membershipBasicsSection: Section = {
     },
     {
       id: 'membership-basics--membership-access',
-      title: 'What membership gives you access to',
+      title: 'Benefits will be published after officer approval',
     },
     { id: 'membership-basics--annual-dues', title: 'Annual dues (high-level)' },
     { id: 'membership-basics--dues-used', title: 'How dues are used' },

@@ -1,4 +1,10 @@
-import { DISCORD_INVITE_URL, INSTAGRAM_URL } from '@/lib/constants'
+import {
+  CLUB_EMAIL,
+  DISCORD_INVITE_URL,
+  INSTAGRAM_URL,
+  ZELLE_PHONE_DISPLAY,
+} from '@/lib/constants'
+import { MEMBERSHIP_INTEREST_OPTIONS } from '@/lib/memberships/application-options'
 import type { GuideSection } from './types'
 
 export const startHereSections: GuideSection[] = [
@@ -8,7 +14,7 @@ export const startHereSections: GuideSection[] = [
     blocks: [
       {
         kind: 'p',
-        text: "A student-run outdoor club focused on climbing, camping, hiking, and backpacking. We climb together during the week and get outside on weekends. You don't need experience or gear - just interest.",
+        text: 'A student-run outdoor club focused on climbing, camping, hiking, and backpacking. We climb together during the week and get outside on weekends. You do not need gear or a car to come meet us. Individual trips may have their own requirements.',
       },
     ],
   },
@@ -170,8 +176,8 @@ export const startHereSections: GuideSection[] = [
       },
       {
         kind: 'notice',
-        text: 'Our PayPal is down right now, so we are not accepting payments yet. If you want to join, email us and we will get you set up.',
-        email: 'unlvmountainclub@gmail.com',
+        text: `Community participation is free. To become an annual member, send the $25 dues through Zelle to ${ZELLE_PHONE_DISPLAY}.`,
+        email: CLUB_EMAIL,
       },
     ],
     ctaLinks: [
@@ -187,8 +193,8 @@ export const startHereSections: GuideSection[] = [
         kind: 'list',
         items: [
           'Beginners are welcome',
-          'No gear required to start',
-          'No car required - we carpool',
+          'You do not need gear or a car to come meet us',
+          'Individual trips may have their own requirements',
           'Drop-in friendly',
           'No pressure to be consistent',
         ],
@@ -292,7 +298,7 @@ export const gearSections: GuideSection[] = [
     blocks: [
       {
         kind: 'p',
-        text: "Bottom line: if gear is the only thing stopping you, don't let it.",
+        text: 'You do not need gear or a car to come meet us. Individual trips may have their own requirements.',
       },
     ],
   },
@@ -305,11 +311,11 @@ export const costSections: GuideSection[] = [
     blocks: [
       {
         kind: 'p',
-        text: 'Annual dues help keep the club running and gear available.',
+        text: `Annual membership costs $25 for 12 calendar months. Send dues through Zelle to ${ZELLE_PHONE_DISPLAY}.`,
       },
       {
         kind: 'list',
-        items: ['Paid once per year', 'Joining later is totally fine'],
+        items: ['One $25 payment', 'Join when you are ready'],
       },
     ],
   },
@@ -320,9 +326,8 @@ export const costSections: GuideSection[] = [
       {
         kind: 'list',
         items: [
-          'Gear maintenance and replacement',
-          'Supporting trips',
-          'Shared resources for members',
+          'The president and treasurer must approve and publish how dues are used before online charging begins.',
+          'Unverified benefits or uses will not be advertised as guarantees.',
         ],
       },
     ],
@@ -333,7 +338,10 @@ export const costSections: GuideSection[] = [
     blocks: [
       {
         kind: 'list',
-        items: ['Gas is usually split among the car', 'Food varies by trip'],
+        items: [
+          'Transportation, food, permits, lodging, and gear needs vary by trip.',
+          'Each trip must publish its own requirements and cost expectations.',
+        ],
       },
     ],
   },
@@ -344,9 +352,9 @@ export const costSections: GuideSection[] = [
       {
         kind: 'list',
         items: [
-          'Gear rentals - just let us know what you need',
-          'Dinner and water on overnight trips',
-          'Trip planning and coordination',
+          'Joining the Discord community',
+          'Open Tuesday and Thursday weekly meetups',
+          'Viewing the public trip calendar',
         ],
       },
     ],
@@ -361,7 +369,7 @@ export const costSections: GuideSection[] = [
       },
     ],
     ctaLinks: [
-      { label: 'See what trips feel like →', href: '/start-here#experience' },
+      { label: 'See what trips feel like →', href: '/learn-more#experience' },
     ],
   },
 ]
@@ -486,7 +494,8 @@ export const faqSections: GuideSection[] = [
         items: [
           {
             question: 'Do I need a car?',
-            answer: 'No. Carpooling is standard.',
+            answer:
+              'You do not need a car to come meet us. Transportation and carpool options vary by trip.',
           },
         ],
       },
@@ -501,7 +510,8 @@ export const faqSections: GuideSection[] = [
         items: [
           {
             question: 'Can I bring friends?',
-            answer: 'Often yes, depending on the trip.',
+            answer:
+              'Guest eligibility is trip-specific and announced with the event.',
           },
         ],
       },
@@ -514,9 +524,9 @@ export const faqSections: GuideSection[] = [
       {
         kind: 'list',
         items: [
-          'Monday 5-7pm at the UNLV rock wall',
-          'Tuesday and Friday evenings at Nevada Climbing Center',
-          'One general meeting at the beginning of each semester',
+          'Tuesdays, 5–7 p.m., at Nevada Climbing Center',
+          'Thursdays, 5–7 p.m., at the UNLV Rec Wall',
+          'General meeting dates are announced in Discord',
           'Unofficial meets coordinated through Discord',
           'Official trips and events have designated meetup spots',
         ],
@@ -561,16 +571,24 @@ export const faqSections: GuideSection[] = [
             { link: { label: 'Instagram', href: INSTAGRAM_URL } },
             { text: ' to connect with the community' },
           ],
-          [{ text: 'Pay annual membership dues' }],
+          [
+            {
+              text: `Send the $25 annual membership dues through Zelle to ${ZELLE_PHONE_DISPLAY}`,
+            },
+          ],
         ],
       },
       {
+        kind: 'list',
+        items: [...MEMBERSHIP_INTEREST_OPTIONS],
+      },
+      {
         kind: 'notice',
-        text: 'Our PayPal is down right now, so we are not accepting payments yet. If you want to join, email us and we will get you set up.',
-        email: 'unlvmountainclub@gmail.com',
+        text: 'Keep your Zelle payment confirmation. Leadership reviews the membership form and confirms payments against the club account.',
+        email: CLUB_EMAIL,
       },
     ],
-    // ctaLinks: [{ label: 'Pay membership dues →', href: '/membership' }], // coming soon
+    ctaLinks: [{ label: 'Membership sign up →', href: '/membership-sign-up' }],
   },
   {
     id: 'platforms',
@@ -584,7 +602,7 @@ export const faqSections: GuideSection[] = [
           'Eventbrite for RSVPs, waivers, emergency contact (coming soon to the web app)',
           'Instagram',
           'PhotoCircle for trip photos',
-          'Email newsletter for trip announcements (coming soon)',
+          'The website for the public calendar and membership account',
         ],
       },
     ],
@@ -597,7 +615,7 @@ export const faqSections: GuideSection[] = [
       { label: 'Join Discord →', href: DISCORD_INVITE_URL },
       { label: 'Gear & what to bring →', href: '/gear' },
       { label: 'Costs & dues →', href: '/cost' },
-      { label: 'Start here page →', href: '/start-here' },
+      { label: 'Learn more →', href: '/learn-more' },
     ],
   },
 ]

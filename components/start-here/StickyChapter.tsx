@@ -210,7 +210,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
           return (
             <div
               key={blockKey(block)}
-              className="max-w-prose rounded-2xl border border-border/60 bg-secondary/20 p-4 md:p-5"
+              className="max-w-prose border border-border/60 bg-secondary/20 p-4 md:p-5"
             >
               <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 Note
@@ -262,7 +262,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
           return (
             <div
               key={blockKey(block)}
-              className="rounded-2xl border border-border/50 bg-secondary/20 p-6"
+              className="border border-border/50 bg-secondary/20 p-6"
             >
               <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 Note
@@ -307,7 +307,7 @@ export function StickyChapter({ section }: StickyChapterProps) {
         <div
           className={
             isCard
-              ? 'max-w-prose rounded-2xl border border-border/40 bg-secondary/20 p-6 md:p-8'
+              ? 'max-w-prose border border-border/40 bg-secondary/20 p-6 md:p-8'
               : 'max-w-prose'
           }
         >

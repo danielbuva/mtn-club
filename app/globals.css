@@ -3,7 +3,14 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.9821 0 0);
+  --background: #f8f1df;
+  --editorial-page: #f8f1df;
+  --editorial-ink: #211d18;
+  --editorial-panel: #e9ddc3;
+  --editorial-muted: #6a5146;
+  --editorial-inverse: #211d18;
+  --editorial-inverse-foreground: #f8f1df;
+  --editorial-highlight: #ffeca2;
   --foreground: oklch(0.2435 0 0);
   --card: oklch(0.9911 0 0);
   --card-foreground: oklch(0.2435 0 0);
@@ -64,8 +71,33 @@
   --spacing: 0.25rem;
 }
 
+@layer components {
+  .public-page-top {
+    padding-top: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .public-page-top {
+      padding-top: 3rem;
+    }
+  }
+
+  @media (max-height: 720px) {
+    .public-page-top {
+      padding-top: 1.5rem;
+    }
+  }
+}
+
 .dark {
-  --background: oklch(0.2659 0.0075 17.6356);
+  --background: oklch(0.2498 0.051 21.6);
+  --editorial-page: #28211d;
+  --editorial-ink: #f8f1df;
+  --editorial-panel: #3a302a;
+  --editorial-muted: #d1b9a6;
+  --editorial-inverse: #120f0d;
+  --editorial-inverse-foreground: #f8f1df;
+  --editorial-highlight: #ffeca2;
   --foreground: oklch(0.9491 0 0);
   --card: oklch(0.2244 0.0031 17.3887);
   --card-foreground: oklch(0.9491 0 0);
@@ -193,6 +225,18 @@
 
     background-color: var(--background);
   }
+  html:has([data-overscroll-tone="paper"]),
+  html:has([data-overscroll-tone="paper"]) body {
+    background-color: var(--editorial-page);
+  }
+  html:has([data-overscroll-tone="inverse"]),
+  html:has([data-overscroll-tone="inverse"]) body {
+    background-color: var(--editorial-inverse);
+  }
+  html:has([data-calendar-page]),
+  html:has([data-calendar-page]) body {
+    background-color: var(--editorial-page);
+  }
   :where(
       button,
       a[href],
@@ -235,6 +279,36 @@
       transparent 0
     );
   }
+}
+
+[data-calendar-page] {
+  --background: var(--editorial-page);
+  --foreground: var(--editorial-ink);
+  --card: var(--editorial-page);
+  --card-foreground: var(--editorial-ink);
+  --popover: var(--editorial-page);
+  --popover-foreground: var(--editorial-ink);
+  --primary: var(--editorial-ink);
+  --primary-foreground: var(--editorial-highlight);
+  --secondary: var(--editorial-panel);
+  --secondary-foreground: var(--editorial-ink);
+  --muted: var(--editorial-panel);
+  --muted-foreground: var(--editorial-muted);
+  --accent: var(--editorial-panel);
+  --accent-foreground: var(--editorial-ink);
+  --border: color-mix(in srgb, var(--editorial-ink) 22%, transparent);
+  --input: color-mix(in srgb, var(--editorial-ink) 28%, transparent);
+  --ring: var(--editorial-ink);
+}
+
+/* Magazine surfaces stay square. Floating thumb controls are the one rounded UI. */
+[data-editorial-surface] :where(*):not(input[type="radio"]) {
+  border-radius: 0;
+}
+
+[data-editorial-surface] [data-thumb-navigation],
+[data-editorial-surface] [data-thumb-navigation] :where(*) {
+  border-radius: 9999px;
 }
 
 .calendar-scroll {
@@ -284,6 +358,239 @@
 }
 
 @layer utilities {
+  .dark [data-public-shell] {
+    background-color: var(--editorial-page);
+    color: var(--editorial-ink);
+  }
+
+  .dark [data-public-shell] [class~="bg-[#F8F1DF]"] {
+    background-color: var(--editorial-page);
+  }
+
+  .dark [data-public-shell] [class~="bg-[#F8F1DF]/15"] {
+    background-color: color-mix(
+      in srgb,
+      var(--editorial-inverse-foreground) 15%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="bg-[#F8F1DF]/92"] {
+    background-color: color-mix(
+      in srgb,
+      var(--editorial-page) 92%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="bg-[#211D18]"] {
+    background-color: var(--editorial-inverse);
+  }
+
+  .dark [data-public-shell] [class~="bg-[#211D18]/20"] {
+    background-color: color-mix(in srgb, var(--editorial-ink) 20%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="bg-[#E9DDC3]"] {
+    background-color: var(--editorial-panel);
+  }
+
+  .dark [data-public-shell] [class~="bg-[#E9DDC3]/55"] {
+    background-color: color-mix(
+      in srgb,
+      var(--editorial-panel) 55%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="bg-white/55"] {
+    background-color: rgb(255 255 255 / 0.08);
+  }
+
+  .dark [data-public-shell] [class~="text-[#211D18]"] {
+    color: var(--editorial-ink);
+  }
+
+  .dark [data-public-shell] [class~="text-[#211D18]/60"] {
+    color: color-mix(in srgb, var(--editorial-ink) 60%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="text-[#211D18]/62"] {
+    color: color-mix(in srgb, var(--editorial-ink) 62%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="text-[#211D18]/65"] {
+    color: color-mix(in srgb, var(--editorial-ink) 65%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="text-[#211D18]/70"] {
+    color: color-mix(in srgb, var(--editorial-ink) 70%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="text-[#211D18]/72"] {
+    color: color-mix(in srgb, var(--editorial-ink) 72%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="text-[#6A5146]"] {
+    color: var(--editorial-muted);
+  }
+
+  .dark [data-public-shell] [class~="text-[#F8F1DF]"] {
+    color: var(--editorial-inverse-foreground);
+  }
+
+  .dark [data-public-shell] [class~="text-[#F8F1DF]/60"] {
+    color: color-mix(
+      in srgb,
+      var(--editorial-inverse-foreground) 60%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="text-[#F8F1DF]/65"] {
+    color: color-mix(
+      in srgb,
+      var(--editorial-inverse-foreground) 65%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="text-[#F8F1DF]/70"] {
+    color: color-mix(
+      in srgb,
+      var(--editorial-inverse-foreground) 70%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="text-[#F8F1DF]/75"] {
+    color: color-mix(
+      in srgb,
+      var(--editorial-inverse-foreground) 75%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="text-[#FFECA2]"] {
+    color: var(--editorial-highlight);
+  }
+
+  .dark [data-public-shell] [class~="text-[#FFECA2]/70"] {
+    color: color-mix(in srgb, var(--editorial-highlight) 70%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="border-[#211D18]"] {
+    border-color: var(--editorial-ink);
+  }
+
+  .dark [data-public-shell] [class~="border-[#211D18]/15"] {
+    border-color: color-mix(in srgb, var(--editorial-ink) 15%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="border-[#211D18]/20"] {
+    border-color: color-mix(in srgb, var(--editorial-ink) 20%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="border-[#211D18]/25"] {
+    border-color: color-mix(in srgb, var(--editorial-ink) 25%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="border-[#211D18]/30"] {
+    border-color: color-mix(in srgb, var(--editorial-ink) 30%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="border-[#211D18]/35"] {
+    border-color: color-mix(in srgb, var(--editorial-ink) 40%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="decoration-[#211D18]/35"] {
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--editorial-ink) 35%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="decoration-[#FFECA2]/35"] {
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--editorial-highlight) 35%,
+      transparent
+    );
+  }
+
+  .dark [data-public-shell] [class~="accent-[#211D18]"] {
+    accent-color: var(--editorial-ink);
+  }
+
+  .dark
+    [data-public-shell]
+    [class~="focus-visible:ring-[#211D18]"]:focus-visible {
+    --tw-ring-color: var(--editorial-ink);
+  }
+
+  .dark
+    [data-public-shell]
+    [class~="focus-visible:ring-[#FFECA2]"]:focus-visible {
+    --tw-ring-color: var(--editorial-highlight);
+  }
+
+  .dark
+    [data-public-shell]
+    [class~="focus-visible:ring-offset-[#F8F1DF]"]:focus-visible {
+    --tw-ring-offset-color: var(--editorial-page);
+  }
+
+  .dark
+    [data-public-shell]
+    [class~="focus-within:ring-[#211D18]"]:focus-within {
+    --tw-ring-color: var(--editorial-ink);
+  }
+
+  .dark
+    [data-public-shell]
+    [class~="focus-within:ring-offset-[#F8F1DF]"]:focus-within {
+    --tw-ring-offset-color: var(--editorial-page);
+  }
+
+  .dark
+    [data-public-shell]
+    [data-membership-sign-up-form]
+    :where(input:not([type="radio"]):not([type="checkbox"]), textarea) {
+    border-color: color-mix(in srgb, var(--editorial-ink) 78%, transparent);
+  }
+
+  .dark
+    [data-public-shell]
+    [data-membership-sign-up-form]
+    label:has(> input:is([type="radio"], [type="checkbox"])) {
+    border-color: color-mix(in srgb, var(--editorial-ink) 58%, transparent);
+  }
+
+  .dark
+    [data-public-shell]
+    [data-membership-sign-up-form]
+    label:has(> input:is([type="radio"], [type="checkbox"]):checked) {
+    border-color: var(--editorial-ink);
+  }
+
+  .dark [data-public-shell] [data-membership-sign-up-form] fieldset {
+    border-color: color-mix(in srgb, var(--editorial-ink) 38%, transparent);
+  }
+
+  .dark [data-public-shell] [class~="hover:bg-[#E9DDC3]"]:hover,
+  .dark
+    [data-public-shell]
+    [class~="has-[:checked]:bg-[#E9DDC3]"]:has(:checked) {
+    background-color: var(--editorial-panel);
+  }
+
+  .dark
+    [data-public-shell]
+    [class~="has-[:checked]:border-[#211D18]"]:has(:checked) {
+    border-color: var(--editorial-ink);
+  }
+
   .guide-highlight {
     animation: guide-highlight-pulse 1.4s ease-out forwards;
   }

@@ -19,7 +19,7 @@ export const getInvolvedSection: Section = {
     { id: 'get-involved--rsvp-trips', title: 'Step 3: RSVP to trips' },
     {
       id: 'get-involved--join-officially',
-      title: 'Step 4: Join officially (membership dues)',
+      title: 'Step 4: Become a member with $25 annual dues',
     },
   ],
   blocks: [],

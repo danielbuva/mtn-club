@@ -5,7 +5,7 @@ type InsetPanelProps = {
 
 export function InsetPanel({ title, rows }: InsetPanelProps) {
   return (
-    <div className="rounded-2xl border border-border/50 bg-secondary/30 p-6">
+    <div className="border border-border/50 bg-secondary/30 p-6">
       <p className="text-xs uppercase tracking-widest text-muted-foreground">
         {title}
       </p>

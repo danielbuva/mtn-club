@@ -42,9 +42,9 @@ const roles = [
 export default function TeamPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 pt-16">
+      <main className="flex-1">
         {/* Hero */}
-        <section className="py-24 px-4 bg-secondary/30">
+        <section className="public-page-top bg-secondary/30 px-4 pb-24">
           <div className="max-w-4xl mx-auto text-center">
             <span className="text-primary font-medium text-sm uppercase tracking-wider">
               Our Team
@@ -58,10 +58,10 @@ export default function TeamPage() {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="rounded-xl">
-                <Link href="/membership">Become a member</Link>
+                <Link href="/membership-sign-up">Become a member</Link>
               </Button>
               <Button variant="secondary" asChild className="rounded-xl">
-                <Link href="/start-here">Get started</Link>
+                <Link href="/learn-more">Learn more</Link>
               </Button>
             </div>
           </div>

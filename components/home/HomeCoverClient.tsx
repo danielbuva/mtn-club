@@ -24,7 +24,6 @@ export function HomeCoverClient({
       if (!url) return
       const img = new window.Image()
       img.src = url
-      void img.decode?.().catch(() => {})
     })
   }, [])
 

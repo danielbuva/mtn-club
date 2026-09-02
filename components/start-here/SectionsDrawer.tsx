@@ -1,16 +1,19 @@
 'use client'
 
-import { ChevronRightIcon } from 'lucide-react'
+import { ChevronRightIcon, List } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
+import Link from 'next/link'
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { GuideSection } from '@/app/(reader)/guides/types'
 import { BackButton } from '@/components/back-button'
+import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
 import { Button } from '@/components/ui/button'
 
 const HEADER_OFFSET = 72
 type SectionsDrawerProps = {
   sections: GuideSection[]
+  canCreateEvent: boolean
 }
 
 const prefersReducedMotion = () =>
@@ -143,17 +146,18 @@ const useDrawerFocusTrap = (
   }, [open, openerRef])
 }
 
-export function SectionsDrawer({ sections }: SectionsDrawerProps) {
+export function SectionsDrawer({
+  sections,
+  canCreateEvent,
+}: SectionsDrawerProps) {
   const [open, setOpen] = useState(false)
   const [expandedIds, setExpandedIds] = useState<GuideSection['id'][]>([])
-  const [hideFab, setHideFab] = useState(false)
   const highlightTimerRef = useRef<number | null>(null)
   const highlightRafRef = useRef<number | null>(null)
   const lastClickRef = useRef<GuideSection['id'] | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
   const closeButtonRef = useRef<HTMLButtonElement | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
-  const scrollHideTimerRef = useRef<number | null>(null)
 
   const tocSections = sections.filter(section => {
     const label = (section.tocLabel ?? section.title).trim()
@@ -164,28 +168,6 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
   const handleClose = useCallback(() => setOpen(false), [])
   useDrawerFocusTrap(open, panelRef, closeButtonRef, openerRef, handleClose)
   useInitialHashScroll()
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    const onScroll = () => {
-      setHideFab(true)
-      if (scrollHideTimerRef.current) {
-        window.clearTimeout(scrollHideTimerRef.current)
-      }
-      scrollHideTimerRef.current = window.setTimeout(() => {
-        setHideFab(false)
-      }, 180)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (scrollHideTimerRef.current) {
-        window.clearTimeout(scrollHideTimerRef.current)
-      }
-    }
-  }, [])
 
   const handleJump = (id: string, closeAfter = true) => {
     const target = document.getElementById(id)
@@ -218,7 +200,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
       )
       if (!target) return
       target.classList.remove('guide-highlight')
-      void target.offsetWidth
+      target.getBoundingClientRect()
       target.classList.add('guide-highlight')
       highlightTimerRef.current = window.setTimeout(() => {
         target.classList.remove('guide-highlight')
@@ -259,41 +241,32 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
 
   return (
     <>
-      <div className="fixed left-0 right-0 top-0 z-40 hidden items-center justify-between border-b border-border/50 bg-background/80 px-4 py-3 text-xs text-muted-foreground backdrop-blur md:flex">
-        <BackButton />
-        <div aria-hidden="true" />
-      </div>
-
-      <AnimatePresence>
-        {!hideFab ? (
-          <motion.div
-            className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 md:hidden"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
+      <ThumbNavigationBar ariaLabel="Guide navigation" showTheme={false}>
+        <BackButton className="min-h-9 rounded-full px-4 py-2 text-xs text-foreground/70 whitespace-nowrap" />
+        {canCreateEvent ? (
+          <Button
+            asChild
+            size="sm"
+            className="rounded-full px-4 text-xs whitespace-nowrap"
           >
-            <div className="relative flex items-center">
-              <div className="absolute right-full mr-3 rounded-full border border-border/50 bg-background/80 backdrop-blur">
-                <BackButton className="px-4 py-2 text-xs text-foreground/70 lowercase whitespace-nowrap" />
-              </div>
-              <Button
-                variant="secondary"
-                size="sm"
-                className="rounded-full"
-                aria-expanded={open}
-                aria-controls="sections-drawer"
-                onClick={event => {
-                  openerRef.current = event.currentTarget
-                  setOpen(true)
-                }}
-              >
-                Sections
-              </Button>
-            </div>
-          </motion.div>
+            <Link href="/trips/new">+ Event</Link>
+          </Button>
         ) : null}
-      </AnimatePresence>
+        <Button
+          variant="secondary"
+          size="sm"
+          className="rounded-full px-4 md:hidden"
+          aria-expanded={open}
+          aria-controls="sections-drawer"
+          onClick={event => {
+            openerRef.current = event.currentTarget
+            setOpen(true)
+          }}
+        >
+          <List className="size-4" aria-hidden="true" />
+          Sections
+        </Button>
+      </ThumbNavigationBar>
 
       <AnimatePresence initial={false} mode="wait">
         {open ? (
@@ -434,7 +407,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
       </AnimatePresence>
 
       <aside className="hidden md:block md:sticky md:top-20 md:self-start">
-        <div className="max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border border-border/50 bg-background/70 p-4 text-sm text-muted-foreground backdrop-blur">
+        <div className="max-h-[calc(100vh-7rem)] overflow-y-auto border border-border/50 bg-background/70 p-4 text-sm text-muted-foreground backdrop-blur">
           <p className="text-xs uppercase tracking-widest">Sections</p>
           <nav className="mt-4 space-y-3">
             {tocSections.map(section => (

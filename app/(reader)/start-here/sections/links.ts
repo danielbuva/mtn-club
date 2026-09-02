@@ -1,11 +1,11 @@
-import { DISCORD_INVITE_URL, INSTAGRAM_URL } from '@/lib/constants'
+import {
+  DISCORD_INVITE_URL,
+  INSTAGRAM_URL,
+  INVOLVEMENT_CENTER_URL,
+} from '@/lib/constants'
 
 export const LINKS = {
   discord: DISCORD_INVITE_URL,
   instagram: INSTAGRAM_URL,
-  involvementCenter:
-    'https://involvementcenter.unlv.edu/organization/unlvmountainclub',
-  eventbrite: 'TODO',
-  photoCircle: 'TODO',
-  newsletter: 'TODO',
+  involvementCenter: INVOLVEMENT_CENTER_URL,
 }
