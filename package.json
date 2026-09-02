@@ -20,7 +20,7 @@
     "generate:fair-qr": "node scripts/generate-fair-qr.mjs",
     "lint": "biome lint .",
     "lint:fix": "biome lint . --write",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "test:membership:sandbox": "node --env-file=.env.local scripts/test-membership-applications.mjs",
     "test:stripe:sandbox": "node --env-file=.env.local scripts/test-stripe-sandbox.mjs",
