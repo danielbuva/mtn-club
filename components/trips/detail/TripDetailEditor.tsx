@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { saveTripDetailEditsAction } from '@/app/(reader)/trips/actions'
-import { TripCTA } from '@/components/trips/TripCTA'
+import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -19,10 +19,6 @@ import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 type TripDetailEditorProps = {
   trip: TripDetail
   availableActivityTags: string[]
-  viewer: {
-    isAuthenticated: boolean
-    isMember: boolean
-  }
 }
 
 type TripDraft = {
@@ -91,7 +87,6 @@ const parseDateInput = (value: string) => {
 export function TripDetailEditor({
   trip,
   availableActivityTags,
-  viewer,
 }: TripDetailEditorProps) {
   const router = useRouter()
   const isMobile = useIsMobile()
@@ -185,7 +180,6 @@ export function TripDetailEditor({
     })
   }
 
-  const needsMembership = trip.visibility !== 'public'
   const startAt = parseDateInput(draft.startAt) ?? trip.startAt
   const endAt = parseDateInput(draft.endAt)
 
@@ -576,39 +570,7 @@ export function TripDetailEditor({
               </div>
             ) : (
               <>
-                {!viewer.isAuthenticated ? (
-                  <Button
-                    onClick={() =>
-                      router.push(
-                        `/auth/login?returnTo=${encodeURIComponent(`/trips/${trip.id}?edit=1`)}`,
-                      )
-                    }
-                  >
-                    Sign in to RSVP
-                  </Button>
-                ) : null}
-
-                {viewer.isAuthenticated &&
-                needsMembership &&
-                !viewer.isMember ? (
-                  <Button onClick={() => router.push('/membership')}>
-                    Become a member
-                  </Button>
-                ) : null}
-
-                {viewer.isAuthenticated &&
-                (!needsMembership || viewer.isMember) ? (
-                  <TripCTA
-                    trip={{
-                      id: trip.id,
-                      status: trip.status,
-                      rsvpCount: trip.rsvpCount,
-                      capacity: trip.capacity,
-                      waitlistEnabled: trip.waitlistEnabled,
-                      currentUserRsvp: trip.viewerRsvpStatus ?? null,
-                    }}
-                  />
-                ) : null}
+                <RsvpComingSoon />
 
                 <Button
                   type="button"

@@ -261,7 +261,6 @@ export default async function TripDetailPage({
       <TripDetailEditor
         trip={trip}
         availableActivityTags={availableActivityTags}
-        viewer={viewer}
       />
     )
   }

@@ -3,8 +3,8 @@
 import { format } from 'date-fns'
 import { CalendarDays, Clock3, MapPin, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { TripCTA } from '@/components/trips/TripCTA'
 import { TripMetaRow } from '@/components/trips/TripMetaRow'
+import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
 import { TripStats } from '@/components/trips/TripStats'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { DifficultyTag } from '@/components/trips/TripTags'
@@ -164,8 +164,8 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
 
           <div className="flex items-center justify-between gap-2 md:justify-end">
             <TripStatusBadge status={trip.status} />
-            <div className="flex-1 md:flex-none [&_button]:w-full md:[&_button]:w-auto">
-              <TripCTA trip={trip} />
+            <div className="flex-1 md:max-w-48">
+              <RsvpComingSoon />
             </div>
           </div>
         </div>
