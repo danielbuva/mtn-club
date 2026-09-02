@@ -33,6 +33,7 @@ import {
 import { useMediaQuery } from '@/components/calendar/use-media-query'
 import { TripDetailsDrawer } from '@/components/trip-details-drawer'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
+import { getSingleTripForDay } from '@/lib/events/calendar-day-selection'
 import { parseCalendarDate } from '@/lib/events/formatters'
 import type { CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
@@ -259,8 +260,9 @@ export function CalendarPageClient({
     const dayTrips = tripsByDay.get(dayKey) ?? []
     if (dayTrips.length === 0) return
     setCurrentDate(clampCalendarMonthDate(date))
-    if (dayTrips.length === 1) {
-      handleTripSelect(dayTrips[0])
+    const singleTrip = getSingleTripForDay(dayKey, dayTrips)
+    if (singleTrip) {
+      handleTripSelect(singleTrip)
       return
     }
     saveScrollPosition(currentView)
