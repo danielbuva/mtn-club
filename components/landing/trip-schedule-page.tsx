@@ -11,15 +11,24 @@ import {
 const calendarLinkClass =
   'group inline-flex min-h-11 items-center gap-2 font-semibold text-[#FFECA2] underline decoration-[#FFECA2]/35 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#FFECA2]'
 
-function CalendarLink() {
+function ScheduleLinks() {
   return (
-    <Link href="/calendar" className={calendarLinkClass}>
-      <span>See trip calendar</span>
-      <ArrowRight
-        className="size-4 transition-transform group-hover:translate-x-0.5"
-        aria-hidden="true"
-      />
-    </Link>
+    <div className="flex flex-col items-start gap-2">
+      <Link href="/calendar" className={calendarLinkClass}>
+        <span>See trip calendar</span>
+        <ArrowRight
+          className="size-4 transition-transform group-hover:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </Link>
+      <Link href="/trips" className={calendarLinkClass}>
+        <span>See all trips and events</span>
+        <ArrowRight
+          className="size-4 transition-transform group-hover:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </Link>
+    </div>
   )
 }
 
@@ -41,7 +50,7 @@ export function TripSchedulePage({
             Get outside this semester.
           </h1>
           <div className="mt-4">
-            <CalendarLink />
+            <ScheduleLinks />
           </div>
 
           <div className="mt-6 grid gap-px overflow-hidden border border-[#F8F1DF]/15 bg-[#F8F1DF]/15 sm:grid-cols-2">
@@ -80,7 +89,7 @@ export function TripSchedulePage({
             Exact time and logistics for special trips are announced in Discord.
           </p>
           <div className="mt-4">
-            <CalendarLink />
+            <ScheduleLinks />
           </div>
         </div>
       </section>

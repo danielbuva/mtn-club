@@ -9,6 +9,7 @@ import { TripRequirements } from '@/components/trips/detail/TripRequirements'
 import { TripStats } from '@/components/trips/detail/TripStats'
 import { TripStickyRsvpBar } from '@/components/trips/detail/TripStickyRsvpBar'
 import { Card, CardContent } from '@/components/ui/card'
+import { fetchPublicHostsByTrip } from '@/lib/events/queries'
 import { createClient } from '@/lib/supabase/server'
 import type {
   TripActivityType,
@@ -79,7 +80,14 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     return null
   }
 
-  const [privateRes, leaderRes, goingRsvpsRes, allRsvpsRes, viewerRes] =
+  const [
+    privateRes,
+    leaderRes,
+    goingRsvpsRes,
+    allRsvpsRes,
+    viewerRes,
+    hostsByTrip,
+  ] =
     await Promise.all([
       supabase
         .from('trip_private')
@@ -104,6 +112,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
         .select('user_id,status')
         .eq('trip_id', trip.id),
       supabase.auth.getUser(),
+      fetchPublicHostsByTrip(supabase, [trip.id]),
     ])
 
   const leaderProfileRes = leaderRes.data?.user_id
@@ -151,6 +160,10 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
 
   const activityTags = trip.activity_tags ?? []
   const activityType = resolveActivityType(activityTags)
+  const publicHostName = hostsByTrip
+    .get(trip.id)
+    ?.map(host => host.name)
+    .join(', ')
 
   const attendeeProfileByUserId = new Map(
     (attendeeProfilesRes.data ?? []).map(profile => [profile.user_id, profile]),
@@ -184,11 +197,13 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     locationNotes: privateRes.data?.meetup_point ?? undefined,
     startAt: new Date(trip.starts_at),
     endAt: trip.ends_at ? new Date(trip.ends_at) : undefined,
+    isAllDay: trip.is_all_day,
     difficulty: resolveDifficulty(trip.difficulty),
     status,
     capacity: trip.capacity ?? undefined,
     rsvpCount,
-    leaderName: leaderProfileRes.data?.display_name ?? undefined,
+    leaderName:
+      publicHostName ?? leaderProfileRes.data?.display_name ?? undefined,
     leaderAvatarUrl: leaderProfileRes.data?.avatar_url ?? undefined,
     summary: trip.description_public ?? undefined,
     description:

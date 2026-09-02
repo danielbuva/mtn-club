@@ -47,7 +47,9 @@ export async function fetchTripsInRange(
     console.error('TRIPS ERROR', error)
     throw error
   }
-  return data ?? []
+  return (data ?? []).filter(
+    trip => !trip.schedule_key?.startsWith('fall-2026-weekly-'),
+  )
 }
 
 export async function fetchPublicHostsByTrip(

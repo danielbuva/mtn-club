@@ -25,6 +25,7 @@ export type TripListItem = {
   locationName: string
   startAt: Date
   endAt?: Date
+  isAllDay?: boolean
   difficulty?: TripDifficulty
   capacity?: number
   rsvpCount?: number
@@ -62,6 +63,7 @@ export type TripDetail = {
   locationNotes?: string
   startAt: Date
   endAt?: Date
+  isAllDay?: boolean
   difficulty?: TripDifficulty
   status: TripStatus
   capacity?: number

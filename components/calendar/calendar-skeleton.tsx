@@ -4,6 +4,7 @@ import { CalendarControls } from '@/components/calendar/calendar-controls'
 import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { WEEKLY_MEETUP_NOTE } from '@/lib/club-content'
 import { cn } from '@/lib/utils'
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -42,6 +43,9 @@ export function CalendarSkeleton({
 
         <section className="px-4 pb-6 pt-6 md:pt-12">
           <div className="mx-auto w-full max-w-6xl space-y-6">
+            <p className="text-sm font-medium text-foreground/80">
+              {WEEKLY_MEETUP_NOTE}
+            </p>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-col gap-3 md:flex-row md:items-center">
                 <CalendarControls

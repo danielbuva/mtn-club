@@ -3,26 +3,14 @@ import test from 'node:test'
 import {
   CLUB_DISCLAIMER,
   FALL_2026_TRIPS,
-  WEEKLY_MEETUPS,
+  WEEKLY_MEETUP_NOTE,
 } from '../lib/club-content.ts'
 
-test('publishes the locked Fall 2026 weekly meetup ranges', () => {
-  assert.deepEqual(WEEKLY_MEETUPS, [
-    {
-      day: 'Tuesdays',
-      time: '5–7 p.m.',
-      location: 'Nevada Climbing Center',
-      firstDate: '2026-09-01',
-      lastDate: '2026-12-08',
-    },
-    {
-      day: 'Thursdays',
-      time: '5–7 p.m.',
-      location: 'UNLV Rec Wall',
-      firstDate: '2026-09-03',
-      lastDate: '2026-12-10',
-    },
-  ])
+test('publishes weekly meetups as one compact note', () => {
+  assert.equal(
+    WEEKLY_MEETUP_NOTE,
+    'Meetups: Tuesdays @ NCC · Thursdays @ UNLV Rock Wall.',
+  )
 })
 
 test('publishes all ten supplied special trips as date-only inventory', () => {

@@ -1,5 +1,5 @@
-import { CalendarDays, Clock3, MapPin, Users } from 'lucide-react'
-import { formatSpots, formatTripDate, formatTripTime } from '@/lib/trips/format'
+import { CalendarDays, Clock3, MapPin } from 'lucide-react'
+import { formatTripDate, formatTripTime } from '@/lib/trips/format'
 import type { TripDetail } from '@/lib/trips/types'
 
 type TripQuickFactsProps = {
@@ -8,7 +8,7 @@ type TripQuickFactsProps = {
 
 export function TripQuickFacts({ trip }: TripQuickFactsProps) {
   return (
-    <section className="grid grid-cols-2 gap-3 rounded-2xl border border-border/70 bg-card p-4 md:grid-cols-4 md:p-5">
+    <section className="grid grid-cols-2 gap-3 rounded-2xl border border-border/70 bg-card p-4 md:grid-cols-3 md:p-5">
       <div className="space-y-1">
         <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
@@ -31,16 +31,7 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
           Time
         </p>
         <p className="text-sm font-medium">
-          {formatTripTime(trip.startAt, trip.endAt)}
-        </p>
-      </div>
-      <div className="space-y-1">
-        <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-          <Users className="h-3.5 w-3.5" aria-hidden="true" />
-          Spots
-        </p>
-        <p className="text-sm font-medium">
-          {formatSpots(trip.rsvpCount ?? 0, trip.capacity)}
+          {trip.isAllDay ? 'TBA' : formatTripTime(trip.startAt, trip.endAt)}
         </p>
       </div>
     </section>

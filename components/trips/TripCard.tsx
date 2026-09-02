@@ -1,7 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
-import { CalendarDays, Clock3, MapPin, Users } from 'lucide-react'
+import { CalendarDays, Clock3, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
 import { TripMetaRow } from '@/components/trips/TripMetaRow'
@@ -18,21 +18,6 @@ const getDateLabel = (startAt: Date, endAt?: Date) => {
     return format(startAt, 'MMM d')
   }
   return `${format(startAt, 'MMM d')}-${format(endAt, 'MMM d')}`
-}
-
-const getCapacityLabel = (trip: TripListItem) => {
-  if (typeof trip.capacity !== 'number') {
-    return null
-  }
-
-  if (typeof trip.rsvpCount === 'number') {
-    const remaining = Math.max(trip.capacity - trip.rsvpCount, 0)
-    return remaining > 0
-      ? `${remaining} spots left`
-      : `${trip.rsvpCount} / ${trip.capacity}`
-  }
-
-  return `${trip.capacity} spots`
 }
 
 const getLeaderInitials = (name?: string) => {
@@ -61,14 +46,11 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
   const metaItems = [
     { icon: MapPin, text: trip.locationName },
     { icon: CalendarDays, text: getDateLabel(trip.startAt, trip.endAt) },
-    { icon: Clock3, text: format(trip.startAt, 'h:mm a') },
-    { icon: Users, text: `${trip.rsvpCount ?? 0} going` },
+    {
+      icon: Clock3,
+      text: trip.isAllDay ? 'TBA' : format(trip.startAt, 'h:mm a'),
+    },
   ]
-
-  const capacityLabel = getCapacityLabel(trip)
-  if (capacityLabel) {
-    metaItems.push({ icon: Users, text: capacityLabel })
-  }
 
   return (
     <Card

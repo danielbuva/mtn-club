@@ -14,22 +14,8 @@ export type FallTrip = {
   activity: 'bouldering' | 'camping' | 'hiking' | 'sport_climbing'
 }
 
-export const WEEKLY_MEETUPS = [
-  {
-    day: 'Tuesdays',
-    time: '5–7 p.m.',
-    location: 'Nevada Climbing Center',
-    firstDate: '2026-09-01',
-    lastDate: '2026-12-08',
-  },
-  {
-    day: 'Thursdays',
-    time: '5–7 p.m.',
-    location: 'UNLV Rec Wall',
-    firstDate: '2026-09-03',
-    lastDate: '2026-12-10',
-  },
-] as const
+export const WEEKLY_MEETUP_NOTE =
+  'Meetups: Tuesdays @ NCC · Thursdays @ UNLV Rock Wall.'
 
 export const FALL_2026_TRIPS: FallTrip[] = [
   {

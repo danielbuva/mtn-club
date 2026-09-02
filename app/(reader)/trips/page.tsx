@@ -1,7 +1,11 @@
 import { addMonths, format, startOfDay } from 'date-fns'
 import { TripsList } from '@/components/trips/TripsList'
 import { Card, CardContent } from '@/components/ui/card'
-import { fetchTripsInRange } from '@/lib/events/queries'
+import { WEEKLY_MEETUP_NOTE } from '@/lib/club-content'
+import {
+  fetchPublicHostsByTrip,
+  fetchTripsInRange,
+} from '@/lib/events/queries'
 import type { EventRow } from '@/lib/events/types'
 import { createClient } from '@/lib/supabase/server'
 import type {
@@ -147,6 +151,7 @@ const toTripListItem = (
   event: EventRow,
   rsvpCount: number,
   currentUserRsvp: TripRsvpChoice,
+  leaderName?: string,
 ): TripListItem => {
   const difficulty = resolveDifficulty(event.difficulty)
   const activityTags = event.activity_tags ?? []
@@ -164,6 +169,7 @@ const toTripListItem = (
     locationName: event.location_public ?? 'TBD',
     startAt: new Date(event.starts_at),
     endAt: event.ends_at ? new Date(event.ends_at) : undefined,
+    isAllDay: event.is_all_day,
     difficulty,
     capacity: event.capacity ?? undefined,
     rsvpCount,
@@ -171,6 +177,7 @@ const toTripListItem = (
     visibility: event.visibility,
     waitlistEnabled: event.waitlist_enabled,
     currentUserRsvp,
+    leaderName,
     tags: tags.length ? tags : undefined,
     detailHref: `/trips/${event.id}`,
   }
@@ -186,16 +193,22 @@ export default async function TripsPage() {
     end: sixMonthsOut,
   })
 
-  const rsvpCounts = await fetchRsvpCounts(events.map(event => event.id))
-  const currentUserRsvpByTrip = await fetchCurrentUserRsvp(
-    events.map(event => event.id),
-  )
+  const tripIds = events.map(event => event.id)
+  const [rsvpCounts, currentUserRsvpByTrip, hostsByTrip] = await Promise.all([
+    fetchRsvpCounts(tripIds),
+    fetchCurrentUserRsvp(tripIds),
+    fetchPublicHostsByTrip(supabase, tripIds),
+  ])
 
   const trips = events.reduce<TripListItem[]>((acc, event) => {
     const rsvpCount = rsvpCounts.get(event.id) ?? 0
     const currentUserRsvp = currentUserRsvpByTrip.get(event.id) ?? null
+    const leaderName = hostsByTrip
+      .get(event.id)
+      ?.map(host => host.name)
+      .join(', ')
 
-    acc.push(toTripListItem(event, rsvpCount, currentUserRsvp))
+    acc.push(toTripListItem(event, rsvpCount, currentUserRsvp, leaderName))
     return acc
   }, [])
 
@@ -211,6 +224,9 @@ export default async function TripsPage() {
         <p className="text-sm text-muted-foreground">
           Showing trips from {format(now, 'MMM d, yyyy')} to{' '}
           {format(sixMonthsOut, 'MMM d, yyyy')}.
+        </p>
+        <p className="text-sm font-medium text-foreground/80">
+          {WEEKLY_MEETUP_NOTE}
         </p>
       </section>
 

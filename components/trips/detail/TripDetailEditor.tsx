@@ -1,6 +1,6 @@
 'use client'
 
-import { CalendarDays, Clock3, MapPin, Users } from 'lucide-react'
+import { CalendarDays, Clock3, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useTransition } from 'react'
@@ -13,7 +13,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { formatSpots, formatTripDate } from '@/lib/trips/format'
+import { formatTripDate } from '@/lib/trips/format'
 import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 
 type TripDetailEditorProps = {
@@ -381,7 +381,7 @@ export function TripDetailEditor({
         )}
       </section>
 
-      <section className="grid grid-cols-2 gap-3 rounded-2xl border border-border/70 bg-card p-4 md:grid-cols-4 md:p-5">
+      <section className="grid grid-cols-2 gap-3 rounded-2xl border border-border/70 bg-card p-4 md:grid-cols-3 md:p-5">
         <div className="space-y-1">
           <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
@@ -420,15 +420,6 @@ export function TripDetailEditor({
             }
             className="h-8 text-sm"
           />
-        </div>
-        <div className="space-y-1">
-          <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-            <Users className="h-3.5 w-3.5" aria-hidden="true" />
-            Spots
-          </p>
-          <p className="text-sm font-medium">
-            {formatSpots(trip.rsvpCount ?? 0, trip.capacity)}
-          </p>
         </div>
       </section>
 

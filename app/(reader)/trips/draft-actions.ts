@@ -270,6 +270,7 @@ export async function publishTripFormAction(payload: {
       parsed.data.overviewCarpoolNeedGear?.trim() || null,
     capacity: maxParticipants,
     is_official: isOfficial,
+    is_all_day: true,
     updated_at: new Date().toISOString(),
   }
 
