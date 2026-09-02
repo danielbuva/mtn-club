@@ -10,7 +10,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: 'light dark',
-  themeColor: '#F8F1DF',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F8F1DF' },
+    { media: '(prefers-color-scheme: dark)', color: '#28211D' },
+  ],
 }
 
 export default function LearnMorePage() {

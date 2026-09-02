@@ -26,7 +26,11 @@ export default function ReaderLayout({
   children: React.ReactNode
 }) {
   return (
-    <div data-editorial-surface className="min-h-screen text-foreground">
+    <div
+      data-editorial-surface
+      data-overscroll-tone="paper"
+      className="min-h-screen bg-background text-foreground"
+    >
       <Suspense fallback={<ReaderNavigationFallback />}>
         <ReaderFloatingNavigation />
       </Suspense>
