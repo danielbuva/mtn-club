@@ -1,7 +1,12 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import type { GuideInlinePart, GuideSection } from '@/app/(reader)/guides/types'
 import { CopyEmailButton } from '@/components/guides/CopyEmailButton'
-import { GuideCtas } from '@/components/guides/GuideCtas'
+import {
+  GuideCtas,
+  GuideCtasSkeleton,
+  MembershipAwareGuideCtas,
+} from '@/components/guides/GuideCtas'
 import { GuideSection as GuideSectionWrapper } from '@/components/guides/GuideSection'
 import { InsetPanel } from '@/components/start-here/InsetPanel'
 import { PullQuote } from '@/components/start-here/PullQuote'
@@ -13,6 +18,9 @@ type StickyChapterProps = {
 const subsectionScrollClass = 'scroll-mt-20'
 
 export function StickyChapter({ section }: StickyChapterProps) {
+  const hasMembershipCta = section.ctaLinks?.some(
+    link => link.href === '/membership-sign-up',
+  )
   const blockKey = (block: GuideSection['blocks'][number]) => {
     switch (block.kind) {
       case 'p':
@@ -279,7 +287,15 @@ export function StickyChapter({ section }: StickyChapterProps) {
         }
         return null
       })}
-      {section.ctaLinks?.length ? <GuideCtas links={section.ctaLinks} /> : null}
+      {section.ctaLinks?.length ? (
+        hasMembershipCta ? (
+          <Suspense fallback={<GuideCtasSkeleton />}>
+            <MembershipAwareGuideCtas links={section.ctaLinks} />
+          </Suspense>
+        ) : (
+          <GuideCtas links={section.ctaLinks} />
+        )
+      ) : null}
     </div>
   )
 

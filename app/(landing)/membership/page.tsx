@@ -16,18 +16,32 @@ export const viewport: Viewport = {
   themeColor: '#F8F1DF',
 }
 
-async function MembershipContent() {
-  const viewer = await getViewer()
+async function MembershipContent({
+  searchParams,
+}: {
+  searchParams: Promise<{ signedIn?: string }>
+}) {
+  const [viewer, params] = await Promise.all([getViewer(), searchParams])
   const account = viewer.userId
     ? await getMembershipAccount(viewer.userId)
     : null
-  return <MembershipPage viewer={viewer} account={account} />
+  return (
+    <MembershipPage
+      viewer={viewer}
+      account={account}
+      signedIn={params.signedIn === '1'}
+    />
+  )
 }
 
-export default function Page() {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ signedIn?: string }>
+}) {
   return (
     <Suspense fallback={<MembershipPageSkeleton />}>
-      <MembershipContent />
+      <MembershipContent searchParams={searchParams} />
     </Suspense>
   )
 }

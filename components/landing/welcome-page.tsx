@@ -1,10 +1,12 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { TrackLink } from '@/components/analytics/track-link'
 import { PublicShell } from '@/components/landing/public-shell'
 import { WelcomeDisclaimer } from '@/components/landing/welcome-disclaimer'
+import { getViewer } from '@/lib/auth/viewer'
 import {
   DISCORD_INVITE_URL,
   INSTAGRAM_URL,
@@ -15,6 +17,9 @@ const internalLinkClass =
   'group flex min-h-14 items-center justify-between gap-3 border-b border-[#211D18]/20 py-2 text-left outline-none transition hover:pl-1 focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#211D18] [@media(max-height:720px)]:min-h-10 [@media(max-height:720px)]:py-1 [@media(max-height:720px)]:text-sm'
 
 const externalLinkClass = `${internalLinkClass} text-[#6A5146]`
+
+const membershipLinkClass =
+  'group inline-flex min-h-13 w-64 items-center justify-between gap-3 border border-[#211D18] px-6 py-2 text-base font-bold text-[#211D18] outline-none transition hover:bg-[#E9DDC3] focus-visible:ring-2 focus-visible:ring-[#211D18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F1DF] [@media(max-height:720px)]:min-h-11 [@media(max-height:720px)]:px-5 [@media(max-height:720px)]:text-sm'
 
 function LinkArrow({ external = false }: { external?: boolean }) {
   const Icon = external ? ArrowUpRight : ArrowRight
@@ -39,6 +44,50 @@ function WelcomePhoto() {
       />
     </div>
   )
+}
+
+function MembershipLink({
+  href = '/membership-sign-up',
+  label = 'Become a Member',
+}: {
+  href?: string
+  label?: string
+}) {
+  return (
+    <TrackLink
+      href={href}
+      eventName="welcome_membership_signup_click"
+      className={membershipLinkClass}
+    >
+      <span>{label}</span>
+      <ArrowRight
+        className="-mr-px size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+        aria-hidden="true"
+      />
+    </TrackLink>
+  )
+}
+
+function MembershipLinkSkeleton() {
+  return (
+    <div
+      className={membershipLinkClass}
+      aria-hidden="true"
+      data-membership-link-loading
+    >
+      <span className="h-4 w-32 animate-pulse bg-[#211D18]/15" />
+      <span className="size-4 animate-pulse bg-[#211D18]/15" />
+    </div>
+  )
+}
+
+async function ViewerMembershipLink() {
+  const viewer = await getViewer()
+  if (!viewer.isAuthenticated) {
+    return <MembershipLink />
+  }
+
+  return <MembershipLink href="/membership" label="Membership Status" />
 }
 
 export function WelcomePage() {
@@ -90,17 +139,9 @@ export function WelcomePage() {
                 />
               </TrackLink>
 
-              <TrackLink
-                href="/membership-sign-up"
-                eventName="welcome_membership_signup_click"
-                className="group inline-flex min-h-13 w-64 items-center justify-between gap-3 border border-[#211D18] px-6 py-2 text-base font-bold text-[#211D18] outline-none transition hover:bg-[#E9DDC3] focus-visible:ring-2 focus-visible:ring-[#211D18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F1DF] [@media(max-height:720px)]:min-h-11 [@media(max-height:720px)]:px-5 [@media(max-height:720px)]:text-sm"
-              >
-                <span>Become a Member</span>
-                <ArrowRight
-                  className="-mr-px size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </TrackLink>
+              <Suspense fallback={<MembershipLinkSkeleton />}>
+                <ViewerMembershipLink />
+              </Suspense>
             </div>
             <p className="mt-3 max-w-lg text-xs leading-5 text-[#211D18]/62 sm:text-sm [@media(max-height:720px)]:mt-2 [@media(max-height:720px)]:text-[11px] [@media(max-height:720px)]:leading-4">
               Open community invitations and weekly meets are free. Member-only

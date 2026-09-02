@@ -10,12 +10,8 @@ export function MembershipPageSkeleton() {
       >
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_22rem] lg:items-end">
           <div>
-            <p className="font-brand text-sm uppercase tracking-[0.2em] text-[#6A5146]">
-              Membership
-            </p>
-            <h1 className="mt-3 max-w-4xl font-brand text-6xl uppercase leading-[0.9] sm:text-8xl">
-              Become a member.
-            </h1>
+            <div className="h-4 w-28 animate-pulse bg-[#211D18]/10" />
+            <div className="mt-3 h-14 max-w-xl animate-pulse bg-[#211D18]/10 sm:h-20" />
             <div className="mt-6 h-8 max-w-2xl animate-pulse bg-[#E9DDC3]" />
           </div>
           <div className="min-h-48 animate-pulse bg-[#211D18]" />

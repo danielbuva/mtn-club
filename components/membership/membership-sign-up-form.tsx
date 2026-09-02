@@ -65,7 +65,7 @@ export function MembershipSignUpForm() {
           <p className="mt-5 text-base leading-6 text-[#211D18]/70">
             Already signed up?{' '}
             <Link
-              href="/auth/login"
+              href={`/auth/login?returnTo=${encodeURIComponent('/membership?signedIn=1')}`}
               className="font-semibold text-[#211D18] underline decoration-[#211D18]/35 underline-offset-4"
             >
               Click here.
@@ -270,7 +270,7 @@ export function MembershipSignUpForm() {
             <div className="flex flex-wrap items-center gap-4 border-t border-[#211D18]/20 pt-7">
               <SubmitButton />
               <Link
-                href="/auth/login"
+                href={`/auth/login?returnTo=${encodeURIComponent('/membership?signedIn=1')}`}
                 className="text-sm font-semibold underline underline-offset-4"
               >
                 Already have an account? Sign in

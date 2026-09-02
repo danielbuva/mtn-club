@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from 'next'
+import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 import { MembershipSignUpForm } from '@/components/membership/membership-sign-up-form'
+import { MembershipSignUpSkeleton } from '@/components/membership/membership-sign-up-skeleton'
+import { getViewer } from '@/lib/auth/viewer'
 
 export const metadata: Metadata = {
   title: 'Membership Sign Up | UNLV Mountain Club',
@@ -12,6 +16,19 @@ export const viewport: Viewport = {
   themeColor: '#F8F1DF',
 }
 
-export default function Page() {
+async function MembershipSignUpContent() {
+  const viewer = await getViewer()
+  if (viewer.isAuthenticated) {
+    redirect('/membership')
+  }
+
   return <MembershipSignUpForm />
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<MembershipSignUpSkeleton />}>
+      <MembershipSignUpContent />
+    </Suspense>
+  )
 }

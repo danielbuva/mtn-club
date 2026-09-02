@@ -3,9 +3,9 @@
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import {
+  getReturnToFromReferrer,
   getReturnToFromSearchParams,
   getStoredReturnTo,
-  sanitizeReturnTo,
   storeReturnTo,
 } from '@/lib/auth/return-to'
 
@@ -22,7 +22,10 @@ export function AuthReturnTo() {
       return
     }
 
-    const fromReferrer = sanitizeReturnTo(document.referrer)
+    const fromReferrer = getReturnToFromReferrer(
+      document.referrer,
+      window.location.origin,
+    )
     if (fromReferrer) {
       storeReturnTo(fromReferrer)
     }

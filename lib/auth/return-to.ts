@@ -33,6 +33,23 @@ export const sanitizeReturnTo = (value: string | null): string | null => {
   }
 }
 
+export const getReturnToFromReferrer = (
+  value: string | null,
+  currentOrigin: string,
+): string | null => {
+  if (!value) return null
+
+  try {
+    const referrer = new URL(value, currentOrigin)
+    if (referrer.origin !== currentOrigin) return null
+    return sanitizeReturnTo(
+      `${referrer.pathname}${referrer.search}${referrer.hash}`,
+    )
+  } catch {
+    return null
+  }
+}
+
 export const storeReturnTo = (value: string | null) => {
   if (!isClient) return
   const sanitized = sanitizeReturnTo(value)

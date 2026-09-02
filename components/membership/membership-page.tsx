@@ -17,12 +17,20 @@ const formatDateTime = (value: string) =>
 export function MembershipPage({
   viewer,
   account,
+  signedIn = false,
 }: {
   viewer: Viewer
   account: MembershipAccount | null
+  signedIn?: boolean
 }) {
   if (viewer.isAuthenticated) {
-    return <SignedInMembershipPage viewer={viewer} account={account} />
+    return (
+      <SignedInMembershipPage
+        viewer={viewer}
+        account={account}
+        signedIn={signedIn}
+      />
+    )
   }
 
   return (
@@ -120,9 +128,11 @@ export function MembershipPage({
 function SignedInMembershipPage({
   viewer,
   account,
+  signedIn,
 }: {
   viewer: Viewer
   account: MembershipAccount | null
+  signedIn: boolean
 }) {
   const application = account?.schemaReady ? account.application : null
   const showZelleInstructions = Boolean(
@@ -135,6 +145,11 @@ function SignedInMembershipPage({
 
       <section className="public-page-top border-b border-[#211D18]/15 px-5 pb-14 sm:px-8 sm:pb-20">
         <div className="mx-auto max-w-4xl">
+          {signedIn ? (
+            <output className="mb-6 block border border-[#211D18]/20 bg-[#E9DDC3] px-4 py-3 text-sm font-semibold text-[#211D18]">
+              Signed in{viewer.email ? ` as ${viewer.email}` : ''}.
+            </output>
+          ) : null}
           <p className="font-brand text-sm uppercase tracking-[0.2em] text-[#6A5146]">
             Membership
           </p>
@@ -210,7 +225,11 @@ function MembershipStatus({
     return (
       <StatusBox icon={BadgeCheck} title="Already signed up?">
         <p>Sign in to see your form and confirmation status.</p>
-        <StatusLink href="/auth/login">Sign in</StatusLink>
+        <StatusLink
+          href={`/auth/login?returnTo=${encodeURIComponent('/membership?signedIn=1')}`}
+        >
+          Sign in
+        </StatusLink>
       </StatusBox>
     )
   }

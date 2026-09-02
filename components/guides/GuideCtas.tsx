@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { GuideCtaLink } from '@/app/(reader)/guides/types'
+import { getViewer } from '@/lib/auth/viewer'
 import { cn } from '@/lib/utils'
 
 type GuideCtasProps = {
@@ -26,4 +27,31 @@ export function GuideCtas({ links, className }: GuideCtasProps) {
       ))}
     </div>
   )
+}
+
+export function GuideCtasSkeleton({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn('mt-6 md:mt-8 flex flex-col items-end gap-4', className)}
+      aria-hidden="true"
+      data-guide-ctas-loading
+    >
+      <span className="h-6 w-52 animate-pulse bg-foreground/10 md:h-8" />
+    </div>
+  )
+}
+
+export async function MembershipAwareGuideCtas(props: GuideCtasProps) {
+  const viewer = await getViewer()
+  if (!viewer.isAuthenticated) {
+    return <GuideCtas {...props} />
+  }
+
+  const links = props.links.map(link =>
+    link.href === '/membership-sign-up'
+      ? { label: 'Membership status →', href: '/membership' }
+      : link,
+  )
+
+  return <GuideCtas {...props} links={links} />
 }

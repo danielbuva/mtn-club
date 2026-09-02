@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -51,7 +52,8 @@ export function LoginForm({
       const returnTo =
         getReturnToFromSearchParams(searchParams) ?? takeStoredReturnTo() ?? '/'
       clearStoredReturnTo()
-      router.push(returnTo)
+      toast.success('Signed in successfully.')
+      router.replace(returnTo)
       setTimeout(() => {
         router.refresh()
       }, 0)
