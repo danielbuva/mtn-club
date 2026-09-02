@@ -7,13 +7,39 @@ import { cn } from '@/lib/utils'
 interface CalendarCategoryPillProps {
   categories: CalendarCategoryKey[]
   className?: string
+  eventMarker?: boolean
 }
 
 export function CalendarCategoryPill({
   categories,
   className,
+  eventMarker = false,
 }: CalendarCategoryPillProps) {
   if (categories.length === 0) return null
+
+  if (eventMarker) {
+    const categoryOccurrences = new Map<CalendarCategoryKey, number>()
+    const eventSegments = categories.map(category => {
+      const occurrence = (categoryOccurrences.get(category) ?? 0) + 1
+      categoryOccurrences.set(category, occurrence)
+      return { category, key: `${category}-${occurrence}` }
+    })
+
+    return (
+      <span
+        data-calendar-event-marker
+        aria-hidden="true"
+        className={cn('inline-flex h-2 shrink-0 overflow-hidden', className)}
+      >
+        {eventSegments.map(segment => (
+          <span
+            key={segment.key}
+            className={cn('size-2 shrink-0', CATEGORY_COLORS[segment.category])}
+          />
+        ))}
+      </span>
+    )
+  }
 
   if (categories.length === 1) {
     const color = CATEGORY_COLORS[categories[0]]

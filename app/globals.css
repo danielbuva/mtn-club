@@ -218,11 +218,13 @@
     @apply border-border outline-ring/50;
   }
   html {
+    min-height: 100%;
     background-color: var(--background);
   }
   body {
     @apply bg-background text-foreground;
 
+    min-height: 100%;
     background-color: var(--background);
   }
   html:has([data-overscroll-tone="paper"]),
@@ -308,6 +310,10 @@
 
 [data-editorial-surface] [data-thumb-navigation],
 [data-editorial-surface] [data-thumb-navigation] :where(*) {
+  border-radius: 9999px;
+}
+
+[data-editorial-surface] [data-calendar-event-marker] {
   border-radius: 9999px;
 }
 

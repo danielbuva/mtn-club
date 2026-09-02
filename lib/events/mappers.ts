@@ -22,7 +22,7 @@ export function eventToCalendarTrip(event: EventRow): CalendarTrip {
   const startDate = new Date(startAt)
   const endDate = new Date(endAt)
 
-  const activityTags: string[] = []
+  const activityTags = event.activity_tags ?? []
   const seasonTag = getSeasonTag(startDate)
   const tags = Array.from(new Set([...activityTags, seasonTag]))
 

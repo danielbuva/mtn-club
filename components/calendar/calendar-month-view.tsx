@@ -1,6 +1,6 @@
 'use client'
 
-import { addDays, endOfWeek, format, startOfWeek } from 'date-fns'
+import { format, startOfWeek } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   type RefObject,
@@ -11,11 +11,14 @@ import {
   useRef,
   useState,
 } from 'react'
-import {
-  getDayCategories,
-  getTripCategories,
-} from '@/components/calendar/calendar-categories'
+import { getTripCategories } from '@/components/calendar/calendar-categories'
 import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
+import {
+  CALENDAR_MAX_YEAR,
+  CALENDAR_MIN_MONTH_INDEX,
+  CALENDAR_MIN_YEAR,
+  formatMonthParam,
+} from '@/components/calendar/calendar-utils'
 import { Button } from '@/components/ui/button'
 import type { ViewerKey } from '@/lib/events/calendar'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
@@ -41,6 +44,7 @@ interface CalendarMonthViewProps {
   scrollAdjustToken: number
   onRequestYear: (year: number, direction: 'prepend' | 'append') => void
   onScrollTargetHandled: () => void
+  onVisibleMonthChange: (monthKey: string) => void
   onDaySelect: (date: Date) => void
   onTeaserClick: (day: string, teaser: TripTeaserDay) => void
   onToday: () => void
@@ -50,7 +54,10 @@ interface CalendarMonthViewProps {
 
 type WeekRow = {
   weekKey: string
-  days: { date: Date; dateKey: string }[]
+  monthKey: string
+  monthName: string
+  isLastWeekOfMonth: boolean
+  days: ({ date: Date; dateKey: string } | null)[]
   monthLabel?: { monthKey: string; label: string }
 }
 
@@ -59,38 +66,52 @@ const SCROLL_END_DEBOUNCE_MS = 160
 const SNAP_VELOCITY_THRESHOLD = 0.6
 
 const getHeaderMonthForWeek = (week: WeekRow) => {
-  const monthDate = week.monthLabel
-    ? (week.days.find(day => day.date.getDate() === 1)?.date ??
-      week.days[3].date)
-    : week.days[3].date
   return {
-    monthKey: format(monthDate, 'yyyy-MM'),
-    label: format(monthDate, 'MMMM yyyy'),
+    monthKey: week.monthKey,
+    label: week.monthName,
   }
 }
 
 const buildWeekRows = (minYear: number, maxYear: number): WeekRow[] => {
-  const start = startOfWeek(new Date(minYear, 0, 1), { weekStartsOn: 0 })
-  const end = endOfWeek(new Date(maxYear, 11, 31), { weekStartsOn: 0 })
   const rows: WeekRow[] = []
-  let cursor = start
 
-  while (cursor <= end) {
-    const days = Array.from({ length: 7 }, (_, index) => {
-      const date = addDays(cursor, index)
-      return { date, dateKey: format(date, 'yyyy-MM-dd') }
-    })
+  for (let year = minYear; year <= maxYear; year += 1) {
+    const firstMonthIndex =
+      year === CALENDAR_MIN_YEAR ? CALENDAR_MIN_MONTH_INDEX : 0
 
-    const monthStart = days.find(day => day.date.getDate() === 1)
-    const monthLabel = monthStart
-      ? {
-          monthKey: format(monthStart.date, 'yyyy-MM'),
-          label: format(monthStart.date, 'MMMM yyyy'),
-        }
-      : undefined
+    for (let monthIndex = firstMonthIndex; monthIndex <= 11; monthIndex += 1) {
+      const monthStart = new Date(year, monthIndex, 1)
+      const monthKey = format(monthStart, 'yyyy-MM')
+      const monthName = format(monthStart, 'MMMM yyyy')
+      const leadingBlankCount = monthStart.getDay()
+      const dayCount = new Date(year, monthIndex + 1, 0).getDate()
+      const slotCount = Math.ceil((leadingBlankCount + dayCount) / 7) * 7
 
-    rows.push({ weekKey: format(cursor, 'yyyy-MM-dd'), days, monthLabel })
-    cursor = addDays(cursor, 7)
+      for (let offset = 0; offset < slotCount; offset += 7) {
+        const days = Array.from({ length: 7 }, (_, columnIndex) => {
+          const dayNumber = offset + columnIndex - leadingBlankCount + 1
+          if (dayNumber < 1 || dayNumber > dayCount) return null
+          const date = new Date(year, monthIndex, dayNumber)
+          return { date, dateKey: format(date, 'yyyy-MM-dd') }
+        })
+        const firstDate = days.find(day => day !== null)?.date ?? monthStart
+        const weekStartKey = format(
+          startOfWeek(firstDate, { weekStartsOn: 0 }),
+          'yyyy-MM-dd',
+        )
+        const weekKey = `${monthKey}:${weekStartKey}`
+        const isFirstWeek = offset === 0
+
+        rows.push({
+          weekKey,
+          monthKey,
+          monthName,
+          isLastWeekOfMonth: offset + 7 >= slotCount,
+          days,
+          monthLabel: isFirstWeek ? { monthKey, label: monthName } : undefined,
+        })
+      }
+    }
   }
 
   return rows
@@ -112,13 +133,13 @@ export function CalendarMonthView({
   scrollAdjustToken,
   onRequestYear,
   onScrollTargetHandled,
+  onVisibleMonthChange,
   onDaySelect,
   onTeaserClick,
   onToday,
   onPrevMonth,
   onNextMonth,
 }: CalendarMonthViewProps) {
-  const monthAnchorRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const weekRowRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const monthBoundaryWeekRef = useRef<Record<string, string>>({})
   const headerBlockRef = useRef<HTMLDivElement | null>(null)
@@ -158,20 +179,13 @@ export function CalendarMonthView({
     [yearBounds.maxYear, yearBounds.minYear],
   )
 
-  useEffect(() => {
-    if (weekRows.length === 0) return
-    monthAnchorRefs.current = {}
-    weekRowRefs.current = {}
-    monthBoundaryWeekRef.current = {}
-  }, [weekRows])
-
   useLayoutEffect(() => {
     const container = scrollContainerRef.current
     if (!container) return
     const prevTop = container.scrollTop
     suppressSnapRef.current = prevTop !== restoreScrollTop
     container.scrollTop = restoreScrollTop
-  }, [restoreScrollTop, scrollContainerRef.current])
+  }, [restoreScrollTop, scrollContainerRef])
 
   useEffect(() => {
     if (scrollAdjustToken > 0) {
@@ -260,8 +274,9 @@ export function CalendarMonthView({
     const nextHeader = getHeaderMonthForWeek(activeWeek)
     if (nextHeader.monthKey !== headerMonth.monthKey) {
       setHeaderMonth(nextHeader)
+      onVisibleMonthChange(nextHeader.monthKey)
     }
-  }, [headerMonth.monthKey, scrollContainerRef, weekRows])
+  }, [headerMonth.monthKey, onVisibleMonthChange, scrollContainerRef, weekRows])
 
   const snapToTarget = useCallback(() => {
     const container = scrollContainerRef.current
@@ -342,13 +357,16 @@ export function CalendarMonthView({
       }
 
       const threshold = 240
-      if (container.scrollTop < threshold && yearBounds.minYear > 1970) {
+      if (
+        container.scrollTop < threshold &&
+        yearBounds.minYear > CALENDAR_MIN_YEAR
+      ) {
         onRequestYear(yearBounds.minYear - 1, 'prepend')
       }
       if (
         container.scrollHeight - container.scrollTop - container.clientHeight <
           threshold &&
-        yearBounds.maxYear < 2100
+        yearBounds.maxYear < CALENDAR_MAX_YEAR
       ) {
         onRequestYear(yearBounds.maxYear + 1, 'append')
       }
@@ -393,6 +411,9 @@ export function CalendarMonthView({
   }, [updateHeaderMonth])
 
   const todayKey = format(new Date(), 'yyyy-MM-dd')
+  const canGoToPreviousMonth =
+    formatMonthParam(currentDate) !==
+    `${CALENDAR_MIN_YEAR}-${String(CALENDAR_MIN_MONTH_INDEX + 1).padStart(2, '0')}`
 
   return (
     <div>
@@ -417,6 +438,7 @@ export function CalendarMonthView({
                   size="icon"
                   className="rounded-none"
                   onClick={onPrevMonth}
+                  disabled={!canGoToPreviousMonth}
                   aria-label="Previous month"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -469,16 +491,19 @@ export function CalendarMonthView({
           <div
             key={week.weekKey}
             data-week-start={week.weekKey}
-            data-month-key={week.monthLabel?.monthKey}
+            data-month-key={week.monthKey}
             ref={(node: HTMLDivElement | null) => {
               weekRowRefs.current[week.weekKey] = node
               if (week.monthLabel) {
-                monthAnchorRefs.current[week.monthLabel.monthKey] = node
                 monthBoundaryWeekRef.current[week.monthLabel.monthKey] =
                   week.weekKey
               }
             }}
-            className="relative grid grid-cols-7"
+            className={cn(
+              'relative grid aspect-[7/1] grid-cols-7 grid-rows-1',
+              !week.isLastWeekOfMonth && 'border-b border-border',
+              week.isLastWeekOfMonth && 'mb-3 md:mb-0',
+            )}
           >
             {week.monthLabel && (
               <div
@@ -491,8 +516,23 @@ export function CalendarMonthView({
               </div>
             )}
             {week.days.map((day, index) => {
+              if (!day) {
+                return (
+                  <div
+                    key={`${week.weekKey}:blank-${index}`}
+                    aria-hidden="true"
+                    className={cn(
+                      'h-full min-h-0 border-r-0 border-border md:border-r',
+                      index === 6 && 'md:border-r-0',
+                    )}
+                  />
+                )
+              }
+
               const dayTrips = tripsByDay.get(day.dateKey) ?? []
-              const categories = getDayCategories(dayTrips)
+              const eventCategories = dayTrips.map(
+                trip => getTripCategories(trip)[0],
+              )
               const teaser =
                 viewerKey === 'public'
                   ? teasersByDay.get(day.dateKey)
@@ -515,25 +555,20 @@ export function CalendarMonthView({
                   type="button"
                   onClick={handleDayClick}
                   className={cn(
-                    'flex h-24 w-full flex-col gap-2 border-b border-r border-border px-2 py-2 text-left transition hover:bg-secondary/60 sm:h-28',
+                    'flex h-full min-h-0 min-w-0 w-full flex-col gap-2 overflow-hidden border-r-0 border-border px-2 py-2 text-left transition hover:bg-secondary/60 md:border-r',
                     isToday && 'bg-primary/5',
-                    index % 7 === 6 && 'border-r-0',
+                    index % 7 === 6 && 'md:border-r-0',
                   )}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-center">
                     <span
                       className={cn(
                         'inline-flex h-7 w-7 items-center justify-center text-xs font-semibold',
-                        isToday && 'bg-primary text-primary-foreground',
+                        isToday && 'bg-foreground text-background',
                       )}
                     >
                       {day.date.getDate()}
                     </span>
-                    {dayTrips.length > 0 && (
-                      <span className="text-[10px] text-muted-foreground">
-                        {dayTrips.length}
-                      </span>
-                    )}
                   </div>
 
                   {showTitles ? (
@@ -544,7 +579,8 @@ export function CalendarMonthView({
                           className="flex items-center gap-1"
                         >
                           <CalendarCategoryPill
-                            categories={getTripCategories(trip)}
+                            categories={getTripCategories(trip).slice(0, 1)}
+                            eventMarker
                             className="shrink-0"
                           />
                           <span className="truncate">{trip.title}</span>
@@ -552,20 +588,29 @@ export function CalendarMonthView({
                       ))}
                       {dayTrips.length > tripsToShow.length && (
                         <span className="text-[10px] text-muted-foreground">
-                          +{dayTrips.length - tripsToShow.length} more
+                          More events
                         </span>
                       )}
                     </div>
                   ) : (
-                    categories.length > 0 && (
-                      <CalendarCategoryPill categories={categories} />
+                    eventCategories.length > 0 && (
+                      <CalendarCategoryPill
+                        categories={eventCategories}
+                        eventMarker
+                        className="mx-auto"
+                      />
                     )
                   )}
 
-                  {hasTeaser && (
-                    <span className="text-[10px] text-muted-foreground">
-                      {teaser.event_count} upcoming
-                    </span>
+                  {hasTeaser && teaser && (
+                    <CalendarCategoryPill
+                      categories={Array.from(
+                        { length: teaser.event_count },
+                        () => 'other' as const,
+                      )}
+                      eventMarker
+                      className="mx-auto"
+                    />
                   )}
                 </button>
               )

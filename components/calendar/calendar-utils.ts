@@ -2,6 +2,15 @@ import { addDays, format } from 'date-fns'
 import { formatDateOnly, parseCalendarDate } from '@/lib/events/formatters'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 
+export {
+  CALENDAR_MAX_YEAR,
+  CALENDAR_MIN_MONTH_INDEX,
+  CALENDAR_MIN_YEAR,
+  clampCalendarDate,
+  clampCalendarMonthDate,
+  isCalendarTripSupported,
+} from '@/lib/events/calendar-boundary'
+
 export type ViewMode = 'calendar' | 'list'
 export type SemesterKey = 'spring' | 'summer' | 'fall' | 'winter' | 'all'
 

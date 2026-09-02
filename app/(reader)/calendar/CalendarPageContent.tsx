@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import { connection } from 'next/server'
 import { CalendarPage } from '@/components/calendar/calendar-page'
+import { clampCalendarMonthDate } from '@/components/calendar/calendar-utils'
 import { getViewer } from '@/lib/auth/viewer'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
 
@@ -27,7 +28,9 @@ export async function CalendarPageContent({
   searchParams,
 }: CalendarPageContentProps) {
   await connection()
-  const monthDate = resolveMonthDate(searchParams?.month)
+  const monthDate = clampCalendarMonthDate(
+    resolveMonthDate(searchParams?.month),
+  )
   const currentMonth = format(monthDate, 'yyyy-MM')
   const year = monthDate.getFullYear()
   const viewer = await getViewer()

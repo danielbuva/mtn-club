@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server'
+import {
+  CALENDAR_MAX_YEAR,
+  CALENDAR_MIN_YEAR,
+} from '@/components/calendar/calendar-utils'
 import { getViewer } from '@/lib/auth/viewer'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
 
 const isValidYear = (value: number) =>
-  Number.isInteger(value) && value >= 1970 && value <= 2100
+  Number.isInteger(value) &&
+  value >= CALENDAR_MIN_YEAR &&
+  value <= CALENDAR_MAX_YEAR
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
