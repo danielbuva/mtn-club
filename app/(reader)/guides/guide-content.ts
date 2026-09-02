@@ -40,7 +40,7 @@ export const startHereSections: GuideSection[] = [
       {
         kind: 'list',
         items: [
-          'People looking for guided, commercial trips',
+          'People looking for commercial trips',
           'Anyone expecting the club to remove all personal responsibility',
           "Folks who aren't respectful of shared gear or group time",
         ],
