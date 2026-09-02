@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import {
   encodeMembershipInterests,
@@ -125,6 +126,55 @@ export async function submitMembershipSignUp(
   }
   const userId = signUpResult.data.user.id
 
+  const clearSessionAndDeleteUser = async () => {
+    const signOutResult = await supabase.auth.signOut({ scope: 'local' })
+    if (signOutResult.error) {
+      console.error(
+        'Membership sign-up session cleanup failed:',
+        signOutResult.error,
+      )
+    }
+
+    const cleanupResult = await admin.auth.admin.deleteUser(userId)
+    if (cleanupResult.error) {
+      console.error(
+        'Membership sign-up account cleanup failed:',
+        cleanupResult.error,
+      )
+    }
+    return cleanupResult.error
+  }
+
+  const session = signUpResult.data.session
+  if (!session) {
+    await clearSessionAndDeleteUser()
+    return {
+      error:
+        'We could not sign you in after creating the account. Please try again.',
+    }
+  }
+
+  const sessionResult = await supabase.auth.setSession({
+    access_token: session.access_token,
+    refresh_token: session.refresh_token,
+  })
+  const verifiedUser = await supabase.auth.getUser()
+  if (
+    sessionResult.error ||
+    verifiedUser.error ||
+    verifiedUser.data.user?.id !== userId
+  ) {
+    console.error('Membership sign-up session verification failed:', {
+      session: sessionResult.error,
+      user: verifiedUser.error,
+    })
+    await clearSessionAndDeleteUser()
+    return {
+      error:
+        'We could not sign you in after creating the account. Please try again.',
+    }
+  }
+
   const duesPaymentClaimed = duesStatus === 'paid'
   const guardianConsent = ageStatus === 'adult' ? 'not_required' : 'pending'
   const duesClaimedAt = duesPaymentClaimed ? new Date().toISOString() : null
@@ -177,19 +227,14 @@ export async function submitMembershipSignUp(
       membership: membershipResult.error,
       application: applicationResult.error,
     })
-    const cleanupResult = await admin.auth.admin.deleteUser(userId)
-    if (cleanupResult.error) {
-      console.error(
-        'Membership sign-up account cleanup failed:',
-        cleanupResult.error,
-      )
-    }
+    const cleanupError = await clearSessionAndDeleteUser()
     return {
-      error: cleanupResult.error
+      error: cleanupError
         ? 'Your account was created, but we could not save the membership form. Contact club leadership for help.'
         : 'We could not save your signup. Please try again.',
     }
   }
 
+  revalidatePath('/membership')
   redirect('/membership')
 }
