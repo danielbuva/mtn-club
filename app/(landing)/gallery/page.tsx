@@ -24,7 +24,7 @@ async function PublishedGalleryPhotos() {
   const photos = await fetchPublishedGalleryPhotos()
   return (
     <GalleryPhotoCollection
-      photos={photos.length > 0 ? photos : involvementCenterGalleryPhotos}
+      photos={[...involvementCenterGalleryPhotos, ...photos]}
     />
   )
 }

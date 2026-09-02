@@ -1,7 +1,7 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import { HomeCoverClient } from '@/components/home/HomeCoverClient'
 import UNLVMountainClub from '@/components/unlv-mountain-club'
-import { DISCORD_INVITE_URL } from '@/lib/constants'
 
 /*
 Tuning knobs:
@@ -18,7 +18,61 @@ const frameStyle = {
   left: 'calc(var(--frame-padding) + env(safe-area-inset-left))',
 } as const
 
-export default function HomeCover() {
+const primaryLinkClass =
+  'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75'
+const secondaryLinkClass =
+  'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75'
+
+const authenticatedLinks = [
+  { href: '/welcome', label: 'Club Info', primary: true },
+  { href: '/calendar', label: 'Calendar', primary: false },
+  { href: '/gallery', label: 'Photo Gallery', primary: false },
+  { href: '/trips', label: 'Trips & Events', primary: false },
+] as const
+
+export function HomeCoverNavigation({
+  isAuthenticated,
+}: {
+  isAuthenticated: boolean
+}) {
+  if (!isAuthenticated) {
+    return (
+      <Link href="/welcome" className={primaryLinkClass}>
+        Welcome →
+      </Link>
+    )
+  }
+
+  return authenticatedLinks.map(link => (
+    <Link
+      key={link.href}
+      href={link.href}
+      className={link.primary ? primaryLinkClass : secondaryLinkClass}
+    >
+      {link.label} →
+    </Link>
+  ))
+}
+
+export function HomeCoverNavigationSkeleton() {
+  return (
+    <div
+      className="flex flex-col items-end gap-3 py-1"
+      aria-hidden="true"
+      data-homecover-navigation-loading
+    >
+      {[10, 8, 11, 12].map(width => (
+        <span
+          key={width}
+          className="h-6 animate-pulse bg-[#FFF4C9]/20 sm:h-8 md:h-9"
+          style={{ width: `${width}rem` }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export default function HomeCover({ navigation }: { navigation: ReactNode }) {
   const transitionDurationMs = 500
 
   return (
@@ -48,34 +102,7 @@ export default function HomeCover() {
               aria-label="Primary"
               className="relative space-y-3 sm:space-y-3 py-1"
             >
-              <Link
-                href="/welcome"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
-              >
-                Start Here →
-              </Link>
-              <Link
-                href="/calendar"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]"
-              >
-                Calendar →
-              </Link>
-              {DISCORD_INVITE_URL && (
-                <Link
-                  href={DISCORD_INVITE_URL}
-                  className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
-                >
-                  <span className="inline-flex items-center gap-2">
-                    Join Discord →
-                  </span>
-                </Link>
-              )}
-              <Link
-                href="/join"
-                className="block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75"
-              >
-                Join the Club →
-              </Link>
+              {navigation}
             </nav>
           </div>
         </div>
