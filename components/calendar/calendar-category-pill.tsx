@@ -10,6 +10,8 @@ interface CalendarCategoryPillProps {
   eventMarker?: boolean
 }
 
+const EVENT_MARKER_SEGMENT_SIZE_PX = 8
+
 export function CalendarCategoryPill({
   categories,
   className,
@@ -29,12 +31,21 @@ export function CalendarCategoryPill({
       <span
         data-calendar-event-marker
         aria-hidden="true"
-        className={cn('inline-flex h-2 shrink-0 overflow-hidden', className)}
+        className={cn(
+          'flex h-[8px] flex-none items-stretch overflow-hidden leading-none',
+          className,
+        )}
+        style={{
+          width: `${eventSegments.length * EVENT_MARKER_SEGMENT_SIZE_PX}px`,
+        }}
       >
         {eventSegments.map(segment => (
           <span
             key={segment.key}
-            className={cn('size-2 shrink-0', CATEGORY_COLORS[segment.category])}
+            className={cn(
+              'block h-[8px] w-[8px] flex-none',
+              CATEGORY_COLORS[segment.category],
+            )}
           />
         ))}
       </span>

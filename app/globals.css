@@ -313,10 +313,6 @@
   border-radius: 9999px;
 }
 
-[data-editorial-surface] [data-calendar-event-marker] {
-  border-radius: 9999px;
-}
-
 .calendar-scroll {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;

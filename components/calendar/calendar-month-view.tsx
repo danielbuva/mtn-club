@@ -555,15 +555,15 @@ export function CalendarMonthView({
                   type="button"
                   onClick={handleDayClick}
                   className={cn(
-                    'flex h-full min-h-0 min-w-0 w-full flex-col gap-2 overflow-hidden border-r-0 border-border px-2 py-2 text-left transition hover:bg-secondary/60 md:border-r',
+                    'flex h-full min-h-0 min-w-0 w-full flex-col gap-1 overflow-hidden border-r-0 border-border px-0 py-1 text-left transition hover:bg-secondary/60 md:gap-2 md:border-r md:px-2 md:py-2',
                     isToday && 'bg-primary/5',
                     index % 7 === 6 && 'md:border-r-0',
                   )}
                 >
-                  <div className="flex items-center justify-center">
+                  <div className="flex h-6 flex-none items-center justify-center md:h-7">
                     <span
                       className={cn(
-                        'inline-flex h-7 w-7 items-center justify-center text-xs font-semibold',
+                        'inline-flex h-6 w-6 items-center justify-center text-xs font-semibold md:h-7 md:w-7',
                         isToday && 'bg-foreground text-background',
                       )}
                     >
@@ -594,23 +594,25 @@ export function CalendarMonthView({
                     </div>
                   ) : (
                     eventCategories.length > 0 && (
-                      <CalendarCategoryPill
-                        categories={eventCategories}
-                        eventMarker
-                        className="mx-auto"
-                      />
+                      <div className="flex h-2 w-full flex-none items-center justify-center">
+                        <CalendarCategoryPill
+                          categories={eventCategories}
+                          eventMarker
+                        />
+                      </div>
                     )
                   )}
 
                   {hasTeaser && teaser && (
-                    <CalendarCategoryPill
-                      categories={Array.from(
-                        { length: teaser.event_count },
-                        () => 'other' as const,
-                      )}
-                      eventMarker
-                      className="mx-auto"
-                    />
+                    <div className="flex h-2 w-full flex-none items-center justify-center">
+                      <CalendarCategoryPill
+                        categories={Array.from(
+                          { length: teaser.event_count },
+                          () => 'other' as const,
+                        )}
+                        eventMarker
+                      />
+                    </div>
                   )}
                 </button>
               )
