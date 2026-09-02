@@ -4,6 +4,7 @@ import {
   CLUB_DISCLAIMER,
   FALL_2026_TRIPS,
   WEEKLY_MEETUP_NOTE,
+  WEEKLY_MEETUPS,
 } from '../lib/club-content.ts'
 
 test('publishes weekly meetups as one compact note', () => {
@@ -11,6 +12,15 @@ test('publishes weekly meetups as one compact note', () => {
     WEEKLY_MEETUP_NOTE,
     'Meetups: Tuesdays at 5 p.m. @ NCC · Thursdays at 5 p.m. @ UNLV Rock Wall.',
   )
+})
+
+test('links the Tuesday meetup to Nevada Climbing Center', () => {
+  assert.deepEqual(WEEKLY_MEETUPS[0], {
+    day: 'Tuesdays',
+    time: '5 p.m.',
+    location: 'NCC',
+    href: 'https://nevadaclimbingcenters.com/',
+  })
 })
 
 test('publishes all ten supplied special trips as date-only inventory', () => {

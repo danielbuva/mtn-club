@@ -1,7 +1,6 @@
-import { addMonths, format, startOfDay } from 'date-fns'
 import { TripsList } from '@/components/trips/TripsList'
 import { Card, CardContent } from '@/components/ui/card'
-import { WEEKLY_MEETUP_NOTE } from '@/lib/club-content'
+import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import { fetchPublicHostsByTrip, fetchTripsInRange } from '@/lib/events/queries'
 import type { EventRow } from '@/lib/events/types'
 import { createClient } from '@/lib/supabase/server'
@@ -182,12 +181,12 @@ const toTripListItem = (
 
 export default async function TripsPage() {
   const supabase = await createClient()
-  const now = startOfDay(new Date())
-  const sixMonthsOut = addMonths(now, 6)
+  const rangeStart = new Date('2026-09-01T00:00:00-07:00')
+  const rangeEnd = new Date('2026-12-01T23:59:59.999-08:00')
 
   const events = await fetchTripsInRange(supabase, {
-    start: now,
-    end: sixMonthsOut,
+    start: rangeStart,
+    end: rangeEnd,
   })
 
   const tripIds = events.map(event => event.id)
@@ -219,12 +218,9 @@ export default async function TripsPage() {
           Trips & Events
         </h1>
         <p className="text-sm text-muted-foreground">
-          Showing trips from {format(now, 'MMM d, yyyy')} to{' '}
-          {format(sixMonthsOut, 'MMM d, yyyy')}.
+          Showing trips from Sep 1, 2026 to Dec 1, 2026.
         </p>
-        <p className="text-sm font-medium text-foreground/80">
-          {WEEKLY_MEETUP_NOTE}
-        </p>
+        <WeeklyMeetupNote className="text-foreground/80" />
       </section>
 
       {trips.length === 0 ? (

@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { PublicShell } from '@/components/landing/public-shell'
+import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import {
   FALL_2026_TRIPS,
   formatTripDate,
@@ -9,11 +10,11 @@ import {
 } from '@/lib/club-content'
 
 const calendarLinkClass =
-  'group inline-flex min-h-11 items-center gap-2 font-semibold text-[#FFECA2] underline decoration-[#FFECA2]/35 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#FFECA2]'
+  'group inline-flex items-center gap-2 leading-7 font-semibold text-[#FFECA2] underline decoration-[#FFECA2]/35 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#FFECA2]'
 
 function ScheduleLinks() {
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className="flex flex-col items-start">
       <Link href="/calendar" className={calendarLinkClass}>
         <span>See trip calendar</span>
         <ArrowRight
@@ -53,7 +54,9 @@ export function TripSchedulePage({
             <ScheduleLinks />
           </div>
 
-          <div className="mt-6 grid gap-px overflow-hidden border border-[#F8F1DF]/15 bg-[#F8F1DF]/15 sm:grid-cols-2">
+          <WeeklyMeetupNote className="mt-6 text-[#F8F1DF]/75" />
+
+          <div className="mt-4 grid gap-px overflow-hidden border border-[#F8F1DF]/15 bg-[#F8F1DF]/15 sm:grid-cols-2">
             {FALL_2026_TRIPS.map(trip => {
               const scheduleKey = getFallTripScheduleKey(trip)
               const href =

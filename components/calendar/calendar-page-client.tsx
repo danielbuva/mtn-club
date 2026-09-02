@@ -32,7 +32,7 @@ import {
 } from '@/components/calendar/calendar-utils'
 import { useMediaQuery } from '@/components/calendar/use-media-query'
 import { TripDetailsDrawer } from '@/components/trip-details-drawer'
-import { WEEKLY_MEETUP_NOTE } from '@/lib/club-content'
+import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
 import { getSingleTripForDay } from '@/lib/events/calendar-day-selection'
 import { getClubCalendarDate, parseCalendarDate } from '@/lib/events/formatters'
@@ -454,9 +454,7 @@ export function CalendarPageClient({
 
         <section className="px-4 pb-6 pt-6 md:pt-12">
           <div className="mx-auto w-full max-w-6xl space-y-6">
-            <p className="text-sm font-medium text-foreground/80">
-              {WEEKLY_MEETUP_NOTE}
-            </p>
+            <WeeklyMeetupNote className="text-foreground/80" />
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-col gap-3 md:flex-row md:items-center">
                 <CalendarControls
