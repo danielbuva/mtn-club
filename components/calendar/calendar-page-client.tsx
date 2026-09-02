@@ -34,7 +34,7 @@ import { useMediaQuery } from '@/components/calendar/use-media-query'
 import { TripDetailsDrawer } from '@/components/trip-details-drawer'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
 import { getSingleTripForDay } from '@/lib/events/calendar-day-selection'
-import { parseCalendarDate } from '@/lib/events/formatters'
+import { getClubCalendarDate, parseCalendarDate } from '@/lib/events/formatters'
 import type { CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
@@ -288,7 +288,7 @@ export function CalendarPageClient({
   }
 
   const handleToday = async () => {
-    const today = clampCalendarDate(new Date())
+    const today = clampCalendarDate(getClubCalendarDate())
     const weekStartKey = format(
       startOfWeek(today, { weekStartsOn: 0 }),
       'yyyy-MM-dd',

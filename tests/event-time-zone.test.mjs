@@ -1,11 +1,22 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { formatDateOnly, formatTimeRange } from '../lib/events/formatters.ts'
+import {
+  formatDateOnly,
+  formatTimeRange,
+  getClubCalendarDate,
+} from '../lib/events/formatters.ts'
 
 test('keeps late-afternoon Las Vegas events on their local calendar day', () => {
   const startsAt = new Date('2026-09-02T00:00:00.000Z')
 
   assert.equal(formatDateOnly(startsAt, 'America/Los_Angeles'), '2026-09-01')
+})
+
+test('keeps calendar today on September 1 during the late Las Vegas evening', () => {
+  const lateEvening = new Date('2026-09-02T04:28:00.000Z')
+  const clubToday = getClubCalendarDate(lateEvening)
+
+  assert.equal(formatDateOnly(clubToday), '2026-09-01')
 })
 
 test('formats weekly meetup times in the event time zone', () => {

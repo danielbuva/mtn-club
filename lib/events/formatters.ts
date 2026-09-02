@@ -1,3 +1,5 @@
+export const CLUB_TIME_ZONE = 'America/Los_Angeles'
+
 export function formatDateRange(start: string, end?: string | null): string {
   const startDate = parseCalendarDate(start)
   const endDate = end ? parseCalendarDate(end) : startDate
@@ -60,6 +62,10 @@ export function formatDateOnly(value: Date, timeZone?: string): string {
   const month = String(value.getMonth() + 1).padStart(2, '0')
   const day = String(value.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
+}
+
+export function getClubCalendarDate(value = new Date()): Date {
+  return parseCalendarDate(formatDateOnly(value, CLUB_TIME_ZONE))
 }
 
 export function formatTime(

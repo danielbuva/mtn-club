@@ -21,6 +21,7 @@ import {
 } from '@/components/calendar/calendar-utils'
 import { Button } from '@/components/ui/button'
 import type { ViewerKey } from '@/lib/events/calendar'
+import { CLUB_TIME_ZONE, formatDateOnly } from '@/lib/events/formatters'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
@@ -410,7 +411,7 @@ export function CalendarMonthView({
     updateHeaderMonth()
   }, [updateHeaderMonth])
 
-  const todayKey = format(new Date(), 'yyyy-MM-dd')
+  const todayKey = formatDateOnly(new Date(), CLUB_TIME_ZONE)
   const canGoToPreviousMonth =
     formatMonthParam(currentDate) !==
     `${CALENDAR_MIN_YEAR}-${String(CALENDAR_MIN_MONTH_INDEX + 1).padStart(2, '0')}`

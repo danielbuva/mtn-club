@@ -4,17 +4,18 @@ import { CalendarPage } from '@/components/calendar/calendar-page'
 import { clampCalendarMonthDate } from '@/components/calendar/calendar-utils'
 import { getViewer } from '@/lib/auth/viewer'
 import { getCalendarYearData, type ViewerKey } from '@/lib/events/calendar'
+import { getClubCalendarDate } from '@/lib/events/formatters'
 
 const resolveMonthDate = (monthValue?: string): Date => {
   const match = monthValue ? /^(\d{4})-(\d{2})$/.exec(monthValue) : null
   if (!match) {
-    return new Date()
+    return getClubCalendarDate()
   }
 
   const year = Number(match[1])
   const monthIndex = Number(match[2]) - 1
   if (!Number.isFinite(year) || monthIndex < 0 || monthIndex > 11) {
-    return new Date()
+    return getClubCalendarDate()
   }
 
   return new Date(year, monthIndex, 1)
