@@ -47,6 +47,10 @@ const CATEGORY_BY_TAG: Record<string, CalendarCategoryKey> = {
   meetup: 'social',
 }
 
+export function getTagCategory(tag: string): CalendarCategoryKey {
+  return CATEGORY_BY_TAG[tag.toLowerCase()] ?? 'other'
+}
+
 export function getTripCategories(trip: CalendarTrip): CalendarCategoryKey[] {
   const categories = new Set<CalendarCategoryKey>()
   for (const tag of trip.tags) {
