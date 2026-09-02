@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SITE_URL: https://example.com
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-public-key
+      NEXT_PUBLIC_DISCORD_INVITE_URL: https://discord.gg/Vz6aENDasV
+      NEXT_PUBLIC_INSTAGRAM_URL: https://www.instagram.com/unlvmountainclub/
+      MEMBERSHIP_CHECKOUT_ENABLED: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm check
+      - run: pnpm test
+      - run: pnpm build
