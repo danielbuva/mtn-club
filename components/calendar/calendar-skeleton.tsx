@@ -1,4 +1,3 @@
-import { addDays, format } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { CalendarControls } from '@/components/calendar/calendar-controls'
 import { CalendarSemesterSelect } from '@/components/calendar/calendar-semester-select'
@@ -8,6 +7,62 @@ import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import { cn } from '@/lib/utils'
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const calendarWeeks = [
+  {
+    id: 'week-1',
+    cells: [
+      'blank-1',
+      'blank-2',
+      'blank-3',
+      'blank-4',
+      'day-1',
+      'day-2',
+      'day-3',
+    ],
+  },
+  {
+    id: 'week-2',
+    cells: ['day-4', 'day-5', 'day-6', 'day-7', 'day-8', 'day-9', 'day-10'],
+  },
+  {
+    id: 'week-3',
+    cells: [
+      'day-11',
+      'day-12',
+      'day-13',
+      'day-14',
+      'day-15',
+      'day-16',
+      'day-17',
+    ],
+  },
+  {
+    id: 'week-4',
+    cells: [
+      'day-18',
+      'day-19',
+      'day-20',
+      'day-21',
+      'day-22',
+      'day-23',
+      'day-24',
+    ],
+  },
+  {
+    id: 'week-5',
+    cells: [
+      'day-25',
+      'day-26',
+      'day-27',
+      'day-28',
+      'day-29',
+      'day-30',
+      'day-31',
+    ],
+  },
+]
+const eventMarkerCells = new Set(['1:2', '2:5', '4:1'])
+
 type CalendarSkeletonProps = {
   view?: 'calendar' | 'list'
   semester?: 'spring' | 'summer' | 'fall' | 'winter' | 'all'
@@ -18,8 +73,6 @@ export function CalendarSkeleton({
   semester = 'all',
 }: CalendarSkeletonProps) {
   const isListView = view === 'list'
-  const start = new Date(2025, 11, 28)
-  const days = Array.from({ length: 35 }, (_, index) => addDays(start, index))
 
   return (
     <div
@@ -81,12 +134,16 @@ export function CalendarSkeleton({
 
             {isListView ? (
               <div className="calendar-scroll max-h-[70vh] overflow-y-auto pr-2 lg:max-h-[75vh]">
-                <div className="space-y-4">
-                  <Card className="rounded-none p-12 text-center">
-                    <p className="text-muted-foreground">
-                      No trips match your filters.
-                    </p>
-                  </Card>
+                <div className="space-y-3" aria-hidden="true">
+                  {[0, 1, 2].map(item => (
+                    <div
+                      key={item}
+                      className="grid gap-3 border border-border bg-card p-4 sm:grid-cols-[8rem_1fr]"
+                    >
+                      <span className="h-5 w-24 animate-pulse bg-muted" />
+                      <span className="h-5 w-full max-w-sm animate-pulse bg-muted" />
+                    </div>
+                  ))}
                 </div>
               </div>
             ) : (
@@ -143,33 +200,49 @@ export function CalendarSkeleton({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-7">
-                  {days.map((day, index) => {
-                    const dateKey = format(day, 'yyyy-MM-dd')
-                    const inMonth =
-                      day.getFullYear() === 2026 && day.getMonth() === 0
-                    const rowIndex = Math.floor(index / 7)
-                    const isLastRow = rowIndex === 4
-                    const isLastCol = (index + 1) % 7 === 0
-                    return (
-                      <div
-                        key={dateKey}
-                        className={cn(
-                          'flex h-24 flex-col gap-2 border-border px-2 py-2 text-left sm:h-28',
-                          !isLastRow && 'border-b',
-                          !isLastCol && 'border-r',
-                          !inMonth && 'text-muted-foreground/60',
-                        )}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="inline-flex h-7 w-7 items-center justify-center">
-                            <span className="h-2 w-4 bg-foreground/20 animate-pulse" />
-                          </span>
-                        </div>
-                        <div className="flex-1" />
-                      </div>
-                    )
-                  })}
+                <div aria-hidden="true">
+                  {calendarWeeks.map((week, rowIndex) => (
+                    <div
+                      key={week.id}
+                      className={cn(
+                        'grid aspect-[7/1] grid-cols-7 grid-rows-1',
+                        rowIndex < calendarWeeks.length - 1 &&
+                          'border-b border-border',
+                        rowIndex === calendarWeeks.length - 1 && 'mb-3 md:mb-0',
+                      )}
+                    >
+                      {week.cells.map((cell, columnIndex) =>
+                        cell.startsWith('day-') ? (
+                          <div
+                            key={cell}
+                            className={cn(
+                              'flex h-full min-h-0 min-w-0 flex-col gap-1 overflow-hidden border-r-0 border-border px-0 py-1 md:gap-2 md:border-r md:px-2 md:py-2',
+                              columnIndex === 6 && 'md:border-r-0',
+                            )}
+                          >
+                            <div className="flex h-6 flex-none items-center justify-center md:h-7">
+                              <span className="h-2 w-3 animate-pulse bg-foreground/20" />
+                            </div>
+                            {eventMarkerCells.has(
+                              `${rowIndex}:${columnIndex}`,
+                            ) ? (
+                              <div className="flex h-2 w-full flex-none items-center justify-center">
+                                <span className="size-2 animate-pulse bg-foreground/15" />
+                              </div>
+                            ) : null}
+                          </div>
+                        ) : (
+                          <div
+                            key={cell}
+                            className={cn(
+                              'h-full min-h-0 border-r-0 border-border md:border-r',
+                              columnIndex === 6 && 'md:border-r-0',
+                            )}
+                          />
+                        ),
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

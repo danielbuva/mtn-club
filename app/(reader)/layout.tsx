@@ -1,3 +1,4 @@
+import { Menu } from 'lucide-react'
 import { Suspense } from 'react'
 import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
 import { ReaderFloatingBackButton } from '@/components/reader-floating-back-button'
@@ -10,13 +11,31 @@ async function ReaderFloatingNavigation() {
 
 function ReaderNavigationFallback() {
   return (
-    <ThumbNavigationBar showTheme={false}>
-      <span
-        className="block h-9 w-20 animate-pulse rounded-full bg-muted"
-        aria-hidden="true"
-      />
-      <span className="sr-only">Loading page actions</span>
-    </ThumbNavigationBar>
+    <>
+      <div data-reader-navigation-fallback="default">
+        <ThumbNavigationBar showTheme={false}>
+          <span
+            className="block h-9 w-20 animate-pulse rounded-full bg-muted"
+            aria-hidden="true"
+          />
+          <span className="sr-only">Loading page actions</span>
+        </ThumbNavigationBar>
+      </div>
+
+      <div data-reader-navigation-fallback="calendar" aria-hidden="true">
+        <ThumbNavigationBar
+          ariaLabel="Loading site navigation"
+          tone="paper"
+          placement="right"
+          className="gap-0 overflow-hidden"
+          showTheme={false}
+        >
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#211D18] text-[#FFECA2]">
+            <Menu className="size-5" aria-hidden="true" />
+          </span>
+        </ThumbNavigationBar>
+      </div>
+    </>
   )
 }
 

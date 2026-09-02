@@ -303,6 +303,24 @@
   --ring: var(--editorial-ink);
 }
 
+[data-reader-navigation-fallback="calendar"] {
+  display: none;
+}
+
+html:has([data-calendar-page]) [data-reader-navigation-fallback="default"] {
+  display: none;
+}
+
+html:has([data-calendar-page]) [data-reader-navigation-fallback="calendar"] {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  html:has([data-calendar-page]) [data-reader-navigation-fallback="calendar"] {
+    display: none;
+  }
+}
+
 /* Magazine surfaces stay square. Floating thumb controls are the one rounded UI. */
 [data-editorial-surface] :where(*):not(input[type="radio"]) {
   border-radius: 0;
