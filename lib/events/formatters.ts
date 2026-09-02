@@ -37,24 +37,50 @@ export function parseCalendarDate(value: string): Date {
   return new Date(value)
 }
 
-export function formatDateOnly(value: Date): string {
+export function formatDateOnly(value: Date, timeZone?: string): string {
+  if (timeZone) {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(value)
+    const year = parts.find(part => part.type === 'year')?.value
+    const month = parts.find(part => part.type === 'month')?.value
+    const day = parts.find(part => part.type === 'day')?.value
+
+    if (!year || !month || !day) {
+      throw new Error('Unable to format calendar date in its event time zone.')
+    }
+
+    return `${year}-${month}-${day}`
+  }
+
   const year = value.getFullYear()
   const month = String(value.getMonth() + 1).padStart(2, '0')
   const day = String(value.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
 }
 
-export function formatTime(value: string | null | undefined): string {
+export function formatTime(
+  value: string | null | undefined,
+  timeZone?: string,
+): string {
   if (!value) return 'TBD'
   const date = new Date(value)
   return date.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
+    timeZone,
   })
 }
 
-export function formatTimeRange(start: string, end: string): string {
-  return `${formatTime(start)}–${formatTime(end)}`
+export function formatTimeRange(
+  start: string,
+  end: string,
+  timeZone?: string,
+): string {
+  return `${formatTime(start, timeZone)}–${formatTime(end, timeZone)}`
 }
 
 export function getSeasonTag(
