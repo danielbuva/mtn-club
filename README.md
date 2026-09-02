@@ -1,14 +1,19 @@
 # UNLV Mountain Club Web App
 
-Web app for the UNLV Mountain Club
+Public community hub, trip calendar, gallery, and membership system for the
+UNLV Mountain Club.
 
 ## What is here
 
-- Public pages: home, about, team
-- Member pages: membership, calendar, profile
+- Involvement-fair entry point at `/welcome`
+- Community action chooser at `/join`
+- Public Fall 2026 calendar and gallery
+- Account-linked membership sign up at `/membership-sign-up`
+- Member profile, trip, and officer tools
 - Auth and data via Supabase
 - Maps and geo utilities for trips
-- Payments and dues via Stripe
+- Current dues through Zelle with officer confirmation
+- Disabled Stripe checkout skeleton for a possible future upgrade
 
 ## Tech stack
 
@@ -17,7 +22,7 @@ Web app for the UNLV Mountain Club
 - Supabase (auth + database)
 - Tailwind CSS + shadcn/ui
 - MapLibre + react-map-gl
-- Stripe (payments)
+- Stripe (disabled future checkout skeleton)
 - Vercel (hosting)
 
 ## Getting started
@@ -47,22 +52,47 @@ Set these in `.env.local` for local dev and in Vercel for deployments.
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-NEXT_PUBLIC_STRIPE_SECRET_KEY=
+SUPABASE_SECRET_KEY=
+NEXT_PUBLIC_SITE_URL=https://unlvmountainclub.com
+NEXT_PUBLIC_DISCORD_INVITE_URL=
+NEXT_PUBLIC_INSTAGRAM_URL=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_MEMBERSHIP_PRICE_ID=
+STRIPE_LIVE_MODE=false
+MEMBERSHIP_CHECKOUT_ENABLED=false
 ```
+
+`SUPABASE_SECRET_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and the
+Stripe Price ID are server-only. Never prefix a Stripe secret key with
+`NEXT_PUBLIC_`. Hosted Checkout does not need a publishable Stripe key in the
+browser.
+
+Production and preview deployments must use different Supabase projects and
+Stripe modes if online checkout work resumes. Current membership dues use Zelle
+and the officer review flow. Stripe Checkout remains disabled unless every
+future payment release gate in `RUNBOOK.md` has passed.
+
+The canonical production site is `https://unlvmountainclub.com`.
+`https://unlvmountain.club` redirects to the canonical domain.
 
 ## Scripts
 
 - `pnpm dev`: start Next.js in development mode
 - `pnpm build`: create production build
 - `pnpm start`: run production server
-- `pnpm lint`: run biome
+- `pnpm check`: run Biome formatting and lint checks
+- `pnpm typecheck`: run strict TypeScript checks
+- `pnpm test`: run automated tests
+- `pnpm test:membership:sandbox`: run the synthetic membership-access test with
+  sandbox Supabase admin credentials
+- `pnpm generate:fair-qr <production-url>`: make M and Q print candidates
 
 ## Git hooks
 
 This repo uses Lefthook for pre-commit and pre-push checks.
 
-- `pnpm install` runs `pnpm prepare`, which installs Git hooks
+- `pnpm install` runs `pnpm prepare`, which installs Git hooks in a Git checkout and safely skips them in deployment uploads
 - If you installed dependencies before hooks were added, run `pnpm prepare` once
 
 ## Repository layout
@@ -72,7 +102,8 @@ This repo uses Lefthook for pre-commit and pre-push checks.
 - `lib/` helpers and shared utilities
 - `hooks/` custom hooks
 - `public/` static assets
-- `supabase/` database and auth helpers
+- `supabase/migrations/` database changes and security policies
+- `tests/` automated and database-contract tests
 
 ## Deployment
 
