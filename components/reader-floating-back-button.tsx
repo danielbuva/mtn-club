@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BackButton } from '@/components/back-button'
+import { PublicThumbNavigation } from '@/components/navigation/public-thumb-navigation'
 import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
 import { Button } from '@/components/ui/button'
 
@@ -15,8 +16,16 @@ export function ReaderFloatingBackButton({
 }) {
   const pathname = usePathname()
   const isTripsNewPage = pathname === '/trips/new'
+  const isTripDetailPage =
+    pathname.startsWith('/trips/') &&
+    pathname !== '/trips/new' &&
+    pathname !== '/trips/drafts'
 
-  if (guidePaths.has(pathname)) {
+  if (pathname === '/calendar') {
+    return <PublicThumbNavigation />
+  }
+
+  if (guidePaths.has(pathname) || isTripDetailPage) {
     return null
   }
 
