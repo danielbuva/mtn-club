@@ -36,7 +36,12 @@ export function GuideCtasSkeleton({ className }: { className?: string }) {
       aria-hidden="true"
       data-guide-ctas-loading
     >
-      <span className="h-6 w-52 animate-pulse bg-foreground/10 md:h-8" />
+      <span className="inline-flex items-center gap-2">
+        <span className="h-6 w-44 animate-pulse bg-foreground/10 md:h-8" />
+        <span className="text-base text-foreground/90 sm:text-xl md:text-2xl">
+          →
+        </span>
+      </span>
     </div>
   )
 }

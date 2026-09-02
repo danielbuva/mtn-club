@@ -76,7 +76,7 @@ function MembershipLinkSkeleton() {
       data-membership-link-loading
     >
       <span className="h-4 w-32 animate-pulse bg-[#211D18]/15" />
-      <span className="size-4 animate-pulse bg-[#211D18]/15" />
+      <ArrowRight className="-mr-px size-4 shrink-0" aria-hidden="true" />
     </div>
   )
 }
