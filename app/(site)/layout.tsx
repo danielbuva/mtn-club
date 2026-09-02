@@ -13,9 +13,9 @@ export default function SiteLayout({
     <Suspense fallback={<ViewerFallback />}>
       <ViewerGate>
         <div data-editorial-surface className="min-h-screen flex flex-col">
+          <PublicThumbNavigation />
           <div className="flex-1">{children}</div>
           <Footer />
-          <PublicThumbNavigation />
         </div>
       </ViewerGate>
     </Suspense>

@@ -26,9 +26,10 @@ export function PublicShell({
       data-overscroll-tone={overscrollTone}
       className="min-h-svh bg-[#F8F1DF] text-[#211D18]"
     >
+      <PublicThumbNavigation />
       <main>{children}</main>
       {showFooter ? (
-        <footer className="bg-[#211D18] pb-[calc(5.5rem+env(safe-area-inset-bottom))] text-[#F8F1DF]">
+        <footer className="bg-[#211D18] pb-[calc(5.5rem+env(safe-area-inset-bottom))] text-[#F8F1DF] md:pb-0">
           <div className="mx-auto flex max-w-5xl flex-col gap-3 px-5 py-8 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-brand text-xl uppercase tracking-wide">
               UNLV Mountain Club
@@ -57,7 +58,6 @@ export function PublicShell({
           <ClubDisclaimer id={disclaimerId} />
         </footer>
       ) : null}
-      <PublicThumbNavigation />
     </div>
   )
 }
