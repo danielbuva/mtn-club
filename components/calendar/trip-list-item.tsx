@@ -97,7 +97,7 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
             </div>
             {trip.hosts.length > 0 && (
               <p className="mt-3 text-sm text-muted-foreground">
-                Hosted by{' '}
+                Led by{' '}
                 {trip.hosts
                   .map(host => `${host.name} — ${host.title}`)
                   .join('; ')}

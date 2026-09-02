@@ -2,10 +2,7 @@ import { addMonths, format, startOfDay } from 'date-fns'
 import { TripsList } from '@/components/trips/TripsList'
 import { Card, CardContent } from '@/components/ui/card'
 import { WEEKLY_MEETUP_NOTE } from '@/lib/club-content'
-import {
-  fetchPublicHostsByTrip,
-  fetchTripsInRange,
-} from '@/lib/events/queries'
+import { fetchPublicHostsByTrip, fetchTripsInRange } from '@/lib/events/queries'
 import type { EventRow } from '@/lib/events/types'
 import { createClient } from '@/lib/supabase/server'
 import type {

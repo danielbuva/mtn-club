@@ -35,7 +35,7 @@ const buildTrip = (trip: (typeof FALL_2026_TRIPS)[number]): CalendarTrip => ({
 })
 
 export function getFall2026Calendar(): CalendarTrip[] {
-  return FALL_2026_TRIPS.map(buildTrip).sort(
-    (left, right) => left.dateStart.localeCompare(right.dateStart),
+  return FALL_2026_TRIPS.map(buildTrip).sort((left, right) =>
+    left.dateStart.localeCompare(right.dateStart),
   )
 }

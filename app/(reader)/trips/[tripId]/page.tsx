@@ -87,33 +87,29 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     allRsvpsRes,
     viewerRes,
     hostsByTrip,
-  ] =
-    await Promise.all([
-      supabase
-        .from('trip_private')
-        .select(
-          'meetup_point,required_gear,recommended_gear,weather_notes,description_private',
-        )
-        .eq('trip_id', trip.id)
-        .maybeSingle(),
-      supabase
-        .from('trip_leaders')
-        .select('user_id')
-        .eq('trip_id', trip.id)
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('trip_rsvps')
-        .select('user_id,status')
-        .eq('trip_id', trip.id)
-        .eq('status', 'going'),
-      supabase
-        .from('trip_rsvps')
-        .select('user_id,status')
-        .eq('trip_id', trip.id),
-      supabase.auth.getUser(),
-      fetchPublicHostsByTrip(supabase, [trip.id]),
-    ])
+  ] = await Promise.all([
+    supabase
+      .from('trip_private')
+      .select(
+        'meetup_point,required_gear,recommended_gear,weather_notes,description_private',
+      )
+      .eq('trip_id', trip.id)
+      .maybeSingle(),
+    supabase
+      .from('trip_leaders')
+      .select('user_id')
+      .eq('trip_id', trip.id)
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('trip_rsvps')
+      .select('user_id,status')
+      .eq('trip_id', trip.id)
+      .eq('status', 'going'),
+    supabase.from('trip_rsvps').select('user_id,status').eq('trip_id', trip.id),
+    supabase.auth.getUser(),
+    fetchPublicHostsByTrip(supabase, [trip.id]),
+  ])
 
   const leaderProfileRes = leaderRes.data?.user_id
     ? await supabase

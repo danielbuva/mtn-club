@@ -59,7 +59,7 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
             ) : null}
             <AvatarFallback>{initials(trip.leaderName)}</AvatarFallback>
           </Avatar>
-          <span>Hosted by {trip.leaderName ?? 'UNLV Mountain Club'}</span>
+          <span>Led by {trip.leaderName ?? 'UNLV Mountain Club'}</span>
         </div>
       </section>
     )
@@ -112,7 +112,7 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
               ) : null}
               <AvatarFallback>{initials(trip.leaderName)}</AvatarFallback>
             </Avatar>
-            <span>Hosted by {trip.leaderName ?? 'UNLV Mountain Club'}</span>
+            <span>Led by {trip.leaderName ?? 'UNLV Mountain Club'}</span>
           </div>
         </div>
       </div>

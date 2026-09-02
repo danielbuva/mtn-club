@@ -139,7 +139,7 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
                 </AvatarFallback>
               </Avatar>
               <p className="truncate text-sm text-muted-foreground">
-                Hosted by {trip.leaderName ?? 'UNLV Mountain Club'}
+                Led by {trip.leaderName ?? 'UNLV Mountain Club'}
               </p>
             </div>
           </div>
