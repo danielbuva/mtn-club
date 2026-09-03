@@ -22,11 +22,7 @@ export const viewport: Viewport = {
 async function PublishedGalleryPhotos() {
   await connection()
   const photos = await fetchPublishedGalleryPhotos()
-  return (
-    <GalleryPhotoCollection
-      photos={[...involvementCenterGalleryPhotos, ...photos]}
-    />
-  )
+  return <GalleryPhotoCollection photos={photos} />
 }
 
 export default function Page() {

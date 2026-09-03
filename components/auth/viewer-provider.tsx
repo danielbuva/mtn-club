@@ -5,6 +5,7 @@ import type { Viewer } from '@/lib/auth/viewer'
 
 const defaultViewer: Viewer = {
   isAuthenticated: false,
+  isAdmin: false,
   canCreateEvent: false,
   userId: null,
   email: null,

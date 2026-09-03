@@ -10,6 +10,7 @@ export type PublicGalleryPhoto = Pick<
   'id' | 'title' | 'alt_text' | 'caption' | 'taken_on' | 'trip_id'
 > & {
   imageUrl: string
+  unoptimized?: boolean
 }
 
 const publicGallerySelect =
@@ -37,6 +38,7 @@ export async function fetchPublishedGalleryPhotos(): Promise<
       taken_on: photo.taken_on,
       trip_id: photo.trip_id,
       imageUrl: getGalleryPublicUrl(supabase, photo.storage_path),
+      unoptimized: photo.storage_path.startsWith('https://'),
     }))
   } catch {
     return []
@@ -47,6 +49,7 @@ export function getGalleryPublicUrl(
   client: SupabaseClient<Database>,
   storagePath: string,
 ): string {
+  if (storagePath.startsWith('https://')) return storagePath
   return client.storage.from('club_gallery').getPublicUrl(storagePath).data
     .publicUrl
 }

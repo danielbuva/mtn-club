@@ -1,7 +1,9 @@
 import { ArrowRight, BadgeCheck, Clock3, ShieldAlert } from 'lucide-react'
 import Link from 'next/link'
+import { claimZelleMembershipPayment } from '@/app/(site)/membership/actions'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { PublicShell } from '@/components/landing/public-shell'
+import { Button } from '@/components/ui/button'
 import type { Viewer } from '@/lib/auth/viewer'
 import { ZELLE_PHONE_DISPLAY } from '@/lib/constants'
 import type { MembershipAccount } from '@/lib/memberships/account'
@@ -194,6 +196,9 @@ function getSignedInSummary(account: MembershipAccount | null) {
   if (account.application.duesPaymentClaimed) {
     return 'Leadership is confirming your dues.'
   }
+  if (account.latestZelleStatus === 'rejected') {
+    return 'Leadership could not match the previous payment claim. You can report a new payment after checking the Zelle details.'
+  }
   return 'Your form is complete. Send your dues to receive full membership access.'
 }
 
@@ -300,7 +305,37 @@ function MembershipStatus({
     )
   }
 
-  return <StatusBox icon={Clock3} title="Form received" inline />
+  if (account.latestZelleStatus === 'rejected') {
+    return (
+      <StatusBox icon={ShieldAlert} title="Payment not matched">
+        <p>
+          Check the Zelle recipient and report the payment again when ready.
+        </p>
+        <form action={claimZelleMembershipPayment} className="mt-4">
+          <Button
+            type="submit"
+            className="rounded-none bg-[#211D18] text-[#FFECA2]"
+          >
+            I sent the dues
+          </Button>
+        </form>
+      </StatusBox>
+    )
+  }
+
+  return (
+    <StatusBox icon={Clock3} title="Form received">
+      <p>Send the $25 dues through Zelle, then let leadership know.</p>
+      <form action={claimZelleMembershipPayment} className="mt-4">
+        <Button
+          type="submit"
+          className="rounded-none bg-[#211D18] text-[#FFECA2]"
+        >
+          I sent the dues
+        </Button>
+      </form>
+    </StatusBox>
+  )
 }
 
 function StatusLink({ href, children }: { href: string; children: string }) {

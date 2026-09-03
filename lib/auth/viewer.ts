@@ -13,6 +13,7 @@ export type MemberSummary = {
 
 export type Viewer = {
   isAuthenticated: boolean
+  isAdmin: boolean
   canCreateEvent: boolean
   userId: string | null
   email?: string | null
@@ -50,6 +51,7 @@ export async function getViewer(): Promise<Viewer> {
   if (authError || !authData.user) {
     return {
       isAuthenticated: false,
+      isAdmin: false,
       canCreateEvent: false,
       userId: null,
       email: null,
@@ -64,21 +66,26 @@ export async function getViewer(): Promise<Viewer> {
 
   const user = authData.user
 
-  const [profileResult, membershipResult, accessResult] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select('user_id, first_name, last_name, display_name, avatar_url')
-      .eq('user_id', user.id)
-      .maybeSingle(),
-    supabase
-      .from('memberships')
-      .select('role, status, joined_on, member_since')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    supabase.rpc('get_my_membership_access'),
-  ])
+  const [profileResult, membershipResult, accessResult, adminResult] =
+    await Promise.all([
+      supabase
+        .from('profiles')
+        .select('user_id, first_name, last_name, display_name, avatar_url')
+        .eq('user_id', user.id)
+        .maybeSingle(),
+      supabase
+        .from('memberships')
+        .select('role, status, joined_on, member_since')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase.rpc('get_my_membership_access'),
+      supabase.rpc('has_admin_capability', {
+        p_uid: user.id,
+        p_capability_key: 'overview.read',
+      }),
+    ])
 
   if (profileResult.error) {
     console.error('Error loading viewer profile:', profileResult.error)
@@ -105,7 +112,9 @@ export async function getViewer(): Promise<Viewer> {
 
   return {
     isAuthenticated: true,
-    canCreateEvent: Boolean(profile) && isMember,
+    isAdmin: adminResult.data ?? false,
+    canCreateEvent:
+      Boolean(profile) && (isMember || (adminResult.data ?? false)),
     userId: user.id,
     email: user.email ?? null,
     isMember,

@@ -24,6 +24,8 @@ import { createClient } from '@/lib/supabase/client'
 type NotificationsSettingsFormClientProps = {
   initialProfile: ProfileRow | null
   userId: string
+  email: string | null
+  initialMailingListSubscribed: boolean
 }
 
 const isEqual = (a: NotificationSettings, b: NotificationSettings) =>
@@ -32,6 +34,8 @@ const isEqual = (a: NotificationSettings, b: NotificationSettings) =>
 export function NotificationsSettingsFormClient({
   initialProfile,
   userId,
+  email,
+  initialMailingListSubscribed,
 }: NotificationsSettingsFormClientProps) {
   const initialValues = useMemo(
     () => profileRowToFormValues(initialProfile).notificationSettings,
@@ -41,6 +45,12 @@ export function NotificationsSettingsFormClient({
   const [baseline, setBaseline] = useState<NotificationSettings>(initialValues)
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [mailingListSubscribed, setMailingListSubscribed] = useState(
+    initialMailingListSubscribed,
+  )
+  const [mailingListBaseline, setMailingListBaseline] = useState(
+    initialMailingListSubscribed,
+  )
   const { setIsDirty } = useSettingsDirty()
 
   useEffect(() => {
@@ -48,7 +58,8 @@ export function NotificationsSettingsFormClient({
     setBaseline(initialValues)
   }, [initialValues])
 
-  const isDirty = !isEqual(values, baseline)
+  const isDirty =
+    !isEqual(values, baseline) || mailingListSubscribed !== mailingListBaseline
 
   useEffect(() => {
     setIsDirty(isDirty)
@@ -70,8 +81,21 @@ export function NotificationsSettingsFormClient({
         updated_at: new Date().toISOString(),
       }
       const supabase = createClient()
-      await upsertProfile(supabase, userId, payload)
+      const mailingPromise =
+        mailingListSubscribed !== mailingListBaseline
+          ? supabase.rpc('set_mailing_list_subscription', {
+              p_email: email ?? '',
+              p_subscribed: mailingListSubscribed,
+              p_source: 'account_settings',
+            })
+          : Promise.resolve({ error: null })
+      const [, mailingResult] = await Promise.all([
+        upsertProfile(supabase, userId, payload),
+        mailingPromise,
+      ])
+      if (mailingResult.error) throw mailingResult.error
       setBaseline(values)
+      setMailingListBaseline(mailingListSubscribed)
     } catch (error) {
       setSaveError(
         error instanceof Error ? error.message : 'Unable to save changes',
@@ -83,6 +107,7 @@ export function NotificationsSettingsFormClient({
 
   const handleReset = () => {
     setValues(baseline)
+    setMailingListSubscribed(mailingListBaseline)
     setSaveError(null)
   }
 
@@ -93,6 +118,21 @@ export function NotificationsSettingsFormClient({
         description="Pick the types of emails you want from the club."
       >
         <div className="space-y-4">
+          <div className="flex items-center justify-between gap-4 rounded-xl border border-border p-4">
+            <div>
+              <p className="text-sm font-medium">Club mailing list</p>
+              <p className="text-xs text-muted-foreground">
+                Optional club news and trip announcements. You can unsubscribe
+                at any time.
+              </p>
+            </div>
+            <Switch
+              checked={mailingListSubscribed}
+              disabled={!email}
+              onCheckedChange={setMailingListSubscribed}
+              aria-label="Join the club mailing list"
+            />
+          </div>
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Trip updates</p>

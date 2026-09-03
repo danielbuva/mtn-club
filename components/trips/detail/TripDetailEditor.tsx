@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { saveTripDetailEditsAction } from '@/app/(reader)/trips/actions'
+import {
+  type TripAssignmentOption,
+  TripAssignmentsEditor,
+} from '@/components/trips/detail/trip-assignments-editor'
 import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { Button } from '@/components/ui/button'
@@ -19,6 +23,10 @@ import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 type TripDetailEditorProps = {
   trip: TripDetail
   availableActivityTags: string[]
+  publicHostOptions?: TripAssignmentOption[]
+  leaderOptions?: TripAssignmentOption[]
+  initialPublicHostIds?: string[]
+  initialLeaderIds?: string[]
 }
 
 type TripDraft = {
@@ -87,12 +95,18 @@ const parseDateInput = (value: string) => {
 export function TripDetailEditor({
   trip,
   availableActivityTags,
+  publicHostOptions = [],
+  leaderOptions = [],
+  initialPublicHostIds = [],
+  initialLeaderIds = [],
 }: TripDetailEditorProps) {
   const router = useRouter()
   const isMobile = useIsMobile()
   const [isPending, startTransition] = useTransition()
   const [newTag, setNewTag] = useState('')
   const [tagPickerOpen, setTagPickerOpen] = useState(false)
+  const [publicHostIds, setPublicHostIds] = useState(initialPublicHostIds)
+  const [leaderIds, setLeaderIds] = useState(initialLeaderIds)
 
   const [draft, setDraft] = useState<TripDraft>({
     title: trip.title,
@@ -170,6 +184,10 @@ export function TripDetailEditor({
         formData.set('overviewWeather', draft.overviewWeather)
         formData.set('overviewEquipment', draft.overviewEquipment)
         formData.set('overviewCarpoolNeedGear', draft.overviewCarpoolNeedGear)
+        if (publicHostOptions.length || leaderOptions.length) {
+          formData.set('publicHostIds', JSON.stringify(publicHostIds))
+          formData.set('leaderIds', JSON.stringify(leaderIds))
+        }
 
         await saveTripDetailEditsAction(formData)
         toast.success('Trip changes saved')
@@ -185,6 +203,16 @@ export function TripDetailEditor({
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5 md:pb-8">
+      {publicHostOptions.length || leaderOptions.length ? (
+        <TripAssignmentsEditor
+          publicHosts={publicHostOptions}
+          leaders={leaderOptions}
+          selectedPublicHostIds={publicHostIds}
+          selectedLeaderIds={leaderIds}
+          onPublicHostsChange={setPublicHostIds}
+          onLeadersChange={setLeaderIds}
+        />
+      ) : null}
       <section className="overflow-hidden rounded-2xl border border-border/70 bg-card">
         {trip.heroImageUrl ? (
           <div className="relative aspect-[16/9] bg-muted">

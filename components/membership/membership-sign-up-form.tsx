@@ -253,6 +253,29 @@ export function MembershipSignUpForm() {
               </div>
             </fieldset>
 
+            <fieldset className="border-t border-[#211D18]/20 pt-7">
+              <legend className="font-brand text-3xl uppercase">
+                Stay in the loop
+              </legend>
+              <label className="mt-5 flex cursor-pointer items-start gap-3 border border-[#211D18]/35 p-4 transition focus-within:ring-2 focus-within:ring-[#211D18] focus-within:ring-offset-2 focus-within:ring-offset-[#F8F1DF] has-[:checked]:bg-[#E9DDC3]">
+                <input
+                  type="checkbox"
+                  name="mailingListOptIn"
+                  className={selectionInputClass}
+                />
+                <span>
+                  <span className="block font-semibold">
+                    Join the Mountain Club mailing list
+                  </span>
+                  <span className="mt-1 block text-sm leading-5 text-[#211D18]/65">
+                    Get club news, trip announcements, and community updates by
+                    email. This is optional and you can unsubscribe in account
+                    settings.
+                  </span>
+                </span>
+              </label>
+            </fieldset>
+
             {state.error && (
               <div
                 ref={errorRef}

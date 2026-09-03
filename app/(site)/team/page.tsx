@@ -1,60 +1,41 @@
-import {
-  Compass,
-  Flag,
-  Heart,
-  Mail,
-  Map as MapIcon,
-  Shield,
-} from 'lucide-react'
+import { Heart, Mail, Mountain } from 'lucide-react'
 import Link from 'next/link'
-import { TeamCard } from '@/components/team-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { teamMembers } from '@/lib/data'
+import { CLUB_EMAIL } from '@/lib/constants'
+import { createClient } from '@/lib/supabase/server'
 
-const roles = [
-  {
-    icon: Flag,
-    title: 'Trip Lead',
-    description:
-      'Responsible for overall trip planning, navigation, and group management. Sets the pace and makes go/no-go decisions.',
-  },
-  {
-    icon: Compass,
-    title: 'Sweep',
-    description:
-      'Stays at the back of the group to ensure no one falls behind. Assists slower hikers and handles rear communications.',
-  },
-  {
-    icon: Shield,
-    title: 'First Aid',
-    description:
-      'Certified in wilderness first aid. Carries the group first aid kit and responds to any medical situations.',
-  },
-  {
-    icon: MapIcon,
-    title: 'Route Planning',
-    description:
-      'Scouts routes in advance, identifies hazards, and prepares detailed trip itineraries with backup options.',
-  },
-]
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part[0])
+    .join('')
+    .toUpperCase()
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  const supabase = await createClient()
+  const leaders = await supabase
+    .from('club_hosts')
+    .select('id, public_name, club_title')
+    .eq('is_active', true)
+    .order('display_order')
+    .order('public_name')
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
-        {/* Hero */}
         <section className="public-page-top bg-secondary/30 px-4 pb-24">
-          <div className="max-w-4xl mx-auto text-center">
-            <span className="text-primary font-medium text-sm uppercase tracking-wider">
+          <div className="mx-auto max-w-4xl text-center">
+            <span className="text-sm font-medium uppercase tracking-wider text-primary">
               Our Team
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4 text-balance">
-              Meet the People Behind the Adventures
+            <h1 className="mt-2 mb-4 text-balance text-4xl font-bold md:text-5xl">
+              Meet the Mountain Club Leadership
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our leadership team brings decades of combined outdoor experience,
-              certifications, and a shared passion for building community.
+            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+              The student leaders who organize trips, support members, and keep
+              the club moving.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="rounded-xl">
@@ -67,80 +48,75 @@ export default function TeamPage() {
           </div>
         </section>
 
-        {/* Team Grid */}
-        <section className="py-24 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamMembers.map(member => (
-                <TeamCard key={member.id} member={member} />
-              ))}
-            </div>
+        <section className="px-4 py-24">
+          <div className="mx-auto max-w-6xl">
+            {leaders.error ? (
+              <div className="rounded-2xl border border-dashed p-10 text-center text-muted-foreground">
+                We could not load the leadership roster. Please try again soon.
+              </div>
+            ) : (leaders.data ?? []).length ? (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {(leaders.data ?? []).map(leader => (
+                  <Card
+                    key={leader.id}
+                    className="overflow-hidden border-border/50 bg-card"
+                  >
+                    <CardContent className="flex items-center gap-5 p-6">
+                      <div
+                        className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 font-brand text-2xl text-primary"
+                        aria-hidden="true"
+                      >
+                        {initials(leader.public_name)}
+                      </div>
+                      <div>
+                        <h2 className="text-lg font-semibold">
+                          {leader.public_name}
+                        </h2>
+                        <p className="mt-1 text-sm font-medium text-primary">
+                          {leader.club_title}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed p-10 text-center text-muted-foreground">
+                The current leadership roster will be posted here soon.
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Safety & Roles */}
-        <section className="py-24 px-4 bg-secondary/30">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-primary font-medium text-sm uppercase tracking-wider">
-                Trip Safety
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4 text-balance">
-                Safety Roles & Responsibilities
-              </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Every trip has designated roles to ensure a safe and enjoyable
-                experience for all participants.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {roles.map(role => (
-                <Card key={role.title} className="p-6 bg-card border-border/50">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-                    <role.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">{role.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {role.description}
-                  </p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Join Leadership CTA */}
-        <section className="py-24 px-4">
-          <div className="max-w-4xl mx-auto">
+        <section className="bg-secondary/30 px-4 py-24">
+          <div className="mx-auto max-w-4xl">
             <Card className="overflow-hidden border-primary/20">
               <CardContent className="p-8 md:p-12">
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                  <div className="w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <Heart className="w-10 h-10 text-primary" />
+                <div className="flex flex-col items-center gap-8 md:flex-row">
+                  <div className="flex size-20 shrink-0 items-center justify-center rounded-3xl bg-primary/10">
+                    <Heart
+                      className="size-10 text-primary"
+                      aria-hidden="true"
+                    />
                   </div>
-                  <div className="text-center md:text-left flex-1">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-3 text-balance">
+                  <div className="flex-1 text-center md:text-left">
+                    <h2 className="text-balance text-2xl font-bold md:text-3xl">
                       Interested in Joining Leadership?
                     </h2>
-                    <p className="text-muted-foreground leading-relaxed mb-6">
-                      We are always looking for passionate, experienced outdoor
-                      enthusiasts to join our team. Leadership roles include
-                      trip leads, workshop instructors, and community
-                      organizers.
+                    <p className="mt-3 leading-relaxed text-muted-foreground">
+                      Tell us how you would like to help with trips, gear,
+                      member support, or club operations.
                     </p>
-                    <div className="flex flex-col sm:flex-row items-center gap-4">
-                      <Button size="lg" className="rounded-xl gap-2" asChild>
-                        <a href="mailto:leadership@mountainclub.com">
-                          <Mail className="w-4 h-4" />
-                          Apply to Lead
-                        </a>
-                      </Button>
-                      <p className="text-sm text-muted-foreground">
-                        or email leadership@mountainclub.com
-                      </p>
-                    </div>
+                    <Button size="lg" className="mt-6 rounded-xl gap-2" asChild>
+                      <a href={`mailto:${CLUB_EMAIL}`}>
+                        <Mail className="size-4" /> Contact the club
+                      </a>
+                    </Button>
                   </div>
+                  <Mountain
+                    className="hidden size-20 text-primary/15 lg:block"
+                    aria-hidden="true"
+                  />
                 </div>
               </CardContent>
             </Card>

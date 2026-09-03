@@ -24,6 +24,7 @@ const publicPrefixes = [
   '/api',
   '/_next',
   '/profile',
+  '/admin',
 ]
 
 const publicExact = new Set([

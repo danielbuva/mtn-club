@@ -19,9 +19,6 @@ const publishFieldLabels: Partial<Record<keyof EventFormValues, string>> = {
   primaryLocationName: 'Where',
 }
 
-const isStaffRole = (role: string | null | undefined) =>
-  ['staff', 'leadership', 'admin'].includes(role ?? '')
-
 const mapVisibilityToTrip = (
   visibility: EventFormValues['visibility'],
 ): Database['public']['Enums']['trip_visibility'] => {
@@ -102,12 +99,33 @@ const getViewerContext = async () => {
     throw membershipError
   }
 
+  const [createScopeResult, officialScopeResult, updateScopeResult] =
+    await Promise.all([
+      supabase.rpc('admin_capability_scope', {
+        p_uid: user.id,
+        p_capability_key: 'trips.create',
+      }),
+      supabase.rpc('admin_capability_scope', {
+        p_uid: user.id,
+        p_capability_key: 'trips.official',
+      }),
+      supabase.rpc('admin_capability_scope', {
+        p_uid: user.id,
+        p_capability_key: 'trips.update',
+      }),
+    ])
+
+  const isActiveMember = membership?.status === 'active'
+  const canCreateAsAdmin = Boolean(createScopeResult.data)
+  if (!isActiveMember && !canCreateAsAdmin) {
+    throw new Error('Active membership or trip administration access required.')
+  }
+
   return {
     supabase,
     userId: user.id,
-    role: membership?.role ?? null,
-    canChooseOfficial: isStaffRole(membership?.role),
-    canManageTags: isStaffRole(membership?.role),
+    canChooseOfficial: Boolean(officialScopeResult.data),
+    canManageTags: Boolean(updateScopeResult.data),
   }
 }
 
@@ -200,6 +218,8 @@ export async function publishTripFormAction(payload: {
   values: EventFormValues
   isNoLimitEnabled: boolean
   sourceDraftId?: string | null
+  publicHostIds?: string[]
+  leaderUserIds?: string[]
 }) {
   const { supabase, userId, canChooseOfficial, canManageTags } =
     await getViewerContext()
@@ -312,6 +332,39 @@ export async function publishTripFormAction(payload: {
       throw privateError
     }
   }
+
+  const publicHostIds = z
+    .array(z.string().uuid())
+    .max(20)
+    .parse(payload.publicHostIds ?? [])
+  const leaderUserIds = z
+    .array(z.string().uuid())
+    .max(20)
+    .parse(payload.leaderUserIds ?? [])
+  if ((publicHostIds.length || leaderUserIds.length) && !canManageTags) {
+    throw new Error('Trip management permission is required to assign hosts.')
+  }
+  const assignmentResults = await Promise.all([
+    publicHostIds.length
+      ? supabase.from('trip_hosts').insert(
+          publicHostIds.map((hostId, index) => ({
+            trip_id: createdTrip.id,
+            host_id: hostId,
+            sort_order: index,
+          })),
+        )
+      : Promise.resolve({ error: null }),
+    leaderUserIds.length
+      ? supabase.from('trip_leaders').insert(
+          leaderUserIds.map(leaderUserId => ({
+            trip_id: createdTrip.id,
+            user_id: leaderUserId,
+          })),
+        )
+      : Promise.resolve({ error: null }),
+  ])
+  const assignmentError = assignmentResults.find(result => result.error)?.error
+  if (assignmentError) throw assignmentError
 
   if (payload.sourceDraftId) {
     const parsedDraftId = tripDraftIdSchema.safeParse(payload.sourceDraftId)

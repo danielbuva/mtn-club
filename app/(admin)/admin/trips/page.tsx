@@ -1,0 +1,313 @@
+import {
+  Archive,
+  CalendarPlus,
+  Eye,
+  Pencil,
+  RotateCcw,
+  XCircle,
+} from 'lucide-react'
+import Link from 'next/link'
+import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { requireAdminCapability } from '@/lib/admin/auth'
+import { createClient } from '@/lib/supabase/server'
+import {
+  changeTripLifecycleAction,
+  purgeTestTripAction,
+  setTripOfficialAction,
+} from './actions'
+
+const formatDate = (value: string, isAllDay: boolean) => {
+  const date = new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'medium',
+    timeZone: 'America/Los_Angeles',
+  }).format(new Date(value))
+  if (isAllDay) return `${date} · Time TBA`
+  const time = new Intl.DateTimeFormat('en-US', {
+    timeStyle: 'short',
+    timeZone: 'America/Los_Angeles',
+  }).format(new Date(value))
+  return `${date}, ${time}`
+}
+
+export default async function AdminTripsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    q?: string
+    timing?: string
+    kind?: string
+    lifecycle?: string
+    filter?: string
+  }>
+}) {
+  const context = await requireAdminCapability('trips.read')
+  const filters = await searchParams
+  const supabase = await createClient()
+  let query = supabase
+    .from('trips')
+    .select(
+      'id, title, starts_at, location_public, description_public, capacity, is_all_day, is_official, activity_tags, lifecycle_status, visibility',
+    )
+    .order('starts_at', { ascending: filters.timing !== 'past' })
+    .limit(250)
+
+  const now = new Date().toISOString()
+  if (filters.timing === 'past') query = query.lt('starts_at', now)
+  else if (filters.timing !== 'all') query = query.gte('starts_at', now)
+  if (
+    filters.lifecycle &&
+    ['published', 'canceled', 'archived'].includes(filters.lifecycle)
+  ) {
+    query = query.eq(
+      'lifecycle_status',
+      filters.lifecycle as 'published' | 'canceled' | 'archived',
+    )
+  } else if (!filters.lifecycle || filters.lifecycle === 'active') {
+    query = query.neq('lifecycle_status', 'archived')
+  }
+  if (filters.kind === 'official') query = query.eq('is_official', true)
+  if (filters.kind === 'unofficial') query = query.eq('is_official', false)
+  if (filters.q?.trim()) query = query.ilike('title', `%${filters.q.trim()}%`)
+
+  const [{ data: trips, error }, credits, hosts, leaders] = await Promise.all([
+    query,
+    supabase.from('trip_hosts').select('trip_id, host_id'),
+    supabase.from('club_hosts').select('id, is_active'),
+    supabase.from('trip_leaders').select('trip_id, user_id'),
+  ])
+  const loadError =
+    error ?? credits.error ?? hosts.error ?? leaders.error ?? null
+  const assignedTripIds = new Set(
+    (leaders.data ?? [])
+      .filter(leader => leader.user_id === context.userId)
+      .map(leader => leader.trip_id),
+  )
+  const canManageTrip = (
+    capability: 'trips.update' | 'trips.delete' | 'trips.official',
+    tripId: string,
+  ) =>
+    context.permissions[capability] === 'all' ||
+    (context.permissions[capability] === 'assigned' &&
+      assignedTripIds.has(tripId))
+  const inactiveHostIds = new Set(
+    (hosts.data ?? []).filter(host => !host.is_active).map(host => host.id),
+  )
+  const creditedTripIds = new Set(
+    (credits.data ?? []).map(credit => credit.trip_id),
+  )
+  const attentionTripIds = new Set(
+    (trips ?? [])
+      .filter(
+        trip =>
+          !trip.location_public?.trim() ||
+          !trip.description_public?.trim() ||
+          !creditedTripIds.has(trip.id) ||
+          (credits.data ?? []).some(
+            credit =>
+              credit.trip_id === trip.id && inactiveHostIds.has(credit.host_id),
+          ),
+      )
+      .map(trip => trip.id),
+  )
+  const visibleTrips =
+    filters.filter === 'attention'
+      ? (trips ?? []).filter(trip => attentionTripIds.has(trip.id))
+      : (trips ?? [])
+
+  return (
+    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
+      <AdminPageHeader
+        title="Trips"
+        description="Create, review, and maintain the club schedule without losing canceled-trip history."
+        actions={
+          context.permissions['trips.create'] ? (
+            <Button
+              asChild
+              className="bg-[#211D18] text-[#FFECA2] hover:bg-[#352E27]"
+            >
+              <Link href="/admin/trips/new">
+                <CalendarPlus className="size-4" /> Create trip
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
+
+      <form className="mt-8 grid gap-3 border border-[#211D18]/15 bg-white/45 p-4 dark:border-border dark:bg-card sm:grid-cols-[1fr_repeat(4,auto)]">
+        <Input
+          name="q"
+          defaultValue={filters.q}
+          placeholder="Search trips"
+          aria-label="Search trips"
+        />
+        <select
+          name="timing"
+          defaultValue={filters.timing ?? 'upcoming'}
+          className="h-10 border border-input bg-background px-3 text-sm"
+        >
+          <option value="upcoming">Upcoming</option>
+          <option value="past">Past</option>
+          <option value="all">All dates</option>
+        </select>
+        <select
+          name="kind"
+          defaultValue={filters.kind ?? 'all'}
+          className="h-10 border border-input bg-background px-3 text-sm"
+        >
+          <option value="all">All types</option>
+          <option value="official">Official</option>
+          <option value="unofficial">Unofficial</option>
+          <option value="meetup">Meetups</option>
+          <option value="trip">Trips</option>
+        </select>
+        <select
+          name="lifecycle"
+          defaultValue={filters.lifecycle ?? 'active'}
+          className="h-10 border border-input bg-background px-3 text-sm"
+          aria-label="Trip lifecycle"
+        >
+          <option value="active">Published and canceled</option>
+          <option value="published">Published</option>
+          <option value="canceled">Canceled</option>
+          <option value="archived">Archived</option>
+        </select>
+        <Button type="submit" variant="outline">
+          Apply filters
+        </Button>
+      </form>
+
+      {loadError ? (
+        <p
+          role="alert"
+          className="mt-6 border border-destructive/30 bg-destructive/10 p-4 text-sm"
+        >
+          Trips could not be loaded. Confirm that the admin migration has been
+          deployed.
+        </p>
+      ) : null}
+      {!loadError && !visibleTrips.length ? (
+        <div className="mt-6 border border-dashed border-[#211D18]/20 p-12 text-center text-sm text-[#6A5146] dark:border-border dark:text-muted-foreground">
+          No trips match these filters.
+        </div>
+      ) : null}
+
+      {!loadError ? (
+        <section className="mt-6 grid gap-3">
+          {visibleTrips
+            .filter(trip => {
+              const meetup = (trip.activity_tags ?? []).some(
+                (tag: string) => tag.toLowerCase() === 'meetup',
+              )
+              if (filters.kind === 'meetup') return meetup
+              if (filters.kind === 'trip') return !meetup
+              return true
+            })
+            .map(trip => (
+              <article
+                key={trip.id}
+                className="grid gap-4 border border-[#211D18]/15 bg-white/45 p-5 dark:border-border dark:bg-card lg:grid-cols-[1fr_auto] lg:items-center"
+              >
+                <div>
+                  <h2 className="text-lg font-semibold">{trip.title}</h2>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <Badge variant={trip.is_official ? 'default' : 'secondary'}>
+                      {trip.is_official ? 'Official' : 'Community trip'}
+                    </Badge>
+                    <Badge variant="outline">{trip.lifecycle_status}</Badge>
+                    <Badge variant="outline">{trip.visibility}</Badge>
+                  </div>
+                  <p className="mt-3 text-sm text-[#6A5146] dark:text-muted-foreground">
+                    {formatDate(trip.starts_at, trip.is_all_day)} ·{' '}
+                    {trip.location_public ?? 'Location needed'} ·{' '}
+                    {trip.capacity ? `${trip.capacity} spots` : 'No limit'}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={`/trips/${trip.id}`}>
+                      <Eye className="size-4" /> View
+                    </Link>
+                  </Button>
+                  {canManageTrip('trips.update', trip.id) ? (
+                    <Button asChild size="sm" variant="outline">
+                      <Link href={`/trips/${trip.id}?edit=1`}>
+                        <Pencil className="size-4" /> Edit
+                      </Link>
+                    </Button>
+                  ) : null}
+                  {canManageTrip('trips.official', trip.id) ? (
+                    <form action={setTripOfficialAction}>
+                      <input type="hidden" name="tripId" value={trip.id} />
+                      <input
+                        type="hidden"
+                        name="isOfficial"
+                        value={trip.is_official ? 'false' : 'true'}
+                      />
+                      <Button size="sm" variant="ghost">
+                        Make {trip.is_official ? 'unofficial' : 'official'}
+                      </Button>
+                    </form>
+                  ) : null}
+                  {canManageTrip('trips.delete', trip.id) &&
+                  trip.lifecycle_status === 'published' ? (
+                    <form action={changeTripLifecycleAction}>
+                      <input type="hidden" name="tripId" value={trip.id} />
+                      <Button
+                        name="lifecycle"
+                        value="canceled"
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <XCircle className="size-4" /> Cancel
+                      </Button>
+                    </form>
+                  ) : null}
+                  {canManageTrip('trips.delete', trip.id) &&
+                  trip.lifecycle_status === 'canceled' ? (
+                    <form action={changeTripLifecycleAction}>
+                      <input type="hidden" name="tripId" value={trip.id} />
+                      <Button
+                        name="lifecycle"
+                        value="archived"
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <Archive className="size-4" /> Archive
+                      </Button>
+                    </form>
+                  ) : null}
+                  {canManageTrip('trips.delete', trip.id) &&
+                  trip.lifecycle_status !== 'published' ? (
+                    <form action={changeTripLifecycleAction}>
+                      <input type="hidden" name="tripId" value={trip.id} />
+                      <Button
+                        name="lifecycle"
+                        value="published"
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <RotateCcw className="size-4" /> Restore
+                      </Button>
+                    </form>
+                  ) : null}
+                  {context.isSuperAdmin &&
+                  trip.lifecycle_status !== 'published' &&
+                  /test/i.test(trip.title) ? (
+                    <form action={purgeTestTripAction}>
+                      <input type="hidden" name="tripId" value={trip.id} />
+                      <Button size="sm" variant="destructive">
+                        Purge test
+                      </Button>
+                    </form>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+        </section>
+      ) : null}
+    </div>
+  )
+}

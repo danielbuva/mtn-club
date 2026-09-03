@@ -17,6 +17,7 @@ import { EventLocationsSection } from '@/components/events/sections/event-locati
 import { EventScheduleSection } from '@/components/events/sections/event-schedule-section'
 import { EventSettingsSection } from '@/components/events/sections/event-settings-section'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toEventFormValuesFromDraft } from '@/lib/events/drafts'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
 import type { Database } from '@/lib/supabase/types'
@@ -73,6 +74,9 @@ type EventFormProps = {
   initialIsOfficial: boolean
   initialDraft: Database['public']['Tables']['trip_drafts']['Row'] | null
   activityOptions: string[]
+  publicHostOptions: Array<{ id: string; label: string }>
+  leaderOptions: Array<{ id: string; label: string }>
+  successPath: string
 }
 
 export function EventForm({
@@ -81,6 +85,9 @@ export function EventForm({
   initialIsOfficial,
   initialDraft,
   activityOptions,
+  publicHostOptions,
+  leaderOptions,
+  successPath,
 }: EventFormProps) {
   const router = useRouter()
   const initialState = resolveInitialFormState({
@@ -103,6 +110,8 @@ export function EventForm({
   const [isNoLimitEnabled, setIsNoLimitEnabled] = useState(
     initialState.isNoLimitEnabled,
   )
+  const [publicHostIds, setPublicHostIds] = useState<string[]>([])
+  const [leaderUserIds, setLeaderUserIds] = useState<string[]>([])
 
   useEffect(() => {
     const nextState = resolveInitialFormState({
@@ -138,6 +147,8 @@ export function EventForm({
     setNewActivityTag('')
     setActivityOptionValues(activityOptions)
     setIsNoLimitEnabled(true)
+    setPublicHostIds([])
+    setLeaderUserIds([])
   }
 
   const updateField = <K extends keyof EventFormValues>(
@@ -281,10 +292,12 @@ export function EventForm({
         values: parsed.data,
         isNoLimitEnabled,
         sourceDraftId: currentDraftId,
+        publicHostIds,
+        leaderUserIds,
       })
 
       resetForm()
-      router.push('/trips')
+      router.push(successPath)
     } catch (error: unknown) {
       setFormError(
         error instanceof Error ? error.message : 'Unable to create event',
@@ -351,13 +364,81 @@ export function EventForm({
         onFieldChange={updateField}
       />
 
+      {canManageTags && (publicHostOptions.length || leaderOptions.length) ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Trip hosts and leaders</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-6 sm:grid-cols-2">
+            <fieldset>
+              <legend className="text-sm font-semibold">
+                Public host credits
+              </legend>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Names shown on the public trip page.
+              </p>
+              <div className="mt-3 grid gap-2">
+                {publicHostOptions.map(option => (
+                  <label
+                    key={option.id}
+                    className="flex items-center gap-2 text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={publicHostIds.includes(option.id)}
+                      onChange={event =>
+                        setPublicHostIds(current =>
+                          event.target.checked
+                            ? [...current, option.id]
+                            : current.filter(id => id !== option.id),
+                        )
+                      }
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend className="text-sm font-semibold">
+                Linked account leaders
+              </legend>
+              <p className="mt-1 text-xs text-muted-foreground">
+                These assignments power assigned-only trip permissions.
+              </p>
+              <div className="mt-3 grid gap-2">
+                {leaderOptions.map(option => (
+                  <label
+                    key={option.id}
+                    className="flex items-center gap-2 text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={leaderUserIds.includes(option.id)}
+                      onChange={event =>
+                        setLeaderUserIds(current =>
+                          event.target.checked
+                            ? [...current, option.id]
+                            : current.filter(id => id !== option.id),
+                        )
+                      }
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          </CardContent>
+        </Card>
+      ) : null}
+
       <div className="hidden items-center justify-between md:flex">
         <Button
           type="button"
           variant="ghost"
           onClick={() => {
             resetForm()
-            router.push('/trips')
+            router.push(successPath)
           }}
         >
           Cancel

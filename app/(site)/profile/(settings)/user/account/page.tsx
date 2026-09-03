@@ -9,7 +9,7 @@ export default async function AccountSettingsPage() {
     getProfileOrRedirect(),
     getViewer(),
   ])
-  const isAdmin = viewer.member?.role === 'admin'
+  const isAdmin = viewer.isAdmin
 
   return (
     <div className="space-y-6">

@@ -166,6 +166,7 @@ const toTripListItem = (
     startAt: new Date(event.starts_at),
     endAt: event.ends_at ? new Date(event.ends_at) : undefined,
     isAllDay: event.is_all_day,
+    isOfficial: event.is_official,
     difficulty,
     capacity: event.capacity ?? undefined,
     rsvpCount,

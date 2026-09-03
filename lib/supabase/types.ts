@@ -35,29 +35,292 @@ export type Database = {
         }
         Relationships: []
       }
+      account_deletion_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          last_error: string | null
+          requested_by: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          requested_by: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          requested_by?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      admin_activity_events: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          id: string
+          resource_id: string | null
+          resource_type: string
+          result: string
+          subject_user_id: string | null
+          summary: string
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          id?: string
+          resource_id?: string | null
+          resource_type: string
+          result?: string
+          subject_user_id?: string | null
+          summary: string
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          id?: string
+          resource_id?: string | null
+          resource_type?: string
+          result?: string
+          subject_user_id?: string | null
+          summary?: string
+        }
+        Relationships: []
+      }
+      admin_capabilities: {
+        Row: {
+          action: string
+          created_at: string
+          is_active: boolean
+          key: string
+          label: string
+          phase: number
+          resource: string
+          supports_assigned_scope: boolean
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          is_active?: boolean
+          key: string
+          label: string
+          phase?: number
+          resource: string
+          supports_assigned_scope?: boolean
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          is_active?: boolean
+          key?: string
+          label?: string
+          phase?: number
+          resource?: string
+          supports_assigned_scope?: boolean
+        }
+        Relationships: []
+      }
+      admin_role_grants: {
+        Row: {
+          capability_key: string
+          created_at: string
+          role_id: string
+          scope: Database['public']['Enums']['admin_permission_scope']
+          updated_at: string
+        }
+        Insert: {
+          capability_key: string
+          created_at?: string
+          role_id: string
+          scope?: Database['public']['Enums']['admin_permission_scope']
+          updated_at?: string
+        }
+        Update: {
+          capability_key?: string
+          created_at?: string
+          role_id?: string
+          scope?: Database['public']['Enums']['admin_permission_scope']
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      admin_roles: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_super_admin: boolean
+          is_system: boolean
+          key: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_super_admin?: boolean
+          is_system?: boolean
+          key: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_super_admin?: boolean
+          is_system?: boolean
+          key?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      admin_user_roles: {
+        Row: {
+          assigned_by: string | null
+          created_at: string
+          role_id: string
+          user_id: string
+        }
+        Insert: {
+          assigned_by?: string | null
+          created_at?: string
+          role_id: string
+          user_id: string
+        }
+        Update: {
+          assigned_by?: string | null
+          created_at?: string
+          role_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'admin_user_roles_role_id_fkey'
+            columns: ['role_id']
+            isOneToOne: false
+            referencedRelation: 'admin_roles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       club_hosts: {
         Row: {
           club_title: string
           created_at: string
           id: string
+          display_order: number
+          is_active: boolean
           linked_user_id: string | null
           public_name: string
+          role_key: string | null
           updated_at: string
         }
         Insert: {
           club_title: string
           created_at?: string
           id?: string
+          display_order?: number
+          is_active?: boolean
           linked_user_id?: string | null
           public_name: string
+          role_key?: string | null
           updated_at?: string
         }
         Update: {
           club_title?: string
           created_at?: string
           id?: string
+          display_order?: number
+          is_active?: boolean
           linked_user_id?: string | null
           public_name?: string
+          role_key?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      club_admin_settings: {
+        Row: {
+          currency: string
+          dues_amount_cents: number
+          id: boolean
+          non_admin_upcoming_trip_limit: number
+          time_zone: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          currency?: string
+          dues_amount_cents?: number
+          id?: boolean
+          non_admin_upcoming_trip_limit?: number
+          time_zone?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          currency?: string
+          dues_amount_cents?: number
+          id?: boolean
+          non_admin_upcoming_trip_limit?: number
+          time_zone?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      club_terms: {
+        Row: {
+          created_at: string
+          ends_on: string
+          id: string
+          is_active: boolean
+          name: string
+          starts_on: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_on: string
+          id?: string
+          is_active?: boolean
+          name: string
+          starts_on: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_on?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          starts_on?: string
           updated_at?: string
         }
         Relationships: []
@@ -246,6 +509,66 @@ export type Database = {
           },
         ]
       }
+      mailing_list_consent_events: {
+        Row: {
+          consent_source: string
+          created_at: string
+          email: string
+          id: string
+          subscribed: boolean
+          user_id: string
+        }
+        Insert: {
+          consent_source: string
+          created_at?: string
+          email: string
+          id?: string
+          subscribed: boolean
+          user_id: string
+        }
+        Update: {
+          consent_source?: string
+          created_at?: string
+          email?: string
+          id?: string
+          subscribed?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mailing_list_subscriptions: {
+        Row: {
+          consent_source: string
+          created_at: string
+          email: string
+          subscribed: boolean
+          subscribed_at: string | null
+          unsubscribed_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consent_source: string
+          created_at?: string
+          email: string
+          subscribed?: boolean
+          subscribed_at?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consent_source?: string
+          created_at?: string
+          email?: string
+          subscribed?: boolean
+          subscribed_at?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       membership_checkout_attempts: {
         Row: {
           amount_cents: number
@@ -296,31 +619,34 @@ export type Database = {
           created_at: string
           ends_at: string
           id: string
-          payment_id: string
+          payment_id: string | null
           revoked_at: string | null
           revoked_reason: string | null
           starts_at: string
           user_id: string
+          zelle_payment_id: string | null
         }
         Insert: {
           created_at?: string
           ends_at: string
           id?: string
-          payment_id: string
+          payment_id?: string | null
           revoked_at?: string | null
           revoked_reason?: string | null
           starts_at: string
           user_id: string
+          zelle_payment_id?: string | null
         }
         Update: {
           created_at?: string
           ends_at?: string
           id?: string
-          payment_id?: string
+          payment_id?: string | null
           revoked_at?: string | null
           revoked_reason?: string | null
           starts_at?: string
           user_id?: string
+          zelle_payment_id?: string | null
         }
         Relationships: [
           {
@@ -437,6 +763,51 @@ export type Database = {
             referencedColumns: ['id']
           },
         ]
+      }
+      membership_zelle_payments: {
+        Row: {
+          amount_cents: number
+          claim_source: string
+          claimed_at: string
+          created_at: string
+          currency: string
+          id: string
+          internal_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database['public']['Enums']['zelle_payment_status']
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          claim_source?: string
+          claimed_at?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          internal_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database['public']['Enums']['zelle_payment_status']
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          claim_source?: string
+          claimed_at?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          internal_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database['public']['Enums']['zelle_payment_status']
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       memberships: {
         Row: {
@@ -1054,7 +1425,10 @@ export type Database = {
         Row: {
           activity_id: string | null
           activity_tags: string[]
+          archived_at: string | null
           capacity: number | null
+          canceled_at: string | null
+          canceled_by: string | null
           cover_image_path: string | null
           created_at: string
           created_by: string | null
@@ -1064,6 +1438,7 @@ export type Database = {
           id: string
           is_all_day: boolean
           is_official: boolean
+          lifecycle_status: Database['public']['Enums']['trip_lifecycle_status']
           location_public: string | null
           overview_carpool_need_gear: string | null
           overview_equipment: string | null
@@ -1082,7 +1457,10 @@ export type Database = {
         Insert: {
           activity_id?: string | null
           activity_tags?: string[]
+          archived_at?: string | null
           capacity?: number | null
+          canceled_at?: string | null
+          canceled_by?: string | null
           cover_image_path?: string | null
           created_at?: string
           created_by?: string | null
@@ -1092,6 +1470,7 @@ export type Database = {
           id?: string
           is_all_day?: boolean
           is_official?: boolean
+          lifecycle_status?: Database['public']['Enums']['trip_lifecycle_status']
           location_public?: string | null
           overview_carpool_need_gear?: string | null
           overview_equipment?: string | null
@@ -1110,7 +1489,10 @@ export type Database = {
         Update: {
           activity_id?: string | null
           activity_tags?: string[]
+          archived_at?: string | null
           capacity?: number | null
+          canceled_at?: string | null
+          canceled_by?: string | null
           cover_image_path?: string | null
           created_at?: string
           created_by?: string | null
@@ -1120,6 +1502,7 @@ export type Database = {
           id?: string
           is_all_day?: boolean
           is_official?: boolean
+          lifecycle_status?: Database['public']['Enums']['trip_lifecycle_status']
           location_public?: string | null
           overview_carpool_need_gear?: string | null
           overview_equipment?: string | null
@@ -1254,6 +1637,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_confirmed_zelle_membership: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
+      admin_list_accounts: {
+        Args: {
+          p_actor_user_id: string
+          p_mailing?: string | null
+          p_membership_state?: string | null
+          p_needs_attention?: boolean
+          p_page?: number
+          p_page_size?: number
+          p_restriction?: string | null
+          p_role_name?: string | null
+          p_search?: string | null
+        }
+        Returns: {
+          deletion_error: string | null
+          deletion_status: string | null
+          display_name: string | null
+          email: string | null
+          leadership_roles: string[]
+          mailing_subscribed: boolean
+          membership_role: string | null
+          membership_state: string
+          restriction: string
+          total_count: number
+          user_id: string
+        }[]
+      }
+      admin_capability_scope: {
+        Args: { p_capability_key: string; p_uid: string }
+        Returns: Database['public']['Enums']['admin_permission_scope'] | null
+      }
       approve_membership_review_item: {
         Args: { p_review_id: string; p_reviewer_id: string }
         Returns: string
@@ -1274,6 +1691,7 @@ export type Database = {
         Args: { p_trip_id: string }
         Returns: boolean
       }
+      claim_zelle_membership_payment: { Args: never; Returns: string }
       confirm_membership_guardian_consent: {
         Args: { p_reviewer_id: string; p_user_id: string }
         Returns: undefined
@@ -1320,11 +1738,29 @@ export type Database = {
           receipt_url: string
         }[]
       }
+      grant_complimentary_membership_access: {
+        Args: {
+          p_actor_user_id: string
+          p_days: number
+          p_reason: string
+          p_user_id: string
+        }
+        Returns: string
+      }
       has_membership_access: { Args: { p_uid: string }; Returns: boolean }
+      has_admin_capability: {
+        Args: { p_capability_key: string; p_uid: string }
+        Returns: boolean
+      }
+      has_trip_admin_capability: {
+        Args: { p_capability_key: string; p_trip_id: string; p_uid: string }
+        Returns: boolean
+      }
       has_provisional_membership_access: { Args: never; Returns: boolean }
       is_active_member: { Args: { p_uid: string }; Returns: boolean }
       is_banned: { Args: { p_uid: string }; Returns: boolean }
       is_staff_or_admin: { Args: { p_uid: string }; Returns: boolean }
+      is_super_admin: { Args: { p_uid: string }; Returns: boolean }
       process_membership_checkout_event: {
         Args: {
           p_amount_cents: number
@@ -1374,9 +1810,71 @@ export type Database = {
           review_required: boolean
         }[]
       }
+      record_admin_activity: {
+        Args: {
+          p_action: string
+          p_actor_user_id: string
+          p_after_data?: Json | null
+          p_before_data?: Json | null
+          p_resource_id: string | null
+          p_resource_type: string
+          p_result?: string
+          p_subject_user_id: string | null
+          p_summary: string
+        }
+        Returns: string
+      }
+      review_zelle_membership_payment: {
+        Args: {
+          p_decision: string
+          p_note?: string | null
+          p_payment_id: string
+          p_reviewer_id: string
+        }
+        Returns: boolean
+      }
+      reverse_zelle_membership_payment: {
+        Args: {
+          p_payment_id: string
+          p_reason: string
+          p_reviewer_id: string
+        }
+        Returns: boolean
+      }
+      set_mailing_list_subscription: {
+        Args: { p_email: string; p_source?: string; p_subscribed: boolean }
+        Returns: undefined
+      }
+      set_admin_account_restriction: {
+        Args: {
+          p_actor_user_id: string
+          p_reason?: string | null
+          p_restriction: Database['public']['Enums']['membership_restriction']
+          p_user_id: string
+        }
+        Returns: undefined
+      }
+      set_zelle_membership_payment_status: {
+        Args: {
+          p_desired_status: string
+          p_note?: string | null
+          p_reviewer_id: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      set_super_admin_assignment: {
+        Args: {
+          p_actor_user_id: string
+          p_assign: boolean
+          p_target_user_id: string
+        }
+        Returns: undefined
+      }
       try_uuid: { Args: { p: string }; Returns: string }
     }
     Enums: {
+      admin_permission_scope: 'assigned' | 'all'
       carpool_kind: 'offer' | 'need'
       club_role: 'regular' | 'staff' | 'leadership' | 'admin'
       guardian_consent_status: 'not_required' | 'pending' | 'confirmed'
@@ -1413,6 +1911,7 @@ export type Database = {
         | 'suspended'
         | 'banned'
       trip_difficulty: 'beginner' | 'intermediate' | 'hard' | 'expert'
+      trip_lifecycle_status: 'published' | 'canceled' | 'archived'
       trip_rsvp_status:
         | 'going'
         | 'maybe'
@@ -1422,6 +1921,7 @@ export type Database = {
         | 'waitlisted'
       trip_visibility: 'public' | 'members' | 'minimal'
       webhook_processing_status: 'processing' | 'succeeded' | 'failed'
+      zelle_payment_status: 'claimed' | 'confirmed' | 'rejected' | 'reversed'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1549,6 +2049,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      admin_permission_scope: ['assigned', 'all'],
       carpool_kind: ['offer', 'need'],
       club_role: ['regular', 'staff', 'leadership', 'admin'],
       guardian_consent_status: ['not_required', 'pending', 'confirmed'],
@@ -1589,6 +2090,7 @@ export const Constants = {
         'banned',
       ],
       trip_difficulty: ['beginner', 'intermediate', 'hard', 'expert'],
+      trip_lifecycle_status: ['published', 'canceled', 'archived'],
       trip_rsvp_status: [
         'going',
         'maybe',
@@ -1599,6 +2101,7 @@ export const Constants = {
       ],
       trip_visibility: ['public', 'members', 'minimal'],
       webhook_processing_status: ['processing', 'succeeded', 'failed'],
+      zelle_payment_status: ['claimed', 'confirmed', 'rejected', 'reversed'],
     },
   },
 } as const

@@ -32,6 +32,7 @@ export type MembershipAccount = {
   hasExpiredEntitlement: boolean
   checkoutProcessing: boolean
   reviewRequired: boolean
+  latestZelleStatus: 'claimed' | 'confirmed' | 'rejected' | 'reversed' | null
   application: {
     status: 'submitted' | 'confirmed' | 'withdrawn'
     ageStatus: 'adult' | 'minor'
@@ -52,6 +53,7 @@ export const unavailableMembershipAccount: MembershipAccount = {
   hasExpiredEntitlement: false,
   checkoutProcessing: false,
   reviewRequired: false,
+  latestZelleStatus: null,
   application: null,
   paymentHistory: [],
 }
@@ -81,6 +83,7 @@ async function loadMembershipAccount(
     checkout,
     review,
     application,
+    zellePayment,
     history,
   ] = await Promise.all([
     admin
@@ -126,6 +129,13 @@ async function loadMembershipAccount(
       )
       .eq('user_id', userId)
       .maybeSingle(),
+    admin
+      .from('membership_zelle_payments')
+      .select('status')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
     supabase.rpc('get_my_membership_payment_history'),
   ])
 
@@ -136,6 +146,7 @@ async function loadMembershipAccount(
     checkout.error ||
     review.error ||
     application.error ||
+    zellePayment.error ||
     history.error
   ) {
     return unavailableMembershipAccount
@@ -174,6 +185,7 @@ async function loadMembershipAccount(
     reviewRequired: Boolean(
       review.data || checkout.data?.status === 'review_required',
     ),
+    latestZelleStatus: zellePayment.data?.status ?? null,
     application: application.data
       ? {
           status: application.data.status,

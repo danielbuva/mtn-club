@@ -40,6 +40,7 @@ export async function submitMembershipSignUp(
   const experienceNotes = normalizeText(formData, 'experienceNotes')
   const password = String(formData.get('password') ?? '')
   const repeatPassword = String(formData.get('repeatPassword') ?? '')
+  const mailingListOptIn = formData.get('mailingListOptIn') === 'on'
 
   if (fullName.length < 2 || fullName.length > 120) {
     return { error: 'Enter your full name.' }
@@ -179,53 +180,112 @@ export async function submitMembershipSignUp(
   const guardianConsent = ageStatus === 'adult' ? 'not_required' : 'pending'
   const duesClaimedAt = duesPaymentClaimed ? new Date().toISOString() : null
   const { firstName, lastName } = splitName(fullName)
+  const duesSettings = duesPaymentClaimed
+    ? await admin
+        .from('club_admin_settings')
+        .select('dues_amount_cents, currency')
+        .eq('id', true)
+        .single()
+    : { data: null, error: null }
 
-  const [profileResult, membershipResult, applicationResult] =
-    await Promise.all([
-      admin.from('profiles').upsert(
-        {
-          user_id: userId,
-          display_name: fullName,
-          first_name: firstName,
-          last_name: lastName,
-        },
-        { onConflict: 'user_id' },
+  if (duesSettings.error) {
+    console.error(
+      'Membership dues settings could not be loaded:',
+      duesSettings.error,
+    )
+    await clearSessionAndDeleteUser()
+    return { error: 'We could not start your payment claim. Please try again.' }
+  }
+
+  const [
+    profileResult,
+    membershipResult,
+    applicationResult,
+    mailingResult,
+    mailingConsentResult,
+    zelleResult,
+  ] = await Promise.all([
+    admin.from('profiles').upsert(
+      {
+        user_id: userId,
+        display_name: fullName,
+        first_name: firstName,
+        last_name: lastName,
+      },
+      { onConflict: 'user_id' },
+    ),
+    admin
+      .from('memberships')
+      .upsert(
+        { user_id: userId, status: 'pending', role: 'regular' },
+        { onConflict: 'user_id', ignoreDuplicates: true },
       ),
-      admin
-        .from('memberships')
-        .upsert(
-          { user_id: userId, status: 'pending', role: 'regular' },
-          { onConflict: 'user_id', ignoreDuplicates: true },
-        ),
-      admin.from('membership_applications').upsert(
-        {
+    admin.from('membership_applications').upsert(
+      {
+        user_id: userId,
+        full_name: fullName,
+        contact_email: contactEmail,
+        age_status: ageStatus,
+        guardian_consent: guardianConsent,
+        dues_payment_claimed: duesPaymentClaimed,
+        dues_claimed_at: duesClaimedAt,
+        primary_interest: primaryInterest,
+        experience_notes: experienceNotes || null,
+        status: 'submitted',
+        confirmed_at: null,
+        confirmed_by: null,
+        membership_access_override_id: null,
+      },
+      { onConflict: 'user_id' },
+    ),
+    mailingListOptIn
+      ? admin.from('mailing_list_subscriptions').upsert(
+          {
+            user_id: userId,
+            email: contactEmail,
+            subscribed: true,
+            consent_source: 'membership_signup',
+            subscribed_at: new Date().toISOString(),
+            unsubscribed_at: null,
+          },
+          { onConflict: 'user_id' },
+        )
+      : Promise.resolve({ error: null }),
+    mailingListOptIn
+      ? admin.from('mailing_list_consent_events').insert({
           user_id: userId,
-          full_name: fullName,
-          contact_email: contactEmail,
-          age_status: ageStatus,
-          guardian_consent: guardianConsent,
-          dues_payment_claimed: duesPaymentClaimed,
-          dues_claimed_at: duesClaimedAt,
-          primary_interest: primaryInterest,
-          experience_notes: experienceNotes || null,
-          status: 'submitted',
-          confirmed_at: null,
-          confirmed_by: null,
-          membership_access_override_id: null,
-        },
-        { onConflict: 'user_id' },
-      ),
-    ])
+          email: contactEmail,
+          subscribed: true,
+          consent_source: 'membership_signup',
+        })
+      : Promise.resolve({ error: null }),
+    duesPaymentClaimed
+      ? admin.from('membership_zelle_payments').insert({
+          user_id: userId,
+          amount_cents: duesSettings.data?.dues_amount_cents ?? 2500,
+          currency: duesSettings.data?.currency ?? 'usd',
+          status: 'claimed',
+          claim_source: 'membership_signup',
+          claimed_at: duesClaimedAt ?? new Date().toISOString(),
+        })
+      : Promise.resolve({ error: null }),
+  ])
 
   if (
     profileResult.error ||
     membershipResult.error ||
-    applicationResult.error
+    applicationResult.error ||
+    mailingResult.error ||
+    mailingConsentResult.error ||
+    zelleResult.error
   ) {
     console.error('Membership sign-up persistence failed:', {
       profile: profileResult.error,
       membership: membershipResult.error,
       application: applicationResult.error,
+      mailingList: mailingResult.error,
+      mailingConsent: mailingConsentResult.error,
+      zelle: zelleResult.error,
     })
     const cleanupError = await clearSessionAndDeleteUser()
     return {
@@ -233,6 +293,28 @@ export async function submitMembershipSignUp(
         ? 'Your account was created, but we could not save the membership form. Contact club leadership for help.'
         : 'We could not save your signup. Please try again.',
     }
+  }
+
+  const { error: activityError } = await admin
+    .from('admin_activity_events')
+    .insert({
+      actor_user_id: userId,
+      subject_user_id: userId,
+      action: 'membership_application_submitted',
+      resource_type: 'membership_application',
+      resource_id: userId,
+      summary: `${fullName} submitted a membership application.`,
+      after_data: {
+        guardian_consent: guardianConsent,
+        payment_claimed: duesPaymentClaimed,
+        mailing_list_opt_in: mailingListOptIn,
+      },
+    })
+  if (activityError) {
+    console.error(
+      'Membership application activity could not be recorded:',
+      activityError,
+    )
   }
 
   revalidatePath('/membership')

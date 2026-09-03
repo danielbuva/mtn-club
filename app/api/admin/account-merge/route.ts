@@ -53,20 +53,20 @@ const assertAdmin = async () => {
     return { ok: false as const, status: 401, error: 'Unauthorized.' }
   }
 
-  const { data: membership, error: membershipError } = await supabase
-    .from('memberships')
-    .select('role')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  if (membershipError) {
-    return { ok: false as const, status: 500, error: membershipError.message }
+  const permission = await supabase.rpc('has_admin_capability', {
+    p_uid: user.id,
+    p_capability_key: 'accounts.update',
+  })
+  if (permission.error) {
+    return { ok: false as const, status: 500, error: permission.error.message }
   }
 
-  if (membership?.role !== 'admin') {
-    return { ok: false as const, status: 403, error: 'Admin access required.' }
+  if (!permission.data) {
+    return {
+      ok: false as const,
+      status: 403,
+      error: 'Account management permission required.',
+    }
   }
 
   return { ok: true as const, userId: user.id }

@@ -99,6 +99,14 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
       ) : null}
 
       <CardContent className="space-y-3 p-4 md:p-5">
+        <Badge
+          variant={trip.isOfficial === false ? 'secondary' : 'outline'}
+          className="w-fit text-[11px] uppercase tracking-wide"
+        >
+          {trip.isOfficial === false
+            ? 'Community-created trip'
+            : 'Official club trip'}
+        </Badge>
         {!showImage ? (
           <div className="flex items-center gap-2">
             {visibleTags.map(tag => (

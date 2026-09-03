@@ -33,6 +33,7 @@ const buildTripsRangeQuery = (
     .from('trips')
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
+    .eq('lifecycle_status', 'published')
     .lte('starts_at', endIso)
     .or(`ends_at.is.null,ends_at.gte.${startIso}`)
     .order('starts_at', { ascending: true })
@@ -47,9 +48,7 @@ export async function fetchTripsInRange(
     console.error('TRIPS ERROR', error)
     throw error
   }
-  return (data ?? []).filter(
-    trip => !trip.schedule_key?.startsWith('fall-2026-weekly-'),
-  )
+  return data ?? []
 }
 
 export async function fetchPublicHostsByTrip(
@@ -126,6 +125,7 @@ export async function fetchPastTripsPublic(
     .from('trips')
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
+    .eq('lifecycle_status', 'published')
     .lt('starts_at', nowIso)
     .order('starts_at', { ascending: false })
     .limit(limit)

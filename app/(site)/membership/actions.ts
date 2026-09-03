@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { isMembershipCheckoutEnabled } from '@/lib/memberships/config'
 import {
   createStripeClient,
@@ -13,6 +15,15 @@ export type CheckoutActionResult =
   | { ok: false; error: string }
 
 const CHECKOUT_LIFETIME_SECONDS = 30 * 60
+
+export async function claimZelleMembershipPayment() {
+  const supabase = await createClient()
+  const { error } = await supabase.rpc('claim_zelle_membership_payment')
+  if (error) throw error
+  revalidatePath('/membership')
+  revalidatePath('/admin')
+  revalidatePath('/admin/membership')
+}
 
 export async function createMembershipCheckout(): Promise<CheckoutActionResult> {
   if (!isMembershipCheckoutEnabled()) {

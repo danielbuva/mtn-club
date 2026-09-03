@@ -33,10 +33,14 @@ function getServerHydrationSnapshot(): false {
 export function ThemeCycleButton({
   className,
   onThemeChange,
+  shape = 'round',
+  showLabel = false,
   tabIndex,
 }: {
   className?: string
   onThemeChange?: () => void
+  shape?: 'round' | 'square'
+  showLabel?: boolean
   tabIndex?: number
 } = {}) {
   const { setTheme, theme } = useTheme()
@@ -63,12 +67,15 @@ export function ThemeCycleButton({
       }}
       tabIndex={tabIndex}
       className={cn(
-        'flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground outline-none transition hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+        'flex size-11 shrink-0 items-center justify-center bg-secondary text-secondary-foreground outline-none transition hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+        shape === 'round' && 'rounded-full',
+        showLabel && 'flex-col gap-1 text-[9px] font-semibold leading-none',
         !hydrated && 'invisible',
         className,
       )}
     >
       <Icon className="size-4.5" aria-hidden="true" />
+      {showLabel ? <span>Theme</span> : null}
     </button>
   )
 }

@@ -15,6 +15,7 @@ const photo = (
   taken_on: null,
   trip_id: null,
   imageUrl: involvementImageUrl(documentId),
+  unoptimized: true,
 })
 
 export const involvementCenterGalleryPhotos: PublicGalleryPhoto[] = [

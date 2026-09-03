@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 export function ThumbNavigationBar({
   children,
   className,
+  containerClassName,
   ariaLabel = 'Page actions',
   tone = 'app',
   placement = 'center',
@@ -12,6 +13,7 @@ export function ThumbNavigationBar({
 }: {
   children: ReactNode
   className?: string
+  containerClassName?: string
   ariaLabel?: string
   tone?: 'app' | 'paper'
   placement?: 'center' | 'right'
@@ -24,6 +26,7 @@ export function ThumbNavigationBar({
         placement === 'right'
           ? 'justify-end px-[max(1.25rem,env(safe-area-inset-right))]'
           : 'justify-center px-4',
+        containerClassName,
       )}
     >
       <nav

@@ -13,6 +13,9 @@ type NewEventPageProps = {
   canCreateOfficial: boolean
   canManageTags: boolean
   activityOptions: string[]
+  publicHostOptions?: Array<{ id: string; label: string }>
+  leaderOptions?: Array<{ id: string; label: string }>
+  successPath?: string
 }
 
 export function NewEventPage({
@@ -22,6 +25,9 @@ export function NewEventPage({
   canCreateOfficial,
   canManageTags,
   activityOptions,
+  publicHostOptions = [],
+  leaderOptions = [],
+  successPath = '/trips',
 }: NewEventPageProps) {
   const initialIsOfficial = initialType === 'official' && canCreateOfficial
 
@@ -50,6 +56,9 @@ export function NewEventPage({
                 initialIsOfficial={initialIsOfficial}
                 initialDraft={initialDraft}
                 activityOptions={activityOptions}
+                publicHostOptions={publicHostOptions}
+                leaderOptions={leaderOptions}
+                successPath={successPath}
               />
             )}
           </div>

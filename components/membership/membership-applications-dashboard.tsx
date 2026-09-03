@@ -2,7 +2,7 @@ import { BadgeCheck, CircleAlert, Clock3 } from 'lucide-react'
 import {
   confirmGuardianConsentAction,
   confirmMembershipApplicationAction,
-} from '@/app/(site)/admin/membership/actions'
+} from '@/app/(admin)/admin/membership/actions'
 import { Button } from '@/components/ui/button'
 
 export type MembershipApplicationReviewItem = {

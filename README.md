@@ -84,6 +84,11 @@ The canonical production site is `https://unlvmountainclub.com`.
 - `pnpm check`: run Biome formatting and lint checks
 - `pnpm typecheck`: run strict TypeScript checks
 - `pnpm test`: run automated tests
+- `pnpm test:admin:production`: run read-only checks against the configured
+  Supabase project, including bootstrap admins, private-table access, gallery
+  inventory, and required admin RPCs
+- `pnpm supabase:check-link`: stop before a database command if the CLI is
+  linked to a different project than `.env.local`
 - `pnpm test:membership:sandbox`: run the synthetic membership-access test with
   sandbox Supabase admin credentials
 - `pnpm generate:fair-qr <production-url>`: make M and Q print candidates
@@ -112,6 +117,27 @@ Production deploys are handled by Vercel. Pushing to `main` triggers a productio
 ## Operations
 
 See `RUNBOOK.md` for infra ownership, access, and incident response.
+
+### Supabase CLI ownership
+
+The GitHub identity used for this repository does not need a seat in the
+Supabase organization. Authenticate the CLI with a scoped personal access token
+created by the Supabase account that owns the project, then link this checkout
+to the project referenced by `NEXT_PUBLIC_SUPABASE_URL`.
+
+```bash
+export SUPABASE_ACCESS_TOKEN="..."
+pnpm exec supabase unlink
+pnpm exec supabase link --project-ref "..."
+pnpm supabase:check-link
+pnpm exec supabase migration list
+```
+
+Never commit the token. Before repairing or pushing migrations, confirm that
+the linked project ref is the same ref at the beginning of the configured
+Supabase hostname. Only one operator should push database migrations at a time.
+If SQL was applied manually, use `migration repair --status applied` only after
+verifying that exact migration's schema changes are already present.
 
 ## Contributing
 

@@ -11,20 +11,21 @@ export default async function TripsNewPage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  const membership = user
-    ? await supabase
-        .from('memberships')
-        .select('role')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-    : { data: null }
-
-  const role = membership.data?.role
   const resolvedSearchParams = searchParams ? await searchParams : undefined
-  const canCreateOfficial = Boolean(role && role !== 'regular')
-  const canManageTags = ['staff', 'leadership', 'admin'].includes(role ?? '')
+  const [officialScope, updateScope] = user
+    ? await Promise.all([
+        supabase.rpc('admin_capability_scope', {
+          p_uid: user.id,
+          p_capability_key: 'trips.official',
+        }),
+        supabase.rpc('admin_capability_scope', {
+          p_uid: user.id,
+          p_capability_key: 'trips.update',
+        }),
+      ])
+    : [{ data: null }, { data: null }]
+  const canCreateOfficial = Boolean(officialScope.data)
+  const canManageTags = Boolean(updateScope.data)
   const draftId = resolvedSearchParams?.draft
 
   const tagOptionsRes = await supabase

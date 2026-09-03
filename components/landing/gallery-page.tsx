@@ -46,6 +46,7 @@ export function GalleryPhotoCollection({
               alt={photo.alt_text}
               width={1200}
               height={900}
+              unoptimized={photo.unoptimized}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="aspect-square w-full border-b border-[#211D18]/25 object-cover"
             />

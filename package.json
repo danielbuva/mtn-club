@@ -22,6 +22,8 @@
     "lint:fix": "biome lint . --write",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
+    "test:admin:production": "node --env-file=.env.local scripts/check-admin-production.mjs",
+    "supabase:check-link": "node --env-file=.env.local scripts/check-supabase-link.mjs",
     "test:membership:sandbox": "node --env-file=.env.local scripts/test-membership-applications.mjs",
     "test:stripe:sandbox": "node --env-file=.env.local scripts/test-stripe-sandbox.mjs",
     "prepare": "node scripts/install-git-hooks.mjs",
@@ -99,7 +101,7 @@
     "npm-check-updates": "^19.3.1",
     "postcss": "^8",
     "qrcode": "1.5.4",
-    "supabase": "^2.76.8",
+    "supabase": "^2.116.0",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5"

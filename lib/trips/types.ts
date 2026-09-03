@@ -26,6 +26,7 @@ export type TripListItem = {
   startAt: Date
   endAt?: Date
   isAllDay?: boolean
+  isOfficial?: boolean
   difficulty?: TripDifficulty
   capacity?: number
   rsvpCount?: number
@@ -64,6 +65,7 @@ export type TripDetail = {
   startAt: Date
   endAt?: Date
   isAllDay?: boolean
+  isOfficial?: boolean
   difficulty?: TripDifficulty
   status: TripStatus
   capacity?: number

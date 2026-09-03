@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { ActivityTag, DifficultyTag } from '@/components/trips/TripTags'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { TripDetail } from '@/lib/trips/types'
 
@@ -27,6 +28,13 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
       <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 md:p-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
+            <Badge
+              variant={trip.isOfficial === false ? 'secondary' : 'outline'}
+            >
+              {trip.isOfficial === false
+                ? 'Community-created trip'
+                : 'Official club trip'}
+            </Badge>
             <ActivityTag activityType={trip.activityType} uppercase />
             {trip.difficulty ? (
               <DifficultyTag difficulty={trip.difficulty} />
@@ -76,6 +84,14 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
         <div className="absolute left-4 top-4 flex items-center gap-2">
+          <Badge
+            variant="secondary"
+            className="border border-white/20 bg-black/50 text-white"
+          >
+            {trip.isOfficial === false
+              ? 'Community-created trip'
+              : 'Official club trip'}
+          </Badge>
           <ActivityTag activityType={trip.activityType} uppercase onImage />
         </div>
 

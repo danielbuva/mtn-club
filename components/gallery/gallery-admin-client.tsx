@@ -18,27 +18,25 @@ type GalleryAdminClientProps = {
   schemaReady: boolean
   initialPhotos: AdminGalleryPhoto[]
   trips: GalleryTripOption[]
+  canCreate: boolean
+  canUpdate: boolean
+  canDelete: boolean
 }
-
-const allowedFileTypes = new Map([
-  ['image/jpeg', 'jpg'],
-  ['image/png', 'png'],
-  ['image/webp', 'webp'],
-  ['image/avif', 'avif'],
-])
 
 export function GalleryAdminClient({
   userId,
   schemaReady,
   initialPhotos,
   trips,
+  canCreate,
+  canUpdate,
+  canDelete,
 }: GalleryAdminClientProps) {
   const router = useRouter()
-  const [file, setFile] = useState<File | null>(null)
   const [isBusy, setIsBusy] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
 
-  const handleUpload = async (event: FormEvent<HTMLFormElement>) => {
+  const handleAdd = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = event.currentTarget
     const formData = new FormData(form)
@@ -47,14 +45,20 @@ export function GalleryAdminClient({
     const caption = String(formData.get('caption') ?? '').trim()
     const tripId = String(formData.get('tripId') ?? '').trim()
     const takenOn = String(formData.get('takenOn') ?? '').trim()
-    const extension = file ? allowedFileTypes.get(file.type) : undefined
+    const imageUrl = String(formData.get('imageUrl') ?? '').trim()
 
-    if (!file || !extension) {
-      setMessage('Choose a JPG, PNG, WebP, or AVIF image.')
-      return
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setMessage('The image must be 10 MB or smaller.')
+    try {
+      const parsedUrl = new URL(imageUrl)
+      if (
+        parsedUrl.protocol !== 'https:' ||
+        parsedUrl.username ||
+        parsedUrl.password ||
+        imageUrl.length > 2048
+      ) {
+        throw new Error('Invalid image URL')
+      }
+    } catch {
+      setMessage('Enter a valid HTTPS image link.')
       return
     }
     if (!title || !altText) {
@@ -65,19 +69,9 @@ export function GalleryAdminClient({
     setIsBusy(true)
     setMessage(null)
     const supabase = createClient()
-    const storagePath = `uploads/${crypto.randomUUID()}.${extension}`
-    const upload = await supabase.storage
-      .from('club_gallery')
-      .upload(storagePath, file, { contentType: file.type, upsert: false })
-
-    if (upload.error) {
-      setMessage(upload.error.message)
-      setIsBusy(false)
-      return
-    }
 
     const metadata = await supabase.from('gallery_photos').insert({
-      storage_path: storagePath,
+      storage_path: imageUrl,
       title,
       alt_text: altText,
       caption: caption || null,
@@ -89,15 +83,13 @@ export function GalleryAdminClient({
     })
 
     if (metadata.error) {
-      await supabase.storage.from('club_gallery').remove([storagePath])
       setMessage(metadata.error.message)
       setIsBusy(false)
       return
     }
 
     form.reset()
-    setFile(null)
-    setMessage('Photo uploaded as an unpublished draft.')
+    setMessage('Image link saved as an unpublished draft.')
     setIsBusy(false)
     router.refresh()
   }
@@ -151,13 +143,15 @@ export function GalleryAdminClient({
     setIsBusy(true)
     setMessage(null)
     const supabase = createClient()
-    const storageResult = await supabase.storage
-      .from('club_gallery')
-      .remove([photo.storage_path])
-    if (storageResult.error) {
-      setMessage(storageResult.error.message)
-      setIsBusy(false)
-      return
+    if (!photo.storage_path.startsWith('https://')) {
+      const storageResult = await supabase.storage
+        .from('club_gallery')
+        .remove([photo.storage_path])
+      if (storageResult.error) {
+        setMessage(storageResult.error.message)
+        setIsBusy(false)
+        return
+      }
     }
     const metadataResult = await supabase
       .from('gallery_photos')
@@ -173,76 +167,79 @@ export function GalleryAdminClient({
 
   if (!schemaReady) {
     return (
-      <div className="mt-10 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 text-sm leading-6">
+      <div className="mt-10 border border-amber-500/30 bg-amber-500/10 p-5 text-sm leading-6">
         The gallery migration has not been applied to this Supabase environment
-        yet. Uploads remain safely unavailable.
+        yet. New gallery entries remain safely unavailable.
       </div>
     )
   }
 
   return (
-    <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,24rem)_1fr]">
-      <form
-        onSubmit={handleUpload}
-        className="h-fit space-y-5 rounded-2xl border border-border bg-card p-5 lg:sticky lg:top-24"
-      >
-        <div>
-          <h2 className="text-xl font-semibold">Upload a draft</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            New uploads stay unpublished until an officer chooses Publish.
-          </p>
-        </div>
-        <Field label="Image" htmlFor="gallery-file">
-          <Input
-            id="gallery-file"
-            name="file"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/avif"
-            required
-            onChange={event => setFile(event.target.files?.[0] ?? null)}
-          />
-        </Field>
-        <Field label="Title" htmlFor="gallery-title">
-          <Input id="gallery-title" name="title" required maxLength={120} />
-        </Field>
-        <Field label="Alternative text" htmlFor="gallery-alt">
-          <Textarea
-            id="gallery-alt"
-            name="altText"
-            required
-            maxLength={300}
-            placeholder="Describe what is visible for someone who cannot see the photo."
-          />
-        </Field>
-        <Field label="Caption (optional)" htmlFor="gallery-caption">
-          <Textarea id="gallery-caption" name="caption" maxLength={600} />
-        </Field>
-        <Field label="Trip (optional)" htmlFor="gallery-trip">
-          <select
-            id="gallery-trip"
-            name="tripId"
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-          >
-            <option value="">Not linked to a trip</option>
-            {trips.map(trip => (
-              <option key={trip.id} value={trip.id}>
-                {trip.title}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Date taken (optional)" htmlFor="gallery-date">
-          <Input id="gallery-date" name="takenOn" type="date" />
-        </Field>
-        <Button type="submit" disabled={isBusy} className="w-full">
-          {isBusy ? 'Working…' : 'Upload unpublished draft'}
-        </Button>
-        {message && (
-          <output className="block text-sm leading-6 text-muted-foreground">
-            {message}
-          </output>
-        )}
-      </form>
+    <div className="mt-10 space-y-10">
+      {canCreate ? (
+        <form onSubmit={handleAdd} className="border border-border bg-card p-5">
+          <div>
+            <h2 className="text-xl font-semibold">Add a draft</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Save a direct HTTPS image link and its gallery details. New photos
+              stay unpublished until an officer chooses Publish.
+            </p>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <Field label="Direct image link" htmlFor="gallery-image-url">
+              <Input
+                id="gallery-image-url"
+                name="imageUrl"
+                type="url"
+                inputMode="url"
+                maxLength={2048}
+                placeholder="https://example.com/photo.jpg"
+                required
+              />
+            </Field>
+            <Field label="Title" htmlFor="gallery-title">
+              <Input id="gallery-title" name="title" required maxLength={120} />
+            </Field>
+            <Field label="Trip (optional)" htmlFor="gallery-trip">
+              <select
+                id="gallery-trip"
+                name="tripId"
+                className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Not linked to a trip</option>
+                {trips.map(trip => (
+                  <option key={trip.id} value={trip.id}>
+                    {trip.title}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Alternative text" htmlFor="gallery-alt">
+              <Textarea
+                id="gallery-alt"
+                name="altText"
+                required
+                maxLength={300}
+                placeholder="Describe what is visible for someone who cannot see the photo."
+              />
+            </Field>
+            <Field label="Caption (optional)" htmlFor="gallery-caption">
+              <Textarea id="gallery-caption" name="caption" maxLength={600} />
+            </Field>
+            <Field label="Date taken (optional)" htmlFor="gallery-date">
+              <Input id="gallery-date" name="takenOn" type="date" />
+            </Field>
+          </div>
+          <Button type="submit" disabled={isBusy} className="mt-5">
+            {isBusy ? 'Working…' : 'Add unpublished draft'}
+          </Button>
+          {message && (
+            <output className="block text-sm leading-6 text-muted-foreground">
+              {message}
+            </output>
+          )}
+        </form>
+      ) : null}
 
       <section aria-labelledby="gallery-library-title">
         <div className="flex items-center justify-between gap-4">
@@ -254,11 +251,11 @@ export function GalleryAdminClient({
           </span>
         </div>
         {initialPhotos.length === 0 ? (
-          <div className="mt-4 rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
+          <div className="mt-4 border border-dashed border-border p-10 text-center text-muted-foreground">
             No photos have been uploaded.
           </div>
         ) : (
-          <div className="mt-4 space-y-5">
+          <div className="mt-4 grid gap-5 xl:grid-cols-2">
             {initialPhotos.map((photo, index) => (
               <GalleryPhotoEditor
                 key={photo.id}
@@ -273,6 +270,8 @@ export function GalleryAdminClient({
                 onBusyChange={setIsBusy}
                 onMessage={setMessage}
                 onSaved={() => router.refresh()}
+                canUpdate={canUpdate}
+                canDelete={canDelete}
               />
             ))}
           </div>
@@ -294,6 +293,8 @@ function GalleryPhotoEditor({
   onBusyChange,
   onMessage,
   onSaved,
+  canUpdate,
+  canDelete,
 }: {
   photo: AdminGalleryPhoto
   index: number
@@ -306,6 +307,8 @@ function GalleryPhotoEditor({
   onBusyChange: (value: boolean) => void
   onMessage: (value: string | null) => void
   onSaved: () => void
+  canUpdate: boolean
+  canDelete: boolean
 }) {
   const saveMetadata = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -343,14 +346,15 @@ function GalleryPhotoEditor({
   }
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="grid sm:grid-cols-[11rem_1fr]">
-        <div className="relative min-h-48 bg-muted sm:min-h-full">
+    <article className="overflow-hidden border border-border bg-card">
+      <div>
+        <div className="relative aspect-[16/9] bg-muted">
           <Image
             src={photo.imageUrl}
             alt=""
             fill
-            sizes="176px"
+            unoptimized={photo.storage_path.startsWith('https://')}
+            sizes="(min-width: 1280px) 40vw, 90vw"
             className="object-cover"
           />
         </div>
@@ -359,26 +363,28 @@ function GalleryPhotoEditor({
             <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
               {photo.is_published ? 'Published' : 'Draft'}
             </span>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={isBusy || index === 0}
-                onClick={() => onMove(index, -1)}
-              >
-                Move up
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={isBusy || index === count - 1}
-                onClick={() => onMove(index, 1)}
-              >
-                Move down
-              </Button>
-            </div>
+            {canUpdate ? (
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={isBusy || index === 0}
+                  onClick={() => onMove(index, -1)}
+                >
+                  Move up
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={isBusy || index === count - 1}
+                  onClick={() => onMove(index, 1)}
+                >
+                  Move down
+                </Button>
+              </div>
+            ) : null}
           </div>
           <Field label="Title" htmlFor={`title-${photo.id}`}>
             <Input
@@ -386,6 +392,7 @@ function GalleryPhotoEditor({
               name="title"
               defaultValue={photo.title}
               required
+              disabled={!canUpdate}
             />
           </Field>
           <Field label="Alternative text" htmlFor={`alt-${photo.id}`}>
@@ -394,6 +401,7 @@ function GalleryPhotoEditor({
               name="altText"
               defaultValue={photo.alt_text}
               required
+              disabled={!canUpdate}
             />
           </Field>
           <Field label="Caption" htmlFor={`caption-${photo.id}`}>
@@ -401,6 +409,7 @@ function GalleryPhotoEditor({
               id={`caption-${photo.id}`}
               name="caption"
               defaultValue={photo.caption ?? ''}
+              disabled={!canUpdate}
             />
           </Field>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -409,7 +418,8 @@ function GalleryPhotoEditor({
                 id={`trip-${photo.id}`}
                 name="tripId"
                 defaultValue={photo.trip_id ?? ''}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm"
+                disabled={!canUpdate}
               >
                 <option value="">Not linked</option>
                 {trips.map(trip => (
@@ -425,31 +435,38 @@ function GalleryPhotoEditor({
                 name="takenOn"
                 type="date"
                 defaultValue={photo.taken_on ?? ''}
+                disabled={!canUpdate}
               />
             </Field>
           </div>
           <div className="flex flex-wrap gap-2 border-t border-border pt-4">
-            <Button type="submit" size="sm" disabled={isBusy}>
-              Save metadata
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              disabled={isBusy}
-              onClick={() => onPublish(photo)}
-            >
-              {photo.is_published ? 'Unpublish' : 'Publish'}
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="destructive"
-              disabled={isBusy}
-              onClick={() => onRemove(photo)}
-            >
-              Remove
-            </Button>
+            {canUpdate ? (
+              <Button type="submit" size="sm" disabled={isBusy}>
+                Save metadata
+              </Button>
+            ) : null}
+            {canUpdate ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={isBusy}
+                onClick={() => onPublish(photo)}
+              >
+                {photo.is_published ? 'Unpublish' : 'Publish'}
+              </Button>
+            ) : null}
+            {canDelete ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="destructive"
+                disabled={isBusy}
+                onClick={() => onRemove(photo)}
+              >
+                Remove
+              </Button>
+            ) : null}
           </div>
         </form>
       </div>

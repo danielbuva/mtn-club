@@ -82,8 +82,11 @@ const parseActivityTags = (value: FormDataEntryValue | null) => {
   return Array.from(new Set(normalized))
 }
 
-const isTagManagerRole = (role: string | null | undefined) =>
-  ['staff', 'leadership', 'admin'].includes(role ?? '')
+const parseUuidList = (value: FormDataEntryValue | null) => {
+  if (typeof value !== 'string') return null
+  const parsed: unknown = JSON.parse(value)
+  return z.array(z.string().uuid()).max(20).parse(parsed)
+}
 
 const assertTagManager = async (
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -96,21 +99,13 @@ const assertTagManager = async (
     throw new Error('Sign in required.')
   }
 
-  const { data: membership, error: membershipError } = await supabase
-    .from('memberships')
-    .select('role,status')
-    .eq('user_id', user.id)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  if (membershipError) {
-    throw membershipError
-  }
-
-  if (!isTagManagerRole(membership?.role)) {
-    throw new Error('Only staff, leadership, or admin can manage tags.')
+  const permission = await supabase.rpc('has_admin_capability', {
+    p_uid: user.id,
+    p_capability_key: 'trips.update',
+  })
+  if (permission.error) throw permission.error
+  if (!permission.data) {
+    throw new Error('Trip management permission is required.')
   }
 }
 
@@ -421,24 +416,13 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     )
   }
 
-  const { data: membership, error: membershipError } = await supabase
-    .from('memberships')
-    .select('role,status')
-    .eq('user_id', user.id)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  if (membershipError) {
-    throw membershipError
-  }
-
-  const canEdit = ['staff', 'leadership', 'admin'].includes(
-    membership?.role ?? '',
-  )
+  const { data: canEdit } = await supabase.rpc('has_trip_admin_capability', {
+    p_uid: user.id,
+    p_capability_key: 'trips.update',
+    p_trip_id: tripId,
+  })
   if (!canEdit) {
-    throw new Error('Only staff, leadership, or admin can edit trips.')
+    throw new Error('Trip update permission required.')
   }
 
   const rawDifficulty = formData.get('difficulty')
@@ -505,6 +489,46 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     if (tagOptionsError) {
       throw tagOptionsError
     }
+  }
+
+  const publicHostIds = parseUuidList(formData.get('publicHostIds'))
+  const leaderIds = parseUuidList(formData.get('leaderIds'))
+  if (publicHostIds || leaderIds) {
+    const scope = await supabase.rpc('admin_capability_scope', {
+      p_uid: user.id,
+      p_capability_key: 'trips.update',
+    })
+    if (scope.error) throw scope.error
+    if (scope.data !== 'all') {
+      throw new Error('All-trip permission is required to reassign leaders.')
+    }
+    const deletionResults = await Promise.all([
+      supabase.from('trip_hosts').delete().eq('trip_id', tripId),
+      supabase.from('trip_leaders').delete().eq('trip_id', tripId),
+    ])
+    const deletionError = deletionResults.find(result => result.error)?.error
+    if (deletionError) throw deletionError
+    const insertionResults = await Promise.all([
+      publicHostIds?.length
+        ? supabase.from('trip_hosts').insert(
+            publicHostIds.map((hostId, index) => ({
+              trip_id: tripId,
+              host_id: hostId,
+              sort_order: index,
+            })),
+          )
+        : Promise.resolve({ error: null }),
+      leaderIds?.length
+        ? supabase.from('trip_leaders').insert(
+            leaderIds.map(leaderId => ({
+              trip_id: tripId,
+              user_id: leaderId,
+            })),
+          )
+        : Promise.resolve({ error: null }),
+    ])
+    const insertionError = insertionResults.find(result => result.error)?.error
+    if (insertionError) throw insertionError
   }
 
   revalidatePath('/trips')
