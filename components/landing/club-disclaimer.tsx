@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { CLUB_DISCLAIMER } from '@/lib/club-content'
 
 export function ClubDisclaimer({ id }: { id?: string }) {
@@ -17,6 +18,12 @@ export function ClubDisclaimer({ id }: { id?: string }) {
         <p className="mt-3 max-w-4xl text-xs leading-6 sm:text-sm">
           {CLUB_DISCLAIMER}
         </p>
+        <Link
+          href="/privacy"
+          className="mt-4 inline-block text-xs underline underline-offset-4 outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-current"
+        >
+          Privacy policy
+        </Link>
       </div>
     </section>
   )

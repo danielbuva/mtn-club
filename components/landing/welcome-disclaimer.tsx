@@ -1,6 +1,7 @@
 'use client'
 
 import { ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { CLUB_DISCLAIMER } from '@/lib/club-content'
 
@@ -80,6 +81,14 @@ export function WelcomeDisclaimer() {
           <span>Student-run and independent</span>
         </span>
       </button>
+      <div className="mx-auto max-w-6xl px-5 pb-2 sm:px-8">
+        <Link
+          href="/privacy"
+          className="text-xs underline underline-offset-4 outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-current"
+        >
+          Privacy policy
+        </Link>
+      </div>
       {open ? (
         <div
           id="welcome-disclaimer-copy"
