@@ -116,6 +116,14 @@ export default async function AdminTripsPage({
     filters.filter === 'attention'
       ? (trips ?? []).filter(trip => attentionTripIds.has(trip.id))
       : (trips ?? [])
+  const filteredTrips = visibleTrips.filter(trip => {
+    const meetup = (trip.activity_tags ?? []).some(
+      (tag: string) => tag.toLowerCase() === 'meetup',
+    )
+    if (filters.kind === 'meetup') return meetup
+    if (filters.kind === 'trip') return !meetup
+    return true
+  })
 
   return (
     <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
@@ -188,7 +196,7 @@ export default async function AdminTripsPage({
           deployed.
         </p>
       ) : null}
-      {!loadError && !visibleTrips.length ? (
+      {!loadError && !filteredTrips.length ? (
         <div className="mt-6 border border-dashed border-[#211D18]/20 p-12 text-center text-sm text-[#6A5146] dark:border-border dark:text-muted-foreground">
           No trips match these filters.
         </div>
@@ -196,116 +204,107 @@ export default async function AdminTripsPage({
 
       {!loadError ? (
         <section className="mt-6 grid gap-3">
-          {visibleTrips
-            .filter(trip => {
-              const meetup = (trip.activity_tags ?? []).some(
-                (tag: string) => tag.toLowerCase() === 'meetup',
-              )
-              if (filters.kind === 'meetup') return meetup
-              if (filters.kind === 'trip') return !meetup
-              return true
-            })
-            .map(trip => (
-              <article
-                key={trip.id}
-                className="grid gap-4 border border-[#211D18]/15 bg-white/45 p-5 dark:border-border dark:bg-card lg:grid-cols-[1fr_auto] lg:items-center"
-              >
-                <div>
-                  <h2 className="text-lg font-semibold">{trip.title}</h2>
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <Badge variant={trip.is_official ? 'default' : 'secondary'}>
-                      {trip.is_official ? 'Official' : 'Community trip'}
-                    </Badge>
-                    <Badge variant="outline">{trip.lifecycle_status}</Badge>
-                    <Badge variant="outline">{trip.visibility}</Badge>
-                  </div>
-                  <p className="mt-3 text-sm text-[#6A5146] dark:text-muted-foreground">
-                    {formatDate(trip.starts_at, trip.is_all_day)} ·{' '}
-                    {trip.location_public ?? 'Location needed'} ·{' '}
-                    {trip.capacity ? `${trip.capacity} spots` : 'No limit'}
-                  </p>
+          {filteredTrips.map(trip => (
+            <article
+              key={trip.id}
+              className="grid gap-4 border border-[#211D18]/15 bg-white/45 p-5 dark:border-border dark:bg-card lg:grid-cols-[1fr_auto] lg:items-center"
+            >
+              <div>
+                <h2 className="text-lg font-semibold">{trip.title}</h2>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <Badge variant={trip.is_official ? 'default' : 'secondary'}>
+                    {trip.is_official ? 'Official' : 'Community trip'}
+                  </Badge>
+                  <Badge variant="outline">{trip.lifecycle_status}</Badge>
+                  <Badge variant="outline">{trip.visibility}</Badge>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
+                <p className="mt-3 text-sm text-[#6A5146] dark:text-muted-foreground">
+                  {formatDate(trip.starts_at, trip.is_all_day)} ·{' '}
+                  {trip.location_public ?? 'Location needed'} ·{' '}
+                  {trip.capacity ? `${trip.capacity} spots` : 'No limit'}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button asChild size="sm" variant="outline">
+                  <Link href={`/trips/${trip.id}`}>
+                    <Eye className="size-4" /> View
+                  </Link>
+                </Button>
+                {canManageTrip('trips.update', trip.id) ? (
                   <Button asChild size="sm" variant="outline">
-                    <Link href={`/trips/${trip.id}`}>
-                      <Eye className="size-4" /> View
+                    <Link href={`/trips/${trip.id}?edit=1`}>
+                      <Pencil className="size-4" /> Edit
                     </Link>
                   </Button>
-                  {canManageTrip('trips.update', trip.id) ? (
-                    <Button asChild size="sm" variant="outline">
-                      <Link href={`/trips/${trip.id}?edit=1`}>
-                        <Pencil className="size-4" /> Edit
-                      </Link>
+                ) : null}
+                {canManageTrip('trips.official', trip.id) ? (
+                  <form action={setTripOfficialAction}>
+                    <input type="hidden" name="tripId" value={trip.id} />
+                    <input
+                      type="hidden"
+                      name="isOfficial"
+                      value={trip.is_official ? 'false' : 'true'}
+                    />
+                    <Button size="sm" variant="ghost">
+                      Make {trip.is_official ? 'unofficial' : 'official'}
                     </Button>
-                  ) : null}
-                  {canManageTrip('trips.official', trip.id) ? (
-                    <form action={setTripOfficialAction}>
-                      <input type="hidden" name="tripId" value={trip.id} />
-                      <input
-                        type="hidden"
-                        name="isOfficial"
-                        value={trip.is_official ? 'false' : 'true'}
-                      />
-                      <Button size="sm" variant="ghost">
-                        Make {trip.is_official ? 'unofficial' : 'official'}
-                      </Button>
-                    </form>
-                  ) : null}
-                  {canManageTrip('trips.delete', trip.id) &&
-                  trip.lifecycle_status === 'published' ? (
-                    <form action={changeTripLifecycleAction}>
-                      <input type="hidden" name="tripId" value={trip.id} />
-                      <Button
-                        name="lifecycle"
-                        value="canceled"
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <XCircle className="size-4" /> Cancel
-                      </Button>
-                    </form>
-                  ) : null}
-                  {canManageTrip('trips.delete', trip.id) &&
-                  trip.lifecycle_status === 'canceled' ? (
-                    <form action={changeTripLifecycleAction}>
-                      <input type="hidden" name="tripId" value={trip.id} />
-                      <Button
-                        name="lifecycle"
-                        value="archived"
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <Archive className="size-4" /> Archive
-                      </Button>
-                    </form>
-                  ) : null}
-                  {canManageTrip('trips.delete', trip.id) &&
-                  trip.lifecycle_status !== 'published' ? (
-                    <form action={changeTripLifecycleAction}>
-                      <input type="hidden" name="tripId" value={trip.id} />
-                      <Button
-                        name="lifecycle"
-                        value="published"
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <RotateCcw className="size-4" /> Restore
-                      </Button>
-                    </form>
-                  ) : null}
-                  {context.isSuperAdmin &&
-                  trip.lifecycle_status !== 'published' &&
-                  /test/i.test(trip.title) ? (
-                    <form action={purgeTestTripAction}>
-                      <input type="hidden" name="tripId" value={trip.id} />
-                      <Button size="sm" variant="destructive">
-                        Purge test
-                      </Button>
-                    </form>
-                  ) : null}
-                </div>
-              </article>
-            ))}
+                  </form>
+                ) : null}
+                {canManageTrip('trips.delete', trip.id) &&
+                trip.lifecycle_status === 'published' ? (
+                  <form action={changeTripLifecycleAction}>
+                    <input type="hidden" name="tripId" value={trip.id} />
+                    <Button
+                      name="lifecycle"
+                      value="canceled"
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <XCircle className="size-4" /> Cancel
+                    </Button>
+                  </form>
+                ) : null}
+                {canManageTrip('trips.delete', trip.id) &&
+                trip.lifecycle_status === 'canceled' ? (
+                  <form action={changeTripLifecycleAction}>
+                    <input type="hidden" name="tripId" value={trip.id} />
+                    <Button
+                      name="lifecycle"
+                      value="archived"
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <Archive className="size-4" /> Archive
+                    </Button>
+                  </form>
+                ) : null}
+                {canManageTrip('trips.delete', trip.id) &&
+                trip.lifecycle_status !== 'published' ? (
+                  <form action={changeTripLifecycleAction}>
+                    <input type="hidden" name="tripId" value={trip.id} />
+                    <Button
+                      name="lifecycle"
+                      value="published"
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <RotateCcw className="size-4" /> Restore
+                    </Button>
+                  </form>
+                ) : null}
+                {context.isSuperAdmin &&
+                trip.lifecycle_status !== 'published' &&
+                /test/i.test(trip.title) ? (
+                  <form action={purgeTestTripAction}>
+                    <input type="hidden" name="tripId" value={trip.id} />
+                    <Button size="sm" variant="destructive">
+                      Purge test
+                    </Button>
+                  </form>
+                ) : null}
+              </div>
+            </article>
+          ))}
         </section>
       ) : null}
     </div>
