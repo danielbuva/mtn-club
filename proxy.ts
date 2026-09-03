@@ -30,6 +30,7 @@ const publicPrefixes = [
 const publicExact = new Set([
   '/',
   '/privacy',
+  '/terms',
   // Let the removed legacy route reach Next.js so it returns a real 404.
   '/start-here',
   '/favicon.ico',

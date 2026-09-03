@@ -81,12 +81,18 @@ export function WelcomeDisclaimer() {
           <span>Student-run and independent</span>
         </span>
       </button>
-      <div className="mx-auto max-w-6xl px-5 pb-2 sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-wrap gap-x-5 gap-y-2 px-5 pb-2 sm:px-8">
         <Link
           href="/privacy"
           className="text-xs underline underline-offset-4 outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-current"
         >
           Privacy policy
+        </Link>
+        <Link
+          href="/terms"
+          className="text-xs underline underline-offset-4 outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-current"
+        >
+          Terms of service
         </Link>
       </div>
       {open ? (
