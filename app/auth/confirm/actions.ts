@@ -4,7 +4,7 @@ import { parseEmailOtpType } from '@/lib/auth/confirmation'
 import { recordConfirmedEmail } from '@/lib/auth/confirmed-email-proof'
 import { authErrorMessage } from '@/lib/auth/errors'
 import { setAuthFlow } from '@/lib/auth/flow-cookies'
-import { grantPasswordReset } from '@/lib/auth/recovery-session'
+import { verifyRecoveryLink } from '@/lib/auth/recovery-policy'
 import { authHref, sanitizeReturnTo } from '@/lib/auth/return-to'
 import { createClient } from '@/lib/supabase/server'
 export type ConfirmState = { error: string | null }
@@ -20,19 +20,21 @@ export async function confirmEmailAction(
     return { error: 'This link is incomplete. Please request a new email.' }
   try {
     const supabase = await createClient()
-    const { data, error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash: tokenHash,
-    })
+    const recovery = type === 'recovery' || type === 'invite'
+    const result = recovery
+      ? await verifyRecoveryLink(supabase, tokenHash, type)
+      : await supabase.auth.verifyOtp({ type, token_hash: tokenHash })
+    const { data, error } = result
     if (error) return { error: authErrorMessage(error) }
     if (data.user && type !== 'email_change')
       await recordConfirmedEmail(data.user)
-    if (type === 'recovery' || type === 'invite') {
-      if (!(await grantPasswordReset(supabase)))
+    if (recovery) {
+      if (!('receipt' in result) || !result.receipt)
         return {
           error:
             'This email could not start a password reset. Request a fresh reset link.',
         }
+      await setAuthFlow('password', result.receipt)
     } else if (data.user) {
       await setAuthFlow('arrival', {
         userId: data.user.id,

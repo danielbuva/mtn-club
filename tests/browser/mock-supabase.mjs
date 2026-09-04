@@ -13,7 +13,8 @@ const user = {
   identities: [],
 }
 const encode = value => Buffer.from(JSON.stringify(value)).toString('base64url')
-const session = (method = 'recovery') => ({
+// Token-hash POST verification returns OTP AMR, including recovery links.
+const session = (method = 'otp') => ({
   access_token: `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ sub: user.id, session_id: 'isolated-recovery-session', amr: [{ method, timestamp: Math.floor(Date.now() / 1000) }], exp: Math.floor(Date.now() / 1000) + 3600 })}.dGVzdA`,
   refresh_token: 'isolated-refresh',
   expires_in: 3600,

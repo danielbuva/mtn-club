@@ -1,0 +1,82 @@
+# Auth-only sandbox. No production credentials, migrations, or outbound email.
+project_id = "mtn-auth-integration"
+
+[api]
+enabled = true
+port = 55321
+schemas = ["public"]
+
+[db]
+port = 55322
+shadow_port = 55320
+major_version = 17
+
+[db.migrations]
+enabled = false
+
+[db.seed]
+enabled = false
+
+[studio]
+enabled = false
+
+[inbucket]
+enabled = true
+port = 55324
+
+[storage]
+enabled = false
+
+[realtime]
+enabled = false
+
+[edge_runtime]
+enabled = false
+
+[analytics]
+enabled = false
+
+[auth]
+site_url = "http://127.0.0.1:3130"
+additional_redirect_urls = ["http://127.0.0.1:3130/auth/confirm**", "http://127.0.0.1:3130/auth/callback**", "http://127.0.0.1:3130/auth/update-password**"]
+enable_signup = true
+enable_manual_linking = true
+minimum_password_length = 12
+password_requirements = ""
+
+[auth.captcha]
+enabled = true
+provider = "turnstile"
+# Cloudflare's PUBLIC testing secret. Never use this configuration in production.
+secret = "1x0000000000000000000000000000000AA"
+
+[auth.rate_limit]
+email_sent = 1000
+sign_in_sign_ups = 1000
+token_verifications = 1000
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = false
+max_frequency = "60s"
+otp_length = 6
+otp_expiry = 3600
+
+[auth.email.template.confirmation]
+subject = "Confirm your Mountain Club email"
+content_path = "../../supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your Mountain Club password"
+content_path = "../../supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Your Mountain Club verification code"
+content_path = "../../supabase/templates/verification-code.html"
+
+[auth.email.notification.password_changed]
+enabled = true
+subject = "Your Mountain Club password was changed"
+content_path = "../../supabase/templates/password-changed.html"

@@ -85,6 +85,7 @@ test('password flow requires recent recovery/invite AMR, not a URL flag or OAuth
     { method: 'recovery' },
     [{ method: 'password', timestamp: now / 1000 }],
     [{ method: 'oauth', timestamp: now / 1000 }],
+    [{ method: 'otp', timestamp: now / 1000 }],
     [{ method: 'recovery', timestamp: 1 }],
     [{ method: 'recovery', timestamp: now / 1000 + 60 }],
   ])
