@@ -26,7 +26,7 @@ async function Destination({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  redirect(user ? returnTo : authHref('/auth/login', returnTo))
+  return redirect(user ? returnTo : authHref('/auth/login', returnTo))
 }
 export default function Page({
   searchParams,
