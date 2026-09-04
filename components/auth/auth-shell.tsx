@@ -24,8 +24,8 @@ export function AuthShell({
         aria-label="Mountain Club community"
       >
         <Image
-          src="/welcome/sunset-group.jpg"
-          alt="Mountain Club members together beneath a desert sunset"
+          src="/club-covers/club-hike.jpg"
+          alt="Mountain Club members exploring a rocky desert canyon"
           fill
           sizes="(min-width: 1024px) 50vw, 1px"
           className="object-cover"
