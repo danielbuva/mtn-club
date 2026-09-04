@@ -278,7 +278,7 @@ export function Header() {
                     className="rounded-xl font-medium"
                     asChild
                   >
-                    <Link href={`/auth/login?redirect=${authRedirect}`}>
+                    <Link href={`/auth/login?returnTo=${authRedirect}`}>
                       Sign in
                     </Link>
                   </Button>
@@ -328,7 +328,7 @@ export function Header() {
                   ))}
                   {!viewer.isAuthenticated && (
                     <Link
-                      href={`/auth/login?redirect=${authRedirect}`}
+                      href={`/auth/login?returnTo=${authRedirect}`}
                       onClick={handleMobileNavClick}
                       className={cn(
                         'px-4 py-3 rounded-none text-base font-medium transition-colors',

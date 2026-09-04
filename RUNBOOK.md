@@ -40,6 +40,8 @@ The canonical production origin is `https://unlvmountainclub.com`. `https://unlv
 
 ## 3. Deployments and environments
 
+Authentication has an additional required release gate: [Authentication runbook](AUTH_RUNBOOK.md). It covers SMTP sign-off, managed Turnstile, safe account linking, the confirmation-on security decision, informational verification, safe redirects, branded templates, and device testing. Deploy compatible handlers before enabling global CAPTCHA or changing recovery email templates.
+
 Production deploys from `main`; pull requests receive preview deployments. CI runs dependency installation with the lockfile, TypeScript, Biome, tests, and a production build.
 
 Required public configuration:

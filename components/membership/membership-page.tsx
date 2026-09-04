@@ -277,9 +277,11 @@ function MembershipStatus({
 
   if (!account.application) {
     return (
-      <StatusBox icon={Clock3} title="Application not found">
-        No membership application is attached to this account. Contact club
-        leadership for help.
+      <StatusBox icon={Clock3} title="Ready to join?">
+        <p>Your account is ready. Complete the membership application next.</p>
+        <StatusLink href="/membership-sign-up">
+          Complete your application
+        </StatusLink>
       </StatusBox>
     )
   }

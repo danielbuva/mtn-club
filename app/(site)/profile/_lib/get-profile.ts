@@ -10,7 +10,7 @@ export const getProfileOrRedirect = cache(async () => {
   const result = await fetchProfile(supabase)
 
   if (!result.userId) {
-    redirect('/auth/login?redirect=/profile/user/account')
+    redirect('/auth/login?returnTo=/profile/user/account')
   }
 
   return { ...result, userId: result.userId }

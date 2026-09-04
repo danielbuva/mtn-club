@@ -1,8 +1,6 @@
 'use client'
 
-import type { Provider } from '@supabase/supabase-js'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
 import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
@@ -27,7 +25,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { getOAuthLinkErrorMessage } from '@/lib/auth/oauth-link'
 import { CLUB_EMAIL } from '@/lib/constants'
 import { upsertProfile } from '@/lib/profile/queries'
 import type { ProfileRow, ProfileUpdate } from '@/lib/profile/types'
@@ -55,7 +52,6 @@ export function AccountSettingsFormClient({
   isAdmin,
 }: AccountSettingsFormClientProps) {
   const supabase = useMemo(() => createClient(), [])
-  const searchParams = useSearchParams()
   const initialValues = useMemo<AccountFormState>(
     () => ({
       avatarUrl: initialProfile?.avatar_url ?? '',
@@ -71,21 +67,8 @@ export function AccountSettingsFormClient({
   const [baseline, setBaseline] = useState<AccountFormState>(initialValues)
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
-  const [passwordValues, setPasswordValues] = useState({
-    current: '',
-    next: '',
-    confirm: '',
-  })
-  const [passwordMessage, setPasswordMessage] = useState<string | null>(null)
   const [deleteConfirm, setDeleteConfirm] = useState('')
   const [deleteError, setDeleteError] = useState<string | null>(null)
-  const [connectedProviders, setConnectedProviders] = useState<Set<string>>(
-    new Set(),
-  )
-  const [connectMessage, setConnectMessage] = useState<string | null>(null)
-  const [connectingProvider, setConnectingProvider] = useState<Provider | null>(
-    null,
-  )
   const [mergePrimaryUserId, setMergePrimaryUserId] = useState('')
   const [mergeSecondaryUserId, setMergeSecondaryUserId] = useState('')
   const [mergeMessage, setMergeMessage] = useState<string | null>(null)
@@ -110,65 +93,6 @@ export function AccountSettingsFormClient({
   useEffect(() => {
     setIsDirty(isDirty)
   }, [isDirty, setIsDirty])
-
-  useEffect(() => {
-    let active = true
-    const loadIdentities = () =>
-      supabase.auth
-        .getUserIdentities()
-        .then(({ data, error }) => {
-          if (!active) return
-          if (error) {
-            setConnectMessage(
-              error.message || 'Unable to load connected providers right now.',
-            )
-            return
-          }
-
-          const providers = new Set(
-            (data.identities ?? [])
-              .map(identity => identity.provider)
-              .filter((provider): provider is string => !!provider),
-          )
-          setConnectedProviders(providers)
-        })
-        .catch(error => {
-          if (!active) return
-          setConnectMessage(
-            error instanceof Error
-              ? error.message
-              : 'Unable to load connected providers right now.',
-          )
-        })
-
-    loadIdentities()
-
-    return () => {
-      active = false
-    }
-  }, [supabase])
-
-  useEffect(() => {
-    const oauthLinked = searchParams.get('oauthLinked')
-    if (oauthLinked === '1') {
-      const provider = searchParams.get('provider')
-      const providerLabel =
-        provider && provider.length > 0
-          ? `${provider[0]?.toUpperCase() ?? ''}${provider.slice(1)}`
-          : 'Provider'
-      setConnectMessage(`${providerLabel} connected successfully.`)
-      setConnectingProvider(null)
-      return
-    }
-
-    const oauthLinkError = searchParams.get('oauthLinkError')
-    if (oauthLinkError === '1') {
-      setConnectMessage(
-        'We could not complete provider linking. Try again or sign in with the other account and contact an admin for merge support.',
-      )
-      setConnectingProvider(null)
-    }
-  }, [searchParams])
 
   const handleFieldChange = (key: keyof AccountFormState, value: string) => {
     setValues(prev => ({ ...prev, [key]: value }))
@@ -203,59 +127,6 @@ export function AccountSettingsFormClient({
     setSaveError(null)
   }
 
-  const passwordStrength = useMemo(() => {
-    const score =
-      Number(passwordValues.next.length >= 10) +
-      Number(/[A-Z]/.test(passwordValues.next)) +
-      Number(/[0-9]/.test(passwordValues.next)) +
-      Number(/[^A-Za-z0-9]/.test(passwordValues.next))
-    if (!passwordValues.next) return 'Add a new password to see strength'
-    if (score <= 1) return 'Weak — add length or numbers'
-    if (score <= 2) return 'Fair — add a symbol or uppercase'
-    if (score <= 3) return 'Good — almost there'
-    return 'Strong password'
-  }, [passwordValues.next])
-
-  const handlePasswordChange = async () => {
-    setPasswordMessage(null)
-    if (!email) {
-      setPasswordMessage('No email address found for your account.')
-      return
-    }
-    if (
-      !passwordValues.current ||
-      !passwordValues.next ||
-      !passwordValues.confirm
-    ) {
-      setPasswordMessage('Complete all password fields to continue.')
-      return
-    }
-    if (passwordValues.next !== passwordValues.confirm) {
-      setPasswordMessage('New passwords do not match.')
-      return
-    }
-    if (passwordValues.next.length < 10) {
-      setPasswordMessage('Choose a password that is at least 10 characters.')
-      return
-    }
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: passwordValues.next,
-      })
-      if (error) throw error
-      setPasswordValues({ current: '', next: '', confirm: '' })
-      setPasswordMessage(
-        'Password updated. Use your new password next time you sign in.',
-      )
-    } catch (error) {
-      setPasswordMessage(
-        error instanceof Error
-          ? error.message
-          : 'Unable to update password. Try again later.',
-      )
-    }
-  }
-
   const handleDeleteAccount = async () => {
     setDeleteError(null)
     if (deleteConfirm.trim() !== 'DELETE') {
@@ -265,35 +136,6 @@ export function AccountSettingsFormClient({
     setDeleteError(
       'Account deletion is not enabled yet. Contact support to proceed.',
     )
-  }
-
-  const handleConnectOAuth = async (provider: Provider) => {
-    setConnectMessage(null)
-    setConnectingProvider(provider)
-    try {
-      const nextPath = '/profile/user/account'
-      const callbackUrl = new URL('/auth/callback', window.location.origin)
-      callbackUrl.searchParams.set('next', nextPath)
-      callbackUrl.searchParams.set('provider', provider)
-
-      const credentials = {
-        provider,
-        options: {
-          redirectTo: callbackUrl.toString(),
-          queryParams: {
-            flow: 'link',
-          },
-        },
-      } as const
-
-      const { error } = await supabase.auth.linkIdentity(credentials)
-      if (error) {
-        throw error
-      }
-    } catch (error) {
-      setConnectMessage(getOAuthLinkErrorMessage(error))
-      setConnectingProvider(null)
-    }
   }
 
   const handleMergeAccounts = async (dryRun: boolean) => {
@@ -496,61 +338,6 @@ export function AccountSettingsFormClient({
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem
-          value="connected-accounts"
-          className="rounded-xl border border-border/60 bg-card/80 px-4 shadow-sm"
-        >
-          <AccordionTrigger className="py-4 text-left hover:no-underline">
-            <div className="space-y-1">
-              <p className="text-lg font-semibold">Connected accounts</p>
-              <p className="text-sm text-muted-foreground">
-                Link Google or Discord so you can sign in with either provider.
-              </p>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="pb-4">
-            <div className="space-y-4">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={
-                    connectingProvider !== null ||
-                    connectedProviders.has('google')
-                  }
-                  onClick={() => handleConnectOAuth('google')}
-                >
-                  {connectedProviders.has('google')
-                    ? 'Google connected'
-                    : connectingProvider === 'google'
-                      ? 'Connecting Google...'
-                      : 'Connect Google'}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={
-                    connectingProvider !== null ||
-                    connectedProviders.has('discord')
-                  }
-                  onClick={() => handleConnectOAuth('discord')}
-                >
-                  {connectedProviders.has('discord')
-                    ? 'Discord connected'
-                    : connectingProvider === 'discord'
-                      ? 'Connecting Discord...'
-                      : 'Connect Discord'}
-                </Button>
-              </div>
-              {connectMessage ? (
-                <p className="text-xs text-muted-foreground">
-                  {connectMessage}
-                </p>
-              ) : null}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
         {isAdmin ? (
           <AccordionItem
             value="account-merge"
@@ -636,91 +423,6 @@ export function AccountSettingsFormClient({
             </AccordionContent>
           </AccordionItem>
         ) : null}
-
-        <AccordionItem
-          value="change-password"
-          className="rounded-xl border border-border/60 bg-card/80 px-4 shadow-sm"
-        >
-          <AccordionTrigger className="py-4 text-left hover:no-underline">
-            <div className="space-y-1">
-              <p className="text-lg font-semibold">Change password</p>
-              <p className="text-sm text-muted-foreground">
-                Use a strong password to secure your account.
-              </p>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="pb-4">
-            <div className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="grid gap-2">
-                  <Label htmlFor="current-password">Current password</Label>
-                  <Input
-                    id="current-password"
-                    type="password"
-                    value={passwordValues.current}
-                    onChange={event =>
-                      setPasswordValues(prev => ({
-                        ...prev,
-                        current: event.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="new-password">New password</Label>
-                  <Input
-                    id="new-password"
-                    type="password"
-                    value={passwordValues.next}
-                    onChange={event =>
-                      setPasswordValues(prev => ({
-                        ...prev,
-                        next: event.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="confirm-password">Confirm new password</Label>
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    value={passwordValues.confirm}
-                    onChange={event =>
-                      setPasswordValues(prev => ({
-                        ...prev,
-                        confirm: event.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs text-muted-foreground">
-                  {passwordStrength}
-                </p>
-                <Button variant="outline" onClick={handlePasswordChange}>
-                  Update password
-                </Button>
-              </div>
-              <div className="text-xs text-muted-foreground">
-                If you run into issues, you can also{' '}
-                <Link
-                  className="underline underline-offset-4"
-                  href="/auth/forgot-password"
-                >
-                  send a reset email
-                </Link>
-                .
-              </div>
-              {passwordMessage ? (
-                <p className="text-xs text-muted-foreground">
-                  {passwordMessage}
-                </p>
-              ) : null}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
 
         <AccordionItem
           value="account-removal"

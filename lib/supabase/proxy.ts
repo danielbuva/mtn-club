@@ -2,6 +2,11 @@ import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+  // Overwrite any caller-provided value; use this request, never a referrer.
+  request.headers.set(
+    'x-auth-return-to',
+    `${request.nextUrl.pathname}${request.nextUrl.search}`,
+  )
   let supabaseResponse = NextResponse.next({
     request,
   })

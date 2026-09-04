@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { requireAdminCapability } from '@/lib/admin/auth'
+import { recoveryRedirect } from '@/lib/auth/return-to'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const uuidSchema = z.string().uuid()
@@ -302,7 +303,7 @@ export async function sendPasswordResetAction(formData: FormData) {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://unlvmountainclub.com'
   const { error } = await admin.auth.resetPasswordForEmail(email, {
-    redirectTo: `${siteUrl}/auth/update-password`,
+    redirectTo: recoveryRedirect(siteUrl, '/profile/user/account'),
   })
   if (error) throw error
   await logAccountAction(

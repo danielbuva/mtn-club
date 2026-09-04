@@ -1,39 +1,43 @@
-import Link from 'next/link'
+import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
+import { AuthMessageSkeleton } from '@/components/auth/auth-message-skeleton'
+import { AuthShell } from '@/components/auth/auth-shell'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  type AuthSearchParams,
+  authHref,
+  getReturnToFromSearchParams,
+  readAuthSearchParams,
+} from '@/lib/auth/return-to'
+import { createClient } from '@/lib/supabase/server'
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: 'Continue to your account | UNLV Mountain Club',
+}
+
+async function Destination({
+  searchParams,
+}: {
+  searchParams: Promise<AuthSearchParams>
+}) {
+  const returnTo =
+    getReturnToFromSearchParams(readAuthSearchParams(await searchParams)) ?? '/'
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  redirect(user ? returnTo : authHref('/auth/login', returnTo))
+}
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<AuthSearchParams>
+}) {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">
-                Thank you for signing up!
-              </CardTitle>
-              <CardDescription>Your account is ready.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Continue to Mountain Club to explore upcoming trips and finish
-                setting up your profile.
-              </p>
-              <Link
-                href="/"
-                className="mt-5 inline-flex min-h-10 items-center bg-primary px-4 text-sm font-semibold text-primary-foreground"
-              >
-                Continue
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <AuthShell title="Almost there." description="Getting your account ready.">
+      <Suspense fallback={<AuthMessageSkeleton />}>
+        <Destination searchParams={searchParams} />
+      </Suspense>
+    </AuthShell>
   )
 }

@@ -54,6 +54,9 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 SUPABASE_SECRET_KEY=
 NEXT_PUBLIC_SITE_URL=https://unlvmountainclub.com
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+# Set only after the production email checks in AUTH_RUNBOOK.md pass:
+AUTH_EMAIL_DELIVERY_VERIFIED=false
 NEXT_PUBLIC_DISCORD_INVITE_URL=
 NEXT_PUBLIC_INSTAGRAM_URL=
 STRIPE_SECRET_KEY=
@@ -75,6 +78,10 @@ future payment release gate in `RUNBOOK.md` has passed.
 
 The canonical production site is `https://unlvmountainclub.com`.
 `https://unlvmountain.club` redirects to the canonical domain.
+
+Authentication setup, email templates, CAPTCHA rollout, redirect allowlists,
+and release acceptance checks are in [AUTH_RUNBOOK.md](AUTH_RUNBOOK.md).
+Production builds block missing auth keys, Turnstile test keys, or missing email-delivery sign-off.
 
 ## Scripts
 

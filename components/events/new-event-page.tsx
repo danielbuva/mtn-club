@@ -1,9 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { EventForm } from '@/components/events/event-form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { authHref } from '@/lib/auth/return-to'
 import type { Database } from '@/lib/supabase/types'
 
 type NewEventPageProps = {
@@ -30,6 +32,9 @@ export function NewEventPage({
   successPath = '/trips',
 }: NewEventPageProps) {
   const initialIsOfficial = initialType === 'official' && canCreateOfficial
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const query = searchParams.toString()
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -42,7 +47,12 @@ export function NewEventPage({
                   <p className="text-sm text-muted-foreground">
                     Please sign in to create events.
                   </p>
-                  <Link href="/auth/login">
+                  <Link
+                    href={authHref(
+                      '/auth/login',
+                      `${pathname}${query ? `?${query}` : ''}`,
+                    )}
+                  >
                     <Button className="rounded-xl">Sign in</Button>
                   </Link>
                 </CardContent>

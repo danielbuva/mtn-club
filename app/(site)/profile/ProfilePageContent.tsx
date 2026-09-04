@@ -13,7 +13,7 @@ export async function ProfilePageContent() {
     const result = await fetchProfile(supabase)
 
     if (!result.userId) {
-      redirect('/auth/login?redirect=/profile')
+      redirect('/auth/login?returnTo=/profile')
     }
 
     return (

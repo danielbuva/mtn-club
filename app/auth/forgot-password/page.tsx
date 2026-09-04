@@ -1,45 +1,39 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { AuthFormSkeleton } from '@/components/auth/auth-form-skeleton'
+import { AuthShell } from '@/components/auth/auth-shell'
 import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-
-function ForgotPasswordFallback() {
+  type AuthSearchParams,
+  getReturnToFromSearchParams,
+  readAuthSearchParams,
+} from '@/lib/auth/return-to'
+export const metadata: Metadata = {
+  title: 'Reset password | UNLV Mountain Club',
+}
+async function Content({
+  searchParams,
+}: {
+  searchParams: Promise<AuthSearchParams>
+}) {
+  const params = readAuthSearchParams(await searchParams)
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-        <CardDescription>
-          Type in your email and we&apos;ll send you a link to reset your
-          password
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-6">
-          <div className="grid gap-2">
-            <div className="h-4 w-14 rounded bg-muted" />
-            <div className="h-10 w-full rounded-md bg-muted" />
-          </div>
-          <div className="h-10 w-full rounded-md bg-muted" />
-          <div className="mt-4 h-4 w-48 rounded bg-muted" />
-        </div>
-      </CardContent>
-    </Card>
+    <ForgotPasswordForm returnTo={getReturnToFromSearchParams(params) ?? '/'} />
   )
 }
-
-export default function Page() {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<AuthSearchParams>
+}) {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <Suspense fallback={<ForgotPasswordFallback />}>
-          <ForgotPasswordForm />
-        </Suspense>
-      </div>
-    </div>
+    <AuthShell
+      title="Lost your password?"
+      description="It happens. We’ll email you a secure link to choose a new one."
+    >
+      <Suspense fallback={<AuthFormSkeleton mode="recovery" />}>
+        <Content searchParams={searchParams} />
+      </Suspense>
+    </AuthShell>
   )
 }

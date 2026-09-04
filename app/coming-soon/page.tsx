@@ -66,7 +66,7 @@ async function ComingSoonContent({ searchParams }: ComingSoonPageProps) {
           <Link href="/team">Team</Link>
         </Button>
         <Button variant="outline" asChild className="rounded-xl">
-          <Link href="/auth/login">Sign in</Link>
+          <Link href="/auth/login?returnTo=%2F">Sign in</Link>
         </Button>
       </div>
     </div>

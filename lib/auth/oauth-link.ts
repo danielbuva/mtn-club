@@ -19,17 +19,18 @@ const getErrorCode = (error: unknown) => {
 
 export const getOAuthLinkErrorMessage = (error: unknown) => {
   if (isNotFoundError(error)) {
-    return 'Provider linking is not enabled for this project yet. Ask an admin to enable identity linking in Supabase Auth.'
+    return 'Connecting sign-in methods is temporarily unavailable. Your existing sign-in methods still work. Please contact club support.'
   }
 
   const code = getErrorCode(error)
   if (code === 'identity_already_exists') {
-    return 'That provider account is already connected to another user. Sign in with that provider first, then ask an admin to merge accounts.'
+    return 'That provider is connected to another club account. Nothing was merged. Club support can help after verifying you own both accounts.'
   }
 
-  if (error instanceof Error && error.message.trim().length > 0) {
-    return error.message
-  }
-
-  return 'Unable to connect provider. Please try again.'
+  if (
+    code === 'email_conflict_identity_not_deletable' ||
+    code === 'multiple_accounts'
+  )
+    return 'We found an account conflict. Nothing was merged. Contact club support to verify ownership and review your sign-in options.'
+  return 'We could not connect that provider. Your existing methods still work. Try again or contact club support.'
 }

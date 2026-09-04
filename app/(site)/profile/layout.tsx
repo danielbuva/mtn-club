@@ -2,48 +2,28 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { ProfilePageFallback } from '@/components/profile/profile-page-fallback'
+import { authHref, sanitizeReturnTo } from '@/lib/auth/return-to'
 import { createClient } from '@/lib/supabase/server'
 
-const getReturnPathFromHeaders = async () => {
-  const headerStore = await headers()
-  const referer = headerStore.get('referer')
-  if (!referer) return null
-
-  const host = headerStore.get('host')
-  if (!host) return null
-
-  const proto = headerStore.get('x-forwarded-proto') ?? 'http'
-  const origin = `${proto}://${host}`
-
-  try {
-    const url = new URL(referer)
-    if (url.origin !== origin) return null
-    if (
-      url.pathname.startsWith('/auth') ||
-      url.pathname.startsWith('/profile')
-    ) {
-      return null
-    }
-    return `${url.pathname}${url.search}${url.hash}`
-  } catch {
-    return null
+async function ProfileSession({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+  if (!data.user) {
+    const requestHeaders = await headers()
+    const returnTo =
+      sanitizeReturnTo(requestHeaders.get('x-auth-return-to')) ?? '/profile'
+    redirect(authHref('/auth/login', returnTo))
   }
+  return children
 }
-
-export default async function ProfileLayout({
+export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  if (!data.user) {
-    const returnTo = await getReturnPathFromHeaders()
-    const redirectParam = returnTo
-      ? `?redirect=${encodeURIComponent(returnTo)}`
-      : '?redirect=/'
-    redirect(`/auth/login${redirectParam}`)
-  }
-
-  return <Suspense fallback={<ProfilePageFallback />}>{children}</Suspense>
+  return (
+    <Suspense fallback={<ProfilePageFallback />}>
+      <ProfileSession>{children}</ProfileSession>
+    </Suspense>
+  )
 }

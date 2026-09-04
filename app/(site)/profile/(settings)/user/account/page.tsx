@@ -1,16 +1,52 @@
+import { Suspense } from 'react'
 import { getProfileOrRedirect } from '@/app/(site)/profile/_lib/get-profile'
 import { AccountSettingsFormClient } from '@/components/profile/settings/account-settings-form-client'
+import { EmailVerificationPanel } from '@/components/profile/settings/email-verification-panel'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
 import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
+import { SignInMethodsPanel } from '@/components/profile/settings/sign-in-methods-panel'
+import { connectedOAuthProviders } from '@/lib/auth/sign-in-methods'
+import { getEmailVerificationStatus } from '@/lib/auth/verification'
 import { getViewer } from '@/lib/auth/viewer'
+import { createClient } from '@/lib/supabase/server'
 
-export default async function AccountSettingsPage() {
+async function AccountContent() {
   const [{ profile, userId, email }, viewer] = await Promise.all([
     getProfileOrRedirect(),
     getViewer(),
   ])
   const isAdmin = viewer.isAdmin
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
+  return (
+    <>
+      {user && (
+        <SignInMethodsPanel
+          providers={connectedOAuthProviders(user.identities)}
+          email={user.email ?? null}
+        />
+      )}
+      {user && (
+        <EmailVerificationPanel
+          key={user.email}
+          email={email}
+          status={getEmailVerificationStatus(user)}
+        />
+      )}
+      <AccountSettingsFormClient
+        initialProfile={profile}
+        userId={userId}
+        email={email}
+        isAdmin={isAdmin}
+      />
+    </>
+  )
+}
+
+export default function AccountSettingsPage() {
   return (
     <div className="space-y-6">
       <MobileSettingsHeader title="Account" backHref="/profile/settings" />
@@ -18,12 +54,20 @@ export default async function AccountSettingsPage() {
         title="Account"
         description="Manage your personal details and security settings."
       />
-      <AccountSettingsFormClient
-        initialProfile={profile}
-        userId={userId}
-        email={email}
-        isAdmin={isAdmin}
-      />
+      <Suspense
+        fallback={
+          <div className="space-y-6 animate-pulse" aria-busy="true">
+            {[1, 2, 3, 4].map(item => (
+              <div
+                key={item}
+                className="h-24 rounded-xl border border-border/60 bg-muted/40"
+              />
+            ))}
+          </div>
+        }
+      >
+        <AccountContent />
+      </Suspense>
     </div>
   )
 }

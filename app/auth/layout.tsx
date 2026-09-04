@@ -1,24 +1,16 @@
-import { Suspense } from 'react'
-import {
-  AuthCloseButton,
-  AuthCloseFallback,
-} from '@/components/auth/auth-close-button'
-import { AuthReturnTo } from '@/components/auth/auth-return-to'
-
+import type { Metadata, Viewport } from 'next'
+export const viewport: Viewport = {
+  viewportFit: 'cover',
+  interactiveWidget: 'resizes-content',
+}
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+  referrer: 'no-referrer',
+}
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <div className="min-h-svh">
-      <Suspense fallback={null}>
-        <AuthReturnTo />
-      </Suspense>
-      <Suspense fallback={<AuthCloseFallback />}>
-        <AuthCloseButton />
-      </Suspense>
-      {children}
-    </div>
-  )
+  return children
 }

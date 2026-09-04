@@ -1,4 +1,14 @@
 import type { NextConfig } from 'next'
+import { authReleaseErrors } from './lib/auth/release-config'
+
+if (
+  process.env.VERCEL_ENV === 'production' ||
+  process.env.AUTH_RELEASE_ENV === 'production'
+) {
+  const errors = authReleaseErrors(process.env)
+  if (errors.length)
+    throw new Error(`Authentication release blocked:\n${errors.join('\n')}`)
+}
 
 const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
   ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
@@ -6,6 +16,13 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Keep isolated browser tests independent from an already-running dev server.
+  ...(process.env.AUTH_BROWSER_TEST === 'true'
+    ? {
+        distDir: '.next-auth-browser',
+        typescript: { tsconfigPath: 'tsconfig.auth-browser.json' },
+      }
+    : {}),
 
   experimental: {
     staleTimes: {

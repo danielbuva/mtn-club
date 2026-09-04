@@ -38,8 +38,6 @@ export async function submitMembershipSignUp(
     .filter(Boolean)
   const otherInterest = normalizeText(formData, 'otherInterest')
   const experienceNotes = normalizeText(formData, 'experienceNotes')
-  const password = String(formData.get('password') ?? '')
-  const repeatPassword = String(formData.get('repeatPassword') ?? '')
   const mailingListOptIn = formData.get('mailingListOptIn') === 'on'
 
   if (fullName.length < 2 || fullName.length > 120) {
@@ -57,12 +55,6 @@ export async function submitMembershipSignUp(
   }
   if (duesStatus !== 'paid' && duesStatus !== 'not_yet') {
     return { error: 'Tell us whether you have sent the annual dues.' }
-  }
-  if (password.length < 8) {
-    return { error: 'Use a password with at least eight characters.' }
-  }
-  if (password !== repeatPassword) {
-    return { error: 'The passwords do not match.' }
   }
 
   const allowedInterests = new Set<string>([
@@ -109,72 +101,31 @@ export async function submitMembershipSignUp(
     }
   }
 
+  // Account creation is handled by the shared CAPTCHA-protected auth journey.
+  // This action only writes membership data for the verified current session.
   const supabase = await createClient()
-  const signUpResult = await supabase.auth.signUp({
-    email: contactEmail,
-    password,
-  })
-  if (signUpResult.error || !signUpResult.data.user) {
-    const accountExists = signUpResult.error?.message
-      .toLowerCase()
-      .includes('already registered')
-    return {
-      error: accountExists
-        ? 'An account already exists for this email. Use the sign-in link below.'
-        : (signUpResult.error?.message ??
-          'We could not create the account. Please try again.'),
-    }
-  }
-  const userId = signUpResult.data.user.id
-
-  const clearSessionAndDeleteUser = async () => {
-    const signOutResult = await supabase.auth.signOut({ scope: 'local' })
-    if (signOutResult.error) {
-      console.error(
-        'Membership sign-up session cleanup failed:',
-        signOutResult.error,
-      )
-    }
-
-    const cleanupResult = await admin.auth.admin.deleteUser(userId)
-    if (cleanupResult.error) {
-      console.error(
-        'Membership sign-up account cleanup failed:',
-        cleanupResult.error,
-      )
-    }
-    return cleanupResult.error
-  }
-
-  const session = signUpResult.data.session
-  if (!session) {
-    await clearSessionAndDeleteUser()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+  if (authError || !user || user.email?.toLowerCase() !== contactEmail)
     return {
       error:
-        'We could not sign you in after creating the account. Please try again.',
+        'Sign in again with the account shown on this form before submitting.',
     }
-  }
-
-  const sessionResult = await supabase.auth.setSession({
-    access_token: session.access_token,
-    refresh_token: session.refresh_token,
-  })
-  const verifiedUser = await supabase.auth.getUser()
-  if (
-    sessionResult.error ||
-    verifiedUser.error ||
-    verifiedUser.data.user?.id !== userId
-  ) {
-    console.error('Membership sign-up session verification failed:', {
-      session: sessionResult.error,
-      user: verifiedUser.error,
-    })
-    await clearSessionAndDeleteUser()
+  const userId = user.id
+  const existing = await admin
+    .from('membership_applications')
+    .select('user_id')
+    .eq('user_id', userId)
+    .maybeSingle()
+  if (existing.error)
+    return { error: 'We could not check your application. Please try again.' }
+  if (existing.data)
     return {
       error:
-        'We could not sign you in after creating the account. Please try again.',
+        'An application is already on file. Open Membership status to review it or contact club support.',
     }
-  }
 
   const duesPaymentClaimed = duesStatus === 'paid'
   const guardianConsent = ageStatus === 'adult' ? 'not_required' : 'pending'
@@ -193,7 +144,6 @@ export async function submitMembershipSignUp(
       'Membership dues settings could not be loaded:',
       duesSettings.error,
     )
-    await clearSessionAndDeleteUser()
     return { error: 'We could not start your payment claim. Please try again.' }
   }
 
@@ -220,24 +170,21 @@ export async function submitMembershipSignUp(
         { user_id: userId, status: 'pending', role: 'regular' },
         { onConflict: 'user_id', ignoreDuplicates: true },
       ),
-    admin.from('membership_applications').upsert(
-      {
-        user_id: userId,
-        full_name: fullName,
-        contact_email: contactEmail,
-        age_status: ageStatus,
-        guardian_consent: guardianConsent,
-        dues_payment_claimed: duesPaymentClaimed,
-        dues_claimed_at: duesClaimedAt,
-        primary_interest: primaryInterest,
-        experience_notes: experienceNotes || null,
-        status: 'submitted',
-        confirmed_at: null,
-        confirmed_by: null,
-        membership_access_override_id: null,
-      },
-      { onConflict: 'user_id' },
-    ),
+    admin.from('membership_applications').insert({
+      user_id: userId,
+      full_name: fullName,
+      contact_email: contactEmail,
+      age_status: ageStatus,
+      guardian_consent: guardianConsent,
+      dues_payment_claimed: duesPaymentClaimed,
+      dues_claimed_at: duesClaimedAt,
+      primary_interest: primaryInterest,
+      experience_notes: experienceNotes || null,
+      status: 'submitted',
+      confirmed_at: null,
+      confirmed_by: null,
+      membership_access_override_id: null,
+    }),
     mailingListOptIn
       ? admin.from('mailing_list_subscriptions').upsert(
           {
@@ -287,11 +234,10 @@ export async function submitMembershipSignUp(
       mailingConsent: mailingConsentResult.error,
       zelle: zelleResult.error,
     })
-    const cleanupError = await clearSessionAndDeleteUser()
+    // Never roll back a form failure by deleting the member's auth account.
     return {
-      error: cleanupError
-        ? 'Your account was created, but we could not save the membership form. Contact club leadership for help.'
-        : 'We could not save your signup. Please try again.',
+      error:
+        'Your account is safe, but part of the application could not be saved. Check Membership status before trying again, or contact club support.',
     }
   }
 
