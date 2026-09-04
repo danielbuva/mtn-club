@@ -33,6 +33,18 @@ Before deployment:
 - Verify the current deployment revision and production configuration. The
   Vercel connector returned 403 for this project's team during this check;
   production deployment status was not independently verified.
+- Establish a schema-only baseline for disposable database creation. The first
+  tracked migration, `20260304072736_add_trip_overview_sections.sql`, alters
+  `public.trips`, but no tracked migration creates the original table. Matching
+  remote migration history does not establish fresh-database reproducibility.
+  Export the current schema without member data, review it, and restore it to an
+  isolated instance with matching migration history before creating test users.
+  Do not push a new baseline over production or mark unapplied SQL as applied.
+  This session has neither `SUPABASE_DB_PASSWORD` nor `SUPABASE_ACCESS_TOKEN`
+  available in its environment; do not paste either into chat.
+  A local Supabase startup confirmed this failure with SQLSTATE `42P01` at the
+  first migration. The CLI stopped its containers afterward; no production data
+  was changed.
 - Commit/release only the intended admin changes, preserving unrelated public
   home/auth fallback work in the working tree.
 
