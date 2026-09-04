@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import { isAuthSensitiveUrl } from '../lib/auth/analytics.ts'
 import { parseEmailOtpType } from '../lib/auth/confirmation.ts'
@@ -6,6 +7,17 @@ import { authErrorMessage } from '../lib/auth/errors.ts'
 import { passwordError, validateCredentials } from '../lib/auth/password.ts'
 import { authReleaseErrors } from '../lib/auth/release-config.ts'
 import { getEmailVerificationStatus } from '../lib/auth/verification.ts'
+
+test('email signup requires confirmation when same-email linking is supported', () => {
+  const config = readFileSync(
+    new URL('../supabase/config.toml', import.meta.url),
+    'utf8',
+  )
+  const emailSection = config.match(/\[auth\.email\]([\s\S]*?)(?=\n\[|$)/)?.[1]
+  assert.ok(emailSection, 'auth.email configuration is required')
+  assert.match(emailSection, /^enable_confirmations\s*=\s*true\s*$/m)
+  assert.match(emailSection, /^double_confirm_changes\s*=\s*true\s*$/m)
+})
 
 test('new passwords have a 12-code-point minimum without composition rules', () => {
   for (const value of ['', 'x'.repeat(11), '🏔'.repeat(11)])

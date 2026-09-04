@@ -114,12 +114,22 @@ export function CredentialsForm({
         noValidate
         onSubmit={handleSubmit}
         aria-busy={actions.pending !== null}
+        aria-describedby={signup ? 'signup-confirmation-guidance' : undefined}
       >
         <fieldset disabled={actions.pending !== null} className="space-y-5">
           <legend className="sr-only">
             {signup ? 'Create an account with email' : 'Sign in with email'}
           </legend>
           <EmailField {...fieldProps('email')} />
+          {signup && (
+            <p
+              id="signup-confirmation-guidance"
+              className="text-sm leading-6 text-muted-foreground"
+            >
+              We’ll email you a confirmation link. Confirm your email before
+              signing in, then continue where you left off.
+            </p>
+          )}
           <PasswordField
             {...fieldProps('password')}
             label="Password"

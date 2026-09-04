@@ -10,6 +10,13 @@ test('mobile validation, autofill attributes, visibility, and live requirements'
 }) => {
   await page.setViewportSize({ width: 320, height: 740 })
   await page.goto('/auth/sign-up?returnTo=%2Ftrips%3Fview%3Dlist%23september')
+  await expect(
+    page.getByText('We’ll email you a confirmation link.', { exact: false }),
+  ).toBeVisible()
+  await expect(page.locator('form')).toHaveAttribute(
+    'aria-describedby',
+    'signup-confirmation-guidance',
+  )
   await page
     .getByRole('button', { name: 'Create account', exact: true })
     .click()
