@@ -62,6 +62,8 @@ In the **preview project only**, repeat these three paths with each exact approv
 
 Copy the committed HTML files into the corresponding Supabase Auth template settings:
 
+All four templates reuse the root landing page's custom wordmark, exported as `public/email/club-wordmark-v1.png` with `node scripts/generate-auth-email-brand.mjs`. PNG avoids email-client SVG limitations; the opaque paper backing preserves the artwork's contrast, and descriptive alt text keeps the club name available when images are blocked. Deploy the image **before** activating these templates and verify `{{ .SiteURL }}/email/club-wordmark-v1.png` is publicly accessible without authentication on each sending environment. Keep versioned image URLs stable for already-delivered emails; use a new filename for future artwork changes. Do not add tracking parameters or recipient identifiers to image URLs.
+
 - Reset Password: `supabase/templates/recovery.html`.
 - Confirm Signup: `supabase/templates/confirmation.html`.
 - Magic Link: `supabase/templates/verification-code.html` (OTP only; no automatic sign-in link).
@@ -128,6 +130,7 @@ Earlier, after approval of the confirmation policy and the Resend switch, the wo
 
 - [x] Owner approves required confirmation for new email/password signups; existing confirmed accounts and verified provider sign-ins are not forced through redundant confirmation.
 - [x] Owner confirms a fresh Resend recovery email reached the inbox with a direct reset link, without provider tracking redirects. This is a delivery check only.
+- [x] Owner received and approved the recovery and verification-code Resend preview drafts (September 3). These were safe dashboard test sends, not active recovery/code requests; the subsequent landing-page wordmark addition still needs an inbox image-rendering check after its asset is hosted. Production templates remain unchanged.
 - [ ] Signup displays its inbox/60-second resend state and confirmation returns to the intended page. Email login accepts existing shorter passwords, while all new-password entry points reject <12 characters. Spaces, Unicode, paste, and password-manager generation work.
 - [ ] Both providers work from both pages; cancelling sign-in returns a useful screen; cancelling linking leaves existing identities unchanged. New OAuth profiles hydrate names/avatar without replacing edited profile fields.
 - [ ] Same verified email across password/Google/Discord opens the same user ID/profile/membership. An unverified email must not take over an existing account. Explicit links require the initiating signed-in user; forged/expired callback flags cannot show success. Cross-account conflicts offer verified support, not an automatic merge.
