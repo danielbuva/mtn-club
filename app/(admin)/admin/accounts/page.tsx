@@ -72,9 +72,9 @@ async function AdminAccountsPageContent({
         {totalAccounts} account
         {totalAccounts === 1 ? '' : 's'}
       </p>
-      <section className="mt-4 overflow-hidden border border-[#211D18]/15 bg-white/45 dark:border-border dark:bg-card">
+      <section className="mt-4 min-w-0 max-w-full overflow-hidden border border-[#211D18]/15 bg-white/45 dark:border-border dark:bg-card">
         {accounts.length ? (
-          <div className="overflow-x-auto">
+          <div className="max-w-full overflow-x-auto overscroll-x-contain">
             <table className="w-full text-left text-sm">
               <thead className="bg-[#E9DDC3]/70 text-xs uppercase tracking-wide dark:bg-secondary">
                 <tr>

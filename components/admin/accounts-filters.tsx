@@ -21,9 +21,9 @@ export function AccountFilters({
     <fieldset disabled={disabled} className="min-w-0">
       <form
         action="/admin/accounts"
-        className="mt-8 grid gap-3 border border-[#211D18]/15 bg-white/45 p-4 dark:border-border dark:bg-card sm:grid-cols-2 xl:grid-cols-[1fr_auto_auto_auto_auto_auto]"
+        className="mt-8 grid min-w-0 grid-cols-1 gap-3 border border-[#211D18]/15 bg-white/45 p-4 dark:border-border dark:bg-card sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_repeat(4,minmax(0,auto))_auto]"
       >
-        <label htmlFor="account-search" className="relative">
+        <label htmlFor="account-search" className="relative min-w-0">
           <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
           <Input
             aria-label="Search name or email"
@@ -38,7 +38,7 @@ export function AccountFilters({
           aria-label="Membership state"
           name="status"
           defaultValue={filters.status ?? 'all'}
-          className="h-10 border border-input bg-background pl-2 pr-3 text-sm"
+          className="h-10 w-full min-w-0 border border-input bg-background pl-2 pr-3 text-sm"
         >
           <option value="all">All membership states</option>
           <option value="active">Active</option>
@@ -51,7 +51,7 @@ export function AccountFilters({
           aria-label="Leadership role"
           name="role"
           defaultValue={filters.role ?? 'all'}
-          className="h-10 border border-input bg-background pl-2 pr-3 text-sm"
+          className="h-10 w-full min-w-0 border border-input bg-background pl-2 pr-3 text-sm"
         >
           <option value="all">All leadership roles</option>
           {roles.map(role => (
@@ -64,7 +64,7 @@ export function AccountFilters({
           aria-label="Restriction"
           name="restriction"
           defaultValue={filters.restriction ?? 'all'}
-          className="h-10 border border-input bg-background pl-2 pr-3 text-sm"
+          className="h-10 w-full min-w-0 border border-input bg-background pl-2 pr-3 text-sm"
         >
           <option value="all">All restrictions</option>
           <option value="normal">Unrestricted</option>
@@ -75,7 +75,7 @@ export function AccountFilters({
           aria-label="Mailing status"
           name="mailing"
           defaultValue={filters.mailing ?? 'all'}
-          className="h-10 border border-input bg-background pl-2 pr-3 text-sm"
+          className="h-10 w-full min-w-0 border border-input bg-background pl-2 pr-3 text-sm"
         >
           <option value="all">Any mailing status</option>
           <option value="subscribed">Subscribed</option>

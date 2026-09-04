@@ -87,7 +87,7 @@ export function AdminMobileNavigation({
         tone="paper"
         placement="right"
         showTheme={false}
-        containerClassName="pb-[max(1.75rem,env(safe-area-inset-bottom))]"
+        containerClassName="left-auto right-0 w-max max-w-full pb-[max(1.75rem,env(safe-area-inset-bottom))] lg:hidden"
         className="relative gap-0 overflow-visible rounded-none lg:hidden"
       >
         <div
