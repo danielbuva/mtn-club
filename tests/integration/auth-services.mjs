@@ -114,7 +114,8 @@ export async function messageFor(email, subject) {
 }
 
 export function confirmationLink(message, type) {
-  assert.match(message.HTML, /UNLV MOUNTAIN CLUB/)
+  assert.match(message.HTML, /alt="UNLV Mountain Club"/)
+  assert.match(message.HTML, /\/email\/club-wordmark-v2\.png/)
   assert.doesNotMatch(
     message.HTML,
     /sendibt|click\.resend|\.ConfirmationURL|\{\{/,

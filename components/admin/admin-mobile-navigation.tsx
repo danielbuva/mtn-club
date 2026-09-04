@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useId, useState } from 'react'
+import { type Dispatch, type SetStateAction, useEffect, useId } from 'react'
 import { ThemeCycleButton } from '@/components/navigation/theme-cycle-button'
 import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
 import { cn } from '@/lib/utils'
@@ -47,8 +47,15 @@ const shortLabels = {
   Settings: 'Settings',
 } as const
 
-export function AdminMobileNavigation({ items }: { items: AdminShellItem[] }) {
-  const [open, setOpen] = useState(false)
+export function AdminMobileNavigation({
+  items,
+  open,
+  setOpen,
+}: {
+  items: AdminShellItem[]
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+}) {
   const pathname = usePathname()
   const navigationId = useId()
   const links = [
@@ -63,7 +70,7 @@ export function AdminMobileNavigation({ items }: { items: AdminShellItem[] }) {
     }
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
-  }, [open])
+  }, [open, setOpen])
 
   return (
     <>

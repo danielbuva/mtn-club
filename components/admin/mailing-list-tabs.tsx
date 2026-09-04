@@ -79,7 +79,7 @@ function MailingTabTrigger({
       className="h-11 flex-none gap-2 border-x-0 border-t-0 border-b-2 border-transparent bg-transparent px-4 shadow-none data-[state=active]:border-[#211D18] data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:border-foreground dark:data-[state=active]:bg-transparent"
     >
       {label}
-      <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
+      <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-secondary px-2 py-0.5 text-center text-xs leading-4 tabular-nums">
         {count}
       </span>
     </TabsTrigger>

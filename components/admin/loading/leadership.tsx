@@ -1,43 +1,9 @@
 'use client'
 
 import { ChevronDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { useAdminViewer } from '../admin-view-frame'
-import {
-  roleCardClass,
-  roleSummaryClass,
-  rosterCardClass,
-  rosterLabelClass,
-} from '../leadership-styles'
+import { roleCardClass, roleSummaryClass } from '../leadership-styles'
 import { LoadingValue } from './primitives'
-
-function RosterField({
-  label,
-  select = false,
-  fullWidth = false,
-}: {
-  label: string
-  select?: boolean
-  fullWidth?: boolean
-}) {
-  return (
-    <div className={cn(rosterLabelClass, fullWidth && 'sm:col-span-2')}>
-      {label}
-      <div
-        className={cn(
-          'mt-1 flex w-full items-center border border-input px-3',
-          select
-            ? 'h-10 justify-between bg-background'
-            : 'h-9 bg-transparent py-1',
-        )}
-      >
-        <LoadingValue className="h-3 w-2/3" />
-        {select ? <ChevronDown className="size-4" aria-hidden="true" /> : null}
-      </div>
-    </div>
-  )
-}
 
 export function LeadershipLoading() {
   const viewer = useAdminViewer()
@@ -53,29 +19,33 @@ export function LeadershipLoading() {
             </p>
           </div>
         </div>
-        <div className="mt-5 grid gap-4 lg:grid-cols-2">
+        <div className="mt-5 grid items-start gap-4 lg:grid-cols-2">
           {[0, 1].map(row => (
-            <div key={row} className={rosterCardClass}>
-              <RosterField label="Public name" />
-              <RosterField label="Title" />
-              <RosterField label="Role" select />
-              <RosterField label="Display order" />
-              <RosterField label="Linked account" select fullWidth />
-              <div className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  disabled
-                  aria-label="Show on public roster"
-                />{' '}
-                Show on public roster
+            <div key={row} className={roleCardClass}>
+              <div className={roleSummaryClass}>
+                <span className="min-w-0">
+                  <span className="flex h-6 items-center">
+                    <LoadingValue className="h-4 w-40" />
+                  </span>
+                  <span className="flex h-5 items-center">
+                    <LoadingValue className="h-3 w-28" />
+                  </span>
+                </span>
+                <ChevronDown
+                  className="ml-3 size-4 shrink-0"
+                  aria-hidden="true"
+                />
               </div>
-              {!viewer || viewer.isSuperAdmin ? (
-                <Button type="button" size="sm" disabled>
-                  Save roster entry
-                </Button>
-              ) : null}
             </div>
           ))}
+          {!viewer || viewer.isSuperAdmin ? (
+            <div className={roleCardClass}>
+              <div className={roleSummaryClass}>
+                <span className="font-semibold">Add leader</span>
+                <ChevronDown className="size-4" aria-hidden="true" />
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
       <section className="mt-12">

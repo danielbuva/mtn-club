@@ -17,11 +17,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { sanitizeReturnTo } from '@/lib/auth/return-to'
 import { formatTripDate } from '@/lib/trips/format'
 import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 
 type TripDetailEditorProps = {
   trip: TripDetail
+  returnTo?: string
   availableActivityTags: string[]
   publicHostOptions?: TripAssignmentOption[]
   leaderOptions?: TripAssignmentOption[]
@@ -93,6 +95,7 @@ const parseDateInput = (value: string) => {
 }
 
 export function TripDetailEditor({
+  returnTo,
   trip,
   availableActivityTags,
   publicHostOptions = [],
@@ -283,7 +286,13 @@ export function TripDetailEditor({
                 variant="secondary"
                 className="border border-white/25 bg-black/50 text-white hover:bg-black/60"
               >
-                <Link href={`/trips/${trip.id}`}>Cancel</Link>
+                <Link
+                  href={
+                    sanitizeReturnTo(returnTo ?? null) ?? `/trips/${trip.id}`
+                  }
+                >
+                  Cancel
+                </Link>
               </Button>
               <select
                 value={draft.difficulty}
@@ -353,7 +362,13 @@ export function TripDetailEditor({
               </div>
 
               <Button asChild type="button" size="sm" variant="outline">
-                <Link href={`/trips/${trip.id}`}>Cancel</Link>
+                <Link
+                  href={
+                    sanitizeReturnTo(returnTo ?? null) ?? `/trips/${trip.id}`
+                  }
+                >
+                  Cancel
+                </Link>
               </Button>
             </div>
 

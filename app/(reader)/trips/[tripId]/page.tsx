@@ -260,10 +260,10 @@ export default async function TripDetailPage({
   searchParams,
 }: {
   params: Promise<{ tripId: string }>
-  searchParams: Promise<{ edit?: string }>
+  searchParams: Promise<{ edit?: string; returnTo?: string }>
 }) {
   const { tripId } = await params
-  const { edit } = await searchParams
+  const { edit, returnTo } = await searchParams
   const isEditMode = edit === '1'
 
   const trip = await getTripDetail(tripId)
@@ -321,6 +321,7 @@ export default async function TripDetailPage({
     return (
       <TripDetailEditor
         trip={trip}
+        returnTo={returnTo}
         availableActivityTags={availableActivityTags}
         publicHostOptions={assignmentData?.publicHostOptions}
         leaderOptions={assignmentData?.leaderOptions}

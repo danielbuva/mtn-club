@@ -9,6 +9,8 @@ import {
 import { MembershipTabs } from '@/components/admin/membership/membership-tabs'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { buildMembershipAccessSnapshot } from '@/lib/admin/membership-access'
+import { buildMembershipReviewAccounts } from '@/lib/admin/membership-review'
+import { listMembershipReviewAccounts } from '@/lib/admin/membership-review-accounts'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 type MembershipTab = 'review' | 'members' | 'exceptions'
@@ -36,11 +38,12 @@ async function AdminMembershipPageContent({
     restrictionsResult,
     reviewsResult,
     profilesResult,
+    accounts,
   ] = await Promise.all([
     admin
       .from('membership_applications')
       .select(
-        'user_id, full_name, contact_email, age_status, guardian_consent, dues_payment_claimed, primary_interest, experience_notes, status, created_at',
+        'user_id, full_name, contact_email, age_status, guardian_consent, dues_payment_claimed, dues_claimed_at, primary_interest, experience_notes, status, created_at',
       )
       .order('created_at', { ascending: false }),
     admin
@@ -68,6 +71,7 @@ async function AdminMembershipPageContent({
       .in('status', ['pending', 'refund_requested'])
       .order('created_at'),
     admin.from('profiles').select('user_id, display_name'),
+    listMembershipReviewAccounts(),
   ])
 
   const queryError = [
@@ -106,15 +110,21 @@ async function AdminMembershipPageContent({
     ]),
   )
 
+  const reviewAccounts = buildMembershipReviewAccounts(
+    applications,
+    accounts,
+    profileNames,
+  )
+
   return (
     <MembershipTabs
       defaultTab={resolveDefaultTab(tab)}
-      reviewCount={applications.length}
+      reviewCount={reviewAccounts.length}
       memberCount={memberships.length}
       exceptionCount={reviews.length}
       review={
         <MembershipReviewPanel
-          applications={applications}
+          applications={reviewAccounts}
           payments={payments}
           canConfirmGuardian={Boolean(
             context.permissions['membership.confirm_guardian'],

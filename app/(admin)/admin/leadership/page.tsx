@@ -59,50 +59,148 @@ async function AdminLeadershipPageContent() {
             </p>
           </div>
         </div>
-        <div className="mt-5 grid gap-4 lg:grid-cols-2">
+        <div className="mt-5 grid items-start gap-4 lg:grid-cols-2">
           {(hosts.data ?? []).map(host => (
-            <form
-              key={host.id}
-              action={saveRosterEntryAction}
-              className={rosterCardClass}
-            >
-              <input type="hidden" name="hostId" value={host.id} />
-              <label
-                htmlFor={`host-name-${host.id}`}
-                className={rosterLabelClass}
+            <details key={host.id} className={roleCardClass}>
+              <summary className={roleSummaryClass}>
+                <span className="min-w-0">
+                  <span className="block font-semibold">
+                    {host.public_name}
+                  </span>
+                  <span className="block text-sm text-muted-foreground">
+                    {host.club_title}
+                    {host.is_active ? '' : ' · Inactive'}
+                  </span>
+                </span>
+                <ChevronDown
+                  className="ml-3 size-4 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </summary>
+              <form action={saveRosterEntryAction} className={rosterCardClass}>
+                <input type="hidden" name="hostId" value={host.id} />
+                <label
+                  htmlFor={`host-name-${host.id}`}
+                  className={rosterLabelClass}
+                >
+                  Public name
+                  <Input
+                    id={`host-name-${host.id}`}
+                    name="publicName"
+                    defaultValue={host.public_name}
+                    className="mt-1"
+                    required
+                  />
+                </label>
+                <label
+                  htmlFor={`host-title-${host.id}`}
+                  className={rosterLabelClass}
+                >
+                  Title
+                  <Input
+                    id={`host-title-${host.id}`}
+                    name="title"
+                    defaultValue={host.club_title}
+                    className="mt-1"
+                    required
+                  />
+                </label>
+                <label
+                  htmlFor={`host-role-${host.id}`}
+                  className={rosterLabelClass}
+                >
+                  Role
+                  <select
+                    id={`host-role-${host.id}`}
+                    name="roleKey"
+                    defaultValue={host.role_key ?? ''}
+                    className="mt-1 h-10 w-full border border-input bg-background px-3 text-sm"
+                  >
+                    {(roles.data ?? [])
+                      .filter(role => !role.is_super_admin)
+                      .map(role => (
+                        <option key={role.id} value={role.key}>
+                          {role.name}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+                <label
+                  htmlFor={`host-order-${host.id}`}
+                  className={rosterLabelClass}
+                >
+                  Display order
+                  <Input
+                    id={`host-order-${host.id}`}
+                    name="displayOrder"
+                    type="number"
+                    min={0}
+                    defaultValue={host.display_order}
+                    className="mt-1"
+                  />
+                </label>
+                <label className="text-xs font-semibold uppercase tracking-wide sm:col-span-2">
+                  Linked account
+                  <select
+                    name="linkedUserId"
+                    defaultValue={host.linked_user_id ?? ''}
+                    className="mt-1 h-10 w-full border border-input bg-background px-3 text-sm"
+                  >
+                    <option value="">Not linked</option>
+                    {(authUsers.data.users ?? []).map(user => (
+                      <option key={user.id} value={user.id}>
+                        {user.email ?? user.id}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    defaultChecked={host.is_active}
+                  />{' '}
+                  Show on public roster
+                </label>
+                {context.isSuperAdmin ? (
+                  <Button type="submit" size="sm">
+                    Save roster entry
+                  </Button>
+                ) : null}
+              </form>
+            </details>
+          ))}
+          {context.isSuperAdmin ? (
+            <details className={roleCardClass}>
+              <summary className={roleSummaryClass}>
+                <span className="font-semibold">Add leader</span>
+                <ChevronDown
+                  className="size-4 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </summary>
+              <form
+                action={saveRosterEntryAction}
+                className="grid gap-3 border border-dashed border-[#211D18]/25 p-5 sm:grid-cols-2"
               >
-                Public name
-                <Input
-                  id={`host-name-${host.id}`}
+                <input
                   name="publicName"
-                  defaultValue={host.public_name}
-                  className="mt-1"
+                  placeholder="New leader name"
+                  aria-label="New leader name"
                   required
+                  className="h-10 border border-input bg-background px-3 text-sm"
                 />
-              </label>
-              <label
-                htmlFor={`host-title-${host.id}`}
-                className={rosterLabelClass}
-              >
-                Title
-                <Input
-                  id={`host-title-${host.id}`}
+                <input
                   name="title"
-                  defaultValue={host.club_title}
-                  className="mt-1"
+                  placeholder="Public title"
+                  aria-label="Public title"
                   required
+                  className="h-10 border border-input bg-background px-3 text-sm"
                 />
-              </label>
-              <label
-                htmlFor={`host-role-${host.id}`}
-                className={rosterLabelClass}
-              >
-                Role
                 <select
-                  id={`host-role-${host.id}`}
                   name="roleKey"
-                  defaultValue={host.role_key ?? ''}
-                  className="mt-1 h-10 w-full border border-input bg-background px-3 text-sm"
+                  className="h-10 border border-input bg-background px-3 text-sm"
+                  aria-label="Role"
                 >
                   {(roles.data ?? [])
                     .filter(role => !role.is_super_admin)
@@ -112,27 +210,17 @@ async function AdminLeadershipPageContent() {
                       </option>
                     ))}
                 </select>
-              </label>
-              <label
-                htmlFor={`host-order-${host.id}`}
-                className={rosterLabelClass}
-              >
-                Display order
                 <Input
-                  id={`host-order-${host.id}`}
                   name="displayOrder"
                   type="number"
                   min={0}
-                  defaultValue={host.display_order}
-                  className="mt-1"
+                  defaultValue={100}
+                  aria-label="Display order"
                 />
-              </label>
-              <label className="text-xs font-semibold uppercase tracking-wide sm:col-span-2">
-                Linked account
                 <select
                   name="linkedUserId"
-                  defaultValue={host.linked_user_id ?? ''}
-                  className="mt-1 h-10 w-full border border-input bg-background px-3 text-sm"
+                  className="h-10 border border-input bg-background px-3 text-sm"
+                  aria-label="Linked account"
                 >
                   <option value="">Not linked</option>
                   {(authUsers.data.users ?? []).map(user => (
@@ -141,76 +229,15 @@ async function AdminLeadershipPageContent() {
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="isActive"
-                  defaultChecked={host.is_active}
-                />{' '}
-                Show on public roster
-              </label>
-              {context.isSuperAdmin ? (
-                <Button type="submit" size="sm">
-                  Save roster entry
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" name="isActive" defaultChecked /> Show
+                  publicly
+                </label>
+                <Button size="sm" className="sm:col-span-2">
+                  <UserRoundCheck className="size-4" /> Add leader
                 </Button>
-              ) : null}
-            </form>
-          ))}
-          {context.isSuperAdmin ? (
-            <form
-              action={saveRosterEntryAction}
-              className="grid gap-3 border border-dashed border-[#211D18]/25 p-5 sm:grid-cols-2"
-            >
-              <input
-                name="publicName"
-                placeholder="New leader name"
-                required
-                className="h-10 border border-input bg-background px-3 text-sm"
-              />
-              <input
-                name="title"
-                placeholder="Public title"
-                required
-                className="h-10 border border-input bg-background px-3 text-sm"
-              />
-              <select
-                name="roleKey"
-                className="h-10 border border-input bg-background px-3 text-sm"
-              >
-                {(roles.data ?? [])
-                  .filter(role => !role.is_super_admin)
-                  .map(role => (
-                    <option key={role.id} value={role.key}>
-                      {role.name}
-                    </option>
-                  ))}
-              </select>
-              <Input
-                name="displayOrder"
-                type="number"
-                min={0}
-                defaultValue={100}
-              />
-              <select
-                name="linkedUserId"
-                className="h-10 border border-input bg-background px-3 text-sm"
-              >
-                <option value="">Not linked</option>
-                {(authUsers.data.users ?? []).map(user => (
-                  <option key={user.id} value={user.id}>
-                    {user.email ?? user.id}
-                  </option>
-                ))}
-              </select>
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="isActive" defaultChecked /> Show
-                publicly
-              </label>
-              <Button size="sm" className="sm:col-span-2">
-                <UserRoundCheck className="size-4" /> Add leader
-              </Button>
-            </form>
+              </form>
+            </details>
           ) : null}
         </div>
       </section>

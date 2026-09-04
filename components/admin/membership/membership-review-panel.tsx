@@ -6,27 +6,17 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  getApplicantClaimTimestamp,
+  type MembershipReviewAccount,
+} from '@/lib/admin/membership-review'
 import { decodeMembershipInterests } from '@/lib/memberships/application-options'
 import type { Database } from '@/lib/supabase/types'
-
-type Application = Pick<
-  Database['public']['Tables']['membership_applications']['Row'],
-  | 'user_id'
-  | 'full_name'
-  | 'contact_email'
-  | 'age_status'
-  | 'guardian_consent'
-  | 'dues_payment_claimed'
-  | 'primary_interest'
-  | 'experience_notes'
-  | 'status'
-  | 'created_at'
->
 
 type Payment = Database['public']['Tables']['membership_zelle_payments']['Row']
 
 type MembershipReviewPanelProps = {
-  applications: Application[]
+  applications: MembershipReviewAccount[]
   payments: Payment[]
   canConfirmGuardian: boolean
   canReviewPayment: boolean
@@ -81,8 +71,14 @@ export function MembershipReviewPanel({
         const applicantClaim = userPayments.find(
           payment => payment.claim_source !== 'admin',
         )
+        const claimedAt = getApplicantClaimTimestamp(
+          application,
+          applicantClaim,
+        )
         const applicantReportedPayment = Boolean(
-          application.dues_payment_claimed || applicantClaim,
+          (application.dues_payment_claimed &&
+            !userPayments.some(payment => payment.claim_source === 'admin')) ||
+            applicantClaim,
         )
         const acceptedStatusLocked =
           currentPayment?.status === 'confirmed' && !isSuperAdmin
@@ -104,7 +100,10 @@ export function MembershipReviewPanel({
                   {application.contact_email}
                 </a>
                 <p className="mt-2 text-xs text-[#6A5146] dark:text-muted-foreground">
-                  Applied {formatDate(application.created_at)}
+                  {application.status === 'account'
+                    ? 'Account created'
+                    : 'Applied'}{' '}
+                  {formatDate(application.created_at)}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -127,7 +126,11 @@ export function MembershipReviewPanel({
                   Age
                 </dt>
                 <dd className="font-medium">
-                  {application.age_status === 'adult' ? '18 or older' : 'Minor'}
+                  {application.age_status === null
+                    ? 'Not provided'
+                    : application.age_status === 'adult'
+                      ? '18 or older'
+                      : 'Minor'}
                 </dd>
               </div>
               <div>
@@ -135,7 +138,8 @@ export function MembershipReviewPanel({
                   Guardian
                 </dt>
                 <dd className="font-medium">
-                  {application.guardian_consent.replaceAll('_', ' ')}
+                  {application.guardian_consent?.replaceAll('_', ' ') ??
+                    'Not provided'}
                 </dd>
               </div>
               <div>
@@ -143,9 +147,11 @@ export function MembershipReviewPanel({
                   Interests
                 </dt>
                 <dd className="font-medium">
-                  {decodeMembershipInterests(application.primary_interest).join(
-                    ', ',
-                  )}
+                  {application.primary_interest
+                    ? decodeMembershipInterests(
+                        application.primary_interest,
+                      ).join(', ')
+                    : 'Not provided'}
                 </dd>
               </div>
             </dl>
@@ -164,7 +170,7 @@ export function MembershipReviewPanel({
                   <Clock3 className="mt-0.5 size-4 shrink-0" />
                 )}
                 {applicantReportedPayment
-                  ? `Applicant reported sending a Zelle payment${applicantClaim ? ` on ${formatDate(applicantClaim.claimed_at)}` : ''}.`
+                  ? `Applicant reported sending a Zelle payment${claimedAt ? ` on ${formatDate(claimedAt)}` : ' (claim date not recorded)'}.`
                   : 'Applicant has not reported sending a Zelle payment.'}
               </p>
               <p className="flex items-start gap-2">
@@ -254,7 +260,7 @@ function EmptyApplications() {
   return (
     <div className="border border-dashed border-[#211D18]/20 p-12 text-center text-sm text-[#6A5146] dark:border-border dark:text-muted-foreground">
       <Users className="mx-auto mb-3 size-6" aria-hidden="true" />
-      No membership applications yet.
+      No accounts or membership applications yet.
     </div>
   )
 }

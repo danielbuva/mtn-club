@@ -26,9 +26,9 @@ Only users created by this test run are deleted during cleanup.
 This additional test requires the **application schema without member data** in
 the dedicated sandbox. The repository's incremental migrations do not include
 the original base schema and cannot currently bootstrap a fresh database.
-On September 3, 2026, the owner's existing, untracked `supabase/schema-only.sql`
+On September 3, 2026, the owner's existing `supabase/schema-only.sql`
 was inspected and loaded into `supabase_db_mtn-auth-integration` only. That file
-is not bundled with this test or committed by the auth task. Do not load it into
+is now retained in the release branch as a schema-only test baseline. Do not load it into
 an existing database or run production migrations just to prepare this test.
 
 Once the local schema is available:

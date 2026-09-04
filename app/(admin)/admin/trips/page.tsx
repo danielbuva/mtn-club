@@ -39,6 +39,11 @@ async function AdminTripsPageContent({
 }) {
   const context = await requireAdminCapability('trips.read')
   const filters = await searchParams
+  const returnQuery = new URLSearchParams()
+  for (const [key, value] of Object.entries(filters)) {
+    if (typeof value === 'string') returnQuery.set(key, value)
+  }
+  const returnTo = `/admin/trips${returnQuery.size ? `?${returnQuery}` : ''}`
   const supabase = await createClient()
   let query = supabase
     .from('trips')
@@ -166,7 +171,9 @@ async function AdminTripsPageContent({
                 </Button>
                 {canManageTrip('trips.update', trip.id) ? (
                   <Button asChild size="sm" variant="outline">
-                    <Link href={`/trips/${trip.id}?edit=1`}>
+                    <Link
+                      href={`/trips/${trip.id}?edit=1&returnTo=${encodeURIComponent(returnTo)}`}
+                    >
                       <Pencil className="size-4" /> Edit
                     </Link>
                   </Button>

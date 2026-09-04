@@ -1,5 +1,5 @@
 export const rosterCardClass =
-  'grid gap-3 border border-[#211D18]/15 bg-white/45 p-5 dark:border-border dark:bg-card sm:grid-cols-2'
+  'grid gap-3 border-t border-[#211D18]/15 p-5 dark:border-border sm:grid-cols-2'
 
 export const rosterLabelClass = 'text-xs font-semibold uppercase tracking-wide'
 

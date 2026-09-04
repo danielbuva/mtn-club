@@ -10,7 +10,15 @@ Membership signup authenticates first through the same CAPTCHA-protected signup/
 
 All generated auth links use `returnTo`; legacy `redirect` and callback `next` are accepted. Only safe site-relative destinations are allowed. Auth destinations and encoded auth loops are rejected. Nothing stores a return destination in local storage or derives it from a referrer. Successful email auth replaces the current document so server-rendered account state sees fresh cookies.
 
-## Provisioning status — September 3, 2026
+## Final release preparation — September 3, 2026
+
+The owner requested deployment of all pending branch changes and confirmed the password-change notification arrived. Resend independently reports the real preview recovery and password-change messages delivered. The owner explicitly accepts real-phone keyboard/autofill testing as a follow-up during a small initial production release, not a completed test. Branded recovery and code delivery, actual preview password reset, Google sign-in, Discord connection/cancellation, and same-account identity preservation have evidence recorded below; full real-device and every-provider/membership combination remain rollout follow-ups.
+
+The pending admin membership-review change adds migration `202609040001_account_membership_review.sql`; the auth changes alone do not require a migration. Review found that a fresh schema-only database could inherit API execute privileges on the activation helper. The migration now explicitly revokes both payment functions from public/anonymous/authenticated roles and grants execution only to service_role. Its disposable database test passes account-only activation, idempotence, guardian consent, permission denial, and API privilege checks, with all fixtures rolled back. The schema-only snapshot contains no member rows or detected credentials and is committed solely as a local test baseline; never apply the snapshot to production.
+
+The combined branch passes 62 unit tests, 25 mocked browser checks, 10 actual local Auth service tests, two actual local Auth browser journeys, and TypeScript. Lint retains the same six existing image warnings. Email integration assertions now verify the wordmark's alt text and v2 asset instead of the retired all-uppercase text heading. The final clean build and coordinated production activation are the next steps; the provisioning notes below describe the pre-release state.
+
+## Provisioning status — September 3, 2026 (pre-release history)
 
 Managed Turnstile widgets are provisioned in the club's Cloudflare account:
 

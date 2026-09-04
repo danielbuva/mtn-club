@@ -25,38 +25,18 @@ export function ReaderFloatingBackButton({
     return <PublicThumbNavigation />
   }
 
-  if (guidePaths.has(pathname) || isTripDetailPage) {
+  if (
+    guidePaths.has(pathname) ||
+    isTripDetailPage ||
+    (isTripsNewPage && canCreateEvent)
+  ) {
     return null
   }
 
   return (
     <ThumbNavigationBar showTheme={false}>
       <BackButton className="min-h-9 rounded-full px-4 py-2 text-xs text-foreground/70 whitespace-nowrap" />
-      {isTripsNewPage && canCreateEvent ? (
-        <>
-          <Button
-            size="sm"
-            variant="outline"
-            className="rounded-full px-3 text-xs whitespace-nowrap"
-            onClick={() => {
-              const saveDraftButton = document.getElementById(
-                'trip-save-draft-btn',
-              ) as HTMLButtonElement | null
-              saveDraftButton?.click()
-            }}
-          >
-            Save draft
-          </Button>
-          <Button
-            size="sm"
-            className="rounded-full px-4 text-xs whitespace-nowrap"
-            type="submit"
-            form="trip-event-form"
-          >
-            + Post
-          </Button>
-        </>
-      ) : canCreateEvent ? (
+      {canCreateEvent ? (
         <Button
           asChild
           size="sm"

@@ -222,9 +222,10 @@ export default async function AdminAccountDetailPage({
           <div className="mt-4 flex flex-wrap gap-2">
             {assignedRoles.length ? (
               assignedRoles.map(role => (
-                <div
+                <Badge
                   key={role.id}
-                  className="flex items-center gap-1 rounded-full bg-secondary pl-3 text-sm font-semibold"
+                  variant="secondary"
+                  className="min-h-9 gap-2 px-3 py-1 text-sm"
                 >
                   <span>{role.name}</span>
                   {context.isSuperAdmin && !role.is_super_admin ? (
@@ -233,14 +234,14 @@ export default async function AdminAccountDetailPage({
                       <input type="hidden" name="roleId" value={role.id} />
                       <button
                         type="submit"
-                        className="rounded-full px-2 py-1.5 hover:bg-destructive/10"
+                        className="flex size-6 items-center justify-center rounded-full hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         aria-label={`Remove ${role.name}`}
                       >
                         ×
                       </button>
                     </form>
                   ) : null}
-                </div>
+                </Badge>
               ))
             ) : (
               <p className="text-sm text-muted-foreground">

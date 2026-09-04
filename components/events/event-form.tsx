@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import {
   addTripTagOptionAction,
@@ -10,6 +10,7 @@ import {
   publishTripFormAction,
   saveTripDraftAction,
 } from '@/app/(reader)/trips/draft-actions'
+import { EventFloatingActions } from '@/components/events/event-floating-actions'
 import { EventBasicsSection } from '@/components/events/sections/event-basics-section'
 import { EventDescriptionSection } from '@/components/events/sections/event-description-section'
 import { EventDetailsSection } from '@/components/events/sections/event-details-section'
@@ -90,6 +91,12 @@ export function EventForm({
   successPath,
 }: EventFormProps) {
   const router = useRouter()
+  const pathname = usePathname()
+  const isAdmin = pathname.startsWith('/admin/')
+  const handleCancel = () => {
+    resetForm()
+    router.push(successPath)
+  }
   const initialState = resolveInitialFormState({
     initialDraft,
     canChooseOfficial,
@@ -246,7 +253,7 @@ export function EventForm({
         currentDraftId,
       )
       setCurrentDraftId(result.id)
-      router.replace(`/trips/new?draft=${result.id}`)
+      router.replace(`${pathname}?draft=${result.id}`, { scroll: false })
     } catch (error: unknown) {
       setFormError(
         error instanceof Error ? error.message : 'Unable to save draft',
@@ -432,23 +439,34 @@ export function EventForm({
         </Card>
       ) : null}
 
-      <div className="hidden items-center justify-between md:flex">
+      <EventFloatingActions
+        admin={isAdmin}
+        isSubmitting={isSubmitting}
+        isSavingDraft={isSavingDraft}
+        onSaveDraft={handleSaveDraft}
+      />
+      <div
+        className={
+          isAdmin
+            ? 'hidden items-center justify-between lg:flex'
+            : 'hidden items-center justify-between md:flex'
+        }
+      >
         <Button
           type="button"
           variant="ghost"
-          onClick={() => {
-            resetForm()
-            router.push(successPath)
-          }}
+          className="min-h-11 md:min-h-0"
+          disabled={isSubmitting || isSavingDraft}
+          onClick={handleCancel}
         >
           Cancel
         </Button>
-        <div className="flex items-center gap-2">
+        <div className="grid gap-2 sm:grid-cols-2 md:flex md:items-center">
           <Button
             id="trip-save-draft-btn"
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="min-h-11 md:min-h-0"
             disabled={isSubmitting || isSavingDraft}
             onClick={handleSaveDraft}
           >
@@ -457,7 +475,7 @@ export function EventForm({
           <Button
             type="submit"
             disabled={isSubmitting || isSavingDraft}
-            className="rounded-xl"
+            className="min-h-11 md:min-h-0"
           >
             {isSubmitting
               ? 'Saving...'

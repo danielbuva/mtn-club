@@ -181,7 +181,9 @@ export function CredentialsForm({
       </form>
       {signup && (
         <p className="text-sm leading-6 text-muted-foreground">
-          Creating an account is free. Club membership and dues are separate.
+          Creating an account is free. Your account will appear in the club’s
+          membership review queue. Membership is activated after an admin
+          confirms your dues payment.
         </p>
       )}
       <p className="text-center text-sm">

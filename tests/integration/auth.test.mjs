@@ -178,7 +178,8 @@ test('recovery in another browser has genuine recovery claims, rejects reuse, ch
     user.email,
     'Your Mountain Club password was changed',
   )
-  assert.match(notification.HTML, /UNLV MOUNTAIN CLUB/)
+  assert.match(notification.HTML, /alt="UNLV Mountain Club"/)
+  assert.match(notification.HTML, /\/email\/club-wordmark-v2\.png/)
 })
 
 test('officer/admin-authorized recovery is exempt from CAPTCHA but still sends the branded link', async () => {

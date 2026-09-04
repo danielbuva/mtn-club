@@ -151,3 +151,17 @@ verifying that exact migration's schema changes are already present.
 - Use `feature/*` branches for new work
 - Keep changes scoped and PR-ready
 - Update `RUNBOOK.md` when infra changes
+
+### Account membership review
+
+`/admin/membership` includes all auth accounts (including accounts without a
+profile or membership application). New accounts start with payment pending.
+An authorized payment reviewer can confirm dues to grant the existing 12-month
+membership term. Applications identifying a minor still require guardian consent.
+Existing applications and account creation flows remain available.
+
+Apply `supabase/migrations/202609040001_account_membership_review.sql` before
+releasing this change. No new environment variables are required. The migration
+also allows confirmation when an applicant has not personally reported payment.
+Database regression checks are in `tests/account-membership-review.sql`; run them
+against a disposable database with the migrations applied. The fixtures roll back.

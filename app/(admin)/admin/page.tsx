@@ -138,7 +138,9 @@ async function AdminOverviewPageContent() {
                       asChild
                       className="bg-[#FFECA2] text-[#211D18] hover:bg-[#f6dc76]"
                     >
-                      <Link href={`/trips/${data.nextTrip.id}?edit=1`}>
+                      <Link
+                        href={`/trips/${data.nextTrip.id}?edit=1&returnTo=%2Fadmin`}
+                      >
                         Manage trip
                       </Link>
                     </Button>

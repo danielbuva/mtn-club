@@ -11,21 +11,20 @@ test('sidebar identity fallback has no extra gap shifting the public-site link',
   )
 })
 
-test('leadership placeholders share card styling and match input/select heights', () => {
+test('leadership placeholders match collapsed roster summaries', () => {
   const loading = source('components/admin/loading/leadership.tsx')
   const page = source('app/(admin)/admin/leadership/page.tsx')
-  for (const className of [
-    'rosterCardClass',
-    'rosterLabelClass',
-    'roleCardClass',
-    'roleSummaryClass',
-  ]) {
+  for (const className of ['roleCardClass', 'roleSummaryClass']) {
     assert.ok(loading.includes(className))
     assert.ok(page.includes(className))
   }
-  assert.match(loading, /h-10 justify-between bg-background/)
-  assert.match(loading, /h-9 bg-transparent py-1/)
-  assert.match(loading, /Save roster entry/)
+  assert.match(loading, /flex h-6 items-center/)
+  assert.match(loading, /flex h-5 items-center/)
+  assert.match(loading, /Add leader/)
+  assert.doesNotMatch(loading, /Save roster entry/)
+  assert.match(page, /<details\s+key=\{host.id\}/)
+  assert.match(page, /<summary className=\{roleSummaryClass\}>/)
+  assert.doesNotMatch(page, /<details[^>]*\bopen[\s=>]/)
 })
 
 test('settings loading shares the real form layout and input height', () => {

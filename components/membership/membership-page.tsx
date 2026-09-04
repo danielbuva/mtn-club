@@ -138,7 +138,10 @@ function SignedInMembershipPage({
 }) {
   const application = account?.schemaReady ? account.application : null
   const showZelleInstructions = Boolean(
-    application && !application.duesPaymentClaimed && !account?.accessActive,
+    account?.schemaReady &&
+      account.restriction === 'normal' &&
+      !application?.duesPaymentClaimed &&
+      !account.accessActive,
   )
 
   return (
@@ -185,7 +188,9 @@ function getSignedInSummary(account: MembershipAccount | null) {
     return 'Your membership is active.'
   }
   if (!account.application) {
-    return 'We could not find a membership application for this account.'
+    return account.latestZelleStatus === 'rejected'
+      ? 'Leadership could not match your dues payment. Contact the club to resolve it.'
+      : 'Your account is awaiting dues payment confirmation by leadership.'
   }
   if (
     account.application.ageStatus === 'minor' &&
@@ -277,8 +282,19 @@ function MembershipStatus({
 
   if (!account.application) {
     return (
-      <StatusBox icon={Clock3} title="Ready to join?">
-        <p>Your account is ready. Complete the membership application next.</p>
+      <StatusBox
+        icon={Clock3}
+        title={
+          account.latestZelleStatus === 'rejected'
+            ? 'Payment not matched'
+            : 'Membership pending'
+        }
+      >
+        <p>
+          {account.latestZelleStatus === 'rejected'
+            ? 'Leadership could not match your payment. Contact the club with your payment details.'
+            : 'Your account is in the membership review queue. Send your dues through Zelle and leadership will activate your membership after confirming payment.'}
+        </p>
         <StatusLink href="/membership-sign-up">
           Complete your application
         </StatusLink>

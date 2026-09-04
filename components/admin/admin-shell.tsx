@@ -3,8 +3,9 @@
 import { ExternalLink, LayoutDashboard, Mountain } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import type { ReactNode } from 'react'
+import { type ReactNode, useState } from 'react'
 import { AdminMobileNavigation } from '@/components/admin/admin-mobile-navigation'
+import { AdminMobileMenuContext } from '@/components/admin/mobile-menu-context'
 import { cn } from '@/lib/utils'
 import { adminNavigationIcons as icons } from './navigation-icons'
 
@@ -50,42 +51,49 @@ export function AdminShell({
   displayName: string
   roleLabel: string
 }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   return (
-    <div className="min-h-screen bg-[#F8F1DF] text-[#211D18] dark:bg-background dark:text-foreground">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#211D18]/15 bg-[#F3E8D0] p-5 dark:border-border dark:bg-card lg:flex lg:flex-col">
-        <Link href="/admin" className="flex items-center gap-3">
-          <span className="flex size-10 items-center justify-center bg-[#211D18] text-[#FFECA2]">
-            <Mountain className="size-5" aria-hidden="true" />
-          </span>
-          <span>
-            <span className="block font-brand text-lg uppercase leading-none">
-              Mountain Club
+    <AdminMobileMenuContext value={mobileMenuOpen}>
+      <div className="min-h-screen bg-[#F8F1DF] text-[#211D18] dark:bg-background dark:text-foreground">
+        <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#211D18]/15 bg-[#F3E8D0] p-5 dark:border-border dark:bg-card lg:flex lg:flex-col">
+          <Link href="/admin" className="flex items-center gap-3">
+            <span className="flex size-10 items-center justify-center bg-[#211D18] text-[#FFECA2]">
+              <Mountain className="size-5" aria-hidden="true" />
             </span>
-            <span className="text-xs text-[#6A5146] dark:text-muted-foreground">
-              Leadership admin
+            <span>
+              <span className="block font-brand text-lg uppercase leading-none">
+                Mountain Club
+              </span>
+              <span className="text-xs text-[#6A5146] dark:text-muted-foreground">
+                Leadership admin
+              </span>
             </span>
-          </span>
-        </Link>
-        <div className="mt-8 flex-1">
-          <AdminNavigation items={items} />
-        </div>
-        <Link
-          href="/"
-          className="flex min-h-10 items-center gap-3 px-3 text-sm font-semibold outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <ExternalLink className="size-4" aria-hidden="true" />
-          View public site
-        </Link>
-        <div className="mt-4 border-t border-[#211D18]/15 pt-4 dark:border-border">
-          <p className="truncate text-sm font-semibold">{displayName}</p>
-          <p className="truncate text-xs text-[#6A5146] dark:text-muted-foreground">
-            {roleLabel}
-          </p>
-        </div>
-      </aside>
+          </Link>
+          <div className="mt-8 flex-1">
+            <AdminNavigation items={items} />
+          </div>
+          <Link
+            href="/"
+            className="flex min-h-10 items-center gap-3 px-3 text-sm font-semibold outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ExternalLink className="size-4" aria-hidden="true" />
+            View public site
+          </Link>
+          <div className="mt-4 border-t border-[#211D18]/15 pt-4 dark:border-border">
+            <p className="truncate text-sm font-semibold">{displayName}</p>
+            <p className="truncate text-xs text-[#6A5146] dark:text-muted-foreground">
+              {roleLabel}
+            </p>
+          </div>
+        </aside>
 
-      <main className="min-h-screen pb-24 lg:pb-0 lg:pl-64">{children}</main>
-      <AdminMobileNavigation items={items} />
-    </div>
+        <main className="min-h-screen pb-24 lg:pb-0 lg:pl-64">{children}</main>
+        <AdminMobileNavigation
+          items={items}
+          open={mobileMenuOpen}
+          setOpen={setMobileMenuOpen}
+        />
+      </div>
+    </AdminMobileMenuContext>
   )
 }

@@ -1,4 +1,5 @@
 import { NewEventPage } from '@/components/events/new-event-page'
+import { getTripLeadershipOptions } from '@/lib/events/creation-options'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function TripsNewPage({
@@ -26,6 +27,7 @@ export default async function TripsNewPage({
     : [{ data: null }, { data: null }]
   const canCreateOfficial = Boolean(officialScope.data)
   const canManageTags = Boolean(updateScope.data)
+  const leadershipOptions = await getTripLeadershipOptions()
   const draftId = resolvedSearchParams?.draft
 
   const tagOptionsRes = await supabase
@@ -58,6 +60,7 @@ export default async function TripsNewPage({
       canCreateOfficial={canCreateOfficial}
       canManageTags={canManageTags}
       activityOptions={activityOptions}
+      {...leadershipOptions}
     />
   )
 }

@@ -23,17 +23,12 @@ const primaryLinkClass =
 const secondaryLinkClass =
   'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75'
 
-const authenticatedLinks = [
-  { href: '/welcome', label: 'Club Info', primary: true },
-  { href: '/calendar', label: 'Calendar', primary: false },
-  { href: '/gallery', label: 'Photo Gallery', primary: false },
-  { href: '/trips', label: 'Trips & Events', primary: false },
-] as const
-
 export function HomeCoverNavigation({
   isAuthenticated,
+  isAdmin,
 }: {
   isAuthenticated: boolean
+  isAdmin: boolean
 }) {
   if (!isAuthenticated) {
     return (
@@ -42,6 +37,17 @@ export function HomeCoverNavigation({
       </Link>
     )
   }
+
+  const authenticatedLinks = [
+    {
+      href: isAdmin ? '/admin' : '/welcome',
+      label: isAdmin ? 'Dashboard' : 'Club Info',
+      primary: true,
+    },
+    { href: '/calendar', label: 'Calendar', primary: false },
+    { href: '/gallery', label: 'Photo Gallery', primary: false },
+    { href: '/trips', label: 'Trips & Events', primary: false },
+  ]
 
   return authenticatedLinks.map(link => (
     <Link
@@ -52,24 +58,6 @@ export function HomeCoverNavigation({
       {link.label} →
     </Link>
   ))
-}
-
-export function HomeCoverNavigationSkeleton() {
-  return (
-    <div
-      className="flex flex-col items-end gap-3 py-1"
-      aria-hidden="true"
-      data-homecover-navigation-loading
-    >
-      {[10, 8, 11, 12].map(width => (
-        <span
-          key={width}
-          className="h-6 animate-pulse bg-[#FFF4C9]/20 sm:h-8 md:h-9"
-          style={{ width: `${width}rem` }}
-        />
-      ))}
-    </div>
-  )
 }
 
 export default function HomeCover({ navigation }: { navigation: ReactNode }) {
