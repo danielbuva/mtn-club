@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import {
   Sheet,
   SheetContent,
@@ -52,13 +53,14 @@ export function TripPhotoSheet({
             {(trip?.photos ?? []).map(photo => (
               <div
                 key={photo}
-                className="h-24 w-32 shrink-0 overflow-hidden rounded-lg border border-border/60 shadow-sm"
+                className="relative h-24 w-32 shrink-0 overflow-hidden rounded-lg border border-border/60 shadow-sm"
               >
-                <img
+                <Image
                   src={photo}
                   alt={trip?.title ?? 'Trip photo'}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="128px"
+                  className="object-cover"
                 />
               </div>
             ))}

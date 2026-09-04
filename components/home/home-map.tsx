@@ -3,6 +3,7 @@
 import { circle, bbox as turfBbox } from '@turf/turf'
 import type { Feature, FeatureCollection, Point } from 'geojson'
 import maplibregl, { type Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl'
+import Image from 'next/image'
 import { useTheme } from 'next-themes'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import MapLibre, {
@@ -305,12 +306,16 @@ export function HomeMap({
                   aria-label={`Zoom into ${pointCount} trip locations`}
                 >
                   {thumbnails.map(photo => (
-                    <span key={photo} className="overflow-hidden rounded-md">
-                      <img
+                    <span
+                      key={photo}
+                      className="relative overflow-hidden rounded-md"
+                    >
+                      <Image
                         src={photo}
                         alt="Cluster"
-                        className="h-full w-full object-cover"
-                        loading="lazy"
+                        fill
+                        sizes="28px"
+                        className="object-cover"
                       />
                     </span>
                   ))}
@@ -347,11 +352,12 @@ export function HomeMap({
                 )}
                 aria-label={`View trip details for ${trip.title}`}
               >
-                <img
+                <Image
                   src={trip.photos[0]}
                   alt={trip.title}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="44px"
+                  className="object-cover"
                 />
               </button>
             </Marker>

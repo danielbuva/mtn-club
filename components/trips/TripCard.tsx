@@ -2,6 +2,7 @@
 
 import { format } from 'date-fns'
 import { CalendarDays, Clock3, MapPin } from 'lucide-react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
 import { TripMetaRow } from '@/components/trips/TripMetaRow'
@@ -38,7 +39,8 @@ type TripCardProps = {
 export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
   const router = useRouter()
   const detailHref = trip.detailHref ?? `/trips/${trip.id}`
-  const showImage = viewMode === 'grid' && Boolean(trip.heroImageUrl)
+  const heroImageUrl = viewMode === 'grid' ? trip.heroImageUrl : undefined
+  const showImage = Boolean(heroImageUrl)
   const visibleTags = (trip.tags ?? trip.activityTags).filter(
     tag => tag.trim().toLowerCase() !== 'outdoor',
   )
@@ -66,12 +68,14 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
       tabIndex={0}
       aria-label={`Open details for ${trip.title}`}
     >
-      {showImage ? (
+      {heroImageUrl ? (
         <div className="relative aspect-[16/9] overflow-hidden">
-          <img
-            src={trip.heroImageUrl}
+          <Image
+            src={heroImageUrl}
             alt={trip.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />

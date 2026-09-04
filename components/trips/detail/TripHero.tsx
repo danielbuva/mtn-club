@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { ActivityTag, DifficultyTag } from '@/components/trips/TripTags'
@@ -76,10 +77,12 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
   return (
     <section className="overflow-hidden rounded-2xl border border-border/70">
       <div className="relative aspect-[16/9] bg-muted">
-        <img
+        <Image
           src={trip.heroImageUrl}
           alt={trip.title}
-          className="h-full w-full object-cover"
+          fill
+          sizes="(min-width: 1280px) 1280px, 100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
