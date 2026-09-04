@@ -1,13 +1,25 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
-<body style="margin:0;background:#F8F1DF;color:#211D18;font-family:Arial,sans-serif;line-height:1.6">
-  <main style="max-width:520px;margin:auto;padding:32px 24px">
-    <p style="margin:0 0 24px"><img src="{{ .SiteURL }}/email/club-wordmark-v1.png" width="256" height="141" alt="UNLV Mountain Club" style="display:block;width:256px;max-width:100%;height:auto;border:0;color:#211D18;font-size:18px;font-weight:bold"></p>
-    <h1 style="font-size:32px;line-height:1.1">Your verification code.</h1>
-    <p>Enter this code in Account settings to verify your email address:</p>
-    <p style="font-size:36px;font-weight:bold;letter-spacing:6px">{{ .Token }}</p>
-    <p>This code expires in one hour and can be used once. Don’t share it with anyone, including club leadership.</p>
-    <p>Verification is optional and doesn’t change your membership or access. If you didn’t request a code, ignore this email.</p>
-    <p>Need a hand? <a href="mailto:unlvmountainclub@gmail.com" style="color:#211D18">Contact the club</a>.</p>
-  </main>
+<body style="margin:0;padding:0;background-color:#F8F1DF">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F8F1DF" style="width:100%;border-collapse:collapse;background-color:#F8F1DF">
+    <tr>
+      <td align="center" bgcolor="#F8F1DF">
+        <!--[if mso]><table role="presentation" width="568" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:568px;margin:0 auto;border-collapse:collapse">
+          <tr>
+            <td align="left" bgcolor="#F8F1DF" style="padding:32px 24px;background-color:#F8F1DF;color:#211D18;font-family:Arial,sans-serif;font-size:16px;line-height:1.6;overflow-wrap:break-word">
+              <p style="margin:0 0 24px"><img src="{{ .SiteURL }}/email/club-wordmark-v1.png" width="256" height="141" alt="UNLV Mountain Club" style="display:block;width:256px;max-width:100%;height:auto;border:0;color:#211D18;font-size:18px;font-weight:bold"></p>
+              <h1 style="font-size:32px;line-height:1.1">Your verification code.</h1>
+              <p>Enter this code in Account settings to verify your email address:</p>
+              <p style="font-size:36px;font-weight:bold;letter-spacing:6px">{{ .Token }}</p>
+              <p>This code expires in one hour and can be used once. Don’t share it with anyone, including club leadership.</p>
+              <p>Verification is optional and doesn’t change your membership or access. If you didn’t request a code, ignore this email.</p>
+              <p>Need a hand? <a href="mailto:unlvmountainclub@gmail.com" style="color:#211D18">Contact the club</a>.</p>
+            </td>
+          </tr>
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+  </table>
 </body></html>
