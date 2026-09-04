@@ -1,3 +1,4 @@
+import { EventFloatingActions } from '@/components/events/event-floating-actions'
 import { LoadingField, LoadingValue } from './primitives'
 
 export function NewTripLoading() {
@@ -36,6 +37,7 @@ export function NewTripLoading() {
           <LoadingField label="Meeting location" knownValue="" />
         </div>
       </div>
+      <EventFloatingActions admin loading />
     </div>
   )
 }

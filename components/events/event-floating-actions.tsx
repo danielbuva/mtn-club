@@ -8,28 +8,33 @@ import { cn } from '@/lib/utils'
 
 export function EventFloatingActions({
   admin,
-  isSubmitting,
-  isSavingDraft,
+  isSubmitting = false,
+  isSavingDraft = false,
+  loading = false,
   onSaveDraft,
 }: {
   admin: boolean
-  isSubmitting: boolean
-  isSavingDraft: boolean
-  onSaveDraft: () => Promise<void>
+  isSubmitting?: boolean
+  isSavingDraft?: boolean
+  loading?: boolean
+  onSaveDraft?: () => Promise<void>
 }) {
   const menuOpen = useAdminMobileMenuOpen()
   const hidden = admin && menuOpen
-  const busy = isSubmitting || isSavingDraft
+  const busy = loading || isSubmitting || isSavingDraft || !onSaveDraft
 
   return (
-    <div inert={hidden} aria-hidden={hidden}>
+    <div data-editorial-surface inert={hidden} aria-hidden={hidden}>
       <ThumbNavigationBar
         ariaLabel="Trip actions"
         containerClassName={cn(
           'transition-[opacity,transform] duration-200 motion-reduce:transition-none',
-          admin ? 'bottom-20 lg:hidden' : 'md:hidden',
+          admin
+            ? 'right-[calc(max(1.25rem,env(safe-area-inset-right))+4.625rem)] justify-end px-0 pl-2 pb-[calc(max(1.75rem,env(safe-area-inset-bottom))+0.5rem)] lg:hidden'
+            : 'md:hidden',
           hidden && 'translate-y-6 opacity-0',
         )}
+        className={admin ? 'max-[360px]:[&_button]:px-2' : undefined}
       >
         <BackButton
           fallbackHref={admin ? '/admin/trips' : '/trips'}
