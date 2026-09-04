@@ -78,7 +78,7 @@ export function AdminViewFrame({
   return (
     <div
       className={cn(
-        'mx-auto w-full px-5 py-8 sm:px-8 lg:py-10',
+        'mx-auto w-full min-w-0 max-w-full overflow-x-clip px-5 py-8 sm:px-8 lg:py-10',
         view === 'settings' ? 'max-w-5xl' : 'max-w-7xl',
       )}
     >

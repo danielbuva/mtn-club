@@ -9,14 +9,17 @@ import {
 import { MembershipTabs } from '@/components/admin/membership/membership-tabs'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { buildMembershipAccessSnapshot } from '@/lib/admin/membership-access'
-import { buildMembershipReviewAccounts } from '@/lib/admin/membership-review'
+import {
+  buildMembershipReviewAccounts,
+  partitionMembershipReviewAccounts,
+} from '@/lib/admin/membership-review'
 import { listMembershipReviewAccounts } from '@/lib/admin/membership-review-accounts'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-type MembershipTab = 'review' | 'members' | 'exceptions'
+type MembershipTab = 'review' | 'members' | 'exceptions' | 'archive'
 
 const resolveDefaultTab = (tab: string | undefined): MembershipTab => {
-  if (tab === 'members' || tab === 'exceptions') return tab
+  if (tab === 'members' || tab === 'exceptions' || tab === 'archive') return tab
   return 'review'
 }
 
@@ -110,29 +113,39 @@ async function AdminMembershipPageContent({
     ]),
   )
 
-  const reviewAccounts = buildMembershipReviewAccounts(
-    applications,
-    accounts,
-    profileNames,
+  const reviewQueues = partitionMembershipReviewAccounts(
+    buildMembershipReviewAccounts(
+      applications,
+      accounts,
+      profileNames,
+      access.activeUserIds,
+    ),
+    payments,
   )
+
+  const reviewPanelPermissions = {
+    canConfirmGuardian: Boolean(
+      context.permissions['membership.confirm_guardian'],
+    ),
+    canReviewPayment: Boolean(
+      context.permissions['membership.confirm_payment'],
+    ),
+    canGrantComplimentary: Boolean(context.permissions['membership.update']),
+    isSuperAdmin: context.isSuperAdmin,
+  }
 
   return (
     <MembershipTabs
       defaultTab={resolveDefaultTab(tab)}
-      reviewCount={reviewAccounts.length}
+      reviewCount={reviewQueues.review.length}
       memberCount={memberships.length}
       exceptionCount={reviews.length}
+      archiveCount={reviewQueues.archived.length}
       review={
         <MembershipReviewPanel
-          applications={reviewAccounts}
+          applications={reviewQueues.review}
           payments={payments}
-          canConfirmGuardian={Boolean(
-            context.permissions['membership.confirm_guardian'],
-          )}
-          canReviewPayment={Boolean(
-            context.permissions['membership.confirm_payment'],
-          )}
-          isSuperAdmin={context.isSuperAdmin}
+          {...reviewPanelPermissions}
         />
       }
       members={
@@ -145,6 +158,14 @@ async function AdminMembershipPageContent({
         <MembershipExceptionsPanel
           reviews={reviews}
           profileNames={profileNames}
+        />
+      }
+      archive={
+        <MembershipReviewPanel
+          applications={reviewQueues.archived}
+          payments={payments}
+          emptyMessage="No rejected applications are archived."
+          {...reviewPanelPermissions}
         />
       }
     />

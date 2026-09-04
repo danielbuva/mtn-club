@@ -3,6 +3,7 @@ import test from 'node:test'
 import {
   buildMembershipReviewAccounts,
   getApplicantClaimTimestamp,
+  partitionMembershipReviewAccounts,
 } from '../lib/admin/membership-review.ts'
 
 const account = {
@@ -93,4 +94,45 @@ test('uses profile names and sorts newest accounts first', () => {
   )
   assert.equal(rows[0].full_name, 'New Member')
   assert.equal(rows[1].full_name, 'Account')
+})
+
+test('active members are removed from the membership review queue', () => {
+  const rows = buildMembershipReviewAccounts(
+    [],
+    [account],
+    new Map(),
+    new Set([account.id]),
+  )
+  assert.deepEqual(rows, [])
+})
+
+test('rejected decisions move accounts from review into the archive', () => {
+  const rows = buildMembershipReviewAccounts([], [account], new Map())
+  const queues = partitionMembershipReviewAccounts(rows, [
+    {
+      user_id: account.id,
+      status: 'rejected',
+      created_at: '2026-09-04T20:00:00Z',
+    },
+  ])
+  assert.deepEqual(queues.review, [])
+  assert.deepEqual(queues.archived, rows)
+})
+
+test('a newer payment claim restores an archived account to review', () => {
+  const rows = buildMembershipReviewAccounts([], [account], new Map())
+  const queues = partitionMembershipReviewAccounts(rows, [
+    {
+      user_id: account.id,
+      status: 'rejected',
+      created_at: '2026-09-04T20:00:00Z',
+    },
+    {
+      user_id: account.id,
+      status: 'claimed',
+      created_at: '2026-09-04T21:00:00Z',
+    },
+  ])
+  assert.deepEqual(queues.review, rows)
+  assert.deepEqual(queues.archived, [])
 })

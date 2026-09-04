@@ -35,6 +35,7 @@ export function CredentialsForm({
     Partial<Record<CredentialField, boolean>>
   >({})
   const [captchaToken, setCaptchaToken] = useState('')
+  const [age18OrOlder, setAge18OrOlder] = useState(false)
   const [captchaKey, setCaptchaKey] = useState(0)
   const actions = useAuthActions(mode, returnTo, () => {
     setCaptchaToken('')
@@ -61,7 +62,7 @@ export function CredentialsForm({
       if (input instanceof HTMLElement) input.focus()
       return
     }
-    await actions.submit(values, captchaToken)
+    await actions.submit(values, captchaToken, age18OrOlder)
   }
   if (actions.needsConfirmation)
     return (
@@ -79,7 +80,7 @@ export function CredentialsForm({
           variant="outline"
           className={authButtonClass}
           disabled={actions.pending !== null}
-          onClick={() => actions.oauth('google')}
+          onClick={() => actions.oauth('google', age18OrOlder)}
         >
           <span aria-hidden="true" className="text-lg font-bold">
             G
@@ -93,7 +94,7 @@ export function CredentialsForm({
           variant="outline"
           className={authButtonClass}
           disabled={actions.pending !== null}
-          onClick={() => actions.oauth('discord')}
+          onClick={() => actions.oauth('discord', age18OrOlder)}
         >
           {actions.pending === 'discord'
             ? 'Opening Discord…'
@@ -158,6 +159,18 @@ export function CredentialsForm({
                 Passwords match.
               </p>
             )}
+          {signup ? (
+            <label className="flex min-h-12 cursor-pointer items-center gap-3 border border-foreground/25 bg-background px-4 text-sm leading-6">
+              <input
+                type="checkbox"
+                name="age18OrOlder"
+                checked={age18OrOlder}
+                onChange={event => setAge18OrOlder(event.target.checked)}
+                className="size-4 shrink-0 accent-foreground"
+              />
+              <span>I am 18 years of age or older.</span>
+            </label>
+          ) : null}
           <AuthCaptcha
             key={captchaKey}
             action={mode}

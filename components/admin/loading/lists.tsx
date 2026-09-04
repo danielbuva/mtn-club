@@ -1,6 +1,6 @@
 'use client'
 
-import { Eye, Pencil } from 'lucide-react'
+import { ChevronDown, Eye, Pencil } from 'lucide-react'
 import { useAdminViewer } from '@/components/admin/admin-view-frame'
 import { Button } from '@/components/ui/button'
 import { AccountFilters } from '../accounts-filters'
@@ -46,56 +46,33 @@ export function TripsLoading() {
 }
 
 export function MembershipLoading() {
-  const viewer = useAdminViewer()
   return (
     <>
-      <LoadingTabs labels={['Applications', 'Active members', 'Exceptions']} />
+      <LoadingTabs
+        labels={[
+          'Membership review',
+          'Active members',
+          'Exceptions',
+          'Archive',
+        ]}
+      />
       <div className="mt-6 space-y-4">
         {[0, 1].map(row => (
-          <article key={row} className={`${panelClass} p-5`}>
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <LoadingValue className="h-7 w-40" />
-                <LoadingValue className="h-5 w-56" />
-                <LoadingValue className="mt-2 h-4 w-44" />
+          <article key={row} className={panelClass}>
+            <div className="flex min-h-[5.25rem] flex-col items-stretch gap-3 bg-[#E9DDC3]/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 dark:bg-secondary">
+              <div className="min-w-0">
+                <LoadingValue className="h-6 w-40 max-w-full" />
+                <LoadingValue className="mt-1 h-5 w-56 max-w-full" />
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex min-w-0 flex-wrap items-center gap-2 sm:shrink-0 sm:flex-nowrap">
                 <LoadingValue className="h-5 w-20 rounded-full" />
                 <LoadingValue className="h-5 w-32 rounded-full" />
+                <ChevronDown
+                  className="ml-auto size-4 shrink-0"
+                  aria-hidden="true"
+                />
               </div>
             </div>
-            <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-3">
-              {['Age', 'Guardian', 'Interests'].map(label => (
-                <div key={label}>
-                  <dt className="text-[#6A5146] dark:text-muted-foreground">
-                    {label}
-                  </dt>
-                  <dd>
-                    <LoadingValue className="h-5" />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <div className="mt-4 grid gap-2 border-l-2 border-[#211D18]/20 pl-3 text-xs text-[#6A5146] dark:border-border dark:text-muted-foreground">
-              <LoadingValue className="w-64 max-w-full" />
-              <p>
-                Payment decisions are shown to the applicant on their membership
-                page.
-              </p>
-            </div>
-            {viewer?.permissions['membership.confirm_payment'] ? (
-              <div className="mt-5 grid gap-3 border-t border-[#211D18]/10 pt-5 dark:border-border sm:grid-cols-[minmax(11rem,auto)_minmax(12rem,1fr)_auto]">
-                <div className="text-sm">
-                  Payment status
-                  <LoadingValue className="mt-2 h-10 w-full" />
-                </div>
-                <div className="text-sm">
-                  Internal note
-                  <LoadingValue className="mt-2 h-10 w-full" />
-                </div>
-                <LoadingValue className="h-9 w-24 self-end" />
-              </div>
-            ) : null}
           </article>
         ))}
       </div>

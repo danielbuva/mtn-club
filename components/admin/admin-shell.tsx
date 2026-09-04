@@ -87,7 +87,9 @@ export function AdminShell({
           </div>
         </aside>
 
-        <main className="min-h-screen pb-24 lg:pb-0 lg:pl-64">{children}</main>
+        <main className="min-h-screen min-w-0 max-w-full overflow-x-clip pb-24 lg:pb-0 lg:pl-64">
+          {children}
+        </main>
         <AdminMobileNavigation
           items={items}
           open={mobileMenuOpen}

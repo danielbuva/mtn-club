@@ -19,21 +19,23 @@ test('real managed test widget, email confirmation in another browser, and membe
 }) => {
   const email = testEmail()
   await page.goto('/membership-sign-up')
-  await expect(page).toHaveURL(
-    /\/auth\/sign-up\?returnTo=%2Fmembership-sign-up/,
-  )
+  await expect(page).toHaveURL(/\/membership-sign-up$/)
   await page.getByLabel('Email address', { exact: true }).fill(email)
   await page.getByLabel('Password', { exact: true }).fill(password)
   await page.getByLabel('Confirm password', { exact: true }).fill(password)
+  await page.getByLabel('Name', { exact: true }).fill('Isolated auth member')
+  await page.getByRole('radio', { name: 'I am 18 or older' }).check()
+  await page.getByRole('radio', { name: 'I have not paid yet' }).check()
+  await page.getByRole('checkbox', { name: 'Hiking', exact: true }).check()
   // Actual Cloudflare test widget: no mocked browser token or Auth endpoint.
   await expect(page.locator('input[name="captchaToken"]')).not.toHaveValue('', {
     timeout: 30000,
   })
   await page
-    .getByRole('button', { name: 'Create account', exact: true })
+    .getByRole('button', { name: 'Create account and submit', exact: true })
     .click()
   await expect(
-    page.getByRole('region', { name: 'Check your email' }),
+    page.getByRole('heading', { name: 'Check your email.' }),
   ).toBeVisible()
   const users = successful(await admin.auth.admin.listUsers()).users
   const user = remember(
@@ -51,16 +53,6 @@ test('real managed test widget, email confirmation in another browser, and membe
     await confirmed
       .getByRole('button', { name: 'Confirm and continue' })
       .click()
-    await expect(confirmed).toHaveURL(/\/membership-sign-up$/)
-    await confirmed
-      .getByLabel('Name', { exact: true })
-      .fill('Isolated auth member')
-    await confirmed.getByRole('radio', { name: 'I am 18 or older' }).check()
-    await confirmed.getByRole('radio', { name: 'I have not paid yet' }).check()
-    await confirmed
-      .getByRole('checkbox', { name: 'Hiking', exact: true })
-      .check()
-    await confirmed.getByRole('button', { name: /Submit/ }).click()
     await expect(confirmed).toHaveURL(/\/membership$/)
     const saved = await admin
       .from('membership_applications')

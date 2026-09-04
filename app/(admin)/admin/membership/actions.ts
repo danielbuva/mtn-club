@@ -7,6 +7,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 const uuidSchema = z.string().uuid()
 
+export type MembershipStatusActionState = {
+  status: 'idle' | 'success' | 'error'
+  message: string
+}
+
 export async function confirmGuardianConsentAction(formData: FormData) {
   const reviewer = await requireAdminCapability('membership.confirm_guardian')
   const applicantId = uuidSchema.parse(
@@ -44,37 +49,70 @@ export async function reviewZellePaymentAction(formData: FormData) {
   revalidatePath('/membership')
 }
 
-export async function setZellePaymentStatusAction(formData: FormData) {
-  const reviewer = await requireAdminCapability('membership.confirm_payment')
-  const applicantId = uuidSchema.parse(
-    String(formData.get('applicantId') ?? ''),
-  )
-  const desiredStatus = z
-    .enum(['pending', 'accepted', 'rejected'])
-    .parse(String(formData.get('paymentStatus') ?? ''))
-  const note = z
-    .string()
-    .trim()
-    .max(1000)
-    .parse(String(formData.get('note') ?? ''))
-  const databaseStatus =
-    desiredStatus === 'pending'
-      ? 'claimed'
-      : desiredStatus === 'accepted'
-        ? 'confirmed'
-        : 'rejected'
-  const admin = createAdminClient()
-  const { error } = await admin.rpc('set_zelle_membership_payment_status', {
-    p_user_id: applicantId,
-    p_reviewer_id: reviewer.userId,
-    p_desired_status: databaseStatus,
-    p_note: note || null,
-  })
-  if (error) throw error
-  revalidatePath('/admin')
-  revalidatePath('/admin/membership')
-  revalidatePath('/admin/accounts')
-  revalidatePath('/membership')
+export async function setZellePaymentStatusAction(
+  _previousState: MembershipStatusActionState,
+  formData: FormData,
+): Promise<MembershipStatusActionState> {
+  try {
+    const applicantId = uuidSchema.parse(
+      String(formData.get('applicantId') ?? ''),
+    )
+    const desiredStatus = z
+      .enum(['pending', 'accepted', 'rejected', 'complimentary'])
+      .parse(String(formData.get('paymentStatus') ?? ''))
+    const note = z
+      .string()
+      .trim()
+      .max(1000)
+      .parse(String(formData.get('note') ?? ''))
+    const reviewer = await requireAdminCapability(
+      desiredStatus === 'complimentary'
+        ? 'membership.update'
+        : 'membership.confirm_payment',
+    )
+    const admin = createAdminClient()
+    if (desiredStatus === 'complimentary') {
+      const reason =
+        z.string().trim().max(500).parse(note) ||
+        'Complimentary membership approved by an administrator.'
+      const { error } = await admin.rpc(
+        'grant_application_complimentary_membership',
+        {
+          p_actor_user_id: reviewer.userId,
+          p_user_id: applicantId,
+          p_reason: reason,
+        },
+      )
+      if (error) throw new Error(error.message)
+    } else {
+      const databaseStatus =
+        desiredStatus === 'pending'
+          ? 'claimed'
+          : desiredStatus === 'accepted'
+            ? 'confirmed'
+            : 'rejected'
+      const { error } = await admin.rpc('set_zelle_membership_payment_status', {
+        p_user_id: applicantId,
+        p_reviewer_id: reviewer.userId,
+        p_desired_status: databaseStatus,
+        p_note: note || null,
+      })
+      if (error) throw new Error(error.message)
+    }
+    revalidatePath('/admin')
+    revalidatePath('/admin/membership')
+    revalidatePath('/admin/accounts')
+    revalidatePath('/membership')
+    return { status: 'success', message: 'Membership status updated.' }
+  } catch (error: unknown) {
+    return {
+      status: 'error',
+      message:
+        error instanceof Error
+          ? error.message
+          : 'The membership status could not be updated. Please try again.',
+    }
+  }
 }
 
 export async function reverseZellePaymentAction(formData: FormData) {

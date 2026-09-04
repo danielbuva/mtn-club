@@ -2,6 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { captchaRequestError } from '@/lib/auth/captcha'
+import { authErrorMessage } from '@/lib/auth/errors'
+import { passwordError } from '@/lib/auth/password'
+import { emailConfirmationRedirect } from '@/lib/auth/return-to'
 import {
   encodeMembershipInterests,
   MEMBERSHIP_INTEREST_OPTIONS,
@@ -11,6 +15,8 @@ import { createClient } from '@/lib/supabase/server'
 
 export type MembershipSignUpActionState = {
   error: string | null
+  captchaResetKey: number
+  confirmationEmail: string | null
 }
 
 const normalizeText = (formData: FormData, name: string) =>
@@ -25,9 +31,14 @@ function splitName(fullName: string) {
 }
 
 export async function submitMembershipSignUp(
-  _previousState: MembershipSignUpActionState,
+  previousState: MembershipSignUpActionState,
   formData: FormData,
 ): Promise<MembershipSignUpActionState> {
+  const failure = (error: string, resetCaptcha = false) => ({
+    error,
+    captchaResetKey: previousState.captchaResetKey + (resetCaptcha ? 1 : 0),
+    confirmationEmail: null,
+  })
   const fullName = normalizeText(formData, 'fullName')
   const contactEmail = normalizeText(formData, 'contactEmail').toLowerCase()
   const ageStatus = normalizeText(formData, 'ageStatus')
@@ -38,23 +49,26 @@ export async function submitMembershipSignUp(
     .filter(Boolean)
   const otherInterest = normalizeText(formData, 'otherInterest')
   const experienceNotes = normalizeText(formData, 'experienceNotes')
+  const password = String(formData.get('password') ?? '')
+  const repeatPassword = String(formData.get('repeatPassword') ?? '')
+  const captchaToken = normalizeText(formData, 'captchaToken')
   const mailingListOptIn = formData.get('mailingListOptIn') === 'on'
 
   if (fullName.length < 2 || fullName.length > 120) {
-    return { error: 'Enter your full name.' }
+    return failure('Enter your full name.')
   }
   if (
     contactEmail.length < 3 ||
     contactEmail.length > 320 ||
     !contactEmail.includes('@')
   ) {
-    return { error: 'Enter a valid contact email.' }
+    return failure('Enter a valid contact email.')
   }
   if (ageStatus !== 'adult' && ageStatus !== 'minor') {
-    return { error: 'Choose the age option that applies to you.' }
+    return failure('Choose the age option that applies to you.')
   }
   if (duesStatus !== 'paid' && duesStatus !== 'not_yet') {
-    return { error: 'Tell us whether you have sent the annual dues.' }
+    return failure('Tell us whether you have sent the annual dues.')
   }
 
   const allowedInterests = new Set<string>([
@@ -66,7 +80,7 @@ export async function submitMembershipSignUp(
     interestChoices.length > MEMBERSHIP_INTEREST_OPTIONS.length + 1 ||
     interestChoices.some(interest => !allowedInterests.has(interest))
   ) {
-    return { error: 'Choose at least one outdoor activity.' }
+    return failure('Choose at least one outdoor activity.')
   }
 
   const selectedInterests = interestChoices.filter(
@@ -74,17 +88,17 @@ export async function submitMembershipSignUp(
   )
   if (interestChoices.includes('Other')) {
     if (otherInterest.length < 2 || otherInterest.length > 120) {
-      return { error: 'Tell us which other outdoor activity interests you.' }
+      return failure('Tell us which other outdoor activity interests you.')
     }
     selectedInterests.push(otherInterest)
   }
   const uniqueInterests = [...new Set(selectedInterests)]
   if (uniqueInterests.length === 0) {
-    return { error: 'Choose at least one outdoor activity.' }
+    return failure('Choose at least one outdoor activity.')
   }
   const primaryInterest = encodeMembershipInterests(uniqueInterests)
   if (experienceNotes.length > 2000) {
-    return { error: 'Keep the experience note under 2,000 characters.' }
+    return failure('Keep the experience note under 2,000 characters.')
   }
 
   let admin: ReturnType<typeof createAdminClient>
@@ -95,37 +109,84 @@ export async function submitMembershipSignUp(
       'Membership sign-up is missing its server configuration:',
       error,
     )
-    return {
-      error:
-        'Membership sign-up is temporarily unavailable. Please try again later.',
-    }
+    return failure(
+      'Membership sign-up is temporarily unavailable. Please try again later.',
+    )
   }
 
-  // Account creation is handled by the shared CAPTCHA-protected auth journey.
-  // This action only writes membership data for the verified current session.
   const supabase = await createClient()
   const {
-    data: { user },
-    error: authError,
+    data: { user: signedInUser },
   } = await supabase.auth.getUser()
-  if (authError || !user || user.email?.toLowerCase() !== contactEmail)
-    return {
-      error:
+  let userId = signedInUser?.id ?? null
+  let requiresConfirmation = false
+
+  if (signedInUser) {
+    if (signedInUser.email?.toLowerCase() !== contactEmail) {
+      return failure(
         'Sign in again with the account shown on this form before submitting.',
+      )
     }
-  const userId = user.id
+  } else {
+    const passwordMessage = passwordError(password)
+    if (passwordMessage) return failure(passwordMessage)
+    if (password !== repeatPassword)
+      return failure('The passwords do not match.')
+    const captchaMessage = captchaRequestError(captchaToken)
+    if (captchaMessage) return failure(captchaMessage, true)
+
+    const configuredOrigin = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+    const signUpResult = await supabase.auth.signUp({
+      email: contactEmail,
+      password,
+      options: {
+        captchaToken,
+        ...(configuredOrigin
+          ? {
+              emailRedirectTo: emailConfirmationRedirect(
+                configuredOrigin,
+                '/membership-sign-up',
+              ),
+            }
+          : {}),
+        ...(ageStatus === 'adult' ? { data: { age_18_or_older: true } } : {}),
+      },
+    })
+    if (signUpResult.error)
+      return failure(authErrorMessage(signUpResult.error), true)
+    if (!signUpResult.data.user)
+      return failure(
+        'We could not create your account. Check your connection and try again.',
+        true,
+      )
+    if (!signUpResult.data.session) {
+      if ((signUpResult.data.user.identities?.length ?? 0) === 0) {
+        return failure(
+          'If you already have an account, sign in using your usual method or reset your password. Otherwise, check your email to continue.',
+          true,
+        )
+      }
+      requiresConfirmation = true
+    }
+    userId = signUpResult.data.user.id
+  }
+
+  if (!userId)
+    return failure(
+      'We could not verify your account. Check your connection and try again.',
+      true,
+    )
   const existing = await admin
     .from('membership_applications')
     .select('user_id')
     .eq('user_id', userId)
     .maybeSingle()
   if (existing.error)
-    return { error: 'We could not check your application. Please try again.' }
+    return failure('We could not check your application. Please try again.')
   if (existing.data)
-    return {
-      error:
-        'An application is already on file. Open Membership status to review it or contact club support.',
-    }
+    return failure(
+      'An application is already on file. Open Membership status to review it or contact club support.',
+    )
 
   const duesPaymentClaimed = duesStatus === 'paid'
   const guardianConsent = ageStatus === 'adult' ? 'not_required' : 'pending'
@@ -144,13 +205,14 @@ export async function submitMembershipSignUp(
       'Membership dues settings could not be loaded:',
       duesSettings.error,
     )
-    return { error: 'We could not start your payment claim. Please try again.' }
+    return failure('We could not start your payment claim. Please try again.')
   }
 
   const [
     profileResult,
     membershipResult,
     applicationResult,
+    ageDeclarationResult,
     mailingResult,
     mailingConsentResult,
     zelleResult,
@@ -185,6 +247,16 @@ export async function submitMembershipSignUp(
       confirmed_by: null,
       membership_access_override_id: null,
     }),
+    ageStatus === 'adult'
+      ? admin.from('account_age_declarations').upsert(
+          {
+            user_id: userId,
+            is_18_or_older: true,
+            source: 'membership_application',
+          },
+          { onConflict: 'user_id', ignoreDuplicates: true },
+        )
+      : Promise.resolve({ error: null }),
     mailingListOptIn
       ? admin.from('mailing_list_subscriptions').upsert(
           {
@@ -222,6 +294,7 @@ export async function submitMembershipSignUp(
     profileResult.error ||
     membershipResult.error ||
     applicationResult.error ||
+    ageDeclarationResult.error ||
     mailingResult.error ||
     mailingConsentResult.error ||
     zelleResult.error
@@ -230,15 +303,15 @@ export async function submitMembershipSignUp(
       profile: profileResult.error,
       membership: membershipResult.error,
       application: applicationResult.error,
+      ageDeclaration: ageDeclarationResult.error,
       mailingList: mailingResult.error,
       mailingConsent: mailingConsentResult.error,
       zelle: zelleResult.error,
     })
     // Never roll back a form failure by deleting the member's auth account.
-    return {
-      error:
-        'Your account is safe, but part of the application could not be saved. Check Membership status before trying again, or contact club support.',
-    }
+    return failure(
+      'Your account is safe, but part of the application could not be saved. Check Membership status before trying again, or contact club support.',
+    )
   }
 
   const { error: activityError } = await admin
@@ -264,5 +337,12 @@ export async function submitMembershipSignUp(
   }
 
   revalidatePath('/membership')
+  if (requiresConfirmation) {
+    return {
+      error: null,
+      captchaResetKey: previousState.captchaResetKey + 1,
+      confirmationEmail: contactEmail,
+    }
+  }
   redirect('/membership')
 }

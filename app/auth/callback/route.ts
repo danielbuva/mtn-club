@@ -44,6 +44,10 @@ export async function GET(request: NextRequest) {
           provider,
           outcome: 'signed-in',
         })
+      if (!error && data.user && params.get('age18') === '1') {
+        const declaration = await supabase.rpc('declare_my_age_18_or_older')
+        if (declaration.error) failed = true
+      }
     } catch {
       failed = true
     }

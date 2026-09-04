@@ -25,17 +25,26 @@ export type MembershipReviewAccount = Omit<
   status: Application['status'] | 'account'
 }
 
+type MembershipReviewPayment = Pick<
+  Database['public']['Tables']['membership_zelle_payments']['Row'],
+  'user_id' | 'status' | 'created_at'
+>
+
 type Account = { id: string; email?: string; created_at: string }
 
 export function buildMembershipReviewAccounts(
   applications: Application[],
   accounts: Account[],
   profileNames: Map<string, string | null>,
+  activeUserIds: ReadonlySet<string> = new Set(),
 ): MembershipReviewAccount[] {
   const rows = new Map<string, MembershipReviewAccount>(
-    applications.map(application => [application.user_id, application]),
+    applications
+      .filter(application => !activeUserIds.has(application.user_id))
+      .map(application => [application.user_id, application]),
   )
   for (const account of accounts) {
+    if (activeUserIds.has(account.id)) continue
     if (rows.has(account.id)) continue
     rows.set(account.id, {
       user_id: account.id,
@@ -67,4 +76,32 @@ export function getApplicantClaimTimestamp(
     payment?.claimed_at ??
     (application.dues_payment_claimed ? application.dues_claimed_at : null)
   )
+}
+
+export function partitionMembershipReviewAccounts(
+  accounts: MembershipReviewAccount[],
+  payments: MembershipReviewPayment[],
+): {
+  review: MembershipReviewAccount[]
+  archived: MembershipReviewAccount[]
+} {
+  const latestPaymentByUser = new Map<string, MembershipReviewPayment>()
+  for (const payment of payments) {
+    const current = latestPaymentByUser.get(payment.user_id)
+    if (!current || payment.created_at > current.created_at) {
+      latestPaymentByUser.set(payment.user_id, payment)
+    }
+  }
+
+  const review: MembershipReviewAccount[] = []
+  const archived: MembershipReviewAccount[] = []
+  for (const account of accounts) {
+    const destination =
+      latestPaymentByUser.get(account.user_id)?.status === 'rejected'
+        ? archived
+        : review
+    destination.push(account)
+  }
+
+  return { review, archived }
 }

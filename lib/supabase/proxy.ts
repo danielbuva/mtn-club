@@ -1,5 +1,18 @@
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
+import { isStaleAuthSessionError } from '@/lib/auth/session-errors'
+
+const clearStaleAuthCookies = (
+  request: NextRequest,
+  response: NextResponse,
+) => {
+  for (const cookie of request.cookies.getAll()) {
+    if (!cookie.name.startsWith('sb-') || !cookie.name.includes('-auth-token'))
+      continue
+    request.cookies.delete(cookie.name)
+    response.cookies.set(cookie.name, '', { maxAge: 0, path: '/' })
+  }
+}
 
 export async function updateSession(request: NextRequest) {
   // Overwrite any caller-provided value; use this request, never a referrer.
@@ -48,8 +61,15 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  const { data } = await supabase.auth.getClaims()
-  const _user = data?.claims
+  try {
+    const { error } = await supabase.auth.getClaims()
+    if (error && isStaleAuthSessionError(error)) {
+      clearStaleAuthCookies(request, supabaseResponse)
+    }
+  } catch (error: unknown) {
+    if (!isStaleAuthSessionError(error)) throw error
+    clearStaleAuthCookies(request, supabaseResponse)
+  }
 
   // if (!user && !request.nextUrl.pathname.startsWith('/auth')) {
   //   const url = request.nextUrl.clone()

@@ -37,6 +37,12 @@ export function AuthFormSkeleton({
         </div>
       ))}
       {mode === 'login' && <div className="ml-auto h-11 w-32 bg-muted/30" />}
+      {mode === 'signup' ? (
+        <div className="flex min-h-12 items-center gap-3 border border-foreground/25 bg-background px-4 text-sm leading-6">
+          <span className="size-4 shrink-0 border border-foreground/40" />
+          <span>I am 18 years of age or older.</span>
+        </div>
+      ) : null}
       {mode !== 'password' && (
         <div className="h-36 border bg-muted/30 min-[332px]:h-16" />
       )}

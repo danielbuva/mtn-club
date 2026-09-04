@@ -9,13 +9,17 @@ declare
   v_account uuid := gen_random_uuid();
   v_minor uuid := gen_random_uuid();
   v_application uuid := gen_random_uuid();
+  v_complimentary uuid := gen_random_uuid();
+  v_complimentary_account uuid := gen_random_uuid();
   v_payment uuid;
 begin
   insert into auth.users (id, email, email_confirmed_at) values
     (v_reviewer, v_reviewer || '@example.com', now()),
     (v_account, v_account || '@example.com', now()),
     (v_minor, v_minor || '@example.com', now()),
-    (v_application, v_application || '@example.com', now());
+    (v_application, v_application || '@example.com', now()),
+    (v_complimentary, v_complimentary || '@example.com', now()),
+    (v_complimentary_account, v_complimentary_account || '@example.com', now());
   -- This fixture also runs against a schema-only sandbox with no seeded roles.
   insert into public.admin_roles (id, key, name, is_super_admin)
     values (v_role, 'test_' || replace(v_role::text, '-', '_'), 'Test reviewer', true);
@@ -69,7 +73,40 @@ begin
     primary_interest, dues_payment_claimed
   ) values
     (v_minor, 'Minor applicant', v_minor || '@example.com', 'minor', 'pending', 'Hiking', false),
-    (v_application, 'Adult applicant', v_application || '@example.com', 'adult', 'not_required', 'Hiking', false);
+    (v_application, 'Adult applicant', v_application || '@example.com', 'adult', 'not_required', 'Hiking', false),
+    (v_complimentary, 'Complimentary applicant', v_complimentary || '@example.com', 'adult', 'not_required', 'Hiking', false);
+  perform public.grant_application_complimentary_membership(
+    v_reviewer, v_complimentary, 'Officer-approved scholarship'
+  );
+  if not exists (
+    select 1 from public.membership_applications
+    where user_id = v_complimentary and status = 'confirmed'
+      and membership_access_override_id is not null
+      and not dues_payment_claimed
+  ) or not exists (
+    select 1 from public.memberships
+    where user_id = v_complimentary and status = 'active'
+  ) or exists (
+    select 1 from public.membership_zelle_payments
+    where user_id = v_complimentary
+  ) then raise exception 'Complimentary membership was not completed independently of payment'; end if;
+  perform public.grant_application_complimentary_membership(
+    v_reviewer, v_complimentary, 'Officer-approved scholarship'
+  );
+  if (
+    select count(*) from public.membership_access_overrides
+    where user_id = v_complimentary and revoked_at is null
+  ) <> 1 then raise exception 'Repeated complimentary grant duplicated access'; end if;
+  perform public.grant_application_complimentary_membership(
+    v_reviewer, v_complimentary_account, 'Account-only scholarship'
+  );
+  perform public.grant_application_complimentary_membership(
+    v_reviewer, v_complimentary_account, 'Account-only scholarship retry'
+  );
+  if (
+    select count(*) from public.membership_access_overrides
+    where user_id = v_complimentary_account and revoked_at is null
+  ) <> 1 then raise exception 'Account-only retry duplicated complimentary access'; end if;
   perform public.set_zelle_membership_payment_status(
     v_minor, v_reviewer, 'confirmed', null
   );

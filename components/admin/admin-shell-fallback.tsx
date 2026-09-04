@@ -47,7 +47,7 @@ export function AdminShellFallback() {
           <LoadingValue className="h-4 w-20" />
         </div>
       </aside>
-      <main className="min-h-screen pb-24 lg:pb-0 lg:pl-64">
+      <main className="min-h-screen min-w-0 max-w-full overflow-x-clip pb-24 lg:pb-0 lg:pl-64">
         <Suspense
           fallback={
             <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">

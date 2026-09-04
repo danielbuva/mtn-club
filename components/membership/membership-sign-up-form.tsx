@@ -8,6 +8,7 @@ import {
 } from '@/app/(landing)/membership-sign-up/actions'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { PublicShell } from '@/components/landing/public-shell'
+import { MembershipAccountFields } from '@/components/membership/membership-account-fields'
 import {
   MembershipAuthControls,
   MembershipPendingFields,
@@ -18,7 +19,11 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MEMBERSHIP_INTEREST_OPTIONS } from '@/lib/memberships/application-options'
 
-const initialState: MembershipSignUpActionState = { error: null }
+const initialState: MembershipSignUpActionState = {
+  error: null,
+  captchaResetKey: 0,
+  confirmationEmail: null,
+}
 
 const radioCardClass =
   'flex cursor-pointer items-start gap-3 border border-[#211D18]/35 p-4 transition focus-within:ring-2 focus-within:ring-[#211D18] focus-within:ring-offset-2 focus-within:ring-offset-[#F8F1DF] has-[:checked]:border-[#211D18] has-[:checked]:bg-[#E9DDC3]'
@@ -27,7 +32,7 @@ const selectionInputClass = 'mt-1 size-4 shrink-0 accent-[#211D18] outline-none'
 const formControlClass =
   'h-12 rounded-none border-[#211D18]/35 bg-transparent shadow-none focus-visible:ring-2 focus-visible:ring-[#211D18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F1DF]'
 
-export function MembershipSignUpForm({ email }: { email: string }) {
+export function MembershipSignUpForm({ email }: { email: string | null }) {
   const [state, formAction] = useActionState(
     submitMembershipSignUp,
     initialState,
@@ -38,6 +43,37 @@ export function MembershipSignUpForm({ email }: { email: string }) {
   useEffect(() => {
     if (state.error) errorRef.current?.focus()
   }, [state.error])
+
+  if (state.confirmationEmail) {
+    return (
+      <PublicShell>
+        <section className="public-page-top px-5 pb-16 sm:px-8 sm:pb-24">
+          <section
+            aria-live="polite"
+            className="mx-auto max-w-2xl border border-[#211D18]/25 bg-[#E9DDC3] p-6 sm:p-8"
+          >
+            <p className="font-brand text-sm uppercase tracking-[0.2em] text-[#6A5146]">
+              Application received
+            </p>
+            <h1 className="mt-3 font-brand text-4xl uppercase sm:text-5xl">
+              Check your email.
+            </h1>
+            <p className="mt-5 leading-7 text-[#211D18]/75">
+              We saved your membership application and sent a confirmation to{' '}
+              <strong>{state.confirmationEmail}</strong>. Confirm the address,
+              then sign in to see your membership status.
+            </p>
+            <Link
+              href={`/auth/login?returnTo=${encodeURIComponent('/membership')}`}
+              className="mt-6 inline-flex min-h-12 items-center bg-[#211D18] px-6 font-semibold text-[#FFECA2] outline-none focus-visible:ring-2 focus-visible:ring-[#211D18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F1DF]"
+            >
+              Sign in after confirming
+            </Link>
+          </section>
+        </section>
+      </PublicShell>
+    )
+  }
 
   return (
     <PublicShell>
@@ -50,15 +86,27 @@ export function MembershipSignUpForm({ email }: { email: string }) {
           <h1 className="mt-3 max-w-3xl font-brand text-5xl uppercase leading-[0.9] sm:text-7xl">
             Membership sign up.
           </h1>
-          <p className="mt-5 text-base leading-6 text-[#211D18]/70">
-            Signed in as {email}.{' '}
-            <Link
-              href="/profile/user/account#sign-in-methods"
-              className="font-semibold text-[#211D18] underline decoration-[#211D18]/35 underline-offset-4"
-            >
-              Account settings
-            </Link>
-          </p>
+          {email ? (
+            <p className="mt-5 text-base leading-6 text-[#211D18]/70">
+              Signed in as {email}.{' '}
+              <Link
+                href="/profile/user/account#sign-in-methods"
+                className="font-semibold text-[#211D18] underline decoration-[#211D18]/35 underline-offset-4"
+              >
+                Account settings
+              </Link>
+            </p>
+          ) : (
+            <p className="mt-5 text-base leading-6 text-[#211D18]/70">
+              Already have an account?{' '}
+              <Link
+                href={`/auth/login?returnTo=${encodeURIComponent('/membership-sign-up')}`}
+                className="font-semibold text-[#211D18] underline decoration-[#211D18]/35 underline-offset-4"
+              >
+                Sign in first.
+              </Link>
+            </p>
+          )}
 
           <ZellePaymentStep />
 
@@ -94,11 +142,19 @@ export function MembershipSignUpForm({ email }: { email: string }) {
             className="mt-8 space-y-10"
           >
             <MembershipPendingFields>
-              <input type="hidden" name="contactEmail" value={email} />
-              <p className="text-sm leading-6 text-[#211D18]/65">
-                Your application belongs to your signed-in account. You won’t
-                need another account or password.
-              </p>
+              {email ? (
+                <>
+                  <input type="hidden" name="contactEmail" value={email} />
+                  <p className="text-sm leading-6 text-[#211D18]/65">
+                    Your application belongs to your signed-in account. You
+                    won’t need another account or password.
+                  </p>
+                </>
+              ) : (
+                <MembershipAccountFields
+                  captchaResetKey={state.captchaResetKey}
+                />
+              )}
 
               <fieldset className="grid gap-5 border-t border-[#211D18]/20 pt-7">
                 <legend className="font-brand text-3xl uppercase">
@@ -288,7 +344,7 @@ export function MembershipSignUpForm({ email }: { email: string }) {
               )}
 
               <div className="flex flex-wrap items-center gap-4 border-t border-[#211D18]/20 pt-7">
-                <MembershipAuthControls />
+                <MembershipAuthControls createsAccount={!email} />
                 <Link
                   href="/membership"
                   className="text-sm font-semibold underline underline-offset-4"

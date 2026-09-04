@@ -41,19 +41,22 @@ export function MobileSettingsHeader({
   }
 
   return (
-    <div className="sticky top-16 z-20 -mx-4 border-b border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1"
-          onClick={handleBack}
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Settings
-        </Button>
-        <span className="text-sm font-semibold text-foreground">{title}</span>
+    <>
+      <div className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-1"
+            onClick={handleBack}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Settings
+          </Button>
+          <span className="text-sm font-semibold text-foreground">{title}</span>
+        </div>
       </div>
-    </div>
+      <div className="h-[3.75rem] md:hidden" aria-hidden="true" />
+    </>
   )
 }

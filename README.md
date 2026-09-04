@@ -157,11 +157,14 @@ verifying that exact migration's schema changes are already present.
 `/admin/membership` includes all auth accounts (including accounts without a
 profile or membership application). New accounts start with payment pending.
 An authorized payment reviewer can confirm dues to grant the existing 12-month
-membership term. Applications identifying a minor still require guardian consent.
-Existing applications and account creation flows remain available.
+membership term or grant documented complimentary access without creating a
+payment record. Applications identifying a minor still require guardian consent.
+Rejected reviews move to the Archive tab and return to the active queue after a
+new payment claim or an administrator reopens them.
 
-Apply `supabase/migrations/202609040001_account_membership_review.sql` before
-releasing this change. No new environment variables are required. The migration
-also allows confirmation when an applicant has not personally reported payment.
+Apply the `202609040001` through `202609040007` membership migrations before
+releasing this change. No new environment variables are required. The migrations
+also allow confirmation when an applicant has not personally reported payment,
+record optional age declarations, and make complimentary grants retry-safe.
 Database regression checks are in `tests/account-membership-review.sql`; run them
 against a disposable database with the migrations applied. The fixtures roll back.

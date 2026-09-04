@@ -67,14 +67,14 @@ export function LoadingField({
 
 export function LoadingTabs({ labels }: { labels: string[] }) {
   return (
-    <div className="mt-8 flex gap-1 overflow-x-auto border-b border-[#211D18]/15 dark:border-border">
+    <div className="mt-8 grid min-w-0 grid-cols-2 gap-0 overflow-hidden border-b border-[#211D18]/15 sm:flex sm:gap-1 sm:overflow-x-auto dark:border-border">
       {labels.map(label => (
         <div
           key={label}
-          className="flex h-11 shrink-0 items-center gap-2 px-4 text-sm font-medium"
+          className="flex min-h-12 min-w-0 items-center justify-center gap-1 px-1.5 py-2 text-center text-sm leading-tight font-medium sm:h-11 sm:min-h-0 sm:shrink-0 sm:gap-2 sm:px-4 sm:py-1"
         >
           {label}
-          <LoadingValue className="h-5 w-6 rounded-full" />
+          <LoadingValue className="h-5 w-5 shrink-0 rounded-full sm:w-6" />
         </div>
       ))}
     </div>

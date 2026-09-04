@@ -96,17 +96,32 @@ test('account settings bind linking to the current user and handle cancellation 
   await request.post('http://127.0.0.1:54399/test/reset-identities')
 })
 
-test('membership signup uses the shared protected authentication journey', async ({
+test('membership signup keeps account creation inside the protected application', async ({
   page,
 }) => {
   await page.goto('/membership-sign-up')
-  await expect(page).toHaveURL(
-    'http://127.0.0.1:3100/auth/sign-up?returnTo=%2Fmembership-sign-up',
-  )
+  await expect(page).toHaveURL('http://127.0.0.1:3100/membership-sign-up')
+  await expect(page.getByLabel('Email address')).toBeVisible()
+  await expect(page.getByLabel('Password', { exact: true })).toBeVisible()
   await expect(
     page.getByRole('button', { name: 'Continue with Google' }),
   ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Continue with Discord' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Create account and submit' }),
+  ).toBeVisible()
   await expect(page.getByText('Security check complete')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Continue with Google' }).click()
+  await expect(page).toHaveURL(url => url.pathname === '/auth/v1/authorize')
+  const callback = new URL(
+    new URL(page.url()).searchParams.get('redirect_to') ?? '',
+  )
+  expect(callback.pathname).toBe('/auth/callback')
+  expect(callback.searchParams.get('returnTo')).toBe('/membership-sign-up')
+  expect(callback.searchParams.get('provider')).toBe('google')
 })
 
 test('a signed-in arrival offers dismissible methods without losing the destination', async ({

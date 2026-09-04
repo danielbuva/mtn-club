@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_age_declarations: {
+        Row: {
+          declared_at: string
+          is_18_or_older: boolean
+          source: string
+          user_id: string
+        }
+        Insert: {
+          declared_at?: string
+          is_18_or_older: boolean
+          source?: string
+          user_id: string
+        }
+        Update: {
+          declared_at?: string
+          is_18_or_older?: boolean
+          source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       activities: {
         Row: {
           created_at: string
@@ -1637,6 +1658,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      declare_my_age_18_or_older: { Args: never; Returns: undefined }
       activate_confirmed_zelle_membership: {
         Args: { p_user_id: string }
         Returns: boolean
@@ -1859,6 +1881,14 @@ export type Database = {
           p_desired_status: string
           p_note?: string | null
           p_reviewer_id: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      grant_application_complimentary_membership: {
+        Args: {
+          p_actor_user_id: string
+          p_reason: string
           p_user_id: string
         }
         Returns: string

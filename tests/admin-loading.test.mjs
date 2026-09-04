@@ -14,6 +14,29 @@ test('trip creation fallback uses the real floating controls in a disabled loadi
   assert.match(controls, /useAdminMobileMenuOpen\(\)/)
 })
 
+test('membership fallback matches collapsed person summaries', () => {
+  const loading = source('components/admin/loading/lists.tsx')
+  const tabs = source('components/admin/membership/membership-tabs.tsx')
+  const primitives = source('components/admin/loading/primitives.tsx')
+  for (const label of [
+    'Membership review',
+    'Active members',
+    'Exceptions',
+    'Archive',
+  ]) {
+    assert.ok(loading.includes(`'${label}'`))
+  }
+  assert.match(loading, /min-h-\[5\.25rem\]/)
+  assert.match(loading, /<ChevronDown\s+className="ml-auto size-4 shrink-0"/)
+  assert.doesNotMatch(loading, /Payment decisions are shown to the applicant/)
+  assert.match(tabs, /grid-cols-2/)
+  assert.match(primitives, /grid-cols-2/)
+  assert.match(
+    source('components/admin/membership/membership-review-panel.tsx'),
+    /<h2 className="break-all text-lg font-semibold">/,
+  )
+})
+
 test('sidebar identity fallback has no extra gap shifting the public-site link', () => {
   const shell = source('components/admin/admin-shell-fallback.tsx')
   assert.match(

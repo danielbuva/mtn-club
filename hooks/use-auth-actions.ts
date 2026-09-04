@@ -18,7 +18,11 @@ export function useAuthActions(
   const [error, setError] = useState<string | null>(null)
   const [needsConfirmation, setNeedsConfirmation] = useState(false)
   const busy = useRef(false)
-  async function submit(values: CredentialValues, captchaToken: string) {
+  async function submit(
+    values: CredentialValues,
+    captchaToken: string,
+    age18OrOlder = false,
+  ) {
     if (busy.current) return
     const captchaError = captchaRequestError(captchaToken)
     if (captchaError) {
@@ -39,6 +43,9 @@ export function useAuthActions(
             window.location.origin,
             returnTo,
           ),
+          ...(mode === 'signup' && age18OrOlder
+            ? { data: { age_18_or_older: true } }
+            : {}),
         },
       }
       const result =
@@ -62,7 +69,7 @@ export function useAuthActions(
     busy.current = false
     setPending(null)
   }
-  async function oauth(provider: 'google' | 'discord') {
+  async function oauth(provider: 'google' | 'discord', age18OrOlder = false) {
     if (busy.current) return
     busy.current = true
     setPending(provider)
@@ -71,6 +78,8 @@ export function useAuthActions(
       const callback = new URL('/auth/callback', window.location.origin)
       callback.searchParams.set('returnTo', returnTo)
       callback.searchParams.set('provider', provider)
+      if (mode === 'signup' && age18OrOlder)
+        callback.searchParams.set('age18', '1')
       const result = await createClient().auth.signInWithOAuth({
         provider,
         options: { redirectTo: callback.toString(), skipBrowserRedirect: true },
