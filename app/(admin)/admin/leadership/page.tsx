@@ -1,5 +1,13 @@
-import { ChevronDown, ShieldCheck, UserRoundCheck } from 'lucide-react'
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { ChevronDown, UserRoundCheck } from 'lucide-react'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
+import {
+  roleCardClass,
+  roleSummaryClass,
+  rosterCardClass,
+  rosterLabelClass,
+} from '@/components/admin/leadership-styles'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,7 +15,7 @@ import { requireAdminCapability } from '@/lib/admin/auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { saveRosterEntryAction, setRoleCapabilityAction } from './actions'
 
-export default async function AdminLeadershipPage() {
+async function AdminLeadershipPageContent() {
   const context = await requireAdminCapability('leadership.read')
   const admin = createAdminClient()
   const [roles, capabilities, grants, hosts, authUsers] = await Promise.all([
@@ -40,19 +48,7 @@ export default async function AdminLeadershipPage() {
   )
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Leadership & access"
-        description="Maintain the public roster and control exactly what each leadership role can do."
-        actions={
-          context.isSuperAdmin ? (
-            <Badge>
-              <ShieldCheck className="size-3" /> Super Admin controls enabled
-            </Badge>
-          ) : null
-        }
-      />
-
+    <>
       <section className="mt-8">
         <div className="flex items-end justify-between gap-4">
           <div>
@@ -68,12 +64,12 @@ export default async function AdminLeadershipPage() {
             <form
               key={host.id}
               action={saveRosterEntryAction}
-              className="grid gap-3 border border-[#211D18]/15 bg-white/45 p-5 dark:border-border dark:bg-card sm:grid-cols-2"
+              className={rosterCardClass}
             >
               <input type="hidden" name="hostId" value={host.id} />
               <label
                 htmlFor={`host-name-${host.id}`}
-                className="text-xs font-semibold uppercase tracking-wide"
+                className={rosterLabelClass}
               >
                 Public name
                 <Input
@@ -86,7 +82,7 @@ export default async function AdminLeadershipPage() {
               </label>
               <label
                 htmlFor={`host-title-${host.id}`}
-                className="text-xs font-semibold uppercase tracking-wide"
+                className={rosterLabelClass}
               >
                 Title
                 <Input
@@ -99,7 +95,7 @@ export default async function AdminLeadershipPage() {
               </label>
               <label
                 htmlFor={`host-role-${host.id}`}
-                className="text-xs font-semibold uppercase tracking-wide"
+                className={rosterLabelClass}
               >
                 Role
                 <select
@@ -119,7 +115,7 @@ export default async function AdminLeadershipPage() {
               </label>
               <label
                 htmlFor={`host-order-${host.id}`}
-                className="text-xs font-semibold uppercase tracking-wide"
+                className={rosterLabelClass}
               >
                 Display order
                 <Input
@@ -229,11 +225,8 @@ export default async function AdminLeadershipPage() {
           {(roles.data ?? [])
             .filter(role => !role.is_super_admin)
             .map(role => (
-              <details
-                key={role.id}
-                className="group overflow-hidden border border-[#211D18]/15 bg-white/45 dark:border-border dark:bg-card"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between bg-[#E9DDC3]/70 px-5 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-secondary [&::-webkit-details-marker]:hidden">
+              <details key={role.id} className={roleCardClass}>
+                <summary className={roleSummaryClass}>
                   <h3 className="font-semibold">{role.name}</h3>
                   <span className="flex items-center gap-3">
                     <Badge variant="outline">{role.key}</Badge>
@@ -289,6 +282,16 @@ export default async function AdminLeadershipPage() {
             ))}
         </div>
       </section>
-    </div>
+    </>
+  )
+}
+
+export default function AdminLeadershipPage() {
+  return (
+    <AdminViewFrame view="leadership">
+      <Suspense fallback={<AdminPanelFallback view="leadership" />}>
+        <AdminLeadershipPageContent />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

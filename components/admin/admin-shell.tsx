@@ -1,37 +1,14 @@
 'use client'
 
-import {
-  BarChart3,
-  CalendarDays,
-  ExternalLink,
-  GalleryHorizontalEnd,
-  LayoutDashboard,
-  Mail,
-  Mountain,
-  Settings,
-  ShieldCheck,
-  UserRoundCog,
-  Users,
-} from 'lucide-react'
+import { ExternalLink, LayoutDashboard, Mountain } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { AdminMobileNavigation } from '@/components/admin/admin-mobile-navigation'
 import { cn } from '@/lib/utils'
+import { adminNavigationIcons as icons } from './navigation-icons'
 
 type AdminShellItem = { href: string; label: string }
-
-const icons = {
-  Overview: LayoutDashboard,
-  Trips: CalendarDays,
-  Membership: ShieldCheck,
-  Accounts: Users,
-  Analytics: BarChart3,
-  'Mailing List': Mail,
-  Gallery: GalleryHorizontalEnd,
-  'Leadership & Access': UserRoundCog,
-  Settings,
-} as const
 
 function AdminNavigation({ items }: { items: AdminShellItem[] }) {
   const pathname = usePathname()

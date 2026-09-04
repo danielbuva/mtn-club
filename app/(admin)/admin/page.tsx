@@ -7,7 +7,9 @@ import {
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { requireAdminCapability } from '@/lib/admin/auth'
@@ -46,7 +48,7 @@ const formatRelative = (value: string) => {
   return formatter.format(Math.round(hours / 24), 'day')
 }
 
-export default async function AdminOverviewPage() {
+async function AdminOverviewPageContent() {
   const admin = await requireAdminCapability('overview.read')
   const data = await getAdminOverviewData()
   const metrics = [
@@ -65,22 +67,7 @@ export default async function AdminOverviewPage() {
   ]
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title={`Welcome back, ${admin.displayName.split(' ')[0]}`}
-        description={`${data.termName} operations at a glance.`}
-        actions={
-          admin.permissions['trips.create'] ? (
-            <Button
-              asChild
-              className="bg-[#211D18] text-[#FFECA2] hover:bg-[#352E27]"
-            >
-              <Link href="/admin/trips/new">Create trip</Link>
-            </Button>
-          ) : null
-        }
-      />
-
+    <>
       <section
         aria-label="Club snapshot"
         className="mt-8 grid gap-4 sm:grid-cols-2"
@@ -245,6 +232,16 @@ export default async function AdminOverviewPage() {
           </p>
         )}
       </section>
-    </div>
+    </>
+  )
+}
+
+export default function AdminOverviewPage() {
+  return (
+    <AdminViewFrame view="overview">
+      <Suspense fallback={<AdminPanelFallback view="overview" />}>
+        <AdminOverviewPageContent />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

@@ -1,12 +1,12 @@
-import { Download } from 'lucide-react'
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { MailingListTabs } from '@/components/admin/mailing-list-tabs'
-import { Button } from '@/components/ui/button'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-export default async function AdminMailingListPage() {
-  const context = await requireAdminCapability('mailing_list.read')
+async function AdminMailingListPageContent() {
+  await requireAdminCapability('mailing_list.read')
   const admin = createAdminClient()
   const [subscriptions, profiles] = await Promise.all([
     admin
@@ -26,25 +26,19 @@ export default async function AdminMailingListPage() {
   )
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Mailing list"
-        description="Consent-backed subscriber records. Campaign sending is intentionally outside part one."
-        actions={
-          context.permissions['mailing_list.export'] ? (
-            <Button asChild>
-              <a href="/admin/mailing-list/export">
-                <Download className="size-4" /> Export opted-in CSV
-              </a>
-            </Button>
-          ) : null
-        }
-      />
+    <MailingListTabs
+      subscriptions={subscriptions.data ?? []}
+      profileNames={profileNames}
+    />
+  )
+}
 
-      <MailingListTabs
-        subscriptions={subscriptions.data ?? []}
-        profileNames={profileNames}
-      />
-    </div>
+export default function AdminMailingListPage() {
+  return (
+    <AdminViewFrame view="mailing">
+      <Suspense fallback={<AdminPanelFallback view="mailing" />}>
+        <AdminMailingListPageContent />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

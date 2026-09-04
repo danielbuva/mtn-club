@@ -1,4 +1,6 @@
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { GalleryAdminClient } from '@/components/gallery/gallery-admin-client'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import {
@@ -7,7 +9,7 @@ import {
 } from '@/lib/gallery/queries'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function AdminGalleryPage() {
+async function AdminGalleryPageContent() {
   const context = await requireAdminCapability('gallery.read')
   const supabase = await createClient()
   const [photosResult, tripsResult] = await Promise.all([
@@ -29,20 +31,24 @@ export default async function AdminGalleryPage() {
   }))
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Club gallery"
-        description="Upload club photographs, write accessible descriptions, and publish the records ready for the public gallery."
-      />
-      <GalleryAdminClient
-        userId={context.userId}
-        schemaReady={!photosResult.error}
-        initialPhotos={photos}
-        trips={tripsResult.data ?? []}
-        canCreate={Boolean(context.permissions['gallery.create'])}
-        canUpdate={Boolean(context.permissions['gallery.update'])}
-        canDelete={Boolean(context.permissions['gallery.delete'])}
-      />
-    </div>
+    <GalleryAdminClient
+      userId={context.userId}
+      schemaReady={!photosResult.error}
+      initialPhotos={photos}
+      trips={tripsResult.data ?? []}
+      canCreate={Boolean(context.permissions['gallery.create'])}
+      canUpdate={Boolean(context.permissions['gallery.update'])}
+      canDelete={Boolean(context.permissions['gallery.delete'])}
+    />
+  )
+}
+
+export default function AdminGalleryPage() {
+  return (
+    <AdminViewFrame view="gallery">
+      <Suspense fallback={<AdminPanelFallback view="gallery" />}>
+        <AdminGalleryPageContent />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

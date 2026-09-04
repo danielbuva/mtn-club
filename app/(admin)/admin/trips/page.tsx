@@ -1,16 +1,10 @@
-import {
-  Archive,
-  CalendarPlus,
-  Eye,
-  Pencil,
-  RotateCcw,
-  XCircle,
-} from 'lucide-react'
+import { Archive, Eye, Pencil, RotateCcw, XCircle } from 'lucide-react'
 import Link from 'next/link'
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { createClient } from '@/lib/supabase/server'
 import {
@@ -32,7 +26,7 @@ const formatDate = (value: string, isAllDay: boolean) => {
   return `${date}, ${time}`
 }
 
-export default async function AdminTripsPage({
+async function AdminTripsPageContent({
   searchParams,
 }: {
   searchParams: Promise<{
@@ -126,67 +120,7 @@ export default async function AdminTripsPage({
   })
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Trips"
-        description="Create, review, and maintain the club schedule without losing canceled-trip history."
-        actions={
-          context.permissions['trips.create'] ? (
-            <Button
-              asChild
-              className="bg-[#211D18] text-[#FFECA2] hover:bg-[#352E27]"
-            >
-              <Link href="/admin/trips/new">
-                <CalendarPlus className="size-4" /> Create trip
-              </Link>
-            </Button>
-          ) : null
-        }
-      />
-
-      <form className="mt-8 grid gap-3 border border-[#211D18]/15 bg-white/45 p-4 dark:border-border dark:bg-card sm:grid-cols-[1fr_repeat(4,auto)]">
-        <Input
-          name="q"
-          defaultValue={filters.q}
-          placeholder="Search trips"
-          aria-label="Search trips"
-        />
-        <select
-          name="timing"
-          defaultValue={filters.timing ?? 'upcoming'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-        >
-          <option value="upcoming">Upcoming</option>
-          <option value="past">Past</option>
-          <option value="all">All dates</option>
-        </select>
-        <select
-          name="kind"
-          defaultValue={filters.kind ?? 'all'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-        >
-          <option value="all">All types</option>
-          <option value="official">Official</option>
-          <option value="unofficial">Unofficial</option>
-          <option value="meetup">Meetups</option>
-          <option value="trip">Trips</option>
-        </select>
-        <select
-          name="lifecycle"
-          defaultValue={filters.lifecycle ?? 'active'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-          aria-label="Trip lifecycle"
-        >
-          <option value="active">Published and canceled</option>
-          <option value="published">Published</option>
-          <option value="canceled">Canceled</option>
-          <option value="archived">Archived</option>
-        </select>
-        <Button type="submit" variant="outline">
-          Apply filters
-        </Button>
-      </form>
-
+    <>
       {loadError ? (
         <p
           role="alert"
@@ -307,6 +241,18 @@ export default async function AdminTripsPage({
           ))}
         </section>
       ) : null}
-    </div>
+    </>
+  )
+}
+
+export default function AdminTripsPage(
+  props: Parameters<typeof AdminTripsPageContent>[0],
+) {
+  return (
+    <AdminViewFrame view="trips">
+      <Suspense fallback={<AdminPanelFallback view="trips" />}>
+        <AdminTripsPageContent {...props} />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

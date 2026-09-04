@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import type { GalleryPhotoRow } from '@/lib/gallery/queries'
 import { createClient } from '@/lib/supabase/client'
+import { GalleryDraftForm } from './gallery-draft-form'
 
 type AdminGalleryPhoto = GalleryPhotoRow & { imageUrl: string }
 type GalleryTripOption = { id: string; title: string; starts_at: string }
@@ -177,68 +178,12 @@ export function GalleryAdminClient({
   return (
     <div className="mt-10 space-y-10">
       {canCreate ? (
-        <form onSubmit={handleAdd} className="border border-border bg-card p-5">
-          <div>
-            <h2 className="text-xl font-semibold">Add a draft</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Save a direct HTTPS image link and its gallery details. New photos
-              stay unpublished until an officer chooses Publish.
-            </p>
-          </div>
-          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            <Field label="Direct image link" htmlFor="gallery-image-url">
-              <Input
-                id="gallery-image-url"
-                name="imageUrl"
-                type="url"
-                inputMode="url"
-                maxLength={2048}
-                placeholder="https://example.com/photo.jpg"
-                required
-              />
-            </Field>
-            <Field label="Title" htmlFor="gallery-title">
-              <Input id="gallery-title" name="title" required maxLength={120} />
-            </Field>
-            <Field label="Trip (optional)" htmlFor="gallery-trip">
-              <select
-                id="gallery-trip"
-                name="tripId"
-                className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm"
-              >
-                <option value="">Not linked to a trip</option>
-                {trips.map(trip => (
-                  <option key={trip.id} value={trip.id}>
-                    {trip.title}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Alternative text" htmlFor="gallery-alt">
-              <Textarea
-                id="gallery-alt"
-                name="altText"
-                required
-                maxLength={300}
-                placeholder="Describe what is visible for someone who cannot see the photo."
-              />
-            </Field>
-            <Field label="Caption (optional)" htmlFor="gallery-caption">
-              <Textarea id="gallery-caption" name="caption" maxLength={600} />
-            </Field>
-            <Field label="Date taken (optional)" htmlFor="gallery-date">
-              <Input id="gallery-date" name="takenOn" type="date" />
-            </Field>
-          </div>
-          <Button type="submit" disabled={isBusy} className="mt-5">
-            {isBusy ? 'Working…' : 'Add unpublished draft'}
-          </Button>
-          {message && (
-            <output className="block text-sm leading-6 text-muted-foreground">
-              {message}
-            </output>
-          )}
-        </form>
+        <GalleryDraftForm
+          trips={trips}
+          onSubmit={handleAdd}
+          isBusy={isBusy}
+          message={message}
+        />
       ) : null}
 
       <section aria-labelledby="gallery-library-title">

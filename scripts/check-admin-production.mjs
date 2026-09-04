@@ -111,7 +111,7 @@ assert.equal(deletionError, null, deletionError?.message)
 console.log(
   JSON.stringify(
     {
-      status: 'ready',
+      status: 'read_only_checks_passed',
       bootstrapSuperAdmins: 2,
       galleryPhotos: galleryCount,
       unresolvedDeletionJobs: failedDeletionCount ?? 0,

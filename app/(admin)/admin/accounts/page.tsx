@@ -1,14 +1,16 @@
-import { Search, ShieldAlert, UserRound } from 'lucide-react'
+import { ShieldAlert, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AccountFilters } from '@/components/admin/accounts-filters'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { retryAccountDeletionAction } from './actions'
 
-export default async function AdminAccountsPage({
+async function AdminAccountsPageContent({
   searchParams,
 }: {
   searchParams: Promise<{
@@ -64,69 +66,8 @@ export default async function AdminAccountsPage({
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Accounts"
-        description="Search members, inspect access, and manage account lifecycle safely."
-      />
-      <form className="mt-8 grid gap-3 border border-[#211D18]/15 bg-white/45 p-4 dark:border-border dark:bg-card sm:grid-cols-2 xl:grid-cols-[1fr_auto_auto_auto_auto_auto]">
-        <label htmlFor="account-search" className="relative">
-          <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
-          <Input
-            id="account-search"
-            name="q"
-            defaultValue={filters.q}
-            className="pl-9"
-            placeholder="Search name or email"
-          />
-        </label>
-        <select
-          name="status"
-          defaultValue={filters.status ?? 'all'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-        >
-          <option value="all">All membership states</option>
-          <option value="active">Active</option>
-          <option value="pending">Pending</option>
-          <option value="inactive">Inactive</option>
-          <option value="suspended">Suspended</option>
-          <option value="banned">Banned</option>
-        </select>
-        <select
-          name="role"
-          defaultValue={filters.role ?? 'all'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-        >
-          <option value="all">All leadership roles</option>
-          {(roles.data ?? []).map(role => (
-            <option key={role.id} value={role.name}>
-              {role.name}
-            </option>
-          ))}
-        </select>
-        <select
-          name="restriction"
-          defaultValue={filters.restriction ?? 'all'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-        >
-          <option value="all">All restrictions</option>
-          <option value="normal">Unrestricted</option>
-          <option value="suspended">Suspended</option>
-          <option value="banned">Banned</option>
-        </select>
-        <select
-          name="mailing"
-          defaultValue={filters.mailing ?? 'all'}
-          className="h-10 border border-input bg-background px-3 text-sm"
-        >
-          <option value="all">Any mailing status</option>
-          <option value="subscribed">Subscribed</option>
-          <option value="unsubscribed">Not subscribed</option>
-        </select>
-        <Button type="submit" variant="outline">
-          Filter
-        </Button>
-      </form>
+    <>
+      <AccountFilters filters={filters} roles={roles.data ?? []} />
       <p className="mt-4 text-sm text-[#6A5146] dark:text-muted-foreground">
         {totalAccounts} account
         {totalAccounts === 1 ? '' : 's'}
@@ -248,6 +189,18 @@ export default async function AdminAccountsPage({
           )}
         </nav>
       ) : null}
-    </div>
+    </>
+  )
+}
+
+export default function AdminAccountsPage(
+  props: Parameters<typeof AdminAccountsPageContent>[0],
+) {
+  return (
+    <AdminViewFrame view="accounts">
+      <Suspense fallback={<AdminPanelFallback view="accounts" />}>
+        <AdminAccountsPageContent {...props} />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

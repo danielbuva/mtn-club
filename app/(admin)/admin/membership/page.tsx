@@ -1,4 +1,6 @@
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { MembershipReviewPanel } from '@/components/admin/membership/membership-review-panel'
 import {
   ActiveMembersPanel,
@@ -16,7 +18,7 @@ const resolveDefaultTab = (tab: string | undefined): MembershipTab => {
   return 'review'
 }
 
-export default async function AdminMembershipPage({
+async function AdminMembershipPageContent({
   searchParams,
 }: {
   searchParams: Promise<{ tab?: string }>
@@ -105,43 +107,48 @@ export default async function AdminMembershipPage({
   )
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Membership"
-        description="Review applications, verify Zelle dues, and keep member access accurate."
-      />
+    <MembershipTabs
+      defaultTab={resolveDefaultTab(tab)}
+      reviewCount={applications.length}
+      memberCount={memberships.length}
+      exceptionCount={reviews.length}
+      review={
+        <MembershipReviewPanel
+          applications={applications}
+          payments={payments}
+          canConfirmGuardian={Boolean(
+            context.permissions['membership.confirm_guardian'],
+          )}
+          canReviewPayment={Boolean(
+            context.permissions['membership.confirm_payment'],
+          )}
+          isSuperAdmin={context.isSuperAdmin}
+        />
+      }
+      members={
+        <ActiveMembersPanel
+          memberships={memberships}
+          profileNames={profileNames}
+        />
+      }
+      exceptions={
+        <MembershipExceptionsPanel
+          reviews={reviews}
+          profileNames={profileNames}
+        />
+      }
+    />
+  )
+}
 
-      <MembershipTabs
-        defaultTab={resolveDefaultTab(tab)}
-        reviewCount={applications.length}
-        memberCount={memberships.length}
-        exceptionCount={reviews.length}
-        review={
-          <MembershipReviewPanel
-            applications={applications}
-            payments={payments}
-            canConfirmGuardian={Boolean(
-              context.permissions['membership.confirm_guardian'],
-            )}
-            canReviewPayment={Boolean(
-              context.permissions['membership.confirm_payment'],
-            )}
-            isSuperAdmin={context.isSuperAdmin}
-          />
-        }
-        members={
-          <ActiveMembersPanel
-            memberships={memberships}
-            profileNames={profileNames}
-          />
-        }
-        exceptions={
-          <MembershipExceptionsPanel
-            reviews={reviews}
-            profileNames={profileNames}
-          />
-        }
-      />
-    </div>
+export default function AdminMembershipPage(
+  props: Parameters<typeof AdminMembershipPageContent>[0],
+) {
+  return (
+    <AdminViewFrame view="membership">
+      <Suspense fallback={<AdminPanelFallback view="membership" />}>
+        <AdminMembershipPageContent {...props} />
+      </Suspense>
+    </AdminViewFrame>
   )
 }

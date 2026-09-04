@@ -7,7 +7,9 @@ import {
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
-import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Suspense } from 'react'
+import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
+import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { Badge } from '@/components/ui/badge'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { buildMembershipAccessSnapshot } from '@/lib/admin/membership-access'
@@ -30,7 +32,7 @@ function getRangeStart(
   return date.toISOString()
 }
 
-export default async function AdminAnalyticsPage({
+async function AdminAnalyticsPageContent({
   searchParams,
 }: {
   searchParams: Promise<{ range?: string }>
@@ -191,32 +193,26 @@ export default async function AdminAnalyticsPage({
   ]
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
-      <AdminPageHeader
-        title="Analytics"
-        description="Operational membership, dues, trip, and mailing-list signals from Supabase."
-        actions={
-          <nav
-            aria-label="Analytics date range"
-            className="flex flex-wrap gap-1"
+    <>
+      <nav
+        aria-label="Analytics date range"
+        className="mt-6 flex flex-wrap gap-1"
+      >
+        {ranges.map(option => (
+          <Link
+            key={option}
+            href={`/admin/analytics?range=${option}`}
+            aria-current={range === option ? 'page' : undefined}
+            className={`px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring ${range === option ? 'bg-[#211D18] text-[#FFECA2]' : 'bg-white/55 hover:bg-white dark:bg-card'}`}
           >
-            {ranges.map(option => (
-              <Link
-                key={option}
-                href={`/admin/analytics?range=${option}`}
-                aria-current={range === option ? 'page' : undefined}
-                className={`px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring ${range === option ? 'bg-[#211D18] text-[#FFECA2]' : 'bg-white/55 hover:bg-white dark:bg-card'}`}
-              >
-                {option === 'term'
-                  ? (activeTerm.data?.name ?? 'Active term')
-                  : option === 'all'
-                    ? 'All time'
-                    : `${option} days`}
-              </Link>
-            ))}
-          </nav>
-        }
-      />
+            {option === 'term'
+              ? (activeTerm.data?.name ?? 'Active term')
+              : option === 'all'
+                ? 'All time'
+                : `${option} days`}
+          </Link>
+        ))}
+      </nav>
 
       <section
         aria-label="Operational metrics"
@@ -278,6 +274,18 @@ export default async function AdminAnalyticsPage({
           )}
         </section>
       </div>
-    </div>
+    </>
+  )
+}
+
+export default function AdminAnalyticsPage(
+  props: Parameters<typeof AdminAnalyticsPageContent>[0],
+) {
+  return (
+    <AdminViewFrame view="analytics">
+      <Suspense fallback={<AdminPanelFallback view="analytics" />}>
+        <AdminAnalyticsPageContent {...props} />
+      </Suspense>
+    </AdminViewFrame>
   )
 }
