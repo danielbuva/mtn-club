@@ -16,6 +16,17 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  async headers() {
+    // Custom-domain previews need this too; hosting defaults may only cover
+    // generated deployment URLs. Never index the isolated acceptance site.
+    if (process.env.VERCEL_ENV !== 'preview') return []
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+    ]
+  },
   // Keep isolated browser tests independent from an already-running dev server.
   ...(process.env.AUTH_BROWSER_TEST === 'true'
     ? {
