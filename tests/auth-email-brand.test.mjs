@@ -27,7 +27,7 @@ test('all auth templates use the public, responsive wordmark with fallback text'
     )
     assert.match(
       html,
-      /src="\{\{ \.SiteURL \}\}\/email\/club-wordmark-v1\.png"/,
+      /src="\{\{ \.SiteURL \}\}\/email\/club-wordmark-v2\.png"/,
     )
     assert.match(html, /alt="UNLV Mountain Club"/)
     assert.match(html, /max-width:100%;height:auto/)

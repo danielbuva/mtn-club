@@ -74,6 +74,7 @@ export function AuthShell({
           >
             <UNLVMountainClub
               idPrefix="auth-mobile-brand"
+              surface="theme"
               viewBox="0 0 355 196"
               className="h-auto w-full"
               aria-hidden="true"

@@ -7,7 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import ts from 'typescript'
 
 const source = new URL('../components/unlv-mountain-club.tsx', import.meta.url)
-const output = new URL('../public/email/club-wordmark-v1.png', import.meta.url)
+const output = new URL('../public/email/club-wordmark-v2.png', import.meta.url)
 const require = createRequire(import.meta.url)
 // Use the same Sharp installation as Next's image pipeline.
 const sharp = require(
@@ -33,9 +33,11 @@ const hook = registerHooks({
 
 try {
   const { default: Wordmark } = await import(source.href)
-  const svg = renderToStaticMarkup(createElement(Wordmark))
-  // Double-resolution, opaque paper backing keeps the original dark fill and
-  // white outline legible even when an email client changes the body colors.
+  const svg = renderToStaticMarkup(
+    createElement(Wordmark, { surface: 'paper' }),
+  )
+  // Use the paper variant: cream fill with a dark outline. The opaque backing
+  // preserves contrast even when an email client changes the body colors.
   const png = await sharp(Buffer.from(svg), { density: 144 })
     .flatten({ background: '#F8F1DF' })
     .png()

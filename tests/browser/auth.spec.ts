@@ -5,6 +5,50 @@ test.beforeEach(async ({ page }) => {
   await mockAuthServices(page)
 })
 
+test('wordmark follows plain-surface colors without inverting the photo version', async ({
+  page,
+}) => {
+  for (const theme of ['light', 'dark']) {
+    await page.addInitScript(
+      value => localStorage.setItem('theme', value),
+      theme,
+    )
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/auth/login')
+    await expect(page.locator('html')).toHaveClass(new RegExp(theme))
+    const mobileLogo = page.locator('svg:has(#auth-mobile-brand-unlv)')
+    await expect(mobileLogo).toBeVisible()
+    const palette = await mobileLogo.evaluate(svg => {
+      const fill = svg.querySelector(':scope > path')
+      const outlined = svg.querySelector(':scope > path[stroke]')
+      const main = document.querySelector('main')
+      if (!fill || !outlined || !main)
+        throw new Error('Missing wordmark layout')
+      return {
+        fill: getComputedStyle(fill).fill,
+        stroke: getComputedStyle(outlined).stroke,
+        background: getComputedStyle(main).backgroundColor,
+        foreground: getComputedStyle(svg).color,
+      }
+    })
+    expect(palette.fill).toBe(palette.background)
+    expect(palette.stroke).toBe(palette.foreground)
+    expect(palette.fill).not.toBe(palette.stroke)
+    await page.screenshot({ path: `test-results/wordmark-${theme}.png` })
+    await page.setViewportSize({ width: 1440, height: 900 })
+    const photoLogo = page.locator('svg:has(#auth-desktop-brand-unlv)')
+    await expect(photoLogo).toBeVisible()
+    await expect(photoLogo.locator(':scope > path').first()).toHaveAttribute(
+      'fill',
+      '#1C1C1C',
+    )
+    await expect(photoLogo.locator(':scope > path[stroke]')).toHaveAttribute(
+      'stroke',
+      '#fff',
+    )
+  }
+})
+
 test('mobile validation, autofill attributes, visibility, and live requirements', async ({
   page,
 }) => {
