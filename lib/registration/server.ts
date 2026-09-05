@@ -52,6 +52,7 @@ export async function getRegistrationSummaries(tripIds: string[]) {
         reservedCount: true,
         availability: true,
         state: true,
+        requirements: true,
       }),
     )
     .parse(data)

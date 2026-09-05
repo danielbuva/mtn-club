@@ -6,7 +6,10 @@ import { TripBottomControls } from '@/components/trips/trip-bottom-controls'
 import type { TripDetail } from '@/lib/trips/types'
 
 type TripStickyRsvpBarProps = {
-  trip: Pick<TripDetail, 'id' | 'status' | 'registrationState'>
+  trip: Pick<
+    TripDetail,
+    'id' | 'status' | 'registrationState' | 'registrationActionRequired'
+  >
   viewer: {
     isAuthenticated: boolean
     isMember: boolean

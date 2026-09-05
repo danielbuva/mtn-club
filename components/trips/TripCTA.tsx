@@ -1,5 +1,5 @@
-import { Check } from 'lucide-react'
 import Link from 'next/link'
+import { ManageRegistrationAlertDialog } from '@/components/registration/manage-registration-dialog'
 import { RsvpChoices } from '@/components/registration/rsvp-choices'
 import { Button } from '@/components/ui/button'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
@@ -16,12 +16,27 @@ export function TripCTA({
     id: string
     status?: TripStatus
     registrationState?: TripRegistrationSnapshot['state']
+    registrationActionRequired?: boolean
   }
   className?: string
   expandable?: boolean
   onExpandedChange?: (expanded: boolean) => void
 }) {
   if (trip.status === 'cancelled') return null
+  if (trip.registrationState === 'confirmed') {
+    if (trip.registrationActionRequired)
+      return (
+        <Button asChild size="sm" className={cn('w-full', className)}>
+          <Link href={`/trips/${trip.id}/rsvp`}>Finish setup</Link>
+        </Button>
+      )
+    return (
+      <ManageRegistrationAlertDialog
+        tripId={trip.id}
+        className={cn('w-full', className)}
+      />
+    )
+  }
   if (trip.status === 'closed' || trip.status === 'full') {
     return (
       <p
@@ -50,24 +65,17 @@ export function TripCTA({
   }
   const label =
     trip.registrationState === 'incomplete'
-      ? 'Finish signup'
-      : trip.registrationState === 'confirmed'
-        ? 'Going'
-        : trip.registrationState === 'waitlisted'
-          ? 'Waitlisted'
-          : trip.registrationState === 'offered'
-            ? 'View seat offer'
-            : trip.registrationState === 'maybe'
-              ? 'Maybe'
-              : 'RSVP'
+      ? 'Finish setup'
+      : trip.registrationState === 'waitlisted'
+        ? 'Waitlisted'
+        : trip.registrationState === 'offered'
+          ? 'View seat offer'
+          : trip.registrationState === 'maybe'
+            ? 'Maybe'
+            : 'RSVP'
   return (
     <Button asChild size="sm" className={cn('w-full', className)}>
-      <Link href={`/trips/${trip.id}/rsvp`}>
-        {trip.registrationState === 'confirmed' ? (
-          <Check aria-hidden="true" className="size-4" />
-        ) : null}
-        {label}
-      </Link>
+      <Link href={`/trips/${trip.id}/rsvp`}>{label}</Link>
     </Button>
   )
 }

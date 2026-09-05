@@ -40,6 +40,7 @@ export type TripListItem = {
   waitlistEnabled?: boolean
   currentUserRsvp?: TripRsvpChoice
   registrationState?: TripRegistrationSnapshot['state']
+  registrationActionRequired?: boolean
   leaderName?: string
   leaderAvatarUrl?: string
   tags?: string[]
@@ -105,6 +106,7 @@ export type TripDetail = {
   canViewAttendees?: boolean
   viewerRsvpStatus?: TripRsvpChoice
   registrationState?: TripRegistrationSnapshot['state']
+  registrationActionRequired?: boolean
   canManageRegistration?: boolean
   visibility?: 'public' | 'members' | 'minimal'
   waitlistEnabled?: boolean

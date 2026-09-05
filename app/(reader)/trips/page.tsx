@@ -145,6 +145,7 @@ export default async function TripsPage() {
         leaderName,
       ),
       registrationState: registration.state,
+      registrationActionRequired: registration.requirements.length > 0,
     })
     return acc
   }, [])

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { createUnlvWaiver } from '@/lib/registration/unlv-waiver'
 import { creationFixture, registrationFixture } from './fixtures'
 import { FieldGallery } from './gallery'
+import { RegistrationRegressions } from './registration-regressions'
 
 type Example = 'creation' | 'registration' | 'gallery'
 const ageReasons = (adult: boolean | null) =>
@@ -288,6 +289,7 @@ export function FormShowroom() {
           />
         </details>
       </footer>
+      <RegistrationRegressions />
     </main>
   )
 }

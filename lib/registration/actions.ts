@@ -18,6 +18,7 @@ function refreshRegistration(tripId: string) {
     `/trips/${tripId}/rsvp`,
     `/trips/${tripId}/registrations`,
     '/profile/trips',
+    '/profile/events/emergency-contact',
     '/profile/user/privacy',
     '/profile/user/account',
     '/calendar',

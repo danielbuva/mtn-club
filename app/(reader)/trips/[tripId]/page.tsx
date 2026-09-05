@@ -164,6 +164,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
       registration.canManage || registration.state === 'confirmed',
     viewerRsvpStatus,
     registrationState: registration.state,
+    registrationActionRequired: registration.requirements.length > 0,
     canManageRegistration: registration.canManage,
     visibility: trip.visibility,
     waitlistEnabled: trip.waitlist_enabled,

@@ -49,7 +49,7 @@ async function Waivers() {
           .map(signature => (
             <details
               key={`${signature.tripId}-${signature.version}-${signature.signedAt}`}
-              className="rounded-lg border p-4"
+              className="min-w-0 max-w-full rounded-lg border p-4 [overflow-wrap:anywhere]"
             >
               <summary className="cursor-pointer font-medium">
                 {signature.title} — version {signature.version}
@@ -64,7 +64,7 @@ async function Waivers() {
                     })}{' '}
                 (America/Los_Angeles)
               </p>
-              <p className="my-4 whitespace-pre-wrap text-sm">
+              <p className="my-4 whitespace-pre-wrap [overflow-wrap:anywhere] text-sm">
                 {signature.body}
               </p>
               <Link

@@ -17,9 +17,6 @@ export function AnnualWaiverIntro({
       <p className="text-xs font-semibold uppercase tracking-widest">
         Annual waiver
       </p>
-      <h2 className="text-xl font-semibold">
-        One signature for covered MTN Club trips
-      </h2>
       <p>
         You’re signing MTN Club’s annual UNLV waiver, not a waiver only for this
         trip. This recurring UNLV RSO Liability Waiver applies only to the

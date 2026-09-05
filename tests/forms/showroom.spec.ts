@@ -290,7 +290,9 @@ for (const situation of ['first', 'returning', 'missing risks']) {
     await form.getByRole('button', { name: 'Continue', exact: true }).click()
     if (!signed) {
       await expect(
-        form.getByText('One signature for covered MTN Club trips'),
+        form.getByText('You’re signing MTN Club’s annual UNLV waiver', {
+          exact: false,
+        }),
       ).toBeVisible()
       await expect(
         form.getByText('Valid July 1, 2026 through June 30, 2027', {
@@ -342,5 +344,39 @@ for (const situation of ['first', 'returning', 'missing risks']) {
     await expect(
       form.getByRole('heading', { name: 'You’re all set.' }),
     ).toBeVisible()
+    await expect(
+      form.getByRole('link', { name: 'Close registration' }),
+    ).toHaveAttribute('href', '/trips')
   })
 }
+
+test('registered trip options, action-required link and signed waiver fit the viewport', async ({
+  page,
+}) => {
+  await page.goto('/form-lab')
+  await page
+    .getByText('Registration regression examples', { exact: true })
+    .click()
+  const panel = page.getByTestId('registration-regressions')
+  await expect(
+    panel.getByRole('link', { name: 'Finish setup' }),
+  ).toHaveAttribute('href', /\/rsvp$/)
+  await panel.getByRole('button', { name: 'Going', exact: true }).click()
+  const dialog = page.getByRole('alertdialog')
+  await expect(
+    dialog.getByRole('link', { name: 'Edit registration' }),
+  ).toHaveAttribute('href', /\/rsvp$/)
+  await expect(
+    dialog.getByRole('button', { name: 'Cancel registration', exact: true }),
+  ).toBeVisible()
+  await dialog.getByRole('button', { name: 'Keep registration' }).click()
+  await panel.getByText('View signed waiver', { exact: false }).click()
+  await expect(
+    panel.getByText('Event:  Outdoor adventures', { exact: false }),
+  ).toBeVisible()
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth > innerWidth,
+    ),
+  ).toBe(false)
+})

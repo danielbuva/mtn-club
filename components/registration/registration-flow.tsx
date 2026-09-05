@@ -1,5 +1,8 @@
 'use client'
 
+import { X } from 'lucide-react'
+import Link from 'next/link'
+
 import { ChoiceCards } from '@/components/forms/choice-cards'
 import { NumberStepper, TextField } from '@/components/forms/fields'
 import { FormActions } from '@/components/forms/form-actions'
@@ -61,7 +64,18 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
         <h1 className="pr-14 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
           {snapshot.title}
         </h1>
-        {props.onCancel && (
+        {complete ? (
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-1/2 size-11 -translate-y-1/2"
+          >
+            <Link href="/trips" aria-label="Close registration">
+              <X className="size-5" />
+            </Link>
+          </Button>
+        ) : props.onCancel ? (
           <RegistrationExit
             onCancel={props.onCancel}
             onSave={
@@ -72,7 +86,7 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
             disabled={pending}
             saveError={failed ? message : undefined}
           />
-        )}
+        ) : null}
       </div>
       <FormProgress index={nav.index} count={nav.count} />
       <FormMessage error={failed}>{message}</FormMessage>

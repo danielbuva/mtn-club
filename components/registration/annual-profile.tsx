@@ -55,7 +55,7 @@ export function AnnualProfile({ state }: { state: AnnualState }) {
       )}
       {state.history.map(record => (
         <details
-          className="rounded-lg border p-4"
+          className="min-w-0 max-w-full rounded-lg border p-4 [overflow-wrap:anywhere]"
           key={record.signatureId}
           open={undefined}
         >
@@ -85,7 +85,9 @@ export function AnnualProfile({ state }: { state: AnnualState }) {
                 for future trips.
               </p>
             )}
-            <p className="whitespace-pre-wrap">{record.body}</p>
+            <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">
+              {record.body}
+            </p>
           </div>
         </details>
       ))}

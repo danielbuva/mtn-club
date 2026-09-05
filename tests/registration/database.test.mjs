@@ -1201,6 +1201,12 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
   assert.equal(snapshot.state, 'confirmed')
   assert.equal(snapshot.waiverSigned, false)
   assert.match(snapshot.waiverReason, /withdrawn/)
+  const summaries = await asUser(
+    f.users[0],
+    `select public.get_registration_summaries(array['${f.trip}']::uuid[])`,
+  )
+  assert.equal(summaries[0].state, 'confirmed')
+  assert.ok(summaries[0].requirements.some(reason => /withdrawn/.test(reason)))
   const again = await asUser(
     f.users[0],
     `select to_jsonb(public.sign_annual_waiver('${waiver}','${randomUUID()}',${literal(JSON.stringify(signatureData))}))`,
@@ -1407,5 +1413,52 @@ test('annual guardian verification, immutable merge evidence, duplicate signing 
     () =>
       sql(`delete from public.registration_signatures where id='${signature}'`),
     /immutable/,
+  )
+})
+
+test('trip contacts sync to the profile without rewriting previous trip records', async () => {
+  const f = fixture()
+  const contact = {
+    name: 'Test Friend',
+    relationship: 'Friend',
+    phone: '7025550100',
+    notes: 'Call first',
+  }
+  const snapshot = await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ formVersion: 2, answers: {}, emergencyContact: contact }))})`,
+  )
+  assert.deepEqual(
+    JSON.parse(
+      sql(
+        `select emergency_contact from public.profile_private where user_id='${f.users[0]}'`,
+      ),
+    ),
+    contact,
+  )
+  const changed = { ...contact, phone: '7025550101' }
+  await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','update_response','${randomUUID()}',${snapshot.revision},${literal(JSON.stringify({ formVersion: 2, answers: {}, emergencyContact: changed }))})`,
+  )
+  assert.deepEqual(
+    JSON.parse(
+      sql(
+        `select emergency_contact from public.profile_private where user_id='${f.users[0]}'`,
+      ),
+    ),
+    changed,
+  )
+  // A profile-only update must not rewrite the historical trip response.
+  sql(
+    `update public.profile_private set emergency_contact='{}' where user_id='${f.users[0]}'`,
+  )
+  assert.deepEqual(
+    JSON.parse(
+      sql(
+        `select emergency_contact from public.registration_responses where trip_id='${f.trip}' and user_id='${f.users[0]}'`,
+      ),
+    ),
+    changed,
   )
 })

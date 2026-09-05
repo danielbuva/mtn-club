@@ -405,7 +405,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await member.goto(`/trips/${tripId}`)
   await expect(member).toHaveURL(`/trips/${tripId}`)
   await expect(
-    member.getByRole('link', { name: 'Finish signup', exact: true }),
+    member.getByRole('link', { name: 'Finish setup', exact: true }),
   ).toBeVisible()
   await organizer.goto(`/trips/${tripId}/registrations`)
   await expect(
@@ -431,7 +431,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     member.getByRole('navigation', { name: 'Page actions', exact: true }),
   ).toContainText('Registration closed')
   await expect(
-    member.getByRole('link', { name: 'Finish signup', exact: true }),
+    member.getByRole('link', { name: 'Finish setup', exact: true }),
   ).toHaveCount(0)
   await organizer.reload()
   await organizer
@@ -452,7 +452,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     )
     .toBe('t')
   await member.reload()
-  await member.getByRole('link', { name: 'Finish signup', exact: true }).click()
+  await member.getByRole('link', { name: 'Finish setup', exact: true }).click()
   await member
     .getByLabel('Experience', { exact: true })
     .fill('Saved draft experience')
@@ -483,7 +483,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     .getByRole('button', { name: 'Save and finish later', exact: true })
     .click()
   await expect(member).toHaveURL(`/trips/${tripId}`)
-  await member.getByRole('link', { name: 'Finish signup', exact: true }).click()
+  await member.getByRole('link', { name: 'Finish setup', exact: true }).click()
   await expect(member.getByLabel('Experience', { exact: true })).toHaveValue(
     'Saved draft experience',
   )
