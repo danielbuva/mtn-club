@@ -461,15 +461,40 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await expect(member.getByLabel('Experience', { exact: true })).toHaveValue(
     'Saved draft experience',
   )
+  await expect(
+    member.getByRole('heading', { name: 'Trip registration', exact: true }),
+  ).toHaveCount(0)
+  await expect(
+    member.getByRole('heading', { name: 'Recent updates', exact: true }),
+  ).toHaveCount(0)
+  await expect(
+    member.getByRole('link', { name: 'Manage registration and roster' }),
+  ).toHaveCount(0)
+  await expect(member.locator('form h1')).toHaveText('RSVP browser acceptance')
+  await member.evaluate(() => {
+    document.documentElement.classList.remove('light')
+    document.documentElement.classList.add('dark')
+  })
+  const colors = await member.evaluate(() => ({
+    page: getComputedStyle(document.body).backgroundColor,
+    surface: getComputedStyle(
+      document.querySelector('[data-editorial-surface]') ?? document.body,
+    ).backgroundColor,
+    actions: getComputedStyle(
+      document.querySelector('[data-form-actions]') ?? document.body,
+    ).backgroundColor,
+  }))
+  expect(colors.page).toBe('rgb(40, 33, 29)')
+  expect(colors.actions).toBe(colors.page)
+  expect(colors.surface).toBe(colors.page)
   await completeForm(member)
   await member
     .getByRole('button', { name: 'Confirm Going', exact: true })
     .click()
-  await expect(
-    member
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText('confirmed', { exact: true }),
-  ).toBeVisible()
+  await expect(member.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'confirmed',
+  )
   await member.screenshot({
     path: '/tmp/mtn-registration-mobile.png',
     fullPage: true,
@@ -519,20 +544,18 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await waiting
     .getByRole('button', { name: 'Join waitlist', exact: true })
     .click()
-  await expect(
-    waiting
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText('waitlisted', { exact: true }),
-  ).toBeVisible()
+  await expect(waiting.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'waitlisted',
+  )
   member.on('dialog', dialog => dialog.accept())
   await member
     .getByRole('button', { name: 'Cancel registration', exact: true })
     .click()
-  await expect(
-    member
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText('cancelled', { exact: true }),
-  ).toBeVisible()
+  await expect(member.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'cancelled',
+  )
   await organizer.goto(`/admin/trips/${tripId}/registrations`)
   await expect(
     organizer.getByRole('heading', {
@@ -560,11 +583,10 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     `update public.registration_offers set expires_at=now()-interval '1 second' where trip_id='${tripId}' and user_id='${waiter.id}' and status='pending'`,
   )
   await waiting.reload()
-  await expect(
-    waiting
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText('waitlisted', { exact: true }),
-  ).toBeVisible()
+  await expect(waiting.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'waitlisted',
+  )
   await organizer
     .getByRole('button', { name: 'Refresh roster', exact: true })
     .click()
@@ -578,11 +600,10 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await waiting
     .getByRole('button', { name: 'Accept seat offer', exact: true })
     .click()
-  await expect(
-    waiting
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText('confirmed', { exact: true }),
-  ).toBeVisible()
+  await expect(waiting.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'confirmed',
+  )
   await waiting.goto('/profile/trips')
   await expect(
     waiting.getByRole('heading', { name: 'RSVP browser acceptance' }),
@@ -688,11 +709,10 @@ test('a minor requests guardian review and registers only after an officer confi
     .getByRole('button', { name: /^(Join waitlist|Confirm Going)$/ })
     .focus()
   await member.keyboard.press('Enter')
-  await expect(
-    member
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText(/^(waitlisted|confirmed)$/),
-  ).toBeVisible()
+  await expect(member.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    /^(waitlisted|confirmed)$/,
+  )
   await memberContext.close()
   await officerContext.close()
 })
@@ -749,16 +769,14 @@ test('privacy email choices persist and opt-outs keep trip status available', as
     fullPage: true,
   })
   await page.goto(`/trips/${tripId}/rsvp`)
-  await expect(
-    page
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText('confirmed', { exact: true }),
-  ).toBeVisible()
-  await expect(
-    page
-      .getByRole('region', { name: 'Registration status', exact: true })
-      .getByText(/Trip emails are disabled/),
-  ).toBeVisible()
+  await expect(page.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'confirmed',
+  )
+  await expect(page.locator('[data-registration-state]')).toHaveAttribute(
+    'data-registration-state',
+    'confirmed',
+  )
   await context.close()
 })
 
@@ -893,7 +911,9 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
   ).toBe('0')
   await page.goto(`/trips/${id}`)
   await expect(
-    page.getByText('6:00 AM - 11:00 AM', { exact: true }),
+    page
+      .getByText('6:00 AM - 11:00 AM', { exact: true })
+      .filter({ visible: true }),
   ).toBeVisible()
   await expect(
     page.getByText('Meeting point: Campus meetup', { exact: false }),

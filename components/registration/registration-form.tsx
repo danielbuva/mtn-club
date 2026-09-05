@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, useTransition } from 'react'
+import { FormMessage } from '@/components/forms/form-shell'
 import { Button } from '@/components/ui/button'
 import {
   declareAgeAction,
@@ -11,7 +12,6 @@ import {
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
 import { useRegistrationCommand } from '@/lib/registration/use-registration-command'
 import { RegistrationFlow } from './registration-flow'
-import { RegistrationEvents, RegistrationSummary } from './registration-summary'
 import { SignupIntent } from './signup-intent'
 
 export function RegistrationForm({
@@ -58,38 +58,17 @@ export function RegistrationForm({
       }
     })
   }
+  const showForm = canRegister || canUpdate || hadEditableForm.current
   if (canRegister && snapshot.state !== 'incomplete') {
     return (
-      <div className="space-y-6">
-        <RegistrationSummary snapshot={snapshot} />
+      <div data-registration-state={snapshot.state} className="space-y-6">
+        <h1 className="font-brand text-3xl">{snapshot.title}</h1>
         <SignupIntent snapshot={snapshot} />
       </div>
     )
   }
-  return (
-    <div className="space-y-6">
-      <RegistrationSummary snapshot={snapshot} />
-      {snapshot.ageAdult === null && !canRegister && !canUpdate ? (
-        <section className="space-y-3">
-          <h2 className="font-medium">Age declaration</h2>
-          <p className="text-sm">
-            Participants under 18 need officer-confirmed guardian consent.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <Button disabled={agePending} onClick={() => declareAge(true)}>
-              I am 18 or older
-            </Button>
-            <Button
-              variant="outline"
-              disabled={agePending}
-              onClick={() => declareAge(false)}
-            >
-              I am under 18
-            </Button>
-          </div>
-          <output>{ageMessage}</output>
-        </section>
-      ) : null}
+  const reviewNotice = (
+    <>
       {snapshot.eligibilityReasons.length ? (
         <div className="space-y-2 rounded-lg bg-muted p-4">
           {snapshot.eligibilityReasons.map(reason => (
@@ -118,9 +97,40 @@ export function RegistrationForm({
           ) : null}
         </div>
       ) : null}
-      {canRegister || canUpdate || hadEditableForm.current ? (
+    </>
+  )
+  return (
+    <div data-registration-state={snapshot.state} className="space-y-6">
+      {!showForm && <h1 className="font-brand text-3xl">{snapshot.title}</h1>}
+      {!showForm && (
+        <FormMessage>{snapshot.state.replaceAll('_', ' ')}</FormMessage>
+      )}
+      {snapshot.ageAdult === null && !showForm ? (
+        <section className="space-y-3">
+          <h2 className="font-medium">Age declaration</h2>
+          <p className="text-sm">
+            Participants under 18 need officer-confirmed guardian consent.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button disabled={agePending} onClick={() => declareAge(true)}>
+              I am 18 or older
+            </Button>
+            <Button
+              variant="outline"
+              disabled={agePending}
+              onClick={() => declareAge(false)}
+            >
+              I am under 18
+            </Button>
+          </div>
+          <output>{ageMessage}</output>
+        </section>
+      ) : null}
+      {!showForm && reviewNotice}
+      {showForm ? (
         <RegistrationFlow
           snapshot={snapshot}
+          reviewNotice={reviewNotice}
           onDeclareAge={async adult => {
             const result = await declareAgeAction(adult)
             if (!result.ok) throw new Error(result.message)
@@ -143,6 +153,7 @@ export function RegistrationForm({
           onSavedDraft={() => router.push(`/trips/${snapshot.tripId}`)}
         />
       ) : null}
+      {message && <output aria-live="polite">{message}</output>}
       <div className="flex flex-wrap gap-2">
         {snapshot.actions.includes('accept_offer') ? (
           <Button
@@ -194,13 +205,6 @@ export function RegistrationForm({
           </Button>
         ) : null}
       </div>
-      <output aria-live="polite">{message}</output>
-      {snapshot.requirements.length && canUpdate ? (
-        <p className="text-sm">
-          Before attendance: {snapshot.requirements.join(' ')}
-        </p>
-      ) : null}
-      <RegistrationEvents snapshot={snapshot} />
     </div>
   )
 }

@@ -1,12 +1,12 @@
 /*
  * Preserved red-toned dark palette from September 2026.
  * This is intentionally not exposed in the theme controls yet. When the
- * secondary theme is wired up, apply `theme-red-dark` to the root element.
+ * secondary theme is wired up, apply `theme-red-dark` alongside `dark` on the root element.
  */
-.theme-red-dark {
+.dark.theme-red-dark {
   color-scheme: dark;
   --background: oklch(0.2498 0.051 21.6);
-  --editorial-page: #28211d;
+  --editorial-page: oklch(0.2498 0.051 21.6);
   --editorial-ink: #f8f1df;
   --editorial-panel: #3a302a;
   --editorial-muted: #d1b9a6;

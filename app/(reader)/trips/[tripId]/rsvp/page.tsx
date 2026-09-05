@@ -1,10 +1,6 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import {
-  RegistrationShell,
-  RegistrationSkeleton,
-} from '@/components/registration/page-shell'
+import { RegistrationSkeleton } from '@/components/registration/page-shell'
 import { RegistrationForm } from '@/components/registration/registration-form'
 import { getRegistration } from '@/lib/registration/server'
 import { createClient } from '@/lib/supabase/server'
@@ -24,17 +20,7 @@ async function RegistrationContent({
       `/auth/login?returnTo=${encodeURIComponent(`/trips/${tripId}/rsvp`)}`,
     )
   const snapshot = await getRegistration(tripId)
-  return (
-    <>
-      <h2 className="text-2xl font-semibold">{snapshot.title}</h2>
-      {snapshot.canManage ? (
-        <Link className="underline" href={`/trips/${tripId}/registrations`}>
-          Manage registration and roster
-        </Link>
-      ) : null}
-      <RegistrationForm key={snapshot.tripId} snapshot={snapshot} />
-    </>
-  )
+  return <RegistrationForm key={snapshot.tripId} snapshot={snapshot} />
 }
 export default function RegistrationPage({
   params,
@@ -42,10 +28,13 @@ export default function RegistrationPage({
   params: Promise<{ tripId: string }>
 }) {
   return (
-    <RegistrationShell title="Trip registration">
+    <main
+      data-guided-form
+      className="mx-auto min-h-screen max-w-2xl px-5 py-8 text-foreground md:py-12"
+    >
       <Suspense fallback={<RegistrationSkeleton />}>
         <RegistrationContent params={params} />
       </Suspense>
-    </RegistrationShell>
+    </main>
   )
 }

@@ -52,9 +52,9 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
         await advance()
       }}
     >
-      <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        Your next adventure / MTN Club
-      </p>
+      <h1 className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+        {snapshot.title}
+      </h1>
       <FormProgress index={nav.index} count={nav.count} />
       <FormMessage error={failed}>{message}</FormMessage>
       {complete ? (
@@ -236,11 +236,14 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
               </FormStep>
             </FormViewport>
           </fieldset>
-          {nav.isLast && snapshot.eligibilityReasons.length > 0 && (
-            <FormMessage error>
-              {snapshot.eligibilityReasons.join(' ')}
-            </FormMessage>
-          )}
+          {nav.isLast &&
+            !props.reviewNotice &&
+            snapshot.eligibilityReasons.length > 0 && (
+              <FormMessage error>
+                {snapshot.eligibilityReasons.join(' ')}
+              </FormMessage>
+            )}
+          {nav.isLast && props.reviewNotice}
           <FormActions
             onBack={nav.index > 0 ? nav.back : undefined}
             placement={

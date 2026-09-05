@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   focusFormError,
@@ -21,6 +21,7 @@ import type {
 import { validateRegistrationValues } from './validate-form'
 
 export type RegistrationFlowProps = {
+  reviewNotice?: ReactNode
   snapshot: TripRegistrationSnapshot
   onPersist: (
     data: RegistrationInput['data'],
