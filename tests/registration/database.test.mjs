@@ -531,3 +531,42 @@ test('email categories preserve legacy opt-outs, reject stale edits, and limit e
   )
   assert.equal((await read()).email, true)
 })
+
+test('registration merge immediately preserves category and mailing-list opt-outs', async () => {
+  const f = fixture()
+  const [primary, secondary] = f.users
+  const defaults = await asUser(
+    primary,
+    'select public.get_my_email_preferences()',
+  )
+  const allOn = Object.fromEntries(
+    Object.keys(defaults).map(key => [key, true]),
+  )
+  await asUser(
+    primary,
+    `select public.save_privacy_email_preferences('{}',${literal(JSON.stringify(allOn))},${literal(JSON.stringify(defaults))})`,
+  )
+  sql(`insert into public.profile_private(user_id,notification_settings) values('${secondary}','{"tripReminders":false,"safetyAlerts":false}') on conflict(user_id) do update set notification_settings=excluded.notification_settings;
+  insert into public.mailing_list_subscriptions(user_id,email,subscribed,consent_source,unsubscribed_at) values('${secondary}','${secondary}@example.test',false,'account_settings',now());
+  select public.merge_trip_registrations('${primary}','${secondary}');`)
+  const prefs = await asUser(
+    primary,
+    'select public.get_my_email_preferences()',
+  )
+  assert.equal(prefs.announcements, false)
+  assert.equal(prefs.general, false)
+  assert.equal(prefs.memberStories, false)
+  assert.equal(prefs.tripReminders, false)
+  assert.equal(prefs.safetyAlerts, false)
+  assert.equal(prefs.tripUpdates, true)
+  assert.equal(
+    sql(`select registration_private.email_enabled('${primary}','reminder')`),
+    'f',
+  )
+  assert.equal(
+    sql(
+      `select subscribed from public.mailing_list_subscriptions where user_id='${primary}'`,
+    ),
+    'f',
+  )
+})
