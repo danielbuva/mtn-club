@@ -1142,6 +1142,28 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
   )
   assert.equal(returning.waiverSigned, true)
   assert.equal(returning.state, 'confirmed')
+  // Long registration answers do not become signing evidence or hit its smaller size limit.
+  const longQuestions = Array.from({ length: 4 }, (_, i) => ({
+    id: `note${i}`,
+    label: `Trip note ${i}`,
+    type: 'text',
+    required: false,
+  }))
+  sql(
+    `update public.trip_registration_settings set questions=${literal(JSON.stringify(longQuestions))} where trip_id='${f.trip}'`,
+  )
+  const longAnswers = Object.fromEntries(
+    longQuestions.map(q => [q.id, 'a'.repeat(4000)]),
+  )
+  const longRegistration = await asUser(
+    f.users[3],
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ ...commandData, answers: longAnswers }))})`,
+  )
+  assert.equal(longRegistration.waiverSigned, true)
+  assert.equal(longRegistration.state, 'confirmed')
+  sql(
+    `update public.trip_registration_settings set questions='[]' where trip_id='${f.trip}'`,
+  )
   // Formatting does not change revision, but new risk wording does.
   assert.equal(
     await disclose(f.trip, 1, ['  Exposed   desert heat with little shade.  ']),

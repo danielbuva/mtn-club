@@ -4,7 +4,7 @@ UNLV's [RSO Liability Waiver FAQ](https://www.unlv.edu/sites/default/files/media
 
 ## Configure reviewed content
 
-1. Apply migrations `202609050005`–`202609050008` before deploying the matching app. No new environment variables are needed. Verify the target Supabase project against the intended Vercel environment, not a differently configured local environment.
+1. Apply migrations `202609050005`–`202609050009` before deploying the matching app. No new environment variables are needed. Verify the target Supabase project against the intended Vercel environment, not a differently configured local environment.
 2. In Admin → Registration operations, enter the designated Event, Sponsor, activity-specific risks/possible injuries, July 1 start date, and specifically enumerated activities. Name those activities in the Event or risk field, as well as the coverage list. The Date of Event is generated as an explicit July–June range.
 3. Save a draft. Review the generated UNLV document and the proposed activity scope/risk language with UNLV. Saving a draft does not make it signable. This release does **not** seed or publish supposedly approved legal content.
 4. Publish the reviewed document with a review reference. Publication creates a separate permanent record. The latest published version for a given academic year requires a fresh signature. To replace wording, save another draft; never modify a stored document.
