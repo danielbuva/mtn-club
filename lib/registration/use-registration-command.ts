@@ -17,6 +17,7 @@ export function useRegistrationCommand(tripId: string) {
   function run(
     input: Omit<RegistrationInput, 'requestId' | 'tripId'>,
     onSuccess?: (snapshot: TripRegistrationSnapshot) => void,
+    onFailure?: () => void,
   ) {
     if (busy.current) return
     busy.current = true
@@ -30,13 +31,14 @@ export function useRegistrationCommand(tripId: string) {
         const result = await registrationAction({ ...input, tripId, requestId })
         if (result.ok) {
           request.current = null
-          setMessage('Registration updated.')
           onSuccess?.(result.snapshot)
         } else {
           setMessage(result.message)
+          onFailure?.()
         }
         router.refresh()
       } catch {
+        onFailure?.()
         setMessage(
           'The response could not be confirmed. Refresh to check your status, or retry safely.',
         )

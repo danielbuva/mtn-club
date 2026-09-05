@@ -157,13 +157,221 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   const member = await memberContext.newPage()
   const waiting = await waitingContext.newPage()
   const organizer = await organizerContext.newPage()
-  await member.goto(`/trips/${tripId}/rsvp`)
+  await member.goto('/trips')
+  const tripCard = member.getByRole('link', {
+    name: 'Open details for RSVP browser acceptance',
+    exact: true,
+  })
+  const initialButtonHeight = await tripCard
+    .getByRole('button', { name: 'RSVP', exact: true })
+    .evaluate(node => node.getBoundingClientRect().height)
+  await tripCard.getByRole('button', { name: 'RSVP', exact: true }).click()
   await expect(
-    member.getByRole('heading', { name: 'RSVP browser acceptance' }),
+    tripCard.getByRole('button', { name: 'Going', exact: true }),
+  ).toBeEnabled()
+  expect(
+    await tripCard
+      .getByRole('button', { name: 'Going', exact: true })
+      .evaluate(node => node.getBoundingClientRect().height),
+  ).toBe(initialButtonHeight)
+  await member.setViewportSize({ width: 320, height: 844 })
+  await tripCard.scrollIntoViewIfNeeded()
+  await member.screenshot({ path: '/tmp/mtn-rsvp-choices-mobile.png' })
+  expect(
+    await member.evaluate(
+      () => document.documentElement.scrollWidth > innerWidth,
+    ),
+  ).toBe(false)
+  await tripCard
+    .getByRole('button', { name: 'Close RSVP options', exact: true })
+    .click()
+  await expect(
+    tripCard.getByRole('button', { name: 'RSVP', exact: true }),
+  ).toBeFocused()
+  await tripCard.getByRole('button', { name: 'RSVP', exact: true }).click()
+  await tripCard.getByRole('button', { name: 'Maybe', exact: true }).click()
+  await expect(
+    tripCard.getByRole('button', { name: 'Close RSVP options', exact: true }),
+  ).toHaveCount(0)
+  await member.goto(`/trips/${tripId}`)
+  const bottomControls = member.getByRole('navigation', {
+    name: 'Page actions',
+    exact: true,
+  })
+  await expect(
+    bottomControls.getByRole('button', { name: 'Maybe', exact: true }),
   ).toBeVisible()
+  const controlsHeight = await bottomControls.evaluate(
+    node => node.getBoundingClientRect().height,
+  )
+  await bottomControls
+    .getByRole('button', { name: 'Maybe', exact: true })
+    .click()
+  await expect(
+    bottomControls.getByRole('button', { name: 'Going', exact: true }),
+  ).toBeEnabled()
+  await expect(
+    bottomControls.getByRole('button', { name: '← back', exact: true }),
+  ).toHaveCount(0)
+  expect(
+    await bottomControls.evaluate(node => node.getBoundingClientRect().height),
+  ).toBe(controlsHeight)
+  await expect(
+    member.getByRole('button', { name: 'Open navigation', exact: true }),
+  ).toHaveCount(0)
+  expect(
+    await bottomControls.evaluate(node => {
+      const box = node.getBoundingClientRect()
+      return Math.abs(box.x + box.width / 2 - innerWidth / 2) < 1
+    }),
+  ).toBe(true)
+  await member.screenshot({ path: '/tmp/mtn-detail-rsvp-options-mobile.png' })
+  const closeOptions = bottomControls.getByRole('button', {
+    name: 'Close RSVP options',
+    exact: true,
+  })
+  expect(
+    await closeOptions.evaluate(node => {
+      const box = node.getBoundingClientRect()
+      return node.contains(
+        document.elementFromPoint(
+          box.x + box.width / 2,
+          box.y + box.height / 2,
+        ),
+      )
+    }),
+  ).toBe(true)
+  await closeOptions.click()
+  await expect(
+    member.getByRole('button', { name: 'Open navigation', exact: true }),
+  ).toBeVisible()
+  await expect(
+    bottomControls.getByRole('button', { name: '← back', exact: true }),
+  ).toBeVisible()
+  await bottomControls
+    .getByRole('button', { name: 'Maybe', exact: true })
+    .click()
+  await bottomControls
+    .getByRole('button', { name: 'Not going', exact: true })
+    .click()
+  await expect(
+    bottomControls.getByRole('button', { name: '← back', exact: true }),
+  ).toBeVisible()
+  await expect(
+    bottomControls.getByRole('button', { name: 'Not going', exact: true }),
+  ).toBeVisible()
+  expect(
+    await bottomControls.evaluate(node => node.getBoundingClientRect().height),
+  ).toBe(controlsHeight)
+  await member.goto('/trips')
+  await tripCard.getByRole('button', { name: 'Not going', exact: true }).click()
+  await tripCard.getByRole('button', { name: 'Maybe', exact: true }).click()
+  await expect(
+    tripCard.getByRole('button', { name: 'Close RSVP options', exact: true }),
+  ).toHaveCount(0)
+  await tripCard.getByRole('button', { name: 'Maybe', exact: true }).click()
+  await tripCard.getByRole('button', { name: 'Not going', exact: true }).click()
+  await expect(
+    tripCard.getByRole('button', { name: 'Close RSVP options', exact: true }),
+  ).toHaveCount(0)
+  await tripCard.getByRole('button', { name: 'Not going', exact: true }).click()
+  await tripCard.getByRole('button', { name: 'Going', exact: true }).click()
+  await expect(member.getByRole('alertdialog')).toContainText(
+    'Complete the following form by',
+  )
+  await expect(member.getByRole('alertdialog')).toContainText(
+    'PST to confirm your spot.',
+  )
+  await expect(member.getByRole('alertdialog')).not.toContainText(
+    'America/Los_Angeles',
+  )
+  await member.screenshot({ path: '/tmp/mtn-signup-dialog-mobile.png' })
+  await member.route('**/trips', async route => {
+    if (route.request().method() === 'POST')
+      await new Promise(resolve => setTimeout(resolve, 800))
+    await route.continue()
+  })
+  await member
+    .getByRole('button', { name: 'Save for later', exact: true })
+    .click()
+  await expect(
+    member
+      .getByRole('alertdialog')
+      .getByRole('button', { name: 'Saving…', exact: true }),
+  ).toBeVisible()
+  await expect(
+    member
+      .getByRole('alertdialog')
+      .getByRole('button', { name: 'Complete form', exact: true }),
+  ).toBeVisible()
+  await expect(member.getByRole('alertdialog')).toHaveCount(0)
+  await member.unroute('**/trips')
+  await expect(member).toHaveURL('/trips')
+  await member.goto(`/trips/${tripId}`)
+  await expect(member).toHaveURL(`/trips/${tripId}`)
+  await expect(
+    member.getByRole('link', { name: 'Finish signup', exact: true }),
+  ).toBeVisible()
+  await organizer.goto(`/trips/${tripId}/registrations`)
+  await expect(
+    organizer.getByText('Signup incomplete', { exact: true }),
+  ).toBeVisible()
+  await organizer
+    .getByRole('main')
+    .getByText('Registration settings', { exact: true })
+    .click()
+  await organizer
+    .getByLabel('Registration', { exact: true })
+    .selectOption('closed')
+  await organizer
+    .getByRole('button', { name: 'Save settings', exact: true })
+    .click()
+  await expect(
+    organizer
+      .getByRole('main')
+      .getByText('Registration settings saved.', { exact: true }),
+  ).toBeVisible()
+  await member.reload()
+  await expect(
+    member.getByRole('navigation', { name: 'Page actions', exact: true }),
+  ).toContainText('Registration closed')
+  await expect(
+    member.getByRole('link', { name: 'Finish signup', exact: true }),
+  ).toHaveCount(0)
+  await organizer.reload()
+  await organizer
+    .getByRole('main')
+    .getByText('Registration settings', { exact: true })
+    .click()
+  await organizer
+    .getByLabel('Registration', { exact: true })
+    .selectOption('open')
+  await organizer
+    .getByRole('button', { name: 'Save settings', exact: true })
+    .click()
+  await expect
+    .poll(() =>
+      sql(
+        `select enabled from public.trip_registration_settings where trip_id='${tripId}'`,
+      ),
+    )
+    .toBe('t')
+  await member.reload()
+  await member.getByRole('link', { name: 'Finish signup', exact: true }).click()
+  await member
+    .getByLabel('Experience *', { exact: true })
+    .fill('Saved draft experience')
+  await member
+    .getByRole('button', { name: 'Save and finish later', exact: true })
+    .click()
+  await expect(member).toHaveURL(`/trips/${tripId}`)
+  await member.getByRole('link', { name: 'Finish signup', exact: true }).click()
+  await expect(member.getByLabel('Experience *', { exact: true })).toHaveValue(
+    'Saved draft experience',
+  )
   await completeForm(member)
   await member
-    .getByRole('button', { name: 'Register for trip', exact: true })
+    .getByRole('button', { name: 'Confirm Going', exact: true })
     .click()
   await expect(
     member
@@ -175,6 +383,10 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     fullPage: true,
   })
   await waiting.goto(`/trips/${tripId}/rsvp`)
+  await waiting.getByRole('button', { name: 'Going', exact: true }).click()
+  await waiting
+    .getByRole('button', { name: 'Complete form', exact: true })
+    .click()
   await completeForm(waiting)
   await waiting
     .getByRole('button', { name: 'Join waitlist', exact: true })
@@ -296,13 +508,14 @@ test('a minor requests guardian review and registers only after an officer confi
   const member = await memberContext.newPage()
   const officer = await officerContext.newPage()
   await member.goto(`/trips/${tripId}/rsvp`)
+  await member.getByRole('button', { name: 'Going', exact: true }).click()
+  await member
+    .getByRole('button', { name: 'Complete form', exact: true })
+    .click()
   await expect(
-    member.getByRole('button', { name: /^(Join waitlist|Register for trip)$/ }),
+    member.getByRole('button', { name: /^(Join waitlist|Confirm Going)$/ }),
   ).toBeDisabled()
   await member.getByRole('button', { name: 'Request guardian review' }).click()
-  await expect(
-    member.getByText('Registration updated.', { exact: true }),
-  ).toBeVisible()
   await officer.goto('/admin/membership/trip-guardian-reviews')
   await expect(
     officer.getByRole('heading', {
@@ -333,7 +546,7 @@ test('a minor requests guardian review and registers only after an officer confi
   await member.reload()
   await completeForm(member, true)
   await member
-    .getByRole('button', { name: /^(Join waitlist|Register for trip)$/ })
+    .getByRole('button', { name: /^(Join waitlist|Confirm Going)$/ })
     .focus()
   await member.keyboard.press('Enter')
   await expect(
@@ -398,6 +611,10 @@ test('privacy email choices persist and opt-outs keep trip status available', as
       .getByRole('region', { name: 'Registration status', exact: true })
       .getByText('confirmed', { exact: true }),
   ).toBeVisible()
-  await expect(page.getByText(/Trip emails are disabled/)).toBeVisible()
+  await expect(
+    page
+      .getByRole('region', { name: 'Registration status', exact: true })
+      .getByText(/Trip emails are disabled/),
+  ).toBeVisible()
   await context.close()
 })
