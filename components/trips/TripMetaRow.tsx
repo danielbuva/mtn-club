@@ -6,28 +6,30 @@ type TripMetaItem = {
 }
 
 type TripMetaRowProps = {
-  items: TripMetaItem[]
+  location: TripMetaItem
+  date: TripMetaItem
+  time: TripMetaItem
 }
 
-export function TripMetaRow({ items }: TripMetaRowProps) {
-  if (!items.length) {
-    return null
-  }
+function MetaItem({ icon: Icon, text }: TripMetaItem) {
+  return (
+    <p className="flex min-w-0 items-center gap-1.5">
+      <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+      <span className="truncate">{text}</span>
+    </p>
+  )
+}
 
+export function TripMetaRow({ location, date, time }: TripMetaRowProps) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-      {items.slice(0, 4).map(item => {
-        const Icon = item.icon
-        return (
-          <p
-            key={`${item.icon.displayName ?? 'icon'}-${item.text}`}
-            className="flex items-center gap-1.5"
-          >
-            <Icon className="h-4 w-4" />
-            <span className="truncate">{item.text}</span>
-          </p>
-        )
-      })}
+      <div className="flex min-w-0 max-w-full items-center gap-4 whitespace-nowrap">
+        <MetaItem {...date} />
+        <div className="shrink-0">
+          <MetaItem {...time} />
+        </div>
+      </div>
+      <MetaItem {...location} />
     </div>
   )
 }

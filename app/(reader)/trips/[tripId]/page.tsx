@@ -8,15 +8,17 @@ import { TripQuickFacts } from '@/components/trips/detail/TripQuickFacts'
 import { TripRequirements } from '@/components/trips/detail/TripRequirements'
 import { TripStats } from '@/components/trips/detail/TripStats'
 import { TripStickyRsvpBar } from '@/components/trips/detail/TripStickyRsvpBar'
+import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { Card, CardContent } from '@/components/ui/card'
 import { fetchPublicHostsByTrip } from '@/lib/events/queries'
+import {
+  legacyRsvpChoice,
+  registrationTripStatus,
+} from '@/lib/registration/presentation'
+import { getRegistration } from '@/lib/registration/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
-import type {
-  TripActivityType,
-  TripDetail,
-  TripStatus,
-} from '@/lib/trips/types'
+import type { TripActivityType, TripDetail } from '@/lib/trips/types'
 
 const resolveActivityType = (activityTags: string[]): TripActivityType => {
   const normalizedTags = activityTags.map(tag => tag.toLowerCase())
@@ -51,23 +53,6 @@ const resolveDifficulty = (difficulty: string | null) => {
   return undefined
 }
 
-const resolveStatus = (
-  visibility: 'public' | 'members' | 'minimal',
-  capacity: number | null,
-  rsvpCount: number,
-  waitlistEnabled: boolean,
-): TripStatus => {
-  if (visibility === 'members') {
-    return 'members_only'
-  }
-
-  if (typeof capacity === 'number' && rsvpCount >= capacity) {
-    return waitlistEnabled ? 'waitlist' : 'full'
-  }
-
-  return 'open'
-}
-
 async function getTripDetail(tripId: string): Promise<TripDetail | null> {
   const supabase = await createClient()
 
@@ -81,14 +66,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     return null
   }
 
-  const [
-    privateRes,
-    leaderRes,
-    goingRsvpsRes,
-    allRsvpsRes,
-    viewerRes,
-    hostsByTrip,
-  ] = await Promise.all([
+  const [privateRes, leaderRes, registration, hostsByTrip] = await Promise.all([
     supabase
       .from('trip_private')
       .select(
@@ -102,13 +80,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
       .eq('trip_id', trip.id)
       .limit(1)
       .maybeSingle(),
-    supabase
-      .from('trip_rsvps')
-      .select('user_id,status')
-      .eq('trip_id', trip.id)
-      .eq('status', 'going'),
-    supabase.from('trip_rsvps').select('user_id,status').eq('trip_id', trip.id),
-    supabase.auth.getUser(),
+    getRegistration(trip.id),
     fetchPublicHostsByTrip(supabase, [trip.id]),
   ])
 
@@ -120,40 +92,8 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
         .maybeSingle()
     : { data: null, error: null }
 
-  const attendeeIds = (goingRsvpsRes.data ?? []).map(row => row.user_id)
-  const attendeeProfilesRes = attendeeIds.length
-    ? await supabase
-        .from('profiles')
-        .select('user_id,display_name,avatar_url')
-        .in('user_id', attendeeIds)
-    : { data: [], error: null }
-
-  const rsvpCount = goingRsvpsRes.data?.length ?? 0
-  const viewerId = viewerRes.data.user?.id ?? null
-  const viewerMembershipRes = viewerId
-    ? await supabase
-        .from('memberships')
-        .select('user_id,status')
-        .eq('user_id', viewerId)
-        .eq('status', 'active')
-        .maybeSingle()
-    : { data: null, error: null }
-
-  const viewerIsMember = Boolean(viewerMembershipRes.data)
-  const viewerRsvpStatusRaw = allRsvpsRes.data?.find(
-    row => row.user_id === viewerId,
-  )?.status
-
-  const viewerRsvpStatus =
-    viewerRsvpStatusRaw === 'removed'
-      ? null
-      : viewerRsvpStatusRaw === 'waitlisted'
-        ? 'waitlisted'
-        : viewerRsvpStatusRaw === 'going'
-          ? 'going'
-          : viewerRsvpStatusRaw === 'not_going'
-            ? 'not_going'
-            : null
+  const rsvpCount = registration.confirmedCount
+  const viewerRsvpStatus = legacyRsvpChoice(registration.state)
 
   const activityTags = trip.activity_tags ?? []
   const activityType = resolveActivityType(activityTags)
@@ -162,30 +102,23 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     ?.map(host => host.name)
     .join(', ')
 
-  const attendeeProfileByUserId = new Map(
-    (attendeeProfilesRes.data ?? []).map(profile => [profile.user_id, profile]),
-  )
-  const attendees = attendeeIds.map(userId => {
-    const profile = attendeeProfileByUserId.get(userId)
-    return {
-      userId,
-      name: profile?.display_name ?? 'Member',
-      avatarUrl: profile?.avatar_url ?? undefined,
-    }
-  })
+  const attendees = registration.attendees.map(person => ({
+    ...person,
+    avatarUrl: person.avatarUrl ?? undefined,
+  }))
 
   const requirements = privateRes.data?.required_gear ?? []
   const gearList = privateRes.data?.recommended_gear ?? []
 
-  const status = resolveStatus(
-    trip.visibility,
-    trip.capacity,
-    rsvpCount,
-    trip.waitlist_enabled,
-  )
+  const status =
+    trip.lifecycle_status === 'canceled'
+      ? 'cancelled'
+      : registrationTripStatus(registration.availability)
 
   return {
     id: trip.id,
+    lifecycleStatus: trip.lifecycle_status,
+    cancellationReason: trip.cancellation_reason,
     title: trip.title,
     activityType,
     activityTags,
@@ -217,9 +150,13 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     requirements: requirements.length ? requirements : undefined,
     tags: [
       trip.is_official ? 'Official club trip' : 'Community-created trip',
-      viewerIsMember ? 'Member ready' : 'Open to all',
+      registration.eligibility === 'members'
+        ? 'Active members'
+        : 'Open to signed-in accounts',
     ].slice(0, 3),
     attendees,
+    canViewAttendees:
+      registration.canManage || registration.state === 'confirmed',
     viewerRsvpStatus,
     visibility: trip.visibility,
     waitlistEnabled: trip.waitlist_enabled,
@@ -277,7 +214,7 @@ export default async function TripDetailPage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [membership, editPermission] = user
+  const [membership, editPermission, lifecyclePermission] = user
     ? await Promise.all([
         supabase
           .from('memberships')
@@ -290,14 +227,25 @@ export default async function TripDetailPage({
           p_capability_key: 'trips.update',
           p_trip_id: trip.id,
         }),
+        supabase.rpc('has_trip_admin_capability', {
+          p_uid: user.id,
+          p_capability_key: 'trips.delete',
+          p_trip_id: trip.id,
+        }),
       ])
-    : [{ data: null }, { data: false }]
+    : [{ data: null }, { data: false }, { data: false }]
 
   const viewer = {
     isAuthenticated: Boolean(user),
     isMember: Boolean(membership.data),
   }
   const canEditTrip = editPermission.data ?? false
+  if (
+    trip.lifecycleStatus === 'archived' &&
+    !canEditTrip &&
+    !lifecyclePermission.data
+  )
+    notFound()
 
   const assignmentScope = user
     ? await supabase.rpc('admin_capability_scope', {
@@ -321,6 +269,7 @@ export default async function TripDetailPage({
     return (
       <TripDetailEditor
         trip={trip}
+        canManageLifecycle={lifecyclePermission.data ?? false}
         returnTo={returnTo}
         availableActivityTags={availableActivityTags}
         publicHostOptions={assignmentData?.publicHostOptions}
@@ -332,17 +281,24 @@ export default async function TripDetailPage({
   }
 
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5 md:pb-8">
+    <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5">
       <TripHero trip={trip} canEdit={canEditTrip} editHref={editHref} />
+      {trip.status === 'cancelled' && (
+        <TripCancellationNotice reason={trip.cancellationReason} />
+      )}
       <TripQuickFacts trip={trip} />
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+      <div className="space-y-4">
         <div className="space-y-4">
           <TripDescription trip={trip} />
           <TripStats trip={trip} />
           <TripLogistics trip={trip} />
           <TripRequirements trip={trip} />
-          <TripAttendeesPreview attendees={trip.attendees ?? []} />
+          <TripAttendeesPreview
+            attendees={trip.attendees ?? []}
+            totalCount={trip.rsvpCount ?? 0}
+            canView={trip.canViewAttendees ?? false}
+          />
 
           <Card className="border-border/70">
             <CardContent className="p-4 text-sm text-muted-foreground md:p-5">

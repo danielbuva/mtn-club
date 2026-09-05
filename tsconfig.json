@@ -38,6 +38,7 @@
   ],
   "exclude": [
     "node_modules",
-    ".next-auth-browser"
+    ".next-auth-browser",
+    ".next-registration-browser"
   ]
 }

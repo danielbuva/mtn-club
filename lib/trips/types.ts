@@ -8,6 +8,7 @@ export type TripActivityType =
 export type TripDifficulty = 'beginner' | 'intermediate' | 'advanced' | 'expert'
 
 export type TripStatus =
+  | 'closed'
   | 'open'
   | 'waitlist'
   | 'full'
@@ -30,6 +31,8 @@ export type TripListItem = {
   difficulty?: TripDifficulty
   capacity?: number
   rsvpCount?: number
+  lifecycleStatus?: 'published' | 'canceled' | 'archived'
+  cancellationReason?: string | null
   status: TripStatus
   visibility?: 'public' | 'members' | 'minimal'
   waitlistEnabled?: boolean
@@ -67,6 +70,8 @@ export type TripDetail = {
   isAllDay?: boolean
   isOfficial?: boolean
   difficulty?: TripDifficulty
+  lifecycleStatus?: 'published' | 'canceled' | 'archived'
+  cancellationReason?: string | null
   status: TripStatus
   capacity?: number
   rsvpCount?: number
@@ -92,6 +97,7 @@ export type TripDetail = {
   nights?: number
   campStyle?: string
   attendees?: TripAttendee[]
+  canViewAttendees?: boolean
   viewerRsvpStatus?: TripRsvpChoice
   visibility?: 'public' | 'members' | 'minimal'
   waitlistEnabled?: boolean

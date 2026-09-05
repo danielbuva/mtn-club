@@ -22,7 +22,7 @@ async function TripScheduleContent() {
   const scheduleKeys = FALL_2026_TRIPS.map(getFallTripScheduleKey)
   const result = await supabase
     .from('trips')
-    .select('id, schedule_key')
+    .select('id, schedule_key, lifecycle_status, cancellation_reason')
     .in('schedule_key', scheduleKeys)
 
   const tripDetailHrefs = Object.fromEntries(
@@ -33,7 +33,27 @@ async function TripScheduleContent() {
     ),
   )
 
-  return <TripSchedulePage tripDetailHrefs={tripDetailHrefs} />
+  const tripStates = Object.fromEntries(
+    (result.data ?? []).flatMap(trip =>
+      trip.schedule_key
+        ? [
+            [
+              trip.schedule_key,
+              {
+                lifecycleStatus: trip.lifecycle_status,
+                cancellationReason: trip.cancellation_reason,
+              },
+            ],
+          ]
+        : [],
+    ),
+  )
+  return (
+    <TripSchedulePage
+      tripDetailHrefs={tripDetailHrefs}
+      tripStates={tripStates}
+    />
+  )
 }
 
 export default function Page() {

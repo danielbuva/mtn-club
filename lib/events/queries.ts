@@ -25,6 +25,7 @@ const legacyPlaceholderFilter = `(${LEGACY_PLACEHOLDER_TRIP_IDS.join(',')})`
 const buildTripsRangeQuery = (
   client: SupabaseClient<Database>,
   range: DateRange,
+  includeArchived: boolean,
 ) => {
   const startIso = range.start.toISOString()
   const endIso = range.end.toISOString()
@@ -33,7 +34,12 @@ const buildTripsRangeQuery = (
     .from('trips')
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
-    .eq('lifecycle_status', 'published')
+    .in(
+      'lifecycle_status',
+      includeArchived
+        ? ['published', 'canceled', 'archived']
+        : ['published', 'canceled'],
+    )
     .lte('starts_at', endIso)
     .or(`ends_at.is.null,ends_at.gte.${startIso}`)
     .order('starts_at', { ascending: true })
@@ -42,8 +48,13 @@ const buildTripsRangeQuery = (
 export async function fetchTripsInRange(
   client: SupabaseClient<Database>,
   range: DateRange,
+  includeArchived = false,
 ): Promise<EventRow[]> {
-  const { data, error } = await buildTripsRangeQuery(client, range)
+  const { data, error } = await buildTripsRangeQuery(
+    client,
+    range,
+    includeArchived,
+  )
   if (error) {
     console.error('TRIPS ERROR', error)
     throw error
@@ -125,7 +136,7 @@ export async function fetchPastTripsPublic(
     .from('trips')
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
-    .eq('lifecycle_status', 'published')
+    .in('lifecycle_status', ['published', 'canceled'])
     .lt('starts_at', nowIso)
     .order('starts_at', { ascending: false })
     .limit(limit)

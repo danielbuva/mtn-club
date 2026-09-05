@@ -6,6 +6,10 @@ type TripStatusBadgeProps = {
 }
 
 const statusMap: Record<TripStatus, { label: string; className: string }> = {
+  closed: {
+    label: 'Registration closed',
+    className: 'border-border bg-muted text-muted-foreground',
+  },
   open: {
     label: 'RSVP Open',
     className: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700',
@@ -23,7 +27,7 @@ const statusMap: Record<TripStatus, { label: string; className: string }> = {
     className: 'border-blue-500/30 bg-blue-500/10 text-blue-700',
   },
   cancelled: {
-    label: 'Cancelled',
+    label: 'Canceled',
     className: 'border-rose-500/30 bg-rose-500/10 text-rose-700',
   },
 }

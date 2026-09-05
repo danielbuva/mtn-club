@@ -15,6 +15,7 @@ import {
   getTagCategory,
   getTripCategories,
 } from '@/components/calendar/calendar-categories'
+import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -91,6 +92,9 @@ export function TripDetailsDrawer({
           </div>
 
           <div className="space-y-7 p-6">
+            {trip.lifecycleStatus === 'canceled' && (
+              <TripCancellationNotice reason={trip.cancellationReason} />
+            )}
             <div className="grid gap-3 sm:grid-cols-2">
               <Detail icon={Calendar} label="Date">
                 {formatDateRange(trip.dateStart, trip.dateEnd)}

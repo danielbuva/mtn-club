@@ -26,6 +26,7 @@ type AdminShellItem = { href: string; label: string }
 const icons = {
   Overview: LayoutDashboard,
   Trips: CalendarDays,
+  Registration: CalendarDays,
   Membership: ShieldCheck,
   Accounts: Users,
   Analytics: BarChart3,
@@ -38,6 +39,7 @@ const icons = {
 const shortLabels = {
   Overview: 'Overview',
   Trips: 'Trips',
+  Registration: 'RSVP',
   Membership: 'Members',
   Accounts: 'Accounts',
   Analytics: 'Analytics',

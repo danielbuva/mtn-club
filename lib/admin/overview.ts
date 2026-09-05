@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { withActivityOwners } from '@/lib/admin/activity'
 import {
   buildMembershipAccessSnapshot,
   countFirstActivationsInRange,
@@ -23,6 +24,7 @@ export type OverviewActivity = {
   summary: string
   action: string
   createdAt: string
+  owner: string
 }
 
 export type AdminOverviewData = {
@@ -98,7 +100,7 @@ export async function getAdminOverviewData(): Promise<AdminOverviewData> {
     supabase.from('trip_hosts').select('trip_id, host_id, sort_order'),
     supabase
       .from('admin_activity_events')
-      .select('id, summary, action, created_at')
+      .select('id, summary, action, created_at, actor_user_id')
       .order('created_at', { ascending: false })
       .limit(8),
   ])
@@ -226,12 +228,7 @@ export async function getAdminOverviewData(): Promise<AdminOverviewData> {
           hosts: nextTripHosts,
         }
       : null,
-    recentActivity: (activityResult.data ?? []).map(item => ({
-      id: item.id,
-      summary: item.summary,
-      action: item.action,
-      createdAt: item.created_at,
-    })),
+    recentActivity: await withActivityOwners(activityResult.data ?? []),
     termName: term?.name ?? 'Current term',
   }
 }

@@ -1,9 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import type { TripDetail } from '@/lib/trips/types'
 
 type TripAttendeesPreviewProps = {
   attendees: NonNullable<TripDetail['attendees']>
+  totalCount: number
+  canView: boolean
 }
 
 function initials(name: string) {
@@ -15,7 +16,11 @@ function initials(name: string) {
     .join('')
 }
 
-export function TripAttendeesPreview({ attendees }: TripAttendeesPreviewProps) {
+export function TripAttendeesPreview({
+  attendees,
+  totalCount,
+  canView,
+}: TripAttendeesPreviewProps) {
   const preview = attendees.slice(0, 8)
   const overflow = Math.max(attendees.length - preview.length, 0)
 
@@ -42,17 +47,25 @@ export function TripAttendeesPreview({ attendees }: TripAttendeesPreviewProps) {
               </span>
             ) : null}
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="bg-transparent"
-          >
-            View all attendees
-          </Button>
+          <details className="text-sm">
+            <summary className="cursor-pointer underline">
+              View participant names
+            </summary>
+            <ul className="mt-2 space-y-1">
+              {attendees.map(person => (
+                <li key={person.userId}>{person.name}</li>
+              ))}
+            </ul>
+          </details>
         </>
       ) : (
-        <p className="text-sm text-muted-foreground">No attendees yet.</p>
+        <p className="text-sm text-muted-foreground">
+          {totalCount === 0
+            ? 'No confirmed attendees yet.'
+            : canView
+              ? `${totalCount} confirmed. No visible profiles to show.`
+              : `${totalCount} confirmed. Participant names are visible to confirmed participants and organizers.`}
+        </p>
       )}
     </section>
   )

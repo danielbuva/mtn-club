@@ -29,6 +29,11 @@ export const ADMIN_NAV_ITEMS = [
   { href: '/admin', label: 'Overview', capability: 'overview.read' },
   { href: '/admin/trips', label: 'Trips', capability: 'trips.read' },
   {
+    href: '/admin/registration',
+    label: 'Registration',
+    capability: 'settings.read',
+  },
+  {
     href: '/admin/membership',
     label: 'Membership',
     capability: 'membership.read',

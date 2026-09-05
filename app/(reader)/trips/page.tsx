@@ -3,6 +3,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import { fetchPublicHostsByTrip, fetchTripsInRange } from '@/lib/events/queries'
 import type { EventRow } from '@/lib/events/types'
+import {
+  legacyRsvpChoice,
+  registrationTripStatus,
+} from '@/lib/registration/presentation'
+import { getRegistrationSummaries } from '@/lib/registration/server'
 import { createClient } from '@/lib/supabase/server'
 import type {
   TripActivityType,
@@ -11,78 +16,6 @@ import type {
   TripRsvpChoice,
   TripStatus,
 } from '@/lib/trips/types'
-
-type TripRsvpCountMap = Map<string, number>
-type CurrentUserRsvpMap = Map<string, TripRsvpChoice>
-
-const fetchRsvpCounts = async (
-  tripIds: string[],
-): Promise<TripRsvpCountMap> => {
-  if (!tripIds.length) {
-    return new Map()
-  }
-
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('trip_rsvps')
-    .select('trip_id,status')
-    .in('trip_id', tripIds)
-    .eq('status', 'going')
-
-  if (error || !data) {
-    return new Map()
-  }
-
-  const counts = new Map<string, number>()
-  for (const row of data) {
-    counts.set(row.trip_id, (counts.get(row.trip_id) ?? 0) + 1)
-  }
-  return counts
-}
-
-const fetchCurrentUserRsvp = async (
-  tripIds: string[],
-): Promise<CurrentUserRsvpMap> => {
-  if (!tripIds.length) {
-    return new Map()
-  }
-
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return new Map()
-  }
-
-  const { data, error } = await supabase
-    .from('trip_rsvps')
-    .select('trip_id,status')
-    .eq('user_id', user.id)
-    .in('trip_id', tripIds)
-
-  if (error || !data) {
-    return new Map()
-  }
-
-  return new Map(
-    data.map(row => {
-      const normalizedStatus: TripRsvpChoice =
-        row.status === 'removed'
-          ? null
-          : row.status === 'going'
-            ? 'going'
-            : row.status === 'waitlisted'
-              ? 'waitlisted'
-              : row.status === 'not_going'
-                ? 'not_going'
-                : null
-
-      return [row.trip_id, normalizedStatus]
-    }),
-  )
-}
 
 const resolveActivityType = (
   activityTags: string[] | null,
@@ -131,22 +64,11 @@ const resolveDifficulty = (
   return raw === 'expert' ? 'expert' : undefined
 }
 
-const resolveStatus = (event: EventRow, rsvpCount: number): TripStatus => {
-  if (event.visibility !== 'public') {
-    return 'members_only'
-  }
-
-  if (typeof event.capacity === 'number' && rsvpCount >= event.capacity) {
-    return event.waitlist_enabled ? 'waitlist' : 'full'
-  }
-
-  return 'open'
-}
-
 const toTripListItem = (
   event: EventRow,
   rsvpCount: number,
   currentUserRsvp: TripRsvpChoice,
+  status: TripStatus,
   leaderName?: string,
 ): TripListItem => {
   const difficulty = resolveDifficulty(event.difficulty)
@@ -158,6 +80,8 @@ const toTripListItem = (
 
   return {
     id: event.id,
+    cancellationReason: event.cancellation_reason,
+    lifecycleStatus: event.lifecycle_status,
     title: event.title,
     activityType,
     activityTags,
@@ -170,7 +94,7 @@ const toTripListItem = (
     difficulty,
     capacity: event.capacity ?? undefined,
     rsvpCount,
-    status: resolveStatus(event, rsvpCount),
+    status,
     visibility: event.visibility,
     waitlistEnabled: event.waitlist_enabled,
     currentUserRsvp,
@@ -191,21 +115,36 @@ export default async function TripsPage() {
   })
 
   const tripIds = events.map(event => event.id)
-  const [rsvpCounts, currentUserRsvpByTrip, hostsByTrip] = await Promise.all([
-    fetchRsvpCounts(tripIds),
-    fetchCurrentUserRsvp(tripIds),
+  const [registrations, hostsByTrip] = await Promise.all([
+    getRegistrationSummaries(tripIds),
     fetchPublicHostsByTrip(supabase, tripIds),
   ])
+  const registrationByTrip = new Map(
+    registrations.map(row => [row.tripId, row]),
+  )
 
   const trips = events.reduce<TripListItem[]>((acc, event) => {
-    const rsvpCount = rsvpCounts.get(event.id) ?? 0
-    const currentUserRsvp = currentUserRsvpByTrip.get(event.id) ?? null
+    const registration = registrationByTrip.get(event.id)
+    if (!registration)
+      throw new Error('Trip registration counts are unavailable.')
+    const rsvpCount = registration.confirmedCount
+    const currentUserRsvp = legacyRsvpChoice(registration.state)
     const leaderName = hostsByTrip
       .get(event.id)
       ?.map(host => host.name)
       .join(', ')
 
-    acc.push(toTripListItem(event, rsvpCount, currentUserRsvp, leaderName))
+    acc.push(
+      toTripListItem(
+        event,
+        rsvpCount,
+        currentUserRsvp,
+        event.lifecycle_status === 'canceled'
+          ? 'cancelled'
+          : registrationTripStatus(registration.availability),
+        leaderName,
+      ),
+    )
     return acc
   }, [])
 

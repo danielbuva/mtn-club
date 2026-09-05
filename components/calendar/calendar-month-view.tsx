@@ -584,7 +584,11 @@ export function CalendarMonthView({
                             eventMarker
                             className="shrink-0"
                           />
-                          <span className="truncate">{trip.title}</span>
+                          <span className="truncate">
+                            {trip.lifecycleStatus === 'canceled'
+                              ? `Canceled: ${trip.title}`
+                              : trip.title}
+                          </span>
                         </div>
                       ))}
                       {dayTrips.length > tripsToShow.length && (

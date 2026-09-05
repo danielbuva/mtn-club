@@ -7,7 +7,13 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { isAuthSensitiveUrl } from '@/lib/auth/analytics'
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  moreLinks,
+}: {
+  children: React.ReactNode
+  moreLinks: React.ReactNode
+}) {
   return (
     <ThemeProvider
       attribute="class"
@@ -15,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <PublicNavigationStateProvider>
+      <PublicNavigationStateProvider moreLinks={moreLinks}>
         {children}
         <Toaster />
         <AuthNotices />

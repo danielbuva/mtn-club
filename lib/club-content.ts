@@ -7,6 +7,8 @@ export type PublicHost = {
 }
 
 export type FallTrip = {
+  lifecycleStatus?: 'published' | 'canceled' | 'archived'
+  cancellationReason?: string | null
   startDate: string
   endDate?: string
   title: string
@@ -36,6 +38,8 @@ export const FALL_2026_TRIPS: FallTrip[] = [
   {
     startDate: '2026-09-06',
     title: 'Red Rock Sport Climbing',
+    lifecycleStatus: 'canceled',
+    cancellationReason: 'Canceled due to rain.',
     activity: 'sport_climbing',
     hosts: [{ name: 'Alyssa Moreno Callaway', title: 'Gear Manager' }],
   },

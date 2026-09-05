@@ -4,21 +4,26 @@ import { format } from 'date-fns'
 import { CalendarDays, Clock3, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
+import { TripCTA } from '@/components/trips/TripCTA'
 import { TripMetaRow } from '@/components/trips/TripMetaRow'
 import { TripStats } from '@/components/trips/TripStats'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { DifficultyTag } from '@/components/trips/TripTags'
+import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripEventTag } from '@/components/trips/trip-event-tag'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import type { TripListItem } from '@/lib/trips/types'
 
+const formatTripDate = (date: Date) =>
+  format(date, 'EEE, MMM d').replace(', Sep ', ', Sept ')
+
 const getDateLabel = (startAt: Date, endAt?: Date) => {
   if (!endAt || format(startAt, 'yyyy-MM-dd') === format(endAt, 'yyyy-MM-dd')) {
-    return format(startAt, 'MMM d')
+    return formatTripDate(startAt)
   }
-  return `${format(startAt, 'MMM d')}-${format(endAt, 'MMM d')}`
+  return `${formatTripDate(startAt)} – ${formatTripDate(endAt)}`
 }
 
 const getLeaderInitials = (name?: string) => {
@@ -42,23 +47,21 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
   const heroImageUrl = viewMode === 'grid' ? trip.heroImageUrl : undefined
   const showImage = Boolean(heroImageUrl)
   const visibleTags = (trip.tags ?? trip.activityTags).filter(
-    tag => tag.trim().toLowerCase() !== 'outdoor',
+    tag => !['outdoor', 'fall'].includes(tag.trim().toLowerCase()),
   )
-
-  const metaItems = [
-    { icon: MapPin, text: trip.locationName },
-    { icon: CalendarDays, text: getDateLabel(trip.startAt, trip.endAt) },
-    {
-      icon: Clock3,
-      text: trip.isAllDay ? 'TBA' : format(trip.startAt, 'h:mm a'),
-    },
-  ]
 
   return (
     <Card
       className="group cursor-pointer overflow-hidden border-border/70 transition-all hover:shadow-md"
-      onClick={() => router.push(detailHref)}
+      onClick={event => {
+        if (
+          !(event.target instanceof Element) ||
+          !event.target.closest('a,button,input,select')
+        )
+          router.push(detailHref)
+      }}
       onKeyDown={event => {
+        if (event.target !== event.currentTarget) return
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
           router.push(detailHref)
@@ -80,17 +83,14 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
-          {visibleTags.length ? (
+          {visibleTags.length || trip.status === 'members_only' ? (
             <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-2">
               {visibleTags.map(tag => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="border-white/20 bg-black/40 text-[11px] uppercase tracking-wide text-white backdrop-blur"
-                >
-                  {tag}
-                </Badge>
+                <TripEventTag key={tag} tag={tag} />
               ))}
+              {trip.status === 'members_only' ? (
+                <TripStatusBadge status={trip.status} />
+              ) : null}
             </div>
           ) : null}
 
@@ -103,40 +103,11 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
       ) : null}
 
       <CardContent className="space-y-3 p-4 md:p-5">
-        <Badge
-          variant={trip.isOfficial === false ? 'secondary' : 'outline'}
-          className="w-fit text-[11px] uppercase tracking-wide"
-        >
-          {trip.isOfficial === false
-            ? 'Community-created trip'
-            : 'Official club trip'}
-        </Badge>
-        {!showImage ? (
-          <div className="flex items-center gap-2">
-            {visibleTags.map(tag => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="text-[11px] uppercase tracking-wide"
-              >
-                {tag}
-              </Badge>
-            ))}
-            {trip.difficulty ? (
-              <DifficultyTag difficulty={trip.difficulty} />
-            ) : null}
-          </div>
-        ) : null}
+        <div className="space-y-2">
+          <h2 className="line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
+            {trip.title}
+          </h2>
 
-        <h2 className="line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
-          {trip.title}
-        </h2>
-
-        <TripMetaRow items={metaItems} />
-
-        <TripStats trip={trip} />
-
-        <div className="space-y-3 border-t border-border/70 pt-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
               <Avatar className="h-7 w-7">
@@ -155,11 +126,53 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
               </p>
             </div>
           </div>
+        </div>
+        {!showImage ? (
+          <div className="flex flex-wrap items-center gap-2">
+            {visibleTags.map(tag => (
+              <TripEventTag key={tag} tag={tag} />
+            ))}
+            {trip.difficulty ? (
+              <DifficultyTag difficulty={trip.difficulty} />
+            ) : null}
+            {trip.status === 'members_only' ? (
+              <TripStatusBadge status={trip.status} />
+            ) : null}
+          </div>
+        ) : null}
+        <Badge
+          variant={trip.isOfficial === false ? 'secondary' : 'outline'}
+          className="w-fit text-[11px] uppercase tracking-wide"
+        >
+          {trip.isOfficial === false
+            ? 'Community-created trip'
+            : 'Official club trip'}
+        </Badge>
 
+        <TripMetaRow
+          location={{ icon: MapPin, text: trip.locationName }}
+          date={{
+            icon: CalendarDays,
+            text: getDateLabel(trip.startAt, trip.endAt),
+          }}
+          time={{
+            icon: Clock3,
+            text: trip.isAllDay ? 'TBA' : format(trip.startAt, 'h:mm a'),
+          }}
+        />
+
+        {trip.status === 'cancelled' && (
+          <TripCancellationNotice reason={trip.cancellationReason} />
+        )}
+        <TripStats trip={trip} />
+
+        <div className="space-y-3 border-t border-border/70 pt-3">
           <div className="flex items-center justify-between gap-2 md:justify-end">
-            <TripStatusBadge status={trip.status} />
+            {trip.status !== 'members_only' ? (
+              <TripStatusBadge status={trip.status} />
+            ) : null}
             <div className="flex-1 md:max-w-48">
-              <RsvpComingSoon />
+              <TripCTA trip={trip} />
             </div>
           </div>
         </div>

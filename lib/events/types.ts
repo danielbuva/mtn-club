@@ -9,6 +9,9 @@ export type EventVisibility = Database['public']['Enums']['trip_visibility']
 export type EventDifficulty = 'Easy' | 'Moderate' | 'Challenging' | 'Expert'
 
 export type CalendarTrip = {
+  lifecycleStatus?: 'published' | 'canceled' | 'archived'
+  cancellationReason?: string | null
+  scheduleKey?: string | null
   id: string
   title: string
   state: string

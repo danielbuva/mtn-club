@@ -13,6 +13,7 @@ test('part-one navigation contains only active admin workspaces', () => {
     [
       'Overview',
       'Trips',
+      'Registration',
       'Membership',
       'Accounts',
       'Analytics',

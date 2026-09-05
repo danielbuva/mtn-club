@@ -125,6 +125,8 @@ Production deploys are handled by Vercel. Pushing to `main` triggers a productio
 
 See `RUNBOOK.md` for infra ownership, access, and incident response.
 
+Trip registration setup, notification delivery, pilot gates, local acceptance, and recovery are documented in [RSVP_RUNBOOK.md](RSVP_RUNBOOK.md).
+
 ### Supabase CLI ownership
 
 The GitHub identity used for this repository does not need a seat in the

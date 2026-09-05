@@ -4,32 +4,45 @@ import { Menu, Mountain } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useId } from 'react'
+import { MoreNavigation } from '@/components/navigation/more-navigation'
 import { usePublicNavigationState } from '@/components/navigation/public-navigation-state'
 import { ThemeCycleButton } from '@/components/navigation/theme-cycle-button'
-import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
+import {
+  ThumbNavigationBar,
+  thumbMenuButtonClass,
+} from '@/components/navigation/thumb-navigation'
 import { cn } from '@/lib/utils'
 
 const items = [
   { href: '/', label: 'Home' },
   { href: '/schedule', label: 'Schedule' },
   { href: '/gallery', label: 'Gallery' },
-  { href: '/join', label: 'Join' },
+  { href: '/membership', label: 'Membership' },
 ] as const
 
 const linkClass =
-  'flex min-h-10 items-center rounded-full px-2 text-xs font-semibold outline-none transition hover:bg-[#E9DDC3] focus-visible:ring-2 focus-visible:ring-[#211D18]'
+  'flex min-h-10 items-center rounded-none px-2 text-xs font-semibold outline-none transition hover:bg-[#E9DDC3] focus-visible:ring-2 focus-visible:ring-[#211D18]'
 
 const desktopLinkClass =
   'flex h-16 items-center border-b-2 border-transparent px-4 text-sm font-semibold outline-none transition hover:border-foreground/30 hover:bg-secondary/60 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring'
 
-export function PublicThumbNavigation() {
+export function PublicThumbNavigation({
+  mobileOnly = false,
+}: {
+  mobileOnly?: boolean
+}) {
   const { animationsReady, open, toggle } = usePublicNavigationState()
   const pathname = usePathname()
   const navigationId = useId()
 
   return (
     <>
-      <header className="sticky top-0 z-40 hidden h-16 border-b border-border bg-background/95 text-foreground backdrop-blur-md md:block">
+      <header
+        className={cn(
+          'sticky top-0 z-40 hidden h-16 border-b border-border bg-background/95 text-foreground backdrop-blur-md',
+          !mobileOnly && 'md:block',
+        )}
+      >
         <div className="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-6 lg:px-8">
           <Link
             href="/"
@@ -70,8 +83,9 @@ export function PublicThumbNavigation() {
           ariaLabel="Site navigation"
           tone="paper"
           placement="right"
+          containerClassName="z-[45]"
           className={cn(
-            'gap-0 overflow-hidden',
+            'gap-0 overflow-hidden rounded-none',
             animationsReady &&
               'transition-[gap] duration-300 ease-out motion-reduce:transition-none',
             open && 'gap-1',
@@ -89,7 +103,7 @@ export function PublicThumbNavigation() {
             )}
           >
             <div className="flex h-11 w-max items-center gap-1">
-              {items.map(item => (
+              {items.slice(0, 3).map(item => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -103,17 +117,26 @@ export function PublicThumbNavigation() {
                   {item.label}
                 </Link>
               ))}
-              <ThemeCycleButton tabIndex={open ? undefined : -1} />
+              <MoreNavigation
+                menuButtonId={`${navigationId}-toggle`}
+                tabIndex={open ? undefined : -1}
+                className={linkClass}
+              />
+              <ThemeCycleButton
+                shape="square"
+                tabIndex={open ? undefined : -1}
+              />
             </div>
           </div>
 
           <button
             type="button"
+            id={`${navigationId}-toggle`}
             aria-label={open ? 'Close navigation' : 'Open navigation'}
             aria-expanded={open}
             aria-controls={`${navigationId}-links`}
             onClick={toggle}
-            className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#211D18] text-[#FFECA2] outline-none transition hover:bg-[#352E27] focus-visible:ring-2 focus-visible:ring-[#211D18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F1DF]"
+            className={thumbMenuButtonClass}
           >
             <Menu className="size-5" aria-hidden="true" />
           </button>

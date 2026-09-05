@@ -2,6 +2,9 @@ import type { ReactNode } from 'react'
 import { ThemeCycleButton } from '@/components/navigation/theme-cycle-button'
 import { cn } from '@/lib/utils'
 
+export const thumbMenuButtonClass =
+  'flex size-11 shrink-0 items-center justify-center rounded-none bg-[#211D18] text-[#FFECA2] outline-none transition hover:bg-[#352E27] focus-visible:ring-2 focus-visible:ring-[#211D18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F1DF]'
+
 export function ThumbNavigationBar({
   children,
   className,

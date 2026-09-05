@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { HomeCoverClient } from '@/components/home/HomeCoverClient'
+import { MoreNavigation } from '@/components/navigation/more-navigation'
 import UNLVMountainClub from '@/components/unlv-mountain-club'
 
 /*
@@ -44,20 +45,27 @@ export function HomeCoverNavigation({
       label: isAdmin ? 'Dashboard' : 'Club Info',
       primary: true,
     },
-    { href: '/calendar', label: 'Calendar', primary: false },
-    { href: '/gallery', label: 'Photo Gallery', primary: false },
-    { href: '/trips', label: 'Trips & Events', primary: false },
+    { href: '/schedule', label: 'Schedule', primary: false },
+    { href: '/gallery', label: 'Photos', primary: false },
   ]
 
-  return authenticatedLinks.map(link => (
-    <Link
-      key={link.href}
-      href={link.href}
-      className={link.primary ? primaryLinkClass : secondaryLinkClass}
-    >
-      {link.label} →
-    </Link>
-  ))
+  return (
+    <>
+      {authenticatedLinks.map(link => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={link.primary ? primaryLinkClass : secondaryLinkClass}
+        >
+          {link.label} →
+        </Link>
+      ))}
+      <MoreNavigation
+        label="Explore →"
+        className={`${secondaryLinkClass} ml-auto text-right focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FFECA2]`}
+      />
+    </>
+  )
 }
 
 export default function HomeCover({ navigation }: { navigation: ReactNode }) {

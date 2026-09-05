@@ -1,0 +1,172 @@
+'use client'
+
+import { Input } from '@/components/ui/input'
+import type {
+  RegistrationInput,
+  TripRegistrationSnapshot,
+} from '@/lib/registration/schema'
+
+type SignerDetails = NonNullable<RegistrationInput['data']['signerDetails']>
+export const emptySignerDetails: SignerDetails = {
+  phone: '',
+  address: '',
+  emergencyAddress: '',
+  birthDate: '',
+  initials: Array.from({ length: 7 }, () => ''),
+}
+const provisions = [
+  'Medical treatment and responsibility for costs',
+  'Personal insurance',
+  'Activity risks and possible injuries',
+  'Physical and mental health',
+  'Photographs and recordings',
+  'Entire agreement and continuing effect',
+  'Voluntary agreement, adult age, and Nevada law',
+]
+
+export function WaiverFields({
+  snapshot,
+  agreed,
+  onAgree,
+  signature,
+  onSignature,
+  details,
+  onDetails,
+}: {
+  snapshot: TripRegistrationSnapshot
+  agreed: boolean
+  onAgree: (value: boolean) => void
+  signature: string
+  onSignature: (value: string) => void
+  details: SignerDetails
+  onDetails: (value: SignerDetails) => void
+}) {
+  if (!snapshot.waiverRequired) return null
+  return (
+    <section className="space-y-3 rounded-lg border p-4">
+      <h2 className="font-semibold">
+        {snapshot.waiver?.title ?? 'Waiver not configured'}
+      </h2>
+      <p className="whitespace-pre-wrap text-sm">
+        {snapshot.waiver?.body ??
+          'An organizer must add the required waiver before registration opens.'}
+      </p>
+      {snapshot.waiverSigned ? (
+        <p>
+          {snapshot.ageAdult === false
+            ? 'An officer verified your parent or guardian’s signed document for'
+            : 'You have signed'}{' '}
+          version {snapshot.waiver?.version}.
+        </p>
+      ) : snapshot.ageAdult === false ? (
+        <p>
+          Have your parent or legal guardian complete and sign this trip’s
+          waiver, then contact a club officer to verify it before registration.
+          You cannot sign the adult agreement yourself.
+        </p>
+      ) : (
+        <>
+          {snapshot.waiver?.sourceUrl ? (
+            <fieldset className="space-y-3">
+              <legend className="font-medium">Complete the waiver</legend>
+              <p className="text-sm">
+                Your typed name signs this exact version. Your account identity
+                and server signing time are recorded. These details are
+                restricted to you and authorized trip managers. Initial each
+                provision after reading it above.
+              </p>
+              {provisions.map((provision, index) => (
+                <label
+                  className="block text-sm"
+                  key={provision}
+                  htmlFor={`waiver-initial-${index}`}
+                >
+                  {index + 1}. {provision} — initials
+                  <Input
+                    required
+                    id={`waiver-initial-${index}`}
+                    maxLength={10}
+                    value={details.initials[index]}
+                    onChange={e =>
+                      onDetails({
+                        ...details,
+                        initials: details.initials.map((value, i) =>
+                          i === index ? e.target.value : value,
+                        ),
+                      })
+                    }
+                  />
+                </label>
+              ))}
+              {(
+                ['phone', 'address', 'emergencyAddress', 'birthDate'] as const
+              ).map(key => (
+                <label
+                  className="block text-sm"
+                  key={key}
+                  htmlFor={`waiver-${key}`}
+                >
+                  {
+                    {
+                      phone: 'Your phone number',
+                      address: 'Your local address',
+                      emergencyAddress: 'Emergency contact address',
+                      birthDate: 'Your date of birth',
+                    }[key]
+                  }
+                  <Input
+                    required
+                    id={`waiver-${key}`}
+                    type={
+                      key === 'birthDate'
+                        ? 'date'
+                        : key === 'phone'
+                          ? 'tel'
+                          : 'text'
+                    }
+                    maxLength={key === 'phone' ? 50 : 500}
+                    value={details[key]}
+                    onChange={e =>
+                      onDetails({ ...details, [key]: e.target.value })
+                    }
+                  />
+                </label>
+              ))}
+              <p className="text-sm">
+                Include medical services, conditions, and allergies relevant to
+                emergency care in the emergency contact notes above. Contact an
+                organizer before signing if a provision does not describe your
+                circumstances.
+              </p>
+            </fieldset>
+          ) : null}
+          <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              required
+              checked={agreed}
+              onChange={e => onAgree(e.target.checked)}
+            />
+            I have read and agree to this waiver (version{' '}
+            {snapshot.waiver?.version}).
+          </label>
+          <label className="block text-sm" htmlFor="signature">
+            Full name as signature
+            <Input
+              id="signature"
+              required
+              minLength={2}
+              maxLength={200}
+              value={signature}
+              onChange={e => onSignature(e.target.value)}
+            />
+          </label>
+          <p className="text-sm">
+            Submitting this form records your electronic signature and
+            agreement.
+          </p>
+        </>
+      )}
+    </section>
+  )
+}

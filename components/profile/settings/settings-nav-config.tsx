@@ -74,6 +74,11 @@ export const settingsNavSections: SettingsNavSection[] = [
     title: 'Events',
     items: [
       {
+        label: 'My trips',
+        href: '/profile/trips',
+        description: 'Registrations and seat offers',
+      },
+      {
         label: 'Emergency contact',
         href: '/profile/events/emergency-contact',
         description: 'Who to call',

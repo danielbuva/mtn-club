@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Archivo_Narrow, Geist } from 'next/font/google'
+import { Suspense } from 'react'
+import { MoreNavigationFallback } from '@/components/navigation/more-navigation-fallback'
+import { MoreNavigationLinks } from '@/components/navigation/more-navigation-links'
 // MapLibre styles should be loaded once at the app root.
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './globals.css'
@@ -82,7 +85,15 @@ export default function RootLayout({
         <script id="initial-theme">{initialThemeScript}</script>
       </head>
       <body className={`${geistSans.className} ${brand.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers
+          moreLinks={
+            <Suspense fallback={<MoreNavigationFallback />}>
+              <MoreNavigationLinks />
+            </Suspense>
+          }
+        >
+          {children}
+        </Providers>
       </body>
     </html>
   )

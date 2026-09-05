@@ -12,6 +12,7 @@ import {
 export const adminNavigationIcons = {
   Overview: LayoutDashboard,
   Trips: CalendarDays,
+  Registration: CalendarDays,
   Membership: ShieldCheck,
   Accounts: Users,
   Analytics: BarChart3,

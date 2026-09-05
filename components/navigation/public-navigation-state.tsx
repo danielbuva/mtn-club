@@ -9,9 +9,11 @@ import {
 } from 'react'
 
 type PublicNavigationState = {
+  moreLinks: ReactNode
   animationsReady: boolean
   open: boolean
   toggle: () => void
+  close: () => void
 }
 
 const PublicNavigationContext = createContext<PublicNavigationState | null>(
@@ -20,8 +22,10 @@ const PublicNavigationContext = createContext<PublicNavigationState | null>(
 
 export function PublicNavigationStateProvider({
   children,
+  moreLinks,
 }: {
   children: ReactNode
+  moreLinks: ReactNode
 }) {
   const [open, setOpen] = useState(false)
   const [animationsReady, setAnimationsReady] = useState(false)
@@ -35,8 +39,12 @@ export function PublicNavigationStateProvider({
     setOpen(current => !current)
   }
 
+  const close = () => setOpen(false)
+
   return (
-    <PublicNavigationContext.Provider value={{ animationsReady, open, toggle }}>
+    <PublicNavigationContext.Provider
+      value={{ animationsReady, open, toggle, close, moreLinks }}
+    >
       {children}
     </PublicNavigationContext.Provider>
   )

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Suspense } from 'react'
 import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
@@ -135,40 +136,50 @@ async function AdminMembershipPageContent({
   }
 
   return (
-    <MembershipTabs
-      defaultTab={resolveDefaultTab(tab)}
-      reviewCount={reviewQueues.review.length}
-      memberCount={memberships.length}
-      exceptionCount={reviews.length}
-      archiveCount={reviewQueues.archived.length}
-      review={
-        <MembershipReviewPanel
-          applications={reviewQueues.review}
-          payments={payments}
-          {...reviewPanelPermissions}
-        />
-      }
-      members={
-        <ActiveMembersPanel
-          memberships={memberships}
-          profileNames={profileNames}
-        />
-      }
-      exceptions={
-        <MembershipExceptionsPanel
-          reviews={reviews}
-          profileNames={profileNames}
-        />
-      }
-      archive={
-        <MembershipReviewPanel
-          applications={reviewQueues.archived}
-          payments={payments}
-          emptyMessage="No rejected applications are archived."
-          {...reviewPanelPermissions}
-        />
-      }
-    />
+    <>
+      {context.permissions['membership.confirm_guardian'] ? (
+        <Link
+          className="mb-4 inline-block underline"
+          href="/admin/membership/trip-guardian-reviews"
+        >
+          Review trip guardian consent
+        </Link>
+      ) : null}
+      <MembershipTabs
+        defaultTab={resolveDefaultTab(tab)}
+        reviewCount={reviewQueues.review.length}
+        memberCount={memberships.length}
+        exceptionCount={reviews.length}
+        archiveCount={reviewQueues.archived.length}
+        review={
+          <MembershipReviewPanel
+            applications={reviewQueues.review}
+            payments={payments}
+            {...reviewPanelPermissions}
+          />
+        }
+        members={
+          <ActiveMembersPanel
+            memberships={memberships}
+            profileNames={profileNames}
+          />
+        }
+        exceptions={
+          <MembershipExceptionsPanel
+            reviews={reviews}
+            profileNames={profileNames}
+          />
+        }
+        archive={
+          <MembershipReviewPanel
+            applications={reviewQueues.archived}
+            payments={payments}
+            emptyMessage="No rejected applications are archived."
+            {...reviewPanelPermissions}
+          />
+        }
+      />
+    </>
   )
 }
 

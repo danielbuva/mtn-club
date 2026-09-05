@@ -200,10 +200,10 @@ async function AdminOverviewPageContent() {
         <div className="flex items-center justify-between gap-4">
           <h2 className="font-brand text-2xl uppercase">Recent activity</h2>
           <Link
-            href="/admin/analytics"
+            href="/admin/analytics#activity-history"
             className="flex items-center gap-1 text-sm font-semibold hover:underline"
           >
-            View analytics <ArrowRight className="size-4" />
+            View full history <ArrowRight className="size-4" />
           </Link>
         </div>
         {data.recentActivity.length ? (
@@ -217,6 +217,9 @@ async function AdminOverviewPageContent() {
                   <p className="font-medium">{item.summary}</p>
                   <p className="mt-1 text-xs uppercase tracking-wide text-[#6A5146] dark:text-muted-foreground">
                     {item.action.replaceAll('_', ' ')}
+                  </p>
+                  <p className="mt-1 break-words text-xs text-muted-foreground">
+                    By {item.owner}
                   </p>
                 </div>
                 <time

@@ -8,9 +8,12 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { ActivityHistory } from '@/components/admin/activity-history'
 import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
+import { ActivityHistoryLoading } from '@/components/admin/loading/activity-history'
 import { Badge } from '@/components/ui/badge'
+import type { ActivitySearchParams } from '@/lib/admin/activity-filters'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { buildMembershipAccessSnapshot } from '@/lib/admin/membership-access'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -35,10 +38,11 @@ function getRangeStart(
 async function AdminAnalyticsPageContent({
   searchParams,
 }: {
-  searchParams: Promise<{ range?: string }>
+  searchParams: Promise<ActivitySearchParams>
 }) {
   await requireAdminCapability('analytics.read')
-  const { range: rawRange } = await searchParams
+  const params = await searchParams
+  const rawRange = typeof params.range === 'string' ? params.range : undefined
   const range = isRange(rawRange) ? rawRange : 'term'
   const admin = createAdminClient()
   const activeTerm = await admin
@@ -201,7 +205,7 @@ async function AdminAnalyticsPageContent({
         {ranges.map(option => (
           <Link
             key={option}
-            href={`/admin/analytics?range=${option}`}
+            href={`/admin/analytics?${new URLSearchParams({ ...Object.fromEntries(Object.entries(params).filter((entry): entry is [string, string] => typeof entry[1] === 'string')), range: option })}`}
             aria-current={range === option ? 'page' : undefined}
             className={`px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring ${range === option ? 'bg-[#211D18] text-[#FFECA2]' : 'bg-white/55 hover:bg-white dark:bg-card'}`}
           >
@@ -285,6 +289,9 @@ export default function AdminAnalyticsPage(
     <AdminViewFrame view="analytics">
       <Suspense fallback={<AdminPanelFallback view="analytics" />}>
         <AdminAnalyticsPageContent {...props} />
+      </Suspense>
+      <Suspense fallback={<ActivityHistoryLoading />}>
+        <ActivityHistory searchParams={props.searchParams} />
       </Suspense>
     </AdminViewFrame>
   )

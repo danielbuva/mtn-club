@@ -37,6 +37,9 @@ export function eventToCalendarTrip(event: EventRow): CalendarTrip {
 
   return {
     id: event.id,
+    lifecycleStatus: event.lifecycle_status,
+    cancellationReason: event.cancellation_reason,
+    scheduleKey: event.schedule_key,
     title: event.title,
     state: event.location_public ?? 'TBD',
     coordinates: {

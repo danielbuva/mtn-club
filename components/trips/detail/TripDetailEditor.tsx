@@ -11,8 +11,9 @@ import {
   type TripAssignmentOption,
   TripAssignmentsEditor,
 } from '@/components/trips/detail/trip-assignments-editor'
-import { RsvpComingSoon } from '@/components/trips/rsvp-coming-soon'
+import { TripCTA } from '@/components/trips/TripCTA'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
+import { TripLifecycleControls } from '@/components/trips/trip-lifecycle-controls'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -23,6 +24,7 @@ import { formatTripDate } from '@/lib/trips/format'
 import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 
 type TripDetailEditorProps = {
+  canManageLifecycle?: boolean
   trip: TripDetail
   returnTo?: string
   availableActivityTags: string[]
@@ -97,6 +99,7 @@ const parseDateInput = (value: string) => {
 
 export function TripDetailEditor({
   returnTo,
+  canManageLifecycle = false,
   trip,
   availableActivityTags,
   publicHostOptions = [],
@@ -583,6 +586,22 @@ export function TripDetailEditor({
             />
           </section>
 
+          {canManageLifecycle && (
+            <section className="space-y-3 border border-border p-4">
+              <h2 className="font-semibold">Trip status</h2>
+              <TripLifecycleControls
+                tripId={trip.id}
+                title={trip.title}
+                lifecycle={trip.lifecycleStatus ?? 'published'}
+                reason={trip.cancellationReason}
+                deletedHref={
+                  returnTo?.startsWith('/admin/trips')
+                    ? '/admin/trips'
+                    : '/trips'
+                }
+              />
+            </section>
+          )}
           <Card className="border-border/70">
             <CardContent className="p-4 text-sm text-muted-foreground md:p-5">
               Comments & Q&A coming soon.
@@ -607,7 +626,7 @@ export function TripDetailEditor({
               </div>
             ) : (
               <>
-                <RsvpComingSoon />
+                <TripCTA trip={trip} />
 
                 <Button
                   type="button"

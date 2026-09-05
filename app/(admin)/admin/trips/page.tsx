@@ -1,17 +1,15 @@
-import { Archive, Eye, Pencil, RotateCcw, XCircle } from 'lucide-react'
+import { Eye, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
+import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripLifecycleControls } from '@/components/trips/trip-lifecycle-controls'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { createClient } from '@/lib/supabase/server'
-import {
-  changeTripLifecycleAction,
-  purgeTestTripAction,
-  setTripOfficialAction,
-} from './actions'
+import { purgeTestTripAction, setTripOfficialAction } from './actions'
 
 const formatDate = (value: string, isAllDay: boolean) => {
   const date = new Intl.DateTimeFormat('en-US', {
@@ -48,7 +46,7 @@ async function AdminTripsPageContent({
   let query = supabase
     .from('trips')
     .select(
-      'id, title, starts_at, location_public, description_public, capacity, is_all_day, is_official, activity_tags, lifecycle_status, visibility',
+      'id, title, starts_at, location_public, description_public, capacity, is_all_day, is_official, activity_tags, lifecycle_status, cancellation_reason, visibility',
     )
     .order('starts_at', { ascending: filters.timing !== 'past' })
     .limit(250)
@@ -150,6 +148,9 @@ async function AdminTripsPageContent({
             >
               <div>
                 <h2 className="text-lg font-semibold">{trip.title}</h2>
+                {trip.lifecycle_status === 'canceled' && (
+                  <TripCancellationNotice reason={trip.cancellation_reason} />
+                )}
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Badge variant={trip.is_official ? 'default' : 'secondary'}>
                     {trip.is_official ? 'Official' : 'Community trip'}
@@ -169,6 +170,13 @@ async function AdminTripsPageContent({
                     <Eye className="size-4" /> View
                   </Link>
                 </Button>
+                {canManageTrip('trips.update', trip.id) ? (
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={`/admin/trips/${trip.id}/registrations`}>
+                      Registration
+                    </Link>
+                  </Button>
+                ) : null}
                 {canManageTrip('trips.update', trip.id) ? (
                   <Button asChild size="sm" variant="outline">
                     <Link
@@ -191,47 +199,13 @@ async function AdminTripsPageContent({
                     </Button>
                   </form>
                 ) : null}
-                {canManageTrip('trips.delete', trip.id) &&
-                trip.lifecycle_status === 'published' ? (
-                  <form action={changeTripLifecycleAction}>
-                    <input type="hidden" name="tripId" value={trip.id} />
-                    <Button
-                      name="lifecycle"
-                      value="canceled"
-                      size="sm"
-                      variant="ghost"
-                    >
-                      <XCircle className="size-4" /> Cancel
-                    </Button>
-                  </form>
-                ) : null}
-                {canManageTrip('trips.delete', trip.id) &&
-                trip.lifecycle_status === 'canceled' ? (
-                  <form action={changeTripLifecycleAction}>
-                    <input type="hidden" name="tripId" value={trip.id} />
-                    <Button
-                      name="lifecycle"
-                      value="archived"
-                      size="sm"
-                      variant="ghost"
-                    >
-                      <Archive className="size-4" /> Archive
-                    </Button>
-                  </form>
-                ) : null}
-                {canManageTrip('trips.delete', trip.id) &&
-                trip.lifecycle_status !== 'published' ? (
-                  <form action={changeTripLifecycleAction}>
-                    <input type="hidden" name="tripId" value={trip.id} />
-                    <Button
-                      name="lifecycle"
-                      value="published"
-                      size="sm"
-                      variant="ghost"
-                    >
-                      <RotateCcw className="size-4" /> Restore
-                    </Button>
-                  </form>
+                {canManageTrip('trips.delete', trip.id) ? (
+                  <TripLifecycleControls
+                    tripId={trip.id}
+                    title={trip.title}
+                    lifecycle={trip.lifecycle_status}
+                    reason={trip.cancellation_reason}
+                  />
                 ) : null}
                 {context.isSuperAdmin &&
                 trip.lifecycle_status !== 'published' &&

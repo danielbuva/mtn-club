@@ -3,6 +3,7 @@
 import { Lock } from 'lucide-react'
 import { getTripCategories } from '@/components/calendar/calendar-categories'
 import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
+import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDateRange, parseCalendarDate } from '@/lib/events/formatters'
@@ -80,6 +81,9 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
               )}
             </div>
 
+            {trip.lifecycleStatus === 'canceled' && (
+              <TripCancellationNotice reason={trip.cancellationReason} />
+            )}
             <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
               {trip.description}
             </p>

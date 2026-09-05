@@ -292,6 +292,7 @@ export type Database = {
           dues_amount_cents: number
           id: boolean
           non_admin_upcoming_trip_limit: number
+          registration_enabled: boolean
           time_zone: string
           updated_at: string
           updated_by: string | null
@@ -301,6 +302,7 @@ export type Database = {
           dues_amount_cents?: number
           id?: boolean
           non_admin_upcoming_trip_limit?: number
+          registration_enabled?: boolean
           time_zone?: string
           updated_at?: string
           updated_by?: string | null
@@ -310,6 +312,7 @@ export type Database = {
           dues_amount_cents?: number
           id?: boolean
           non_admin_upcoming_trip_limit?: number
+          registration_enabled?: boolean
           time_zone?: string
           updated_at?: string
           updated_by?: string | null
@@ -1364,6 +1367,10 @@ export type Database = {
         Row: {
           created_at: string
           note: string | null
+          queued_at: string | null
+          registered_at: string | null
+          registration_state: string
+          revision: number
           status: Database['public']['Enums']['trip_rsvp_status']
           trip_id: string
           updated_at: string
@@ -1372,6 +1379,10 @@ export type Database = {
         Insert: {
           created_at?: string
           note?: string | null
+          queued_at?: string | null
+          registered_at?: string | null
+          registration_state?: string
+          revision?: number
           status: Database['public']['Enums']['trip_rsvp_status']
           trip_id: string
           updated_at?: string
@@ -1380,6 +1391,10 @@ export type Database = {
         Update: {
           created_at?: string
           note?: string | null
+          queued_at?: string | null
+          registered_at?: string | null
+          registration_state?: string
+          revision?: number
           status?: Database['public']['Enums']['trip_rsvp_status']
           trip_id?: string
           updated_at?: string
@@ -1448,6 +1463,7 @@ export type Database = {
           activity_tags: string[]
           archived_at: string | null
           capacity: number | null
+          cancellation_reason: string | null
           canceled_at: string | null
           canceled_by: string | null
           cover_image_path: string | null
@@ -1480,6 +1496,7 @@ export type Database = {
           activity_tags?: string[]
           archived_at?: string | null
           capacity?: number | null
+          cancellation_reason?: string | null
           canceled_at?: string | null
           canceled_by?: string | null
           cover_image_path?: string | null
@@ -1512,6 +1529,7 @@ export type Database = {
           activity_tags?: string[]
           archived_at?: string | null
           capacity?: number | null
+          cancellation_reason?: string | null
           canceled_at?: string | null
           canceled_by?: string | null
           cover_image_path?: string | null
@@ -1653,11 +1671,468 @@ export type Database = {
         }
         Relationships: []
       }
+      registration_account_merges: {
+        Row: {
+          merged_at: string
+          primary_id: string
+          secondary_id: string
+        }
+        Insert: {
+          merged_at?: string
+          primary_id: string
+          secondary_id: string
+        }
+        Update: {
+          merged_at?: string
+          primary_id?: string
+          secondary_id?: string
+        }
+        Relationships: []
+      }
+      registration_delivery_events: {
+        Row: {
+          delivery_status: string | null
+          id: string
+          provider_id: string | null
+          received_at: string
+        }
+        Insert: {
+          delivery_status?: string | null
+          id: string
+          provider_id?: string | null
+          received_at?: string
+        }
+        Update: {
+          delivery_status?: string | null
+          id?: string
+          provider_id?: string | null
+          received_at?: string
+        }
+        Relationships: []
+      }
+      registration_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          details: Json
+          id: string
+          kind: string
+          trip_id: string
+          user_id: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          kind: string
+          trip_id: string
+          user_id?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          kind?: string
+          trip_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_events_trip_id_fkey'
+            columns: ['trip_id']
+            isOneToOne: false
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      registration_guardian_reviews: {
+        Row: {
+          evidence: string
+          reviewed_at: string
+          reviewer_id: string
+          trip_id: string
+          user_id: string
+          waiver_id: string | null
+        }
+        Insert: {
+          evidence: string
+          reviewed_at?: string
+          reviewer_id: string
+          trip_id: string
+          user_id: string
+          waiver_id?: string | null
+        }
+        Update: {
+          evidence?: string
+          reviewed_at?: string
+          reviewer_id?: string
+          trip_id?: string
+          user_id?: string
+          waiver_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_guardian_reviews_trip_id_fkey'
+            columns: ['trip_id']
+            isOneToOne: false
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'registration_guardian_reviews_waiver_id_fkey'
+            columns: ['waiver_id']
+            isOneToOne: false
+            referencedRelation: 'registration_waivers'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      registration_notifications: {
+        Row: {
+          attempts: number
+          created_at: string
+          dedupe_key: string
+          error_code: string | null
+          event_id: string | null
+          id: string
+          kind: string
+          lease_token: string | null
+          leased_until: string | null
+          next_attempt_at: string
+          provider_id: string | null
+          status: string
+          trip_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          dedupe_key: string
+          error_code?: string | null
+          event_id?: string | null
+          id?: string
+          kind: string
+          lease_token?: string | null
+          leased_until?: string | null
+          next_attempt_at?: string
+          provider_id?: string | null
+          status?: string
+          trip_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          dedupe_key?: string
+          error_code?: string | null
+          event_id?: string | null
+          id?: string
+          kind?: string
+          lease_token?: string | null
+          leased_until?: string | null
+          next_attempt_at?: string
+          provider_id?: string | null
+          status?: string
+          trip_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_notifications_event_id_fkey'
+            columns: ['event_id']
+            isOneToOne: false
+            referencedRelation: 'registration_events'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'registration_notifications_trip_id_fkey'
+            columns: ['trip_id']
+            isOneToOne: false
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      registration_offers: {
+        Row: {
+          expires_at: string
+          id: string
+          issued_at: string
+          issued_by: string
+          resolved_at: string | null
+          status: string
+          trip_id: string
+          user_id: string
+        }
+        Insert: {
+          expires_at: string
+          id?: string
+          issued_at?: string
+          issued_by: string
+          resolved_at?: string | null
+          status?: string
+          trip_id: string
+          user_id: string
+        }
+        Update: {
+          expires_at?: string
+          id?: string
+          issued_at?: string
+          issued_by?: string
+          resolved_at?: string | null
+          status?: string
+          trip_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_offers_trip_id_user_id_fkey'
+            columns: ['trip_id', 'user_id']
+            isOneToOne: false
+            referencedRelation: 'trip_rsvps'
+            referencedColumns: ['trip_id', 'user_id']
+          },
+        ]
+      }
+      registration_requests: {
+        Row: {
+          actor_id: string
+          created_at: string
+          payload: Json
+          request_id: string
+          trip_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          payload: Json
+          request_id: string
+          trip_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          payload?: Json
+          request_id?: string
+          trip_id?: string
+        }
+        Relationships: []
+      }
+      registration_responses: {
+        Row: {
+          answers: Json
+          emergency_contact: Json
+          form_version: number
+          trip_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          emergency_contact?: Json
+          form_version: number
+          trip_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          emergency_contact?: Json
+          form_version?: number
+          trip_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_responses_trip_id_user_id_fkey'
+            columns: ['trip_id', 'user_id']
+            isOneToOne: true
+            referencedRelation: 'trip_rsvps'
+            referencedColumns: ['trip_id', 'user_id']
+          },
+        ]
+      }
+      registration_signatures: {
+        Row: {
+          id: string
+          original_signer_id: string
+          signature_name: string
+          signed_at: string
+          trip_id: string
+          user_id: string
+          waiver_id: string
+        }
+        Insert: {
+          id?: string
+          original_signer_id: string
+          signature_name: string
+          signed_at?: string
+          trip_id: string
+          user_id: string
+          waiver_id: string
+        }
+        Update: {
+          id?: string
+          original_signer_id?: string
+          signature_name?: string
+          signed_at?: string
+          trip_id?: string
+          user_id?: string
+          waiver_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_signatures_trip_id_fkey'
+            columns: ['trip_id']
+            isOneToOne: false
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'registration_signatures_waiver_id_fkey'
+            columns: ['waiver_id']
+            isOneToOne: false
+            referencedRelation: 'registration_waivers'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      registration_waivers: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          title: string
+          trip_id: string
+          version: number
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          title: string
+          trip_id: string
+          version: number
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          title?: string
+          trip_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'registration_waivers_trip_id_fkey'
+            columns: ['trip_id']
+            isOneToOne: false
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      registration_worker_health: {
+        Row: {
+          id: boolean
+          last_error: string | null
+          last_run_at: string | null
+          last_success_at: string | null
+        }
+        Insert: {
+          id?: boolean
+          last_error?: string | null
+          last_run_at?: string | null
+          last_success_at?: string | null
+        }
+        Update: {
+          id?: boolean
+          last_error?: string | null
+          last_run_at?: string | null
+          last_success_at?: string | null
+        }
+        Relationships: []
+      }
+      trip_registration_settings: {
+        Row: {
+          eligibility: string
+          emergency_required: boolean
+          enabled: boolean
+          form_version: number
+          locked_at: string | null
+          offer_hours: number
+          questions: Json
+          revision: number
+          trip_id: string
+          waiver_id: string | null
+          waiver_required: boolean
+        }
+        Insert: {
+          eligibility?: string
+          emergency_required?: boolean
+          enabled?: boolean
+          form_version?: number
+          locked_at?: string | null
+          offer_hours?: number
+          questions?: Json
+          revision?: number
+          trip_id: string
+          waiver_id?: string | null
+          waiver_required?: boolean
+        }
+        Update: {
+          eligibility?: string
+          emergency_required?: boolean
+          enabled?: boolean
+          form_version?: number
+          locked_at?: string | null
+          offer_hours?: number
+          questions?: Json
+          revision?: number
+          trip_id?: string
+          waiver_id?: string | null
+          waiver_required?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'trip_registration_settings_trip_id_fkey'
+            columns: ['trip_id']
+            isOneToOne: true
+            referencedRelation: 'trips'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'trip_registration_settings_waiver_id_fkey'
+            columns: ['waiver_id']
+            isOneToOne: false
+            referencedRelation: 'registration_waivers'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      registration_maintenance: { Args: never; Returns: undefined }
+      registration_operations: { Args: never; Returns: Json }
+      get_my_registrations: { Args: never; Returns: Json }
+      get_my_registration_signatures: { Args: never; Returns: Json }
+      get_trip_guardian_requests: { Args: never; Returns: Json }
+
+      merge_trip_registrations: {
+        Args: { p_primary: string; p_secondary: string }
+        Returns: undefined
+      }
+
       declare_my_age_18_or_older: { Args: never; Returns: undefined }
       activate_confirmed_zelle_membership: {
         Args: { p_user_id: string }
@@ -1902,6 +2377,59 @@ export type Database = {
         Returns: undefined
       }
       try_uuid: { Args: { p: string }; Returns: string }
+      claim_registration_notifications: {
+        Args: { p_limit?: number }
+        Returns: Json
+      }
+      declare_registration_age: {
+        Args: { p_adult: boolean }
+        Returns: undefined
+      }
+      finish_registration_notification: {
+        Args: {
+          p_error: string
+          p_id: string
+          p_lease: string
+          p_provider_id: string
+          p_retry: boolean
+        }
+        Returns: undefined
+      }
+      get_registration_summaries: {
+        Args: { p_trip_ids: string[] }
+        Returns: Json
+      }
+      prepare_registration_notification: {
+        Args: { p_id: string; p_lease: string }
+        Returns: Json
+      }
+      registration_command: {
+        Args: {
+          p_command: string
+          p_data?: Json
+          p_expected_revision: number
+          p_request_id: string
+          p_trip_id: string
+          p_user_id?: string
+        }
+        Returns: Json
+      }
+      registration_delivery: {
+        Args: { p_event_id: string; p_provider_id: string; p_status: string }
+        Returns: undefined
+      }
+      registration_worker_result: {
+        Args: { p_error?: string }
+        Returns: undefined
+      }
+      save_registration_settings: {
+        Args: { p_data: Json; p_revision: number; p_trip_id: string }
+        Returns: Json
+      }
+      set_registration_enabled: {
+        Args: { p_enabled: boolean }
+        Returns: undefined
+      }
     }
     Enums: {
       admin_permission_scope: 'assigned' | 'all'

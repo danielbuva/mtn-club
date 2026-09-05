@@ -104,6 +104,7 @@ export function OverviewLoading() {
               <div>
                 <LoadingValue className="w-56 max-w-full" />
                 <LoadingValue className="mt-1 h-3 w-24" />
+                <LoadingValue className="mt-1 h-3 w-32" />
               </div>
               <LoadingValue className="h-3 w-12" />
             </div>

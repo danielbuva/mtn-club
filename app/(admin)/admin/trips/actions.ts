@@ -78,12 +78,18 @@ export async function changeTripLifecycleAction(formData: FormData) {
   const lifecycle = z
     .enum(['canceled', 'archived', 'published'])
     .parse(String(formData.get('lifecycle')))
+  const reason = z
+    .string()
+    .trim()
+    .max(500)
+    .parse(formData.get('reason') ?? '')
   const now = new Date().toISOString()
   const admin = createAdminClient()
   const { data, error } = await admin
     .from('trips')
     .update({
       lifecycle_status: lifecycle,
+      cancellation_reason: lifecycle === 'canceled' ? reason || null : null,
       canceled_at: lifecycle === 'canceled' ? now : null,
       canceled_by: lifecycle === 'canceled' ? context.userId : null,
       archived_at: lifecycle === 'archived' ? now : null,
@@ -97,12 +103,16 @@ export async function changeTripLifecycleAction(formData: FormData) {
     context.userId,
     tripId,
     `trip_${lifecycle}`,
-    `${data.title} was ${lifecycle}.`,
+    `${data.title} was ${lifecycle}.${reason && lifecycle === 'canceled' ? ` Reason: ${reason}` : ''}`,
   )
   revalidatePath('/admin')
   revalidatePath('/admin/trips')
   revalidatePath('/trips')
   revalidatePath('/calendar')
+  revalidatePath('/schedule')
+  revalidatePath('/profile/trips')
+  revalidatePath(`/trips/${tripId}/rsvp`)
+  revalidatePath(`/admin/trips/${tripId}/registrations`)
   revalidatePath(`/trips/${tripId}`)
 }
 

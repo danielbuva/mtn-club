@@ -270,6 +270,12 @@ const applyMerge = async (
   primaryUserId: string,
   secondaryUserId: string,
 ) => {
+  const registrations = await admin.rpc('merge_trip_registrations', {
+    p_primary: primaryUserId,
+    p_secondary: secondaryUserId,
+  })
+  if (registrations.error) throw registrations.error
+
   const [primaryProfileRes, secondaryProfileRes] = await Promise.all([
     admin
       .from('profiles')
@@ -564,38 +570,6 @@ const applyMerge = async (
     .eq('user_id', secondaryUserId)
   if (tripLeadersDeleteError) throw tripLeadersDeleteError
 
-  const mergeTripRsvps = await Promise.all([
-    admin.from('trip_rsvps').select('*').eq('user_id', primaryUserId),
-    admin.from('trip_rsvps').select('*').eq('user_id', secondaryUserId),
-  ])
-  if (mergeTripRsvps[0].error) throw mergeTripRsvps[0].error
-  if (mergeTripRsvps[1].error) throw mergeTripRsvps[1].error
-
-  const primaryRsvpTrips = new Set(
-    (mergeTripRsvps[0].data ?? []).map(row => row.trip_id),
-  )
-  const rsvpRowsToInsert = (mergeTripRsvps[1].data ?? [])
-    .filter(row => !primaryRsvpTrips.has(row.trip_id))
-    .map<Database['public']['Tables']['trip_rsvps']['Insert']>(row => ({
-      trip_id: row.trip_id,
-      user_id: primaryUserId,
-      status: row.status,
-      note: row.note,
-      created_at: row.created_at,
-      updated_at: row.updated_at,
-    }))
-
-  if (rsvpRowsToInsert.length) {
-    const { error } = await admin.from('trip_rsvps').insert(rsvpRowsToInsert)
-    if (error) throw error
-  }
-
-  const { error: tripRsvpsDeleteError } = await admin
-    .from('trip_rsvps')
-    .delete()
-    .eq('user_id', secondaryUserId)
-  if (tripRsvpsDeleteError) throw tripRsvpsDeleteError
-
   const mergeTripFavorites = await Promise.all([
     admin.from('trip_favorites').select('*').eq('user_id', primaryUserId),
     admin.from('trip_favorites').select('*').eq('user_id', secondaryUserId),
@@ -626,41 +600,6 @@ const applyMerge = async (
     .delete()
     .eq('user_id', secondaryUserId)
   if (tripFavoritesDeleteError) throw tripFavoritesDeleteError
-
-  const mergeTripAttendance = await Promise.all([
-    admin.from('trip_attendance').select('*').eq('user_id', primaryUserId),
-    admin.from('trip_attendance').select('*').eq('user_id', secondaryUserId),
-  ])
-  if (mergeTripAttendance[0].error) throw mergeTripAttendance[0].error
-  if (mergeTripAttendance[1].error) throw mergeTripAttendance[1].error
-
-  const primaryAttendanceTrips = new Set(
-    (mergeTripAttendance[0].data ?? []).map(row => row.trip_id),
-  )
-  const attendanceRowsToInsert = (mergeTripAttendance[1].data ?? [])
-    .filter(row => !primaryAttendanceTrips.has(row.trip_id))
-    .map<Database['public']['Tables']['trip_attendance']['Insert']>(row => ({
-      trip_id: row.trip_id,
-      user_id: primaryUserId,
-      attended: row.attended,
-      responded_at: row.responded_at,
-      feedback: row.feedback,
-      created_at: row.created_at,
-      updated_at: row.updated_at,
-    }))
-
-  if (attendanceRowsToInsert.length) {
-    const { error } = await admin
-      .from('trip_attendance')
-      .insert(attendanceRowsToInsert)
-    if (error) throw error
-  }
-
-  const { error: tripAttendanceDeleteError } = await admin
-    .from('trip_attendance')
-    .delete()
-    .eq('user_id', secondaryUserId)
-  if (tripAttendanceDeleteError) throw tripAttendanceDeleteError
 
   const { error: deleteSecondaryAuthError } = await admin.auth.admin.deleteUser(
     secondaryUserId,

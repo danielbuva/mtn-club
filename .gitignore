@@ -18,6 +18,7 @@
 # next.js
 /.next/
 /.next-auth-browser/
+/.next-registration-browser/
 /out/
 
 # production

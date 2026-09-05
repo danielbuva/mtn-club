@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { PublicShell } from '@/components/landing/public-shell'
+import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import {
   FALL_2026_TRIPS,
@@ -35,8 +36,16 @@ function ScheduleLinks() {
 
 export function TripSchedulePage({
   tripDetailHrefs,
+  tripStates = {},
 }: {
   tripDetailHrefs: Record<string, string>
+  tripStates?: Record<
+    string,
+    {
+      lifecycleStatus: 'published' | 'canceled' | 'archived'
+      cancellationReason: string | null
+    }
+  >
 }) {
   return (
     <PublicShell disclaimerId="disclaimer" overscrollTone="inverse">
@@ -59,6 +68,8 @@ export function TripSchedulePage({
           <div className="mt-4 grid gap-px overflow-hidden border border-[#F8F1DF]/15 bg-[#F8F1DF]/15 sm:grid-cols-2">
             {FALL_2026_TRIPS.map(trip => {
               const scheduleKey = getFallTripScheduleKey(trip)
+              const state = tripStates[scheduleKey] ?? trip
+              if (state.lifecycleStatus === 'archived') return null
               const href =
                 tripDetailHrefs[scheduleKey] ??
                 `/calendar?month=${trip.startDate.slice(0, 7)}`
@@ -78,6 +89,14 @@ export function TripSchedulePage({
                       aria-hidden="true"
                     />
                   </h2>
+                  {state.lifecycleStatus === 'canceled' && (
+                    <div className="mt-3">
+                      <TripCancellationNotice
+                        inverse
+                        reason={state.cancellationReason}
+                      />
+                    </div>
+                  )}
                   <p className="mt-2 text-sm leading-6 text-[#F8F1DF]/65">
                     Led by{' '}
                     {trip.hosts

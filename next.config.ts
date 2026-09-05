@@ -28,12 +28,17 @@ const nextConfig: NextConfig = {
     ]
   },
   // Keep isolated browser tests independent from an already-running dev server.
-  ...(process.env.AUTH_BROWSER_TEST === 'true'
+  ...(process.env.REGISTRATION_BROWSER_TEST === 'true'
     ? {
-        distDir: '.next-auth-browser',
-        typescript: { tsconfigPath: 'tsconfig.auth-browser.json' },
+        distDir: '.next-registration-browser',
+        typescript: { tsconfigPath: 'tsconfig.registration-browser.json' },
       }
-    : {}),
+    : process.env.AUTH_BROWSER_TEST === 'true'
+      ? {
+          distDir: '.next-auth-browser',
+          typescript: { tsconfigPath: 'tsconfig.auth-browser.json' },
+        }
+      : {}),
 
   experimental: {
     staleTimes: {

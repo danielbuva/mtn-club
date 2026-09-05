@@ -2,7 +2,6 @@
 
 import { ChevronRightIcon, List } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import Link from 'next/link'
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { GuideSection } from '@/app/(reader)/guides/types'
@@ -13,7 +12,6 @@ import { Button } from '@/components/ui/button'
 const HEADER_OFFSET = 72
 type SectionsDrawerProps = {
   sections: GuideSection[]
-  canCreateEvent: boolean
 }
 
 const prefersReducedMotion = () =>
@@ -146,10 +144,7 @@ const useDrawerFocusTrap = (
   }, [open, openerRef])
 }
 
-export function SectionsDrawer({
-  sections,
-  canCreateEvent,
-}: SectionsDrawerProps) {
+export function SectionsDrawer({ sections }: SectionsDrawerProps) {
   const [open, setOpen] = useState(false)
   const [expandedIds, setExpandedIds] = useState<GuideSection['id'][]>([])
   const highlightTimerRef = useRef<number | null>(null)
@@ -243,15 +238,6 @@ export function SectionsDrawer({
     <>
       <ThumbNavigationBar ariaLabel="Guide navigation" showTheme={false}>
         <BackButton className="min-h-9 rounded-full px-4 py-2 text-xs text-foreground/70 whitespace-nowrap" />
-        {canCreateEvent ? (
-          <Button
-            asChild
-            size="sm"
-            className="rounded-full px-4 text-xs whitespace-nowrap"
-          >
-            <Link href="/trips/new">+ Event</Link>
-          </Button>
-        ) : null}
         <Button
           variant="secondary"
           size="sm"

@@ -15,6 +15,9 @@ const activityTags: Record<
 
 const buildTrip = (trip: (typeof FALL_2026_TRIPS)[number]): CalendarTrip => ({
   id: getFallTripScheduleKey(trip),
+  scheduleKey: getFallTripScheduleKey(trip),
+  lifecycleStatus: trip.lifecycleStatus ?? 'published',
+  cancellationReason: trip.cancellationReason,
   title: trip.title,
   state: 'Exact location in Discord',
   coordinates: { lat: 0, lng: 0 },

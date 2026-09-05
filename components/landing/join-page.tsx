@@ -5,8 +5,13 @@ import {
   MessageCircle,
   UserPlus,
 } from 'lucide-react'
+import { Suspense } from 'react'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { TrackLink } from '@/components/analytics/track-link'
+import {
+  JoinAccountOption,
+  JoinAccountOptionSkeleton,
+} from '@/components/landing/join-account-option'
 import { PublicShell } from '@/components/landing/public-shell'
 import {
   DISCORD_INVITE_URL,
@@ -105,6 +110,9 @@ export function JoinPage() {
               </span>
             </TrackLink>
           </div>
+          <Suspense fallback={<JoinAccountOptionSkeleton />}>
+            <JoinAccountOption />
+          </Suspense>
         </div>
       </section>
     </PublicShell>
