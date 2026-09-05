@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Check } from 'lucide-react'
+import Link from 'next/link'
 import { RsvpChoices } from '@/components/registration/rsvp-choices'
 import { Button } from '@/components/ui/button'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
