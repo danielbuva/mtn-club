@@ -53,21 +53,23 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
         await advance()
       }}
     >
-      <h1 className="pr-14 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        {snapshot.title}
-      </h1>
-      {props.onCancel && (
-        <RegistrationExit
-          onCancel={props.onCancel}
-          onSave={
-            snapshot.actions.includes('save_draft')
-              ? () => persist('draft')
-              : undefined
-          }
-          disabled={pending}
-          saveError={failed ? message : undefined}
-        />
-      )}
+      <div className="relative">
+        <h1 className="pr-14 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          {snapshot.title}
+        </h1>
+        {props.onCancel && (
+          <RegistrationExit
+            onCancel={props.onCancel}
+            onSave={
+              snapshot.actions.includes('save_draft')
+                ? () => persist('draft')
+                : undefined
+            }
+            disabled={pending}
+            saveError={failed ? message : undefined}
+          />
+        )}
+      </div>
       <FormProgress index={nav.index} count={nav.count} />
       <FormMessage error={failed}>{message}</FormMessage>
       {complete ? (

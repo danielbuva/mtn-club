@@ -67,7 +67,7 @@ export function RegistrationExit({
           size="icon"
           disabled={disabled}
           aria-label="Close registration"
-          className="absolute -top-3 right-0 size-11"
+          className="absolute right-0 top-1/2 size-11 -translate-y-1/2"
         >
           <X className="size-5" />
         </Button>
