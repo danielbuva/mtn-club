@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
+import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { requireAdminCapability } from '@/lib/admin/auth'
@@ -105,9 +106,15 @@ async function AdminOverviewPageContent() {
             </div>
             {data.nextTrip ? (
               <>
-                <h2 className="mt-7 max-w-2xl font-brand text-5xl uppercase leading-[0.9] sm:text-6xl">
-                  {data.nextTrip.title}
-                </h2>
+                <div className="mt-7 flex items-start gap-3">
+                  <h2 className="min-w-0 flex-1 max-w-2xl font-brand text-5xl uppercase leading-[0.9] sm:text-6xl">
+                    {data.nextTrip.title}
+                  </h2>
+                  <CopyTripLinkButton
+                    tripId={data.nextTrip.id}
+                    className="text-[#F8F1DF] hover:bg-[#F8F1DF]/10 hover:text-[#F8F1DF]"
+                  />
+                </div>
                 <div className="mt-7 grid gap-3 text-sm text-[#F8F1DF]/75 sm:grid-cols-2">
                   <p className="flex items-center gap-2">
                     <CalendarDays className="size-4 text-[#FFECA2]" />

@@ -11,6 +11,7 @@ import { TripStats } from '@/components/trips/TripStats'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { DifficultyTag } from '@/components/trips/TripTags'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { TripEventTag } from '@/components/trips/trip-event-tag'
 import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -48,20 +49,22 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
   const detailHref = trip.detailHref ?? `/trips/${trip.id}`
   if (trip.status === 'cancelled') {
     return (
-      <Link
-        href={detailHref}
-        className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        aria-label={`Open details for ${trip.title}`}
-      >
-        <Card className="border-border/70 transition-shadow hover:shadow-md">
-          <CardContent className="space-y-2 p-4 md:p-5">
-            <h2 className="text-lg font-semibold leading-snug md:text-xl">
-              <TripTitleText title={trip.title} canceled />
+      <Card className="border-border/70 transition-shadow hover:shadow-md">
+        <CardContent className="space-y-2 p-4 md:p-5">
+          <div className="flex items-start gap-2">
+            <h2 className="min-w-0 flex-1 text-lg font-semibold leading-snug md:text-xl">
+              <Link
+                href={detailHref}
+                className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <TripTitleText title={trip.title} canceled />
+              </Link>
             </h2>
-            <TripCancellationNotice reason={trip.cancellationReason} />
-          </CardContent>
-        </Card>
-      </Link>
+            <CopyTripLinkButton tripId={trip.id} />
+          </div>
+          <TripCancellationNotice reason={trip.cancellationReason} />
+        </CardContent>
+      </Card>
     )
   }
   const heroImageUrl = viewMode === 'grid' ? trip.heroImageUrl : undefined
@@ -129,9 +132,12 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
 
       <CardContent className="space-y-3 p-4 md:p-5">
         <div className="space-y-2">
-          <h2 className="line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
-            <TripTitleText title={trip.title} canceled={false} />
-          </h2>
+          <div className="flex items-start gap-2">
+            <h2 className="min-w-0 flex-1 line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
+              <TripTitleText title={trip.title} canceled={false} />
+            </h2>
+            <CopyTripLinkButton tripId={trip.id} />
+          </div>
 
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">

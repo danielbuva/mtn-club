@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Check } from 'lucide-react'
 import { RsvpChoices } from '@/components/registration/rsvp-choices'
 import { Button } from '@/components/ui/button'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
@@ -51,7 +52,7 @@ export function TripCTA({
     trip.registrationState === 'incomplete'
       ? 'Finish signup'
       : trip.registrationState === 'confirmed'
-        ? '✓ Going'
+        ? 'Going'
         : trip.registrationState === 'waitlisted'
           ? 'Waitlisted'
           : trip.registrationState === 'offered'
@@ -61,7 +62,12 @@ export function TripCTA({
               : 'RSVP'
   return (
     <Button asChild size="sm" className={cn('w-full', className)}>
-      <Link href={`/trips/${trip.id}/rsvp`}>{label}</Link>
+      <Link href={`/trips/${trip.id}/rsvp`}>
+        {trip.registrationState === 'confirmed' ? (
+          <Check aria-hidden="true" className="size-4" />
+        ) : null}
+        {label}
+      </Link>
     </Button>
   )
 }

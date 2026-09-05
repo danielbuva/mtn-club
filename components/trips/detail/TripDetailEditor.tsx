@@ -284,7 +284,7 @@ export function TripDetailEditor({
               ) : null}
             </div>
 
-            <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
+            <div className="absolute left-4 right-4 top-16 z-10 flex flex-wrap items-center gap-2 sm:left-auto sm:top-4 sm:justify-end">
               <Button
                 asChild
                 type="button"

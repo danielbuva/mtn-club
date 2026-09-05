@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { ActivityTag, DifficultyTag } from '@/components/trips/TripTags'
+import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -56,12 +57,15 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
             </Button>
           ) : null}
         </div>
-        <h1 className="text-2xl font-semibold leading-tight md:text-4xl">
-          <TripTitleText
-            title={trip.title}
-            canceled={trip.status === 'cancelled'}
-          />
-        </h1>
+        <div className="flex items-start gap-2">
+          <h1 className="min-w-0 flex-1 text-2xl font-semibold leading-tight md:text-4xl">
+            <TripTitleText
+              title={trip.title}
+              canceled={trip.status === 'cancelled'}
+            />
+          </h1>
+          <CopyTripLinkButton tripId={trip.id} />
+        </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Avatar className="h-7 w-7 border border-border/70">
             {trip.leaderAvatarUrl ? (
@@ -124,12 +128,15 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
         </div>
 
         <div className="relative text-white">
-          <h1 className="text-2xl font-semibold leading-tight md:text-4xl">
-            <TripTitleText
-              title={trip.title}
-              canceled={trip.status === 'cancelled'}
-            />
-          </h1>
+          <div className="flex items-start gap-2">
+            <h1 className="min-w-0 flex-1 text-2xl font-semibold leading-tight md:text-4xl">
+              <TripTitleText
+                title={trip.title}
+                canceled={trip.status === 'cancelled'}
+              />
+            </h1>
+            <CopyTripLinkButton tripId={trip.id} />
+          </div>
           <div className="mt-4 flex items-center gap-2 text-sm text-white/90">
             <Avatar className="h-7 w-7 border border-white/20">
               {trip.leaderAvatarUrl ? (

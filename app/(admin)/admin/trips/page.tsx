@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { TripLifecycleControls } from '@/components/trips/trip-lifecycle-controls'
 import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Badge } from '@/components/ui/badge'
@@ -171,6 +172,7 @@ async function AdminTripsPageContent({
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
+                <CopyTripLinkButton tripId={trip.id} />
                 <Button asChild size="sm" variant="outline">
                   <Link href={`/trips/${trip.id}`}>
                     <Eye className="size-4" /> View
