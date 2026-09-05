@@ -134,8 +134,8 @@ export default async function TripsPage() {
       ?.map(host => host.name)
       .join(', ')
 
-    acc.push(
-      toTripListItem(
+    acc.push({
+      ...toTripListItem(
         event,
         rsvpCount,
         currentUserRsvp,
@@ -144,7 +144,8 @@ export default async function TripsPage() {
           : registrationTripStatus(registration.availability),
         leaderName,
       ),
-    )
+      registrationState: registration.state,
+    })
     return acc
   }, [])
 

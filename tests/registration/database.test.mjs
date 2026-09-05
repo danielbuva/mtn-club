@@ -612,3 +612,203 @@ test('ordinary community creators become leaders without gaining assignment or o
     '1',
   )
 })
+
+test('incomplete signups stay private, hold no seat, survive drafts, and confirm only on valid submission', async () => {
+  const f = fixture(2)
+  const user = f.users[0]
+  const peer = f.users[1]
+  const command = (name, revision, data = {}, request = randomUUID()) =>
+    asUser(
+      user,
+      `select public.registration_command('${f.trip}',${literal(name)},'${request}',${revision},${literal(JSON.stringify(data))})`,
+    )
+  const request = randomUUID()
+  let snapshot = await command('begin_signup', 0, {}, request)
+  assert.equal(snapshot.state, 'incomplete')
+  assert.equal(snapshot.confirmedCount, 0)
+  assert.equal(snapshot.reservedCount, 0)
+  assert.equal(snapshot.actions.includes('register'), true)
+  assert.equal(
+    (await command('begin_signup', 0, {}, request)).revision,
+    snapshot.revision,
+  )
+  const roster = await asUser(
+    f.owner,
+    `select public.get_registration_roster('${f.trip}')`,
+  )
+  assert.equal(roster.rows.find(row => row.userId === user).state, 'incomplete')
+  await assert.rejects(
+    asUser(peer, `select public.get_registration_roster('${f.trip}')`),
+    /permission required/,
+  )
+  await assert.rejects(
+    asUser(
+      f.owner,
+      `select public.registration_command('${f.trip}','begin_signup','${randomUUID()}',0,'{}','${peer}')`,
+    ),
+    /own signup/,
+  )
+  snapshot = await command('save_draft', snapshot.revision, {
+    formVersion: 2,
+    answers: {},
+    emergencyContact: { name: 'Draft contact' },
+  })
+  assert.equal(snapshot.state, 'incomplete')
+  assert.equal(snapshot.emergencyContact.name, 'Draft contact')
+  assert.equal(
+    snapshot.requirements.includes('Complete the current registration form.'),
+    true,
+  )
+  await register(f.trip, peer)
+  const peerView = await asUser(
+    peer,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(
+    peerView.attendees.some(row => row.userId === user),
+    false,
+  )
+  assert.equal(peerView.confirmedCount, 1)
+  snapshot = await command('register', snapshot.revision, {
+    formVersion: 2,
+    answers: {},
+  })
+  assert.equal(snapshot.state, 'confirmed')
+  assert.equal(snapshot.confirmedCount, 2)
+  assert.equal(
+    sql(
+      `select status from public.trip_rsvps where trip_id='${f.trip}' and user_id='${user}'`,
+    ),
+    'going',
+  )
+})
+
+test('trip creators can open and close registration and inspect incomplete signups; closure blocks drafts and submissions', async () => {
+  const f = fixture(2)
+  const creator = f.users[0]
+  const participant = f.users[1]
+  const trip = randomUUID()
+  sql(
+    `insert into public.membership_access_overrides(user_id,reason,granted_by) values('${creator}','Creator registration test','${f.owner}');`,
+  )
+  await asUser(
+    creator,
+    `insert into public.trips(id,title,starts_at,ends_at,created_by,is_official)
+    values('${trip}','Creator registration',now()+interval '5 days',now()+interval '6 days','${creator}',false); select '{}'::json`,
+  )
+  const settings = {
+    enabled: true,
+    eligibility: 'account',
+    emergencyRequired: true,
+    waiverRequired: false,
+    questions: [
+      { id: 'gear', label: 'Gear needed', type: 'text', required: true },
+    ],
+    capacity: 2,
+    waitlistEnabled: true,
+    deadline: null,
+    offerHours: 24,
+  }
+  const save = (actor, revision, enabled) =>
+    asUser(
+      actor,
+      `select public.save_registration_settings('${trip}',${revision},${literal(JSON.stringify({ ...settings, enabled }))})`,
+    )
+  await save(creator, 0, true)
+  await assert.rejects(save(participant, 1, false), /permission required/)
+  const run = (name, revision, data = {}) =>
+    asUser(
+      participant,
+      `select public.registration_command('${trip}',${literal(name)},'${randomUUID()}',${revision},${literal(JSON.stringify(data))})`,
+    )
+  let state = await run('begin_signup', 0)
+  state = await run('save_draft', state.revision, {
+    formVersion: 2,
+    answers: { gear: '' },
+    emergencyContact: { name: 'Partial' },
+  })
+  await assert.rejects(
+    run('register', state.revision, { formVersion: 2, answers: {} }),
+    /required question/,
+  )
+  await save(creator, 1, false)
+  const roster = await asUser(
+    creator,
+    `select public.get_registration_roster('${trip}')`,
+  )
+  assert.equal(
+    roster.rows.find(row => row.userId === participant).state,
+    'incomplete',
+  )
+  assert.equal(roster.snapshot.confirmedCount, 0)
+  await assert.rejects(
+    run('register', state.revision, { formVersion: 2 }),
+    /not open|closed/,
+  )
+  await assert.rejects(
+    run('save_draft', state.revision, { formVersion: 2 }),
+    /not open|closed/,
+  )
+  assert.equal(
+    (
+      await asUser(
+        participant,
+        `select public.get_trip_registration('${trip}')`,
+      )
+    ).actions.includes('register'),
+    false,
+  )
+  await save(creator, 2, true)
+  state = await run('register', state.revision, {
+    formVersion: 2,
+    answers: { gear: 'Tent' },
+    emergencyContact: {
+      name: 'Test contact',
+      relationship: 'Friend',
+      phone: '5551234567',
+    },
+    emergencyConfirmed: true,
+  })
+  assert.equal(state.state, 'confirmed')
+})
+
+test('Maybe and Not going save without confirming or reserving seats, and Going can start afterward', async () => {
+  const f = fixture(2)
+  const user = f.users[0]
+  const run = (command, revision, extra = '') =>
+    asUser(
+      user,
+      `select public.registration_command('${f.trip}',${literal(command)},'${randomUUID()}',${revision},'{}'${extra})`,
+    )
+  let state = await run('set_maybe', 0)
+  assert.equal(state.state, 'maybe')
+  assert.equal(state.confirmedCount, 0)
+  assert.equal(state.reservedCount, 0)
+  const roster = await asUser(
+    f.owner,
+    `select public.get_registration_roster('${f.trip}')`,
+  )
+  assert.equal(roster.rows.find(row => row.userId === user).state, 'maybe')
+  state = await run('set_not_going', state.revision)
+  assert.equal(state.state, 'cancelled')
+  state = await run('set_maybe', state.revision)
+  state = await run('begin_signup', state.revision)
+  assert.equal(state.state, 'incomplete')
+  assert.equal(state.confirmedCount, 0)
+  await assert.rejects(
+    run('set_maybe', 0, `,'${f.users[1]}'`),
+    /permission required/,
+  )
+  const confirmed = await register(f.trip, f.users[2])
+  await assert.rejects(
+    asUser(
+      f.users[2],
+      `select public.registration_command('${f.trip}','set_not_going','${randomUUID()}',${confirmed.revision},'{}')`,
+    ),
+    /cannot be started/,
+  )
+  sql(
+    `update public.trip_registration_settings set enabled=false where trip_id='${f.trip}'`,
+  )
+  await assert.rejects(run('set_maybe', state.revision), /not open|closed/)
+})

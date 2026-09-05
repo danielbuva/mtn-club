@@ -28,8 +28,8 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
   if (!trip.heroImageUrl) {
     return (
       <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 md:p-6">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
             <Badge
               variant={trip.isOfficial === false ? 'secondary' : 'outline'}
             >
@@ -50,7 +50,7 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
               asChild
               size="sm"
               variant="outline"
-              className="bg-transparent"
+              className="shrink-0 bg-transparent"
             >
               <Link href={editHref}>Edit</Link>
             </Button>
@@ -80,7 +80,7 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
 
   return (
     <section className="overflow-hidden rounded-2xl border border-border/70">
-      <div className="relative aspect-[16/9] bg-muted">
+      <div className="relative flex min-h-72 flex-col justify-between gap-8 bg-muted p-4 md:aspect-[16/9] md:p-6">
         <Image
           src={trip.heroImageUrl}
           alt={trip.title}
@@ -90,38 +90,40 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-        <div className="absolute left-4 top-4 flex items-center gap-2">
-          <Badge
-            variant="secondary"
-            className="border border-white/20 bg-black/50 text-white"
-          >
-            {trip.isOfficial === false
-              ? 'Community-created trip'
-              : 'Official club trip'}
-          </Badge>
-          <ActivityTag activityType={trip.activityType} uppercase onImage />
-        </div>
-
-        <div className="absolute right-4 top-4 flex items-center gap-2">
-          {canEdit && editHref ? (
-            <Button
-              asChild
-              size="sm"
+        <div className="relative flex flex-wrap items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <Badge
               variant="secondary"
-              className="border border-white/30 bg-black/50 text-white hover:bg-black/60"
+              className="border border-white/20 bg-black/50 text-white"
             >
-              <Link href={editHref}>Edit</Link>
-            </Button>
-          ) : null}
-          {trip.difficulty ? (
-            <DifficultyTag difficulty={trip.difficulty} onImage />
-          ) : null}
-          {trip.status !== 'open' ? (
-            <TripStatusBadge status={trip.status} />
-          ) : null}
+              {trip.isOfficial === false
+                ? 'Community-created trip'
+                : 'Official club trip'}
+            </Badge>
+            <ActivityTag activityType={trip.activityType} uppercase onImage />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {trip.difficulty ? (
+              <DifficultyTag difficulty={trip.difficulty} onImage />
+            ) : null}
+            {trip.status !== 'open' ? (
+              <TripStatusBadge status={trip.status} />
+            ) : null}
+            {canEdit && editHref ? (
+              <Button
+                asChild
+                size="sm"
+                variant="secondary"
+                className="shrink-0 border border-white/30 bg-black/50 text-white hover:bg-black/60"
+              >
+                <Link href={editHref}>Edit</Link>
+              </Button>
+            ) : null}
+          </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 p-4 text-white md:p-6">
+        <div className="relative text-white">
           <h1 className="text-2xl font-semibold leading-tight md:text-4xl">
             <TripTitleText
               title={trip.title}

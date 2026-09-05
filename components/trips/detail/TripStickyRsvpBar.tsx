@@ -1,10 +1,12 @@
-import Link from 'next/link'
+'use client'
+
+import { useState } from 'react'
+import { TripCTA } from '@/components/trips/TripCTA'
 import { TripBottomControls } from '@/components/trips/trip-bottom-controls'
-import { Button } from '@/components/ui/button'
 import type { TripDetail } from '@/lib/trips/types'
 
 type TripStickyRsvpBarProps = {
-  trip: Pick<TripDetail, 'id' | 'status'>
+  trip: Pick<TripDetail, 'id' | 'status' | 'registrationState'>
   viewer: {
     isAuthenticated: boolean
     isMember: boolean
@@ -12,18 +14,27 @@ type TripStickyRsvpBarProps = {
 }
 
 export function TripStickyRsvpBar({ trip }: TripStickyRsvpBarProps) {
+  const [expanded, setExpanded] = useState(false)
+  const choicesExpanded =
+    expanded &&
+    !['closed', 'full', 'cancelled'].includes(trip.status) &&
+    (!trip.registrationState ||
+      ['none', 'maybe', 'cancelled'].includes(trip.registrationState))
   return (
-    <TripBottomControls fallbackHref="/trips">
+    <TripBottomControls
+      fallbackHref="/trips"
+      showBack={!choicesExpanded}
+      showNavigation={!choicesExpanded}
+    >
       {trip.status === 'cancelled' ? (
         <span className="px-4 text-sm font-semibold">Trip canceled</span>
       ) : (
-        <Button
-          asChild
-          size="sm"
+        <TripCTA
+          trip={trip}
           className="rounded-full px-4 text-xs whitespace-nowrap"
-        >
-          <Link href={`/trips/${trip.id}/rsvp`}>RSVP</Link>
-        </Button>
+          expandable
+          onExpandedChange={setExpanded}
+        />
       )}
     </TripBottomControls>
   )

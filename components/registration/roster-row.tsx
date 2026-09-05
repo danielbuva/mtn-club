@@ -39,7 +39,11 @@ export function RosterRow({
     <article className="space-y-3 rounded-lg border p-4">
       <div className="flex flex-wrap justify-between gap-2">
         <h3 className="font-semibold">{row.name}</h3>
-        <span className="capitalize">{row.state.replaceAll('_', ' ')}</span>
+        <span className="capitalize">
+          {row.state === 'incomplete'
+            ? 'Signup incomplete'
+            : row.state.replaceAll('_', ' ')}
+        </span>
       </div>
       <p className="text-sm">
         Registered: {format(row.registeredAt)} · Queue: {format(row.queuedAt)} (

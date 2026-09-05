@@ -57,14 +57,20 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
           })
         }}
       >
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={values.enabled}
-            onChange={event => update({ enabled: event.target.checked })}
-          />
-          Open this trip for registration
-        </label>
+        <div className="space-y-2">
+          <Label htmlFor="registration-status">Registration</Label>
+          <select
+            id="registration-status"
+            className="w-full rounded border bg-background p-2"
+            value={values.enabled ? 'open' : 'closed'}
+            onChange={event =>
+              update({ enabled: event.target.value === 'open' })
+            }
+          >
+            <option value="closed">Closed</option>
+            <option value="open">Open</option>
+          </select>
+        </div>
         <p className="text-sm text-muted-foreground">
           The global registration switch must also be enabled. Outstanding valid
           offers can still be accepted while new registrations are paused.

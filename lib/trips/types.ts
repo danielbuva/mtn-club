@@ -1,3 +1,5 @@
+import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
+
 export type TripActivityType =
   | 'climbing'
   | 'hiking'
@@ -37,6 +39,7 @@ export type TripListItem = {
   visibility?: 'public' | 'members' | 'minimal'
   waitlistEnabled?: boolean
   currentUserRsvp?: TripRsvpChoice
+  registrationState?: TripRegistrationSnapshot['state']
   leaderName?: string
   leaderAvatarUrl?: string
   tags?: string[]
@@ -99,6 +102,8 @@ export type TripDetail = {
   attendees?: TripAttendee[]
   canViewAttendees?: boolean
   viewerRsvpStatus?: TripRsvpChoice
+  registrationState?: TripRegistrationSnapshot['state']
+  canManageRegistration?: boolean
   visibility?: 'public' | 'members' | 'minimal'
   waitlistEnabled?: boolean
 }

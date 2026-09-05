@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { ScheduledTripDetail } from '@/components/trips/detail/scheduled-trip-detail'
 import { TripAttendeesPreview } from '@/components/trips/detail/TripAttendeesPreview'
@@ -160,6 +161,8 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     canViewAttendees:
       registration.canManage || registration.state === 'confirmed',
     viewerRsvpStatus,
+    registrationState: registration.state,
+    canManageRegistration: registration.canManage,
     visibility: trip.visibility,
     waitlistEnabled: trip.waitlist_enabled,
   }
@@ -302,6 +305,14 @@ export default async function TripDetailPage({
   return (
     <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5">
       <TripHero trip={trip} canEdit={canEditTrip} editHref={editHref} />
+      {trip.canManageRegistration ? (
+        <Link
+          href={`/trips/${trip.id}/registrations`}
+          className="inline-flex min-h-10 items-center text-sm font-medium underline underline-offset-4"
+        >
+          Manage registration · View incomplete signups and roster
+        </Link>
+      ) : null}
       {trip.status === 'cancelled' && (
         <TripCancellationNotice reason={trip.cancellationReason} />
       )}

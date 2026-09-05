@@ -280,7 +280,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     'Complete the following form by',
   )
   await expect(member.getByRole('alertdialog')).toContainText(
-    'PST to confirm your spot.',
+    /P[DS]T to confirm your spot\./,
   )
   await expect(member.getByRole('alertdialog')).not.toContainText(
     'America/Los_Angeles',

@@ -24,6 +24,9 @@ function refreshRegistration(tripId: string) {
   ])
     revalidatePath(path)
 }
+export async function loadRsvpChoicesAction(tripId: string) {
+  return getRegistration(tripId)
+}
 export async function registrationAction(
   input: unknown,
 ): Promise<RegistrationResult> {

@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 export const registrationStateSchema = z.enum([
   'none',
+  'incomplete',
+  'maybe',
   'confirmed',
   'waitlisted',
   'offered',
@@ -10,6 +12,10 @@ export const registrationStateSchema = z.enum([
   'legacy_review',
 ])
 export const commandSchema = z.enum([
+  'set_maybe',
+  'set_not_going',
+  'begin_signup',
+  'save_draft',
   'register',
   'cancel',
   'accept_offer',

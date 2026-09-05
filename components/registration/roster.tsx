@@ -38,6 +38,9 @@ export function RegistrationRosterView({
         {roster.snapshot.confirmedCount} confirmed ·{' '}
         {roster.snapshot.reservedCount} reserved ·{' '}
         {roster.snapshot.waitlistCount} waitlisted
+        {' · '}
+        {roster.rows.filter(row => row.state === 'incomplete').length}{' '}
+        incomplete signups
       </p>
       <SettingsEditor key={roster.settings.revision} roster={roster} />
       <Link
@@ -66,6 +69,8 @@ export function RegistrationRosterView({
             {[
               'all',
               'confirmed',
+              'incomplete',
+              'maybe',
               'waitlisted',
               'offered',
               'cancelled',

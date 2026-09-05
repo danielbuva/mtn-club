@@ -9,6 +9,7 @@ import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
 import { useRegistrationCommand } from '@/lib/registration/use-registration-command'
 import { EmergencyFields, QuestionFields } from './question-fields'
 import { RegistrationEvents, RegistrationSummary } from './registration-summary'
+import { SignupIntent } from './signup-intent'
 import { emptySignerDetails, WaiverFields } from './waiver-fields'
 
 export function RegistrationForm({
@@ -20,7 +21,13 @@ export function RegistrationForm({
   const { run, pending, message } = useRegistrationCommand(snapshot.tripId)
   const [agePending, startAge] = useTransition()
   const [ageMessage, setAgeMessage] = useState('')
-  const [answers, setAnswers] = useState(snapshot.answers)
+  const [answers, setAnswers] = useState(() =>
+    Object.fromEntries(
+      Object.entries(snapshot.answers).filter(([id]) =>
+        snapshot.questions.some(question => question.id === id),
+      ),
+    ),
+  )
   const [contact, setContact] = useState(snapshot.emergencyContact)
   const [agreed, setAgreed] = useState(false)
   const [signature, setSignature] = useState('')
@@ -58,6 +65,14 @@ export function RegistrationForm({
         setAgeMessage('Age declaration could not be saved. Please try again.')
       }
     })
+  }
+  if (canRegister && snapshot.state !== 'incomplete') {
+    return (
+      <div className="space-y-6">
+        <RegistrationSummary snapshot={snapshot} />
+        <SignupIntent snapshot={snapshot} />
+      </div>
+    )
   }
   return (
     <div className="space-y-6">
@@ -184,9 +199,33 @@ export function RegistrationForm({
               : canRegister
                 ? snapshot.availability === 'waitlist'
                   ? 'Join waitlist'
-                  : 'Register for trip'
+                  : 'Confirm Going'
                 : 'Save registration details'}
           </Button>
+          {canRegister ? (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={pending}
+              className="ml-2"
+              onClick={() =>
+                run(
+                  {
+                    command: 'save_draft',
+                    expectedRevision: snapshot.revision,
+                    data: {
+                      formVersion: snapshot.formVersion,
+                      answers,
+                      emergencyContact: contact,
+                    },
+                  },
+                  () => router.push(`/trips/${snapshot.tripId}`),
+                )
+              }
+            >
+              Save and finish later
+            </Button>
+          ) : null}
         </form>
       ) : null}
       <div className="flex flex-wrap gap-2">

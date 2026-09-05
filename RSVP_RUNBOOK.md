@@ -13,6 +13,12 @@ Registration ships closed globally and on every trip. This document describes th
 
 ## Interfaces and ownership
 
+- The incomplete-signup flow requires migration `202609040020_incomplete_trip_signup.sql` before deploying the UI. Migrations `202609040020` and `202609040021` are applied to the preview database used by localhost, fixing the missing-command error. Both have been tested locally; production still needs these two migrations before deploying this UI.
+- An open trip shows **RSVP**. Choosing **Going** explains the required form and offers **Complete form** or **Save for later**. Both start a private incomplete signup. Saved answers and emergency-contact drafts can be resumed; signatures are collected only on submission.
+- Trip cards expand **RSVP** in place into **Going**, **Maybe**, **Not going**, and a close button. Migration `202609040021_rsvp_choices.sql` adds the saved tentative responses. Maybe and Not going do not reserve seats or add public Going attendees. Existing confirmed registrations still use their management flow to cancel or update.
+- Incomplete signups reserve no seat and never appear as Going to other participants. Authorized trip managers see them in the roster's **incomplete** filter, including after registration closes. Completed forms confirm attendance or join the waitlist when capacity is unavailable.
+- Managers choose **Open** or **Closed** in registration settings. Closing blocks new signups, draft saves, and final submissions; the existing rules for already-issued offers and confirmed participant updates remain in effect. Trip cards and bottom controls replace the action with **Registration closed**. Participants can still manage existing registrations from **My trips**.
+
 - Participants register, complete requirements, review offers, update emergency contacts, and cancel at `/trips/[tripId]/rsvp`. `/profile/trips` is the persistent in-app fallback when email is disabled or delayed.
 - Trip managers use `/admin/trips/[tripId]/registrations`. Authorized community-trip creators use `/trips/[tripId]/registrations` without entering the admin shell. Public host attribution grants no management access.
 - Settings administrators use `/admin/registration` for the global switch, worker health, pending-job age, and failed/bounced delivery records.

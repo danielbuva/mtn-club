@@ -3,6 +3,7 @@
 import { format } from 'date-fns'
 import { CalendarDays, Clock3, MapPin } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { TripCTA } from '@/components/trips/TripCTA'
 import { TripMetaRow } from '@/components/trips/TripMetaRow'
@@ -45,6 +46,24 @@ type TripCardProps = {
 export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
   const router = useRouter()
   const detailHref = trip.detailHref ?? `/trips/${trip.id}`
+  if (trip.status === 'cancelled') {
+    return (
+      <Link
+        href={detailHref}
+        className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        aria-label={`Open details for ${trip.title}`}
+      >
+        <Card className="border-border/70 transition-shadow hover:shadow-md">
+          <CardContent className="space-y-2 p-4 md:p-5">
+            <h2 className="text-lg font-semibold leading-snug md:text-xl">
+              <TripTitleText title={trip.title} canceled />
+            </h2>
+            <TripCancellationNotice reason={trip.cancellationReason} />
+          </CardContent>
+        </Card>
+      </Link>
+    )
+  }
   const heroImageUrl = viewMode === 'grid' ? trip.heroImageUrl : undefined
   const showImage = Boolean(heroImageUrl)
   const visibleTags = (trip.tags ?? trip.activityTags).filter(
@@ -56,8 +75,13 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
       className="group cursor-pointer overflow-hidden border-border/70 transition-all hover:shadow-md"
       onClick={event => {
         if (
+          event.target instanceof Node &&
+          !event.currentTarget.contains(event.target)
+        )
+          return
+        if (
           !(event.target instanceof Element) ||
-          !event.target.closest('a,button,input,select')
+          !event.target.closest('a,button,input,select,[data-rsvp-controls]')
         )
           router.push(detailHref)
       }}
@@ -106,14 +130,8 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
       <CardContent className="space-y-3 p-4 md:p-5">
         <div className="space-y-2">
           <h2 className="line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
-            <TripTitleText
-              title={trip.title}
-              canceled={trip.status === 'cancelled'}
-            />
+            <TripTitleText title={trip.title} canceled={false} />
           </h2>
-          {trip.status === 'cancelled' && (
-            <TripCancellationNotice reason={trip.cancellationReason} />
-          )}
 
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
@@ -160,7 +178,6 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
           location={{ icon: MapPin, text: trip.locationName }}
           date={{
             icon: CalendarDays,
-            canceled: trip.status === 'cancelled',
             text: getDateLabel(trip.startAt, trip.endAt),
           }}
           time={{
@@ -171,18 +188,18 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
 
         <TripStats trip={trip} />
 
-        {trip.status !== 'cancelled' && (
-          <div className="space-y-3 border-t border-border/70 pt-3">
-            <div className="flex items-center justify-between gap-2 md:justify-end">
-              {trip.status !== 'members_only' ? (
+        <div className="space-y-3 border-t border-border/70 pt-3">
+          <div className="flex flex-col items-stretch gap-2">
+            {!['members_only', 'closed', 'full'].includes(trip.status) ? (
+              <div className="w-fit">
                 <TripStatusBadge status={trip.status} />
-              ) : null}
-              <div className="flex-1 md:max-w-48">
-                <TripCTA trip={trip} />
               </div>
+            ) : null}
+            <div className="min-w-0 flex-1">
+              <TripCTA trip={trip} expandable />
             </div>
           </div>
-        )}
+        </div>
       </CardContent>
     </Card>
   )
