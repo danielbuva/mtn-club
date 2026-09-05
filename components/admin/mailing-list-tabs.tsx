@@ -1,6 +1,7 @@
 'use client'
 
 import { MailCheck, MailX } from 'lucide-react'
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Database } from '@/lib/supabase/types'
@@ -31,6 +32,26 @@ export function MailingListTabs({
 
   return (
     <Tabs defaultValue="subscribed" className="mt-8 gap-0">
+      <div className="mb-4 flex flex-wrap gap-4 text-sm">
+        <Link
+          className="underline"
+          href="/admin/mailing-list/export?topic=announcements"
+        >
+          Export announcements opt-ins
+        </Link>
+        <Link
+          className="underline"
+          href="/admin/mailing-list/export?topic=general"
+        >
+          Export general updates opt-ins
+        </Link>
+        <Link
+          className="underline"
+          href="/admin/mailing-list/export?topic=memberStories"
+        >
+          Export member stories opt-ins
+        </Link>
+      </div>
       <TabsList
         aria-label="Mailing-list status"
         className="h-auto w-full justify-start gap-1 border-b border-[#211D18]/15 bg-transparent p-0 dark:border-border"

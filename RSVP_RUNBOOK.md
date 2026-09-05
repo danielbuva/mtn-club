@@ -4,10 +4,12 @@ Registration ships closed globally and on every trip. This document describes th
 
 ## Implementation verification — September 4, 2026
 
-- Applied registration migrations `202609040008`–`202609040014` to the isolated preview project `mtnclub-auth-preview` (`qarabfhyyekjqmzsuhzo`) after verifying the local environment and CLI link matched. Production was not changed.
-- Checked the local application against that preview database in Browser: trip controls load authoritative registration status and open the dedicated registration screen with registration closed.
-- Local acceptance passed: 84 application/unit tests, 10 database scenarios (including the SQL workflow, requirements, and authorization suites), and four browser journeys. The browser coverage includes mobile registration, waitlist selection, expiry/reoffer, acceptance, cancellation, guardian review, keyboard submission, protected roster export, sign-in return destinations, and the separate trip-lifecycle controls.
-- Strict TypeScript, full Biome checks, and the isolated production build passed. Outbound registration email was disabled for these tests. Real sender/webhook/Cron delivery and the production pilot remain release gates below.
+- Applied registration migrations `202609040008`–`202609040017` to preview `mtnclub-auth-preview` (`qarabfhyyekjqmzsuhzo`) and production (`maubinlyxzwqnjbrkeht`) through authenticated, transactional migrations. Existing RSVP history was retained; production had one legacy registration at release verification.
+- Local acceptance passed: 85 application/unit tests, 11 database scenarios (including the SQL workflow, requirements, and authorization suites), and five browser journeys against a production build. Browser coverage includes mobile registration, all seven waiver provision initials, waitlist selection, expiry/reoffer, acceptance, cancellation, guardian review, keyboard submission, protected roster export, email-preference persistence, and the separate trip-lifecycle controls.
+- Strict TypeScript and full Biome checks passed. Production-build browser tests also verify that a first anonymous registration request redirects before streaming, preserving the exact sign-in destination without the Next 16.1 Cache Components redirect crash.
+- Hosted preview acceptance used only synthetic accounts and nonbinding fixture documents. It demonstrated confirmation, waitlisting, manual offers, acceptance, minor guardian review, expiry, a delivered test-recipient message, a bounced test-recipient message, and a suppressed opted-out offer. Resend test-recipient delivery proves provider/webhook processing, not delivery to a human inbox.
+- Dedicated Resend sending credentials, verified sender `UNLV Mountain Club <trips@unlvmountainclub.com>`, separate signed delivery webhooks, and minute-by-minute Supabase Cron workers are configured in both hosted environments. Production received and verified real provider delivery/bounce events; worker health and responses were checked. Authentication email settings are unchanged.
+- The configured production pilot is **Black Mountain Hike**, September 13, 2026 (`771c7bce-afc2-44de-acf5-5b5268ff1bbb`). It requires active membership, confirmed emergency contact, and the completed UNLV RSO waiver. Its explicit deadline is **September 12 at 6:00 p.m. America/Los_Angeles** (`2026-09-13T01:00:00Z`) because the trip time is TBA. Other trips remain closed; verify the global switch and pilot after each deployment.
 
 ## Interfaces and ownership
 
@@ -65,9 +67,20 @@ Reference: [Supabase Cron](https://supabase.com/docs/guides/cron), [Resend idemp
 - Offers default to 24 hours, configurable from 1 to 168 hours and capped at registration close. Expiry returns the same queue timestamp. Declining cancels; voluntary cancellation followed by rejoining gets a new timestamp. Removal blocks self-rejoining until an organizer restores access.
 - Present/absent/unmarked attendance is organizer-recorded. Present requires current eligibility and completed requirements. Corrections append actor/time events. Membership expiry flags confirmed participants for review and does not silently remove their seats.
 
+## Email preferences and consent
+
+`/profile/user/privacy` is the authoritative email-settings screen. The former Notifications screen links there. General profile saves do not overwrite notification preferences.
+
+- Master club email, updates for registered trips, reminders, and schedule/safety changes default on. Club announcements, general club updates, and member stories default off for new accounts.
+- Existing explicit choices, the legacy trip-email switch, and mailing-list unsubscribe choices are preserved. The former announcement preference also provided the reminder opt-out; it remains the fallback until the user explicitly saves the separate reminder choice.
+- Master-off suppresses all club categories, including offers, without discarding individual category choices. Sign-in/security email and payment receipts remain separate. The registration screen and My trips provide status and pending offers without email.
+- Saves are transactional, validate every choice, reject stale email edits, and append consent history. Account merging retains opt-outs from either identity.
+- Mailing-list exports are separately filtered for announcements, general updates, and member stories, including the master switch and mailing-list consent. Use the matching export immediately before a campaign. These settings do not themselves schedule or send marketing campaigns.
+- Registration email includes a direct link to this screen. Email choices are separate from profile/contact visibility.
+
 ## Notification behavior and recovery
 
-Registration events and jobs commit together. Every send rechecks general email, trip updates, and legacy trip-email preferences; reminders additionally honor announcement preferences. Suppressed offer emails do not withdraw the offer. Participants must check My trips when email is disabled. The worker skips expired offers and obsolete confirmations/reminders.
+Registration events and jobs commit together. Every send rechecks the master email choice, trip updates, and legacy trip-email preferences; reminders additionally honor the trip-reminder choice. Time/location changes and trip cancellation additionally honor the schedule/safety choice. Suppressed offer emails do not withdraw the offer. Participants must check My trips when email is disabled. The worker skips expired offers and obsolete confirmations/reminders.
 
 The worker claims five jobs per request with two-minute leases, up to six attempts, exponential backoff capped at one hour, and a stable `registration/<job UUID>` Resend idempotency key. HTTP 429, provider 5xx, timeouts, and malformed provider responses are retried. Permanent failures remain inspectable. Interrupted leases can be reclaimed; an expired final lease becomes `delivery_unknown`.
 
@@ -95,10 +108,10 @@ For browser tests, the local stack's `postgres` application schema must first ha
 
 ```sh
 pnpm test:registration:browser
-REGISTRATION_BUILD_ONLY=true node tests/registration/start-app.mjs
+REGISTRATION_PRODUCTION_TEST=true REGISTRATION_TEST_PORT=3172 pnpm test:registration:browser
 ```
 
-The browser suite uses real local authentication and database sessions, creates synthetic users/trips, tests mobile registration through organizer offers and acceptance, verifies protected export and login return destinations, then removes its fixtures. It runs on port 3140 in `.next-registration-browser`, separately from the normal development server. The second command builds production output against the same local services with sending disabled.
+The browser suite uses real local authentication and database sessions, creates synthetic users/trips, tests mobile registration through organizer offers and acceptance, verifies protected export and login return destinations, then removes its fixtures. It runs on port 3140 in `.next-registration-browser`, separately from the normal development server. The second command builds and tests production output against the same local services with sending disabled on an alternate port. Use an isolated worktree when another task is running or editing the application.
 
 Hosted release acceptance still requires real supplied waiver content, officer guardian review, verified sender/webhook/Cron operation, a controlled delivered message and opt-out check, and a successful pilot. Local tests do not replace these checks.
 

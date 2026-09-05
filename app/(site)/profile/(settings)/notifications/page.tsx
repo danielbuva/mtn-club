@@ -1,18 +1,8 @@
-import { getProfileOrRedirect } from '@/app/(site)/profile/_lib/get-profile'
+import Link from 'next/link'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
-import { NotificationsSettingsFormClient } from '@/components/profile/settings/notifications-settings-form-client'
 import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
-import { createClient } from '@/lib/supabase/server'
 
-export default async function NotificationsSettingsPage() {
-  const { profile, userId, email } = await getProfileOrRedirect()
-  const supabase = await createClient()
-  const { data: mailingList } = await supabase
-    .from('mailing_list_subscriptions')
-    .select('subscribed')
-    .eq('user_id', userId)
-    .maybeSingle()
-
+export default function NotificationsSettingsPage() {
   return (
     <div className="space-y-6">
       <MobileSettingsHeader
@@ -21,14 +11,14 @@ export default async function NotificationsSettingsPage() {
       />
       <SettingsPageHeader
         title="Notifications"
-        description="Choose how the club should contact you."
+        description="Email choices now live with your privacy settings."
       />
-      <NotificationsSettingsFormClient
-        initialProfile={profile}
-        userId={userId}
-        email={email}
-        initialMailingListSubscribed={mailingList?.subscribed ?? false}
-      />
+      <Link
+        className="inline-flex rounded-lg border px-4 py-3 font-medium underline"
+        href="/profile/user/privacy"
+      >
+        Manage email preferences in Data & Privacy
+      </Link>
     </div>
   )
 }

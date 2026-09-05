@@ -1,42 +1,41 @@
+import { z } from 'zod'
 import { getAdminContext } from '@/lib/admin/auth'
 import { buildMailingListCsv } from '@/lib/admin/csv'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 
-export async function GET() {
+const recipientsSchema = z.array(
+  z.object({
+    email: z.string(),
+    displayName: z.string(),
+    consentSource: z.string(),
+    subscribedAt: z.string(),
+  }),
+)
+export async function GET(request: Request) {
   const context = await getAdminContext()
   if (!context) return new Response('Unauthorized', { status: 401 })
-  if (!context.permissions['mailing_list.export']) {
+  if (!context.permissions['mailing_list.export'])
     return new Response('Forbidden', { status: 403 })
-  }
-  const admin = createAdminClient()
-  const [subscriptions, profiles] = await Promise.all([
-    admin
-      .from('mailing_list_subscriptions')
-      .select('user_id, email, consent_source, subscribed_at')
-      .eq('subscribed', true)
-      .order('email'),
-    admin.from('profiles').select('user_id, display_name'),
-  ])
-  if (subscriptions.error) throw subscriptions.error
-  if (profiles.error) throw profiles.error
-  const profileNames = new Map(
-    (profiles.data ?? []).map(profile => [
-      profile.user_id,
-      profile.display_name,
-    ]),
-  )
-  const csv = buildMailingListCsv(
-    (subscriptions.data ?? []).map(subscription => ({
-      email: subscription.email,
-      displayName: profileNames.get(subscription.user_id) ?? '',
-      consentSource: subscription.consent_source,
-      subscribedAt: subscription.subscribed_at ?? '',
-    })),
-  )
-
-  return new Response(csv, {
+  const topic = z
+    .enum(['announcements', 'general', 'memberStories'])
+    .safeParse(
+      new URL(request.url).searchParams.get('topic') ?? 'announcements',
+    )
+  if (!topic.success)
+    return new Response('Choose announcements, general, or memberStories.', {
+      status: 400,
+    })
+  const db = await createClient()
+  const { data, error } = await db.rpc('export_club_email_recipients', {
+    p_topic: topic.data,
+  })
+  if (error)
+    return new Response('Recipients could not be loaded. Please try again.', {
+      status: 503,
+    })
+  return new Response(buildMailingListCsv(recipientsSchema.parse(data)), {
     headers: {
-      'Content-Disposition': `attachment; filename="mountain-club-mailing-list-${new Date().toISOString().slice(0, 10)}.csv"`,
+      'Content-Disposition': `attachment; filename="mountain-club-${topic.data}-${new Date().toISOString().slice(0, 10)}.csv"`,
       'Content-Type': 'text/csv; charset=utf-8',
       'Cache-Control': 'no-store',
     },

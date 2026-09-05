@@ -101,7 +101,7 @@ test.beforeAll(async () => {
  begin; set local "request.jwt.claim.sub"='${owner.id}';
  insert into public.trips(id,title,starts_at,ends_at,capacity,created_by) values('${tripId}','RSVP browser acceptance',now()+interval '2 days',now()+interval '3 days',1,'${owner.id}');
  select public.set_registration_enabled(true);
- select public.save_registration_settings('${tripId}',0,'{"enabled":true,"eligibility":"account","emergencyRequired":true,"waiverRequired":true,"waiverTitle":"Browser fixture waiver","waiverBody":"Synthetic acceptance-test document only.","questions":[{"id":"experience","label":"Experience","type":"text","required":true}],"capacity":1,"waitlistEnabled":true,"deadline":null,"offerHours":24}'); commit;`)
+ select public.save_registration_settings('${tripId}',0,'{"enabled":true,"eligibility":"account","emergencyRequired":true,"waiverRequired":true,"waiverTitle":"Browser fixture waiver","waiverBody":"Synthetic acceptance-test document only.","waiverSourceUrl":"https://example.test/synthetic-waiver","questions":[{"id":"experience","label":"Experience","type":"text","required":true}],"capacity":1,"waitlistEnabled":true,"deadline":null,"offerHours":24}'); commit;`)
 })
 test.afterAll(async () => {
   // Only synthetic fixtures in the fixed local sandbox. Production is never accepted.
@@ -124,6 +124,21 @@ async function completeForm(
   await form.getByLabel('Phone', { exact: true }).fill('5551234567')
   await form.getByLabel('I confirm this emergency contact').check()
   if (!waiverComplete) {
+    const initials = await form.getByLabel(/— initials$/).all()
+    expect(initials).toHaveLength(7)
+    for (const field of initials) await field.fill('TP')
+    await form
+      .getByLabel('Your phone number', { exact: true })
+      .fill('5550101234')
+    await form
+      .getByLabel('Your local address', { exact: true })
+      .fill('123 Synthetic Street')
+    await form
+      .getByLabel('Emergency contact address', { exact: true })
+      .fill('456 Synthetic Street')
+    await form
+      .getByLabel('Your date of birth', { exact: true })
+      .fill('1990-01-01')
     await form.getByLabel('I have read and agree').check()
     await form.getByLabel('Full name as signature').fill('Test Participant')
   }
@@ -253,6 +268,11 @@ test('anonymous registration preserves the return destination and worker endpoin
   page,
   request,
 }) => {
+  const response = await request.get(`/trips/${tripId}/rsvp`, {
+    maxRedirects: 0,
+  })
+  expect(response.status()).toBe(307)
+  expect(response.headers()['cache-control']).toContain('no-store')
   await page.goto(`/trips/${tripId}/rsvp`)
   await expect(page).toHaveURL(new RegExp(`/auth/login\\?returnTo=.*${tripId}`))
   expect(
@@ -301,7 +321,9 @@ test('a minor requests guardian review and registers only after an officer confi
   await officer
     .getByLabel('Retained document reference')
     .fill('test-fixture:parent-consent')
-  await officer.getByLabel('I verified the signer').check()
+  await officer
+    .getByRole('checkbox', { name: /^I verified the signer/ })
+    .check()
   await officer
     .getByRole('button', { name: 'Confirm guardian consent', exact: true })
     .click()
@@ -321,4 +343,61 @@ test('a minor requests guardian review and registers only after an officer confi
   ).toBeVisible()
   await memberContext.close()
   await officerContext.close()
+})
+
+test('privacy email choices persist and opt-outs keep trip status available', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+  })
+  await signIn(context, waiter)
+  const page = await context.newPage()
+  await page.goto('/profile/user/privacy')
+  await expect(
+    page.getByRole('switch', { name: 'Trips I RSVP for', exact: true }),
+  ).toBeChecked()
+  await expect(
+    page.getByRole('switch', { name: 'Club announcements', exact: true }),
+  ).not.toBeChecked()
+  await expect(
+    page.getByRole('switch', { name: 'General club updates', exact: true }),
+  ).not.toBeChecked()
+  await page
+    .getByRole('switch', { name: 'General club updates', exact: true })
+    .click()
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click()
+  await expect(
+    page.getByRole('button', { name: 'Save changes', exact: true }),
+  ).toHaveCount(0)
+  await page.reload()
+  await expect(
+    page.getByRole('switch', { name: 'General club updates', exact: true }),
+  ).toBeChecked()
+  await page
+    .getByRole('switch', { name: 'Allow club emails', exact: true })
+    .click()
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click()
+  await expect(
+    page.getByRole('button', { name: 'Save changes', exact: true }),
+  ).toHaveCount(0)
+  await page.reload()
+  await expect(
+    page.getByRole('switch', { name: 'Allow club emails', exact: true }),
+  ).not.toBeChecked()
+  await expect(
+    page.getByRole('switch', { name: 'General club updates', exact: true }),
+  ).toBeDisabled()
+  await page.screenshot({
+    path: '/tmp/mtn-email-preferences-mobile.png',
+    fullPage: true,
+  })
+  await page.goto(`/trips/${tripId}/rsvp`)
+  await expect(
+    page
+      .getByRole('region', { name: 'Registration status', exact: true })
+      .getByText('confirmed', { exact: true }),
+  ).toBeVisible()
+  await expect(page.getByText(/Trip emails are disabled/)).toBeVisible()
+  await context.close()
 })

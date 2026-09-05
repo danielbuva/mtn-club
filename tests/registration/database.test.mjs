@@ -438,3 +438,96 @@ test('registration racing an account merge cannot leave a seat on the merged acc
   )
   await assert.rejects(register(f.trip, secondary), /account has been merged/)
 })
+
+test('email categories preserve legacy opt-outs, reject stale edits, and limit exports', async () => {
+  const f = fixture()
+  const user = f.users[0]
+  const read = () => asUser(user, 'select public.get_my_email_preferences()')
+  const save = (next, expected) =>
+    asUser(
+      user,
+      `select public.save_privacy_email_preferences('{}',${literal(JSON.stringify(next))},${literal(JSON.stringify(expected))})`,
+    )
+  const defaults = await read()
+  assert.deepEqual(defaults, {
+    email: true,
+    tripUpdates: true,
+    tripReminders: true,
+    safetyAlerts: true,
+    announcements: false,
+    general: false,
+    memberStories: false,
+  })
+  sql(`insert into public.profile_private(user_id,notification_settings) values('${user}','{"email":false,"announcements":false}') on conflict(user_id) do update set notification_settings=excluded.notification_settings;
+    insert into public.user_preferences(user_id,trip_email_notifications) values('${user}',false) on conflict(user_id) do update set trip_email_notifications=false;`)
+  const legacy = await read()
+  assert.equal(legacy.email, false)
+  assert.equal(legacy.tripUpdates, false)
+  assert.equal(legacy.tripReminders, false)
+  await save({ ...legacy, general: true }, legacy)
+  assert.equal(
+    sql(`select registration_private.email_enabled('${user}','offered')`),
+    'f',
+  )
+  let recipients = await asUser(
+    f.owner,
+    "select public.export_club_email_recipients('general')",
+  )
+  assert.ok(!recipients.some(r => r.email === `${user}@example.test`))
+  const before = await read()
+  const enabled = { ...before, email: true, tripUpdates: true }
+  await save(enabled, before)
+  assert.equal(
+    sql(
+      `select trip_email_notifications from public.user_preferences where user_id='${user}'`,
+    ),
+    't',
+  )
+  assert.equal(
+    sql(`select registration_private.email_enabled('${user}','offered')`),
+    't',
+  )
+  assert.equal(
+    sql(`select registration_private.email_enabled('${user}','reminder')`),
+    'f',
+  )
+  await assert.rejects(save(before, before), /changed elsewhere/)
+  await assert.rejects(
+    save({ ...enabled, unknown: true }, enabled),
+    /Choose yes or no/,
+  )
+  recipients = await asUser(
+    f.owner,
+    "select public.export_club_email_recipients('general')",
+  )
+  assert.ok(recipients.some(r => r.email === `${user}@example.test`))
+  recipients = await asUser(
+    f.owner,
+    "select public.export_club_email_recipients('announcements')",
+  )
+  assert.ok(!recipients.some(r => r.email === `${user}@example.test`))
+  await assert.rejects(
+    asUser(user, "select public.export_club_email_recipients('general')"),
+    /permission required/,
+  )
+  await save({ ...enabled, safetyAlerts: false }, enabled)
+  assert.equal(
+    sql(`select registration_private.email_enabled('${user}','trip_changed')`),
+    'f',
+  )
+  assert.equal(
+    sql(`select registration_private.email_enabled('${user}','confirmed')`),
+    't',
+  )
+  await assert.rejects(
+    asUser(
+      user,
+      'delete from public.profile_email_consent_events returning id',
+    ),
+    /permission denied/,
+  )
+  sql(
+    `update public.profile_private set notification_settings='{"email":"malformed","tripUpdates":null}' where user_id='${user}'`,
+  )
+  assert.equal((await read()).email, true)
+})

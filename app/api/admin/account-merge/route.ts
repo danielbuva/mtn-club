@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { mergeEmailPreferences } from '@/lib/profile/merge-email-preferences'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
@@ -392,10 +393,10 @@ const applyMerge = async (
           primaryPrivate?.interests_preferences ??
           secondaryPrivate?.interests_preferences ??
           null,
-        notification_settings:
-          primaryPrivate?.notification_settings ??
-          secondaryPrivate?.notification_settings ??
-          null,
+        notification_settings: mergeEmailPreferences(
+          primaryPrivate?.notification_settings,
+          secondaryPrivate?.notification_settings,
+        ),
         created_at:
           primaryPrivate?.created_at ??
           secondaryPrivate?.created_at ??
@@ -496,9 +497,8 @@ const applyMerge = async (
       {
         user_id: primaryUserId,
         trip_email_notifications:
-          primaryPrefs?.trip_email_notifications ??
-          secondaryPrefs?.trip_email_notifications ??
-          true,
+          primaryPrefs?.trip_email_notifications !== false &&
+          secondaryPrefs?.trip_email_notifications !== false,
         created_at:
           primaryPrefs?.created_at ??
           secondaryPrefs?.created_at ??

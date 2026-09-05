@@ -1,22 +1,19 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SettingsCard } from '@/components/profile/settings/settings-card'
 import { useSettingsDirty } from '@/components/profile/settings/settings-dirty-provider'
 import { SettingsSaveBar } from '@/components/profile/settings/settings-save-bar'
 import { Switch } from '@/components/ui/switch'
+import { savePrivacyEmailPreferences } from '@/lib/profile/email-preference-actions'
+import type { EmailPreferences } from '@/lib/profile/email-preferences'
 import { profileRowToFormValues } from '@/lib/profile/mappers'
-import { upsertProfile } from '@/lib/profile/queries'
-import type {
-  PrivacySettings,
-  ProfileRow,
-  ProfileUpdate,
-} from '@/lib/profile/types'
-import { createClient } from '@/lib/supabase/client'
+import type { PrivacySettings, ProfileRow } from '@/lib/profile/types'
+import { EmailPreferencesFields } from './email-preferences-fields'
 
 type PrivacySettingsFormClientProps = {
   initialProfile: ProfileRow | null
-  userId: string
+  initialEmail: EmailPreferences
 }
 
 const isEqual = (a: PrivacySettings, b: PrivacySettings) =>
@@ -24,24 +21,29 @@ const isEqual = (a: PrivacySettings, b: PrivacySettings) =>
 
 export function PrivacySettingsFormClient({
   initialProfile,
-  userId,
+  initialEmail,
 }: PrivacySettingsFormClientProps) {
-  const initialValues = useMemo(
+  const [baseline, setBaseline] = useState<PrivacySettings>(
     () => profileRowToFormValues(initialProfile).privacySettings,
-    [initialProfile],
   )
-  const [values, setValues] = useState<PrivacySettings>(initialValues)
-  const [baseline, setBaseline] = useState<PrivacySettings>(initialValues)
+  const [values, setValues] = useState<PrivacySettings>(baseline)
+  const [emailValues, setEmailValues] = useState(initialEmail)
+  const [emailBaseline, setEmailBaseline] = useState(initialEmail)
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const { setIsDirty } = useSettingsDirty()
 
   useEffect(() => {
-    setValues(initialValues)
-    setBaseline(initialValues)
-  }, [initialValues])
+    const next = profileRowToFormValues(initialProfile).privacySettings
+    setValues(next)
+    setBaseline(next)
+    setEmailValues(initialEmail)
+    setEmailBaseline(initialEmail)
+  }, [initialProfile, initialEmail])
 
-  const isDirty = !isEqual(values, baseline)
+  const isDirty =
+    !isEqual(values, baseline) ||
+    JSON.stringify(emailValues) !== JSON.stringify(emailBaseline)
 
   useEffect(() => {
     setIsDirty(isDirty)
@@ -55,12 +57,14 @@ export function PrivacySettingsFormClient({
     setIsSaving(true)
     setSaveError(null)
     try {
-      const payload: ProfileUpdate = {
-        privacy_settings: values,
-        updated_at: new Date().toISOString(),
-      }
-      const supabase = createClient()
-      await upsertProfile(supabase, userId, payload)
+      const result = await savePrivacyEmailPreferences({
+        privacy: values,
+        preferences: emailValues,
+        expected: emailBaseline,
+      })
+      if (!result.ok) throw new Error(result.message)
+      setEmailValues(result.preferences)
+      setEmailBaseline(result.preferences)
       setBaseline(values)
     } catch (error) {
       setSaveError(
@@ -73,6 +77,7 @@ export function PrivacySettingsFormClient({
 
   const handleReset = () => {
     setValues(baseline)
+    setEmailValues(emailBaseline)
     setSaveError(null)
   }
 
@@ -91,6 +96,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Show profile in directory"
+              disabled={isSaving}
               checked={values.profileVisible}
               onCheckedChange={checked =>
                 updateField('profileVisible', checked)
@@ -105,6 +112,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Share email"
+              disabled={isSaving}
               checked={values.shareEmail}
               onCheckedChange={checked => updateField('shareEmail', checked)}
             />
@@ -117,6 +126,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Share phone number"
+              disabled={isSaving}
               checked={values.sharePhone}
               onCheckedChange={checked => updateField('sharePhone', checked)}
             />
@@ -124,6 +135,11 @@ export function PrivacySettingsFormClient({
         </div>
       </SettingsCard>
 
+      <EmailPreferencesFields
+        value={emailValues}
+        onChange={setEmailValues}
+        disabled={isSaving}
+      />
       <SettingsCard
         title="Community sharing"
         description="These options power ride sharing and gear swaps."
@@ -137,6 +153,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Share gear availability"
+              disabled={isSaving}
               checked={values.shareGear}
               onCheckedChange={checked => updateField('shareGear', checked)}
             />
@@ -149,6 +167,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Share carpooling info"
+              disabled={isSaving}
               checked={values.shareCarpooling}
               onCheckedChange={checked =>
                 updateField('shareCarpooling', checked)
@@ -163,6 +183,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Share car details"
+              disabled={isSaving}
               checked={values.shareCarInfo}
               onCheckedChange={checked => updateField('shareCarInfo', checked)}
             />
@@ -175,6 +197,8 @@ export function PrivacySettingsFormClient({
               </p>
             </div>
             <Switch
+              aria-label="Share approximate area"
+              disabled={isSaving}
               checked={values.shareNeighborhood}
               onCheckedChange={checked =>
                 updateField('shareNeighborhood', checked)

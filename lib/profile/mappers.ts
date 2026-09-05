@@ -65,9 +65,9 @@ const emptyInterestsPreferences: InterestsPreferences = {
 const emptyNotificationSettings: NotificationSettings = {
   email: true,
   sms: false,
-  announcements: true,
+  announcements: false,
   tripUpdates: true,
-  memberStories: true,
+  memberStories: false,
   safetyAlerts: true,
   digestFrequency: 'weekly',
 }
@@ -200,7 +200,6 @@ export function profileFormToUpdate(values: ProfileFormValues): ProfileUpdate {
     gear_profile: normalizeSection(values.gearProfile),
     skills_certs: normalizeSection(values.skillsCerts),
     interests_preferences: normalizeSection(values.interestsPreferences),
-    notification_settings: normalizeSection(values.notificationSettings),
     updated_at: new Date().toISOString(),
   }
 }

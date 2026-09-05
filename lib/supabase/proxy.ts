@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 import { isStaleAuthSessionError } from '@/lib/auth/session-errors'
+import { requiresRegistrationSignIn } from '@/lib/registration/protected-path'
 
 const clearStaleAuthCookies = (
   request: NextRequest,
@@ -69,6 +70,29 @@ export async function updateSession(request: NextRequest) {
   } catch (error: unknown) {
     if (!isStaleAuthSessionError(error)) throw error
     clearStaleAuthCookies(request, supabaseResponse)
+  }
+
+  if (
+    (request.method === 'GET' || request.method === 'HEAD') &&
+    requiresRegistrationSignIn(request.nextUrl.pathname)
+  ) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) {
+      const destination = request.nextUrl.clone()
+      destination.pathname = '/auth/login'
+      destination.search = ''
+      destination.searchParams.set(
+        'returnTo',
+        `${request.nextUrl.pathname}${request.nextUrl.search}`,
+      )
+      const response = NextResponse.redirect(destination)
+      response.headers.set('Cache-Control', 'private, no-store')
+      for (const cookie of supabaseResponse.cookies.getAll())
+        response.cookies.set(cookie)
+      return response
+    }
   }
 
   // if (!user && !request.nextUrl.pathname.startsWith('/auth')) {

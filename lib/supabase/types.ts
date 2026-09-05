@@ -2122,6 +2122,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_email_preferences: { Args: Record<string, never>; Returns: Json }
+      save_privacy_email_preferences: {
+        Args: { p_privacy: Json; p_preferences: Json; p_expected: Json }
+        Returns: Json
+      }
+      export_club_email_recipients: {
+        Args: { p_topic?: string }
+        Returns: Json
+      }
+
       registration_maintenance: { Args: never; Returns: undefined }
       registration_operations: { Args: never; Returns: Json }
       get_my_registrations: { Args: never; Returns: Json }

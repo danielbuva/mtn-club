@@ -1,12 +1,12 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { AccountBasicsSection } from '@/components/profile/sections/account-basics'
 import { ContactCommunicationSection } from '@/components/profile/sections/contact-communication'
 import { EmergencyContactSection } from '@/components/profile/sections/emergency-contact'
 import { GearProfileSection } from '@/components/profile/sections/gear-profile'
 import { InterestsPreferencesSection } from '@/components/profile/sections/interests-preferences'
-import { NotificationsSection } from '@/components/profile/sections/notifications'
 import { PrivacyControlsSection } from '@/components/profile/sections/privacy-controls'
 import { SkillsCertsSection } from '@/components/profile/sections/skills-certs'
 import { TravelPreferencesSection } from '@/components/profile/sections/travel-preferences'
@@ -111,18 +111,6 @@ export function ProfileForm({
     }))
   }
 
-  const updateNotifications = <
-    K extends keyof ProfileFormValues['notificationSettings'],
-  >(
-    key: K,
-    value: ProfileFormValues['notificationSettings'][K],
-  ) => {
-    setValues(prev => ({
-      ...prev,
-      notificationSettings: { ...prev.notificationSettings, [key]: value },
-    }))
-  }
-
   const handleSave = async () => {
     setValidationError(null)
     const parsed = profileFormSchema.safeParse(values)
@@ -168,10 +156,9 @@ export function ProfileForm({
         onChange={updateInterests}
       />
       <SkillsCertsSection value={values.skillsCerts} onChange={updateSkills} />
-      <NotificationsSection
-        value={values.notificationSettings}
-        onChange={updateNotifications}
-      />
+      <Link href="/profile/user/privacy" className="underline">
+        Manage email preferences in Data & Privacy
+      </Link>
 
       <div className="flex items-center justify-end">
         <Button onClick={handleSave} disabled={isSaving} className="rounded-xl">
