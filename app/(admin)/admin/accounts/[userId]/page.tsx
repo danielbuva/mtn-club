@@ -3,11 +3,11 @@ import {
   Ban,
   KeyRound,
   ShieldCheck,
-  Trash2,
   UserRoundCog,
 } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { AccountDeletionForm } from '@/components/admin/account-deletion-form'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -398,22 +398,11 @@ export default async function AdminAccountDetailPage({
             retaining pseudonymized club history. Type the email exactly to
             confirm.
           </p>
-          <form
+          <AccountDeletionForm
+            userId={userId}
+            email={user.email}
             action={permanentlyDeleteAccountAction}
-            className="mt-5 flex max-w-2xl flex-col gap-3 sm:flex-row"
-          >
-            <input type="hidden" name="userId" value={userId} />
-            <Input
-              name="confirmation"
-              type="email"
-              required
-              placeholder={user.email}
-              aria-label="Type account email to confirm deletion"
-            />
-            <Button variant="destructive">
-              <Trash2 className="size-4" /> Permanently delete
-            </Button>
-          </form>
+          />
         </section>
       ) : null}
     </div>

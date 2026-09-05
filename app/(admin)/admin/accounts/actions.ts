@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect, unstable_rethrow } from 'next/navigation'
 import { z } from 'zod'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { recoveryRedirect } from '@/lib/auth/return-to'
@@ -315,12 +316,12 @@ export async function sendPasswordResetAction(formData: FormData) {
   revalidatePath(`/admin/accounts/${userId}`)
 }
 
-export async function permanentlyDeleteAccountAction(formData: FormData) {
+async function deleteAccount(formData: FormData) {
   const context = await requireAdminCapability('accounts.update')
-  if (!context.isSuperAdmin) throw new Error('Super admin access required.')
+  if (!context.isSuperAdmin) return { error: 'Super admin access required.' }
   const userId = uuidSchema.parse(String(formData.get('userId') ?? ''))
   if (userId === context.userId)
-    throw new Error('You cannot delete your own account.')
+    return { error: 'You cannot delete your own account.' }
   const confirmation = String(formData.get('confirmation') ?? '')
     .trim()
     .toLowerCase()
@@ -334,11 +335,12 @@ export async function permanentlyDeleteAccountAction(formData: FormData) {
   ])
   if (userResult.error || !userResult.data.user)
     throw userResult.error ?? new Error('Account not found.')
+  if (superRoles.error) throw superRoles.error
   const email = userResult.data.user.email?.toLowerCase()
   if (!email || confirmation !== email)
-    throw new Error('Type the account email exactly to confirm deletion.')
+    return { error: 'Type the account email exactly to confirm deletion.' }
   if ((superRoles.data ?? []).some(item => item.admin_roles?.is_super_admin)) {
-    throw new Error('Remove super-admin access before deleting this account.')
+    return { error: 'Remove super-admin access before deleting this account.' }
   }
 
   const job = await admin
@@ -357,16 +359,19 @@ export async function permanentlyDeleteAccountAction(formData: FormData) {
     .single()
   if (job.error) throw job.error
 
-  await admin.from('membership_account_restrictions').upsert(
-    {
-      user_id: userId,
-      restriction: 'banned',
-      internal_reason: 'Account deletion in progress.',
-      restricted_at: new Date().toISOString(),
-      updated_by: context.userId,
-    },
-    { onConflict: 'user_id' },
-  )
+  const restriction = await admin
+    .from('membership_account_restrictions')
+    .upsert(
+      {
+        user_id: userId,
+        restriction: 'banned',
+        internal_reason: 'Account deletion in progress.',
+        restricted_at: new Date().toISOString(),
+        updated_by: context.userId,
+      },
+      { onConflict: 'user_id' },
+    )
+  if (restriction.error) throw restriction.error
   await processAccountDeletionJob({
     actorId: context.userId,
     userId,
@@ -375,6 +380,24 @@ export async function permanentlyDeleteAccountAction(formData: FormData) {
   })
   revalidatePath('/admin')
   revalidatePath('/admin/accounts')
+}
+
+export async function permanentlyDeleteAccountAction(
+  _previous: { error: string },
+  formData: FormData,
+): Promise<{ error: string }> {
+  try {
+    const result = await deleteAccount(formData)
+    if (result) return result
+  } catch (error) {
+    unstable_rethrow(error)
+    console.error('Account deletion failed:', error)
+    return {
+      error:
+        'Account deletion could not be completed. Refresh the account list to check its status and retry cleanup if needed.',
+    }
+  }
+  redirect('/admin/accounts')
 }
 
 export async function retryAccountDeletionAction(formData: FormData) {

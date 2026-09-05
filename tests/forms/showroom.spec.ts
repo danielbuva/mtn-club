@@ -380,3 +380,26 @@ test('registered trip options, action-required link and signed waiver fit the vi
     ),
   ).toBe(false)
 })
+
+test('account deletion validation stays inline and preserves the entered confirmation', async ({
+  page,
+}) => {
+  await page.goto('/form-lab')
+  await page.getByText('Account deletion form example', { exact: true }).click()
+  const input = page.getByRole('textbox', {
+    name: 'Type account email to confirm deletion',
+  })
+  await input.fill('wrong@example.test')
+  await page
+    .getByRole('button', { name: 'Permanently delete', exact: true })
+    .click()
+  await expect(page.locator('#account-deletion-error')).toHaveText(
+    'Type the account email exactly to confirm deletion.',
+  )
+  await expect(input).toHaveValue('wrong@example.test')
+  await expect(input).toHaveAttribute('aria-invalid', 'true')
+  await input.fill('member@example.test')
+  await expect(
+    page.getByRole('button', { name: 'Permanently delete', exact: true }),
+  ).toBeEnabled()
+})

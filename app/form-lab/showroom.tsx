@@ -2,6 +2,7 @@
 
 import { Mountain, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
+import { AccountDeletionForm } from '@/components/admin/account-deletion-form'
 import { TripCreationFlow } from '@/components/events/trip-creation-flow'
 import { ToggleField } from '@/components/forms/fields'
 import { RegistrationFlow } from '@/components/registration/registration-flow'
@@ -289,6 +290,16 @@ export function FormShowroom() {
           />
         </details>
       </footer>
+      <details>
+        <summary>Account deletion form example</summary>
+        <AccountDeletionForm
+          userId="preview-only"
+          email="member@example.test"
+          action={async () => ({
+            error: 'Type the account email exactly to confirm deletion.',
+          })}
+        />
+      </details>
       <RegistrationRegressions />
     </main>
   )
