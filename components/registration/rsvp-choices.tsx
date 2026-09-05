@@ -109,8 +109,8 @@ export function RsvpChoices({
             </Button>
             <Button
               type="button"
-            variant="outline"
-            className="h-8 flex-1 px-2 text-xs"
+              variant="outline"
+              className="h-8 flex-1 px-2 text-xs"
               aria-pressed={displayState === 'maybe'}
               onClick={() => choose('maybe')}
             >
@@ -118,8 +118,8 @@ export function RsvpChoices({
             </Button>
             <Button
               type="button"
-            variant="outline"
-            className="h-8 flex-1 px-2 text-xs"
+              variant="outline"
+              className="h-8 flex-1 px-2 text-xs"
               aria-pressed={displayState === 'cancelled'}
               onClick={() => choose('not_going')}
             >
