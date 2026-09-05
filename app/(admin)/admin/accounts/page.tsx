@@ -97,26 +97,39 @@ async function AdminAccountsPageContent({
                           {user.display_name ?? 'Account'}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {user.email ?? 'Deleted identity'}
+                          {deletionJob
+                            ? 'Deleted identity'
+                            : (user.email ?? 'No email')}
                         </p>
                       </td>
                       <td className="px-5 py-4">
-                        <div className="flex gap-2">
-                          <Badge variant="secondary">
-                            {user.membership_state}
-                          </Badge>
-                          {user.restriction !== 'normal' ? (
+                        <div className="flex flex-wrap gap-2">
+                          {!deletionJob && (
+                            <Badge variant="secondary">
+                              {user.membership_state}
+                            </Badge>
+                          )}
+                          {!deletionJob && user.restriction !== 'normal' ? (
                             <Badge variant="destructive">
                               <ShieldAlert className="size-3" />
                               {user.restriction}
                             </Badge>
                           ) : null}
                           {deletionJob ? (
-                            <Badge variant="destructive">
-                              deletion {user.deletion_status}
+                            <Badge
+                              variant={
+                                deletionJob === 'completed'
+                                  ? 'secondary'
+                                  : 'destructive'
+                              }
+                            >
+                              {deletionJob === 'completed'
+                                ? 'Deleted'
+                                : 'Cleanup required'}
                             </Badge>
                           ) : null}
                           {deletionJob &&
+                          deletionJob !== 'completed' &&
                           context.isSuperAdmin &&
                           context.permissions['accounts.update'] ? (
                             <form action={retryAccountDeletionAction}>

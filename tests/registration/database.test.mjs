@@ -1462,3 +1462,40 @@ test('trip contacts sync to the profile without rewriting previous trip records'
     changed,
   )
 })
+
+test('account cleanup worker can scrub private data without reading private fields', () => {
+  assert.equal(
+    sql(
+      "select has_column_privilege('service_role','public.profile_private','user_id','SELECT')",
+    ),
+    't',
+  )
+  assert.equal(
+    sql(
+      "select has_column_privilege('service_role','public.profile_private','phone','UPDATE')",
+    ),
+    't',
+  )
+  assert.equal(
+    sql(
+      "select has_column_privilege('service_role','public.profile_private','phone','SELECT')",
+    ),
+    'f',
+  )
+  sql(
+    "begin; set local role service_role; update public.profile_private set phone=null,birthday=null,emergency_contact=null,carpool_profile=null,gear_profile=null,privacy_settings=null,travel_profile=null,skills_certs=null,interests_preferences=null,notification_settings=null where user_id='00000000-0000-0000-0000-000000000000'; rollback;",
+  )
+})
+
+test('completed deletions remain labeled but no longer need cleanup', () => {
+  const f = fixture()
+  sql(
+    `insert into public.account_deletion_jobs(user_id,requested_by,status,completed_at) values('${f.users[0]}','${f.owner}','completed',now())`,
+  )
+  const read = needs =>
+    sql(
+      `begin; set local "request.jwt.claim.role"='service_role'; select coalesce(json_agg(deletion_status),'[]') from public.admin_list_accounts('${f.owner}','${f.users[0]}',null,null,null,null,${needs},1,25); commit;`,
+    )
+  assert.deepEqual(JSON.parse(read(false)), ['completed'])
+  assert.deepEqual(JSON.parse(read(true)), [])
+})

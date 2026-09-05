@@ -56,6 +56,7 @@ export default async function AdminAccountDetailPage({
     overrides,
     application,
     mailing,
+    deletion,
   ] = await Promise.all([
     admin.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
     admin.from('memberships').select('*').eq('user_id', userId).maybeSingle(),
@@ -96,6 +97,11 @@ export default async function AdminAccountDetailPage({
       .select('subscribed, subscribed_at')
       .eq('user_id', userId)
       .maybeSingle(),
+    admin
+      .from('account_deletion_jobs')
+      .select('status')
+      .eq('user_id', userId)
+      .maybeSingle(),
   ])
 
   const queryError = [
@@ -109,10 +115,29 @@ export default async function AdminAccountDetailPage({
     overrides,
     application,
     mailing,
+    deletion,
   ].find(result => result.error)?.error
   if (queryError) throw queryError
 
   const user = authUser.data.user
+  if (deletion.data)
+    return (
+      <div className="mx-auto w-full max-w-6xl space-y-4 px-5 py-8">
+        <Link href="/admin/accounts" className="underline">
+          Back to accounts
+        </Link>
+        <h1 className="font-brand text-3xl">
+          {deletion.data.status === 'completed'
+            ? 'Deleted member'
+            : 'Account deletion'}
+        </h1>
+        <p>
+          {deletion.data.status === 'completed'
+            ? 'Account deletion is complete. Historical club records are retained.'
+            : 'Account deletion was requested. Cleanup is incomplete; retry cleanup from the account list.'}
+        </p>
+      </div>
+    )
   const assignedIds = new Set(
     (assignments.data ?? []).map(item => item.role_id),
   )
