@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { MemberCTA } from '@/components/member-cta'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { aboutPhotos } from '@/lib/gallery/about-photos'
 
 const values = [
   {
@@ -37,28 +38,24 @@ const activities = [
     title: 'Hikes',
     description:
       'Explore new trails with guided group hikes for all skill levels.',
-    image:
-      'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=400&fit=crop',
+    image: aboutPhotos.hikes,
   },
   {
     title: 'Climbing',
     description:
       'Rock climbing and mountaineering trips led by certified guides.',
-    image:
-      'https://images.unsplash.com/photo-1522163182402-834f871fd851?w=600&h=400&fit=crop',
+    image: aboutPhotos.climbing,
   },
   {
     title: 'Snow Adventures',
     description:
       'Snowshoeing, backcountry skiing, and winter camping expeditions.',
-    image:
-      'https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=600&h=400&fit=crop',
+    image: aboutPhotos.snow,
   },
   {
     title: 'Workshops',
     description: 'Learn navigation, wilderness first aid, and outdoor cooking.',
-    image:
-      'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&h=400&fit=crop',
+    image: aboutPhotos.workshops,
   },
 ]
 
@@ -90,11 +87,12 @@ export default function AboutPage() {
         {/* Hero Section */}
         <section className="relative h-[70vh] min-h-125 flex items-center justify-center overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&h=1080&fit=crop"
-            alt="Mountain landscape"
+            src={aboutPhotos.hero.imageUrl}
+            alt={aboutPhotos.hero.alt_text}
+            unoptimized={aboutPhotos.hero.unoptimized}
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-[40%_70%]"
             priority
           />
           <div className="absolute inset-0 bg-linear-to-b from-background/60 via-background/40 to-background" />
@@ -148,10 +146,11 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-              <div className="relative aspect-4/3 rounded-3xl overflow-hidden">
+              <div className="relative aspect-4/3 overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&h=600&fit=crop"
-                  alt="Group hiking together"
+                  src={aboutPhotos.story.imageUrl}
+                  alt={aboutPhotos.story.alt_text}
+                  unoptimized={aboutPhotos.story.unoptimized}
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover"
@@ -185,8 +184,9 @@ export default function AboutPage() {
                 >
                   <div className="relative aspect-4/3 overflow-hidden">
                     <Image
-                      src={activity.image || '/placeholder.svg'}
-                      alt={activity.title}
+                      src={activity.image.imageUrl}
+                      alt={activity.image.alt_text}
+                      unoptimized={activity.image.unoptimized}
                       fill
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

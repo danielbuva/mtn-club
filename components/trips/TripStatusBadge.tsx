@@ -37,6 +37,13 @@ export function TripStatusBadge({ status }: TripStatusBadgeProps) {
     return null
   }
 
+  if (status === 'cancelled')
+    return (
+      <span className="text-xs uppercase tracking-widest text-[#A1482D] dark:text-[#E99C73]">
+        Canceled
+      </span>
+    )
+
   const meta = statusMap[status]
   return (
     <Badge variant="outline" className={meta.className}>

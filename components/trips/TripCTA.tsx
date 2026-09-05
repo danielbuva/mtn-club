@@ -7,12 +7,7 @@ export function TripCTA({
 }: {
   trip: { id: string; status?: TripStatus }
 }) {
-  if (trip.status === 'cancelled')
-    return (
-      <Button asChild size="sm" variant="outline" className="w-full">
-        <Link href={`/trips/${trip.id}`}>View canceled trip</Link>
-      </Button>
-    )
+  if (trip.status === 'cancelled') return null
   return (
     <Button asChild size="sm" className="w-full">
       <Link href={`/trips/${trip.id}/rsvp`}>RSVP / registration</Link>

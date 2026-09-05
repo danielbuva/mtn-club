@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { PublicShell } from '@/components/landing/public-shell'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import {
   FALL_2026_TRIPS,
@@ -71,8 +72,7 @@ export function TripSchedulePage({
               const state = tripStates[scheduleKey] ?? trip
               if (state.lifecycleStatus === 'archived') return null
               const href =
-                tripDetailHrefs[scheduleKey] ??
-                `/calendar?month=${trip.startDate.slice(0, 7)}`
+                tripDetailHrefs[scheduleKey] ?? `/trips/${scheduleKey}`
               return (
                 <Link
                   key={scheduleKey}
@@ -80,17 +80,25 @@ export function TripSchedulePage({
                   className="group bg-[#211D18] p-5 outline-none transition hover:bg-[#2A241E] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FFECA2]"
                 >
                   <p className="font-brand text-lg uppercase tracking-wide text-[#FFECA2]">
-                    {formatTripDate(trip)}
+                    <TripTitleText
+                      title={formatTripDate(trip)}
+                      canceled={state.lifecycleStatus === 'canceled'}
+                    />
                   </p>
                   <h2 className="mt-1 flex items-start justify-between gap-3 text-lg font-semibold">
-                    <span>{trip.title}</span>
+                    <span>
+                      <TripTitleText
+                        title={trip.title}
+                        canceled={state.lifecycleStatus === 'canceled'}
+                      />
+                    </span>
                     <ArrowRight
                       className="mt-1 size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
                       aria-hidden="true"
                     />
                   </h2>
                   {state.lifecycleStatus === 'canceled' && (
-                    <div className="mt-3">
+                    <div className="mt-1">
                       <TripCancellationNotice
                         inverse
                         reason={state.cancellationReason}

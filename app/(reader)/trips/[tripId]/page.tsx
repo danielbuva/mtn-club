@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { ScheduledTripDetail } from '@/components/trips/detail/scheduled-trip-detail'
 import { TripAttendeesPreview } from '@/components/trips/detail/TripAttendeesPreview'
 import { TripDescription } from '@/components/trips/detail/TripDescription'
 import { TripDetailEditor } from '@/components/trips/detail/TripDetailEditor'
@@ -10,6 +11,7 @@ import { TripStats } from '@/components/trips/detail/TripStats'
 import { TripStickyRsvpBar } from '@/components/trips/detail/TripStickyRsvpBar'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { Card, CardContent } from '@/components/ui/card'
+import { FALL_2026_TRIPS, getFallTripScheduleKey } from '@/lib/club-content'
 import { fetchPublicHostsByTrip } from '@/lib/events/queries'
 import {
   legacyRsvpChoice,
@@ -202,6 +204,23 @@ export default async function TripDetailPage({
   const { tripId } = await params
   const { edit, returnTo } = await searchParams
   const isEditMode = edit === '1'
+
+  const scheduled = FALL_2026_TRIPS.find(
+    item => getFallTripScheduleKey(item) === tripId,
+  )
+  if (scheduled) {
+    const client = await createClient()
+    const { data, error } = await client
+      .from('trips')
+      .select('id')
+      .eq('schedule_key', tripId)
+      .maybeSingle()
+    if (error)
+      throw new Error('Trip details could not be loaded. Please try again.')
+    if (data) redirect(`/trips/${data.id}`)
+    if (scheduled.lifecycleStatus === 'archived') notFound()
+    return <ScheduledTripDetail scheduled={scheduled} />
+  }
 
   const trip = await getTripDetail(tripId)
 

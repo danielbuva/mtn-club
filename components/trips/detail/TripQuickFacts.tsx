@@ -1,4 +1,5 @@
 import { CalendarDays, Clock3, MapPin } from 'lucide-react'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { formatTripDate, formatTripTime } from '@/lib/trips/format'
 import type { TripDetail } from '@/lib/trips/types'
 
@@ -22,7 +23,10 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
           Date
         </p>
         <p className="text-sm font-medium">
-          {formatTripDate(trip.startAt, trip.endAt)}
+          <TripTitleText
+            title={formatTripDate(trip.startAt, trip.endAt)}
+            canceled={trip.status === 'cancelled'}
+          />
         </p>
       </div>
       <div className="space-y-1">

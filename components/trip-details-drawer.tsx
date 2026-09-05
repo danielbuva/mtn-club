@@ -16,6 +16,7 @@ import {
   getTripCategories,
 } from '@/components/calendar/calendar-categories'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -66,7 +67,10 @@ export function TripDetailsDrawer({
             </p>
             <SheetHeader className="mt-3 p-0 text-left">
               <SheetTitle className="pr-10 text-3xl font-bold leading-tight text-balance">
-                {trip.title}
+                <TripTitleText
+                  title={trip.title}
+                  canceled={trip.lifecycleStatus === 'canceled'}
+                />
               </SheetTitle>
             </SheetHeader>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -97,7 +101,10 @@ export function TripDetailsDrawer({
             )}
             <div className="grid gap-3 sm:grid-cols-2">
               <Detail icon={Calendar} label="Date">
-                {formatDateRange(trip.dateStart, trip.dateEnd)}
+                <TripTitleText
+                  title={formatDateRange(trip.dateStart, trip.dateEnd)}
+                  canceled={trip.lifecycleStatus === 'canceled'}
+                />
               </Detail>
               <Detail icon={Clock} label="Time">
                 {trip.isAllDay

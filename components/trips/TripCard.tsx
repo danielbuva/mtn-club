@@ -11,6 +11,7 @@ import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { DifficultyTag } from '@/components/trips/TripTags'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { TripEventTag } from '@/components/trips/trip-event-tag'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -105,8 +106,14 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
       <CardContent className="space-y-3 p-4 md:p-5">
         <div className="space-y-2">
           <h2 className="line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
-            {trip.title}
+            <TripTitleText
+              title={trip.title}
+              canceled={trip.status === 'cancelled'}
+            />
           </h2>
+          {trip.status === 'cancelled' && (
+            <TripCancellationNotice reason={trip.cancellationReason} />
+          )}
 
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
@@ -153,6 +160,7 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
           location={{ icon: MapPin, text: trip.locationName }}
           date={{
             icon: CalendarDays,
+            canceled: trip.status === 'cancelled',
             text: getDateLabel(trip.startAt, trip.endAt),
           }}
           time={{
@@ -161,21 +169,20 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
           }}
         />
 
-        {trip.status === 'cancelled' && (
-          <TripCancellationNotice reason={trip.cancellationReason} />
-        )}
         <TripStats trip={trip} />
 
-        <div className="space-y-3 border-t border-border/70 pt-3">
-          <div className="flex items-center justify-between gap-2 md:justify-end">
-            {trip.status !== 'members_only' ? (
-              <TripStatusBadge status={trip.status} />
-            ) : null}
-            <div className="flex-1 md:max-w-48">
-              <TripCTA trip={trip} />
+        {trip.status !== 'cancelled' && (
+          <div className="space-y-3 border-t border-border/70 pt-3">
+            <div className="flex items-center justify-between gap-2 md:justify-end">
+              {trip.status !== 'members_only' ? (
+                <TripStatusBadge status={trip.status} />
+              ) : null}
+              <div className="flex-1 md:max-w-48">
+                <TripCTA trip={trip} />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </CardContent>
     </Card>
   )

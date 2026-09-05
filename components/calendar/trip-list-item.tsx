@@ -4,6 +4,7 @@ import { Lock } from 'lucide-react'
 import { getTripCategories } from '@/components/calendar/calendar-categories'
 import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDateRange, parseCalendarDate } from '@/lib/events/formatters'
@@ -38,15 +39,25 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
         <div className="flex flex-col sm:flex-row">
           <div className="sm:w-32 p-4 bg-secondary flex flex-row sm:flex-col items-center justify-center gap-2 sm:gap-1 text-center shrink-0">
             <span className="text-sm text-muted-foreground">
-              {parseCalendarDate(trip.dateStart).toLocaleDateString('en-US', {
-                month: 'short',
-              })}
+              <TripTitleText
+                title={parseCalendarDate(trip.dateStart).toLocaleDateString(
+                  'en-US',
+                  { month: 'short' },
+                )}
+                canceled={trip.lifecycleStatus === 'canceled'}
+              />
             </span>
             <span className="text-3xl font-bold">
-              {parseCalendarDate(trip.dateStart).getDate()}
+              <TripTitleText
+                title={String(parseCalendarDate(trip.dateStart).getDate())}
+                canceled={trip.lifecycleStatus === 'canceled'}
+              />
             </span>
             <span className="text-sm text-muted-foreground">
-              {parseCalendarDate(trip.dateStart).getFullYear()}
+              <TripTitleText
+                title={String(parseCalendarDate(trip.dateStart).getFullYear())}
+                canceled={trip.lifecycleStatus === 'canceled'}
+              />
             </span>
           </div>
 
@@ -58,7 +69,12 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
                     categories={categories}
                     className="shrink-0"
                   />
-                  <h3 className="font-semibold text-lg">{trip.title}</h3>
+                  <h3 className="font-semibold text-lg">
+                    <TripTitleText
+                      title={trip.title}
+                      canceled={trip.lifecycleStatus === 'canceled'}
+                    />
+                  </h3>
                   {trip.membersOnly && (
                     <Badge variant="secondary" className="rounded-none gap-1">
                       <Lock className="w-3 h-3" />
@@ -68,7 +84,10 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
                 </div>
                 <p className="text-muted-foreground text-sm">
                   {trip.state} &bull;{' '}
-                  {formatDateRange(trip.dateStart, trip.dateEnd)}
+                  <TripTitleText
+                    title={formatDateRange(trip.dateStart, trip.dateEnd)}
+                    canceled={trip.lifecycleStatus === 'canceled'}
+                  />
                 </p>
               </div>
               {trip.difficulty && (

@@ -127,6 +127,14 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
       exact: true,
     }),
   ).toBeVisible()
+  const canceledCard = visitor.getByRole('link', {
+    name: 'Open details for Lifecycle browser fixture',
+    exact: true,
+  })
+  await expect(canceledCard.locator('h2 s')).toHaveText(
+    'Lifecycle browser fixture',
+  )
+  await expect(canceledCard.locator('a, button')).toHaveCount(0)
   await visitor.goto('/schedule')
   await expect(
     visitor
@@ -137,6 +145,45 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
     path: '/tmp/mtn-canceled-schedule.png',
     fullPage: true,
   })
+
+  const scheduledLink = visitor.getByRole('link', {
+    name: /Red Rock Sport Climbing/,
+  })
+  await expect(scheduledLink).toHaveAttribute(
+    'href',
+    '/trips/fall-2026-red-rock-sport-climbing',
+  )
+  await scheduledLink.click()
+  await expect(visitor).toHaveURL(/\/trips\/fall-2026-red-rock-sport-climbing$/)
+  await expect(
+    visitor.getByRole('heading', {
+      name: 'Red Rock Sport Climbing',
+      exact: true,
+    }),
+  ).toBeVisible()
+  await expect(
+    visitor
+      .getByRole('main')
+      .getByText('Canceled due to rain.', { exact: true }),
+  ).toBeVisible()
+  await expect(visitor.locator('a[href$="/rsvp"]')).toHaveCount(0)
+
+  sql(
+    `update public.trips set schedule_key='fall-2026-black-mountain-hike' where id='${tripId}'`,
+  )
+  await visitor.goto('/trips/fall-2026-black-mountain-hike')
+  await expect(visitor).toHaveURL(new RegExp(`/trips/${tripId}$`))
+  await expect(
+    visitor.getByRole('heading', {
+      name: 'Lifecycle browser fixture',
+      exact: true,
+    }),
+  ).toBeVisible()
+  await visitor.goto('/schedule')
+  const savedLink = visitor.getByRole('link', { name: /Black Mountain Hike/ })
+  await expect(savedLink).toHaveAttribute('href', `/trips/${tripId}`)
+  await savedLink.click()
+  await expect(visitor).toHaveURL(new RegExp(`/trips/${tripId}$`))
 
   await page.goto(`/trips/${tripId}?edit=1`)
   await page

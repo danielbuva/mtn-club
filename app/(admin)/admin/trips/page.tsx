@@ -5,6 +5,7 @@ import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { TripLifecycleControls } from '@/components/trips/trip-lifecycle-controls'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { requireAdminCapability } from '@/lib/admin/auth'
@@ -147,7 +148,12 @@ async function AdminTripsPageContent({
               className="grid gap-4 border border-[#211D18]/15 bg-white/45 p-5 dark:border-border dark:bg-card lg:grid-cols-[1fr_auto] lg:items-center"
             >
               <div>
-                <h2 className="text-lg font-semibold">{trip.title}</h2>
+                <h2 className="text-lg font-semibold">
+                  <TripTitleText
+                    title={trip.title}
+                    canceled={trip.lifecycle_status === 'canceled'}
+                  />
+                </h2>
                 {trip.lifecycle_status === 'canceled' && (
                   <TripCancellationNotice reason={trip.cancellation_reason} />
                 )}

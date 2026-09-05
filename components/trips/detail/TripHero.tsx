@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { ActivityTag, DifficultyTag } from '@/components/trips/TripTags'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -56,7 +57,10 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
           ) : null}
         </div>
         <h1 className="text-2xl font-semibold leading-tight md:text-4xl">
-          {trip.title}
+          <TripTitleText
+            title={trip.title}
+            canceled={trip.status === 'cancelled'}
+          />
         </h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Avatar className="h-7 w-7 border border-border/70">
@@ -119,7 +123,10 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
 
         <div className="absolute inset-x-0 bottom-0 p-4 text-white md:p-6">
           <h1 className="text-2xl font-semibold leading-tight md:text-4xl">
-            {trip.title}
+            <TripTitleText
+              title={trip.title}
+              canceled={trip.status === 'cancelled'}
+            />
           </h1>
           <div className="mt-4 flex items-center gap-2 text-sm text-white/90">
             <Avatar className="h-7 w-7 border border-white/20">

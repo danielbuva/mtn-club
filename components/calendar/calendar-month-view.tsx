@@ -19,6 +19,7 @@ import {
   CALENDAR_MIN_YEAR,
   formatMonthParam,
 } from '@/components/calendar/calendar-utils'
+import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Button } from '@/components/ui/button'
 import type { ViewerKey } from '@/lib/events/calendar'
 import { CLUB_TIME_ZONE, formatDateOnly } from '@/lib/events/formatters'
@@ -585,9 +586,13 @@ export function CalendarMonthView({
                             className="shrink-0"
                           />
                           <span className="truncate">
-                            {trip.lifecycleStatus === 'canceled'
-                              ? `Canceled: ${trip.title}`
-                              : trip.title}
+                            {trip.lifecycleStatus === 'canceled' && (
+                              <span className="sr-only">Canceled: </span>
+                            )}
+                            <TripTitleText
+                              title={trip.title}
+                              canceled={trip.lifecycleStatus === 'canceled'}
+                            />
                           </span>
                         </div>
                       ))}
