@@ -125,10 +125,12 @@ export function RsvpChoices({
             <legend className="sr-only">Your RSVP</legend>
             <Button
               type="button"
+              variant="outline"
               className="h-8 flex-1 px-2 text-xs"
-              onClick={() => choose('going')}
+              aria-pressed={displayState === 'cancelled'}
+              onClick={() => choose('not_going')}
             >
-              Going
+              Not going
             </Button>
             <Button
               type="button"
@@ -141,12 +143,10 @@ export function RsvpChoices({
             </Button>
             <Button
               type="button"
-              variant="outline"
               className="h-8 flex-1 px-2 text-xs"
-              aria-pressed={displayState === 'cancelled'}
-              onClick={() => choose('not_going')}
+              onClick={() => choose('going')}
             >
-              Not going
+              Going
             </Button>
           </fieldset>
         ) : (
