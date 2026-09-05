@@ -66,6 +66,7 @@ export function RegistrationForm({
       data: {},
     })
     if (!result.ok) throw new Error(result.message)
+    router.push('/trips')
   }
   const showForm = canRegister || canUpdate || hadEditableForm.current
   if (canRegister && snapshot.state !== 'incomplete') {
@@ -173,7 +174,7 @@ export function RegistrationForm({
               data,
             })
           }
-          onSavedDraft={() => router.push(`/trips/${snapshot.tripId}`)}
+          onSavedDraft={() => router.push('/trips')}
         />
       ) : null}
       {message && <output aria-live="polite">{message}</output>}

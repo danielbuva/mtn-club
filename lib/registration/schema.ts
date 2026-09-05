@@ -13,6 +13,7 @@ export const registrationStateSchema = z.enum([
   'legacy_review',
 ])
 export const commandSchema = z.enum([
+  'clear_choice',
   'set_maybe',
   'set_not_going',
   'begin_signup',

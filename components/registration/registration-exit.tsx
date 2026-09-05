@@ -107,7 +107,7 @@ export function RegistrationExit({
             {pending === 'cancel' ? 'Canceling…' : 'Cancel registration'}
           </Button>
           <AlertDialogCancel disabled={Boolean(pending)} className="min-h-12">
-            Close overlay
+            Return to form
           </AlertDialogCancel>
         </div>
         {(error || saveError) && (

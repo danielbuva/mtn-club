@@ -338,6 +338,9 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     member.getByRole('button', { name: 'Open navigation', exact: true }),
   ).toBeVisible()
   await expect(
+    bottomControls.getByRole('button', { name: 'RSVP', exact: true }),
+  ).toBeVisible()
+  await expect(
     bottomControls.getByRole('button', { name: '← back', exact: true }),
   ).toBeVisible()
   await bottomControls
@@ -466,7 +469,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   })
   await expect(exitOverlay).toBeVisible()
   await exitOverlay
-    .getByRole('button', { name: 'Close overlay', exact: true })
+    .getByRole('button', { name: 'Return to form', exact: true })
     .click()
   await expect(exitButton).toBeFocused()
   await expect(member.getByLabel('Experience', { exact: true })).toHaveValue(

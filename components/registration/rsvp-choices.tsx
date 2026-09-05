@@ -88,6 +88,29 @@ export function RsvpChoices({
       () => setOptimisticState(previousState),
     )
   }
+  const clearChoice = () => {
+    if (
+      !snapshot ||
+      !snapshot.authenticated ||
+      busy ||
+      !['maybe', 'cancelled'].includes(displayState ?? '')
+    ) {
+      collapse()
+      return
+    }
+    const previousState = displayState
+    setOptimisticState('none')
+    collapse()
+    run(
+      {
+        command: 'clear_choice',
+        expectedRevision: snapshot.revision,
+        data: {},
+      },
+      current => setSnapshot(current),
+      () => setOptimisticState(previousState),
+    )
+  }
 
   return (
     <div className="w-full" data-rsvp-controls>
@@ -146,7 +169,7 @@ export function RsvpChoices({
             variant="ghost"
             className="h-8 w-8 shrink-0 p-0"
             aria-label="Close RSVP options"
-            onClick={collapse}
+            onClick={clearChoice}
           >
             <X aria-hidden="true" />
           </Button>
