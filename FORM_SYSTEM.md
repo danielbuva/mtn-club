@@ -57,7 +57,7 @@ Apply `supabase/migrations/202609040022_transportation_preferences.sql` before d
 
 Also apply `supabase/migrations/202609050001_joining_preferences.sql` for per-trip attendee visibility, remembered defaults, and transactional email choices. Existing attendee records are hidden until their participant opts in.
 
-The local sandbox and remote staging project `qarabfhyyekjqmzsuhzo` have all four form migrations applied as of September 5, 2026. Remote database function lint reports no errors. Production migration/deployment remains a separate `main` release.
+The local sandbox, remote staging `qarabfhyyekjqmzsuhzo`, and production `maubinlyxzwqnjbrkeht` have all four form migrations applied as of September 5, 2026. Production migrations and their history were committed in one transaction through the authenticated Supabase management connection. The existing production pilot remains enabled, with its configured waiver unchanged.
 
 ## Verification
 
@@ -98,4 +98,4 @@ Additional features remain: transportation preferences, per-trip attendee visibi
 
 Authenticated browser coverage now fills and checks organizer values through draft reload and publication, tests community drafts through the calendar alias, exercises every custom-question control, and compares the signed document to the complete real UNLV template. It checks the stored source URL, signature, seven initials, and signer details. Real trips use the organizer-configured immutable waiver; no preview wording or invented risk descriptions are injected into live waivers. Official-trip organizers still complete the existing template picker with actual event risks before enabling registration.
 
-Onboarding remains explicitly deferred. The `staging` branch deploys to the protected Vercel preview backed by `qarabfhyyekjqmzsuhzo`. Production remains a separate `main` release. Physical-device keyboard and screen-reader checks remain manual release QA; automated mobile/desktop checks, authenticated journeys, database tests, type checks, formatting, and the production build pass.
+Onboarding remains explicitly deferred. The `staging` branch deploys to the protected Vercel preview backed by `qarabfhyyekjqmzsuhzo`. The same live-page adapters are released to production through `main`: `/trips/new`, `/calendar/new`, `/admin/trips/new`, and `/trips/[tripId]/rsvp`. The showroom remains preview-only. Physical-device keyboard and screen-reader checks remain manual release QA; automated mobile/desktop checks, authenticated journeys, database tests, type checks, formatting, and the production build pass.

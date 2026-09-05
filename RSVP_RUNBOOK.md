@@ -13,7 +13,7 @@ Registration ships closed globally and on every trip. This document describes th
 
 ## Interfaces and ownership
 
-- The incomplete-signup flow requires migration `202609040020_incomplete_trip_signup.sql` before deploying the UI. Migrations `202609040020` and `202609040021` are applied to the preview database used by localhost, fixing the missing-command error. Both have been tested locally; production still needs these two migrations before deploying this UI.
+- The incomplete-signup flow requires migration `202609040020_incomplete_trip_signup.sql` before deploying the UI. Migrations `202609040020` and `202609040021` are applied to the preview database used by localhost, fixing the missing-command error. Both migrations are also applied to production, verified during the September 5 guided-form release.
 - An open trip shows **RSVP**. Choosing **Going** explains the required form and offers **Complete form** or **Save for later**. Both start a private incomplete signup. Saved answers and emergency-contact drafts can be resumed; signatures are collected only on submission.
 - Trip cards expand **RSVP** in place into **Going**, **Maybe**, **Not going**, and a close button. Migration `202609040021_rsvp_choices.sql` adds the saved tentative responses. Maybe and Not going do not reserve seats or add public Going attendees. Existing confirmed registrations still use their management flow to cancel or update.
 - Incomplete signups reserve no seat and never appear as Going to other participants. Authorized trip managers see them in the roster's **incomplete** filter, including after registration closes. Completed forms confirm attendance or join the waitlist when capacity is unavailable.
@@ -142,3 +142,7 @@ Joining preferences additionally require `202609050001_joining_preferences.sql`.
 ## Guided-form staging release — September 5, 2026
 
 Applied `202609040022`, `202609050001`, `202609050002`, and `202609050003` to remote staging `qarabfhyyekjqmzsuhzo` using the linked Supabase CLI. Remote public and registration-private function lint passed. The release preserves configured waiver content and signature provenance, adds transportation and joining preferences, and ports creation and registration to shared form primitives. Verification: 93 unit tests, 19 database scenarios, 15 browser journeys, type checks, formatting, and production build. Production migration and deployment remain tied to a separate `main` release.
+
+## Guided-form production release — September 5, 2026
+
+The production release brings the existing guided form adapters to their actual pages: `/trips/new`, `/calendar/new`, `/admin/trips/new`, and `/trips/[tripId]/rsvp`. It is not a showroom-only release. Applied `202609040022`, `202609050001`, `202609050002`, and `202609050003` to production `maubinlyxzwqnjbrkeht` in one transaction, including migration history, through the authenticated Supabase management API because the CLI temporary-login role could not be renewed. The global registration switch and Black Mountain pilot remain enabled, and the configured 5,742-character waiver is unchanged. The application uses the configured waiver version and retains its full signer fields.
