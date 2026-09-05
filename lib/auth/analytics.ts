@@ -18,7 +18,7 @@ const sensitiveKeys = new Set([
 export function isAuthSensitiveUrl(value: string) {
   try {
     const url = new URL(value, 'https://mtn-club.local')
-    if (/^\/auth(?:\/|$)/i.test(url.pathname)) return true
+    if (/^\/(?:auth|admin)(?:\/|$)/i.test(url.pathname)) return true
     return [
       ...url.searchParams.keys(),
       ...new URLSearchParams(url.hash.slice(1)).keys(),

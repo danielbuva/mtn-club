@@ -1,11 +1,11 @@
 'use client'
 
-import { Analytics } from '@vercel/analytics/react'
+import { Suspense } from 'react'
+import { SiteAnalytics } from '@/components/analytics/site-analytics'
 import { AuthNotices } from '@/components/auth/auth-notices'
 import { PublicNavigationStateProvider } from '@/components/navigation/public-navigation-state'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
-import { isAuthSensitiveUrl } from '@/lib/auth/analytics'
 
 export function Providers({
   children,
@@ -25,9 +25,9 @@ export function Providers({
         {children}
         <Toaster />
         <AuthNotices />
-        <Analytics
-          beforeSend={event => (isAuthSensitiveUrl(event.url) ? null : event)}
-        />
+        <Suspense fallback={null}>
+          <SiteAnalytics />
+        </Suspense>
       </PublicNavigationStateProvider>
     </ThemeProvider>
   )

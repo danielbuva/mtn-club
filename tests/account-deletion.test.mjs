@@ -10,6 +10,7 @@ const source = readFileSync(
 )
 function fixture({ rolesError = false, cleanupError = false } = {}) {
   let deletions = 0
+  const operations = []
   const admin = {
     auth: {
       admin: {
@@ -25,7 +26,12 @@ function fixture({ rolesError = false, cleanupError = false } = {}) {
     rpc: async () => ({ error: null }),
     from(table) {
       const response = Promise.resolve({
-        data: table === 'account_deletion_jobs' ? { id: 'job' } : [],
+        data:
+          table === 'account_deletion_jobs'
+            ? { id: 'job' }
+            : table === 'admin_roles'
+              ? [{ id: 'ordinary-role' }]
+              : [],
         error:
           (rolesError && table === 'admin_user_roles') ||
           (cleanupError && table === 'profiles')
@@ -40,12 +46,18 @@ function fixture({ rolesError = false, cleanupError = false } = {}) {
           return builder
         },
         delete() {
+          operations.push([table, 'delete'])
           return builder
         },
-        eq() {
+        eq(...args) {
+          operations.push([table, 'eq', ...args])
           return builder
         },
         select() {
+          return builder
+        },
+        in(...args) {
+          operations.push([table, 'in', ...args])
           return builder
         },
         single() {
@@ -94,7 +106,12 @@ function fixture({ rolesError = false, cleanupError = false } = {}) {
     form.set('confirmation', email)
     return exports.permanentlyDeleteAccountAction({ error: '' }, form)
   }
-  return { submit, deletions: () => deletions }
+  return {
+    submit,
+    deletions: () => deletions,
+    operations,
+    assign: exports.assignLeadershipRoleAction,
+  }
 }
 test('wrong deletion confirmation returns an inline error without starting deletion', async () => {
   const f = fixture()
@@ -124,4 +141,32 @@ test('cleanup failure returns a recoverable error instead of a render crash', as
   const f = fixture({ cleanupError: true })
   assert.match((await f.submit('member@example.test')).error, /retry cleanup/)
   assert.equal(f.deletions(), 1)
+})
+
+test('None removes only ordinary leadership roles with the existing admin authorization', async () => {
+  const f = fixture()
+  const form = new FormData()
+  form.set('userId', 'f608b163-54f6-4d56-a60a-53f42756ddd9')
+  form.set('roleId', 'none')
+  await f.assign(form)
+  assert.ok(
+    f.operations.some(
+      op =>
+        JSON.stringify(op) ===
+        JSON.stringify(['admin_roles', 'eq', 'is_super_admin', false]),
+    ),
+  )
+  assert.ok(
+    f.operations.some(
+      op =>
+        JSON.stringify(op) ===
+        JSON.stringify([
+          'admin_user_roles',
+          'in',
+          'role_id',
+          ['ordinary-role'],
+        ]),
+    ),
+  )
+  assert.equal(f.deletions(), 0)
 })

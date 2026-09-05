@@ -223,8 +223,45 @@ export async function assignLeadershipRoleAction(formData: FormData) {
   const context = await requireAdminCapability('leadership.read')
   if (!context.isSuperAdmin) throw new Error('Super admin access required.')
   const userId = uuidSchema.parse(String(formData.get('userId') ?? ''))
-  const roleId = uuidSchema.parse(String(formData.get('roleId') ?? ''))
+  const selection = String(formData.get('roleId') ?? '')
+  const roleId = z.union([uuidSchema, z.literal('none')]).parse(selection)
   const admin = createAdminClient()
+  if (roleId === 'none') {
+    const roles = await admin
+      .from('admin_roles')
+      .select('id')
+      .eq('is_super_admin', false)
+    if (roles.error) throw roles.error
+    if (roles.data.length) {
+      const removed = await admin
+        .from('admin_user_roles')
+        .delete()
+        .eq('user_id', userId)
+        .in(
+          'role_id',
+          roles.data.map(role => role.id),
+        )
+      if (removed.error) throw removed.error
+    }
+    await logAccountAction(
+      context.userId,
+      userId,
+      'leadership_roles_cleared',
+      'Ordinary leadership roles removed.',
+    )
+    revalidatePath('/admin/accounts')
+    revalidatePath('/admin/leadership')
+    revalidatePath(`/admin/accounts/${userId}`)
+    return
+  }
+  const role = await admin
+    .from('admin_roles')
+    .select('is_super_admin')
+    .eq('id', roleId)
+    .single()
+  if (role.error) throw role.error
+  if (role.data.is_super_admin)
+    throw new Error('Use the protected super-admin process.')
   const { error } = await admin
     .from('admin_user_roles')
     .upsert(

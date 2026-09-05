@@ -249,7 +249,7 @@ export default async function AdminAccountDetailPage({
               </p>
             )}
           </div>
-          {context.isSuperAdmin && assignableRoles.length ? (
+          {context.isSuperAdmin ? (
             <form
               action={assignLeadershipRoleAction}
               className="mt-5 flex gap-2 border-t border-border pt-5"
@@ -257,8 +257,15 @@ export default async function AdminAccountDetailPage({
               <input type="hidden" name="userId" value={userId} />
               <select
                 name="roleId"
+                aria-label="Leadership role"
+                defaultValue=""
+                required
                 className="h-10 flex-1 border border-input bg-background px-3 text-sm"
               >
+                <option value="" disabled>
+                  Choose a role
+                </option>
+                <option value="none">None</option>
                 {assignableRoles.map(role => (
                   <option key={role.id} value={role.id}>
                     {role.name}
@@ -266,10 +273,16 @@ export default async function AdminAccountDetailPage({
                 ))}
               </select>
               <Button size="sm">
-                <UserRoundCog className="size-4" /> Assign
+                <UserRoundCog className="size-4" /> Apply
               </Button>
             </form>
           ) : null}
+          {context.isSuperAdmin && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              None removes ordinary leadership roles. Super-admin access is
+              managed separately below.
+            </p>
+          )}
           {context.isSuperAdmin ? (
             <form
               action={setSuperAdminAction}

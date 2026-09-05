@@ -219,3 +219,12 @@ test('production configuration fails closed for missing keys and email sign-off'
     authReleaseErrors({ ...env, AUTH_EMAIL_DELIVERY_VERIFIED: 'false' }).length,
   )
 })
+
+test('analytics excludes admin routes without excluding similarly named public routes', () => {
+  assert.equal(isAuthSensitiveUrl('/admin'), true)
+  assert.equal(
+    isAuthSensitiveUrl('https://unlvmountainclub.com/admin/accounts/example'),
+    true,
+  )
+  assert.equal(isAuthSensitiveUrl('/administration-guide'), false)
+})
