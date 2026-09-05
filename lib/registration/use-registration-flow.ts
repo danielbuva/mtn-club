@@ -21,6 +21,7 @@ import type {
 import { validateRegistrationValues } from './validate-form'
 
 export type RegistrationFlowProps = {
+  onCancel?: () => Promise<void>
   reviewNotice?: ReactNode
   snapshot: TripRegistrationSnapshot
   onPersist: (
@@ -108,8 +109,8 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
     focusFormError(root.current)
     return false
   }
-  async function persist(intent: 'draft' | 'submit') {
-    if (busy.current || (intent === 'submit' && !validate(true))) return
+  async function persist(intent: 'draft' | 'submit'): Promise<boolean> {
+    if (busy.current || (intent === 'submit' && !validate(true))) return false
     busy.current = true
     setPending(true)
     setMessage('')
@@ -138,7 +139,7 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
             focusFormError(root.current)
           }
         }
-        return
+        return false
       }
       receiveSnapshot(result.snapshot)
       if (intent === 'draft') {
@@ -154,9 +155,11 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
               : 'You’re confirmed. See you out there!',
         )
       }
+      return true
     } catch {
       setMessage('Unable to save. Your answers are still here; please retry.')
       setFailed(true)
+      return false
     } finally {
       busy.current = false
       setPending(false)

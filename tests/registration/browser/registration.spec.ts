@@ -453,7 +453,30 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await member
     .getByLabel('Experience', { exact: true })
     .fill('Saved draft experience')
-  await member
+  await expect(
+    member.getByRole('button', { name: 'Cancel registration', exact: true }),
+  ).toHaveCount(0)
+  const exitButton = member.getByRole('button', {
+    name: 'Close registration',
+    exact: true,
+  })
+  await exitButton.click()
+  const exitOverlay = member.getByRole('alertdialog', {
+    name: 'Leave registration?',
+  })
+  await expect(exitOverlay).toBeVisible()
+  await exitOverlay
+    .getByRole('button', { name: 'Close overlay', exact: true })
+    .click()
+  await expect(exitButton).toBeFocused()
+  await expect(member.getByLabel('Experience', { exact: true })).toHaveValue(
+    'Saved draft experience',
+  )
+  await exitButton.click()
+  await exitOverlay.screenshot({
+    path: '/tmp/mtn-registration-exit-mobile.png',
+  })
+  await exitOverlay
     .getByRole('button', { name: 'Save and finish later', exact: true })
     .click()
   await expect(member).toHaveURL(`/trips/${tripId}`)
@@ -548,8 +571,11 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     'data-registration-state',
     'waitlisted',
   )
-  member.on('dialog', dialog => dialog.accept())
   await member
+    .getByRole('button', { name: 'Close registration', exact: true })
+    .click()
+  await member
+    .getByRole('alertdialog', { name: 'Leave registration?' })
     .getByRole('button', { name: 'Cancel registration', exact: true })
     .click()
   await expect(member.locator('[data-registration-state]')).toHaveAttribute(
@@ -916,7 +942,9 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
       .filter({ visible: true }),
   ).toBeVisible()
   await expect(
-    page.getByText('Meeting point: Campus meetup', { exact: false }),
+    page
+      .getByRole('main')
+      .getByText('Meeting point: Campus meetup', { exact: false }),
   ).toBeVisible()
   await context.close()
 })

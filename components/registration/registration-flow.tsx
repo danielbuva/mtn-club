@@ -17,6 +17,7 @@ import {
 } from '@/lib/registration/use-registration-flow'
 import { GuidedQuestion } from './guided-question'
 import { JoiningPreferences } from './joining-preferences'
+import { RegistrationExit } from './registration-exit'
 import { RegistrationReview } from './registration-review'
 import { TransportationFields } from './transportation-fields'
 import { WaiverFields } from './waiver-fields'
@@ -46,15 +47,27 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
   return (
     <FormShell
       ref={root}
-      className="min-h-[65svh]"
+      className="relative min-h-[65svh]"
       onSubmit={async event => {
         event.preventDefault()
         await advance()
       }}
     >
-      <h1 className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+      <h1 className="pr-14 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
         {snapshot.title}
       </h1>
+      {props.onCancel && (
+        <RegistrationExit
+          onCancel={props.onCancel}
+          onSave={
+            snapshot.actions.includes('save_draft')
+              ? () => persist('draft')
+              : undefined
+          }
+          disabled={pending}
+          saveError={failed ? message : undefined}
+        />
+      )}
       <FormProgress index={nav.index} count={nav.count} />
       <FormMessage error={failed}>{message}</FormMessage>
       {complete ? (

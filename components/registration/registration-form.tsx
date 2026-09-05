@@ -11,6 +11,7 @@ import {
 } from '@/lib/registration/actions'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
 import { useRegistrationCommand } from '@/lib/registration/use-registration-command'
+import { RegistrationExit } from './registration-exit'
 import { RegistrationFlow } from './registration-flow'
 import { SignupIntent } from './signup-intent'
 
@@ -58,11 +59,22 @@ export function RegistrationForm({
       }
     })
   }
+  async function cancelRegistration() {
+    const result = await run({
+      command: 'cancel',
+      expectedRevision: snapshot.revision,
+      data: {},
+    })
+    if (!result.ok) throw new Error(result.message)
+  }
   const showForm = canRegister || canUpdate || hadEditableForm.current
   if (canRegister && snapshot.state !== 'incomplete') {
     return (
-      <div data-registration-state={snapshot.state} className="space-y-6">
-        <h1 className="font-brand text-3xl">{snapshot.title}</h1>
+      <div
+        data-registration-state={snapshot.state}
+        className="relative space-y-6"
+      >
+        <h1 className="pr-14 font-brand text-3xl">{snapshot.title}</h1>
         <SignupIntent snapshot={snapshot} />
       </div>
     )
@@ -100,8 +112,13 @@ export function RegistrationForm({
     </>
   )
   return (
-    <div data-registration-state={snapshot.state} className="space-y-6">
-      {!showForm && <h1 className="font-brand text-3xl">{snapshot.title}</h1>}
+    <div
+      data-registration-state={snapshot.state}
+      className="relative space-y-6"
+    >
+      {!showForm && (
+        <h1 className="pr-14 font-brand text-3xl">{snapshot.title}</h1>
+      )}
       {!showForm && (
         <FormMessage>{snapshot.state.replaceAll('_', ' ')}</FormMessage>
       )}
@@ -127,9 +144,15 @@ export function RegistrationForm({
         </section>
       ) : null}
       {!showForm && reviewNotice}
+      {!showForm && snapshot.actions.includes('cancel') && (
+        <RegistrationExit onCancel={cancelRegistration} disabled={pending} />
+      )}
       {showForm ? (
         <RegistrationFlow
           snapshot={snapshot}
+          onCancel={
+            snapshot.actions.includes('cancel') ? cancelRegistration : undefined
+          }
           reviewNotice={reviewNotice}
           onDeclareAge={async adult => {
             const result = await declareAgeAction(adult)
@@ -182,26 +205,6 @@ export function RegistrationForm({
             }
           >
             Decline offer
-          </Button>
-        ) : null}
-        {snapshot.actions.includes('cancel') ? (
-          <Button
-            variant="outline"
-            disabled={pending}
-            onClick={() => {
-              if (
-                window.confirm(
-                  'Cancel your registration and release any reserved seat?',
-                )
-              )
-                run({
-                  command: 'cancel',
-                  expectedRevision: snapshot.revision,
-                  data: {},
-                })
-            }}
-          >
-            Cancel registration
           </Button>
         ) : null}
       </div>
