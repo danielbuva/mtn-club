@@ -18,8 +18,15 @@ export function RegistrationSummary({
       aria-label="Registration status"
     >
       <p className="text-lg font-semibold capitalize">
-        {snapshot.state.replaceAll('_', ' ')}
+        {snapshot.state === 'incomplete'
+          ? 'Signup incomplete'
+          : snapshot.state.replaceAll('_', ' ')}
       </p>
+      {snapshot.state === 'incomplete' ? (
+        <p className="text-sm">
+          Your spot isn’t reserved. Complete the form to confirm your RSVP.
+        </p>
+      ) : null}
       <p>
         {snapshot.confirmedCount} confirmed
         {snapshot.capacity !== null ? ` / ${snapshot.capacity} seats` : ''} ·{' '}
