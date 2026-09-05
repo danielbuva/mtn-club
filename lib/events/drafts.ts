@@ -1,29 +1,7 @@
 import type { EventFormValues } from '@/lib/events/schema'
 import type { Database } from '@/lib/supabase/types'
-
-const toIsoOrNull = (value: string | undefined) => {
-  const trimmed = (value ?? '').trim()
-  if (!trimmed) {
-    return null
-  }
-  const parsed = new Date(trimmed)
-  if (Number.isNaN(parsed.getTime())) {
-    return null
-  }
-  return parsed.toISOString()
-}
-
-const toLocalDateTimeInput = (value: string | null) => {
-  if (!value) {
-    return ''
-  }
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return ''
-  }
-  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000)
-  return local.toISOString().slice(0, 16)
-}
+import { EVENT_KINDS } from './constants'
+import { eventDateTimeToIso, eventLocalDateTime } from './date-time'
 
 const mapDifficultyToTrip = (
   difficulty: EventFormValues['difficulty'],
@@ -89,6 +67,13 @@ const mapVisibilityFromTrip = (
 const normalizeTags = (tags: string[]) =>
   Array.from(new Set(tags.map(tag => tag.trim().toLowerCase()).filter(Boolean)))
 
+function draftDateTime(value: string, timeZone: string) {
+  try {
+    return eventDateTimeToIso(value, timeZone)
+  } catch {
+    return null
+  }
+}
 export const toDraftRowInput = ({
   values,
   isNoLimitEnabled,
@@ -108,11 +93,19 @@ export const toDraftRowInput = ({
 
   return {
     created_by: createdBy,
+    event_kind: values.kind,
+    collect_transportation: values.collectTransportation,
     title: values.title.trim() || null,
     short_summary: values.shortSummary?.trim() || null,
     activity_tags: normalizeTags(values.activityTypes ?? []),
-    starts_at: toIsoOrNull(values.startAt),
-    ends_at: toIsoOrNull(values.endAt),
+    starts_at: draftDateTime(
+      values.startAt,
+      values.timezone || 'America/Los_Angeles',
+    ),
+    ends_at: draftDateTime(
+      values.endAt,
+      values.timezone || 'America/Los_Angeles',
+    ),
     time_zone: values.timezone?.trim() || null,
     primary_location_name: values.primaryLocationName?.trim() || null,
     meeting_location_name: values.meetingLocationName?.trim() || null,
@@ -143,10 +136,17 @@ export const toEventFormValuesFromDraft = ({
     values: {
       title: draft.title ?? '',
       shortSummary: draft.short_summary ?? '',
-      kind: 'outdoor',
+      kind: EVENT_KINDS.find(kind => kind === draft.event_kind) ?? 'outdoor',
+      collectTransportation: draft.collect_transportation ?? false,
       activityTypes: draft.activity_tags ?? [],
-      startAt: toLocalDateTimeInput(draft.starts_at),
-      endAt: toLocalDateTimeInput(draft.ends_at),
+      startAt: eventLocalDateTime(
+        draft.starts_at,
+        draft.time_zone || timezoneFallback,
+      ),
+      endAt: eventLocalDateTime(
+        draft.ends_at,
+        draft.time_zone || timezoneFallback,
+      ),
       timezone: draft.time_zone ?? timezoneFallback,
       primaryLocationName: draft.primary_location_name ?? '',
       meetingLocationName: draft.meeting_location_name ?? '',

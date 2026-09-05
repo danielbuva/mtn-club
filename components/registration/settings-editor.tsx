@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
+import { ToggleField } from '@/components/forms/fields'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -18,6 +19,7 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
   const { settings, snapshot, trip } = roster
   const [values, setValues] = useState<RegistrationSettingsInput>({
     enabled: settings.enabled,
+    collectTransportation: settings.collect_transportation,
     eligibility: settings.eligibility,
     emergencyRequired: settings.emergency_required,
     waiverRequired: settings.waiver_required,
@@ -75,6 +77,12 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
           The global registration switch must also be enabled. Outstanding valid
           offers can still be accepted while new registrations are paused.
         </p>
+        <ToggleField
+          label="Ask about transportation"
+          hint="Optional ride needs and passenger seats, visible to organizers. This does not match rides."
+          checked={Boolean(values.collectTransportation)}
+          onChange={collectTransportation => update({ collectTransportation })}
+        />
         <div className="space-y-2">
           <Label htmlFor="capacity">Seat limit (empty means unlimited)</Label>
           <Input

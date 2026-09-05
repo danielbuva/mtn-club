@@ -83,6 +83,8 @@ export type TripDetail = {
   leaderContact?: string
   summary?: string
   description?: string
+  timeZone?: string
+  eventKind?: string
   overviewWhat?: string
   overviewWhere?: string
   overviewWeather?: string

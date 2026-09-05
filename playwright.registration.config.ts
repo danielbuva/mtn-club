@@ -21,7 +21,7 @@ export default defineConfig({
         ? 'REGISTRATION_BUILD_ONLY=true node tests/registration/start-app.mjs && node tests/registration/start-app.mjs'
         : 'node tests/registration/start-app.mjs',
     url: `http://127.0.0.1:${port}/auth/login`,
-    reuseExistingServer: false,
+    reuseExistingServer: process.env.REGISTRATION_REUSE_SERVER === 'true',
     timeout: 120000,
   },
 })

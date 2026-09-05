@@ -32,7 +32,8 @@
     "prepare": "node scripts/install-git-hooks.mjs",
     "postinstall": "node scripts/copy-maplibre-worker.mjs",
     "test:registration:db": "node --test --test-concurrency=1 tests/registration/database.test.mjs",
-    "test:registration:browser": "playwright test --config playwright.registration.config.ts"
+    "test:registration:browser": "playwright test --config playwright.registration.config.ts",
+    "test:forms:browser": "playwright test --config playwright.forms.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

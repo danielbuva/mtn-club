@@ -128,6 +128,8 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     heroImageUrl: trip.cover_image_path ?? undefined,
     locationName: trip.location_public ?? 'TBD',
     locationNotes: privateRes.data?.meetup_point ?? undefined,
+    timeZone: trip.time_zone,
+    eventKind: trip.event_kind,
     startAt: new Date(trip.starts_at),
     endAt: trip.ends_at ? new Date(trip.ends_at) : undefined,
     isAllDay: trip.is_all_day,

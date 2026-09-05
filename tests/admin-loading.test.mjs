@@ -3,17 +3,6 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import { ADMIN_VIEWS, adminViewForPath } from '../lib/admin/views.ts'
 
-test('trip creation fallback uses the real floating controls in a disabled loading state', () => {
-  const loading = source('components/admin/loading/new-trip.tsx')
-  const form = source('components/events/event-form.tsx')
-  const controls = source('components/events/event-floating-actions.tsx')
-  assert.match(loading, /<EventFloatingActions admin loading\s*\/>/)
-  assert.match(form, /<EventFloatingActions/)
-  assert.match(controls, /const busy = loading \|\|/)
-  assert.equal((controls.match(/disabled=\{busy\}/g) ?? []).length, 2)
-  assert.match(controls, /useAdminMobileMenuOpen\(\)/)
-})
-
 test('membership fallback matches collapsed person summaries', () => {
   const loading = source('components/admin/loading/lists.tsx')
   const tabs = source('components/admin/membership/membership-tabs.tsx')

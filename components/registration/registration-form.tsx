@@ -2,15 +2,17 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { Button } from '@/components/ui/button'
-import { declareAgeAction } from '@/lib/registration/actions'
+import {
+  declareAgeAction,
+  loadRsvpChoicesAction,
+} from '@/lib/registration/actions'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
 import { useRegistrationCommand } from '@/lib/registration/use-registration-command'
-import { EmergencyFields, QuestionFields } from './question-fields'
+import { RegistrationFlow } from './registration-flow'
 import { RegistrationEvents, RegistrationSummary } from './registration-summary'
 import { SignupIntent } from './signup-intent'
-import { emptySignerDetails, WaiverFields } from './waiver-fields'
 
 export function RegistrationForm({
   snapshot,
@@ -21,20 +23,10 @@ export function RegistrationForm({
   const { run, pending, message } = useRegistrationCommand(snapshot.tripId)
   const [agePending, startAge] = useTransition()
   const [ageMessage, setAgeMessage] = useState('')
-  const [answers, setAnswers] = useState(() =>
-    Object.fromEntries(
-      Object.entries(snapshot.answers).filter(([id]) =>
-        snapshot.questions.some(question => question.id === id),
-      ),
-    ),
-  )
-  const [contact, setContact] = useState(snapshot.emergencyContact)
-  const [agreed, setAgreed] = useState(false)
-  const [signature, setSignature] = useState('')
-  const [signerDetails, setSignerDetails] = useState(emptySignerDetails)
-  const [contactConfirmed, setContactConfirmed] = useState(false)
   const canRegister = snapshot.actions.includes('register')
   const canUpdate = snapshot.actions.includes('update_response')
+  const hadEditableForm = useRef(false)
+  if (canRegister || canUpdate) hadEditableForm.current = true
   useEffect(() => {
     if (!snapshot.offer) return
     const refresh = () => router.refresh()
@@ -77,7 +69,7 @@ export function RegistrationForm({
   return (
     <div className="space-y-6">
       <RegistrationSummary snapshot={snapshot} />
-      {snapshot.ageAdult === null ? (
+      {snapshot.ageAdult === null && !canRegister && !canUpdate ? (
         <section className="space-y-3">
           <h2 className="font-medium">Age declaration</h2>
           <p className="text-sm">
@@ -126,107 +118,30 @@ export function RegistrationForm({
           ) : null}
         </div>
       ) : null}
-      {canRegister || canUpdate ? (
-        <form
-          className="space-y-5"
-          onSubmit={event => {
-            event.preventDefault()
-            run({
-              command: canRegister ? 'register' : 'update_response',
-              expectedRevision: snapshot.revision,
-              data: {
-                formVersion: snapshot.formVersion,
-                answers,
-                emergencyContact: contact,
-                emergencyConfirmed: contactConfirmed,
-                ...(agreed &&
-                !snapshot.waiverSigned &&
-                snapshot.ageAdult === true
-                  ? {
-                      waiverAgreed: true,
-                      waiverId: snapshot.waiver?.id,
-                      signatureName: signature,
-                      ...(snapshot.waiver?.sourceUrl ? { signerDetails } : {}),
-                    }
-                  : {}),
-              },
-            })
+      {canRegister || canUpdate || hadEditableForm.current ? (
+        <RegistrationFlow
+          snapshot={snapshot}
+          onDeclareAge={async adult => {
+            const result = await declareAgeAction(adult)
+            if (!result.ok) throw new Error(result.message)
+            const current = await loadRsvpChoicesAction(snapshot.tripId)
+            router.refresh()
+            return current
           }}
-        >
-          <QuestionFields
-            questions={snapshot.questions}
-            answers={answers}
-            onChange={setAnswers}
-          />
-          <EmergencyFields
-            value={contact}
-            onChange={value => {
-              setContact(value)
-              setContactConfirmed(false)
-            }}
-            required={snapshot.emergencyRequired}
-          />
-          {snapshot.emergencyRequired ? (
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                required
-                checked={contactConfirmed}
-                onChange={event => setContactConfirmed(event.target.checked)}
-              />
-              I confirm this emergency contact is current for this trip.
-            </label>
-          ) : null}
-          <WaiverFields
-            snapshot={snapshot}
-            agreed={agreed}
-            onAgree={setAgreed}
-            signature={signature}
-            onSignature={setSignature}
-            details={signerDetails}
-            onDetails={setSignerDetails}
-          />
-          <Button
-            disabled={
-              pending ||
-              agePending ||
-              (canRegister && snapshot.eligibilityReasons.length > 0)
-            }
-            type="submit"
-          >
-            {pending
-              ? 'Saving…'
-              : canRegister
-                ? snapshot.availability === 'waitlist'
-                  ? 'Join waitlist'
-                  : 'Confirm Going'
-                : 'Save registration details'}
-          </Button>
-          {canRegister ? (
-            <Button
-              type="button"
-              variant="outline"
-              disabled={pending}
-              className="ml-2"
-              onClick={() =>
-                run(
-                  {
-                    command: 'save_draft',
-                    expectedRevision: snapshot.revision,
-                    data: {
-                      formVersion: snapshot.formVersion,
-                      answers,
-                      emergencyContact: contact,
-                    },
-                  },
-                  () => router.push(`/trips/${snapshot.tripId}`),
-                )
-              }
-            >
-              Save and finish later
-            </Button>
-          ) : null}
-        </form>
+          onPersist={(data, intent, current) =>
+            run({
+              command:
+                intent === 'draft'
+                  ? 'save_draft'
+                  : current.actions.includes('update_response')
+                    ? 'update_response'
+                    : 'register',
+              expectedRevision: current.revision,
+              data,
+            })
+          }
+          onSavedDraft={() => router.push(`/trips/${snapshot.tripId}`)}
+        />
       ) : null}
       <div className="flex flex-wrap gap-2">
         {snapshot.actions.includes('accept_offer') ? (

@@ -77,7 +77,10 @@ before(() => {
   const migrations = new URL('../../supabase/migrations/', import.meta.url)
   for (const name of readdirSync(migrations)
     .filter(
-      name => name.startsWith('2026090400') && !name.startsWith('202609040007'),
+      name =>
+        name.endsWith('.sql') &&
+        name >= '202609040001' &&
+        !name.startsWith('202609040007'),
     )
     .sort()) {
     sql(readFileSync(new URL(name, migrations), 'utf8'))
@@ -811,4 +814,228 @@ test('Maybe and Not going save without confirming or reserving seats, and Going 
     `update public.trip_registration_settings set enabled=false where trip_id='${f.trip}'`,
   )
   await assert.rejects(run('set_maybe', state.revision), /not open|closed/)
+})
+
+test('transportation preferences normalize, persist through drafts, and remain private', async () => {
+  const f = fixture(3)
+  const user = f.users[0]
+  await asUser(
+    f.owner,
+    `select to_jsonb(public.set_trip_transportation_collection('${f.trip}',true))`,
+  )
+  let current = await asUser(
+    user,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(current.collectTransportation, true)
+  const command = (name, data) =>
+    asUser(
+      user,
+      `select public.registration_command('${f.trip}','${name}','${randomUUID()}',${current.revision},${literal(JSON.stringify({ formVersion: current.formVersion, ...data }))})`,
+    )
+  current = await command('save_draft', {
+    answers: {},
+    transportation: { mode: 'driver', seatsOffered: 4 },
+  })
+  assert.equal(current.state, 'incomplete')
+  assert.equal(current.confirmedCount, 0)
+  assert.deepEqual(current.transportation, { mode: 'driver', seatsOffered: 4 })
+  for (const invalid of [
+    { mode: 'driver', seatsOffered: 9 },
+    { mode: 'driver', seatsOffered: 1.5 },
+    { mode: 'needs_ride', seatsOffered: 4 },
+    { mode: 'covered' },
+  ]) {
+    await assert.rejects(
+      command('save_draft', { answers: {}, transportation: invalid }),
+      /valid transportation/,
+    )
+  }
+  current = await command('register', {
+    answers: {},
+    transportation: { mode: 'needs_ride' },
+  })
+  assert.deepEqual(current.transportation, { mode: 'needs_ride' })
+  current = await command('update_response', { answers: {} })
+  assert.deepEqual(current.transportation, { mode: 'needs_ride' })
+  const other = await asUser(
+    f.users[1],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(other.transportation, null)
+  await assert.rejects(
+    asUser(f.users[1], `select public.get_registration_roster('${f.trip}')`),
+    /permission/,
+  )
+  const roster = await asUser(
+    f.owner,
+    `select public.get_registration_roster('${f.trip}')`,
+  )
+  assert.deepEqual(
+    roster.rows.find(row => row.userId === user).transportation,
+    { mode: 'needs_ride' },
+  )
+  await asUser(
+    f.owner,
+    `select to_jsonb(public.set_trip_transportation_collection('${f.trip}',false))`,
+  )
+  await assert.rejects(
+    command('update_response', {
+      answers: {},
+      transportation: { mode: 'driver', seatsOffered: 3 },
+    }),
+    /disabled/,
+  )
+  current = await command('update_response', { answers: {} })
+  assert.deepEqual(current.transportation, { mode: 'needs_ride' })
+  current = await command('update_response', {
+    answers: {},
+    transportation: null,
+  })
+  assert.equal(current.transportation, null)
+  assert.equal(current.confirmedCount, 1)
+  await assert.rejects(
+    asUser(
+      f.users[1],
+      `select to_jsonb(public.set_trip_transportation_collection('${f.trip}',true))`,
+    ),
+    /permission/,
+  )
+})
+
+test('joining visibility is opt-in, counted privately, remembered, and independent of email categories', async () => {
+  const f = fixture(4)
+  const [hidden, visible] = f.users
+  const preferences = (
+    show,
+    email,
+    expectedShow = false,
+    expectedEmail = false,
+  ) => ({
+    showInAttendeeList: show,
+    emailUpdates: email,
+    expectedEmailUpdates: expectedEmail,
+    expectedAttendeeDefault: expectedShow,
+  })
+  const command = (
+    user,
+    kind,
+    revision,
+    prefs,
+    trip = f.trip,
+    request = randomUUID(),
+  ) =>
+    asUser(
+      user,
+      `select public.registration_command('${trip}','${kind}','${request}',${revision},${literal(JSON.stringify({ formVersion: Number(sql(`select form_version from public.trip_registration_settings where trip_id='${trip}'`)), answers: {}, joiningPreferences: prefs }))})`,
+    )
+  await command(hidden, 'register', 0, preferences(false, false))
+  const request = randomUUID()
+  const first = await command(
+    visible,
+    'register',
+    0,
+    preferences(true, true),
+    f.trip,
+    request,
+  )
+  const retry = await command(
+    visible,
+    'register',
+    0,
+    preferences(true, true),
+    f.trip,
+    request,
+  )
+  assert.equal(retry.revision, first.revision)
+  const view = await asUser(
+    hidden,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(view.confirmedCount, 2)
+  assert.deepEqual(
+    view.attendees.map(person => person.userId),
+    [visible],
+  )
+  const roster = await asUser(
+    f.owner,
+    `select public.get_registration_roster('${f.trip}')`,
+  )
+  assert.equal(roster.rows.length, 2)
+  const next = fixture(4)
+  const prefilled = await asUser(
+    visible,
+    `select public.get_trip_registration('${next.trip}')`,
+  )
+  assert.equal(prefilled.showInAttendeeList, true)
+  assert.equal(prefilled.emailUpdates, true)
+  const emails = await asUser(
+    visible,
+    'select public.get_my_email_preferences()',
+  )
+  assert.equal(emails.tripUpdates, true)
+  assert.equal(emails.announcements, false)
+  assert.equal(emails.general, false)
+  await command(
+    visible,
+    'register',
+    0,
+    preferences(false, false, true, true),
+    next.trip,
+  )
+  const prior = await asUser(
+    visible,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(prior.showInAttendeeList, true)
+  assert.equal(prior.emailUpdates, false)
+  await assert.rejects(
+    command(
+      visible,
+      'update_response',
+      prior.revision,
+      preferences(false, true, true, true),
+    ),
+    /changed elsewhere/,
+  )
+  const after = await asUser(
+    hidden,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(after.confirmedCount, 2)
+  assert.deepEqual(
+    after.attendees.map(person => person.userId),
+    [visible],
+  )
+  await assert.rejects(
+    command(hidden, 'save_draft', 0, preferences(true, true)),
+    /draft|preferences|confirmed/i,
+  )
+})
+
+test('trip activity choices are readable by members but writable only by trip managers', async () => {
+  const f = fixture()
+  const tag = `parity-${randomUUID()}`
+  await asUser(
+    f.owner,
+    `insert into public.trip_tag_options(tag) values('${tag}'); select to_json(true)`,
+  )
+  assert.equal(
+    await asUser(
+      f.users[0],
+      `select to_json(count(*)) from public.trip_tag_options where tag='${tag}'`,
+    ),
+    1,
+  )
+  await assert.rejects(
+    asUser(
+      f.users[0],
+      `insert into public.trip_tag_options(tag) values('unauthorized-${tag}'); select to_json(true)`,
+    ),
+    /row-level security/,
+  )
+  await asUser(
+    f.owner,
+    `delete from public.trip_tag_options where tag='${tag}'; select to_json(true)`,
+  )
 })

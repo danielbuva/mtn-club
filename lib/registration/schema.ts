@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { transportationSchema } from './transportation.ts'
 
 export const registrationStateSchema = z.enum([
   'none',
@@ -102,10 +103,15 @@ export const snapshotSchema = z.object({
   canManage: z.boolean(),
   canReviewGuardian: z.boolean(),
   emailEnabled: z.boolean(),
+  emailUpdates: z.boolean().default(false),
+  emailAllowed: z.boolean().default(true),
+  showInAttendeeList: z.boolean().default(false),
+  defaultShowInAttendeeList: z.boolean().default(false),
   actions: z.array(commandSchema),
   ageAdult: z.boolean().nullable(),
   formVersion: z.number(),
   questions: questionsSchema,
+  collectTransportation: z.boolean().default(false),
   emergencyRequired: z.boolean(),
   waiverRequired: z.boolean(),
   waiverSigned: z.boolean(),
@@ -119,6 +125,7 @@ export const snapshotSchema = z.object({
     })
     .nullable(),
   answers: answersSchema,
+  transportation: transportationSchema.default(null),
   emergencyContact: emergencyContactSchema,
   offer: z
     .object({
@@ -147,6 +154,16 @@ export const registrationInputSchema = z
       .object({
         formVersion: z.number().int().optional(),
         answers: answersSchema.optional(),
+        transportation: transportationSchema.optional(),
+        joiningPreferences: z
+          .object({
+            showInAttendeeList: z.boolean(),
+            emailUpdates: z.boolean(),
+            expectedEmailUpdates: z.boolean(),
+            expectedAttendeeDefault: z.boolean(),
+          })
+          .strict()
+          .optional(),
         emergencyContact: emergencyContactSchema.optional(),
         emergencyConfirmed: z.boolean().optional(),
         waiverAgreed: z.boolean().optional(),
@@ -181,6 +198,7 @@ export const registrationInputSchema = z
 export const settingsInputSchema = z.object({
   enabled: z.boolean(),
   eligibility: z.enum(['members', 'account']),
+  collectTransportation: z.boolean().optional(),
   emergencyRequired: z.boolean(),
   waiverRequired: z.boolean(),
   questions: questionsSchema,
@@ -197,6 +215,7 @@ export const rosterSchema = z.object({
   settings: z.object({
     enabled: z.boolean(),
     eligibility: z.enum(['members', 'account']),
+    collect_transportation: z.boolean().default(false),
     emergency_required: z.boolean(),
     waiver_required: z.boolean(),
     questions: questionsSchema,
@@ -222,6 +241,7 @@ export const rosterSchema = z.object({
       phone: z.string().nullable(),
       emailEnabled: z.boolean(),
       requirements: z.array(z.string()),
+      transportation: transportationSchema.default(null),
       answers: answersSchema,
       emergencyContact: emergencyContactSchema,
       attendance: z.enum(['present', 'absent', 'unmarked']),

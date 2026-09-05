@@ -24,7 +24,7 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
         </p>
         <p className="text-sm font-medium">
           <TripTitleText
-            title={formatTripDate(trip.startAt, trip.endAt)}
+            title={formatTripDate(trip.startAt, trip.endAt, trip.timeZone)}
             canceled={trip.status === 'cancelled'}
           />
         </p>
@@ -35,7 +35,9 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
           Time
         </p>
         <p className="text-sm font-medium">
-          {trip.isAllDay ? 'TBA' : formatTripTime(trip.startAt, trip.endAt)}
+          {trip.isAllDay
+            ? 'TBA'
+            : formatTripTime(trip.startAt, trip.endAt, trip.timeZone)}
         </p>
       </div>
     </section>

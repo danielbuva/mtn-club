@@ -18,6 +18,8 @@ function refreshRegistration(tripId: string) {
     `/trips/${tripId}/rsvp`,
     `/trips/${tripId}/registrations`,
     '/profile/trips',
+    '/profile/user/privacy',
+    '/profile/user/account',
     '/calendar',
     `/admin/trips/${tripId}/registrations`,
     '/admin/membership/trip-guardian-reviews',
@@ -35,7 +37,12 @@ export async function registrationAction(
     return {
       ok: false,
       message: 'Check your registration details.',
-      fieldErrors: z.flattenError(parsed.error).fieldErrors,
+      fieldErrors: Object.fromEntries(
+        parsed.error.issues.map(issue => [
+          issue.path.join('.'),
+          [issue.message],
+        ]),
+      ),
     }
   const { tripId, command, requestId, expectedRevision, userId, data } =
     parsed.data
@@ -67,6 +74,7 @@ export async function declareAgeAction(adult: boolean) {
   const { error } = await db.rpc('declare_registration_age', {
     p_adult: z.boolean().parse(adult),
   })
+  if (!error) revalidatePath('/profile/user/account')
   return error
     ? {
         ok: false,

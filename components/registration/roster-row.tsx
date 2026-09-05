@@ -8,6 +8,7 @@ import type {
   RegistrationCommand,
   RegistrationRoster,
 } from '@/lib/registration/schema'
+import { transportationLabel } from '@/lib/registration/transportation'
 import { useRegistrationCommand } from '@/lib/registration/use-registration-command'
 
 export function RosterRow({
@@ -104,6 +105,8 @@ export function RosterRow({
             {row.email ?? 'Email not shared'} ·{' '}
             {row.phone ?? 'Phone not shared'}
           </dd>
+          <dt className="font-medium">Transportation preferences</dt>
+          <dd>{transportationLabel(row.transportation)}</dd>
           <dt className="font-medium">Emergency contact</dt>
           <dd>
             {[

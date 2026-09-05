@@ -5,6 +5,7 @@ import type {
   RegistrationInput,
   TripRegistrationSnapshot,
 } from '@/lib/registration/schema'
+import { WaiverReader } from './waiver-reader'
 
 type SignerDetails = NonNullable<RegistrationInput['data']['signerDetails']>
 export const emptySignerDetails: SignerDetails = {
@@ -32,6 +33,9 @@ export function WaiverFields({
   onSignature,
   details,
   onDetails,
+  hasRead,
+  onRead,
+  errors = {},
 }: {
   snapshot: TripRegistrationSnapshot
   agreed: boolean
@@ -40,17 +44,39 @@ export function WaiverFields({
   onSignature: (value: string) => void
   details: SignerDetails
   onDetails: (value: SignerDetails) => void
+  hasRead: boolean
+  onRead: () => void
+  errors?: Record<string, string>
 }) {
+  const signatureErrors = Object.entries(errors)
+    .filter(([key]) => key !== 'waiverRead')
+    .map(([, value]) => value)
   if (!snapshot.waiverRequired) return null
   return (
     <section className="space-y-3 rounded-lg border p-4">
+      {signatureErrors.length > 0 && (
+        <p role="alert" className="text-sm text-destructive">
+          {Array.from(new Set(signatureErrors)).join(' ')}
+        </p>
+      )}
       <h2 className="font-semibold">
         {snapshot.waiver?.title ?? 'Waiver not configured'}
       </h2>
-      <p className="whitespace-pre-wrap text-sm">
-        {snapshot.waiver?.body ??
-          'An organizer must add the required waiver before registration opens.'}
-      </p>
+      {snapshot.waiver ? (
+        <WaiverReader
+          key={`${snapshot.waiver.id}:${snapshot.waiver.version}`}
+          title={snapshot.waiver.title}
+          body={snapshot.waiver.body}
+          version={snapshot.waiver.version}
+          hasRead={hasRead || snapshot.waiverSigned}
+          onRead={onRead}
+          error={errors.waiverRead}
+        />
+      ) : (
+        <p>
+          An organizer must add the required waiver before registration opens.
+        </p>
+      )}
       {snapshot.waiverSigned ? (
         <p>
           {snapshot.ageAdult === false
@@ -64,6 +90,10 @@ export function WaiverFields({
           waiver, then contact a club officer to verify it before registration.
           You cannot sign the adult agreement yourself.
         </p>
+      ) : !hasRead ? (
+        <p className="text-sm text-muted-foreground">
+          Open the waiver and read it through before completing your signature.
+        </p>
       ) : (
         <>
           {snapshot.waiver?.sourceUrl ? (
@@ -73,7 +103,7 @@ export function WaiverFields({
                 Your typed name signs this exact version. Your account identity
                 and server signing time are recorded. These details are
                 restricted to you and authorized trip managers. Initial each
-                provision after reading it above.
+                provision after reading the full waiver.
               </p>
               {provisions.map((provision, index) => (
                 <label
@@ -85,6 +115,9 @@ export function WaiverFields({
                   <Input
                     required
                     id={`waiver-initial-${index}`}
+                    aria-invalid={Boolean(
+                      errors[`signerDetails.initials.${index}`],
+                    )}
                     maxLength={10}
                     value={details.initials[index]}
                     onChange={e =>
@@ -124,6 +157,7 @@ export function WaiverFields({
                           ? 'tel'
                           : 'text'
                     }
+                    aria-invalid={Boolean(errors[`signerDetails.${key}`])}
                     maxLength={key === 'phone' ? 50 : 500}
                     value={details[key]}
                     onChange={e =>
@@ -144,6 +178,7 @@ export function WaiverFields({
             <input
               type="checkbox"
               required
+              aria-invalid={Boolean(errors.waiverAgreed)}
               checked={agreed}
               onChange={e => onAgree(e.target.checked)}
             />
@@ -154,6 +189,7 @@ export function WaiverFields({
             Full name as signature
             <Input
               id="signature"
+              aria-invalid={Boolean(errors.signatureName)}
               required
               minLength={2}
               maxLength={200}

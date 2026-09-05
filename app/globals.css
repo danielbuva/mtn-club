@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./themes/red-dark.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -322,7 +323,8 @@ html:has([data-calendar-page]) [data-reader-navigation-fallback="calendar"] {
 }
 
 /* Magazine surfaces stay square. Floating thumb controls are the one rounded UI. */
-[data-editorial-surface] :where(*):not(input[type="radio"]) {
+[data-editorial-surface]
+  :where(*):not(input[type="radio"]):not([data-choice-indicator="single"]) {
   border-radius: 0;
 }
 
@@ -629,4 +631,44 @@ html:has([data-calendar-page]) [data-reader-navigation-fallback="calendar"] {
     color: var(--foreground);
     text-shadow: 0 0 0 color-mix(in oklch, var(--primary) 20%, transparent);
   }
+}
+
+/* Shared editorial form language, scoped away from compact admin forms. */
+[data-guided-form] {
+  --background: var(--editorial-page);
+  --foreground: var(--editorial-ink);
+  --secondary: var(--editorial-panel);
+  --muted-foreground: var(--editorial-muted);
+  --primary: var(--editorial-ink);
+  --primary-foreground: var(--editorial-page);
+}
+[data-step-heading] {
+  scroll-margin-top: 2rem;
+}
+.form-progress {
+  appearance: none;
+  border: 0;
+  background: var(--editorial-panel);
+}
+.form-progress::-webkit-progress-bar {
+  background: var(--editorial-panel);
+}
+.form-progress::-webkit-progress-value {
+  background: var(--editorial-ink);
+}
+.form-progress::-moz-progress-bar {
+  background: var(--editorial-ink);
+}
+[data-guided-form] button {
+  box-shadow: none;
+}
+
+.number-stepper-input {
+  appearance: textfield;
+}
+
+.number-stepper-input::-webkit-inner-spin-button,
+.number-stepper-input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
 }

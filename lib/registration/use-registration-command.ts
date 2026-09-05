@@ -1,51 +1,61 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useRef, useState, useTransition } from 'react'
+import { useRef, useState } from 'react'
 import { registrationAction } from '@/lib/registration/actions'
 import type {
   RegistrationInput,
+  RegistrationResult,
   TripRegistrationSnapshot,
 } from '@/lib/registration/schema'
 
 export function useRegistrationCommand(tripId: string) {
   const router = useRouter()
-  const [pending, startTransition] = useTransition()
+  const [pending, setPending] = useState(false)
   const [message, setMessage] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
   const request = useRef<{ fingerprint: string; id: string } | null>(null)
   const busy = useRef(false)
-  function run(
+  async function run(
     input: Omit<RegistrationInput, 'requestId' | 'tripId'>,
     onSuccess?: (snapshot: TripRegistrationSnapshot) => void,
     onFailure?: () => void,
-  ) {
-    if (busy.current) return
+  ): Promise<RegistrationResult> {
+    if (busy.current)
+      return { ok: false, message: 'A request is already being saved.' }
     busy.current = true
+    setPending(true)
     const fingerprint = JSON.stringify(input)
     if (request.current?.fingerprint !== fingerprint)
       request.current = { fingerprint, id: crypto.randomUUID() }
-    const requestId = request.current.id
     setMessage('')
-    startTransition(async () => {
-      try {
-        const result = await registrationAction({ ...input, tripId, requestId })
-        if (result.ok) {
-          request.current = null
-          onSuccess?.(result.snapshot)
-        } else {
-          setMessage(result.message)
-          onFailure?.()
-        }
-        router.refresh()
-      } catch {
+    setFieldErrors({})
+    try {
+      const result = await registrationAction({
+        ...input,
+        tripId,
+        requestId: request.current.id,
+      })
+      if (result.ok) {
+        request.current = null
+        onSuccess?.(result.snapshot)
+      } else {
+        setMessage(result.message)
+        setFieldErrors(result.fieldErrors ?? {})
         onFailure?.()
-        setMessage(
-          'The response could not be confirmed. Refresh to check your status, or retry safely.',
-        )
-      } finally {
-        busy.current = false
       }
-    })
+      router.refresh()
+      return result
+    } catch {
+      const message =
+        'The response could not be confirmed. Refresh to check your status, or retry safely.'
+      onFailure?.()
+      setMessage(message)
+      return { ok: false, message }
+    } finally {
+      busy.current = false
+      setPending(false)
+    }
   }
-  return { run, pending, message }
+  return { run, pending, message, fieldErrors }
 }

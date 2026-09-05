@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
+import { NewTripLoading } from '@/components/admin/loading/new-trip'
 import { NewEventPage } from '@/components/events/new-event-page'
 import { getTripLeadershipOptions } from '@/lib/events/creation-options'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function TripsNewPage({
+async function TripsNewPageContent({
   searchParams,
 }: {
   searchParams?: Promise<{ type?: string; draft?: string }>
@@ -50,7 +52,10 @@ export default async function TripsNewPage({
           .eq('id', draftId)
           .eq('created_by', user.id)
           .maybeSingle()
-      : { data: null }
+      : { data: null, error: null }
+
+  if (tagOptionsRes.error || initialDraft.error)
+    throw new Error('Unable to load the trip form. Please retry.')
 
   return (
     <NewEventPage
@@ -62,5 +67,15 @@ export default async function TripsNewPage({
       activityOptions={activityOptions}
       {...leadershipOptions}
     />
+  )
+}
+
+export default function TripsNewPage(
+  props: Parameters<typeof TripsNewPageContent>[0],
+) {
+  return (
+    <Suspense fallback={<NewTripLoading />}>
+      <TripsNewPageContent {...props} />
+    </Suspense>
   )
 }

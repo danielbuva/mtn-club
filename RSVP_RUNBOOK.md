@@ -132,3 +132,13 @@ For a delivery incident, set `REGISTRATION_EMAIL_ENABLED=false`; scheduled offer
 Source: [UNLV RSO risk management](https://www.unlv.edu/sia/student-orgs/registration/understanding-risk-management) and the linked August 2022 standard waiver and September 2023 FAQ. The legal provisions are preserved; organizers supply the actual activity and risks. An electronic signature is tied to an authenticated account, explicit agreement, immutable content/version, and database time. Do not sign on another participant’s behalf or represent a test fixture as consent. Participants who cannot make a listed declaration must contact an organizer before signing.
 
 The guardian workflow verifies an externally signed document and records the date supplied on that document, separately from the officer’s server review time. It does not fabricate a parent’s signature or signing timestamp. Keep signed records indefinitely until the club adopts a reviewed retention policy; this release has no automatic evidence deletion. Guardian and signature provenance survives account merging.
+
+## Guided forms and transportation preferences
+
+Apply `202609040022_transportation_preferences.sql` before deploying the guided forms. Existing trips default to transportation collection off. This collects transportation intent and passenger seats only; it does not match riders or create carpools. See [FORM_SYSTEM.md](FORM_SYSTEM.md) for normalization, privacy, showroom, and verification details.
+
+Joining preferences additionally require `202609050001_joining_preferences.sql`. Attendee profiles now require per-trip opt-in; counts and organizer access are unchanged. Age declarations appear in Account settings, and trip email choices share the existing Privacy settings controls.
+
+## Guided-form staging release — September 5, 2026
+
+Applied `202609040022`, `202609050001`, `202609050002`, and `202609050003` to remote staging `qarabfhyyekjqmzsuhzo` using the linked Supabase CLI. Remote public and registration-private function lint passed. The release preserves configured waiver content and signature provenance, adds transportation and joining preferences, and ports creation and registration to shared form primitives. Verification: 93 unit tests, 19 database scenarios, 15 browser journeys, type checks, formatting, and production build. Production migration and deployment remain tied to a separate `main` release.

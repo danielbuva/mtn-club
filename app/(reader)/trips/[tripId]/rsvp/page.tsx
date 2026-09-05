@@ -32,10 +32,7 @@ async function RegistrationContent({
           Manage registration and roster
         </Link>
       ) : null}
-      <RegistrationForm
-        key={`${snapshot.tripId}-${snapshot.formVersion}`}
-        snapshot={snapshot}
-      />
+      <RegistrationForm key={snapshot.tripId} snapshot={snapshot} />
     </>
   )
 }

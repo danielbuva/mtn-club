@@ -20,6 +20,11 @@ export function TripDescription({ trip }: TripDescriptionProps) {
   return (
     <section className="space-y-2 rounded-2xl border border-border/70 bg-card p-4 md:p-5">
       <h2 className="text-lg font-semibold">Overview</h2>
+      {trip.eventKind && (
+        <p className="text-xs capitalize text-muted-foreground">
+          {trip.eventKind}
+        </p>
+      )}
       {sectionRows.length ? (
         <div className="space-y-3 text-sm text-muted-foreground">
           {description ? (

@@ -19,6 +19,8 @@ export async function GET(
         'emergency_relationship',
         'emergency_phone',
         'attendance',
+        'transportation_mode',
+        'passenger_seats_offered',
       ],
       ...roster.rows.map(row => [
         row.name,
@@ -31,6 +33,10 @@ export async function GET(
         row.emergencyContact.relationship,
         row.emergencyContact.phone,
         row.attendance,
+        row.transportation?.mode ?? '',
+        row.transportation?.mode === 'driver'
+          ? String(row.transportation.seatsOffered)
+          : '',
       ]),
     ]
     return new Response(

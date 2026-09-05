@@ -29,6 +29,9 @@ export function TripAttendeesPreview({
       <h2 className="text-lg font-semibold">Attendees</h2>
       {preview.length ? (
         <>
+          <p className="text-sm text-muted-foreground">
+            {totalCount} confirmed. Only people who opted in are shown.
+          </p>
           <div className="flex flex-wrap items-center gap-2">
             {preview.map(attendee => (
               <Avatar

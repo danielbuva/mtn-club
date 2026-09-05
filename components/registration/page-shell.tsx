@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { FormSkeleton } from '@/components/forms/form-skeleton'
 
 export function RegistrationShell({
   title,
@@ -24,12 +25,5 @@ export function RegistrationShell({
   )
 }
 export function RegistrationSkeleton() {
-  return (
-    <div className="space-y-6" aria-busy="true">
-      <div className="h-8 w-2/3 animate-pulse rounded bg-muted" />
-      <div className="h-44 animate-pulse rounded-lg border bg-muted" />
-      <div className="h-72 animate-pulse rounded-lg border bg-muted" />
-      <output className="sr-only">Loading registration details</output>
-    </div>
-  )
+  return <FormSkeleton />
 }

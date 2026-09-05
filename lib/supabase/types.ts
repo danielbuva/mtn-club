@@ -1147,6 +1147,10 @@ export type Database = {
       }
       trip_drafts: {
         Row: {
+          event_kind: string
+          collect_transportation: boolean
+          public_host_ids: string[]
+          leader_user_ids: string[]
           activity_tags: string[]
           created_at: string
           created_by: string
@@ -1171,6 +1175,10 @@ export type Database = {
           visibility: Database['public']['Enums']['trip_visibility']
         }
         Insert: {
+          event_kind?: string
+          collect_transportation?: boolean
+          public_host_ids?: string[]
+          leader_user_ids?: string[]
           activity_tags?: string[]
           created_at?: string
           created_by: string
@@ -1195,6 +1203,10 @@ export type Database = {
           visibility?: Database['public']['Enums']['trip_visibility']
         }
         Update: {
+          event_kind?: string
+          collect_transportation?: boolean
+          public_host_ids?: string[]
+          leader_user_ids?: string[]
           activity_tags?: string[]
           created_at?: string
           created_by?: string
@@ -1459,6 +1471,7 @@ export type Database = {
       }
       trips: {
         Row: {
+          event_kind: string
           activity_id: string | null
           activity_tags: string[]
           archived_at: string | null
@@ -1492,6 +1505,7 @@ export type Database = {
           waitlist_enabled: boolean
         }
         Insert: {
+          event_kind?: string
           activity_id?: string | null
           activity_tags?: string[]
           archived_at?: string | null
@@ -1525,6 +1539,7 @@ export type Database = {
           waitlist_enabled?: boolean
         }
         Update: {
+          event_kind?: string
           activity_id?: string | null
           activity_tags?: string[]
           archived_at?: string | null
@@ -1599,18 +1614,21 @@ export type Database = {
       user_preferences: {
         Row: {
           created_at: string
+          show_in_attendee_lists: boolean
           trip_email_notifications: boolean
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          show_in_attendee_lists?: boolean
           trip_email_notifications?: boolean
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          show_in_attendee_lists?: boolean
           trip_email_notifications?: boolean
           updated_at?: string
           user_id?: string
@@ -1926,6 +1944,8 @@ export type Database = {
       }
       registration_responses: {
         Row: {
+          show_in_attendee_list: boolean
+          transportation: Json | null
           answers: Json
           emergency_contact: Json
           form_version: number
@@ -1934,6 +1954,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          show_in_attendee_list?: boolean
+          transportation?: Json | null
           answers?: Json
           emergency_contact?: Json
           form_version: number
@@ -1942,6 +1964,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          show_in_attendee_list?: boolean
+          transportation?: Json | null
           answers?: Json
           emergency_contact?: Json
           form_version?: number
@@ -2062,6 +2086,7 @@ export type Database = {
       }
       trip_registration_settings: {
         Row: {
+          collect_transportation: boolean
           eligibility: string
           emergency_required: boolean
           enabled: boolean
@@ -2075,6 +2100,7 @@ export type Database = {
           waiver_required: boolean
         }
         Insert: {
+          collect_transportation?: boolean
           eligibility?: string
           emergency_required?: boolean
           enabled?: boolean
@@ -2088,6 +2114,7 @@ export type Database = {
           waiver_required?: boolean
         }
         Update: {
+          collect_transportation?: boolean
           eligibility?: string
           emergency_required?: boolean
           enabled?: boolean
@@ -2122,6 +2149,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      set_trip_transportation_collection: {
+        Args: { p_trip_id: string; p_enabled: boolean }
+        Returns: undefined
+      }
       get_my_email_preferences: { Args: Record<string, never>; Returns: Json }
       save_privacy_email_preferences: {
         Args: { p_privacy: Json; p_preferences: Json; p_expected: Json }

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
 
@@ -186,6 +187,11 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     if (scope.data !== 'all') {
       throw new Error('All-trip permission is required to reassign leaders.')
     }
+    const hostAssignments = await buildHostAssignments(
+      supabase,
+      tripId,
+      publicHostIds ?? [],
+    )
     const deletionResults = await Promise.all([
       supabase.from('trip_hosts').delete().eq('trip_id', tripId),
       supabase.from('trip_leaders').delete().eq('trip_id', tripId),
@@ -194,13 +200,7 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     if (deletionError) throw deletionError
     const insertionResults = await Promise.all([
       publicHostIds?.length
-        ? supabase.from('trip_hosts').insert(
-            publicHostIds.map((hostId, index) => ({
-              trip_id: tripId,
-              host_id: hostId,
-              sort_order: index,
-            })),
-          )
+        ? supabase.from('trip_hosts').insert(hostAssignments)
         : Promise.resolve({ error: null }),
       leaderIds?.length
         ? supabase.from('trip_leaders').insert(

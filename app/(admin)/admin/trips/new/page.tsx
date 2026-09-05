@@ -1,9 +1,11 @@
+import { Suspense } from 'react'
+import { NewTripLoading } from '@/components/admin/loading/new-trip'
 import { NewEventPage } from '@/components/events/new-event-page'
 import { requireAdminCapability } from '@/lib/admin/auth'
 import { getTripLeadershipOptions } from '@/lib/events/creation-options'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function AdminNewTripPage({
+async function AdminNewTripPageContent({
   searchParams,
 }: {
   searchParams: Promise<{ draft?: string }>
@@ -41,5 +43,15 @@ export default async function AdminNewTripPage({
       {...leadershipOptions}
       successPath="/admin/trips"
     />
+  )
+}
+
+export default function AdminNewTripPage(
+  props: Parameters<typeof AdminNewTripPageContent>[0],
+) {
+  return (
+    <Suspense fallback={<NewTripLoading />}>
+      <AdminNewTripPageContent {...props} />
+    </Suspense>
   )
 }

@@ -2,10 +2,12 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { eventDateTimeToIso } from '@/lib/events/date-time'
 import {
   toDraftRowInput,
   toEventFormValuesFromDraft,
 } from '@/lib/events/drafts'
+import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
@@ -130,16 +132,33 @@ const getViewerContext = async () => {
 }
 
 export async function saveTripDraftAction(
-  payload: { values: EventFormValues; isNoLimitEnabled: boolean },
+  payload: {
+    values: EventFormValues
+    isNoLimitEnabled: boolean
+    publicHostIds?: string[]
+    leaderUserIds?: string[]
+  },
   draftId?: string | null,
 ) {
-  const { supabase, userId, canChooseOfficial } = await getViewerContext()
+  const { supabase, userId, canChooseOfficial, canManageTags } =
+    await getViewerContext()
   const draftInput = toDraftRowInput({
     values: payload.values,
     isNoLimitEnabled: payload.isNoLimitEnabled,
     createdBy: userId,
     canChooseOfficial,
   })
+
+  if (canManageTags) {
+    draftInput.public_host_ids = z
+      .array(z.string().uuid())
+      .max(20)
+      .parse(payload.publicHostIds ?? [])
+    draftInput.leader_user_ids = z
+      .array(z.string().uuid())
+      .max(20)
+      .parse(payload.leaderUserIds ?? [])
+  }
 
   if (draftId) {
     const parsedDraftId = tripDraftIdSchema.safeParse(draftId)
@@ -247,9 +266,9 @@ export async function publishTripFormAction(payload: {
   const maxParticipantsRaw = parsed.data.maxParticipants?.trim()
   let maxParticipants: number | null = null
 
-  if (!payload.isNoLimitEnabled && maxParticipantsRaw) {
-    const parsedMax = Number.parseInt(maxParticipantsRaw, 10)
-    if (!Number.isFinite(parsedMax) || parsedMax <= 0) {
+  if (!payload.isNoLimitEnabled) {
+    const parsedMax = Number(maxParticipantsRaw)
+    if (!Number.isInteger(parsedMax) || parsedMax < 1 || parsedMax > 100000) {
       throw new Error('Enter a valid participant limit.')
     }
     maxParticipants = parsedMax
@@ -280,11 +299,25 @@ export async function publishTripFormAction(payload: {
     throw new Error('Trip management permission is required to assign hosts.')
   }
 
+  const startsAt = eventDateTimeToIso(parsed.data.startAt, parsed.data.timezone)
+  const endsAt = eventDateTimeToIso(parsed.data.endAt, parsed.data.timezone)
+  if (!startsAt || !endsAt) throw new Error('Enter valid trip dates.')
+
+  // Avoid INSERT ... RETURNING: row-based visibility helpers cannot see the
+  // new trip during the insertion statement. Authorization still uses INSERT RLS.
+  const createdTrip = { id: crypto.randomUUID() }
+  const hostAssignments = await buildHostAssignments(
+    supabase,
+    createdTrip.id,
+    publicHostIds,
+  )
   const tripInsert: Database['public']['Tables']['trips']['Insert'] = {
+    id: createdTrip.id,
     created_by: userId,
     title: parsed.data.title.trim(),
-    starts_at: new Date(parsed.data.startAt).toISOString(),
-    ends_at: new Date(parsed.data.endAt).toISOString(),
+    event_kind: parsed.data.kind,
+    starts_at: startsAt,
+    ends_at: endsAt,
     time_zone: parsed.data.timezone,
     activity_tags: normalizedTags,
     visibility: mapVisibilityToTrip(visibility),
@@ -293,24 +326,25 @@ export async function publishTripFormAction(payload: {
     description_public: parsed.data.shortSummary?.trim() || null,
     overview_what: parsed.data.overviewWhat?.trim() || null,
     overview_where:
-      parsed.data.overviewWhere?.trim() ||
-      parsed.data.meetingLocationName?.trim() ||
-      null,
+      [
+        parsed.data.meetingLocationName?.trim()
+          ? `Meeting point: ${parsed.data.meetingLocationName.trim()}`
+          : '',
+        parsed.data.overviewWhere?.trim(),
+      ]
+        .filter(Boolean)
+        .join('\n\n') || null,
     overview_weather: parsed.data.overviewWeather?.trim() || null,
     overview_equipment: parsed.data.overviewEquipment?.trim() || null,
     overview_carpool_need_gear:
       parsed.data.overviewCarpoolNeedGear?.trim() || null,
     capacity: maxParticipants,
     is_official: isOfficial,
-    is_all_day: true,
+    is_all_day: false,
     updated_at: new Date().toISOString(),
   }
 
-  const { data: createdTrip, error: tripError } = await supabase
-    .from('trips')
-    .insert(tripInsert)
-    .select('id')
-    .single()
+  const { error: tripError } = await supabase.from('trips').insert(tripInsert)
 
   if (tripError) {
     throw tripError
@@ -347,13 +381,7 @@ export async function publishTripFormAction(payload: {
 
   const assignmentResults = await Promise.all([
     publicHostIds.length
-      ? supabase.from('trip_hosts').insert(
-          publicHostIds.map((hostId, index) => ({
-            trip_id: createdTrip.id,
-            host_id: hostId,
-            sort_order: index,
-          })),
-        )
+      ? supabase.from('trip_hosts').insert(hostAssignments)
       : Promise.resolve({ error: null }),
     leaderUserIds.length
       ? supabase.from('trip_leaders').insert(
@@ -388,7 +416,15 @@ export async function publishTripFormAction(payload: {
   revalidatePath('/trips/drafts')
   revalidatePath(`/trips/${createdTrip.id}`)
 
-  return { tripId: createdTrip.id }
+  let configurationPending = false
+  if (parsed.data.collectTransportation) {
+    const { error } = await supabase.rpc('set_trip_transportation_collection', {
+      p_trip_id: createdTrip.id,
+      p_enabled: true,
+    })
+    configurationPending = Boolean(error)
+  }
+  return { tripId: createdTrip.id, configurationPending }
 }
 
 export async function publishTripDraftAction(draftId: string) {
@@ -418,5 +454,24 @@ export async function publishTripDraftAction(draftId: string) {
     values: mapped.values,
     isNoLimitEnabled: mapped.isNoLimitEnabled,
     sourceDraftId: draft.id,
+    publicHostIds: draft.public_host_ids,
+    leaderUserIds: draft.leader_user_ids,
   })
+}
+
+export async function configureTripTransportationAction(
+  tripId: string,
+  enabled: boolean,
+) {
+  const { supabase } = await getViewerContext()
+  const { error } = await supabase.rpc('set_trip_transportation_collection', {
+    p_trip_id: z.string().uuid().parse(tripId),
+    p_enabled: z.boolean().parse(enabled),
+  })
+  if (error)
+    throw new Error(
+      'Your trip is published, but transportation settings could not be saved. Retry to finish configuration; no duplicate trip will be created.',
+    )
+  revalidatePath(`/trips/${tripId}`)
+  revalidatePath(`/trips/${tripId}/rsvp`)
 }

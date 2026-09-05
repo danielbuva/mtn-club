@@ -33,6 +33,8 @@ const publicExact = new Set([
   '/terms',
   // Let the removed legacy route reach Next.js so it returns a real 404.
   '/start-here',
+  // The page itself restricts the showroom to development and preview.
+  '/form-lab',
   '/favicon.ico',
   '/robots.txt',
   '/sitemap.xml',

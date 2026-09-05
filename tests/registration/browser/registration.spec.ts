@@ -2,6 +2,11 @@ import { execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { type BrowserContext, expect, test } from '@playwright/test'
 import { createServerClient } from '@supabase/ssr'
+import { z } from 'zod'
+import {
+  createUnlvWaiver,
+  unlvWaiverSource,
+} from '../../../lib/registration/unlv-waiver'
 import {
   admin,
   captchaToken,
@@ -15,6 +20,14 @@ let owner: { id: string; email: string }
 let participant: { id: string; email: string }
 let waiter: { id: string; email: string }
 let tripId: string
+const parityHost = randomUUID()
+const parityTag = `parity-${randomUUID()}`
+const realWaiver = createUnlvWaiver(
+  'RSVP browser acceptance',
+  'Synthetic test date',
+  'Uneven terrain, falls, heat exposure, dehydration, and injuries during hiking.',
+)
+const sqlLiteral = (value: string) => `'${value.replaceAll("'", "''")}'`
 function sql(query: string) {
   return execFileSync(
     'docker',
@@ -96,19 +109,71 @@ test.beforeAll(async () => {
   const role = randomUUID()
   sql(`insert into public.admin_roles(id,key,name,is_super_admin) values('${role}','registration_browser_${role.replaceAll('-', '_')}','Registration browser admin',true) on conflict do nothing;
  insert into public.admin_user_roles(user_id,role_id) select '${owner.id}',id from public.admin_roles where is_super_admin;
- insert into public.profiles(user_id,display_name) values('${participant.id}','Registration Participant'),('${waiter.id}','Waitlisted Participant') on conflict(user_id) do update set display_name=excluded.display_name;
+ insert into public.memberships(user_id,status) values('${owner.id}','active') on conflict(user_id) do update set status='active';
+ insert into public.club_hosts(id,public_name,club_title,is_active) values('${parityHost}','Parity Host','Trip Leader',true);
+ insert into public.trip_tag_options(tag) values('${parityTag}');
+ insert into public.profiles(user_id,display_name) values('${owner.id}','Test Organizer'),('${participant.id}','Registration Participant'),('${waiter.id}','Waitlisted Participant') on conflict(user_id) do update set display_name=excluded.display_name;
  insert into public.account_age_declarations(user_id,is_18_or_older) values('${participant.id}',true),('${waiter.id}',true);
  begin; set local "request.jwt.claim.sub"='${owner.id}';
  insert into public.trips(id,title,starts_at,ends_at,capacity,created_by) values('${tripId}','RSVP browser acceptance',now()+interval '2 days',now()+interval '3 days',1,'${owner.id}');
  select public.set_registration_enabled(true);
- select public.save_registration_settings('${tripId}',0,'{"enabled":true,"eligibility":"account","emergencyRequired":true,"waiverRequired":true,"waiverTitle":"Browser fixture waiver","waiverBody":"Synthetic acceptance-test document only.","waiverSourceUrl":"https://example.test/synthetic-waiver","questions":[{"id":"experience","label":"Experience","type":"text","required":true}],"capacity":1,"waitlistEnabled":true,"deadline":null,"offerHours":24}'); commit;`)
+ select public.save_registration_settings('${tripId}',0,${sqlLiteral(
+   JSON.stringify({
+     enabled: true,
+     eligibility: 'account',
+     emergencyRequired: true,
+     waiverRequired: true,
+     waiverTitle: 'UNLV RSO waiver — browser test',
+     waiverBody: realWaiver,
+     waiverSourceUrl: unlvWaiverSource,
+     questions: [
+       { id: 'experience', label: 'Experience', type: 'text', required: true },
+       {
+         id: 'experience_level',
+         label: 'Experience level',
+         type: 'single',
+         required: true,
+         options: ['Some experience', 'First time'],
+       },
+       {
+         id: 'ready',
+         label: 'Prepared for this trip?',
+         type: 'boolean',
+         required: true,
+       },
+       {
+         id: 'gear',
+         label: 'Which gear are you bringing?',
+         type: 'multiple',
+         required: true,
+         options: ['Water', 'Boots', 'Poles'],
+       },
+     ],
+     capacity: 1,
+     waitlistEnabled: true,
+     deadline: null,
+     offerHours: 24,
+   }),
+ )}); commit;`)
 })
 test.afterAll(async () => {
+  // Include partially published synthetic trips so failures do not leak fixtures.
+  if (owner) {
+    const published = sql(
+      `select id from public.trips where created_by='${owner.id}'`,
+    )
+    for (const id of published.split('\n').filter(Boolean)) {
+      if (!trips.includes(id)) trips.push(id)
+    }
+  }
   // Only synthetic fixtures in the fixed local sandbox. Production is never accepted.
   if (trips.length)
     sql(`begin; set local session_replication_role=replica;
- ${['registration_notifications', 'registration_requests', 'registration_offers', 'registration_events', 'registration_signatures', 'registration_guardian_evidence', 'registration_guardian_reviews', 'registration_responses', 'trip_attendance', 'trip_rsvps', 'trip_registration_settings', 'registration_waivers'].map(table => `delete from public.${table} where trip_id in (${trips.map(id => `'${id}'`).join(',')});`).join('\n')}
+ ${['trip_hosts', 'trip_leaders', 'trip_private', 'registration_notifications', 'registration_requests', 'registration_offers', 'registration_events', 'registration_signatures', 'registration_guardian_evidence', 'registration_guardian_reviews', 'registration_responses', 'trip_attendance', 'trip_rsvps', 'trip_registration_settings', 'registration_waivers'].map(table => `delete from public.${table} where trip_id in (${trips.map(id => `'${id}'`).join(',')});`).join('\n')}
  delete from public.trips where id in (${trips.map(id => `'${id}'`).join(',')}); update public.club_admin_settings set registration_enabled=false; commit;`)
+  sql(
+    `delete from public.club_hosts where id='${parityHost}'; delete from public.trip_tag_options where tag='${parityTag}';`,
+  )
   for (const id of users) await admin.auth.admin.deleteUser(id)
 })
 async function completeForm(
@@ -116,14 +181,38 @@ async function completeForm(
   waiverComplete = false,
 ) {
   const form = page.getByRole('main')
+  await expect(form.locator('[data-guided-form]')).toHaveAttribute(
+    'data-ready',
+    'true',
+  )
   await form
-    .getByLabel('Experience *', { exact: true })
+    .getByLabel('Experience', { exact: true })
     .fill('Test hiking experience')
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form
+    .getByRole('radio', { name: 'Some experience', exact: true })
+    .check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('radio', { name: 'Yes', exact: true }).check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('checkbox', { name: 'Water', exact: true }).check()
+  await form.getByRole('checkbox', { name: 'Boots', exact: true }).check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByLabel('Name', { exact: true }).fill('Test contact')
   await form.getByLabel('Relationship', { exact: true }).fill('Friend')
   await form.getByLabel('Phone', { exact: true }).fill('5551234567')
   await form.getByLabel('I confirm this emergency contact').check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
   if (!waiverComplete) {
+    await form.getByRole('button', { name: 'Read full waiver' }).click()
+    const reader = page.getByRole('dialog')
+    await reader
+      .getByRole('region', { name: 'Full waiver document' })
+      .evaluate(element => {
+        element.scrollTop = element.scrollHeight
+      })
+    await reader.getByRole('button', { name: 'Return to form' }).click()
+    await expect(form.getByLabel(/— initials$/)).toHaveCount(7)
     const initials = await form.getByLabel(/— initials$/).all()
     expect(initials).toHaveLength(7)
     for (const field of initials) await field.fill('TP')
@@ -142,6 +231,9 @@ async function completeForm(
     await form.getByLabel('I have read and agree').check()
     await form.getByLabel('Full name as signature').fill('Test Participant')
   }
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('switch', { name: 'Email me trip updates' }).check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
 }
 test('register, waitlist, organizer offer, and acceptance through real sessions', async ({
   browser,
@@ -359,14 +451,14 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await member.reload()
   await member.getByRole('link', { name: 'Finish signup', exact: true }).click()
   await member
-    .getByLabel('Experience *', { exact: true })
+    .getByLabel('Experience', { exact: true })
     .fill('Saved draft experience')
   await member
     .getByRole('button', { name: 'Save and finish later', exact: true })
     .click()
   await expect(member).toHaveURL(`/trips/${tripId}`)
   await member.getByRole('link', { name: 'Finish signup', exact: true }).click()
-  await expect(member.getByLabel('Experience *', { exact: true })).toHaveValue(
+  await expect(member.getByLabel('Experience', { exact: true })).toHaveValue(
     'Saved draft experience',
   )
   await completeForm(member)
@@ -387,6 +479,42 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await waiting
     .getByRole('button', { name: 'Complete form', exact: true })
     .click()
+  const signed = z
+    .object({
+      body: z.string(),
+      source: z.string(),
+      name: z.string(),
+      details: z.object({ initials: z.array(z.string()) }).passthrough(),
+    })
+    .parse(
+      JSON.parse(
+        sql(
+          `select json_build_object('body',w.body,'source',w.source_url,'details',s.signer_details,'name',s.signature_name) from public.registration_signatures s join public.registration_waivers w on w.id=s.waiver_id where s.trip_id='${tripId}' and s.user_id='${participant.id}'`,
+        ),
+      ),
+    )
+  expect(
+    JSON.parse(
+      sql(
+        `select answers from public.registration_responses where trip_id='${tripId}' and user_id='${participant.id}'`,
+      ),
+    ),
+  ).toEqual({
+    experience: 'Test hiking experience',
+    experience_level: 'Some experience',
+    ready: true,
+    gear: ['Water', 'Boots'],
+  })
+  expect(signed.body).toBe(realWaiver)
+  expect(signed.source).toBe(unlvWaiverSource)
+  expect(signed.details.initials).toHaveLength(7)
+  expect(signed.details).toMatchObject({
+    phone: '5550101234',
+    address: '123 Synthetic Street',
+    emergencyAddress: '456 Synthetic Street',
+    birthDate: '1990-01-01',
+  })
+  expect(signed.name).toBe('Test Participant')
   await completeForm(waiting)
   await waiting
     .getByRole('button', { name: 'Join waitlist', exact: true })
@@ -512,6 +640,7 @@ test('a minor requests guardian review and registers only after an officer confi
   await member
     .getByRole('button', { name: 'Complete form', exact: true })
     .click()
+  await completeForm(member, true)
   await expect(
     member.getByRole('button', { name: /^(Join waitlist|Confirm Going)$/ }),
   ).toBeDisabled()
@@ -566,6 +695,10 @@ test('privacy email choices persist and opt-outs keep trip status available', as
   })
   await signIn(context, waiter)
   const page = await context.newPage()
+  await page.goto('/profile/user/account')
+  await expect(
+    page.getByText(/18 or older — declared/).filter({ visible: true }),
+  ).toBeVisible()
   await page.goto('/profile/user/privacy')
   await expect(
     page.getByRole('switch', { name: 'Trips I RSVP for', exact: true }),
@@ -616,5 +749,178 @@ test('privacy email choices persist and opt-outs keep trip status available', as
       .getByRole('region', { name: 'Registration status', exact: true })
       .getByText(/Trip emails are disabled/),
   ).toBeVisible()
+  await context.close()
+})
+
+test('organizer creates a trip through grouped steps and resumes its draft', async ({
+  browser,
+}) => {
+  const context = await browser.newContext()
+  await signIn(context, owner)
+  const page = await context.newPage()
+  const title = `Guided creation ${randomUUID()}`
+  await page.goto('/admin/trips/new')
+  const form = page.locator('#trip-event-form')
+  await expect(form).toHaveAttribute('data-ready', 'true')
+  await form.getByLabel('Trip title').fill(title)
+  await form.getByLabel('Type', { exact: true }).selectOption('social')
+  await form.getByLabel('Short summary').fill('A complete organizer form test.')
+  await form.getByRole('checkbox', { name: parityTag, exact: true }).check()
+  await form.getByRole('button', { name: 'Save draft', exact: true }).click()
+  await expect(page).toHaveURL(/draft=/)
+  await page.reload()
+  await expect(form.getByLabel('Trip title')).toHaveValue(title)
+  await expect(form.getByLabel('Type', { exact: true })).toHaveValue('social')
+  await expect(form.getByLabel('Short summary')).toHaveValue(
+    'A complete organizer form test.',
+  )
+  await expect(
+    form.getByRole('checkbox', { name: parityTag, exact: true }),
+  ).toBeChecked()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByLabel('Start', { exact: true }).fill('2026-11-14T06:00')
+  await form.getByLabel('End', { exact: true }).fill('2026-11-14T11:00')
+  await form.getByLabel('Destination', { exact: true }).fill('Red Rock Canyon')
+  await form.getByLabel('Meeting point').fill('Campus meetup')
+  await form
+    .getByLabel('Private meeting instructions')
+    .fill('Private gate code details')
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('button', { name: 'Back', exact: true }).click()
+  await form.getByRole('radio', { name: 'Moderate', exact: true }).check()
+  for (const [label, value] of [
+    ['What to expect', 'Sunrise hike'],
+    ['Route and area', 'Calico Tanks route'],
+    ['Weather and preparation', 'Bring sun protection'],
+    ['Equipment to bring', 'Water and boots'],
+    ['Transportation and gear notes', 'Arrange your own ride'],
+  ])
+    await form.getByLabel(label).fill(value)
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('radio', { name: 'Everyone', exact: true }).check()
+  await form
+    .getByRole('switch', { name: 'No participant limit', exact: true })
+    .uncheck()
+  await form.getByLabel('Participant limit', { exact: true }).fill('12')
+  await form
+    .getByRole('checkbox', { name: 'Parity Host — Trip Leader', exact: true })
+    .check()
+  await form.locator(`input[type="checkbox"][value="${owner.id}"]`).check()
+  await form.getByRole('switch', { name: /Ask about transportation/ }).check()
+  await form.getByRole('button', { name: 'Save draft', exact: true }).click()
+  await expect(form.getByText(/Draft saved/)).toBeVisible()
+  await page.reload()
+  for (let step = 0; step < 3; step++)
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await expect(
+    form.getByRole('switch', { name: /Ask about transportation/ }),
+  ).toBeChecked()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form
+    .getByRole('button', { name: 'Create Official Trip', exact: true })
+    .click()
+  await expect(page).toHaveURL(/\/admin\/trips$/)
+  const id = sql(`select id from public.trips where title='${title}'`)
+  expect(id).toMatch(/^[a-f0-9-]{36}$/)
+  trips.push(id)
+  expect(
+    sql(
+      `select collect_transportation from public.trip_registration_settings where trip_id='${id}'`,
+    ),
+  ).toBe('t')
+  const persisted = z
+    .object({
+      starts_at: z.string(),
+      ends_at: z.string(),
+      activity_tags: z.array(z.string()),
+    })
+    .passthrough()
+    .parse(
+      JSON.parse(
+        sql(`select row_to_json(t) from public.trips t where id='${id}'`),
+      ),
+    )
+  expect(persisted).toMatchObject({
+    event_kind: 'social',
+    description_public: 'A complete organizer form test.',
+    location_public: 'Red Rock Canyon',
+    overview_what: 'Sunrise hike',
+    overview_where: 'Meeting point: Campus meetup\n\nCalico Tanks route',
+    overview_weather: 'Bring sun protection',
+    overview_equipment: 'Water and boots',
+    overview_carpool_need_gear: 'Arrange your own ride',
+    capacity: 12,
+    difficulty: 'intermediate',
+    visibility: 'public',
+    is_official: true,
+    is_all_day: false,
+    time_zone: 'America/Los_Angeles',
+  })
+  expect(new Date(persisted.starts_at).toISOString()).toBe(
+    '2026-11-14T14:00:00.000Z',
+  )
+  expect(new Date(persisted.ends_at).toISOString()).toBe(
+    '2026-11-14T19:00:00.000Z',
+  )
+  expect(persisted.activity_tags).toContain(parityTag)
+  expect(
+    sql(`select meetup_point from public.trip_private where trip_id='${id}'`),
+  ).toBe('Private gate code details')
+  expect(
+    sql(`select host_id from public.trip_hosts where trip_id='${id}'`),
+  ).toBe(parityHost)
+  expect(
+    sql(`select credited_title from public.trip_hosts where trip_id='${id}'`),
+  ).toBe('Trip Leader')
+  expect(
+    sql(
+      `select count(*) from public.trip_leaders where trip_id='${id}' and user_id='${owner.id}'`,
+    ),
+  ).toBe('1')
+  expect(
+    sql(`select count(*) from public.trip_drafts where title='${title}'`),
+  ).toBe('0')
+  await page.goto(`/trips/${id}`)
+  await expect(
+    page.getByText('6:00 AM - 11:00 AM', { exact: true }),
+  ).toBeVisible()
+  await expect(
+    page.getByText('Meeting point: Campus meetup', { exact: false }),
+  ).toBeVisible()
+  await context.close()
+})
+
+test('members can use activity choices and resume community drafts through the calendar alias', async ({
+  browser,
+}) => {
+  sql(
+    `insert into public.memberships(user_id,status) values('${waiter.id}','active') on conflict(user_id) do update set status='active'`,
+  )
+  const context = await browser.newContext()
+  await signIn(context, waiter)
+  const page = await context.newPage()
+  await page.goto('/calendar/new')
+  const form = page.locator('#trip-event-form')
+  await expect(form).toHaveAttribute('data-ready', 'true')
+  await expect(
+    form.getByRole('switch', { name: 'Official club trip' }),
+  ).toHaveCount(0)
+  await expect(
+    form.getByText('Manage activity options', { exact: true }),
+  ).toHaveCount(0)
+  await form.getByRole('checkbox', { name: parityTag, exact: true }).check()
+  await form.getByLabel('Trip title').fill('Community draft parity')
+  await form.getByLabel('Type', { exact: true }).selectOption('indoor')
+  await form.getByRole('button', { name: 'Save draft', exact: true }).click()
+  await expect(page).toHaveURL(/\/calendar\/new\?draft=/)
+  await page.reload()
+  await expect(form.getByLabel('Trip title')).toHaveValue(
+    'Community draft parity',
+  )
+  await expect(form.getByLabel('Type', { exact: true })).toHaveValue('indoor')
+  await expect(
+    form.getByRole('checkbox', { name: parityTag, exact: true }),
+  ).toBeChecked()
   await context.close()
 })

@@ -170,3 +170,5 @@ also allow confirmation when an applicant has not personally reported payment,
 record optional age declarations, and make complimentary grants retry-safe.
 Database regression checks are in `tests/account-membership-review.sql`; run them
 against a disposable database with the migrations applied. The fixtures roll back.
+
+See [FORM_SYSTEM.md](FORM_SYSTEM.md) for the shared form language, showroom, flow boundaries, and rollout checks.

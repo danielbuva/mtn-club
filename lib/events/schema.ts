@@ -4,10 +4,11 @@ import {
   EVENT_KINDS,
   EVENT_VISIBILITIES,
 } from '@/lib/events/constants'
+import { eventDateTimeToIso } from './date-time'
 
 export const eventFormSchema = z
   .object({
-    title: z.string().min(1, 'Title is required'),
+    title: z.string().trim().min(1, 'Title is required'),
     shortSummary: z
       .string()
       .max(4000, 'Summary is too long')
@@ -18,7 +19,10 @@ export const eventFormSchema = z
     startAt: z.string().min(1, 'Start date is required'),
     endAt: z.string().min(1, 'End date is required'),
     timezone: z.string().min(1, 'Timezone is required'),
-    primaryLocationName: z.string().min(1, 'Primary location is required'),
+    primaryLocationName: z
+      .string()
+      .trim()
+      .min(1, 'Primary location is required'),
     meetingLocationName: z.string().optional(),
     locationNotes: z.string().optional(),
     overviewWhat: z.string().optional(),
@@ -30,14 +34,36 @@ export const eventFormSchema = z
     maxParticipants: z.string().optional(),
     difficulty: z.enum(EVENT_DIFFICULTIES).optional(),
     isOfficial: z.boolean(),
+    collectTransportation: z.boolean().optional().default(false),
   })
   .superRefine((data, ctx) => {
-    const start = new Date(data.startAt)
-    const end = new Date(data.endAt)
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    let start: string | null = null
+    let end: string | null = null
+    try {
+      Intl.DateTimeFormat('en', { timeZone: data.timezone })
+      start = eventDateTimeToIso(data.startAt, data.timezone)
+      end = eventDateTimeToIso(data.endAt, data.timezone)
+    } catch {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Choose a valid timezone',
+        path: ['timezone'],
+      })
       return
     }
-    if (end < start) {
+    if (!start)
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Enter a valid start time in this timezone',
+        path: ['startAt'],
+      })
+    if (!end)
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Enter a valid end time in this timezone',
+        path: ['endAt'],
+      })
+    if (start && end && end < start) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'End time must be after start time',
