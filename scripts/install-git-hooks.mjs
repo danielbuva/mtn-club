@@ -2,7 +2,15 @@ import { spawnSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
-if (!existsSync('.git')) {
+// Deployment exclusions can leave a .git directory without a usable repository.
+const git = existsSync('.git')
+  ? spawnSync('git', ['rev-parse', '--is-inside-work-tree'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+  : null
+
+if (git?.status !== 0 || git.stdout.trim() !== 'true') {
   console.log('Skipping Git hook installation outside a Git checkout.')
   process.exit(0)
 }
