@@ -263,13 +263,17 @@ test('small visual viewports use inline actions and keyboard navigation remains 
   ).toBe(false)
 })
 
-for (const signed of [false, true]) {
-  test(`annual registration ${signed ? 'returning participant skips signature' : 'first trip includes both layers'}`, async ({
-    page,
-  }, testInfo) => {
+for (const situation of ['first', 'returning', 'missing risks']) {
+  const signed = situation !== 'first'
+  const missingRisks = situation === 'missing risks'
+  test(`annual registration ${situation}`, async ({ page }, testInfo) => {
     await page.goto('/form-lab')
     await page.getByText('Try a different situation', { exact: true }).click()
     await page.getByLabel('Annual waiver example', { exact: true }).check()
+    if (missingRisks)
+      await page
+        .getByLabel('Trip risks not configured', { exact: true })
+        .check()
     if (signed)
       await page
         .getByLabel('Annual waiver already signed', { exact: true })
@@ -305,6 +309,19 @@ for (const signed of [false, true]) {
     const acknowledgement = form.getByLabel(
       'I understand these trip-specific risks and conditions.',
     )
+    if (missingRisks) {
+      await expect(acknowledgement).toHaveCount(0)
+      await expect(
+        form.getByText('There is nothing to acknowledge yet.', {
+          exact: false,
+        }),
+      ).toBeVisible()
+      await form.getByRole('button', { name: 'Continue', exact: true }).click()
+      await expect(
+        form.getByRole('heading', { name: 'Before you go', exact: true }),
+      ).toBeVisible()
+      return
+    }
     await expect(acknowledgement).not.toBeChecked()
     await form.getByRole('button', { name: 'Continue', exact: true }).click()
     await expect(

@@ -12,20 +12,26 @@ export function TripRiskAcknowledgement({
   onChange: (value: boolean) => void
   error?: string
 }) {
-  return (
-    <div className="space-y-5">
-      <p>This trip includes:</p>
-      {snapshot.informedRisks ? (
-        <ul className="list-disc space-y-3 pl-5">
-          {snapshot.informedRisks.statements.map(statement => (
-            <li key={statement}>{statement}</li>
-          ))}
-        </ul>
-      ) : (
+  if (!snapshot.informedRisks)
+    return (
+      <div className="space-y-5">
         <p>
           An organizer must add this trip’s informed risks before registration.
         </p>
-      )}
+        <p>
+          There is nothing to acknowledge yet. Contact the trip organizer, then
+          refresh this page once the risks are available.
+        </p>
+      </div>
+    )
+  return (
+    <div className="space-y-5">
+      <p>This trip includes:</p>
+      <ul className="list-disc space-y-3 pl-5">
+        {snapshot.informedRisks.statements.map(statement => (
+          <li key={statement}>{statement}</li>
+        ))}
+      </ul>
       {snapshot.risksAcknowledged ? (
         <p>You acknowledged this revision of the trip’s risks.</p>
       ) : (

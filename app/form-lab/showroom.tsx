@@ -25,6 +25,7 @@ export function FormShowroom() {
   const [revision, setRevision] = useState(0)
   const [transportation, setTransportation] = useState(true)
   const [annual, setAnnual] = useState(false)
+  const [missingRisks, setMissingRisks] = useState(false)
   const [signed, setSigned] = useState(false)
   const [longContent, setLongContent] = useState(false)
   const [fail, setFail] = useState(false)
@@ -46,14 +47,16 @@ export function FormShowroom() {
             until: '2027-06-30',
             activities: ['hiking', 'scrambling'],
           },
-          informedRisks: {
-            id: '33333333-3333-4333-8333-333333333333',
-            revision: 1,
-            statements: [
-              'Expect exposed desert heat and steep sandstone scrambling.',
-            ],
-            activities: ['hiking', 'scrambling'],
-          },
+          informedRisks: missingRisks
+            ? null
+            : {
+                id: '33333333-3333-4333-8333-333333333333',
+                revision: 1,
+                statements: [
+                  'Expect exposed desert heat and steep sandstone scrambling.',
+                ],
+                activities: ['hiking', 'scrambling'],
+              },
           risksAcknowledged: false,
           waiver: registrationFixture.waiver
             ? {
@@ -259,6 +262,11 @@ export function FormShowroom() {
                 label="Annual waiver already signed"
                 checked={signed}
                 onChange={setSigned}
+              />
+              <ToggleField
+                label="Trip risks not configured"
+                checked={missingRisks}
+                onChange={setMissingRisks}
               />
               <ToggleField
                 label="Ask about transportation"
