@@ -9,6 +9,7 @@ export type RegistrationValues = {
   emergencyConfirmed: boolean
   transportationMode: NonNullable<TransportationResponse>['mode'] | null
   seatsOffered: number
+  riskAcknowledgedId: string | null
   waiverReadId: string | null
   waiverAgreed: boolean
   signatureName: string
@@ -28,6 +29,7 @@ export function initialRegistrationValues(
       snapshot.transportation?.mode === 'driver'
         ? snapshot.transportation.seatsOffered
         : 1,
+    riskAcknowledgedId: null,
     waiverReadId: null,
     waiverAgreed: false,
     signatureName: '',
@@ -65,6 +67,13 @@ export function normalizeRegistrationValues(
     ...(snapshot.collectTransportation ? { transportation } : {}),
   }
   if (intent === 'submit') {
+    if (
+      snapshot.informedRisks &&
+      values.riskAcknowledgedId === snapshot.informedRisks.id
+    ) {
+      data.riskAcknowledged = true
+      data.riskDisclosureId = snapshot.informedRisks.id
+    }
     data.joiningPreferences = {
       showInAttendeeList: values.showInAttendeeList,
       emailUpdates: values.emailUpdates,
@@ -105,12 +114,14 @@ export function registrationSteps(
         ]
       : []),
     'emergency',
-    ...(snapshot.waiverRequired ? ['waiver'] : []),
+    ...(snapshot.waiverRequired && !snapshot.waiverSigned ? ['waiver'] : []),
+    ...(snapshot.annualWaiver ? ['risks'] : []),
     'preferences',
     'review',
   ]
 }
 export function registrationFieldStep(field: string): string {
+  if (field.startsWith('risk')) return 'risks'
   if (field.startsWith('joiningPreferences')) return 'preferences'
   if (field.startsWith('answers.'))
     return `question:${field.slice('answers.'.length)}`

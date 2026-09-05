@@ -20,6 +20,7 @@ import { JoiningPreferences } from './joining-preferences'
 import { RegistrationExit } from './registration-exit'
 import { RegistrationReview } from './registration-review'
 import { TransportationFields } from './transportation-fields'
+import { TripRiskAcknowledgement } from './trip-risk-acknowledgement'
 import { WaiverFields } from './waiver-fields'
 
 export function RegistrationFlow(props: RegistrationFlowProps) {
@@ -38,7 +39,10 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
     transportation: 'How are you getting there?',
     seats: 'Sweet — how many people can you take?',
     emergency: 'Emergency Contact',
-    waiver: 'Take a moment to read this.',
+    waiver: snapshot.annualWaiver
+      ? 'Annual UNLV RSO liability waiver'
+      : 'Take a moment to read this.',
+    risks: 'Before you go',
     preferences: 'Make yourself comfortable.',
     review: 'Everything look right?',
   }
@@ -77,9 +81,14 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
           title={
             snapshot.state === 'waitlisted'
               ? 'You’re on the list.'
-              : 'You’re all set.'
+              : snapshot.requirements.length
+                ? 'Registered — action required'
+                : 'You’re all set.'
           }
         >
+          {snapshot.requirements.map(reason => (
+            <p key={reason}>{reason}</p>
+          ))}
           <Button
             type="button"
             variant="outline"
@@ -228,6 +237,21 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
                     details={values.signerDetails}
                     onDetails={value => update('signerDetails', value)}
                     errors={errors}
+                  />
+                )}
+                {nav.current === 'risks' && (
+                  <TripRiskAcknowledgement
+                    snapshot={snapshot}
+                    acknowledged={
+                      values.riskAcknowledgedId === snapshot.informedRisks?.id
+                    }
+                    onChange={value =>
+                      update(
+                        'riskAcknowledgedId',
+                        value ? (snapshot.informedRisks?.id ?? null) : null,
+                      )
+                    }
+                    error={errors.riskAcknowledgedId}
                   />
                 )}
                 {nav.current === 'preferences' && (

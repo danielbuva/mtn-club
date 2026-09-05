@@ -169,11 +169,16 @@ test('creation is grouped, editable, and validates before publishing', async ({
   })
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form
+    .getByLabel('Trip-specific risks and conditions')
+    .fill('Exposed desert heat with little shade.')
+  await form.getByLabel('hiking', { exact: true }).check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByLabel('Participant limit', { exact: true }).fill('12')
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Edit A Saturday outside' }).click()
   await expect(form.getByLabel('Trip title')).toHaveValue('A Saturday outside')
-  for (let step = 0; step < 4; step++)
+  for (let step = 0; step < 5; step++)
     await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form
     .getByRole('button', { name: 'Create Official Trip', exact: true })
@@ -257,3 +262,68 @@ test('small visual viewports use inline actions and keyboard navigation remains 
     ),
   ).toBe(false)
 })
+
+for (const signed of [false, true]) {
+  test(`annual registration ${signed ? 'returning participant skips signature' : 'first trip includes both layers'}`, async ({
+    page,
+  }, testInfo) => {
+    await page.goto('/form-lab')
+    await page.getByText('Try a different situation', { exact: true }).click()
+    await page.getByLabel('Annual waiver example', { exact: true }).check()
+    if (signed)
+      await page
+        .getByLabel('Annual waiver already signed', { exact: true })
+        .check()
+    await page.getByLabel('Ask about transportation', { exact: true }).uncheck()
+    await declareAge(page)
+    const form = page.locator('form')
+    await form.getByRole('radio', { name: 'A new adventure for me' }).check()
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+    await form.getByLabel('Name', { exact: true }).fill('Test Friend')
+    await form.getByLabel('Relationship', { exact: true }).fill('Friend')
+    await form.getByLabel('Phone', { exact: true }).fill('7025550100')
+    await form.getByLabel('I confirm this emergency contact').check()
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+    if (!signed) {
+      await expect(
+        form.getByText('One signature for covered MTN Club trips'),
+      ).toBeVisible()
+      await expect(
+        form.getByText('Valid July 1, 2026 through June 30, 2027', {
+          exact: true,
+        }),
+      ).toBeVisible()
+      await completeWaiver(page)
+      await form.getByRole('button', { name: 'Continue', exact: true }).click()
+    }
+    await expect(
+      form.getByRole('heading', { name: 'Before you go', exact: true }),
+    ).toBeVisible()
+    await expect(
+      form.getByRole('button', { name: 'Read full waiver' }),
+    ).toHaveCount(0)
+    const acknowledgement = form.getByLabel(
+      'I understand these trip-specific risks and conditions.',
+    )
+    await expect(acknowledgement).not.toBeChecked()
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+    await expect(
+      form.getByText('Review and acknowledge these trip-specific risks.', {
+        exact: true,
+      }),
+    ).toBeVisible()
+    await acknowledgement.check()
+    await page.screenshot({
+      path: testInfo.outputPath(`annual-risk-${signed}.png`),
+      fullPage: true,
+    })
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+    await form
+      .getByRole('button', { name: 'Confirm Going', exact: true })
+      .click()
+    await expect(
+      form.getByRole('heading', { name: 'You’re all set.' }),
+    ).toBeVisible()
+  })
+}

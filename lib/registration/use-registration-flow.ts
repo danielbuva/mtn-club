@@ -65,6 +65,13 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
         accepted.current.formVersion !== next.formVersion ||
         accepted.current.waiver?.id !== next.waiver?.id ||
         accepted.current.collectTransportation !== next.collectTransportation
+      if (accepted.current.informedRisks?.id !== next.informedRisks?.id) {
+        setValue('riskAcknowledgedId', null)
+        setComplete(false)
+        setMessage(
+          'The trip risks changed. Please review and acknowledge the current revision.',
+        )
+      }
       accepted.current = next
       setSnapshot(next)
       reset(initialRegistrationValues(next), { keepDirtyValues: dirty })

@@ -27,6 +27,7 @@ export const creationSteps = [
   'basics',
   'place',
   'details',
+  'risks',
   'settings',
   'review',
 ] as const
@@ -34,10 +35,12 @@ export const creationTitles: Record<string, string> = {
   basics: 'Start with the essentials.',
   place: 'When & where?',
   details: 'Help everyone come prepared.',
+  risks: 'Informed risks',
   settings: 'Make it your trip.',
   review: 'Ready to get outside?',
 }
 export function creationStepForField(field: string) {
+  if (['informedRisks', 'waiverActivities'].includes(field)) return 'risks'
   if (
     [
       'startAt',

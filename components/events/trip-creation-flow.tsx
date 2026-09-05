@@ -11,6 +11,7 @@ import {
   FormStep,
 } from '@/components/forms/form-shell'
 import { FormViewport } from '@/components/forms/form-viewport'
+import { InformedRiskFields } from '@/components/registration/informed-risk-editor'
 import { Button } from '@/components/ui/button'
 import {
   creationStepForField,
@@ -204,6 +205,14 @@ export function TripCreationFlow(props: CreationFlowProps) {
                 )}
                 {nav.current === 'place' && <CreationPlace {...shared} />}
                 {nav.current === 'details' && <CreationDetails {...shared} />}
+                {nav.current === 'risks' && (
+                  <InformedRiskFields
+                    risks={values.informedRisks ?? ''}
+                    activities={values.waiverActivities ?? []}
+                    onRisks={value => update('informedRisks', value)}
+                    onActivities={value => update('waiverActivities', value)}
+                  />
+                )}
                 {nav.current === 'settings' && (
                   <div className="space-y-7">
                     <CreationSettings

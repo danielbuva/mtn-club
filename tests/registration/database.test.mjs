@@ -85,6 +85,10 @@ before(() => {
     .sort()) {
     sql(readFileSync(new URL(name, migrations), 'utf8'))
   }
+  // Legacy regression fixtures explicitly retain the old per-trip model. Annual journeys opt in below.
+  sql(
+    'alter table public.trip_registration_settings alter column annual_waiver set default false',
+  )
 })
 after(() => sql(`drop database if exists ${database} with (force)`, 'postgres'))
 async function asUser(user, query) {
@@ -1037,5 +1041,349 @@ test('trip activity choices are readable by members but writable only by trip ma
   await asUser(
     f.owner,
     `delete from public.trip_tag_options where tag='${tag}'; select to_json(true)`,
+  )
+})
+
+test('annual adult journeys: exact template, profile signing, trip risks, withdrawal, replacements, scope, history and concurrency', async () => {
+  const f = fixture(20)
+  const currentYear =
+    new Date().getUTCFullYear() - (new Date().getUTCMonth() < 6 ? 1 : 0)
+  const fields = {
+    event: `MTN hiking and camping ${currentYear}–${currentYear + 1}`,
+    sponsor: 'UNLV Mountain Club',
+    effectiveFrom: `${currentYear}-07-01`,
+    activities: ['hiking', 'camping'],
+    risks:
+      'Hiking and camping may involve falls, heat illness, serious injury and death.',
+  }
+  const create = () =>
+    asUser(
+      f.owner,
+      `select to_jsonb(public.create_annual_waiver(${literal(JSON.stringify(fields))}))`,
+    )
+  const waiver = await create()
+  await asUser(
+    f.owner,
+    `select to_jsonb(public.publish_annual_waiver('${waiver}','Test fixture reviewed wording'))`,
+  )
+  const disclose = (
+    trip,
+    revision,
+    statements = ['Exposed desert heat with little shade.'],
+    activities = ['hiking'],
+  ) =>
+    asUser(
+      f.owner,
+      `select to_jsonb(public.save_trip_informed_risks('${trip}',${revision},${literal(`{${statements.map(x => `"${x}"`).join(',')}}`)}::text[],${literal(`{${activities.join(',')}}`)}::text[]))`,
+    )
+  const risk = await disclose(f.trip, 0)
+  sql(
+    `update public.trip_registration_settings set waiver_required=true where trip_id='${f.trip}'`,
+  )
+  const signatureData = {
+    waiverAgreed: true,
+    signatureName: 'Test Participant',
+    signerDetails: {
+      phone: '7025550100',
+      address: '123 Test Street',
+      emergencyAddress: '456 Test Street',
+      birthDate: '1990-01-01',
+      initials: Array(7).fill('TP'),
+    },
+    emergencyContact: {
+      name: 'Test Contact',
+      phone: '7025550101',
+      relationship: 'Friend',
+    },
+  }
+  const commandData = {
+    ...signatureData,
+    waiverId: waiver,
+    formVersion: 2,
+    answers: {},
+    riskDisclosureId: risk,
+    riskAcknowledged: true,
+  }
+  // First trip includes both independent layers; one transaction preserves capacity and evidence.
+  const first = await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify(commandData))})`,
+  )
+  assert.equal(first.state, 'confirmed')
+  assert.equal(first.waiverSigned, true)
+  assert.equal(first.risksAcknowledged, true)
+  const profile = await asUser(f.users[0], 'select public.get_annual_waivers()')
+  assert.equal(profile.history.length, 1)
+  const { createUnlvWaiver } = await import(
+    '../../lib/registration/unlv-waiver.ts'
+  )
+  assert.equal(
+    profile.history[0].body,
+    createUnlvWaiver(
+      fields.event,
+      `July 1, ${currentYear} – June 30, ${currentYear + 1}`,
+      fields.risks,
+    ),
+  )
+  const original = profile.history[0]
+  // A proactive profile signature is reusable; concurrent devices create one active signature.
+  const signatures = await Promise.all(
+    Array.from({ length: 3 }, () =>
+      asUser(
+        f.users[1],
+        `select to_jsonb(public.sign_annual_waiver('${waiver}','${randomUUID()}',${literal(JSON.stringify(signatureData))}))`,
+      ),
+    ),
+  )
+  assert.equal(new Set(signatures).size, 1)
+  const returning = await asUser(
+    f.users[1],
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ formVersion: 2, answers: {}, riskDisclosureId: risk, riskAcknowledged: true }))})`,
+  )
+  assert.equal(returning.waiverSigned, true)
+  assert.equal(returning.state, 'confirmed')
+  // Formatting does not change revision, but new risk wording does.
+  assert.equal(
+    await disclose(f.trip, 1, ['  Exposed   desert heat with little shade.  ']),
+    risk,
+  )
+  const newRisk = await disclose(f.trip, 1, [
+    'Exposed scrambling where a fall could cause serious injury.',
+  ])
+  let snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.state, 'confirmed')
+  assert.equal(snapshot.risksAcknowledged, false)
+  assert.ok(snapshot.requirements.some(x => x.includes('informed risks')))
+  await assert.rejects(
+    asUser(
+      f.users[0],
+      `select public.registration_command('${f.trip}','update_response','${randomUUID()}',1,${literal(JSON.stringify({ formVersion: 2, answers: {}, riskDisclosureId: risk, riskAcknowledged: true }))})`,
+    ),
+    /risks changed/,
+  )
+  await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','update_response','${randomUUID()}',1,${literal(JSON.stringify({ formVersion: 2, answers: {}, riskDisclosureId: newRisk, riskAcknowledged: true }))})`,
+  )
+  await asUser(
+    f.users[0],
+    `select to_jsonb(public.withdraw_annual_waiver('${original.signatureId}'))`,
+  )
+  snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.state, 'confirmed')
+  assert.equal(snapshot.waiverSigned, false)
+  assert.match(snapshot.waiverReason, /withdrawn/)
+  const again = await asUser(
+    f.users[0],
+    `select to_jsonb(public.sign_annual_waiver('${waiver}','${randomUUID()}',${literal(JSON.stringify(signatureData))}))`,
+  )
+  assert.notEqual(again, original.signatureId)
+  const after = await asUser(f.users[0], 'select public.get_annual_waivers()')
+  assert.equal(after.history.length, 2)
+  assert.equal(after.history[1].body, original.body)
+  assert.equal(after.history[1].signedAt, original.signedAt)
+  assert.ok(after.history[1].withdrawnAt)
+  // Publishing a replacement preserves all signatures and explains re-signing.
+  const replacement = await create()
+  await asUser(
+    f.owner,
+    `select to_jsonb(public.publish_annual_waiver('${replacement}','Test replacement review'))`,
+  )
+  snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.state, 'confirmed')
+  assert.equal(snapshot.waiverSigned, false)
+  assert.match(snapshot.waiverReason, /updated/)
+  await disclose(f.trip, 2, ['Cold water immersion.'], ['kayaking'])
+  snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.waiverSigned, false)
+  assert.match(snapshot.waiverReason, /outside/)
+  // A trip in the next academic year cannot inherit this year's signature.
+  sql(
+    `update public.trips set starts_at='${currentYear + 1}-07-10T12:00Z',ends_at='${currentYear + 1}-07-11T12:00Z' where id='${f.trip}'`,
+  )
+  snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.state, 'confirmed')
+  assert.equal(snapshot.waiverSigned, false)
+  assert.equal(snapshot.waiver, null)
+  await assert.rejects(
+    asUser(
+      f.users[2],
+      `select to_jsonb(public.withdraw_annual_waiver('${again}'))`,
+    ),
+    /not found/,
+  )
+  await assert.rejects(
+    asUser(
+      f.users[2],
+      `select to_jsonb(public.create_annual_waiver(${literal(JSON.stringify(fields))}))`,
+    ),
+    /permission/,
+  )
+  await assert.rejects(
+    asUser(
+      f.users[2],
+      `update public.registration_signatures set signature_name='Forged' where id='${again}' returning to_jsonb(registration_signatures)`,
+    ),
+    /permission/,
+  )
+})
+
+test('annual guardian verification, immutable merge evidence, duplicate signing and past trip accuracy', async () => {
+  const f = fixture(20)
+  const user = f.users[0]
+  const retained = f.users[1]
+  const currentYear =
+    new Date().getUTCFullYear() - (new Date().getUTCMonth() < 6 ? 1 : 0)
+  const fields = {
+    event: 'Hiking annual review fixture',
+    sponsor: 'UNLV Mountain Club',
+    effectiveFrom: `${currentYear}-07-01`,
+    activities: ['hiking'],
+    risks: 'Hiking involves falls, heat illness, serious injury and death.',
+  }
+  const waiver = await asUser(
+    f.owner,
+    `select to_jsonb(public.create_annual_waiver(${literal(JSON.stringify(fields))}))`,
+  )
+  await asUser(
+    f.owner,
+    `select to_jsonb(public.publish_annual_waiver('${waiver}','Reviewed fixture only'))`,
+  )
+  const risk = await asUser(
+    f.owner,
+    `select to_jsonb(public.save_trip_informed_risks('${f.trip}',0,array['Steep rocky terrain.'],array['hiking']))`,
+  )
+  sql(
+    `update public.trip_registration_settings set waiver_required=true where trip_id='${f.trip}';update public.account_age_declarations set is_18_or_older=false where user_id='${user}'`,
+  )
+  await asUser(
+    user,
+    `select to_jsonb(public.request_annual_guardian_review('${waiver}'))`,
+  )
+  const guardianData = {
+    guardianDocument: {
+      guardianName: 'Test Parent',
+      signedOn: new Date().toISOString().slice(0, 10),
+      reference: 'Restricted signed document fixture',
+      verified: true,
+    },
+    evidence: 'Verified identity, authority, signature and complete form.',
+  }
+  await assert.rejects(
+    asUser(
+      retained,
+      `select to_jsonb(public.verify_annual_guardian('${waiver}','${user}',${literal(JSON.stringify(guardianData))}))`,
+    ),
+    /permission/,
+  )
+  const signature = await asUser(
+    f.owner,
+    `select to_jsonb(public.verify_annual_guardian('${waiver}','${user}',${literal(JSON.stringify(guardianData))}))`,
+  )
+  assert.equal(
+    await asUser(
+      f.owner,
+      `select to_jsonb(public.verify_annual_guardian('${waiver}','${user}',${literal(JSON.stringify(guardianData))}))`,
+    ),
+    signature,
+  )
+  let snapshot = await asUser(
+    user,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.waiverSigned, true)
+  assert.deepEqual(snapshot.eligibilityReasons, [])
+  const request = randomUUID()
+  const data = {
+    formVersion: 2,
+    answers: {},
+    riskAcknowledged: true,
+    riskDisclosureId: risk,
+  }
+  snapshot = await asUser(
+    user,
+    `select public.registration_command('${f.trip}','register','${request}',0,${literal(JSON.stringify(data))})`,
+  )
+  assert.equal(snapshot.state, 'confirmed')
+  const retry = await asUser(
+    user,
+    `select public.registration_command('${f.trip}','register','${request}',0,${literal(JSON.stringify(data))})`,
+  )
+  assert.equal(retry.revision, snapshot.revision)
+  sql(`select public.merge_trip_registrations('${retained}','${user}')`)
+  const history = await asUser(retained, 'select public.get_annual_waivers()')
+  assert.equal(history.history[0].signatureId, signature)
+  assert.equal(
+    sql(
+      `select original_signer_id from public.registration_signatures where id='${signature}'`,
+    ),
+    user,
+  )
+  assert.equal(
+    sql(
+      `select user_id from public.registration_risk_acknowledgements where disclosure_id='${risk}'`,
+    ),
+    user,
+  )
+  snapshot = await asUser(
+    retained,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.waiverSigned, true)
+  assert.equal(snapshot.risksAcknowledged, true)
+  // Move fixture trip just after the signature/publication time but before withdrawal.
+  sql(
+    `update public.trips set starts_at=clock_timestamp()-interval '1 millisecond',ends_at=clock_timestamp() where id='${f.trip}'`,
+  )
+  await asUser(
+    retained,
+    `select to_jsonb(public.withdraw_annual_waiver('${signature}'))`,
+  )
+  snapshot = await asUser(
+    retained,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.waiverSigned, true)
+  assert.equal(snapshot.state, 'confirmed')
+  const newer = await asUser(
+    f.owner,
+    `select to_jsonb(public.create_annual_waiver(${literal(JSON.stringify(fields))}))`,
+  )
+  await asUser(
+    f.owner,
+    `select to_jsonb(public.publish_annual_waiver('${newer}','Replacement review fixture'))`,
+  )
+  snapshot = await asUser(
+    retained,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.waiver.id, waiver)
+  assert.equal(snapshot.waiverSigned, true)
+  assert.throws(
+    () =>
+      sql(
+        `update public.registration_waivers set body='Changed' where id='${waiver}'`,
+      ),
+    /immutable/,
+  )
+  assert.throws(
+    () =>
+      sql(`delete from public.registration_signatures where id='${signature}'`),
+    /immutable/,
   )
 })

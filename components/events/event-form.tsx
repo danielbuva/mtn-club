@@ -76,8 +76,14 @@ export function EventForm(props: EventFormProps) {
           setPublishedTripId(result.tripId)
           return 'Your trip is published; finish transportation setup next.'
         }
-        router.push(props.successPath)
-        return 'Trip published.'
+        router.push(
+          result.informedRisksPending
+            ? `/trips/${result.tripId}/registrations`
+            : props.successPath,
+        )
+        return result.informedRisksPending
+          ? 'Trip published. Add informed risks in registration settings before participants register.'
+          : 'Trip published.'
       }}
       onAddTag={
         props.canManageTags

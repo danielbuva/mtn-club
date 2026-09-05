@@ -114,6 +114,27 @@ export const snapshotSchema = z.object({
   questions: questionsSchema,
   collectTransportation: z.boolean().default(false),
   emergencyRequired: z.boolean(),
+  annualWaiver: z.boolean().optional(),
+  waiverApplicable: z.boolean().optional(),
+  waiverReason: z.string().nullable().optional(),
+  waiverCoverage: z
+    .object({
+      from: z.string(),
+      until: z.string(),
+      activities: z.array(z.string()),
+    })
+    .nullable()
+    .optional(),
+  informedRisks: z
+    .object({
+      id: z.string().uuid(),
+      revision: z.number(),
+      statements: z.array(z.string()),
+      activities: z.array(z.string()),
+    })
+    .nullable()
+    .optional(),
+  risksAcknowledged: z.boolean().optional(),
   waiverRequired: z.boolean(),
   waiverSigned: z.boolean(),
   waiver: z
@@ -167,6 +188,8 @@ export const registrationInputSchema = z
           .optional(),
         emergencyContact: emergencyContactSchema.optional(),
         emergencyConfirmed: z.boolean().optional(),
+        riskAcknowledged: z.boolean().optional(),
+        riskDisclosureId: z.string().uuid().optional(),
         waiverAgreed: z.boolean().optional(),
         waiverId: z.string().uuid().nullable().optional(),
         signatureName: z.string().trim().min(2).max(200).optional(),

@@ -15,6 +15,8 @@ export const eventFormSchema = z
       .optional()
       .or(z.literal('')),
     kind: z.enum(EVENT_KINDS),
+    informedRisks: z.string().max(5000).optional(),
+    waiverActivities: z.array(z.string().min(1).max(80)).max(12).optional(),
     activityTypes: z.array(z.string()).optional(),
     startAt: z.string().min(1, 'Start date is required'),
     endAt: z.string().min(1, 'End date is required'),

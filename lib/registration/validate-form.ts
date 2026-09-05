@@ -8,6 +8,14 @@ export function validateRegistrationValues(
 ): Record<string, string> {
   const errors: Record<string, string> = {}
   const active = (id: string) => !step || id === step
+  if (
+    active('risks') &&
+    snapshot.annualWaiver &&
+    !snapshot.risksAcknowledged &&
+    values.riskAcknowledgedId !== snapshot.informedRisks?.id
+  )
+    errors.riskAcknowledgedId =
+      'Review and acknowledge these trip-specific risks.'
   for (const question of snapshot.questions) {
     if (!active(`question:${question.id}`)) continue
     const value = values.answers[question.id]
@@ -65,7 +73,9 @@ export function validateRegistrationValues(
     active('waiver') &&
     snapshot.waiverRequired &&
     !snapshot.waiverSigned &&
-    snapshot.ageAdult === true
+    snapshot.ageAdult === true &&
+    (!snapshot.annualWaiver ||
+      (Boolean(snapshot.waiver) && snapshot.waiverApplicable !== false))
   ) {
     if (!snapshot.waiver || values.waiverReadId !== snapshot.waiver.id) {
       errors.waiverRead = 'Open the waiver and read through to the end.'

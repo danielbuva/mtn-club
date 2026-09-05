@@ -95,6 +95,8 @@ export const toDraftRowInput = ({
     created_by: createdBy,
     event_kind: values.kind,
     collect_transportation: values.collectTransportation,
+    informed_risks: values.informedRisks ?? '',
+    waiver_activities: values.waiverActivities ?? [],
     title: values.title.trim() || null,
     short_summary: values.shortSummary?.trim() || null,
     activity_tags: normalizeTags(values.activityTypes ?? []),
@@ -139,6 +141,8 @@ export const toEventFormValuesFromDraft = ({
       kind: EVENT_KINDS.find(kind => kind === draft.event_kind) ?? 'outdoor',
       collectTransportation: draft.collect_transportation ?? false,
       activityTypes: draft.activity_tags ?? [],
+      informedRisks: draft.informed_risks ?? '',
+      waiverActivities: draft.waiver_activities ?? [],
       startAt: eventLocalDateTime(
         draft.starts_at,
         draft.time_zone || timezoneFallback,

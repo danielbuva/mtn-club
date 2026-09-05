@@ -125,7 +125,7 @@ Production deploys are handled by Vercel. Pushing to `main` triggers a productio
 
 See `RUNBOOK.md` for infra ownership, access, and incident response.
 
-Trip registration setup, notification delivery, pilot gates, local acceptance, and recovery are documented in [RSVP_RUNBOOK.md](RSVP_RUNBOOK.md).
+Trip registration setup, notification delivery, pilot gates, local acceptance, and recovery are documented in [RSVP_RUNBOOK.md](RSVP_RUNBOOK.md). Annual waiver content review, migration, trip risk revisions, guardian signing, and record retention are documented in [ANNUAL_WAIVER_RUNBOOK.md](ANNUAL_WAIVER_RUNBOOK.md).
 
 ### Supabase CLI ownership
 

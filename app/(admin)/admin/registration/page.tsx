@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { z } from 'zod'
+import { AnnualConfiguration } from '@/components/registration/annual-configuration'
 import { RegistrationSwitch } from '@/components/registration/operations-switch'
 import {
   RegistrationShell,
   RegistrationSkeleton,
 } from '@/components/registration/page-shell'
+import { annualDocumentSchema } from '@/lib/registration/annual-schema'
 import { createClient } from '@/lib/supabase/server'
 
 const operationsSchema = z.object({
@@ -30,12 +32,26 @@ const operationsSchema = z.object({
 })
 async function Operations() {
   const db = await createClient()
-  const { data, error } = await db.rpc('registration_operations')
+  const [{ data, error }, annual] = await Promise.all([
+    db.rpc('registration_operations'),
+    db.rpc('get_annual_waiver_configuration'),
+  ])
   if (error) throw new Error('Registration operations are unavailable.')
   const status = operationsSchema.parse(data)
   return (
     <div className="space-y-6">
       <RegistrationSwitch enabled={status.enabled} />
+      {!annual.error && (
+        <AnnualConfiguration
+          documents={z
+            .array(
+              annualDocumentSchema.extend({
+                publishedAt: z.string().nullable(),
+              }),
+            )
+            .parse(annual.data)}
+        />
+      )}
       <section className="space-y-2">
         <h2 className="font-semibold">Notification worker</h2>
         <p>Last run: {status.health.last_run_at ?? 'Never'}</p>

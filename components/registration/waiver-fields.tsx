@@ -5,6 +5,7 @@ import type {
   RegistrationInput,
   TripRegistrationSnapshot,
 } from '@/lib/registration/schema'
+import { AnnualWaiverIntro } from './annual-waiver-intro'
 import { WaiverReader } from './waiver-reader'
 
 type SignerDetails = NonNullable<RegistrationInput['data']['signerDetails']>
@@ -37,7 +38,17 @@ export function WaiverFields({
   onRead,
   errors = {},
 }: {
-  snapshot: TripRegistrationSnapshot
+  snapshot: Pick<
+    TripRegistrationSnapshot,
+    | 'waiverRequired'
+    | 'waiverSigned'
+    | 'waiver'
+    | 'ageAdult'
+    | 'annualWaiver'
+    | 'waiverCoverage'
+    | 'waiverReason'
+    | 'waiverApplicable'
+  >
   agreed: boolean
   onAgree: (value: boolean) => void
   signature: string
@@ -52,8 +63,28 @@ export function WaiverFields({
     .filter(([key]) => key !== 'waiverRead')
     .map(([, value]) => value)
   if (!snapshot.waiverRequired) return null
+  if (snapshot.annualWaiver && snapshot.waiverApplicable === false)
+    return (
+      <section className="space-y-3 rounded-lg border p-4">
+        <h2 className="font-semibold">
+          A waiver process is required before participation
+        </h2>
+        <p>{snapshot.waiverReason}</p>
+        <p>
+          The current annual waiver cannot cover this trip. Contact an officer
+          to arrange the applicable process. Your RSVP can remain registered
+          while this requirement is resolved.
+        </p>
+      </section>
+    )
   return (
     <section className="space-y-3 rounded-lg border p-4">
+      {snapshot.annualWaiver && (
+        <AnnualWaiverIntro coverage={snapshot.waiverCoverage} />
+      )}
+      {snapshot.waiverReason && (
+        <p className="text-sm">{snapshot.waiverReason}</p>
+      )}
       {signatureErrors.length > 0 && (
         <p role="alert" className="text-sm text-destructive">
           {Array.from(new Set(signatureErrors)).join(' ')}
@@ -86,9 +117,9 @@ export function WaiverFields({
         </p>
       ) : snapshot.ageAdult === false ? (
         <p>
-          Have your parent or legal guardian complete and sign this trip’s
-          waiver, then contact a club officer to verify it before registration.
-          You cannot sign the adult agreement yourself.
+          Have your parent or legal guardian complete and sign the displayed
+          annual waiver, then contact a club officer to verify it before
+          registration. You cannot sign the adult agreement yourself.
         </p>
       ) : !hasRead ? (
         <p className="text-sm text-muted-foreground">

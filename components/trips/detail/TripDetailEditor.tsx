@@ -210,6 +210,12 @@ export function TripDetailEditor({
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5 md:pb-8">
+      <Link
+        className="inline-block rounded border px-4 py-3 text-sm font-medium underline"
+        href={`/trips/${trip.id}/informed-risks`}
+      >
+        Edit informed risks & activity scope
+      </Link>
       {publicHostOptions.length || leaderOptions.length ? (
         <TripAssignmentsEditor
           publicHosts={publicHostOptions}

@@ -1147,6 +1147,8 @@ export type Database = {
       }
       trip_drafts: {
         Row: {
+          informed_risks: string
+          waiver_activities: string[]
           event_kind: string
           collect_transportation: boolean
           public_host_ids: string[]
@@ -1175,6 +1177,8 @@ export type Database = {
           visibility: Database['public']['Enums']['trip_visibility']
         }
         Insert: {
+          informed_risks?: string
+          waiver_activities?: string[]
           event_kind?: string
           collect_transportation?: boolean
           public_host_ids?: string[]
@@ -1203,6 +1207,8 @@ export type Database = {
           visibility?: Database['public']['Enums']['trip_visibility']
         }
         Update: {
+          informed_risks?: string
+          waiver_activities?: string[]
           event_kind?: string
           collect_transportation?: boolean
           public_host_ids?: string[]

@@ -3,12 +3,14 @@ import { Suspense } from 'react'
 import { z } from 'zod'
 import { MobileSettingsHeader } from '@/components/profile/settings/mobile-settings-header'
 import { SettingsPageHeader } from '@/components/profile/settings/settings-page-header'
+import { AnnualProfile } from '@/components/registration/annual-profile'
 import { RegistrationSkeleton } from '@/components/registration/page-shell'
+import { annualStateSchema } from '@/lib/registration/annual-schema'
 import { createClient } from '@/lib/supabase/server'
 
 const signaturesSchema = z.array(
   z.object({
-    tripId: z.string(),
+    tripId: z.string().nullable(),
     title: z.string(),
     version: z.number(),
     body: z.string(),
@@ -19,7 +21,10 @@ const signaturesSchema = z.array(
 )
 async function Waivers() {
   const db = await createClient()
-  const { data, error } = await db.rpc('get_my_registration_signatures')
+  const [{ data, error }, annual] = await Promise.all([
+    db.rpc('get_my_registration_signatures'),
+    db.rpc('get_annual_waivers'),
+  ])
   if (error)
     return (
       <p role="alert">
@@ -29,38 +34,47 @@ async function Waivers() {
   const signatures = signaturesSchema.parse(data)
   return (
     <div className="space-y-4">
-      <p className="text-sm">
-        Sign required waivers when registering for a trip. Existing documents
-        are preserved with their original version and signing time.
-      </p>
+      {annual.error ? (
+        <p role="alert">
+          Annual waiver records could not be loaded. Refresh or contact the
+          club.
+        </p>
+      ) : (
+        <AnnualProfile state={annualStateSchema.parse(annual.data)} />
+      )}
+      <h2 className="font-semibold">Previous trip waivers</h2>
       {signatures.length ? (
-        signatures.map(signature => (
-          <details
-            key={`${signature.tripId}-${signature.version}-${signature.signedAt}`}
-            className="rounded-lg border p-4"
-          >
-            <summary className="cursor-pointer font-medium">
-              {signature.title} — version {signature.version}
-            </summary>
-            <p className="mt-3 text-sm">
-              {signature.verification ?? 'Electronic signature'} ·{' '}
-              {signature.signatureName} ·{' '}
-              {signature.signedAt.length === 10
-                ? signature.signedAt
-                : new Date(signature.signedAt).toLocaleString('en-US', {
-                    timeZone: 'America/Los_Angeles',
-                  })}{' '}
-              (America/Los_Angeles)
-            </p>
-            <p className="my-4 whitespace-pre-wrap text-sm">{signature.body}</p>
-            <Link
-              className="underline"
-              href={`/trips/${signature.tripId}/rsvp`}
+        signatures
+          .filter(signature => signature.tripId)
+          .map(signature => (
+            <details
+              key={`${signature.tripId}-${signature.version}-${signature.signedAt}`}
+              className="rounded-lg border p-4"
             >
-              View registration
-            </Link>
-          </details>
-        ))
+              <summary className="cursor-pointer font-medium">
+                {signature.title} — version {signature.version}
+              </summary>
+              <p className="mt-3 text-sm">
+                {signature.verification ?? 'Electronic signature'} ·{' '}
+                {signature.signatureName} ·{' '}
+                {signature.signedAt.length === 10
+                  ? signature.signedAt
+                  : new Date(signature.signedAt).toLocaleString('en-US', {
+                      timeZone: 'America/Los_Angeles',
+                    })}{' '}
+                (America/Los_Angeles)
+              </p>
+              <p className="my-4 whitespace-pre-wrap text-sm">
+                {signature.body}
+              </p>
+              <Link
+                className="underline"
+                href={`/trips/${signature.tripId}/rsvp`}
+              >
+                View registration
+              </Link>
+            </details>
+          ))
       ) : (
         <p>No trip waivers have been signed in the app.</p>
       )}
@@ -79,7 +93,7 @@ export default function LiabilityWaiverPage() {
       />
       <SettingsPageHeader
         title="Liability waiver"
-        description="Your signed trip waivers."
+        description="Your annual waiver and signed document history."
       />
       <Suspense fallback={<RegistrationSkeleton />}>
         <Waivers />

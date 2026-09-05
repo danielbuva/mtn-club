@@ -6,6 +6,7 @@ import { TripCreationFlow } from '@/components/events/trip-creation-flow'
 import { ToggleField } from '@/components/forms/fields'
 import { RegistrationFlow } from '@/components/registration/registration-flow'
 import { Button } from '@/components/ui/button'
+import { createUnlvWaiver } from '@/lib/registration/unlv-waiver'
 import { creationFixture, registrationFixture } from './fixtures'
 import { FieldGallery } from './gallery'
 
@@ -23,6 +24,8 @@ export function FormShowroom() {
   const [example, setExample] = useState<Example>('registration')
   const [revision, setRevision] = useState(0)
   const [transportation, setTransportation] = useState(true)
+  const [annual, setAnnual] = useState(false)
+  const [signed, setSigned] = useState(false)
   const [longContent, setLongContent] = useState(false)
   const [fail, setFail] = useState(false)
   async function simulate() {
@@ -34,6 +37,37 @@ export function FormShowroom() {
   }
   const snapshot = {
     ...registrationFixture,
+    ...(annual
+      ? {
+          annualWaiver: true,
+          waiverSigned: signed,
+          waiverCoverage: {
+            from: '2026-07-01',
+            until: '2027-06-30',
+            activities: ['hiking', 'scrambling'],
+          },
+          informedRisks: {
+            id: '33333333-3333-4333-8333-333333333333',
+            revision: 1,
+            statements: [
+              'Expect exposed desert heat and steep sandstone scrambling.',
+            ],
+            activities: ['hiking', 'scrambling'],
+          },
+          risksAcknowledged: false,
+          waiver: registrationFixture.waiver
+            ? {
+                ...registrationFixture.waiver,
+                title: 'MTN Outdoor Adventures — 2026–2027',
+                body: createUnlvWaiver(
+                  'MTN hiking and scrambling — 2026–2027',
+                  'July 1, 2026 – June 30, 2027',
+                  'Hiking and scrambling: falls, heat illness, serious injury and death.',
+                ),
+              }
+            : null,
+        }
+      : {}),
     ageAdult: savedAge,
     eligibilityReasons: ageReasons(savedAge),
     ...savedPreferences,
@@ -108,7 +142,9 @@ export function FormShowroom() {
             : 'mx-auto max-w-3xl'
         }
       >
-        <div key={`${example}-${revision}-${transportation}-${longContent}`}>
+        <div
+          key={`${example}-${revision}-${transportation}-${longContent}-${annual}-${signed}`}
+        >
           {example === 'creation' && (
             <TripCreationFlow
               initialValues={creationFixture}
@@ -168,7 +204,9 @@ export function FormShowroom() {
                       intent === 'draft'
                         ? current.actions
                         : ['update_response'],
-                    waiverSigned: Boolean(data.waiverAgreed),
+                    waiverSigned:
+                      current.waiverSigned || Boolean(data.waiverAgreed),
+                    risksAcknowledged: Boolean(data.riskAcknowledged),
                   },
                 }
               }}
@@ -212,6 +250,16 @@ export function FormShowroom() {
           </summary>
           {example === 'registration' && (
             <>
+              <ToggleField
+                label="Annual waiver example"
+                checked={annual}
+                onChange={setAnnual}
+              />
+              <ToggleField
+                label="Annual waiver already signed"
+                checked={signed}
+                onChange={setSigned}
+              />
               <ToggleField
                 label="Ask about transportation"
                 checked={transportation}

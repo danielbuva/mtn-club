@@ -27,6 +27,28 @@ export function RegistrationSummary({
           Your spot isn’t reserved. Complete the form to confirm your RSVP.
         </p>
       ) : null}
+      {['confirmed', 'waitlisted', 'offered'].includes(snapshot.state) && (
+        <div className="space-y-2 border-t pt-3">
+          <h3 className="font-semibold">
+            {snapshot.requirements.length
+              ? 'Action required before participation'
+              : 'Participation ready'}
+          </h3>
+          {snapshot.requirements.map(reason => (
+            <p key={reason} className="text-sm">
+              {reason}
+            </p>
+          ))}
+          {snapshot.annualWaiver && (
+            <Link
+              className="text-sm underline"
+              href="/profile/events/liability-waiver"
+            >
+              Review annual waiver
+            </Link>
+          )}
+        </div>
+      )}
       <p>
         {snapshot.confirmedCount} confirmed
         {snapshot.capacity !== null ? ` / ${snapshot.capacity} seats` : ''} ·{' '}

@@ -417,6 +417,7 @@ export async function publishTripFormAction(payload: {
   revalidatePath(`/trips/${createdTrip.id}`)
 
   let configurationPending = false
+  let informedRisksPending = false
   if (parsed.data.collectTransportation) {
     const { error } = await supabase.rpc('set_trip_transportation_collection', {
       p_trip_id: createdTrip.id,
@@ -424,7 +425,22 @@ export async function publishTripFormAction(payload: {
     })
     configurationPending = Boolean(error)
   }
-  return { tripId: createdTrip.id, configurationPending }
+  if (
+    parsed.data.informedRisks?.trim() &&
+    parsed.data.waiverActivities?.length
+  ) {
+    const { error } = await supabase.rpc('save_trip_informed_risks', {
+      p_trip: createdTrip.id,
+      p_revision: 0,
+      p_statements: parsed.data.informedRisks
+        .split('\n')
+        .map(value => value.trim())
+        .filter(Boolean),
+      p_activities: parsed.data.waiverActivities,
+    })
+    informedRisksPending = Boolean(error)
+  } else informedRisksPending = true
+  return { tripId: createdTrip.id, configurationPending, informedRisksPending }
 }
 
 export async function publishTripDraftAction(draftId: string) {
