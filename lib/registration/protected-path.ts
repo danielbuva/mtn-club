@@ -4,6 +4,9 @@ export function requiresRegistrationSignIn(pathname: string) {
   return (
     /^\/trips\/[^/]+\/(rsvp|registrations)(\/|$)/.test(pathname) ||
     /^\/admin\/trips\/[^/]+\/registrations(\/|$)/.test(pathname) ||
+    pathname === '/trips/new' ||
+    pathname === '/calendar/new' ||
+    pathname === '/admin/trips/new' ||
     pathname === '/profile/trips' ||
     pathname === '/profile/user/privacy' ||
     pathname === '/profile/notifications' ||

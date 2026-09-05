@@ -15,6 +15,18 @@ async function TripsNewPageContent({
   } = await supabase.auth.getUser()
 
   const resolvedSearchParams = searchParams ? await searchParams : undefined
+  if (!user)
+    return (
+      <NewEventPage
+        initialType={resolvedSearchParams?.type}
+        initialDraft={null}
+        isAuthenticated={false}
+        canCreateOfficial={false}
+        canManageTags={false}
+        activityOptions={[]}
+      />
+    )
+
   const [officialScope, updateScope] = user
     ? await Promise.all([
         supabase.rpc('admin_capability_scope', {

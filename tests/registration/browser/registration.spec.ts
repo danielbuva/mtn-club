@@ -608,6 +608,16 @@ test('anonymous registration preserves the return destination and worker endpoin
   page,
   request,
 }) => {
+  for (const path of ['/trips/new', '/calendar/new', '/admin/trips/new']) {
+    const destination = `${path}?draft=00000000-0000-0000-0000-000000000001`
+    const entry = await request.get(destination, { maxRedirects: 0 })
+    expect(entry.status()).toBe(307)
+    expect(
+      new URL(entry.headers().location, entry.url()).searchParams.get(
+        'returnTo',
+      ),
+    ).toBe(destination)
+  }
   const response = await request.get(`/trips/${tripId}/rsvp`, {
     maxRedirects: 0,
   })
