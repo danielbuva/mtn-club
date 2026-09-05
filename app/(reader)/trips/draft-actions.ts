@@ -268,6 +268,18 @@ export async function publishTripFormAction(payload: {
     ),
   )
 
+  const publicHostIds = z
+    .array(z.string().uuid())
+    .max(20)
+    .parse(payload.publicHostIds ?? [])
+  const leaderUserIds = z
+    .array(z.string().uuid())
+    .max(20)
+    .parse(payload.leaderUserIds ?? [])
+  if ((publicHostIds.length || leaderUserIds.length) && !canManageTags) {
+    throw new Error('Trip management permission is required to assign hosts.')
+  }
+
   const tripInsert: Database['public']['Tables']['trips']['Insert'] = {
     created_by: userId,
     title: parsed.data.title.trim(),
@@ -333,17 +345,6 @@ export async function publishTripFormAction(payload: {
     }
   }
 
-  const publicHostIds = z
-    .array(z.string().uuid())
-    .max(20)
-    .parse(payload.publicHostIds ?? [])
-  const leaderUserIds = z
-    .array(z.string().uuid())
-    .max(20)
-    .parse(payload.leaderUserIds ?? [])
-  if ((publicHostIds.length || leaderUserIds.length) && !canManageTags) {
-    throw new Error('Trip management permission is required to assign hosts.')
-  }
   const assignmentResults = await Promise.all([
     publicHostIds.length
       ? supabase.from('trip_hosts').insert(

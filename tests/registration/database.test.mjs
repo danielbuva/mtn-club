@@ -570,3 +570,45 @@ test('registration merge immediately preserves category and mailing-list opt-out
     'f',
   )
 })
+
+test('ordinary community creators become leaders without gaining assignment or official-trip permissions', async () => {
+  const { owner, users } = fixture()
+  const member = users[0]
+  const trip = randomUUID()
+  sql(`insert into public.membership_access_overrides(user_id,reason,granted_by)
+    values('${member}','Community trip creation test','${owner}');`)
+  const result = await asUser(
+    member,
+    `insert into public.trips(id,title,starts_at,ends_at,created_by,is_official)
+      values('${trip}','Member community trip',now()+interval '5 days',now()+interval '6 days','${member}',false);
+    select json_build_object(
+      'leaders', (select json_agg(user_id) from public.trip_leaders where trip_id='${trip}'),
+      'officialScope', public.admin_capability_scope('${member}','trips.official'),
+      'assignmentScope', public.admin_capability_scope('${member}','trips.update')
+    )`,
+  )
+  assert.deepEqual(result, {
+    leaders: [member],
+    officialScope: null,
+    assignmentScope: null,
+  })
+  await assert.rejects(
+    asUser(
+      member,
+      `insert into public.trips(title,starts_at,ends_at,created_by,is_official)
+      values('Unauthorized official trip',now()+interval '5 days',now()+interval '6 days','${member}',true)`,
+    ),
+    /official trip permission required|row-level security/,
+  )
+  await assert.rejects(
+    asUser(
+      member,
+      `insert into public.trip_leaders(trip_id,user_id) values('${trip}','${users[1]}')`,
+    ),
+    /row-level security/,
+  )
+  assert.equal(
+    sql(`select count(*) from public.trip_leaders where trip_id='${trip}'`),
+    '1',
+  )
+})
