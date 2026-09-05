@@ -575,16 +575,22 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     'waitlisted',
   )
   await member
-    .getByRole('button', { name: 'Close registration', exact: true })
+    .getByRole('link', { name: 'Close registration', exact: true })
     .click()
+  await expect(member).toHaveURL(/\/trips$/)
+  await member.goto(`/trips/${tripId}`)
+  await member.getByRole('button', { name: 'Going', exact: true }).click()
   await member
-    .getByRole('alertdialog', { name: 'Leave registration?' })
+    .getByRole('alertdialog')
     .getByRole('button', { name: 'Cancel registration', exact: true })
     .click()
-  await expect(member.locator('[data-registration-state]')).toHaveAttribute(
-    'data-registration-state',
-    'cancelled',
-  )
+  await expect
+    .poll(() =>
+      sql(
+        `select registration_state from public.trip_rsvps where trip_id='${tripId}' and user_id='${participant.id}'`,
+      ),
+    )
+    .toBe('cancelled')
   await organizer.goto(`/admin/trips/${tripId}/registrations`)
   await expect(
     organizer.getByRole('heading', {
