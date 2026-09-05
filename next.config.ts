@@ -16,6 +16,7 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  allowedDevOrigins: ['mtnclub.local'],
   async headers() {
     // Custom-domain previews need this too; hosting defaults may only cover
     // generated deployment URLs. Never index the isolated acceptance site.
