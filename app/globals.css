@@ -73,6 +73,20 @@
 }
 
 @layer components {
+  /* iOS Safari can retain the native dialog's default positioning rules. */
+  @media (max-width: 767px) {
+    dialog.waiver-reader-dialog {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      transform: none;
+    }
+  }
+
   .public-page-top {
     padding-top: 2rem;
   }

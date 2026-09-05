@@ -73,7 +73,7 @@ export function WaiverReader({
           if (reachedEnd) onRead()
           setOpen(false)
         }}
-        className="fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none flex-col bg-background p-0 text-foreground backdrop:bg-black/60 open:flex md:m-auto md:h-[85dvh] md:max-w-3xl md:border md:border-foreground/20"
+        className="waiver-reader-dialog fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none flex-col bg-background p-0 text-foreground backdrop:bg-black/60 open:flex md:m-auto md:h-[85dvh] md:max-w-3xl md:border md:border-foreground/20"
       >
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-foreground/15 px-5 py-4 pt-[max(1rem,env(safe-area-inset-top))] md:px-8">
           <div>
