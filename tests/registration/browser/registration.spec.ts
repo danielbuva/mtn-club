@@ -855,7 +855,7 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Back', exact: true }).click()
   await expect(
-    form.getByRole('radio', { name: 'Easy Beginner friendly' }),
+    form.getByRole('radio', { name: 'Beginner', exact: true }),
   ).toBeVisible()
   await form.getByRole('radio', { name: 'Moderate', exact: true }).check()
   for (const [label, value] of [

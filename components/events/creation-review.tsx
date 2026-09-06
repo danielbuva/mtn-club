@@ -40,7 +40,7 @@ export function CreationReview({
       id: 'details',
       title: 'Trip details',
       lines: [
-        values.difficulty,
+        values.difficulty === 'Easy' ? 'Beginner' : values.difficulty,
         values.overviewWhat,
         values.overviewWhere,
         values.overviewWeather,

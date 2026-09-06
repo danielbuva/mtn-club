@@ -156,8 +156,7 @@ export function CreationDetails({ values, onChange }: CreationFieldsProps) {
         columns
         options={EVENT_DIFFICULTIES.map(value => ({
           value,
-          label: value,
-          description: value === 'Easy' ? 'Beginner friendly' : undefined,
+          label: value === 'Easy' ? 'Beginner' : value,
         }))}
         value={values.difficulty ?? null}
         onChange={value => onChange('difficulty', value)}
