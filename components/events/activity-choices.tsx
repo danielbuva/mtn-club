@@ -4,6 +4,10 @@ import { useState } from 'react'
 import { ChoiceCards } from '@/components/forms/choice-cards'
 import { TextField } from '@/components/forms/fields'
 import { Button } from '@/components/ui/button'
+import {
+  isDifficultyTag,
+  normalizeActivityTags,
+} from '@/lib/events/activity-tags'
 
 export function ActivityChoices({
   options,
@@ -21,7 +25,7 @@ export function ActivityChoices({
   const [tag, setTag] = useState('')
   const [message, setMessage] = useState('')
   const [pending, setPending] = useState(false)
-  const all = Array.from(new Set([...options, ...selected])).sort()
+  const all = normalizeActivityTags([...options, ...selected]).sort()
   async function manage(remove = false) {
     if (pending) return
     setPending(true)
@@ -33,6 +37,12 @@ export function ActivityChoices({
       } else {
         const cleaned = tag.trim().toLowerCase()
         if (!cleaned) return
+        if (isDifficultyTag(cleaned)) {
+          setMessage(
+            'Choose beginner friendliness in the Difficulty field under Trip details.',
+          )
+          return
+        }
         await onAdd?.(cleaned)
         onChange(Array.from(new Set([...selected, cleaned])))
         setTag('')

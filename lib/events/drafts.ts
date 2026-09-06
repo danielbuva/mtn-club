@@ -1,5 +1,6 @@
 import type { EventFormValues } from '@/lib/events/schema'
 import type { Database } from '@/lib/supabase/types'
+import { normalizeActivityTags } from './activity-tags'
 import { EVENT_KINDS } from './constants'
 import { eventDateTimeToIso, eventLocalDateTime } from './date-time'
 
@@ -64,9 +65,6 @@ const mapVisibilityFromTrip = (
   return 'members'
 }
 
-const normalizeTags = (tags: string[]) =>
-  Array.from(new Set(tags.map(tag => tag.trim().toLowerCase()).filter(Boolean)))
-
 function draftDateTime(value: string, timeZone: string) {
   try {
     return eventDateTimeToIso(value, timeZone)
@@ -99,7 +97,7 @@ export const toDraftRowInput = ({
     waiver_activities: values.waiverActivities ?? [],
     title: values.title.trim() || null,
     short_summary: values.shortSummary?.trim() || null,
-    activity_tags: normalizeTags(values.activityTypes ?? []),
+    activity_tags: normalizeActivityTags(values.activityTypes ?? []),
     starts_at: draftDateTime(
       values.startAt,
       values.timezone || 'America/Los_Angeles',
@@ -140,7 +138,7 @@ export const toEventFormValuesFromDraft = ({
       shortSummary: draft.short_summary ?? '',
       kind: EVENT_KINDS.find(kind => kind === draft.event_kind) ?? 'outdoor',
       collectTransportation: draft.collect_transportation ?? false,
-      activityTypes: draft.activity_tags ?? [],
+      activityTypes: normalizeActivityTags(draft.activity_tags ?? []),
       informedRisks: draft.informed_risks ?? '',
       waiverActivities: draft.waiver_activities ?? [],
       startAt: eventLocalDateTime(

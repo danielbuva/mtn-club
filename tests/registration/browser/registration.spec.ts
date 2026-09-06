@@ -823,11 +823,14 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
   const page = await context.newPage()
   const title = `Guided creation ${randomUUID()}`
   await page.goto('/admin/trips/new')
-  const form = page.locator('#trip-event-form')
+  const form = page.locator('#trip-event-form:not([inert])')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await form.getByLabel('Trip title').fill(title)
   await form.getByLabel('Type', { exact: true }).selectOption('social')
   await form.getByLabel('Short summary').fill('A complete organizer form test.')
+  await expect(
+    form.getByRole('checkbox', { name: 'beginner friendly', exact: true }),
+  ).toHaveCount(0)
   await form.getByRole('checkbox', { name: parityTag, exact: true }).check()
   await form.getByRole('button', { name: 'Save draft', exact: true }).click()
   await expect(page).toHaveURL(/draft=/)
@@ -851,6 +854,9 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Back', exact: true }).click()
+  await expect(
+    form.getByRole('radio', { name: 'Easy Beginner friendly' }),
+  ).toBeVisible()
   await form.getByRole('radio', { name: 'Moderate', exact: true }).check()
   for (const [label, value] of [
     ['What to expect', 'Sunrise hike'],
@@ -860,6 +866,11 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
     ['Transportation and gear notes', 'Arrange your own ride'],
   ])
     await form.getByLabel(label).fill(value)
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form
+    .getByLabel('Trip-specific risks and conditions')
+    .fill('Uneven terrain and heat exposure.')
+  await form.getByRole('checkbox', { name: 'hiking', exact: true }).check()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('radio', { name: 'Everyone', exact: true }).check()
   await form
@@ -874,7 +885,7 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
   await form.getByRole('button', { name: 'Save draft', exact: true }).click()
   await expect(form.getByText(/Draft saved/)).toBeVisible()
   await page.reload()
-  for (let step = 0; step < 3; step++)
+  for (let step = 0; step < 4; step++)
     await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await expect(
     form.getByRole('switch', { name: /Ask about transportation/ }),

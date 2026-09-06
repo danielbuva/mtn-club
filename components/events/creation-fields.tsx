@@ -154,7 +154,11 @@ export function CreationDetails({ values, onChange }: CreationFieldsProps) {
       <ChoiceCards
         label="Difficulty (optional)"
         columns
-        options={EVENT_DIFFICULTIES.map(value => ({ value, label: value }))}
+        options={EVENT_DIFFICULTIES.map(value => ({
+          value,
+          label: value,
+          description: value === 'Easy' ? 'Beginner friendly' : undefined,
+        }))}
         value={values.difficulty ?? null}
         onChange={value => onChange('difficulty', value)}
       />

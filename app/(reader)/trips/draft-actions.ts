@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { normalizeActivityTags } from '@/lib/events/activity-tags'
 import { eventDateTimeToIso } from '@/lib/events/date-time'
 import {
   toDraftRowInput,
@@ -279,13 +280,7 @@ export async function publishTripFormAction(payload: {
     parsed.data.visibility,
     canChooseOfficial,
   )
-  const normalizedTags = Array.from(
-    new Set(
-      (parsed.data.activityTypes ?? [])
-        .map(activity => activity.trim().toLowerCase())
-        .filter(Boolean),
-    ),
-  )
+  const normalizedTags = normalizeActivityTags(parsed.data.activityTypes ?? [])
 
   const publicHostIds = z
     .array(z.string().uuid())

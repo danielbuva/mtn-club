@@ -3,6 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import {
+  isDifficultyTag,
+  normalizeActivityTags,
+} from '@/lib/events/activity-tags'
 import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
@@ -57,7 +61,7 @@ const parseActivityTags = (value: FormDataEntryValue | null) => {
     .map(tag => (typeof tag === 'string' ? tag.trim().toLowerCase() : ''))
     .filter(Boolean)
 
-  return Array.from(new Set(normalized))
+  return normalizeActivityTags(normalized)
 }
 
 const parseUuidList = (value: FormDataEntryValue | null) => {
@@ -225,6 +229,10 @@ export async function addTripTagOptionAction(rawTag: string) {
   const normalizedTag = rawTag.trim().toLowerCase()
   if (!normalizedTag) {
     throw new Error('Tag cannot be empty.')
+  }
+
+  if (isDifficultyTag(normalizedTag)) {
+    throw new Error('Use the Difficulty field for beginner friendliness.')
   }
 
   const supabase = await createClient()

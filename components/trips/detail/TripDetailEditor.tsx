@@ -20,6 +20,10 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { sanitizeReturnTo } from '@/lib/auth/return-to'
+import {
+  isDifficultyTag,
+  normalizeActivityTags,
+} from '@/lib/events/activity-tags'
 import { formatTripDate } from '@/lib/trips/format'
 import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 
@@ -117,7 +121,7 @@ export function TripDetailEditor({
 
   const [draft, setDraft] = useState<TripDraft>({
     title: trip.title,
-    activityTags: trip.activityTags,
+    activityTags: normalizeActivityTags(trip.activityTags),
     difficulty: trip.difficulty ?? 'beginner',
     summary: trip.summary ?? '',
     locationName: trip.locationName,
@@ -136,7 +140,9 @@ export function TripDetailEditor({
       ...availableActivityTags.map(tag => tag.toLowerCase()),
       ...draft.activityTags.map(tag => tag.toLowerCase()),
     ])
-    return Array.from(merged).sort((a, b) => a.localeCompare(b))
+    return normalizeActivityTags(Array.from(merged)).sort((a, b) =>
+      a.localeCompare(b),
+    )
   }, [availableActivityTags, draft.activityTags])
 
   const toggleTag = (tag: string) => {
@@ -158,6 +164,11 @@ export function TripDetailEditor({
   const addCustomTag = () => {
     const cleaned = newTag.trim().toLowerCase()
     if (!cleaned) {
+      return
+    }
+
+    if (isDifficultyTag(cleaned)) {
+      toast.error('Use the Difficulty field to choose Beginner.')
       return
     }
 
