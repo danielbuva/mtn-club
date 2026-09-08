@@ -1,43 +1,19 @@
 'use client'
 
-import {
-  BarChart3,
-  CalendarDays,
-  ExternalLink,
-  GalleryHorizontalEnd,
-  LayoutDashboard,
-  Mail,
-  Menu,
-  Settings,
-  ShieldCheck,
-  UserRoundCog,
-  Users,
-  X,
-} from 'lucide-react'
+import { ExternalLink, LayoutDashboard, Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type Dispatch, type SetStateAction, useEffect, useId } from 'react'
 import { ThemeCycleButton } from '@/components/navigation/theme-cycle-button'
 import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
 import { cn } from '@/lib/utils'
+import { adminNavigationIcons as icons } from './navigation-icons'
 
 type AdminShellItem = { href: string; label: string }
 
-const icons = {
-  Overview: LayoutDashboard,
-  Trips: CalendarDays,
-  Registration: CalendarDays,
-  Membership: ShieldCheck,
-  Accounts: Users,
-  Analytics: BarChart3,
-  'Mailing List': Mail,
-  Gallery: GalleryHorizontalEnd,
-  'Leadership & Access': UserRoundCog,
-  Settings,
-} as const
-
 const shortLabels = {
   Overview: 'Overview',
+  Announcements: 'Notices',
   Trips: 'Trips',
   Registration: 'RSVP',
   Membership: 'Members',
@@ -47,7 +23,7 @@ const shortLabels = {
   Gallery: 'Gallery',
   'Leadership & Access': 'Access',
   Settings: 'Settings',
-} as const
+} as const satisfies Record<keyof typeof icons, string>
 
 export function AdminMobileNavigation({
   items,
@@ -111,7 +87,8 @@ export function AdminMobileNavigation({
                     : pathname.startsWith(item.href))
                 const label = item.external
                   ? 'Site'
-                  : shortLabels[item.label as keyof typeof shortLabels]
+                  : (shortLabels[item.label as keyof typeof shortLabels] ??
+                    item.label)
 
                 return (
                   <Link
