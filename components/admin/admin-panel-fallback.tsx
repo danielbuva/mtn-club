@@ -1,3 +1,4 @@
+import { AnnouncementAdminLoading } from '@/components/announcements/announcement-admin-loading'
 import type { AdminView } from '@/lib/admin/views'
 import { AnalyticsLoading } from './loading/analytics'
 import { LeadershipLoading, SettingsLoading } from './loading/forms'
@@ -11,6 +12,7 @@ import {
 import { OverviewLoading } from './loading/overview'
 
 const panels = {
+  announcements: AnnouncementAdminLoading,
   overview: OverviewLoading,
   trips: TripsLoading,
   membership: MembershipLoading,

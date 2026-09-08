@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          author_name: string | null
+          content: string
+          created_at: string
+          created_by: string | null
+          description: string
+          ends_at: string
+          id: string
+          slug: string
+          starts_at: string
+          status: string
+          subtitle: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          author_name?: string | null
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          ends_at: string
+          id?: string
+          slug: string
+          starts_at: string
+          status?: string
+          subtitle?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          author_name?: string | null
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          ends_at?: string
+          id?: string
+          slug?: string
+          starts_at?: string
+          status?: string
+          subtitle?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       account_age_declarations: {
         Row: {
           declared_at: string
@@ -2155,6 +2206,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_active_announcement: {
+        Args: never
+        Returns: {
+          author_name: string | null
+          content: string
+          created_at: string
+          created_by: string | null
+          description: string
+          ends_at: string
+          id: string
+          slug: string
+          starts_at: string
+          status: string
+          subtitle: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }[]
+        SetofOptions: {
+          from: '*'
+          to: 'announcements'
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       set_trip_transportation_collection: {
         Args: { p_trip_id: string; p_enabled: boolean }
         Returns: undefined

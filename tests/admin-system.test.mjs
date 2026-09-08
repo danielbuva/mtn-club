@@ -12,6 +12,7 @@ test('part-one navigation contains only active admin workspaces', () => {
     ADMIN_NAV_ITEMS.map(item => item.label),
     [
       'Overview',
+      'Announcements',
       'Trips',
       'Registration',
       'Membership',
@@ -25,9 +26,7 @@ test('part-one navigation contains only active admin workspaces', () => {
   )
   assert.equal(
     ADMIN_NAV_ITEMS.some(item =>
-      ['RSVPs', 'Carpools', 'Attendance', 'Announcements', 'Gear'].includes(
-        item.label,
-      ),
+      ['RSVPs', 'Carpools', 'Attendance', 'Gear'].includes(item.label),
     ),
     false,
   )

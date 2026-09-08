@@ -18,6 +18,7 @@ const publicPrefixes = [
   '/calendar',
   '/schedule',
   '/gallery',
+  '/announcements',
   '/coming-soon',
   '/input-test',
   '/auth',

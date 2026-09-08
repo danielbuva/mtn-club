@@ -686,3 +686,31 @@ html:has([data-calendar-page]) [data-reader-navigation-fallback="calendar"] {
   margin: 0;
   appearance: none;
 }
+
+/* Keep the original wordmark size; only compact phones need a fitted width. */
+@media (max-width: 360px) {
+  .home-cover:has([data-home-announcement]) [data-home-wordmark] {
+    width: calc(100vw - 48px);
+    --tw-translate-x: -50%;
+  }
+  .home-cover:has([data-home-announcement]) [data-home-wordmark] svg {
+    width: 100%;
+    height: auto;
+  }
+}
+@media (max-width: 1023px) and (max-height: 740px) {
+  .home-cover:has([data-home-announcement]) [data-home-wordmark] {
+    top: 54%;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) and (max-height: 500px) {
+  .home-cover:has([data-home-announcement]) [data-home-wordmark] {
+    top: 12px;
+    left: 12px;
+    width: 35vw;
+    transform: none;
+    --tw-translate-x: 0px;
+    --tw-translate-y: 0px;
+    translate: 0 0;
+  }
+}

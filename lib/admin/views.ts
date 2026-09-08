@@ -1,4 +1,8 @@
 export const ADMIN_VIEWS = {
+  announcements: {
+    title: 'Announcements',
+    description: 'Write, schedule, and publish notices for the club.',
+  },
   overview: {
     title: 'Welcome back',
     description: 'Club operations at a glance.',

@@ -172,3 +172,40 @@ Database regression checks are in `tests/account-membership-review.sql`; run the
 against a disposable database with the migrations applied. The fixtures roll back.
 
 See [FORM_SYSTEM.md](FORM_SYSTEM.md) for the shared form language, showroom, flow boundaries, and rollout checks.
+
+## Announcements
+
+`/admin/announcements` manages reusable homepage notices and their full public
+pages. Staff with `announcements.read` can list/preview them;
+`announcements.manage` permits create, edit, publish, archive, and delete.
+The migration grants these to the corresponding existing gallery roles;
+super admins retain full access and can adjust grants in Leadership & Access.
+
+Schedules use **America/Los_Angeles**, independent of the editor's device zone.
+Published notices become public at `starts_at`. The homepage selects at database
+request time with inclusive start and exclusive end. Overlaps resolve by newest
+start, creation time, then ID; the editor warns about them. Expired published
+notices remain at `/announcements/[slug]`; drafts, future notices, and archived
+records are hidden from public queries by RLS. No scheduler or cron is needed.
+
+The body supports paragraphs, `## headings`, `- lists`, and
+`[label](https://example.com)` links. HTML is escaped, and links are restricted to
+HTTP(S) or local paths. Desktop/mobile card previews and a full-page preview use
+the same components as the public routes. Card copy is limited to two lines per
+section so long notices do not take over the homepage.
+
+Migrations: `supabase/migrations/20260908193944_announcements.sql` and
+`supabase/migrations/20260908200620_announcement_author.sql`.
+New notices save the creating admin’s display name as their public byline.
+Later edits preserve the original author; the first notice is credited to Dax Whitaker.
+The optional, idempotent `supabase/seeds/first-announcement.sql` publishes Dax's
+September 15, 2026 meeting notice through midnight that night in Pacific time.
+The app works without seed data. This migration and first notice were applied to
+both `mtnclub-auth-preview` and `mtnclub-webapp`; migration history is recorded in
+both. Application deployments follow the main-branch Vercel workflow.
+
+Validation: `pnpm test`, `pnpm test:auth:browser`, `pnpm typecheck`, `pnpm lint`,
+and `pnpm build`. `tests/announcements.sql` checks real database scheduling,
+public access, and admin CRUD in a transaction that always rolls back. It needs
+an existing super-admin assignment. Run it with the Supabase SQL query tool
+against the intended environment; it does not retain test notices.

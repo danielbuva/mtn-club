@@ -4,6 +4,7 @@ import {
   GalleryHorizontalEnd,
   LayoutDashboard,
   Mail,
+  Megaphone,
   Settings,
   ShieldCheck,
   UserRoundCog,
@@ -11,6 +12,7 @@ import {
 } from 'lucide-react'
 export const adminNavigationIcons = {
   Overview: LayoutDashboard,
+  Announcements: Megaphone,
   Trips: CalendarDays,
   Registration: CalendarDays,
   Membership: ShieldCheck,

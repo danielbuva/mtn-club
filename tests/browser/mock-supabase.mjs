@@ -23,9 +23,55 @@ const session = (method = 'otp') => ({
 })
 const used = new Set()
 const requests = []
+let showAnnouncement = true
+const announcement = {
+  id: '00000000-0000-4000-8000-000000000050',
+  slug: 'general-meeting',
+  title: 'General meeting',
+  author_name: 'Dax Whitaker',
+  subtitle: 'TUE · SEP 15\n5:30 PM · HOS 210',
+  description:
+    'Food, new faces, and a semester of adventure. Everyone welcome.',
+  content:
+    'Members and non-members welcome!\n\n## What to expect\n\nFood and icebreakers.',
+  status: 'published',
+  starts_at: '2026-01-01T00:00:00Z',
+  ends_at: '2099-01-01T00:00:00Z',
+  created_at: '2026-01-01T00:00:00Z',
+  updated_at: '2026-01-01T00:00:00Z',
+  created_by: null,
+  updated_by: null,
+}
+const pastAnnouncement = {
+  ...announcement,
+  id: '00000000-0000-4000-8000-000000000051',
+  slug: 'past-meeting',
+  title: 'Past meeting',
+  ends_at: '2026-01-02T00:00:00Z',
+}
+
 const server = createServer(async (request, response) => {
   response.setHeader('Content-Type', 'application/json')
   const url = new URL(request.url ?? '/', 'http://127.0.0.1:54399')
+  if (url.pathname === '/test/announcement') {
+    showAnnouncement = url.searchParams.get('active') !== 'false'
+    response.end('{}')
+    return
+  }
+  if (url.pathname === '/rest/v1/rpc/get_active_announcement') {
+    response.end(JSON.stringify(showAnnouncement ? [announcement] : []))
+    return
+  }
+  if (url.pathname === '/rest/v1/announcements') {
+    const slug = url.searchParams.get('slug')?.replace(/^eq\./, '')
+    const rows = [announcement, pastAnnouncement]
+    response.end(
+      JSON.stringify(
+        slug ? (rows.find(row => row.slug === slug) ?? null) : rows,
+      ),
+    )
+    return
+  }
   if (url.pathname === '/health') {
     response.end('{}')
     return

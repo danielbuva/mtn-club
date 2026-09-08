@@ -1,5 +1,7 @@
 export const ADMIN_CAPABILITIES = [
   'overview.read',
+  'announcements.read',
+  'announcements.manage',
   'trips.read',
   'trips.create',
   'trips.update',
@@ -27,6 +29,11 @@ export type AdminCapability = (typeof ADMIN_CAPABILITIES)[number]
 
 export const ADMIN_NAV_ITEMS = [
   { href: '/admin', label: 'Overview', capability: 'overview.read' },
+  {
+    href: '/admin/announcements',
+    label: 'Announcements',
+    capability: 'announcements.read',
+  },
   { href: '/admin/trips', label: 'Trips', capability: 'trips.read' },
   {
     href: '/admin/registration',

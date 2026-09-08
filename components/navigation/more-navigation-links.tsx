@@ -20,6 +20,7 @@ const club: NavigationGroup = {
   title: 'Know the club',
   links: [
     { href: '/welcome', label: 'Welcome' },
+    { href: '/announcements', label: 'Announcements' },
     { href: '/learn-more', label: 'Learn more' },
     { href: '/about', label: 'About us' },
     { href: '/team', label: 'Meet the team' },

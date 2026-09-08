@@ -68,13 +68,20 @@ export function HomeCoverNavigation({
   )
 }
 
-export default function HomeCover({ navigation }: { navigation: ReactNode }) {
+export default function HomeCover({
+  navigation,
+  announcement,
+}: {
+  navigation: ReactNode
+  announcement?: ReactNode
+}) {
   const transitionDurationMs = 500
 
   return (
-    <div className="relative min-h-svh bg-neutral-950 text-white overflow-hidden select-none [--frame-padding:16px] md:[--frame-padding:24px]">
+    <div className="home-cover relative min-h-svh bg-neutral-950 text-white overflow-hidden select-none [--frame-padding:16px] md:[--frame-padding:24px]">
       <div className="absolute inset-0 bg-neutral-950" />
       <HomeCoverClient transitionDurationMs={transitionDurationMs} />
+      {announcement}
 
       <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/20 via-black/30 to-black/55" />
 
@@ -86,9 +93,12 @@ export default function HomeCover({ navigation }: { navigation: ReactNode }) {
       </div>
 
       <div className="pointer-events-none absolute z-30" style={frameStyle}>
-        <div className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-[56%] -translate-y-1/2 w-[min(86vw,320px)] sm:w-[min(86vw,360px)] md:w-[min(520px,40vw)] lg:top-6 lg:left-6 lg:translate-x-0 lg:translate-y-0 lg:w-[min(520px,40vw)]">
+        <div
+          data-home-wordmark
+          className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-[56%] -translate-y-1/2 w-[min(86vw,320px)] sm:w-[min(86vw,360px)] md:w-[min(520px,40vw)] lg:top-6 lg:left-6 lg:translate-x-0 lg:translate-y-0 lg:w-[min(520px,40vw)]"
+        >
           <span className="sr-only">UNLV Mountain Club</span>
-          <UNLVMountainClub />
+          <UNLVMountainClub viewBox="0 0 355 196" />
         </div>
 
         <div className="pointer-events-auto absolute right-1 bottom-5 md:right-6 md:bottom-6 font-brand select-auto">
