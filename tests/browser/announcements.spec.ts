@@ -6,13 +6,27 @@ test.beforeEach(async ({ request }) => {
 for (const viewport of [
   { width: 1440, height: 900 },
   { width: 390, height: 844 },
+  { width: 390, height: 667 },
   { width: 320, height: 568 },
 ]) {
-  test(`homepage notice placement and link at ${viewport.width}px`, async ({
+  test(`homepage notice placement and link at ${viewport.width}×${viewport.height}px`, async ({
     page,
+    request,
   }) => {
     await page.setViewportSize(viewport)
+    await request.get('http://127.0.0.1:54399/test/announcement?active=false')
     await page.goto('/')
+    await expect(
+      page.getByRole('link', { name: 'Welcome →', exact: true }),
+    ).toBeVisible()
+    const originalWordmark = await page
+      .locator('[data-home-wordmark] svg')
+      .boundingBox()
+    const originalNavigation = await page
+      .locator('[data-homecover-nav]')
+      .boundingBox()
+    await request.get('http://127.0.0.1:54399/test/announcement?active=true')
+    await page.reload()
     const note = page.getByRole('complementary', { name: 'Club announcement' })
     await expect(note).toBeVisible()
     await expect(note.getByText('From Dax Whitaker')).toBeVisible()
@@ -22,9 +36,12 @@ for (const viewport of [
     expect(box.x).toBeGreaterThan(16)
     expect(box.x + box.width).toBeLessThan(viewport.width - 16)
     expect(box.y + box.height).toBeLessThan(viewport.height * 0.4)
-    const wordmark = await page.locator('[data-home-wordmark]').boundingBox()
-    if (viewport.width < 1000 && wordmark)
-      expect(box.y + box.height).toBeLessThan(wordmark.y)
+    await expect
+      .poll(() => page.locator('[data-home-wordmark] svg').boundingBox())
+      .toEqual(originalWordmark)
+    await expect
+      .poll(() => page.locator('[data-homecover-nav]').boundingBox())
+      .toEqual(originalNavigation)
     if (viewport.width > 1000) expect(box.x).toBeGreaterThan(viewport.width / 2)
     const link = note.getByRole('link')
     await expect(link).toHaveAttribute('href', '/announcements/general-meeting')
