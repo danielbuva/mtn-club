@@ -6,6 +6,7 @@ test.beforeEach(async ({ request }) => {
 for (const viewport of [
   { width: 1440, height: 900 },
   { width: 390, height: 844 },
+  { width: 428, height: 926 },
   { width: 390, height: 667 },
   { width: 320, height: 568 },
 ]) {
