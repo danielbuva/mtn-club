@@ -218,3 +218,9 @@ reporting continues to use `has_membership_access` / `get_my_membership_access`.
 UI access gates use `membershipAccessLevel === 'full'` rather than `isMember`.
 Regression coverage lives in `tests/admin-member-access.sql` and
 `tests/viewer-access.test.mjs`.
+
+Event editing interprets date inputs in the stored event timezone, preserves
+unchanged timestamps (including seconds), and reports registration deadline
+conflicts before saving. Server-side assignment loaders require explicit
+`service_role` grants on `trip_leaders`, `trip_private`, and `trip_tag_options`.
+Coverage: `tests/trip-edit-dates.test.mjs` and `tests/trip-editing.sql`.

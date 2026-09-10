@@ -184,6 +184,9 @@ async function getTripAssignmentEditorData(tripId: string) {
     admin.from('profiles').select('user_id, display_name'),
     admin.from('trip_leaders').select('user_id').eq('trip_id', tripId),
   ])
+  for (const result of [hosts, credits, assignments, profiles, leaders]) {
+    if (result.error) throw result.error
+  }
   const leadershipIds = new Set(
     (assignments.data ?? []).map(item => item.user_id),
   )

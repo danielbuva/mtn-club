@@ -136,6 +136,7 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
     'registration-requirements.sql',
     'registration-authorization.sql',
     'admin-member-access.sql',
+    'trip-editing.sql',
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
 })

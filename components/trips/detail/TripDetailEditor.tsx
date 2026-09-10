@@ -24,6 +24,7 @@ import {
   isDifficultyTag,
   normalizeActivityTags,
 } from '@/lib/events/activity-tags'
+import { eventDateTimeToIso, eventLocalDateTime } from '@/lib/events/date-time'
 import { formatTripDate } from '@/lib/trips/format'
 import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 
@@ -75,30 +76,11 @@ const difficultyClass: Record<TripDifficulty, string> = {
   expert: 'border-red-500/30 bg-red-500/10 text-red-700',
 }
 
-const toDatetimeLocal = (date: Date | undefined) => {
-  if (!date) {
-    return ''
-  }
-  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-  return localDate.toISOString().slice(0, 16)
-}
-
 const getPrimaryTagLabel = (activityTags: string[]) => {
   if (!activityTags.length) {
     return 'OUTDOOR'
   }
   return activityTags[0].toUpperCase()
-}
-
-const parseDateInput = (value: string) => {
-  if (!value) {
-    return undefined
-  }
-  const asDate = new Date(value)
-  if (Number.isNaN(asDate.getTime())) {
-    return undefined
-  }
-  return asDate
 }
 
 export function TripDetailEditor({
@@ -111,6 +93,7 @@ export function TripDetailEditor({
   initialPublicHostIds = [],
   initialLeaderIds = [],
 }: TripDetailEditorProps) {
+  const timeZone = trip.timeZone ?? 'America/Los_Angeles'
   const router = useRouter()
   const isMobile = useIsMobile()
   const [isPending, startTransition] = useTransition()
@@ -126,8 +109,8 @@ export function TripDetailEditor({
     summary: trip.summary ?? '',
     locationName: trip.locationName,
     locationNotes: trip.locationNotes ?? '',
-    startAt: toDatetimeLocal(trip.startAt),
-    endAt: toDatetimeLocal(trip.endAt),
+    startAt: eventLocalDateTime(trip.startAt.toISOString(), timeZone),
+    endAt: eventLocalDateTime(trip.endAt?.toISOString() ?? null, timeZone),
     overviewWhat: trip.overviewWhat ?? '',
     overviewWhere: trip.overviewWhere ?? '',
     overviewWeather: trip.overviewWeather ?? '',
@@ -207,7 +190,11 @@ export function TripDetailEditor({
           formData.set('leaderIds', JSON.stringify(leaderIds))
         }
 
-        await saveTripDetailEditsAction(formData)
+        const result = await saveTripDetailEditsAction(formData)
+        if (!result.ok) {
+          toast.error(result.error)
+          return
+        }
         toast.success('Trip changes saved')
         router.push(`/trips/${trip.id}`)
       } catch {
@@ -216,8 +203,10 @@ export function TripDetailEditor({
     })
   }
 
-  const startAt = parseDateInput(draft.startAt) ?? trip.startAt
-  const endAt = parseDateInput(draft.endAt)
+  const startInstant = eventDateTimeToIso(draft.startAt, timeZone)
+  const endInstant = eventDateTimeToIso(draft.endAt, timeZone)
+  const startAt = startInstant ? new Date(startInstant) : trip.startAt
+  const endAt = endInstant ? new Date(endInstant) : undefined
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5 md:pb-8">
@@ -470,16 +459,17 @@ export function TripDetailEditor({
             Date
           </p>
           <p className="text-sm font-medium">
-            {formatTripDate(startAt, endAt)}
+            {formatTripDate(startAt, endAt, timeZone)}
           </p>
         </div>
         <div className="space-y-1">
           <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
             <Clock3 className="h-3.5 w-3.5" aria-hidden="true" />
-            Start
+            Start · {timeZone}
           </p>
           <Input
             type="datetime-local"
+            aria-label={`Event start (${timeZone})`}
             value={draft.startAt}
             onChange={event =>
               setDraft(current => ({ ...current, startAt: event.target.value }))
@@ -595,6 +585,7 @@ export function TripDetailEditor({
             </p>
             <Input
               type="datetime-local"
+              aria-label={`Event end (${timeZone})`}
               value={draft.endAt}
               onChange={event =>
                 setDraft(current => ({ ...current, endAt: event.target.value }))

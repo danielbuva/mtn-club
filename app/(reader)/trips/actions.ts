@@ -8,6 +8,7 @@ import {
   normalizeActivityTags,
 } from '@/lib/events/activity-tags'
 import { buildHostAssignments } from '@/lib/events/host-assignments'
+import { resolveTripEditDates } from '@/lib/events/trip-edit-dates'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
 
@@ -28,17 +29,6 @@ const parseStringField = (value: FormDataEntryValue | null) => {
   }
   const trimmed = value.trim()
   return trimmed.length ? trimmed : null
-}
-
-const parseDateField = (value: FormDataEntryValue | null) => {
-  if (typeof value !== 'string' || !value.trim()) {
-    return null
-  }
-  const asDate = new Date(value)
-  if (Number.isNaN(asDate.getTime())) {
-    throw new Error('Invalid date value.')
-  }
-  return asDate.toISOString()
 }
 
 const parseActivityTags = (value: FormDataEntryValue | null) => {
@@ -105,14 +95,35 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     )
   }
 
-  const { data: canEdit } = await supabase.rpc('has_trip_admin_capability', {
-    p_uid: user.id,
-    p_capability_key: 'trips.update',
-    p_trip_id: tripId,
-  })
-  if (!canEdit) {
-    throw new Error('Trip update permission required.')
+  const { data: canEdit, error: permissionError } = await supabase.rpc(
+    'has_trip_admin_capability',
+    {
+      p_uid: user.id,
+      p_capability_key: 'trips.update',
+      p_trip_id: tripId,
+    },
+  )
+  if (permissionError || !canEdit) {
+    return {
+      ok: false,
+      error:
+        'Could not verify event editing access. Refresh and try again, or contact an officer.',
+    } as const
   }
+
+  const { data: storedTrip, error: readError } = await supabase
+    .from('trips')
+    .select('starts_at, ends_at, rsvp_deadline, time_zone')
+    .eq('id', tripId)
+    .single()
+  if (readError || !storedTrip) {
+    return {
+      ok: false,
+      error: 'Could not load the event. Refresh and try again.',
+    } as const
+  }
+  const dates = resolveTripEditDates(formData, storedTrip)
+  if (!dates.ok) return dates
 
   const rawDifficulty = formData.get('difficulty')
   const parsedDifficulty = tripDifficultySchema.safeParse(rawDifficulty)
@@ -123,8 +134,6 @@ export async function saveTripDetailEditsAction(formData: FormData) {
       : difficulty
 
   const activityTags = parseActivityTags(formData.get('activityTags'))
-  const startsAt = parseDateField(formData.get('startAt'))
-  const endsAt = parseDateField(formData.get('endAt'))
 
   const tripUpdate: Database['public']['Tables']['trips']['Update'] = {
     title: parseStringField(formData.get('title')) ?? 'Untitled Trip',
@@ -139,18 +148,27 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     ),
     difficulty: dbDifficulty ?? undefined,
     activity_tags: activityTags,
-    starts_at: startsAt ?? undefined,
-    ends_at: endsAt ?? undefined,
+    starts_at: dates.startsAt,
+    ends_at: dates.endsAt ?? undefined,
     updated_at: new Date().toISOString(),
   }
 
-  const { error: tripError } = await supabase
+  const { data: savedTrip, error: tripError } = await supabase
     .from('trips')
     .update(tripUpdate)
     .eq('id', tripId)
+    .select('id')
+    .maybeSingle()
 
   if (tripError) {
     throw tripError
+  }
+
+  if (!savedTrip) {
+    return {
+      ok: false,
+      error: 'The event was not saved. Refresh and check your editing access.',
+    } as const
   }
 
   const meetupPoint = parseStringField(formData.get('locationNotes'))
@@ -222,7 +240,7 @@ export async function saveTripDetailEditsAction(formData: FormData) {
   revalidatePath('/trips')
   revalidatePath(`/trips/${tripId}`)
   revalidatePath('/calendar')
-  return { ok: true }
+  return { ok: true } as const
 }
 
 export async function addTripTagOptionAction(rawTag: string) {
