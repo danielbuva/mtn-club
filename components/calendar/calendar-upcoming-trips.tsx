@@ -28,7 +28,7 @@ export async function CalendarUpcomingTrips({
   currentMonth,
 }: CalendarUpcomingTripsProps) {
   const viewer = await getViewer()
-  if (!viewer.isMember) {
+  if (viewer.membershipAccessLevel !== 'full') {
     return null
   }
 

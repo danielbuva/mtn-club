@@ -16,10 +16,10 @@ export function HomePage({ trips, viewer, tripsError }: HomePageProps) {
         <HomePageClient
           trips={trips}
           tripsError={tripsError ?? null}
-          showScrollIndicator={!viewer.isMember}
+          showScrollIndicator={viewer.membershipAccessLevel !== 'full'}
           scrollTargetId="home-cta"
         />
-        {!viewer.isMember ? (
+        {viewer.membershipAccessLevel !== 'full' ? (
           <div className="min-h-screen flex flex-col">
             <HomeCTASection className="flex-1" />
           </div>

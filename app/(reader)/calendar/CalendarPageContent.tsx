@@ -35,7 +35,8 @@ export async function CalendarPageContent({
   const currentMonth = format(monthDate, 'yyyy-MM')
   const year = monthDate.getFullYear()
   const viewer = await getViewer()
-  const viewerKey: ViewerKey = viewer.isMember ? 'member' : 'public'
+  const viewerKey: ViewerKey =
+    viewer.membershipAccessLevel === 'full' ? 'member' : 'public'
   const yearData = await getCalendarYearData({ year, viewerKey })
 
   return (

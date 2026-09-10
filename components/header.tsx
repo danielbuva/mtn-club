@@ -191,7 +191,7 @@ export function Header() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
-            {viewer.isMember ? (
+            {viewer.membershipAccessLevel === 'full' ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
@@ -340,7 +340,7 @@ export function Header() {
                       Sign in
                     </Link>
                   )}
-                  {viewer.isMember && (
+                  {viewer.membershipAccessLevel === 'full' && (
                     <Link
                       href="/profile"
                       onClick={handleMobileNavClick}

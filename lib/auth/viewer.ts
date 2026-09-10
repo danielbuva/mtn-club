@@ -101,6 +101,8 @@ export async function getViewer(): Promise<Viewer> {
   const fullName = buildFullName(profile)
   const access = accessResult.data?.[0] ?? null
   const isMember = access?.access_active ?? membership?.status === 'active'
+  const isAdmin = adminResult.data ?? false
+  const hasFullAccess = isMember || isAdmin
   const provisionalAccess = access?.provisional_access ?? false
   const restriction = access?.restriction
   const membershipState =
@@ -112,21 +114,20 @@ export async function getViewer(): Promise<Viewer> {
 
   return {
     isAuthenticated: true,
-    isAdmin: adminResult.data ?? false,
-    canCreateEvent:
-      Boolean(profile) && (isMember || (adminResult.data ?? false)),
+    isAdmin,
+    canCreateEvent: Boolean(profile) && hasFullAccess,
     userId: user.id,
     email: user.email ?? null,
     isMember,
-    canViewMemberContent: isMember || provisionalAccess,
-    membershipAccessLevel: isMember
+    canViewMemberContent: hasFullAccess || provisionalAccess,
+    membershipAccessLevel: hasFullAccess
       ? 'full'
       : provisionalAccess
         ? 'provisional'
         : 'none',
     membershipState,
     membershipBannedAt: null,
-    member: isMember
+    member: hasFullAccess
       ? {
           fullName,
           avatarUrl: profile?.avatar_url ?? null,

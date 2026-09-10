@@ -241,12 +241,7 @@ export default async function TripDetailPage({
 
   const [membership, editPermission, lifecyclePermission] = user
     ? await Promise.all([
-        supabase
-          .from('memberships')
-          .select('user_id,status')
-          .eq('user_id', user.id)
-          .eq('status', 'active')
-          .maybeSingle(),
+        supabase.rpc('is_active_member', { p_uid: user.id }),
         supabase.rpc('has_trip_admin_capability', {
           p_uid: user.id,
           p_capability_key: 'trips.update',

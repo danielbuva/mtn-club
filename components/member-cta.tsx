@@ -31,7 +31,7 @@ export function MemberCTA({
 }: MemberCTAProps) {
   const viewer = useViewer()
 
-  if (viewer.isMember) {
+  if (viewer.membershipAccessLevel === 'full') {
     if (memberFallback) {
       return <>{memberFallback}</>
     }

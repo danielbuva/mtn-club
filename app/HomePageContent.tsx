@@ -8,9 +8,10 @@ import {
 export async function HomePageContent() {
   const viewer = await getViewer()
   try {
-    const trips = viewer.isMember
-      ? await getHomeTripsForMember({})
-      : await getHomeTripsPublicCached({})
+    const trips =
+      viewer.membershipAccessLevel === 'full'
+        ? await getHomeTripsForMember({})
+        : await getHomeTripsPublicCached({})
     return <HomePage trips={trips} viewer={viewer} />
   } catch (error) {
     const message =

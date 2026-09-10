@@ -209,3 +209,12 @@ and `pnpm build`. `tests/announcements.sql` checks real database scheduling,
 public access, and admin CRUD in a transaction that always rolls back. It needs
 an existing super-admin assignment. Run it with the Supabase SQL query tool
 against the intended environment; it does not retain test notices.
+
+Admins authorized for `overview.read` have full member content and participation
+access without buying or receiving a membership. Their assigned admin capability
+scopes still apply, and suspension/bans still block access. The shared
+`is_active_member` authorization helper includes these admins; actual membership
+reporting continues to use `has_membership_access` / `get_my_membership_access`.
+UI access gates use `membershipAccessLevel === 'full'` rather than `isMember`.
+Regression coverage lives in `tests/admin-member-access.sql` and
+`tests/viewer-access.test.mjs`.

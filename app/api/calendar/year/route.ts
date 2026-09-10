@@ -21,7 +21,8 @@ export async function GET(request: Request) {
   }
 
   const viewer = await getViewer()
-  const viewerKey: ViewerKey = viewer.isMember ? 'member' : 'public'
+  const viewerKey: ViewerKey =
+    viewer.membershipAccessLevel === 'full' ? 'member' : 'public'
   const data = await getCalendarYearData({ year, viewerKey })
 
   return NextResponse.json({ data })

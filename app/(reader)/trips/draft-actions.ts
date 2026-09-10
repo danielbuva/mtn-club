@@ -89,14 +89,10 @@ const getViewerContext = async () => {
     throw new Error('A profile is required to manage drafts.')
   }
 
-  const { data: membership, error: membershipError } = await supabase
-    .from('memberships')
-    .select('role,status')
-    .eq('user_id', user.id)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  const { data: isActiveMember, error: membershipError } = await supabase.rpc(
+    'is_active_member',
+    { p_uid: user.id },
+  )
 
   if (membershipError) {
     throw membershipError
@@ -118,7 +114,6 @@ const getViewerContext = async () => {
       }),
     ])
 
-  const isActiveMember = membership?.status === 'active'
   const canCreateAsAdmin = Boolean(createScopeResult.data)
   if (!isActiveMember && !canCreateAsAdmin) {
     throw new Error('Active membership or trip administration access required.')
