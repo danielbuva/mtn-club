@@ -19,6 +19,8 @@ begin
   select t.created_by into owner_id from public.trips t join public.trip_registration_settings s on s.trip_id=t.id
   where t.id=item.trip_id and t.starts_at>now() and s.risk_disclosure_id is null for update of t,s;
   if not found then continue; end if;
+  -- Imported production trips have no creator; this backfill was requested by Dani.
+  owner_id := coalesce(owner_id,(select user_id from public.profiles where user_id='d72bae41-af94-443f-b63c-664f2d22d64e'::uuid));
   if owner_id is null then raise exception 'Trip % needs a disclosure owner',item.trip_id; end if;
   insert into public.registration_risk_disclosures(trip_id,revision,statements,activity_scope,created_by)
   select item.trip_id,coalesce(max(revision),0)+1,item.statements,item.activities,owner_id
