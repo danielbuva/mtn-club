@@ -113,7 +113,7 @@ export async function saveTripDetailEditsAction(formData: FormData) {
 
   const { data: storedTrip, error: readError } = await supabase
     .from('trips')
-    .select('starts_at, ends_at, rsvp_deadline, time_zone')
+    .select('starts_at, ends_at, rsvp_deadline, time_zone, is_all_day')
     .eq('id', tripId)
     .single()
   if (readError || !storedTrip) {
@@ -149,6 +149,7 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     difficulty: dbDifficulty ?? undefined,
     activity_tags: activityTags,
     starts_at: dates.startsAt,
+    is_all_day: dates.isAllDay,
     ends_at: dates.endsAt ?? undefined,
     updated_at: new Date().toISOString(),
   }

@@ -46,6 +46,7 @@ type TripDraft = {
   summary: string
   locationName: string
   locationNotes: string
+  timeTba: boolean
   startAt: string
   endAt: string
   overviewWhat: string
@@ -109,6 +110,7 @@ export function TripDetailEditor({
     summary: trip.summary ?? '',
     locationName: trip.locationName,
     locationNotes: trip.locationNotes ?? '',
+    timeTba: trip.isAllDay ?? false,
     startAt: eventLocalDateTime(trip.startAt.toISOString(), timeZone),
     endAt: eventLocalDateTime(trip.endAt?.toISOString() ?? null, timeZone),
     overviewWhat: trip.overviewWhat ?? '',
@@ -179,6 +181,7 @@ export function TripDetailEditor({
         formData.set('locationName', draft.locationName)
         formData.set('locationNotes', draft.locationNotes)
         formData.set('startAt', draft.startAt)
+        formData.set('timeTba', String(draft.timeTba))
         formData.set('endAt', draft.endAt)
         formData.set('overviewWhat', draft.overviewWhat)
         formData.set('overviewWhere', draft.overviewWhere)
@@ -472,10 +475,28 @@ export function TripDetailEditor({
             aria-label={`Event start (${timeZone})`}
             value={draft.startAt}
             onChange={event =>
-              setDraft(current => ({ ...current, startAt: event.target.value }))
+              setDraft(current => ({
+                ...current,
+                startAt: event.target.value,
+                timeTba: false,
+              }))
             }
             className="h-8 text-sm"
           />
+          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={draft.timeTba}
+              onChange={event =>
+                setDraft(current => ({
+                  ...current,
+                  timeTba: event.target.checked,
+                }))
+              }
+              className="h-4 w-4 accent-primary focus-visible:outline-2 focus-visible:outline-ring"
+            />
+            Start time to be announced
+          </label>
         </div>
       </section>
 

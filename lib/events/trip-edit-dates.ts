@@ -5,6 +5,7 @@ type StoredTripDates = {
   ends_at: string | null
   rsvp_deadline: string | null
   time_zone: string | null
+  is_all_day: boolean
 }
 
 function resolveDate(
@@ -42,5 +43,13 @@ export function resolveTripEditDates(form: FormData, trip: StoredTripDates) {
         'The event starts before its registration deadline. Move the start later or update the deadline in Manage registration first.',
     } as const
   }
-  return { ok: true, startsAt, endsAt } as const
+  const timeTba = form.get('timeTba')
+  const isAllDay =
+    timeTba === 'true'
+      ? true
+      : timeTba === 'false'
+        ? false
+        : trip.is_all_day &&
+          new Date(startsAt).getTime() === new Date(trip.starts_at).getTime()
+  return { ok: true, startsAt, endsAt, isAllDay } as const
 }

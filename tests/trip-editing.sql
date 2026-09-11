@@ -13,8 +13,8 @@ begin
  insert into public.memberships(user_id,status,role) values(u,'pending','regular') on conflict(user_id) do update set status='pending';
  perform set_config('request.jwt.claim.sub',u::text,true);
  set local role authenticated;
- insert into public.trips(id,title,created_by,starts_at,ends_at,rsvp_deadline)
- values(t,'Timezone regression',u,'2026-09-13 07:00Z','2026-09-14 06:59:59Z','2026-09-13 01:00Z');
+ insert into public.trips(id,title,created_by,starts_at,ends_at,rsvp_deadline,is_all_day)
+ values(t,'Timezone regression',u,'2026-09-13 07:00Z','2026-09-14 06:59:59Z','2026-09-13 01:00Z',true);
  begin
   update public.trips set starts_at='2026-09-13 00:00Z' where id=t;
  exception when raise_exception then
@@ -22,8 +22,9 @@ begin
   denied:=true;
  end;
  if not denied then raise exception 'Deadline guard was bypassed'; end if;
- update public.trips set title='Saved by a pending-member admin',starts_at='2026-09-13 07:00Z',ends_at='2026-09-14 06:59:59Z' where id=t;
+ update public.trips set title='Saved by a pending-member admin',is_all_day=false,starts_at='2026-09-13 07:00Z',ends_at='2026-09-14 06:59:59Z' where id=t;
  if not found then raise exception 'Admin event save denied'; end if;
+ if exists(select 1 from public.trips where id=t and is_all_day) then raise exception 'Saved time still marked TBA'; end if;
  insert into public.trip_private(trip_id,meetup_point) values(t,'Meeting point') on conflict(trip_id) do update set meetup_point=excluded.meetup_point;
  insert into public.trip_tag_options(tag) values('edit-regression') on conflict do nothing;
  insert into public.trip_leaders(trip_id,user_id) values(t,u) on conflict do nothing;

@@ -30,6 +30,7 @@ const trip = {
   ends_at: '2026-09-14T06:59:59+00:00',
   rsvp_deadline: '2026-09-13T01:00:00+00:00',
   time_zone: 'America/Los_Angeles',
+  is_all_day: true,
 }
 const form = (start, end) => {
   const result = new FormData()
@@ -151,4 +152,24 @@ test('a row hidden by access rules is not reported as saved', async () => {
   const f = actionFixture({ saved: false })
   assert.equal((await f.save()).ok, false)
   assert.equal(f.writes.length, 1)
+})
+
+test('setting a start time clears TBA while unrelated edits preserve it', () => {
+  const unchanged = form('2026-09-13T00:00', '2026-09-13T23:59')
+  assert.equal(resolveTripEditDates(unchanged, trip).isAllDay, true)
+  const timed = form('2026-09-13T07:00', '2026-09-13T23:59')
+  assert.equal(resolveTripEditDates(timed, trip).isAllDay, false)
+  timed.set('timeTba', 'true')
+  assert.equal(resolveTripEditDates(timed, trip).isAllDay, true)
+  unchanged.set('timeTba', 'false')
+  assert.equal(resolveTripEditDates(unchanged, trip).isAllDay, false)
+})
+
+test('saving an explicit time updates both the timestamp and display flag', async () => {
+  const f = actionFixture()
+  f.values.set('startAt', '2026-09-13T07:00')
+  f.values.set('timeTba', 'false')
+  assert.equal((await f.save()).ok, true)
+  assert.equal(f.writes[0].payload.starts_at, '2026-09-13T14:00:00.000Z')
+  assert.equal(f.writes[0].payload.is_all_day, false)
 })
