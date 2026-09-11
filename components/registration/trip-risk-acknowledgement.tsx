@@ -42,15 +42,18 @@ export function TripRiskAcknowledgement({
             checked={acknowledged}
             onChange={event => onChange(event.target.checked)}
             aria-invalid={Boolean(error)}
+            aria-describedby="trip-risk-error"
           />
           I understand these trip-specific risks and conditions.
         </label>
       )}
-      {error && (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
-      )}
+      <p
+        id="trip-risk-error"
+        role={error ? 'alert' : undefined}
+        className="min-h-10 text-sm text-destructive"
+      >
+        {error}
+      </p>
       {snapshot.waiverSigned && snapshot.waiverCoverage ? (
         <p className="text-sm">
           Your annual UNLV RSO Liability Waiver is already valid through{' '}
@@ -60,13 +63,15 @@ export function TripRiskAcknowledgement({
         </p>
       ) : (
         <p className="text-sm">
-          This trip acknowledgement is separate from the annual liability
-          waiver. Any required waiver must be valid before participation.
+          This trip acknowledgement is separate from the liability waiver. Any
+          required waiver must be valid before participation.
         </p>
       )}
-      <Link className="underline" href="/profile/events/liability-waiver">
-        View annual waiver
-      </Link>
+      {snapshot.annualWaiver && (
+        <Link className="underline" href="/profile/events/liability-waiver">
+          View annual waiver
+        </Link>
+      )}
     </div>
   )
 }

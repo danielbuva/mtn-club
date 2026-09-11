@@ -41,7 +41,9 @@ const buildTripsRangeQuery = (
         : ['published', 'canceled'],
     )
     .lte('starts_at', endIso)
-    .or(`ends_at.is.null,ends_at.gte.${startIso}`)
+    .or(
+      `and(ends_at.is.null,starts_at.gte.${startIso}),ends_at.gte.${startIso}`,
+    )
     .order('starts_at', { ascending: true })
 }
 

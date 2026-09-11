@@ -1,16 +1,17 @@
 import { expect, type Page, test } from '@playwright/test'
 
 async function declareAge(page: Page) {
-  const form = page.locator('form')
+  const form = page.locator('form[data-guided-form]')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await form.getByRole('radio', { name: 'I am 18 or older' }).check()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
 }
 
 async function completeWaiver(page: Page) {
-  const form = page.locator('form')
+  const form = page.locator('form[data-guided-form]')
   await expect(form.getByLabel('Full name as signature')).toHaveCount(0)
   const opener = form.getByRole('button', { name: 'Read full waiver' })
+  await opener.focus()
   await opener.click()
   const reader = page.getByRole('dialog')
   await expect(reader).toBeVisible()
@@ -51,7 +52,7 @@ test('registration branches preserve local seats, validate, and recover from err
   page,
 }, testInfo) => {
   await page.goto('/form-lab')
-  const form = page.locator('form')
+  const form = page.locator('form[data-guided-form]')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await declareAge(page)
   const initialHeight = await form.evaluate(element => element.scrollHeight)
@@ -152,7 +153,7 @@ test('creation is grouped, editable, and validates before publishing', async ({
 }, testInfo) => {
   await page.goto('/form-lab')
   await page.getByRole('button', { name: 'Plan a trip', exact: true }).click()
-  const form = page.locator('form')
+  const form = page.locator('form[data-guided-form]')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await form.getByLabel('Trip title').fill('')
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
@@ -163,16 +164,28 @@ test('creation is grouped, editable, and validates before publishing', async ({
     'opacity',
     '1',
   )
+  await form.getByLabel('No end time (open-ended)').check()
   await page.screenshot({
     path: testInfo.outputPath('creation.png'),
     fullPage: true,
   })
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
-  await form
-    .getByLabel('Trip-specific risks and conditions')
-    .fill('Exposed desert heat with little shade.')
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await expect(
+    form.getByText(
+      'Select the activities or choose no risk disclosure needed.',
+    ),
+  ).toBeVisible()
+  await form.getByLabel('No risk disclosure needed', { exact: true }).check()
+  await expect(
+    form.getByLabel('Additional trip-specific risks and conditions (optional)'),
+  ).toHaveCount(0)
   await form.getByLabel('hiking', { exact: true }).check()
+  await expect(
+    form.getByLabel('No risk disclosure needed', { exact: true }),
+  ).not.toBeChecked()
+  await expect(form.getByText(/Hiking involves uneven ground/)).toBeVisible()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByLabel('Participant limit', { exact: true }).fill('12')
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
@@ -197,7 +210,7 @@ test('transportation can be omitted and long content stays scrollable', async ({
   await page
     .getByRole('switch', { name: 'Include longer reading and writing' })
     .check()
-  const form = page.locator('form')
+  const form = page.locator('form[data-guided-form]')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await declareAge(page)
   await form.getByRole('radio', { name: 'Right up my alley' }).check()
@@ -234,7 +247,7 @@ test('small visual viewports use inline actions and keyboard navigation remains 
   page,
 }) => {
   await page.goto('/form-lab')
-  const form = page.locator('form')
+  const form = page.locator('form[data-guided-form]')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await declareAge(page)
   const first = form.getByRole('radio', { name: 'Right up my alley' })
@@ -280,7 +293,7 @@ for (const situation of ['first', 'returning', 'missing risks']) {
         .check()
     await page.getByLabel('Ask about transportation', { exact: true }).uncheck()
     await declareAge(page)
-    const form = page.locator('form')
+    const form = page.locator('form[data-guided-form]')
     await form.getByRole('radio', { name: 'A new adventure for me' }).check()
     await form.getByRole('button', { name: 'Continue', exact: true }).click()
     await form.getByLabel('Name', { exact: true }).fill('Test Friend')
@@ -402,4 +415,87 @@ test('account deletion validation stays inline and preserves the entered confirm
   await expect(
     page.getByRole('button', { name: 'Permanently delete', exact: true }),
   ).toBeEnabled()
+})
+
+test('waiver autofill preserves all values and errors do not shift fields', async ({
+  page,
+}) => {
+  await page.goto('/form-lab')
+  const form = page.locator('form[data-guided-form]')
+  await declareAge(page)
+  await form.getByRole('radio', { name: 'A new adventure for me' }).check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByRole('radio', { name: 'I need a ride' }).check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await form.getByLabel('Name', { exact: true }).fill('Test Friend')
+  await form.getByLabel('Relationship', { exact: true }).fill('Friend')
+  await form.getByLabel('Phone', { exact: true }).fill('5551234567')
+  await form.getByLabel('I confirm this emergency contact').check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await completeWaiver(page)
+  const inputs = form.locator('input[id^="waiver-"]')
+  for (const input of await inputs.all()) await input.fill('')
+  await form.getByLabel('Full name as signature').fill('')
+  await form.getByLabel('I have read and agree').uncheck({ force: true })
+  const geometry = () =>
+    form.evaluate(element => ({
+      height: element.scrollHeight,
+      positions: Array.from(element.querySelectorAll('input')).map(
+        input =>
+          input.getBoundingClientRect().top -
+          element.getBoundingClientRect().top,
+      ),
+    }))
+  const before = await geometry()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await expect(form.locator('#waiver-emergencyAddress-error')).toHaveText(
+    'Please complete this waiver detail.',
+  )
+  expect(await geometry()).toEqual(before)
+  await expect(form.getByLabel('Emergency contact address')).toHaveAttribute(
+    'autocomplete',
+    'section-emergency street-address',
+  )
+  await form.evaluate(element => {
+    const values = {
+      phone: '7025551234',
+      address: '123 Member Street, Las Vegas, NV 89119',
+      emergencyAddress: '456 Emergency Road, Las Vegas, NV 89119',
+    }
+    for (const [key, value] of Object.entries(values)) {
+      const input = element.querySelector(`#waiver-${key}`)
+      if (!(input instanceof HTMLInputElement))
+        throw new Error('Missing contact field')
+      Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        'value',
+      )?.set?.call(input, value)
+      input.dispatchEvent(
+        new InputEvent('input', {
+          bubbles: true,
+          inputType: 'insertReplacementText',
+        }),
+      )
+    }
+  })
+  await expect(form.getByLabel('Your phone number')).toHaveValue('7025551234')
+  await expect(form.getByLabel('Your local address')).toHaveValue(
+    '123 Member Street, Las Vegas, NV 89119',
+  )
+  await expect(form.getByLabel('Emergency contact address')).toHaveValue(
+    '456 Emergency Road, Las Vegas, NV 89119',
+  )
+  await form.getByLabel('Emergency contact address').evaluate(input => {
+    if (!(input instanceof HTMLInputElement)) throw new Error('Missing address')
+    input.focus()
+    Object.getOwnPropertyDescriptor(
+      HTMLInputElement.prototype,
+      'value',
+    )?.set?.call(input, '789 Updated Road, Las Vegas, NV 89119')
+    input.blur()
+  })
+  await form.getByLabel('Full name as signature').fill('Test Participant')
+  await expect(form.getByLabel('Emergency contact address')).toHaveValue(
+    '789 Updated Road, Las Vegas, NV 89119',
+  )
 })

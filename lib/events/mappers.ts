@@ -57,7 +57,7 @@ export function eventToCalendarTrip(event: EventRow): CalendarTrip {
     description: event.description_public ?? 'Details coming soon.',
     meetingTime: event.is_all_day
       ? null
-      : formatTimeRange(startAt, endAt, event.time_zone),
+      : formatTimeRange(startAt, event.ends_at, event.time_zone),
     meetingLocation: event.location_public ?? 'TBD',
     isOfficial: event.is_official,
     isAllDay: event.is_all_day,

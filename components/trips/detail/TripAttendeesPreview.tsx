@@ -1,3 +1,4 @@
+import { Info } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { TripDetail } from '@/lib/trips/types'
 
@@ -27,11 +28,24 @@ export function TripAttendeesPreview({
   return (
     <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 md:p-5">
       <h2 className="text-lg font-semibold">Attendees</h2>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <p>{totalCount} confirmed.</p>
+        <details className="relative">
+          <summary
+            aria-label="About attendee visibility"
+            className="flex size-9 cursor-pointer list-none items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 [&::-webkit-details-marker]:hidden"
+          >
+            <Info className="size-4" aria-hidden="true" />
+          </summary>
+          <p className="absolute right-0 top-full z-10 w-56 rounded-lg border bg-popover p-3 text-popover-foreground shadow-md">
+            Only people who opted in are shown.
+            {!canView &&
+              ' Participant names are visible to confirmed participants and organizers.'}
+          </p>
+        </details>
+      </div>
       {preview.length ? (
         <>
-          <p className="text-sm text-muted-foreground">
-            {totalCount} confirmed. Only people who opted in are shown.
-          </p>
           <div className="flex flex-wrap items-center gap-2">
             {preview.map(attendee => (
               <Avatar
@@ -61,15 +75,7 @@ export function TripAttendeesPreview({
             </ul>
           </details>
         </>
-      ) : (
-        <p className="text-sm text-muted-foreground">
-          {totalCount === 0
-            ? 'No confirmed attendees yet.'
-            : canView
-              ? `${totalCount} confirmed. No visible profiles to show.`
-              : `${totalCount} confirmed. Participant names are visible to confirmed participants and organizers.`}
-        </p>
-      )}
+      ) : null}
     </section>
   )
 }

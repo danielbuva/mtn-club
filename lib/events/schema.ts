@@ -4,6 +4,7 @@ import {
   EVENT_KINDS,
   EVENT_VISIBILITIES,
 } from '@/lib/events/constants'
+import { riskStatements } from '@/lib/registration/risk-activities'
 import { eventDateTimeToIso } from './date-time'
 
 export const eventFormSchema = z
@@ -19,7 +20,8 @@ export const eventFormSchema = z
     waiverActivities: z.array(z.string().min(1).max(80)).max(12).optional(),
     activityTypes: z.array(z.string()).optional(),
     startAt: z.string().min(1, 'Start date is required'),
-    endAt: z.string().min(1, 'End date is required'),
+    endAt: z.string(),
+    noEndTime: z.boolean().optional(),
     timezone: z.string().min(1, 'Timezone is required'),
     primaryLocationName: z
       .string()
@@ -39,12 +41,38 @@ export const eventFormSchema = z
     collectTransportation: z.boolean().optional().default(false),
   })
   .superRefine((data, ctx) => {
+    const activities = data.waiverActivities ?? []
+    if (
+      !activities.length ||
+      (activities.includes('none') && activities.length > 1)
+    )
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Select the activities or choose no risk disclosure needed.',
+        path: ['waiverActivities'],
+      })
+    const statements = riskStatements(activities, data.informedRisks)
+    if (
+      activities.length &&
+      (!statements.length ||
+        statements.length > 5 ||
+        statements.some(statement => statement.length > 1000))
+    )
+      ctx.addIssue({
+        code: 'custom',
+        message:
+          'Use up to four concise additional statements (1,000 characters each). Other activities need a description.',
+        path: ['informedRisks'],
+      })
+
     let start: string | null = null
     let end: string | null = null
     try {
       Intl.DateTimeFormat('en', { timeZone: data.timezone })
       start = eventDateTimeToIso(data.startAt, data.timezone)
-      end = eventDateTimeToIso(data.endAt, data.timezone)
+      end = data.noEndTime
+        ? null
+        : eventDateTimeToIso(data.endAt, data.timezone)
     } catch {
       ctx.addIssue({
         code: 'custom',
@@ -59,13 +87,13 @@ export const eventFormSchema = z
         message: 'Enter a valid start time in this timezone',
         path: ['startAt'],
       })
-    if (!end)
+    if (!data.noEndTime && !end)
       ctx.addIssue({
         code: 'custom',
         message: 'Enter a valid end time in this timezone',
         path: ['endAt'],
       })
-    if (start && end && end < start) {
+    if (start && end && end <= start) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'End time must be after start time',

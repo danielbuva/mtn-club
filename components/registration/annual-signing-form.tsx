@@ -17,6 +17,7 @@ import {
   signAnnualAction,
 } from '@/lib/registration/annual-actions'
 import type { AnnualState } from '@/lib/registration/annual-schema'
+import { validateWaiverSignature } from '@/lib/registration/validate-waiver'
 import { emptySignerDetails, WaiverFields } from './waiver-fields'
 export function AnnualSigningForm({ state }: { state: AnnualState }) {
   const router = useRouter()
@@ -28,6 +29,7 @@ export function AnnualSigningForm({ state }: { state: AnnualState }) {
   const [contact, setContact] = useState(state.emergencyContact)
   const [pending, setPending] = useState(false)
   const [message, setMessage] = useState('')
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const request = useRef<string | null>(null)
   const busy = useRef(false)
   const waiver = state.current
@@ -56,10 +58,18 @@ export function AnnualSigningForm({ state }: { state: AnnualState }) {
             )
             return
           }
-          if (!read || !agreed) {
-            setMessage('Read the full document and agree before signing.')
-            return
-          }
+          const fieldErrors = read
+            ? validateWaiverSignature(
+                {
+                  waiverAgreed: agreed,
+                  signatureName: name,
+                  signerDetails: details,
+                },
+                Boolean(waiver.source_url),
+              )
+            : { waiverRead: 'Open the waiver and read through to the end.' }
+          setErrors(fieldErrors)
+          if (Object.keys(fieldErrors).length) return
           request.current ??= crypto.randomUUID()
           const result = await signAnnualAction(waiver.id, request.current, {
             waiverAgreed: agreed,
@@ -121,6 +131,7 @@ export function AnnualSigningForm({ state }: { state: AnnualState }) {
               ),
             )}
             <WaiverFields
+              errors={errors}
               snapshot={{
                 waiverRequired: true,
                 waiverSigned: false,

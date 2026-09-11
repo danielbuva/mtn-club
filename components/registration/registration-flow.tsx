@@ -71,7 +71,10 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
             size="icon"
             className="absolute right-0 top-1/2 size-11 -translate-y-1/2"
           >
-            <Link href="/trips" aria-label="Close registration">
+            <Link
+              href={`/trips/${snapshot.tripId}`}
+              aria-label="Close registration"
+            >
               <X className="size-5" />
             </Link>
           </Button>

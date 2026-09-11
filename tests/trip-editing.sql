@@ -1,7 +1,7 @@
 begin;
 do $$
 declare
- u uuid := gen_random_uuid(); r uuid := gen_random_uuid(); t uuid := gen_random_uuid(); denied boolean := false;
+ u uuid := gen_random_uuid(); r uuid := gen_random_uuid(); t uuid := gen_random_uuid(); denied boolean := false; disclosure uuid;
 begin
  insert into auth.users(id,email) values(u,u::text||'@example.test');
  insert into public.profiles(user_id,display_name) values(u,'Trip edit regression') on conflict do nothing;
@@ -25,10 +25,26 @@ begin
  update public.trips set title='Saved by a pending-member admin',is_all_day=false,starts_at='2026-09-13 07:00Z',ends_at='2026-09-14 06:59:59Z' where id=t;
  if not found then raise exception 'Admin event save denied'; end if;
  if exists(select 1 from public.trips where id=t and is_all_day) then raise exception 'Saved time still marked TBA'; end if;
+ update public.trips set ends_at=null where id=t;
+ if not exists(select 1 from public.trips where id=t and ends_at is null) then raise exception 'Open-ended save failed'; end if;
+ if public.get_trip_registration(t)->'endAt' <> 'null'::jsonb then raise exception 'Registration lost null end'; end if;
  insert into public.trip_private(trip_id,meetup_point) values(t,'Meeting point') on conflict(trip_id) do update set meetup_point=excluded.meetup_point;
  insert into public.trip_tag_options(tag) values('edit-regression') on conflict do nothing;
  insert into public.trip_leaders(trip_id,user_id) values(t,u) on conflict do nothing;
  reset role;
+ update public.trip_registration_settings set annual_waiver=false,waiver_required=false where trip_id=t;
+ set local role authenticated;
+ disclosure:=public.save_trip_informed_risks(t,0,array['Uneven ground.'],array['hiking']);
+ reset role;
+ if not ('Review and acknowledge the current trip-specific informed risks.'=any(registration_private.requirements(t,u))) then raise exception 'Legacy trip did not require risk acknowledgement'; end if;
+ if exists(select 1 from public.trip_registration_settings where trip_id=t and annual_waiver) then raise exception 'Saving risks changed the waiver assignment'; end if;
+ set local role authenticated;
+ disclosure:=public.save_trip_informed_risks(t,1,array['No trip-specific risk disclosure required.'],array['none']);
+ reset role;
+ if 'Review and acknowledge the current trip-specific informed risks.'=any(registration_private.requirements(t,u)) then raise exception 'No risk selection still requires acknowledgement'; end if;
+ reset role;
+ update public.trip_registration_settings set waiver_required=true where trip_id=t;
+ if cardinality(registration_private.requirements(t,u))=0 then raise exception 'No risk bypassed required waiver'; end if;
  set local role service_role;
  if not exists(select 1 from public.trip_leaders where trip_id=t and user_id=u) then raise exception 'Server cannot read saved leader assignments'; end if;
  if not exists(select 1 from public.trip_private where trip_id=t) then raise exception 'Server cannot read private event details'; end if;

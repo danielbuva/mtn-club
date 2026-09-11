@@ -1,3 +1,4 @@
+import { requiresRiskAcknowledgement } from './risk-activities.ts'
 import type { RegistrationInput, TripRegistrationSnapshot } from './schema'
 import type { TransportationResponse } from './transportation'
 
@@ -115,7 +116,7 @@ export function registrationSteps(
       : []),
     'emergency',
     ...(snapshot.waiverRequired && !snapshot.waiverSigned ? ['waiver'] : []),
-    ...(snapshot.annualWaiver ? ['risks'] : []),
+    ...(requiresRiskAcknowledgement(snapshot) ? ['risks'] : []),
     'preferences',
     'review',
   ]

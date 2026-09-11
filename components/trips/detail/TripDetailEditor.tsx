@@ -48,6 +48,7 @@ type TripDraft = {
   locationNotes: string
   timeTba: boolean
   startAt: string
+  noEndTime: boolean
   endAt: string
   overviewWhat: string
   overviewWhere: string
@@ -112,6 +113,7 @@ export function TripDetailEditor({
     locationNotes: trip.locationNotes ?? '',
     timeTba: trip.isAllDay ?? false,
     startAt: eventLocalDateTime(trip.startAt.toISOString(), timeZone),
+    noEndTime: !trip.endAt,
     endAt: eventLocalDateTime(trip.endAt?.toISOString() ?? null, timeZone),
     overviewWhat: trip.overviewWhat ?? '',
     overviewWhere: trip.overviewWhere ?? '',
@@ -183,6 +185,7 @@ export function TripDetailEditor({
         formData.set('startAt', draft.startAt)
         formData.set('timeTba', String(draft.timeTba))
         formData.set('endAt', draft.endAt)
+        formData.set('noEndTime', String(draft.noEndTime))
         formData.set('overviewWhat', draft.overviewWhat)
         formData.set('overviewWhere', draft.overviewWhere)
         formData.set('overviewWeather', draft.overviewWeather)
@@ -207,7 +210,9 @@ export function TripDetailEditor({
   }
 
   const startInstant = eventDateTimeToIso(draft.startAt, timeZone)
-  const endInstant = eventDateTimeToIso(draft.endAt, timeZone)
+  const endInstant = draft.noEndTime
+    ? null
+    : eventDateTimeToIso(draft.endAt, timeZone)
   const startAt = startInstant ? new Date(startInstant) : trip.startAt
   const endAt = endInstant ? new Date(endInstant) : undefined
 
@@ -604,15 +609,34 @@ export function TripDetailEditor({
             <p className="text-xs uppercase tracking-wide text-muted-foreground">
               End time (optional)
             </p>
-            <Input
-              type="datetime-local"
-              aria-label={`Event end (${timeZone})`}
-              value={draft.endAt}
-              onChange={event =>
-                setDraft(current => ({ ...current, endAt: event.target.value }))
-              }
-              className="h-9"
-            />
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={draft.noEndTime}
+                onChange={event =>
+                  setDraft(current => ({
+                    ...current,
+                    noEndTime: event.target.checked,
+                  }))
+                }
+                className="h-4 w-4 accent-primary focus-visible:outline-2 focus-visible:outline-ring"
+              />
+              No end time (open-ended)
+            </label>
+            {!draft.noEndTime && (
+              <Input
+                type="datetime-local"
+                aria-label={`Event end (${timeZone})`}
+                value={draft.endAt}
+                onChange={event =>
+                  setDraft(current => ({
+                    ...current,
+                    endAt: event.target.value,
+                  }))
+                }
+                className="h-9"
+              />
+            )}
           </section>
 
           {canManageLifecycle && (

@@ -1,11 +1,14 @@
 'use client'
 
+import type { Dispatch, SetStateAction } from 'react'
 import { Input } from '@/components/ui/input'
 import type {
   RegistrationInput,
   TripRegistrationSnapshot,
 } from '@/lib/registration/schema'
 import { AnnualWaiverIntro } from './annual-waiver-intro'
+import { SignerContactFields } from './signer-contact-fields'
+import { WaiverFieldError } from './waiver-field-error'
 import { WaiverReader } from './waiver-reader'
 
 type SignerDetails = NonNullable<RegistrationInput['data']['signerDetails']>
@@ -54,14 +57,11 @@ export function WaiverFields({
   signature: string
   onSignature: (value: string) => void
   details: SignerDetails
-  onDetails: (value: SignerDetails) => void
+  onDetails: Dispatch<SetStateAction<SignerDetails>>
   hasRead: boolean
   onRead: () => void
   errors?: Record<string, string>
 }) {
-  const signatureErrors = Object.entries(errors)
-    .filter(([key]) => key !== 'waiverRead')
-    .map(([, value]) => value)
   if (!snapshot.waiverRequired) return null
   if (snapshot.annualWaiver && snapshot.waiverApplicable === false)
     return (
@@ -84,11 +84,6 @@ export function WaiverFields({
       )}
       {snapshot.waiverReason && (
         <p className="text-sm">{snapshot.waiverReason}</p>
-      )}
-      {signatureErrors.length > 0 && (
-        <p role="alert" className="text-sm text-destructive">
-          {Array.from(new Set(signatureErrors)).join(' ')}
-        </p>
       )}
       <h2 className="font-semibold">
         {snapshot.waiver?.title ?? 'Waiver not configured'}
@@ -146,57 +141,33 @@ export function WaiverFields({
                   <Input
                     required
                     id={`waiver-initial-${index}`}
+                    aria-describedby={`waiver-initial-${index}-error`}
                     aria-invalid={Boolean(
                       errors[`signerDetails.initials.${index}`],
                     )}
                     maxLength={10}
                     value={details.initials[index]}
-                    onChange={e =>
-                      onDetails({
-                        ...details,
-                        initials: details.initials.map((value, i) =>
-                          i === index ? e.target.value : value,
+                    onChange={e => {
+                      const initial = e.currentTarget.value
+                      onDetails(previous => ({
+                        ...previous,
+                        initials: previous.initials.map((value, i) =>
+                          i === index ? initial : value,
                         ),
-                      })
-                    }
+                      }))
+                    }}
+                  />
+                  <WaiverFieldError
+                    id={`waiver-initial-${index}-error`}
+                    error={errors[`signerDetails.initials.${index}`]}
                   />
                 </label>
               ))}
-              {(
-                ['phone', 'address', 'emergencyAddress', 'birthDate'] as const
-              ).map(key => (
-                <label
-                  className="block text-sm"
-                  key={key}
-                  htmlFor={`waiver-${key}`}
-                >
-                  {
-                    {
-                      phone: 'Your phone number',
-                      address: 'Your local address',
-                      emergencyAddress: 'Emergency contact address',
-                      birthDate: 'Your date of birth',
-                    }[key]
-                  }
-                  <Input
-                    required
-                    id={`waiver-${key}`}
-                    type={
-                      key === 'birthDate'
-                        ? 'date'
-                        : key === 'phone'
-                          ? 'tel'
-                          : 'text'
-                    }
-                    aria-invalid={Boolean(errors[`signerDetails.${key}`])}
-                    maxLength={key === 'phone' ? 50 : 500}
-                    value={details[key]}
-                    onChange={e =>
-                      onDetails({ ...details, [key]: e.target.value })
-                    }
-                  />
-                </label>
-              ))}
+              <SignerContactFields
+                details={details}
+                onDetails={onDetails}
+                errors={errors}
+              />
               <p className="text-sm">
                 Include medical services, conditions, and allergies relevant to
                 emergency care in the emergency contact notes above. Contact an
@@ -210,22 +181,32 @@ export function WaiverFields({
               type="checkbox"
               required
               aria-invalid={Boolean(errors.waiverAgreed)}
+              aria-describedby="waiver-agreed-error"
               checked={agreed}
               onChange={e => onAgree(e.target.checked)}
             />
             I have read and agree to this waiver (version{' '}
             {snapshot.waiver?.version}).
           </label>
+          <WaiverFieldError
+            id="waiver-agreed-error"
+            error={errors.waiverAgreed}
+          />
           <label className="block text-sm" htmlFor="signature">
             Full name as signature
             <Input
               id="signature"
+              aria-describedby="signature-error"
               aria-invalid={Boolean(errors.signatureName)}
               required
               minLength={2}
               maxLength={200}
               value={signature}
               onChange={e => onSignature(e.target.value)}
+            />
+            <WaiverFieldError
+              id="signature-error"
+              error={errors.signatureName}
             />
           </label>
           <p className="text-sm">

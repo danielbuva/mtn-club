@@ -18,6 +18,7 @@ export function WaiverReader({
   onRead: () => void
   error?: string
 }) {
+  const opener = useRef<HTMLButtonElement>(null)
   const dialog = useRef<HTMLDialogElement>(null)
   const document = useRef<HTMLElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -50,6 +51,7 @@ export function WaiverReader({
   return (
     <>
       <Button
+        ref={opener}
         type="button"
         variant="outline"
         className="min-h-12 w-full"
@@ -61,7 +63,7 @@ export function WaiverReader({
       </Button>
       <p
         id={helpId}
-        className="min-h-5 text-sm text-destructive"
+        className="min-h-10 text-sm text-destructive"
         role={error ? 'alert' : undefined}
       >
         {error}
@@ -72,6 +74,7 @@ export function WaiverReader({
         onClose={() => {
           if (reachedEnd) onRead()
           setOpen(false)
+          opener.current?.focus()
         }}
         className="waiver-reader-dialog fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none flex-col bg-background p-0 text-foreground backdrop:bg-black/60 open:flex md:m-auto md:h-[85dvh] md:max-w-3xl md:border md:border-foreground/20"
       >

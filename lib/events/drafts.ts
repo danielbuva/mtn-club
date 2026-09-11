@@ -102,10 +102,10 @@ export const toDraftRowInput = ({
       values.startAt,
       values.timezone || 'America/Los_Angeles',
     ),
-    ends_at: draftDateTime(
-      values.endAt,
-      values.timezone || 'America/Los_Angeles',
-    ),
+    no_end_time: values.noEndTime ?? false,
+    ends_at: values.noEndTime
+      ? null
+      : draftDateTime(values.endAt, values.timezone || 'America/Los_Angeles'),
     time_zone: values.timezone?.trim() || null,
     primary_location_name: values.primaryLocationName?.trim() || null,
     meeting_location_name: values.meetingLocationName?.trim() || null,
@@ -145,6 +145,7 @@ export const toEventFormValuesFromDraft = ({
         draft.starts_at,
         draft.time_zone || timezoneFallback,
       ),
+      noEndTime: draft.no_end_time,
       endAt: eventLocalDateTime(
         draft.ends_at,
         draft.time_zone || timezoneFallback,
@@ -172,13 +173,14 @@ export const toEventFormValuesFromDraft = ({
 
 export const publishValidationErrors = (values: EventFormValues) => {
   const missing: string[] = []
+  if (!values.waiverActivities?.length) missing.push('risk activity selection')
   if (!values.title.trim()) {
     missing.push('title')
   }
   if (!values.startAt.trim()) {
     missing.push('start date')
   }
-  if (!values.endAt.trim()) {
+  if (!values.noEndTime && !values.endAt.trim()) {
     missing.push('end date')
   }
   if (!values.timezone.trim()) {

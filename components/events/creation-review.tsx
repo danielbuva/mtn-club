@@ -29,7 +29,7 @@ export function CreationReview({
       id: 'place',
       title: 'When & where',
       lines: [
-        `${values.startAt.replace('T', ' ')} → ${values.endAt.replace('T', ' ')}`,
+        `${values.startAt.replace('T', ' ')}${values.noEndTime ? ' · No end time' : ` → ${values.endAt.replace('T', ' ')}`}`,
         values.timezone,
         values.primaryLocationName,
         values.meetingLocationName,
@@ -46,6 +46,16 @@ export function CreationReview({
         values.overviewWeather,
         values.overviewEquipment,
         values.overviewCarpoolNeedGear,
+      ],
+    },
+    {
+      id: 'risks',
+      title: 'Informed risks',
+      lines: [
+        values.waiverActivities?.includes('none')
+          ? 'No risk disclosure needed'
+          : values.waiverActivities?.join(', '),
+        values.informedRisks,
       ],
     },
     {

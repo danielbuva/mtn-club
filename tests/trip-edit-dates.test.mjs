@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import ts from 'typescript'
 import * as dateTime from '../lib/events/date-time.ts'
+import * as riskActivities from '../lib/registration/risk-activities.ts'
 
 function compile(path, dependencies) {
   const source = readFileSync(new URL(path, import.meta.url), 'utf8')
@@ -172,4 +173,99 @@ test('saving an explicit time updates both the timestamp and display flag', asyn
   assert.equal((await f.save()).ok, true)
   assert.equal(f.writes[0].payload.starts_at, '2026-09-13T14:00:00.000Z')
   assert.equal(f.writes[0].payload.is_all_day, false)
+})
+
+test('open-ended edit removes the old placeholder end and preserves the start', () => {
+  const values = form('2026-09-13T07:00', '2026-09-13T23:59')
+  values.set('noEndTime', 'true')
+  values.set('timeTba', 'false')
+  const saved = { ...trip, starts_at: '2026-09-13T14:00:00+00:00' }
+  const result = resolveTripEditDates(values, saved)
+  assert.equal(result.ok, true)
+  assert.equal(result.startsAt, saved.starts_at)
+  assert.equal(result.endsAt, null)
+  assert.equal(result.isAllDay, false)
+})
+
+test('open-ended save action writes null instead of retaining the previous end', async () => {
+  const f = actionFixture()
+  f.values.set('noEndTime', 'true')
+  assert.equal((await f.save()).ok, true)
+  assert.equal(f.writes[0].payload.ends_at, null)
+})
+
+const constants = compile('../lib/events/constants.ts', {})
+const { eventFormSchema } = compile('../lib/events/schema.ts', {
+  zod: { z },
+  '@/lib/events/constants': constants,
+  '@/lib/registration/risk-activities': riskActivities,
+  './date-time': dateTime,
+})
+const draftHelpers = compile('../lib/events/drafts.ts', {
+  './activity-tags': activityTags,
+  './constants': constants,
+  './date-time': dateTime,
+})
+const { emptyEventValues } = compile('../lib/events/form-values.ts', {})
+const { formatTimeRange } = compile('../lib/events/formatters.ts', {})
+test('creation supports explicit no end, including draft round trips', () => {
+  const values = {
+    ...emptyEventValues(),
+    title: 'Open-ended hike',
+    waiverActivities: ['hiking'],
+    startAt: '2026-09-13T07:00',
+    endAt: '',
+    noEndTime: true,
+    primaryLocationName: 'Black Mountain',
+  }
+  assert.equal(eventFormSchema.safeParse(values).success, true)
+  assert.equal(
+    eventFormSchema.safeParse({ ...values, waiverActivities: [] }).success,
+    false,
+  )
+  assert.equal(
+    eventFormSchema.safeParse({ ...values, waiverActivities: ['none'] })
+      .success,
+    true,
+  )
+  assert.equal(
+    eventFormSchema.safeParse({
+      ...values,
+      waiverActivities: ['none', 'hiking'],
+    }).success,
+    false,
+  )
+  assert.equal(
+    eventFormSchema.safeParse({ ...values, noEndTime: false }).success,
+    false,
+  )
+  const draft = draftHelpers.toDraftRowInput({
+    values,
+    isNoLimitEnabled: true,
+    createdBy: 'user',
+    canChooseOfficial: true,
+  })
+  assert.equal(draft.ends_at, null)
+  assert.equal(draft.no_end_time, true)
+  assert.equal(draft.starts_at, '2026-09-13T14:00:00.000Z')
+  const restored = draftHelpers.toEventFormValuesFromDraft({
+    draft,
+    canChooseOfficial: true,
+    timezoneFallback: 'America/Los_Angeles',
+  }).values
+  assert.equal(restored.noEndTime, true)
+  assert.equal(restored.endAt, '')
+  assert.equal(eventFormSchema.safeParse(restored).success, true)
+  assert.equal(
+    formatTimeRange(draft.starts_at, draft.ends_at, 'America/Los_Angeles'),
+    '7:00 AM',
+  )
+  assert.equal(
+    draftHelpers.toEventFormValuesFromDraft({
+      draft: { ...draft, no_end_time: false },
+      canChooseOfficial: true,
+      timezoneFallback: 'America/Los_Angeles',
+    }).values.noEndTime,
+    false,
+  )
 })

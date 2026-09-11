@@ -215,3 +215,26 @@ test('trip detail uses the selected timezone across UTC midnight', async () => {
     '5:00 PM - 7:00 PM',
   )
 })
+
+test('explicit no-risk skips acknowledgement without skipping the waiver', () => {
+  const none = {
+    ...snapshot,
+    annualWaiver: true,
+    waiverRequired: true,
+    waiverSigned: false,
+    informedRisks: { id: 'none', activities: ['none'] },
+  }
+  const values = initialRegistrationValues(none)
+  assert.equal(registrationSteps(none, values).includes('risks'), false)
+  assert.equal(registrationSteps(none, values).includes('waiver'), true)
+  assert.deepEqual(validateRegistrationValues(values, none, 'risks'), {})
+  const legacy = {
+    ...none,
+    annualWaiver: false,
+    informedRisks: { id: 'hike', activities: ['hiking'] },
+  }
+  assert.equal(registrationSteps(legacy, values).includes('risks'), true)
+  assert.ok(
+    validateRegistrationValues(values, legacy, 'risks').riskAcknowledgedId,
+  )
+})

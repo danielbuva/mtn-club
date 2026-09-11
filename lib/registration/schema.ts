@@ -79,7 +79,7 @@ export const snapshotSchema = z.object({
   tripId: z.string().uuid(),
   title: z.string(),
   startAt: z.string(),
-  endAt: z.string(),
+  endAt: z.string().nullable(),
   timeZone: z.string(),
   availability: z.enum([
     'open',

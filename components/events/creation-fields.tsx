@@ -95,14 +95,23 @@ export function CreationPlace({
           error={errors.startAt}
           onChange={event => onChange('startAt', event.target.value)}
         />
-        <DateTimeField
-          id="endAt"
-          label="End"
-          required
-          value={values.endAt}
-          error={errors.endAt}
-          onChange={event => onChange('endAt', event.target.value)}
-        />
+        <div className="space-y-3">
+          <ToggleField
+            label="No end time (open-ended)"
+            checked={values.noEndTime ?? false}
+            onChange={value => onChange('noEndTime', value)}
+          />
+          {!values.noEndTime && (
+            <DateTimeField
+              id="endAt"
+              label="End"
+              required
+              value={values.endAt}
+              error={errors.endAt}
+              onChange={event => onChange('endAt', event.target.value)}
+            />
+          )}
+        </div>
       </div>
       <TextField
         id="timezone"

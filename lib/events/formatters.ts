@@ -83,10 +83,12 @@ export function formatTime(
 
 export function formatTimeRange(
   start: string,
-  end: string,
+  end: string | null,
   timeZone?: string,
 ): string {
-  return `${formatTime(start, timeZone)}–${formatTime(end, timeZone)}`
+  return end
+    ? `${formatTime(start, timeZone)}–${formatTime(end, timeZone)}`
+    : formatTime(start, timeZone)
 }
 
 export function getSeasonTag(

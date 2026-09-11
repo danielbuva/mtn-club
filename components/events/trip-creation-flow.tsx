@@ -207,6 +207,7 @@ export function TripCreationFlow(props: CreationFlowProps) {
                 {nav.current === 'details' && <CreationDetails {...shared} />}
                 {nav.current === 'risks' && (
                   <InformedRiskFields
+                    error={errors.waiverActivities ?? errors.informedRisks}
                     risks={values.informedRisks ?? ''}
                     activities={values.waiverActivities ?? []}
                     onRisks={value => update('informedRisks', value)}

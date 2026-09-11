@@ -150,7 +150,7 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     activity_tags: activityTags,
     starts_at: dates.startsAt,
     is_all_day: dates.isAllDay,
-    ends_at: dates.endsAt ?? undefined,
+    ends_at: dates.endsAt,
     updated_at: new Date().toISOString(),
   }
 

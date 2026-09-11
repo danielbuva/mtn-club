@@ -10,6 +10,7 @@ import {
 } from '@/lib/events/drafts'
 import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
+import { riskStatements } from '@/lib/registration/risk-activities'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
 
@@ -290,8 +291,11 @@ export async function publishTripFormAction(payload: {
   }
 
   const startsAt = eventDateTimeToIso(parsed.data.startAt, parsed.data.timezone)
-  const endsAt = eventDateTimeToIso(parsed.data.endAt, parsed.data.timezone)
-  if (!startsAt || !endsAt) throw new Error('Enter valid trip dates.')
+  const endsAt = parsed.data.noEndTime
+    ? null
+    : eventDateTimeToIso(parsed.data.endAt, parsed.data.timezone)
+  if (!startsAt || (!parsed.data.noEndTime && !endsAt))
+    throw new Error('Enter valid trip dates.')
 
   // Avoid INSERT ... RETURNING: row-based visibility helpers cannot see the
   // new trip during the insertion statement. Authorization still uses INSERT RLS.
@@ -415,21 +419,16 @@ export async function publishTripFormAction(payload: {
     })
     configurationPending = Boolean(error)
   }
-  if (
-    parsed.data.informedRisks?.trim() &&
-    parsed.data.waiverActivities?.length
-  ) {
-    const { error } = await supabase.rpc('save_trip_informed_risks', {
-      p_trip: createdTrip.id,
-      p_revision: 0,
-      p_statements: parsed.data.informedRisks
-        .split('\n')
-        .map(value => value.trim())
-        .filter(Boolean),
-      p_activities: parsed.data.waiverActivities,
-    })
-    informedRisksPending = Boolean(error)
-  } else informedRisksPending = true
+  const { error: riskError } = await supabase.rpc('save_trip_informed_risks', {
+    p_trip: createdTrip.id,
+    p_revision: 0,
+    p_statements: riskStatements(
+      parsed.data.waiverActivities ?? [],
+      parsed.data.informedRisks,
+    ),
+    p_activities: parsed.data.waiverActivities ?? [],
+  })
+  informedRisksPending = Boolean(riskError)
   return { tripId: createdTrip.id, configurationPending, informedRisksPending }
 }
 

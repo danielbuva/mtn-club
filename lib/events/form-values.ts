@@ -8,6 +8,7 @@ export function emptyEventValues(isOfficial = false): EventFormValues {
     activityTypes: [],
     startAt: '',
     endAt: '',
+    noEndTime: false,
     timezone: 'America/Los_Angeles',
     primaryLocationName: '',
     meetingLocationName: '',
@@ -20,7 +21,7 @@ export function emptyEventValues(isOfficial = false): EventFormValues {
     visibility: 'members',
     maxParticipants: '',
     isOfficial,
-    collectTransportation: false,
+    collectTransportation: true,
   }
 }
 export const creationSteps = [

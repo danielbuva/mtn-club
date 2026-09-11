@@ -98,9 +98,12 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
   }, [props.snapshot, receiveSnapshot])
   function update<K extends keyof RegistrationValues>(
     key: K,
-    value: RegistrationValues[K],
+    value:
+      | RegistrationValues[K]
+      | ((previous: RegistrationValues[K]) => RegistrationValues[K]),
   ) {
-    setValue<keyof RegistrationValues>(key, value, { shouldDirty: true })
+    const next = typeof value === 'function' ? value(getValues(key)) : value
+    setValue<keyof RegistrationValues>(key, next, { shouldDirty: true })
     setErrors({})
   }
   function validate(all: boolean) {

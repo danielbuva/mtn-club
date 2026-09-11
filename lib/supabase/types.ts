@@ -1208,6 +1208,7 @@ export type Database = {
           created_at: string
           created_by: string
           difficulty: Database['public']['Enums']['trip_difficulty'] | null
+          no_end_time: boolean
           ends_at: string | null
           id: string
           is_official: boolean
@@ -1238,6 +1239,7 @@ export type Database = {
           created_at?: string
           created_by: string
           difficulty?: Database['public']['Enums']['trip_difficulty'] | null
+          no_end_time?: boolean
           ends_at?: string | null
           id?: string
           is_official?: boolean
@@ -1268,6 +1270,7 @@ export type Database = {
           created_at?: string
           created_by?: string
           difficulty?: Database['public']['Enums']['trip_difficulty'] | null
+          no_end_time?: boolean
           ends_at?: string | null
           id?: string
           is_official?: boolean
@@ -1541,7 +1544,7 @@ export type Database = {
           created_by: string | null
           description_public: string | null
           difficulty: Database['public']['Enums']['trip_difficulty'] | null
-          ends_at: string
+          ends_at: string | null
           id: string
           is_all_day: boolean
           is_official: boolean
@@ -1575,7 +1578,7 @@ export type Database = {
           created_by?: string | null
           description_public?: string | null
           difficulty?: Database['public']['Enums']['trip_difficulty'] | null
-          ends_at: string
+          ends_at?: string | null
           id?: string
           is_all_day?: boolean
           is_official?: boolean
@@ -1609,7 +1612,7 @@ export type Database = {
           created_by?: string | null
           description_public?: string | null
           difficulty?: Database['public']['Enums']['trip_difficulty'] | null
-          ends_at?: string
+          ends_at?: string | null
           id?: string
           is_all_day?: boolean
           is_official?: boolean

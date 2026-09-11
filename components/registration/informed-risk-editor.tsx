@@ -10,82 +10,14 @@ import {
 } from '@/components/forms/form-shell'
 import { FormViewport } from '@/components/forms/form-viewport'
 import { saveInformedRisksAction } from '@/lib/registration/annual-actions'
+import {
+  additionalRiskStatements,
+  riskStatements,
+} from '@/lib/registration/risk-activities'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
-export const waiverActivities = [
-  'hiking',
-  'backpacking',
-  'camping',
-  'scrambling',
-  'rock climbing',
-  'bouldering',
-  'transportation/travel',
-]
-export function InformedRiskFields({
-  risks,
-  activities,
-  onRisks,
-  onActivities,
-}: {
-  risks: string
-  activities: string[]
-  onRisks: (value: string) => void
-  onActivities: (value: string[]) => void
-}) {
-  return (
-    <div className="space-y-4">
-      <p>
-        Tell participants what is especially important to understand about this
-        trip. Keep this specific and useful — they’ll acknowledge it before
-        registering.
-      </p>
-      <label className="block space-y-2">
-        <span>Trip-specific risks and conditions</span>
-        <textarea
-          className="min-h-32 w-full rounded border bg-background p-3"
-          value={risks}
-          onChange={event => onRisks(event.target.value)}
-          maxLength={5000}
-        />
-      </label>
-      <p className="text-sm text-muted-foreground">
-        Write roughly 1–3 meaningful statements, one per line. Describe this
-        trip’s conditions in plain language. This is separate from the liability
-        waiver.
-      </p>
-      <fieldset className="space-y-2">
-        <legend className="mb-2 font-medium">Activities on this trip</legend>
-        {[...new Set([...waiverActivities, ...activities])].map(activity => (
-          <label key={activity} className="flex min-h-10 items-center gap-3">
-            <input
-              type="checkbox"
-              checked={activities.includes(activity)}
-              onChange={event =>
-                onActivities(
-                  event.target.checked
-                    ? [...activities, activity]
-                    : activities.filter(value => value !== activity),
-                )
-              }
-            />
-            {activity}
-          </label>
-        ))}
-        <label className="block">
-          Other activity (requires separate scope review)
-          <input
-            className="mt-2 w-full rounded border bg-background p-2"
-            onBlur={event => {
-              const value = event.target.value.trim().toLowerCase()
-              if (value && !activities.includes(value))
-                onActivities([...activities, value])
-              event.target.value = ''
-            }}
-          />
-        </label>
-      </fieldset>
-    </div>
-  )
-}
+import { InformedRiskFields } from './informed-risk-fields'
+
+export { InformedRiskFields } from './informed-risk-fields'
 export function InformedRiskEditor({
   snapshot,
   initiallyOpen = false,
@@ -94,7 +26,10 @@ export function InformedRiskEditor({
   initiallyOpen?: boolean
 }) {
   const [risks, setRisks] = useState(
-    snapshot.informedRisks?.statements.join('\n') ?? '',
+    additionalRiskStatements(
+      snapshot.informedRisks?.activities ?? [],
+      snapshot.informedRisks?.statements ?? [],
+    ),
   )
   const [activities, setActivities] = useState(
     snapshot.informedRisks?.activities ?? [],
@@ -115,10 +50,7 @@ export function InformedRiskEditor({
             const result = await saveInformedRisksAction(
               snapshot.tripId,
               snapshot.informedRisks?.revision ?? 0,
-              risks
-                .split('\n')
-                .map(x => x.trim())
-                .filter(Boolean),
+              riskStatements(activities, risks),
               activities,
             )
             setMessage(result.message)

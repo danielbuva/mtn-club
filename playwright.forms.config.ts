@@ -6,6 +6,7 @@ export default defineConfig({
   timeout: 60000,
   use: { baseURL: 'http://127.0.0.1:3140', trace: 'retain-on-failure' },
   projects: [
+    { name: 'iphone-webkit', use: { ...devices['iPhone 13'] } },
     {
       name: 'mobile',
       use: { ...devices['iPhone 13'], defaultBrowserType: 'chromium' },

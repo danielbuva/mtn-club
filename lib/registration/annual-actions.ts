@@ -111,7 +111,9 @@ export async function saveInformedRisksAction(
     ok: !error,
     message:
       error?.message ??
-      'Informed risks saved. Participants must acknowledge the current revision.',
+      (activities.includes('none')
+        ? 'Informed-risk step disabled. Waiver requirements are unchanged.'
+        : 'Informed risks saved. Participants must acknowledge the current revision.'),
   }
 }
 export async function requestAnnualGuardianAction(waiverId: string) {

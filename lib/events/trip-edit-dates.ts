@@ -23,14 +23,22 @@ function resolveDate(
 export function resolveTripEditDates(form: FormData, trip: StoredTripDates) {
   const timeZone = trip.time_zone ?? 'America/Los_Angeles'
   const startsAt = resolveDate(form.get('startAt'), trip.starts_at, timeZone)
-  const endsAt = resolveDate(form.get('endAt'), trip.ends_at, timeZone)
-  if (!startsAt || (form.get('endAt') && !endsAt)) {
+  const noEndTime = form.get('noEndTime') === 'true'
+  const endsAt = noEndTime
+    ? null
+    : resolveDate(form.get('endAt'), trip.ends_at, timeZone)
+  if (
+    !startsAt ||
+    (!noEndTime &&
+      (form.get('noEndTime') === 'false' || form.get('endAt')) &&
+      !endsAt)
+  ) {
     return {
       ok: false,
       error: `Enter valid event dates in ${timeZone}. This time may not exist during a daylight-saving change.`,
     } as const
   }
-  if (endsAt && new Date(endsAt) < new Date(startsAt)) {
+  if (endsAt && new Date(endsAt) <= new Date(startsAt)) {
     return {
       ok: false,
       error: 'The event end must be after its start.',

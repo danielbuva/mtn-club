@@ -1,5 +1,7 @@
 import type { RegistrationValues } from './form-values'
+import { requiresRiskAcknowledgement } from './risk-activities.ts'
 import type { TripRegistrationSnapshot } from './schema'
+import { validateWaiverSignature } from './validate-waiver.ts'
 
 export function validateRegistrationValues(
   values: RegistrationValues,
@@ -10,7 +12,7 @@ export function validateRegistrationValues(
   const active = (id: string) => !step || id === step
   if (
     active('risks') &&
-    snapshot.annualWaiver &&
+    requiresRiskAcknowledgement(snapshot) &&
     !snapshot.risksAcknowledged &&
     values.riskAcknowledgedId !== snapshot.informedRisks?.id
   )
@@ -81,27 +83,10 @@ export function validateRegistrationValues(
       errors.waiverRead = 'Open the waiver and read through to the end.'
       return errors
     }
-    if (!values.waiverAgreed)
-      errors.waiverAgreed =
-        'Read and agree to the current waiver before submitting.'
-    if (values.signatureName.trim().length < 2)
-      errors.signatureName = 'Enter your full name as your signature.'
-    if (snapshot.waiver?.sourceUrl) {
-      for (const field of ['phone', 'address', 'emergencyAddress'] as const) {
-        if (
-          values.signerDetails[field].trim().length <
-          (field === 'phone' ? 7 : 5)
-        )
-          errors[`signerDetails.${field}`] =
-            'Please complete this waiver detail.'
-      }
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(values.signerDetails.birthDate))
-        errors['signerDetails.birthDate'] = 'Enter your date of birth.'
-      for (const [index, value] of values.signerDetails.initials.entries())
-        if (!value.trim())
-          errors[`signerDetails.initials.${index}`] =
-            'Initial this provision after reading it.'
-    }
+    Object.assign(
+      errors,
+      validateWaiverSignature(values, Boolean(snapshot.waiver?.sourceUrl)),
+    )
   }
   return errors
 }
