@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      trip_update_followers: {
+        Row: { trip_id: string; user_id: string; created_at: string }
+        Insert: { trip_id: string; user_id: string; created_at?: string }
+        Update: { trip_id?: string; user_id?: string; created_at?: string }
+        Relationships: []
+      }
       announcements: {
         Row: {
           author_name: string | null
@@ -2237,6 +2243,10 @@ export type Database = {
       set_trip_transportation_collection: {
         Args: { p_trip_id: string; p_enabled: boolean }
         Returns: undefined
+      }
+      set_trip_update_following: {
+        Args: { p_trip_id: string; p_following: boolean }
+        Returns: boolean
       }
       get_my_email_preferences: { Args: Record<string, never>; Returns: Json }
       save_privacy_email_preferences: {

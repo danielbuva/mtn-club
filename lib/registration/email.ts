@@ -12,6 +12,8 @@ export const notificationSchema = z.object({
 })
 export type RegistrationNotification = z.infer<typeof notificationSchema>
 const messages: Record<string, string> = {
+  registration_opened:
+    'Registration is now open for this trip. View the trip and sign up while places are available.',
   confirmed: 'Your place on this trip is confirmed.',
   waitlisted:
     'You are on the waitlist. An organizer will choose participants when seats become available.',
@@ -47,7 +49,12 @@ export function registrationEmail(
   const origin = new URL(siteUrl)
   if (origin.protocol !== 'https:' && origin.hostname !== 'localhost')
     throw new Error('Invalid registration site URL')
-  const link = new URL(`/trips/${notification.tripId}/rsvp`, origin).href
+  const opening = notification.kind === 'registration_opened'
+  const action = opening ? 'View trip and register' : 'Review registration'
+  const link = new URL(
+    `/trips/${notification.tripId}${opening ? '' : '/rsvp'}`,
+    origin,
+  ).href
   const preferencesLink = new URL('/profile/user/privacy', origin).href
   const message =
     messages[notification.kind] ??
@@ -55,10 +62,10 @@ export function registrationEmail(
   const deadline = notification.offerExpiresAt
     ? `Offer expires: ${new Date(notification.offerExpiresAt).toLocaleString('en-US', { timeZone: notification.timeZone })} (${notification.timeZone}).`
     : ''
-  const text = `UNLV Mountain Club\n\n${notification.title}\n\n${message}\n${deadline}\n\nReview registration: ${link}\n\nManage email preferences: ${preferencesLink}`
-  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff9eb;color:#211d18;font-family:Arial,sans-serif"><tr><td style="padding:32px"><p>UNLV Mountain Club</p><h1 style="font-size:24px">${escapeHtml(notification.title)}</h1><p>${escapeHtml(message)}</p><p>${escapeHtml(deadline)}</p><p><a href="${escapeHtml(link)}">Review registration</a></p><p style="font-size:12px"><a href="${escapeHtml(preferencesLink)}">Manage email preferences</a>.</p></td></tr></table>`
+  const text = `UNLV Mountain Club\n\n${notification.title}\n\n${message}\n${deadline}\n\n${action}: ${link}\n\nManage email preferences: ${preferencesLink}`
+  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff9eb;color:#211d18;font-family:Arial,sans-serif"><tr><td style="padding:32px"><p>UNLV Mountain Club</p><h1 style="font-size:24px">${escapeHtml(notification.title)}</h1><p>${escapeHtml(message)}</p><p>${escapeHtml(deadline)}</p><p><a href="${escapeHtml(link)}">${action}</a></p><p style="font-size:12px"><a href="${escapeHtml(preferencesLink)}">Manage email preferences</a>.</p></td></tr></table>`
   return {
-    subject: `${notification.kind === 'offered' ? 'Seat offer' : 'Trip update'}: ${notification.title.replace(/[\r\n]/g, ' ').slice(0, 150)}`,
+    subject: `${opening ? 'Registration open' : notification.kind === 'offered' ? 'Seat offer' : 'Trip update'}: ${notification.title.replace(/[\r\n]/g, ' ').slice(0, 150)}`,
     text,
     html,
   }

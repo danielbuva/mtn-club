@@ -40,7 +40,8 @@ export const emailCategories = [
   {
     key: 'announcements',
     label: 'Club announcements',
-    description: 'New trips, club events, and club-wide news. Opt-in.',
+    description:
+      'New trips, registration opening alerts, club events, and club-wide news. Opt-in.',
   },
   {
     key: 'general',

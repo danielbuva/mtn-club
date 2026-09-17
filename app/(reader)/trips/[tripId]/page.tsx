@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
+import { Suspense } from 'react'
 import { ScheduledTripDetail } from '@/components/trips/detail/scheduled-trip-detail'
 import { TripAttendeesPreview } from '@/components/trips/detail/TripAttendeesPreview'
 import { TripDescription } from '@/components/trips/detail/TripDescription'
@@ -11,6 +12,7 @@ import { TripRequirements } from '@/components/trips/detail/TripRequirements'
 import { TripStats } from '@/components/trips/detail/TripStats'
 import { TripStickyRsvpBar } from '@/components/trips/detail/TripStickyRsvpBar'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripFollowControl } from '@/components/trips/trip-follow-control'
 import { Card, CardContent } from '@/components/ui/card'
 import { FALL_2026_TRIPS, getFallTripScheduleKey } from '@/lib/club-content'
 import { fetchPublicHostsByTrip } from '@/lib/events/queries'
@@ -318,6 +320,18 @@ export default async function TripDetailPage({
         <TripCancellationNotice reason={trip.cancellationReason} />
       )}
       <TripQuickFacts trip={trip} />
+      {trip.lifecycleStatus === 'published' && trip.startAt > new Date() ? (
+        <Suspense
+          fallback={
+            <output
+              className="block h-28 animate-pulse rounded-2xl border border-border/70 bg-card p-4"
+              aria-label="Loading trip email preferences"
+            />
+          }
+        >
+          <TripFollowControl tripId={trip.id} />
+        </Suspense>
+      ) : null}
 
       <div className="space-y-4">
         <div className="space-y-4">

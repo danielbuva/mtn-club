@@ -156,3 +156,20 @@ test('delivery retries provider outages and rate limits with stable deduplicatio
   )
   assert.equal(invalid.errorCode, 'invalid_provider_response')
 })
+
+test('registration opening email has a distinct subject and trip link', () => {
+  const email = registrationEmail(
+    { ...notification, kind: 'registration_opened', offerExpiresAt: null },
+    'https://club.example.test',
+  )
+  assert.match(email.subject, /^Registration open:/)
+  assert.match(email.text, /Registration is now open/)
+  assert.ok(
+    email.text.includes(
+      `View trip and register: https://club.example.test/trips/${tripId}`,
+    ),
+  )
+  assert.ok(!email.text.includes('/rsvp'))
+  assert.ok(email.html.includes('&lt;img'))
+  assert.ok(email.text.includes('/profile/user/privacy'))
+})

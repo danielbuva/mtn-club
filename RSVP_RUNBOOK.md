@@ -146,3 +146,25 @@ Applied `202609040022`, `202609050001`, `202609050002`, and `202609050003` to re
 ## Guided-form production release — September 5, 2026
 
 The production release brings the existing guided form adapters to their actual pages: `/trips/new`, `/calendar/new`, `/admin/trips/new`, and `/trips/[tripId]/rsvp`. It is not a showroom-only release. Applied `202609040022`, `202609050001`, `202609050002`, and `202609050003` to production `maubinlyxzwqnjbrkeht` in one transaction, including migration history, through the authenticated Supabase management API because the CLI temporary-login role could not be renewed. The global registration switch and Black Mountain pilot remain enabled, and the configured 5,742-character waiver is unchanged. The application uses the configured waiver version and retains its full signer fields.
+
+## Registration-opening emails — September 17, 2026
+
+Migration `20260917215109_registration_open_notifications` adds explicit per-trip
+followers and queues `registration_opened` when a published, future trip's
+registration gate changes from closed to open (including deadline extensions and
+the global switch). Trips already open at migration time are not backfilled.
+Recipients must follow that trip or opt into **Club announcements**, the existing
+new-trip email category. **Allow club emails** must remain enabled. The queue
+rechecks consent, trip access, and registration status before sending, deduplicates
+users who qualify through both routes, and ignores superseded opening events.
+
+The trip page includes follow/unfollow controls. Delivery uses the existing Resend
+credentials, delivery webhook, and minute-by-minute registration worker; no new
+Vercel environment variables are required. The worker processes five jobs per run,
+so larger announcement audiences drain over multiple minutes.
+
+Validation: 124 unit tests, strict type checks, full Biome checks, production build,
+and rollback-only `tests/registration-opening.sql` on preview and production.
+The SQL fixtures test recipient union/deduplication, unchanged saves, opt-outs,
+unfollowing, closing before delivery, reopening, deadline extension, and queue
+permissions without sending mail or retaining fixture data.
