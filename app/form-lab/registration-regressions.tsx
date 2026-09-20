@@ -40,6 +40,17 @@ export function RegistrationRegressions() {
             registrationActionRequired: true,
           }}
         />
+        <div data-testid="past-trip-registration">
+          <TripCTA
+            trip={{
+              id,
+              status: 'closed',
+              registrationReadOnly: true,
+              registrationState: 'confirmed',
+              registrationActionRequired: true,
+            }}
+          />
+        </div>
         <AnnualProfile
           state={{
             current: document,

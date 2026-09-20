@@ -9,6 +9,7 @@ import {
   Users,
   X,
 } from 'lucide-react'
+import Link from 'next/link'
 import {
   CATEGORY_COLORS,
   type CalendarCategoryKey,
@@ -25,7 +26,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { DISCORD_INVITE_URL } from '@/lib/constants'
 import { formatDateRange } from '@/lib/events/formatters'
 import type { CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
@@ -148,18 +148,14 @@ export function TripDetailsDrawer({
               </div>
             </details>
 
-            {DISCORD_INVITE_URL && (
+            {
               <Button size="lg" className="w-full rounded-none gap-2" asChild>
-                <a
-                  href={DISCORD_INVITE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/trips/${trip.id}`}>
                   <MessageCircle className="size-4" aria-hidden="true" />
-                  Open Discord for logistics
-                </a>
+                  Go to trip page
+                </Link>
               </Button>
-            )}
+            }
           </div>
         </div>
       </SheetContent>

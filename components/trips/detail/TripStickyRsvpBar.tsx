@@ -8,7 +8,11 @@ import type { TripDetail } from '@/lib/trips/types'
 type TripStickyRsvpBarProps = {
   trip: Pick<
     TripDetail,
-    'id' | 'status' | 'registrationState' | 'registrationActionRequired'
+    | 'id'
+    | 'status'
+    | 'registrationReadOnly'
+    | 'registrationState'
+    | 'registrationActionRequired'
   >
   viewer: {
     isAuthenticated: boolean

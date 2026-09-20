@@ -50,7 +50,7 @@ export function eventToCalendarTrip(event: EventRow): CalendarTrip {
     dateEnd,
     difficulty,
     miles: null,
-    elevationGain: null,
+    elevationGain: event.elevation_ft ?? null,
     tags,
     photos: [],
     membersOnly: event.visibility !== 'public',

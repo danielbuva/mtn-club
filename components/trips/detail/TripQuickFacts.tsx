@@ -40,6 +40,28 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
             : formatTripTime(trip.startAt, trip.endAt, trip.timeZone)}
         </p>
       </div>
+      {(
+        [
+          ['Registration opens', trip.registrationOpensAt],
+          ['Registration closes', trip.registrationClosesAt],
+        ] as const
+      ).map(([label, value]) =>
+        value ? (
+          <div key={label} className="space-y-1">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              {label}
+            </p>
+            <p className="text-sm font-medium">
+              {new Date(value).toLocaleString('en-US', {
+                timeZone: trip.timeZone ?? 'America/Los_Angeles',
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })}{' '}
+              ({trip.timeZone ?? 'America/Los_Angeles'})
+            </p>
+          </div>
+        ) : null,
+      )}
     </section>
   )
 }

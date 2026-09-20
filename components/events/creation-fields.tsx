@@ -157,9 +157,24 @@ const details = [
   ['overviewEquipment', 'Equipment to bring'],
   ['overviewCarpoolNeedGear', 'Transportation and gear notes'],
 ] as const
-export function CreationDetails({ values, onChange }: CreationFieldsProps) {
+export function CreationDetails({
+  values,
+  errors,
+  onChange,
+}: CreationFieldsProps) {
   return (
     <div className="space-y-7">
+      <TextField
+        id="elevationFt"
+        label="Elevation gain (feet)"
+        optional
+        type="number"
+        min={0}
+        max={100000}
+        value={values.elevationFt ?? ''}
+        error={errors.elevationFt}
+        onChange={event => onChange('elevationFt', event.target.value)}
+      />
       <ChoiceCards
         label="Difficulty (optional)"
         columns
@@ -237,6 +252,46 @@ export function CreationSettings({
           onChange={event => onChange('maxParticipants', event.target.value)}
         />
       )}
+      <details className="space-y-5 border-y border-border py-5">
+        <summary className="cursor-pointer font-semibold">
+          Registration settings (optional)
+        </summary>
+        <ToggleField
+          label="Enable registration"
+          hint="The club’s registration switch must also be enabled."
+          checked={values.registrationEnabled ?? false}
+          onChange={value => onChange('registrationEnabled', value)}
+        />
+        <ToggleField
+          label="Allow waitlist"
+          checked={values.waitlistEnabled ?? false}
+          onChange={value => onChange('waitlistEnabled', value)}
+        />
+        <p className="text-sm text-muted-foreground">
+          Times use {values.timezone}. Leave opening empty to open immediately
+          when enabled; leave closing empty to close at trip start.
+        </p>
+        <DateTimeField
+          id="registrationOpensAt"
+          label="Registration opens"
+          optional
+          value={values.registrationOpensAt ?? ''}
+          error={errors.registrationOpensAt}
+          onChange={event =>
+            onChange('registrationOpensAt', event.target.value)
+          }
+        />
+        <DateTimeField
+          id="registrationClosesAt"
+          label="Registration closes"
+          optional
+          value={values.registrationClosesAt ?? ''}
+          error={errors.registrationClosesAt}
+          onChange={event =>
+            onChange('registrationClosesAt', event.target.value)
+          }
+        />
+      </details>
       <ToggleField
         label="Ask about transportation"
         hint="Optionally collect ride needs and passenger seats offered. This does not match riders with drivers."

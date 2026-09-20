@@ -145,6 +145,7 @@ export default async function TripsPage() {
         leaderName,
       ),
       registrationState: registration.state,
+      registrationReadOnly: new Date(event.starts_at).getTime() <= Date.now(),
       registrationActionRequired: registration.requirements.length > 0,
     })
     return acc

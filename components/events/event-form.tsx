@@ -13,7 +13,6 @@ import {
 import { toEventFormValuesFromDraft } from '@/lib/events/drafts'
 import { emptyEventValues } from '@/lib/events/form-values'
 import type { Database } from '@/lib/supabase/types'
-import { PublishedTripRecovery } from './published-trip-recovery'
 import { TripCreationFlow } from './trip-creation-flow'
 
 type EventFormProps = {
@@ -30,32 +29,31 @@ export function EventForm(props: EventFormProps) {
   const router = useRouter()
   const pathname = usePathname()
   const draftId = useRef(props.initialDraft?.id)
-  const [publishedTripId, setPublishedTripId] = useState<string | null>(null)
+  const [generation, setGeneration] = useState(0)
   const [options, setOptions] = useState(props.activityOptions)
-  const initial = props.initialDraft
-    ? toEventFormValuesFromDraft({
-        draft: props.initialDraft,
-        canChooseOfficial: props.canChooseOfficial,
-        timezoneFallback: 'America/Los_Angeles',
-      })
-    : {
-        values: emptyEventValues(props.initialIsOfficial),
-        isNoLimitEnabled: true,
-      }
-  if (publishedTripId)
-    return (
-      <PublishedTripRecovery
-        tripId={publishedTripId}
-        onDone={() => router.push(props.successPath)}
-      />
-    )
+  const initial =
+    props.initialDraft && generation === 0
+      ? toEventFormValuesFromDraft({
+          draft: props.initialDraft,
+          canChooseOfficial: props.canChooseOfficial,
+          timezoneFallback: 'America/Los_Angeles',
+        })
+      : {
+          values: emptyEventValues(props.initialIsOfficial),
+          isNoLimitEnabled: true,
+        }
 
   return (
     <TripCreationFlow
+      key={generation}
       initialValues={initial.values}
       initialNoLimit={initial.isNoLimitEnabled}
-      initialHostIds={props.initialDraft?.public_host_ids}
-      initialLeaderIds={props.initialDraft?.leader_user_ids}
+      initialHostIds={
+        generation === 0 ? props.initialDraft?.public_host_ids : []
+      }
+      initialLeaderIds={
+        generation === 0 ? props.initialDraft?.leader_user_ids : []
+      }
       canChooseOfficial={props.canChooseOfficial}
       activityOptions={options}
       publicHostOptions={props.canManageTags ? props.publicHostOptions : []}
@@ -73,9 +71,13 @@ export function EventForm(props: EventFormProps) {
           sourceDraftId: draftId.current,
         })
         if (result.configurationPending) {
-          setPublishedTripId(result.tripId)
-          return 'Your trip is published; finish transportation setup next.'
+          draftId.current = undefined
+          setGeneration(current => current + 1)
+          router.push(`/trips/${result.tripId}/registrations`)
+          return 'Your trip is published; finish registration settings on its management page.'
         }
+        draftId.current = undefined
+        setGeneration(current => current + 1)
         router.push(
           result.informedRisksPending
             ? `/trips/${result.tripId}/registrations`

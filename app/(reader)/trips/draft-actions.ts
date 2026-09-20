@@ -11,6 +11,7 @@ import {
 import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
 import { riskStatements } from '@/lib/registration/risk-activities'
+import { rosterSchema } from '@/lib/registration/schema'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
 
@@ -310,6 +311,18 @@ export async function publishTripFormAction(payload: {
     created_by: userId,
     title: parsed.data.title.trim(),
     event_kind: parsed.data.kind,
+    registration_opens_at: eventDateTimeToIso(
+      parsed.data.registrationOpensAt ?? '',
+      parsed.data.timezone,
+    ),
+    rsvp_deadline: eventDateTimeToIso(
+      parsed.data.registrationClosesAt ?? '',
+      parsed.data.timezone,
+    ),
+    waitlist_enabled: parsed.data.waitlistEnabled ?? false,
+    elevation_ft: parsed.data.elevationFt?.trim()
+      ? Number(parsed.data.elevationFt)
+      : null,
     starts_at: startsAt,
     ends_at: endsAt,
     time_zone: parsed.data.timezone,
@@ -428,6 +441,33 @@ export async function publishTripFormAction(payload: {
     ),
     p_activities: parsed.data.waiverActivities ?? [],
   })
+  if (parsed.data.registrationEnabled && !riskError) {
+    const { data: current } = await supabase.rpc('get_registration_roster', {
+      p_trip_id: createdTrip.id,
+    })
+    const roster = rosterSchema.safeParse(current)
+    if (roster.success) {
+      const { settings, trip } = roster.data
+      const { error } = await supabase.rpc('save_registration_settings', {
+        p_trip_id: createdTrip.id,
+        p_revision: settings.revision,
+        p_data: {
+          enabled: true,
+          eligibility: settings.eligibility,
+          emergencyRequired: settings.emergency_required,
+          waiverRequired: settings.waiver_required,
+          questions: settings.questions,
+          capacity: trip.capacity,
+          waitlistEnabled: trip.waitlistEnabled,
+          deadline: trip.deadline,
+          opensAt: trip.opensAt ?? null,
+          offerHours: settings.offer_hours,
+          collectTransportation: parsed.data.collectTransportation,
+        },
+      })
+      configurationPending ||= Boolean(error)
+    } else configurationPending = true
+  }
   informedRisksPending = Boolean(riskError)
   return { tripId: createdTrip.id, configurationPending, informedRisksPending }
 }

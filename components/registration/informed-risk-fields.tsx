@@ -1,5 +1,6 @@
 'use client'
 import { riskActivities } from '@/lib/registration/risk-activities'
+import { OutdoorConditions } from './outdoor-conditions'
 
 export function InformedRiskFields({
   risks,
@@ -119,6 +120,7 @@ export function InformedRiskFields({
           waiver still applies.
         </p>
       )}
+      <OutdoorConditions />
     </div>
   )
 }

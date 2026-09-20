@@ -17,7 +17,6 @@ const items = [
   { href: '/', label: 'Home' },
   { href: '/schedule', label: 'Schedule' },
   { href: '/gallery', label: 'Gallery' },
-  { href: '/membership', label: 'Membership' },
 ] as const
 
 const linkClass =
@@ -72,6 +71,7 @@ export function PublicThumbNavigation({
                 {item.label}
               </Link>
             ))}
+            <MoreNavigation className={desktopLinkClass} />
           </nav>
 
           <ThemeCycleButton className="rounded-none bg-transparent hover:bg-secondary" />

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { FormMessage } from '@/components/forms/form-shell'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,8 +26,6 @@ export function RegistrationForm({
   const [ageMessage, setAgeMessage] = useState('')
   const canRegister = snapshot.actions.includes('register')
   const canUpdate = snapshot.actions.includes('update_response')
-  const hadEditableForm = useRef(false)
-  if (canRegister || canUpdate) hadEditableForm.current = true
   useEffect(() => {
     if (!snapshot.offer) return
     const refresh = () => router.refresh()
@@ -68,7 +66,7 @@ export function RegistrationForm({
     if (!result.ok) throw new Error(result.message)
     router.push(`/trips/${snapshot.tripId}`)
   }
-  const showForm = canRegister || canUpdate || hadEditableForm.current
+  const showForm = canRegister || canUpdate
   if (canRegister && snapshot.state !== 'incomplete') {
     return (
       <div

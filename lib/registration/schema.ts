@@ -90,6 +90,7 @@ export const snapshotSchema = z.object({
     'canceled',
     'archived',
   ]),
+  opensAt: z.string().nullable().optional(),
   closeAt: z.string(),
   eligibility: z.enum(['members', 'account']),
   eligibilityReasons: z.array(z.string()),
@@ -228,6 +229,7 @@ export const settingsInputSchema = z.object({
   questions: questionsSchema,
   capacity: z.number().int().positive().max(100000).nullable(),
   waitlistEnabled: z.boolean(),
+  opensAt: z.string().datetime({ offset: true }).nullable().optional(),
   deadline: z.string().datetime({ offset: true }).nullable(),
   offerHours: z.number().int().min(1).max(168),
   waiverSourceUrl: z.string().url().optional(),
@@ -250,6 +252,7 @@ export const rosterSchema = z.object({
   trip: z.object({
     capacity: z.number().nullable(),
     waitlistEnabled: z.boolean(),
+    opensAt: z.string().nullable().optional(),
     deadline: z.string().nullable(),
     isAllDay: z.boolean(),
   }),

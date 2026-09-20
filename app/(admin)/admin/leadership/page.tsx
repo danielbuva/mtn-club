@@ -77,7 +77,11 @@ async function AdminLeadershipPageContent() {
                   aria-hidden="true"
                 />
               </summary>
-              <form action={saveRosterEntryAction} className={rosterCardClass}>
+              <form
+                key={host.updated_at}
+                action={saveRosterEntryAction}
+                className={rosterCardClass}
+              >
                 <input type="hidden" name="hostId" value={host.id} />
                 <label
                   htmlFor={`host-name-${host.id}`}

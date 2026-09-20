@@ -50,6 +50,9 @@ export type TripListItem = {
   gradeMin?: string
   gradeMax?: string
   distanceMi?: number
+  registrationReadOnly?: boolean
+  registrationOpensAt?: string | null
+  registrationClosesAt?: string | null
   elevationFt?: number
   nights?: number
   campStyle?: string
@@ -99,6 +102,9 @@ export type TripDetail = {
   gradeMin?: string
   gradeMax?: string
   distanceMi?: number
+  registrationReadOnly?: boolean
+  registrationOpensAt?: string | null
+  registrationClosesAt?: string | null
   elevationFt?: number
   nights?: number
   campStyle?: string

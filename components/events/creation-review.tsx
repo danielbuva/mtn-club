@@ -42,6 +42,7 @@ export function CreationReview({
       lines: [
         values.difficulty === 'Easy' ? 'Beginner' : values.difficulty,
         values.overviewWhat,
+        values.elevationFt ? `${values.elevationFt} ft elevation gain` : '',
         values.overviewWhere,
         values.overviewWeather,
         values.overviewEquipment,
@@ -63,6 +64,16 @@ export function CreationReview({
       title: 'Settings',
       lines: [
         values.visibility.replaceAll('_', ' '),
+        values.registrationEnabled
+          ? 'Registration enabled'
+          : 'Registration closed',
+        values.waitlistEnabled ? 'Waitlist enabled' : '',
+        values.registrationOpensAt
+          ? `Registration opens: ${values.registrationOpensAt.replace('T', ' ')} (${values.timezone})`
+          : '',
+        values.registrationClosesAt
+          ? `Registration closes: ${values.registrationClosesAt.replace('T', ' ')} (${values.timezone})`
+          : '',
         noLimit
           ? 'No participant limit'
           : `${values.maxParticipants} participants`,

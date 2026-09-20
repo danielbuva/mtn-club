@@ -31,6 +31,8 @@ const messages: Record<string, string> = {
     'This trip has been canceled. Check the trip page for updates.',
   trip_changed:
     'The trip time or location has changed. Review the latest trip details before traveling.',
+  incomplete_reminder:
+    'Your trip starts within 24 hours, but your signup is incomplete. Finish your registration before it closes. Your place is not confirmed until setup is complete.',
   reminder:
     'Your trip starts within 24 hours. Review the latest arrangements and your registration details.',
 }
@@ -50,7 +52,11 @@ export function registrationEmail(
   if (origin.protocol !== 'https:' && origin.hostname !== 'localhost')
     throw new Error('Invalid registration site URL')
   const opening = notification.kind === 'registration_opened'
-  const action = opening ? 'View trip and register' : 'Review registration'
+  const action = opening
+    ? 'View trip and register'
+    : notification.kind === 'incomplete_reminder'
+      ? 'Finish signup'
+      : 'Review registration'
   const link = new URL(
     `/trips/${notification.tripId}${opening ? '' : '/rsvp'}`,
     origin,

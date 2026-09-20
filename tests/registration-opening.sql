@@ -17,7 +17,7 @@ begin
  insert into public.trips(id,title,starts_at,ends_at,created_by,visibility,lifecycle_status)
  values(trip,'Registration opening test',now()+interval '3 days',now()+interval '4 days',null,'public','published');
  insert into public.trip_update_followers(trip_id,user_id) select trip,u from unnest(array[follower,both_user,opted_out]) u;
- update public.club_admin_settings set registration_enabled=true where id;
+ insert into public.club_admin_settings(id,registration_enabled) values(true,true) on conflict(id) do update set registration_enabled=true;
  update public.trip_registration_settings set enabled=true where trip_id=trip;
  select count(*) into n from public.registration_notifications where trip_id=trip and kind='registration_opened' and user_id=any(array[follower,general_user,both_user,neither,opted_out]);
  perform pg_temp.assert_true(n=3,'follower OR announcement opt-in; overlap deduped, master opt-out excluded');

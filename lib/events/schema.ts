@@ -9,6 +9,21 @@ import { eventDateTimeToIso } from './date-time'
 
 export const eventFormSchema = z
   .object({
+    registrationEnabled: z.boolean().optional(),
+    waitlistEnabled: z.boolean().optional(),
+    registrationOpensAt: z.string().optional(),
+    registrationClosesAt: z.string().optional(),
+    elevationFt: z
+      .string()
+      .optional()
+      .refine(
+        value =>
+          !value ||
+          (Number.isFinite(Number(value)) &&
+            Number(value) >= 0 &&
+            Number(value) <= 100000),
+        'Enter an elevation gain from 0 to 100,000 feet.',
+      ),
     title: z.string().trim().min(1, 'Title is required'),
     shortSummary: z
       .string()
@@ -81,6 +96,36 @@ export const eventFormSchema = z
       })
       return
     }
+    const opens = data.registrationOpensAt
+      ? eventDateTimeToIso(data.registrationOpensAt, data.timezone)
+      : null
+    const closes = data.registrationClosesAt
+      ? eventDateTimeToIso(data.registrationClosesAt, data.timezone)
+      : null
+    if (data.registrationOpensAt && !opens)
+      ctx.addIssue({
+        code: 'custom',
+        path: ['registrationOpensAt'],
+        message: 'Enter a valid opening time.',
+      })
+    if (data.registrationClosesAt && !closes)
+      ctx.addIssue({
+        code: 'custom',
+        path: ['registrationClosesAt'],
+        message: 'Enter a valid closing time.',
+      })
+    if (closes && start && closes > start)
+      ctx.addIssue({
+        code: 'custom',
+        path: ['registrationClosesAt'],
+        message: 'Registration must close by the trip start.',
+      })
+    if (opens && (closes || start) && opens >= (closes || start || ''))
+      ctx.addIssue({
+        code: 'custom',
+        path: ['registrationOpensAt'],
+        message: 'Registration must open before it closes.',
+      })
     if (!start)
       ctx.addIssue({
         code: 'custom',

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { saveTripDetailEditsAction } from '@/app/(reader)/trips/actions'
+import { SettingsEditor } from '@/components/registration/settings-editor'
 import {
   type TripAssignmentOption,
   TripAssignmentsEditor,
@@ -25,10 +26,12 @@ import {
   normalizeActivityTags,
 } from '@/lib/events/activity-tags'
 import { eventDateTimeToIso, eventLocalDateTime } from '@/lib/events/date-time'
+import type { RegistrationRoster } from '@/lib/registration/schema'
 import { formatTripDate } from '@/lib/trips/format'
 import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 
 type TripDetailEditorProps = {
+  registrationRoster?: RegistrationRoster
   canManageLifecycle?: boolean
   trip: TripDetail
   returnTo?: string
@@ -40,6 +43,7 @@ type TripDetailEditorProps = {
 }
 
 type TripDraft = {
+  elevationFt: string
   title: string
   activityTags: string[]
   difficulty: TripDifficulty
@@ -87,6 +91,7 @@ const getPrimaryTagLabel = (activityTags: string[]) => {
 
 export function TripDetailEditor({
   returnTo,
+  registrationRoster,
   canManageLifecycle = false,
   trip,
   availableActivityTags,
@@ -105,6 +110,7 @@ export function TripDetailEditor({
   const [leaderIds, setLeaderIds] = useState(initialLeaderIds)
 
   const [draft, setDraft] = useState<TripDraft>({
+    elevationFt: trip.elevationFt == null ? '' : String(trip.elevationFt),
     title: trip.title,
     activityTags: normalizeActivityTags(trip.activityTags),
     difficulty: trip.difficulty ?? 'beginner',
@@ -176,6 +182,7 @@ export function TripDetailEditor({
       try {
         const formData = new FormData()
         formData.set('tripId', trip.id)
+        formData.set('elevationFt', draft.elevationFt)
         formData.set('title', draft.title)
         formData.set('activityTags', JSON.stringify(draft.activityTags))
         formData.set('difficulty', draft.difficulty)
@@ -224,6 +231,28 @@ export function TripDetailEditor({
       >
         Edit informed risks & activity scope
       </Link>
+      {registrationRoster && (
+        <SettingsEditor
+          key={registrationRoster.settings.revision}
+          roster={registrationRoster}
+        />
+      )}
+      <label htmlFor="trip-elevation" className="block space-y-2">
+        Elevation gain (feet, optional)
+        <Input
+          id="trip-elevation"
+          type="number"
+          min={0}
+          max={100000}
+          value={draft.elevationFt}
+          onChange={event =>
+            setDraft(current => ({
+              ...current,
+              elevationFt: event.target.value,
+            }))
+          }
+        />
+      </label>
       {publicHostOptions.length || leaderOptions.length ? (
         <TripAssignmentsEditor
           publicHosts={publicHostOptions}

@@ -6,6 +6,7 @@ import { withdrawAnnualAction } from '@/lib/registration/annual-actions'
 import type { AnnualState } from '@/lib/registration/annual-schema'
 import { AnnualSigningForm } from './annual-signing-form'
 import { waiverDate } from './annual-waiver-intro'
+import { OutdoorConditions } from './outdoor-conditions'
 export function AnnualProfile({ state }: { state: AnnualState }) {
   const [signing, setSigning] = useState(false)
   const [confirm, setConfirm] = useState(false)
@@ -19,6 +20,7 @@ export function AnnualProfile({ state }: { state: AnnualState }) {
   return (
     <section className="space-y-5">
       <h2 className="text-xl font-semibold">Outdoor Adventures Waiver</h2>
+      <OutdoorConditions />
       <p className="font-medium">
         {valid
           ? `✓ Valid through ${waiverDate(valid.validUntil)}`

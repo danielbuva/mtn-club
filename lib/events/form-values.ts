@@ -2,6 +2,11 @@ import type { EventFormValues } from './schema'
 
 export function emptyEventValues(isOfficial = false): EventFormValues {
   return {
+    registrationEnabled: false,
+    waitlistEnabled: false,
+    registrationOpensAt: '',
+    registrationClosesAt: '',
+    elevationFt: '',
     title: '',
     kind: 'outdoor',
     shortSummary: '',
@@ -53,6 +58,9 @@ export function creationStepForField(field: string) {
     ].includes(field)
   )
     return 'place'
+  if (field.startsWith('registration') || field === 'waitlistEnabled')
+    return 'settings'
+  if (field === 'elevationFt') return 'details'
   if (field.startsWith('overview') || field === 'difficulty') return 'details'
   if (
     ['maxParticipants', 'visibility', 'collectTransportation'].includes(field)

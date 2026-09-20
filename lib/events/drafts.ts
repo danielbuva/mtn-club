@@ -90,6 +90,19 @@ export const toDraftRowInput = ({
       : parsedMax
 
   return {
+    registration_enabled: values.registrationEnabled ?? false,
+    waitlist_enabled: values.waitlistEnabled ?? false,
+    registration_opens_at: draftDateTime(
+      values.registrationOpensAt ?? '',
+      values.timezone || 'America/Los_Angeles',
+    ),
+    rsvp_deadline: draftDateTime(
+      values.registrationClosesAt ?? '',
+      values.timezone || 'America/Los_Angeles',
+    ),
+    elevation_ft: values.elevationFt?.trim()
+      ? Number(values.elevationFt)
+      : null,
     created_by: createdBy,
     event_kind: values.kind,
     collect_transportation: values.collectTransportation,
@@ -134,6 +147,17 @@ export const toEventFormValuesFromDraft = ({
 }): { values: EventFormValues; isNoLimitEnabled: boolean } => {
   return {
     values: {
+      registrationEnabled: draft.registration_enabled ?? false,
+      waitlistEnabled: draft.waitlist_enabled ?? false,
+      registrationOpensAt: eventLocalDateTime(
+        draft.registration_opens_at,
+        draft.time_zone || timezoneFallback,
+      ),
+      registrationClosesAt: eventLocalDateTime(
+        draft.rsvp_deadline,
+        draft.time_zone || timezoneFallback,
+      ),
+      elevationFt: draft.elevation_ft == null ? '' : String(draft.elevation_ft),
       title: draft.title ?? '',
       shortSummary: draft.short_summary ?? '',
       kind: EVENT_KINDS.find(kind => kind === draft.event_kind) ?? 'outdoor',

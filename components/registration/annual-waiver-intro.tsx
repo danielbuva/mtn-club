@@ -1,4 +1,5 @@
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
+import { OutdoorConditions } from './outdoor-conditions'
 export function waiverDate(value: string) {
   return new Date(`${value}T12:00:00Z`).toLocaleDateString('en-US', {
     month: 'long',
@@ -44,6 +45,7 @@ export function AnnualWaiverIntro({
         academic year when the covered activities and risks are specifically
         identified.
       </p>
+      <OutdoorConditions />
     </div>
   )
 }

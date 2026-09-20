@@ -15,6 +15,7 @@ export function TripCTA({
   trip: {
     id: string
     status?: TripStatus
+    registrationReadOnly?: boolean
     registrationState?: TripRegistrationSnapshot['state']
     registrationActionRequired?: boolean
   }
@@ -23,6 +24,12 @@ export function TripCTA({
   onExpandedChange?: (expanded: boolean) => void
 }) {
   if (trip.status === 'cancelled') return null
+  if (trip.registrationReadOnly)
+    return (
+      <p className={cn('text-sm text-muted-foreground', className)}>
+        Registration closed
+      </p>
+    )
   if (trip.registrationState === 'confirmed') {
     if (trip.registrationActionRequired)
       return (

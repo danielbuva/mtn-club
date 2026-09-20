@@ -29,7 +29,7 @@ export const emailCategories = [
     key: 'tripReminders',
     label: 'Upcoming trip reminders',
     description:
-      'A reminder about 24 hours before a trip you are confirmed for. On by default.',
+      'A reminder before a trip you are confirmed for or still need to finish signing up for. Recent signups have a cooldown. On by default.',
   },
   {
     key: 'safetyAlerts',

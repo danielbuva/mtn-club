@@ -188,6 +188,20 @@ test('creation is grouped, editable, and validates before publishing', async ({
   await expect(form.getByText(/Hiking involves uneven ground/)).toBeVisible()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByLabel('Participant limit', { exact: true }).fill('12')
+  await form
+    .getByText('Registration settings (optional)', { exact: true })
+    .click()
+  await form.getByLabel('Enable registration', { exact: false }).check()
+  await form
+    .getByLabel('Registration opens', { exact: false })
+    .fill('2026-09-01T10:00')
+  await form
+    .getByLabel('Registration closes', { exact: false })
+    .fill('2026-09-02T10:00')
+  await page.screenshot({
+    path: testInfo.outputPath('registration-settings.png'),
+    fullPage: true,
+  })
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
   await form.getByRole('button', { name: 'Edit A Saturday outside' }).click()
   await expect(form.getByLabel('Trip title')).toHaveValue('A Saturday outside')
@@ -359,7 +373,7 @@ for (const situation of ['first', 'returning', 'missing risks']) {
     ).toBeVisible()
     await expect(
       form.getByRole('link', { name: 'Close registration' }),
-    ).toHaveAttribute('href', '/trips')
+    ).toHaveAttribute('href', '/trips/11111111-1111-4111-8111-111111111111')
   })
 }
 
@@ -498,4 +512,15 @@ test('waiver autofill preserves all values and errors do not shift fields', asyn
   await expect(form.getByLabel('Emergency contact address')).toHaveValue(
     '789 Updated Road, Las Vegas, NV 89119',
   )
+})
+
+test('past confirmed registrations are read only', async ({ page }) => {
+  await page.goto('/form-lab')
+  await page
+    .getByText('Registration regression examples', { exact: true })
+    .click()
+  const past = page.getByTestId('past-trip-registration')
+  await expect(past.getByText('Registration closed')).toBeVisible()
+  await expect(past.getByRole('button')).toHaveCount(0)
+  await expect(past.getByRole('link')).toHaveCount(0)
 })

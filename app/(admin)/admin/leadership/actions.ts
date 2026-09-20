@@ -109,8 +109,13 @@ export async function saveRosterEntryAction(formData: FormData) {
     updated_at: new Date().toISOString(),
   }
   const result = hostId
-    ? await admin.from('club_hosts').update(payload).eq('id', hostId)
-    : await admin.from('club_hosts').insert(payload)
+    ? await admin
+        .from('club_hosts')
+        .update(payload)
+        .eq('id', hostId)
+        .select('id')
+        .single()
+    : await admin.from('club_hosts').insert(payload).select('id').single()
   if (result.error) throw result.error
 
   if (linkedUserId) {
@@ -119,8 +124,9 @@ export async function saveRosterEntryAction(formData: FormData) {
       .select('id')
       .eq('key', roleKey)
       .maybeSingle()
+    if (roleResult.error) throw roleResult.error
     if (roleResult.data) {
-      await admin.from('admin_user_roles').upsert(
+      const assignment = await admin.from('admin_user_roles').upsert(
         {
           user_id: linkedUserId,
           role_id: roleResult.data.id,
@@ -128,6 +134,7 @@ export async function saveRosterEntryAction(formData: FormData) {
         },
         { onConflict: 'user_id,role_id' },
       )
+      if (assignment.error) throw assignment.error
     }
   }
   await admin.rpc('record_admin_activity', {

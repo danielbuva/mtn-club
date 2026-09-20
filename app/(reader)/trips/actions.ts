@@ -125,6 +125,16 @@ export async function saveTripDetailEditsAction(formData: FormData) {
   const dates = resolveTripEditDates(formData, storedTrip)
   if (!dates.ok) return dates
 
+  const elevationRaw = parseStringField(formData.get('elevationFt'))
+  const elevation = elevationRaw === null ? null : Number(elevationRaw)
+  if (
+    elevation !== null &&
+    (!Number.isFinite(elevation) || elevation < 0 || elevation > 100000)
+  )
+    return {
+      ok: false,
+      error: 'Enter an elevation gain from 0 to 100,000 feet.',
+    } as const
   const rawDifficulty = formData.get('difficulty')
   const parsedDifficulty = tripDifficultySchema.safeParse(rawDifficulty)
   const difficulty = parsedDifficulty.success ? parsedDifficulty.data : null
@@ -136,6 +146,7 @@ export async function saveTripDetailEditsAction(formData: FormData) {
   const activityTags = parseActivityTags(formData.get('activityTags'))
 
   const tripUpdate: Database['public']['Tables']['trips']['Update'] = {
+    ...(formData.has('elevationFt') ? { elevation_ft: elevation } : {}),
     title: parseStringField(formData.get('title')) ?? 'Untitled Trip',
     description_public: parseStringField(formData.get('summary')),
     location_public: parseStringField(formData.get('locationName')),

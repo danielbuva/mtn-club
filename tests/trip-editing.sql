@@ -14,15 +14,15 @@ begin
  perform set_config('request.jwt.claim.sub',u::text,true);
  set local role authenticated;
  insert into public.trips(id,title,created_by,starts_at,ends_at,rsvp_deadline,is_all_day)
- values(t,'Timezone regression',u,'2026-09-13 07:00Z','2026-09-14 06:59:59Z','2026-09-13 01:00Z',true);
+ values(t,'Timezone regression',u,date_trunc('day',now())+interval '2 days 7 hours',date_trunc('day',now())+interval '3 days 6 hours 59 minutes 59 seconds',date_trunc('day',now())+interval '2 days 1 hour',true);
  begin
-  update public.trips set starts_at='2026-09-13 00:00Z' where id=t;
+  update public.trips set starts_at=date_trunc('day',now())+interval '2 days' where id=t;
  exception when raise_exception then
   if sqlerrm <> 'Registration must close by the trip start.' then raise; end if;
   denied:=true;
  end;
  if not denied then raise exception 'Deadline guard was bypassed'; end if;
- update public.trips set title='Saved by a pending-member admin',is_all_day=false,starts_at='2026-09-13 07:00Z',ends_at='2026-09-14 06:59:59Z' where id=t;
+ update public.trips set title='Saved by a pending-member admin',is_all_day=false,starts_at=date_trunc('day',now())+interval '2 days 7 hours',ends_at=date_trunc('day',now())+interval '3 days 6 hours 59 minutes 59 seconds' where id=t;
  if not found then raise exception 'Admin event save denied'; end if;
  if exists(select 1 from public.trips where id=t and is_all_day) then raise exception 'Saved time still marked TBA'; end if;
  update public.trips set ends_at=null where id=t;

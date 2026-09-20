@@ -168,3 +168,11 @@ and rollback-only `tests/registration-opening.sql` on preview and production.
 The SQL fixtures test recipient union/deduplication, unchanged saves, opt-outs,
 unfollowing, closing before delivery, reopening, deadline extension, and queue
 permissions without sending mail or retaining fixture data.
+
+## September 20 registration update
+
+Trips can optionally set an opening instant and closing deadline in their own timezone, plus elevation gain in feet. Blank opening means immediately when enabled; blank closing means trip start. The global registration switch still applies. New-trip optional settings and the edit screen use the existing registration settings command. Past-trip participant registrations and registration settings are read-only; attendance recording remains available to authorized organizers.
+
+Incomplete signup reminders use the existing Resend outbox and minute worker. They require Allow club emails, Trip updates, and Upcoming trip reminders. A reminder is eligible during the 24 hours before departure, only while signup remains open. Signups begun inside that window wait at least two hours, preferably until 6pm in the trip timezone the previous evening. If the cooldown extends beyond registration closing, no reminder is sent. Each participant receives at most one incomplete reminder per departure time. Completion, cancellation, changed departure, closed registration, and opt-outs are rechecked immediately before delivery.
+
+The low-light and changing-temperature sections are preparation guidance beside the annual waiver and informed risks. Existing immutable waiver documents and signatures are preserved. Publishing a replacement annual document still requires the established review workflow and makes its new version require a signature.

@@ -20,7 +20,7 @@ import {
   legacyRsvpChoice,
   registrationTripStatus,
 } from '@/lib/registration/presentation'
-import { getRegistration } from '@/lib/registration/server'
+import { getRegistration, getRoster } from '@/lib/registration/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import type { TripActivityType, TripDetail } from '@/lib/trips/types'
@@ -132,6 +132,9 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     locationNotes: privateRes.data?.meetup_point ?? undefined,
     timeZone: trip.time_zone,
     eventKind: trip.event_kind,
+    registrationOpensAt: trip.registration_opens_at,
+    registrationClosesAt: trip.rsvp_deadline,
+    elevationFt: trip.elevation_ft ?? undefined,
     startAt: new Date(trip.starts_at),
     endAt: trip.ends_at ? new Date(trip.ends_at) : undefined,
     isAllDay: trip.is_all_day,
@@ -166,6 +169,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
       registration.canManage || registration.state === 'confirmed',
     viewerRsvpStatus,
     registrationState: registration.state,
+    registrationReadOnly: new Date(trip.starts_at).getTime() <= Date.now(),
     registrationActionRequired: registration.requirements.length > 0,
     canManageRegistration: registration.canManage,
     visibility: trip.visibility,
@@ -294,6 +298,9 @@ export default async function TripDetailPage({
     return (
       <TripDetailEditor
         trip={trip}
+        registrationRoster={
+          trip.canManageRegistration ? await getRoster(trip.id) : undefined
+        }
         canManageLifecycle={lifecyclePermission.data ?? false}
         returnTo={returnTo}
         availableActivityTags={availableActivityTags}

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { TripRegistrationSnapshot } from '@/lib/registration/schema'
 import { waiverDate } from './annual-waiver-intro'
+import { OutdoorConditions } from './outdoor-conditions'
 export function TripRiskAcknowledgement({
   snapshot,
   acknowledged,
@@ -72,6 +73,7 @@ export function TripRiskAcknowledgement({
           View annual waiver
         </Link>
       )}
+      <OutdoorConditions />
     </div>
   )
 }

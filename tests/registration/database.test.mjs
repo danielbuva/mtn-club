@@ -1049,6 +1049,9 @@ test('trip activity choices are readable by members but writable only by trip ma
 
 test('annual adult journeys: exact template, profile signing, trip risks, withdrawal, replacements, scope, history and concurrency', async () => {
   const f = fixture(20)
+  sql(
+    `update public.trip_registration_settings set annual_waiver=true where trip_id='${f.trip}'`,
+  )
   const currentYear =
     new Date().getUTCFullYear() - (new Date().getUTCMonth() < 6 ? 1 : 0)
   const fields = {
@@ -1276,6 +1279,9 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
 
 test('annual guardian verification, immutable merge evidence, duplicate signing and past trip accuracy', async () => {
   const f = fixture(20)
+  sql(
+    `update public.trip_registration_settings set annual_waiver=true where trip_id='${f.trip}'`,
+  )
   const user = f.users[0]
   const retained = f.users[1]
   const currentYear =
@@ -1501,4 +1507,97 @@ test('completed deletions remain labeled but no longer need cleanup', () => {
     )
   assert.deepEqual(JSON.parse(read(false)), ['completed'])
   assert.deepEqual(JSON.parse(read(true)), [])
+})
+
+test('scheduled registration enforces opening, announces once, and past trips reject mutations', async () => {
+  const f = fixture()
+  sql(
+    `update public.trips set registration_opens_at=now()+interval '1 hour',elevation_ft=1800 where id='${f.trip}'`,
+  )
+  let snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(snapshot.availability, 'disabled')
+  assert.ok(!snapshot.actions.includes('register'))
+  await assert.rejects(register(f.trip, f.users[0]), /not open yet/)
+  sql(
+    `update public.trips set registration_opens_at=now()-interval '1 minute',registration_open_announced_at=null where id='${f.trip}'; select public.registration_maintenance();`,
+  )
+  const count = sql(
+    `select count(*) from public.registration_events where trip_id='${f.trip}' and kind='registration_opened'`,
+  )
+  sql('select public.registration_maintenance()')
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_events where trip_id='${f.trip}' and kind='registration_opened'`,
+    ),
+    count,
+  )
+  await register(f.trip, f.users[0])
+  sql(
+    `update public.trips set registration_opens_at=null,starts_at=now()-interval '1 day',ends_at=now()-interval '1 hour' where id='${f.trip}'`,
+  )
+  snapshot = await asUser(
+    f.users[0],
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.deepEqual(snapshot.actions, [])
+  for (const command of ['cancel', 'update_response', 'set_maybe'])
+    await assert.rejects(
+      asUser(
+        f.users[0],
+        `select public.registration_command('${f.trip}','${command}','${randomUUID()}',1)`,
+      ),
+      /Past trips/,
+    )
+  await assert.rejects(
+    asUser(
+      f.owner,
+      `select public.save_registration_settings('${f.trip}',1,'{}')`,
+    ),
+    /Past trip/,
+  )
+})
+
+test('incomplete reminders respect cooldown, preferences, completion, and deduplication', async () => {
+  const f = fixture(20)
+  await asUser(
+    f.users[2],
+    `select public.registration_command('${f.trip}','begin_signup','${randomUUID()}',0)`,
+  )
+  sql(`insert into public.trip_rsvps(trip_id,user_id,status,registration_state,revision,created_at)
+    values ('${f.trip}','${f.users[0]}','removed','incomplete',1,now()-interval '2 days'),
+    ('${f.trip}','${f.users[1]}','removed','incomplete',1,now()-interval '2 days')`)
+  sql(`update public.trips set starts_at=now()+interval '20 hours',ends_at=now()+interval '22 hours' where id='${f.trip}';
+    update public.trip_rsvps set created_at=now()-interval '2 days' where trip_id='${f.trip}' and user_id<>'${f.users[2]}';
+    insert into public.profile_private(user_id,notification_settings) values('${f.users[1]}','{"tripReminders":false}') on conflict(user_id) do update set notification_settings=excluded.notification_settings;
+    select public.registration_maintenance(); select public.registration_maintenance();`)
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_notifications where trip_id='${f.trip}' and kind='incomplete_reminder'`,
+    ),
+    '1',
+  )
+  const job = JSON.parse(
+    sql(
+      `update public.registration_notifications set status='sending',lease_token=gen_random_uuid(),leased_until=now()+interval '2 minutes' where trip_id='${f.trip}' and kind='incomplete_reminder' returning jsonb_build_object('id',id,'lease',lease_token)`,
+    ),
+  )
+  await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',1,'{"formVersion":2,"answers":{}}')`,
+  )
+  assert.equal(
+    sql(
+      `select coalesce(public.prepare_registration_notification('${job.id}','${job.lease}')::text,'null')`,
+    ),
+    'null',
+  )
+  assert.equal(
+    sql(
+      `select status from public.registration_notifications where id='${job.id}'`,
+    ),
+    'obsolete',
+  )
 })

@@ -1204,6 +1204,11 @@ export type Database = {
       }
       trip_drafts: {
         Row: {
+          registration_opens_at: string | null
+          elevation_ft: number | null
+          rsvp_deadline: string | null
+          registration_enabled: boolean
+          waitlist_enabled: boolean
           informed_risks: string
           waiver_activities: string[]
           event_kind: string
@@ -1235,6 +1240,11 @@ export type Database = {
           visibility: Database['public']['Enums']['trip_visibility']
         }
         Insert: {
+          registration_opens_at?: string | null
+          elevation_ft?: number | null
+          rsvp_deadline?: string | null
+          registration_enabled?: boolean
+          waitlist_enabled?: boolean
           informed_risks?: string
           waiver_activities?: string[]
           event_kind?: string
@@ -1266,6 +1276,11 @@ export type Database = {
           visibility?: Database['public']['Enums']['trip_visibility']
         }
         Update: {
+          registration_opens_at?: string | null
+          elevation_ft?: number | null
+          rsvp_deadline?: string | null
+          registration_enabled?: boolean
+          waitlist_enabled?: boolean
           informed_risks?: string
           waiver_activities?: string[]
           event_kind?: string
@@ -1537,6 +1552,9 @@ export type Database = {
       }
       trips: {
         Row: {
+          registration_opens_at: string | null
+          elevation_ft: number | null
+          registration_open_announced_at: string | null
           event_kind: string
           activity_id: string | null
           activity_tags: string[]
@@ -1571,6 +1589,9 @@ export type Database = {
           waitlist_enabled: boolean
         }
         Insert: {
+          registration_opens_at?: string | null
+          elevation_ft?: number | null
+          registration_open_announced_at?: string | null
           event_kind?: string
           activity_id?: string | null
           activity_tags?: string[]
@@ -1605,6 +1626,9 @@ export type Database = {
           waitlist_enabled?: boolean
         }
         Update: {
+          registration_opens_at?: string | null
+          elevation_ft?: number | null
+          registration_open_announced_at?: string | null
           event_kind?: string
           activity_id?: string | null
           activity_tags?: string[]
