@@ -2,6 +2,7 @@
 import { AnnualProfile } from '@/components/registration/annual-profile'
 import { TripCTA } from '@/components/trips/TripCTA'
 import { createUnlvWaiver } from '@/lib/registration/unlv-waiver'
+import { RegistrationSettingsRegression } from './registration-settings-regression'
 
 export function RegistrationRegressions() {
   const id = '33333333-3333-4333-8333-333333333333'
@@ -24,6 +25,7 @@ export function RegistrationRegressions() {
     <details className="min-w-0 max-w-full">
       <summary>Registration regression examples</summary>
       <div className="min-w-0 space-y-4" data-testid="registration-regressions">
+        <RegistrationSettingsRegression />
         <TripCTA
           trip={{
             id,

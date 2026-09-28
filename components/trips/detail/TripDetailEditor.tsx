@@ -104,6 +104,7 @@ export function TripDetailEditor({
   const router = useRouter()
   const isMobile = useIsMobile()
   const [isPending, startTransition] = useTransition()
+  const [registrationDirty, setRegistrationDirty] = useState(false)
   const [newTag, setNewTag] = useState('')
   const [tagPickerOpen, setTagPickerOpen] = useState(false)
   const [publicHostIds, setPublicHostIds] = useState(initialPublicHostIds)
@@ -178,6 +179,12 @@ export function TripDetailEditor({
   }
 
   const onSave = () => {
+    if (registrationDirty) {
+      toast.error(
+        'Save your registration changes with Save settings before saving trip details.',
+      )
+      return
+    }
     startTransition(async () => {
       try {
         const formData = new FormData()
@@ -235,6 +242,7 @@ export function TripDetailEditor({
         <SettingsEditor
           key={registrationRoster.settings.revision}
           roster={registrationRoster}
+          onDirtyChange={setRegistrationDirty}
         />
       )}
       <label htmlFor="trip-elevation" className="block space-y-2">
@@ -703,7 +711,7 @@ export function TripDetailEditor({
                   disabled={isPending}
                   className="min-w-[180px]"
                 >
-                  {isPending ? 'Saving…' : 'Save'}
+                  {isPending ? 'Saving…' : 'Save trip details'}
                 </Button>
               </div>
             ) : (
@@ -716,7 +724,7 @@ export function TripDetailEditor({
                   disabled={isPending}
                   className="w-full"
                 >
-                  {isPending ? 'Saving…' : 'Save'}
+                  {isPending ? 'Saving…' : 'Save trip details'}
                 </Button>
               </>
             )}

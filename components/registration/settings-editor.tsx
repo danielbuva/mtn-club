@@ -1,7 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
+import { toast } from 'sonner'
 import { ToggleField } from '@/components/forms/fields'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,11 +14,18 @@ import type {
   RegistrationRoster,
   RegistrationSettingsInput,
 } from '@/lib/registration/schema'
+import { registrationSetupIssues } from '@/lib/registration/settings-readiness'
 import { InformedRiskEditor } from './informed-risk-editor'
 import { QuestionEditor } from './question-editor'
 import { WaiverTemplatePicker } from './waiver-template-picker'
 
-export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
+export function SettingsEditor({
+  roster,
+  onDirtyChange,
+}: {
+  roster: RegistrationRoster
+  onDirtyChange?: (dirty: boolean) => void
+}) {
   const { settings, snapshot, trip } = roster
   const [values, setValues] = useState<RegistrationSettingsInput>({
     enabled: settings.enabled,
@@ -33,10 +41,20 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
     offerHours: settings.offer_hours,
   })
   const [message, setMessage] = useState('')
+  const [savedValues, setSavedValues] = useState(values)
+  const dirty = JSON.stringify(values) !== JSON.stringify(savedValues)
+  useEffect(() => {
+    onDirtyChange?.(dirty)
+  }, [dirty, onDirtyChange])
   const [pending, startTransition] = useTransition()
   const router = useRouter()
   const past = new Date(snapshot.startAt).getTime() <= Date.now()
   const locked = settings.locked_at !== null
+  const setupIssues = registrationSetupIssues(values, {
+    annualWaiver: Boolean(snapshot.annualWaiver),
+    hasWaiver: Boolean(snapshot.waiver),
+    isAllDay: trip.isAllDay,
+  })
   const update = (next: Partial<RegistrationSettingsInput>) =>
     setValues(current => ({ ...current, ...next }))
   return (
@@ -53,6 +71,11 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
           className="mt-4 space-y-4"
           onSubmit={event => {
             event.preventDefault()
+            if (setupIssues.length) {
+              setMessage(setupIssues.join(' '))
+              toast.error(setupIssues[0])
+              return
+            }
             startTransition(async () => {
               try {
                 const result = await saveRegistrationSettingsAction(
@@ -61,9 +84,16 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
                   values,
                 )
                 setMessage(result.message)
-                if (result.ok) router.refresh()
+                if (result.ok) {
+                  setSavedValues(values)
+                  toast.success(result.message)
+                  router.refresh()
+                } else toast.error(result.message)
               } catch {
                 setMessage(
+                  'Settings could not be saved. Refresh and try again.',
+                )
+                toast.error(
                   'Settings could not be saved. Refresh and try again.',
                 )
               }
@@ -86,6 +116,24 @@ export function SettingsEditor({ roster }: { roster: RegistrationRoster }) {
                 <option value="open">Open</option>
               </select>
             </div>
+            {dirty && (
+              <output className="block text-sm font-medium">
+                Registration changes are not saved yet. Use Save settings below.
+              </output>
+            )}
+            {setupIssues.length > 0 && (
+              <div
+                role="alert"
+                className="rounded border border-destructive p-3 text-sm"
+              >
+                <p className="font-semibold">Before registration can open:</p>
+                <ul className="list-disc pl-5">
+                  {setupIssues.map(issue => (
+                    <li key={issue}>{issue}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <p className="text-sm text-muted-foreground">
               The global registration switch must also be enabled. Outstanding
               valid offers can still be accepted while new registrations are
