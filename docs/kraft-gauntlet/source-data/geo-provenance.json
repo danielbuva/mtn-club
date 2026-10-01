@@ -1,0 +1,123 @@
+{
+  "accessedAt": "2026-09-30",
+  "boundsWgs84": {
+    "west": -115.4233,
+    "south": 36.1562,
+    "east": -115.4093,
+    "north": 36.16525
+  },
+  "world": {
+    "width": 1000,
+    "height": 800,
+    "projection": "EPSG:3857",
+    "northUp": true
+  },
+  "osm": {
+    "id": "osm-kraft-2026-09-30",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "copyrightUrl": "https://www.openstreetmap.org/copyright",
+    "query": "[out:json][timeout:35];(way[highway](36.156,-115.424,36.166,-115.408);way[waterway](36.156,-115.424,36.166,-115.408);way[amenity=parking](36.156,-115.424,36.166,-115.408);node[amenity=parking](36.156,-115.424,36.166,-115.408););out geom;",
+    "peakQuery": "[out:json][timeout:20];node[natural=peak](36.16,-115.435,36.175,-115.408);out;",
+    "timestamp": "2026-10-01T05:30:01Z"
+  },
+  "usgs3dep": {
+    "id": "usgs-3dep-2026-09-30",
+    "license": "US public domain",
+    "attribution": "USGS National Map 3D Elevation Program (3DEP). August 25, 2026.",
+    "export": {
+      "request": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=-12848862.981679251%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=500%2C400&format=tiff&f=json&renderingRule=%7B%22rasterFunction%22%3A+%22None%22%7D&adjustAspectRatio=false&pixelType=F32&interpolation=RSP_BilinearInterpolation",
+      "response": {
+        "href": "https://elevation.nationalmap.gov/arcgis/rest/directories/elevation_output/3DEPElevation_ImageServer/_ags_66e68c88_b8f9_4dce_9b90_0140ee769dc6.tif",
+        "width": 500,
+        "height": 400,
+        "extent": {
+          "xmin": -12848862.981679251,
+          "ymin": 4322135.591505952,
+          "xmax": -12847304.508808147,
+          "ymax": 4323383.405606867,
+          "spatialReference": {
+            "wkid": 102100,
+            "latestWkid": 3857
+          }
+        },
+        "scale": 0
+      }
+    },
+    "sampleResolutionWorld": [
+      2,
+      2
+    ],
+    "groundSampleMetersApprox": 2.52,
+    "contourIntervalMeters": 20,
+    "simplificationToleranceWorld": 0.5
+  },
+  "usgsNaip": {
+    "id": "usgs-naip-2026-09-30",
+    "license": "US public domain",
+    "attribution": "USGS, USDA, The National Map: Orthoimagery.",
+    "export": {
+      "request": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/exportImage?bbox=-12848862.981679251%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=1600%2C1280&format=jpg&f=json&renderingRule=%7B%22rasterFunction%22%3A+%22NaturalColor%22%7D&adjustAspectRatio=false&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicLockRaster%22%2C+%22lockRasterIds%22%3A+%5B134873%5D%2C+%22mosaicOperation%22%3A+%22MT_FIRST%22%7D",
+      "response": {
+        "href": "https://imagery.nationalmap.gov/arcgis/rest/directories/imagery_output/USGSNAIPPlus_ImageServer/_ags_96e6a631_11b0_40b5_a6e9_47382cab9262.jpg",
+        "width": 1600,
+        "height": 1280,
+        "extent": {
+          "xmin": -12848862.981679251,
+          "ymin": 4322135.591505952,
+          "xmax": -12847304.508808147,
+          "ymax": 4323383.405606867,
+          "spatialReference": {
+            "wkid": 102100,
+            "latestWkid": 3857
+          }
+        },
+        "scale": 0
+      },
+      "lockedRasterId": 134873
+    },
+    "sourceRecord": {
+      "OBJECTID": 134873,
+      "State": "NV",
+      "Year": 2022,
+      "raster_name": "m_3611553_se_11_060_20220611",
+      "agency": "USDA",
+      "vendor": "USDA-FSA-APFO",
+      "resolution_value": 0.6,
+      "resolution_units": "METER",
+      "acquisition_date": 1654905600000
+    }
+  },
+  "files": [
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-dem-source.tif",
+      "bytes": 1049850,
+      "sha256": "77dbb8cfa67f3b91124749ef9f7cd46eefc92601cea68cb8992a7113ad89f21d"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-naip-reference.jpg",
+      "bytes": 415084,
+      "sha256": "f8d7c12adec990ef3d4ee74813d49e3200f573a96022491e2c090c018d720927"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-osm-peaks-source.json",
+      "bytes": 717,
+      "sha256": "d11c6506be5418ce37f5794f87b1c5d8821f87955b73ab4c88afd5da879c5937"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-osm-source.json",
+      "bytes": 175773,
+      "sha256": "4b744aeb83dfdacb29fef5030c468989f3c7f51fc2c24e013792416dc1921eae"
+    },
+    {
+      "path": "public/kraft/geo-features.json",
+      "bytes": 143915,
+      "sha256": "5ba8b6b1c226d86e8e8016dc8d457658dd796cbe26282c44c2eb9e0966b81246"
+    },
+    {
+      "path": "public/kraft/geo-license.txt",
+      "bytes": 1449,
+      "sha256": "efe64db0b4ea34817dd692aa299dca9bdec7eb437353cf811c05e88f1a5f9c6b"
+    }
+  ]
+}

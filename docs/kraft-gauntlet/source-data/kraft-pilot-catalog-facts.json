@@ -1,0 +1,639 @@
+[
+  {
+    "boulderSourceId": "mp-cube",
+    "sourceUrl": "https://www.mountainproject.com/area/105959355/the-cube",
+    "accessedAt": "2026-09-30",
+    "routeCount": 12,
+    "routes": [
+      {
+        "id": "cube-a-clockwork-orange",
+        "sourceId": "mp-route-107004798",
+        "sourceName": "A Clockwork Orange",
+        "name": "A Clockwork Orange",
+        "routeUrl": "https://www.mountainproject.com/route/107004798/a-clockwork-orange",
+        "grade": "V12",
+        "fontGrade": "8A+",
+        "gradeValue": 12,
+        "risk": "PG13"
+      },
+      {
+        "id": "cube-big-love",
+        "sourceId": "mp-route-112430327",
+        "sourceName": "Big Love",
+        "name": "Big Love",
+        "routeUrl": "https://www.mountainproject.com/route/112430327/big-love",
+        "grade": "V4",
+        "fontGrade": "6B",
+        "gradeValue": 4,
+        "risk": "R"
+      },
+      {
+        "id": "fear-of-a-black-hat",
+        "sourceId": "mp-black-hat",
+        "sourceName": "Fear of a Black Hat",
+        "name": "Fear of a Black Hat",
+        "routeUrl": "https://www.mountainproject.com/route/107004045/fear-of-a-black-hat",
+        "grade": "V9",
+        "fontGrade": "7C",
+        "gradeValue": 9,
+        "risk": "PG13"
+      },
+      {
+        "id": "cube-full-regulation",
+        "sourceId": "mp-route-116693657",
+        "sourceName": "Full Regulation",
+        "name": "Full Regulation",
+        "routeUrl": "https://www.mountainproject.com/route/116693657/full-regulation",
+        "grade": "V3",
+        "fontGrade": "6A",
+        "gradeValue": 3,
+        "risk": "R"
+      },
+      {
+        "id": "cube-marriage",
+        "sourceId": "mp-route-124045669",
+        "sourceName": "Marriage",
+        "name": "Marriage",
+        "routeUrl": "https://www.mountainproject.com/route/124045669/marriage",
+        "grade": "V6+",
+        "fontGrade": "7A",
+        "gradeValue": 6,
+        "risk": "R"
+      },
+      {
+        "id": "cube-marriage-sit",
+        "sourceId": "mp-route-124045709",
+        "sourceName": "Marriage Sit",
+        "name": "Marriage Sit",
+        "routeUrl": "https://www.mountainproject.com/route/124045709/marriage-sit",
+        "grade": "V7-",
+        "fontGrade": "7A+",
+        "gradeValue": 7,
+        "risk": "R"
+      },
+      {
+        "id": "cube-martinets-rails",
+        "sourceId": "mp-route-113857995",
+        "sourceName": "Martinet's Rails",
+        "name": "Martinet's Rails",
+        "routeUrl": "https://www.mountainproject.com/route/113857995/martinets-rails",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1,
+        "risk": "PG13"
+      },
+      {
+        "id": "perfect-poser",
+        "sourceId": "mp-perfect-poser",
+        "sourceName": "Perfect Poser",
+        "name": "Perfect Poser",
+        "routeUrl": "https://www.mountainproject.com/route/105959433/perfect-poser",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1,
+        "risk": "R"
+      },
+      {
+        "id": "cube-total-devastation",
+        "sourceId": "mp-route-111470042",
+        "sourceName": "Total Devastation",
+        "name": "Total Devastation",
+        "routeUrl": "https://www.mountainproject.com/route/111470042/total-devastation",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2,
+        "risk": "R"
+      },
+      {
+        "id": "cube-total-devastation-direct",
+        "sourceId": "mp-route-121616668",
+        "sourceName": "Total Devastation Direct",
+        "name": "Total Devastation Direct",
+        "routeUrl": "https://www.mountainproject.com/route/121616668/total-devastation-direct",
+        "grade": "V8",
+        "fontGrade": "7B",
+        "gradeValue": 8,
+        "risk": "R"
+      },
+      {
+        "id": "cube-total-devastation-left",
+        "sourceId": "mp-route-124045533",
+        "sourceName": "Total Devastation Left",
+        "name": "Total Devastation Left",
+        "routeUrl": "https://www.mountainproject.com/route/124045533/total-devastation-left",
+        "grade": "V4",
+        "fontGrade": "6B",
+        "gradeValue": 4,
+        "risk": "R"
+      },
+      {
+        "id": "west-face-left",
+        "sourceId": "mp-west-face-left",
+        "sourceName": "West Face Left",
+        "name": "West Face Left",
+        "routeUrl": "https://www.mountainproject.com/route/107004813/west-face-left",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0,
+        "risk": "PG13"
+      }
+    ]
+  },
+  {
+    "boulderSourceId": "mp-split",
+    "sourceUrl": "https://www.mountainproject.com/area/105959392/the-split-boulder",
+    "accessedAt": "2026-09-30",
+    "routeCount": 9,
+    "routes": [
+      {
+        "id": "front-side-crack",
+        "sourceId": "mp-front-crack",
+        "sourceName": "Front Side Crack",
+        "name": "Front Side Crack",
+        "routeUrl": "https://www.mountainproject.com/route/106617793/front-side-crack",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0,
+        "risk": "R",
+        "ydsGrade": "5.8"
+      },
+      {
+        "id": "split-leaning-wide-crack",
+        "sourceId": "mp-route-106629920",
+        "sourceName": "Leaning Wide Crack",
+        "name": "Leaning Wide Crack",
+        "routeUrl": "https://www.mountainproject.com/route/106629920/leaning-wide-crack",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1,
+        "ydsGrade": "5.9"
+      },
+      {
+        "id": "split-the-mole",
+        "sourceId": "mp-route-116385877",
+        "sourceName": "Mole, The",
+        "name": "Mole, The",
+        "routeUrl": "https://www.mountainproject.com/route/116385877/the-mole",
+        "grade": "V7",
+        "fontGrade": "7A+",
+        "gradeValue": 7
+      },
+      {
+        "id": "split-phazed-aka-the-hole",
+        "sourceId": "mp-route-107974947",
+        "sourceName": "Phazed (a.k.a. The Hole)",
+        "name": "Phazed (a.k.a. The Hole)",
+        "routeUrl": "https://www.mountainproject.com/route/107974947/phazed-aka-the-hole",
+        "grade": "V10-11",
+        "fontGrade": "8A",
+        "gradeValue": 10,
+        "gradeMaxValue": 11
+      },
+      {
+        "id": "plumbers-crack",
+        "sourceId": "mp-plumbers",
+        "sourceName": "Plumber's Crack",
+        "name": "Plumber's Crack",
+        "routeUrl": "https://www.mountainproject.com/route/107185645/plumbers-crack",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2,
+        "risk": "R",
+        "ydsGrade": "5.9"
+      },
+      {
+        "id": "split-plumbers-crack-traverse",
+        "sourceId": "mp-route-123599243",
+        "sourceName": "Plumber’s Crack Traverse",
+        "name": "Plumber’s Crack Traverse",
+        "routeUrl": "https://www.mountainproject.com/route/123599243/plumbers-crack-traverse",
+        "grade": "V10",
+        "fontGrade": "7C+",
+        "gradeValue": 10
+      },
+      {
+        "id": "split-slice-n-dice",
+        "sourceId": "mp-route-107974932",
+        "sourceName": "Slice N Dice",
+        "name": "Slice N Dice",
+        "routeUrl": "https://www.mountainproject.com/route/107974932/slice-n-dice",
+        "grade": "V9",
+        "fontGrade": "7C",
+        "gradeValue": 9,
+        "risk": "R"
+      },
+      {
+        "id": "split-decision",
+        "sourceId": "mp-split-decision",
+        "sourceName": "Split Decision",
+        "name": "Split Decision",
+        "routeUrl": "https://www.mountainproject.com/route/110174865/split-decision",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1
+      },
+      {
+        "id": "split-split-decision-sit",
+        "sourceId": "mp-route-115968255",
+        "sourceName": "Split Decision Sit",
+        "name": "Split Decision Sit",
+        "routeUrl": "https://www.mountainproject.com/route/115968255/split-decision-sit",
+        "grade": "V5",
+        "fontGrade": "6C",
+        "gradeValue": 5,
+        "risk": "R"
+      }
+    ]
+  },
+  {
+    "boulderSourceId": "mp-pearl",
+    "sourceUrl": "https://www.mountainproject.com/area/106056258/the-pearl",
+    "accessedAt": "2026-09-30",
+    "routeCount": 11,
+    "routes": [
+      {
+        "id": "pearl-across-the-choss",
+        "sourceId": "mp-route-107030493",
+        "sourceName": "Across the Choss",
+        "name": "Across the Choss",
+        "routeUrl": "https://www.mountainproject.com/route/107030493/across-the-choss",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1
+      },
+      {
+        "id": "pearl-clam-bumper-right",
+        "sourceId": "mp-route-116980157",
+        "sourceName": "Clam Bumper Right",
+        "name": "Clam Bumper Right",
+        "routeUrl": "https://www.mountainproject.com/route/116980157/clam-bumper-right",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0
+      },
+      {
+        "id": "pearl-the-clam-bumper",
+        "sourceId": "mp-route-106652005",
+        "sourceName": "Clam Bumper, The",
+        "name": "Clam Bumper, The",
+        "routeUrl": "https://www.mountainproject.com/route/106652005/the-clam-bumper",
+        "grade": "V3",
+        "fontGrade": "6A",
+        "gradeValue": 3
+      },
+      {
+        "id": "jennas-jewelry",
+        "sourceId": "mp-jennas",
+        "sourceName": "Jenna's Jewelry",
+        "name": "Jenna's Jewelry",
+        "routeUrl": "https://www.mountainproject.com/route/106652010/jennas-jewelry",
+        "grade": "V3-4",
+        "fontGrade": "6A+",
+        "gradeValue": 3,
+        "gradeMaxValue": 4
+      },
+      {
+        "id": "pearl-northeast-corner",
+        "sourceId": "mp-route-202867946",
+        "sourceName": "Northeast Corner",
+        "name": "Northeast Corner",
+        "routeUrl": "https://www.mountainproject.com/route/202867946/northeast-corner",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0
+      },
+      {
+        "id": "northeast-face-center",
+        "sourceId": "mp-pearl-ne",
+        "sourceName": "Northeast Face Center",
+        "name": "Northeast Face Center",
+        "routeUrl": "https://www.mountainproject.com/route/110224533/northeast-face-center",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1
+      },
+      {
+        "id": "pearl-pearl-necklace",
+        "sourceId": "mp-route-107444907",
+        "sourceName": "Pearl Necklace",
+        "name": "Pearl Necklace",
+        "routeUrl": "https://www.mountainproject.com/route/107444907/pearl-necklace",
+        "grade": "V6-",
+        "fontGrade": "7A",
+        "gradeValue": 6
+      },
+      {
+        "id": "the-pearl",
+        "sourceId": "mp-pearl-route",
+        "sourceName": "Pearl, The",
+        "name": "Pearl, The",
+        "routeUrl": "https://www.mountainproject.com/route/106056281/the-pearl",
+        "grade": "V5",
+        "fontGrade": "6C",
+        "gradeValue": 5
+      },
+      {
+        "id": "six-pack",
+        "sourceId": "mp-six-pack",
+        "sourceName": "Six Pack",
+        "name": "Six Pack",
+        "routeUrl": "https://www.mountainproject.com/route/107030486/six-pack",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0
+      },
+      {
+        "id": "pearl-the-spreader",
+        "sourceId": "mp-route-110224675",
+        "sourceName": "Spreader, The",
+        "name": "Spreader, The",
+        "routeUrl": "https://www.mountainproject.com/route/110224675/the-spreader",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0
+      },
+      {
+        "id": "pearl-vajazzled",
+        "sourceId": "mp-route-126854254",
+        "sourceName": "Vajazzled",
+        "name": "Vajazzled",
+        "routeUrl": "https://www.mountainproject.com/route/126854254/vajazzled",
+        "grade": "V4-5",
+        "fontGrade": "6B+",
+        "gradeValue": 4,
+        "gradeMaxValue": 5
+      }
+    ]
+  },
+  {
+    "boulderSourceId": "mp-monkey",
+    "sourceUrl": "https://www.mountainproject.com/area/105937674/monkey-bar-boulder",
+    "accessedAt": "2026-09-30",
+    "routeCount": 26,
+    "routes": [
+      {
+        "id": "monkey-blunt-arete",
+        "sourceId": "mp-route-114126068",
+        "sourceName": "Blunt Arete",
+        "name": "Blunt Arete",
+        "routeUrl": "https://www.mountainproject.com/route/114126068/blunt-arete",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-center-face",
+        "sourceId": "mp-route-108731189",
+        "sourceName": "Center Face",
+        "name": "Center Face",
+        "routeUrl": "https://www.mountainproject.com/route/108731189/center-face",
+        "grade": "V2-3",
+        "fontGrade": "5+",
+        "gradeValue": 2,
+        "gradeMaxValue": 3
+      },
+      {
+        "id": "monkey-curious-george",
+        "sourceId": "mp-route-114000041",
+        "sourceName": "Curious George",
+        "name": "Curious George",
+        "routeUrl": "https://www.mountainproject.com/route/114000041/curious-george",
+        "grade": "V3-",
+        "fontGrade": "6A",
+        "gradeValue": 3
+      },
+      {
+        "id": "monkey-darwin-award",
+        "sourceId": "mp-route-107513950",
+        "sourceName": "Darwin Award",
+        "name": "Darwin Award",
+        "routeUrl": "https://www.mountainproject.com/route/107513950/darwin-award",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-glory-hole",
+        "sourceId": "mp-route-107838637",
+        "sourceName": "Glory Hole",
+        "name": "Glory Hole",
+        "routeUrl": "https://www.mountainproject.com/route/107838637/glory-hole",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1
+      },
+      {
+        "id": "hyperglide",
+        "sourceId": "mp-hyperglide",
+        "sourceName": "Hyperglide",
+        "name": "Hyperglide",
+        "routeUrl": "https://www.mountainproject.com/route/107074342/hyperglide",
+        "grade": "V5",
+        "fontGrade": "6C",
+        "gradeValue": 5
+      },
+      {
+        "id": "monkey-left",
+        "sourceId": "mp-route-114126051",
+        "sourceName": "Left",
+        "name": "Left",
+        "routeUrl": "https://www.mountainproject.com/route/114126051/left",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0
+      },
+      {
+        "id": "monkey-left-left",
+        "sourceId": "mp-route-114126042",
+        "sourceName": "Left Left",
+        "name": "Left Left",
+        "routeUrl": "https://www.mountainproject.com/route/114126042/left-left",
+        "grade": "V0",
+        "fontGrade": "4",
+        "gradeValue": 0
+      },
+      {
+        "id": "monkey-bar-direct",
+        "sourceId": "mp-monkey-direct",
+        "sourceName": "Monkey Bar Direct",
+        "name": "Monkey Bar Direct",
+        "routeUrl": "https://www.mountainproject.com/route/107378329/monkey-bar-direct",
+        "grade": "V8",
+        "fontGrade": "7B",
+        "gradeValue": 8
+      },
+      {
+        "id": "monkey-monkey-bar-direct-right",
+        "sourceId": "mp-route-112381021",
+        "sourceName": "Monkey Bar Direct Right",
+        "name": "Monkey Bar Direct Right",
+        "routeUrl": "https://www.mountainproject.com/route/112381021/monkey-bar-direct-right",
+        "grade": "V9",
+        "fontGrade": "7C",
+        "gradeValue": 9
+      },
+      {
+        "id": "monkey-bar-right",
+        "sourceId": "mp-monkey-right",
+        "sourceName": "Monkey Bar Right",
+        "name": "Monkey Bar Right",
+        "routeUrl": "https://www.mountainproject.com/route/106683440/monkey-bar-right",
+        "grade": "V6",
+        "fontGrade": "7A",
+        "gradeValue": 6
+      },
+      {
+        "id": "monkey-monkey-bar-traverse",
+        "sourceId": "mp-route-105937677",
+        "sourceName": "Monkey Bar Traverse",
+        "name": "Monkey Bar Traverse",
+        "routeUrl": "https://www.mountainproject.com/route/105937677/monkey-bar-traverse",
+        "grade": "V6",
+        "fontGrade": "7A",
+        "gradeValue": 6
+      },
+      {
+        "id": "monkey-bars",
+        "sourceId": "mp-monkey-bars",
+        "sourceName": "Monkey Bars",
+        "name": "Monkey Bars",
+        "routeUrl": "https://www.mountainproject.com/route/106657521/monkey-bars",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-monkey-crack",
+        "sourceId": "mp-route-107849034",
+        "sourceName": "Monkey Crack",
+        "name": "Monkey Crack",
+        "routeUrl": "https://www.mountainproject.com/route/107849034/monkey-crack",
+        "grade": "V1",
+        "fontGrade": "5",
+        "gradeValue": 1
+      },
+      {
+        "id": "monkey-monkey-far",
+        "sourceId": "mp-route-121826536",
+        "sourceName": "Monkey Far",
+        "name": "Monkey Far",
+        "routeUrl": "https://www.mountainproject.com/route/121826536/monkey-far",
+        "grade": "V9-10",
+        "fontGrade": "7C+",
+        "gradeValue": 9,
+        "gradeMaxValue": 10
+      },
+      {
+        "id": "monkey-monkey-near",
+        "sourceId": "mp-route-126614999",
+        "sourceName": "Monkey Near",
+        "name": "Monkey Near",
+        "routeUrl": "https://www.mountainproject.com/route/126614999/monkey-near",
+        "grade": "V5",
+        "fontGrade": "6C",
+        "gradeValue": 5
+      },
+      {
+        "id": "monkey-monkeys-uncle",
+        "sourceId": "mp-route-123281460",
+        "sourceName": "Monkey's Uncle",
+        "name": "Monkey's Uncle",
+        "routeUrl": "https://www.mountainproject.com/route/123281460/monkeys-uncle",
+        "grade": "V8",
+        "fontGrade": "7B",
+        "gradeValue": 8
+      },
+      {
+        "id": "monkey-northeast-left",
+        "sourceId": "mp-monkey-ne",
+        "sourceName": "Northeast Face Left",
+        "name": "Northeast Face Left",
+        "routeUrl": "https://www.mountainproject.com/route/113880181/northeast-face-left",
+        "grade": "V3",
+        "fontGrade": "6A",
+        "gradeValue": 3
+      },
+      {
+        "id": "monkey-peter-north-pump",
+        "sourceId": "mp-route-116621137",
+        "sourceName": "Peter North Pump",
+        "name": "Peter North Pump",
+        "routeUrl": "https://www.mountainproject.com/route/116621137/peter-north-pump",
+        "grade": "V9",
+        "fontGrade": "7C",
+        "gradeValue": 9
+      },
+      {
+        "id": "monkey-pockets",
+        "sourceId": "mp-route-113880208",
+        "sourceName": "Pockets",
+        "name": "Pockets",
+        "routeUrl": "https://www.mountainproject.com/route/113880208/pockets",
+        "grade": "V2+",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-prow-direct",
+        "sourceId": "mp-route-202093496",
+        "sourceName": "Prow Direct",
+        "name": "Prow Direct",
+        "routeUrl": "https://www.mountainproject.com/route/202093496/prow-direct",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-the-redirect",
+        "sourceId": "mp-route-117939655",
+        "sourceName": "Redirect, The",
+        "name": "Redirect, The",
+        "routeUrl": "https://www.mountainproject.com/route/117939655/the-redirect",
+        "grade": "V12",
+        "fontGrade": "8A+",
+        "gradeValue": 12
+      },
+      {
+        "id": "monkey-right-of-crack",
+        "sourceId": "mp-route-108731202",
+        "sourceName": "Right of Crack",
+        "name": "Right of Crack",
+        "routeUrl": "https://www.mountainproject.com/route/108731202/right-of-crack",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-the-rising-sun",
+        "sourceId": "mp-route-123510628",
+        "sourceName": "Rising Sun, The",
+        "name": "Rising Sun, The",
+        "routeUrl": "https://www.mountainproject.com/route/123510628/the-rising-sun",
+        "grade": "V2-3",
+        "fontGrade": "5+",
+        "gradeValue": 2,
+        "gradeMaxValue": 3
+      },
+      {
+        "id": "monkey-seam",
+        "sourceId": "mp-route-121742287",
+        "sourceName": "Seam",
+        "name": "Seam",
+        "routeUrl": "https://www.mountainproject.com/route/121742287/seam",
+        "grade": "V2",
+        "fontGrade": "5+",
+        "gradeValue": 2
+      },
+      {
+        "id": "monkey-umpa-lumpa",
+        "sourceId": "mp-route-108551582",
+        "sourceName": "Umpa Lumpa",
+        "name": "Umpa Lumpa",
+        "routeUrl": "https://www.mountainproject.com/route/108551582/umpa-lumpa",
+        "grade": "V5",
+        "fontGrade": "6C",
+        "gradeValue": 5
+      }
+    ]
+  }
+]

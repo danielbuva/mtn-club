@@ -1,0 +1,32 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-01T05:35:49Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "node",
+      "id": 7112921633,
+      "lat": 36.1641215,
+      "lon": -115.4215676,
+      "tags": {
+        "ele": "1437",
+        "name": "Kraft Mountain",
+        "natural": "peak"
+      }
+    },
+    {
+      "type": "node",
+      "id": 8276837688,
+      "lat": 36.1653961,
+      "lon": -115.4329342,
+      "tags": {
+        "ele": "1520",
+        "loc_name": "New Peak",
+        "natural": "peak"
+      }
+    }
+  ]
+}

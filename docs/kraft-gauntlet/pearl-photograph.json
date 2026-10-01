@@ -1,0 +1,55 @@
+{
+  "verifiedAt": "2026-10-01T06:40:20Z",
+  "suppliedFile": {
+    "path": "/Volumes/blue/50-documents/unlv/mtn-club/the-pearl.jpg",
+    "width": 3840,
+    "height": 2880,
+    "bytes": 3617004,
+    "sha256": "ab3f5205373567937b2deef1776d4886df525b147bfa7967be94174a562124d2",
+    "hasExif": false,
+    "boulderIdentitySource": "User identification, corroborated by visual comparison with Mountain Project photo 106120934"
+  },
+  "source": {
+    "title": "Interesting Geology at Kraft Mountain (54084251954)",
+    "commonsPageId": 159578822,
+    "commonsUrl": "https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg",
+    "commonsRevision": 1216078144,
+    "commonsRevisionAt": "2026-05-18T11:10:32Z",
+    "flickrUrl": "https://www.flickr.com/photos/blmnevada/54084251954/",
+    "flickrAccount": "BLM Nevada",
+    "photographer": "Samantha Szesciorka, BLM",
+    "captureDate": "2024-03-08",
+    "cameraClock": "14:27:26",
+    "cameraClockTimezoneConfirmed": false,
+    "flickrPublicationDate": "2024-10-21",
+    "commonsUploadAt": "2025-02-11T18:34:37Z",
+    "width": 5712,
+    "height": 4284,
+    "bytes": 5140865,
+    "sha1": "365c0570899592dd9748804496dc056990a93163"
+  },
+  "reuse": {
+    "commonsTemplates": ["Cc-by-2.0", "PD-USGov-BLM"],
+    "publicDomainJurisdiction": "United States",
+    "flickrLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "commonsFlickrReviewAt": "2025-02-11T18:36:52Z",
+    "commonsFlickrReviewLicense": "cc-by-2.0",
+    "suggestedCredit": "Photo: Samantha Szesciorka / BLM Nevada · Public domain (U.S.) / CC BY 2.0 · Resized and optimized."
+  },
+  "viewEvidence": {
+    "classification": "source-matched-southeast-context-photo",
+    "orientationStatus": "source-observation",
+    "availableLicensedFacePhotos": 1,
+    "reviewedFacePhotos": 0,
+    "reviewedRoutePaths": 0,
+    "southeastCorrespondence": "Source-correlated visual inference for the left/center smooth face; not field-confirmed",
+    "northeastCorrespondence": "unconfirmed",
+    "reviewedRouteGeometry": false,
+    "cameraLatitude": 36.159264,
+    "cameraLongitude": -115.414756,
+    "cameraTrueHeadingDegrees": 277.8910065515188,
+    "cameraMetadataIsSurveyedBoulderPosition": false,
+    "primaryComparisonPhotoUrl": "https://www.mountainproject.com/photo/106120934/the-pearl-is-the-center-line-of-chalked-up-holds-on-a-slightly-overhanging-face-",
+    "southeastRouteSourceUrl": "https://www.mountainproject.com/route/106056281/the-pearl"
+  }
+}

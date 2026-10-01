@@ -1,0 +1,284 @@
+import { cubeClimbs, monkeyClimbs, pearlClimbs, splitClimbs } from './climbs.ts'
+import { kraftCoordinateObservations } from './location-observations.ts'
+import { kraftSources } from './sources.ts'
+import type { Boulder, Climb, Face, KraftGuide } from './types'
+
+export { kraftSources } from './sources.ts'
+
+const reviewedAt = '2026-10-01'
+const photoGap =
+  'A licensed, identified photograph of this face is still needed.'
+
+function face(
+  id: string,
+  name: string,
+  orientation: string,
+  sourceIds: string[],
+  climbs: Climb[],
+): Face {
+  return {
+    id,
+    name,
+    orientation,
+    orientationStatus:
+      orientation === 'Unconfirmed' ? 'unknown' : 'source-observation',
+    groupingStatus:
+      id === 'monkey-cave' ? 'editorial-provisional' : 'source-backed',
+    image: { status: 'missing', reason: photoGap },
+    sourceIds,
+    climbIds: climbs
+      .filter(route => route.faceIds.includes(id))
+      .map(route => route.id),
+  }
+}
+
+export const kraftBoulders: Boulder[] = [
+  {
+    id: 'cube',
+    name: 'The Cube',
+    aliases: ['Cube'],
+    aliasObservations: [
+      { name: 'Cube', sourceId: 'mp-cube', identityStatus: 'source-linked' },
+    ],
+    areaId: 'cube-area',
+    areaAssignmentStatus: 'source-backed',
+    coverage: {
+      status: 'source-catalog',
+      sourceId: 'mp-cube',
+      sourceClimbCount: 12,
+    },
+    location: {
+      lat: 36.15974,
+      lon: -115.41913,
+      status: 'source-observation',
+      sourceIds: ['mp-cube'],
+      observations: kraftCoordinateObservations.cube,
+      note: 'Parent boulder location. The Perfect Poser route coordinate is inconsistent and is excluded.',
+    },
+    description:
+      'Large highball boulder by the main trail junction north of the parking area.',
+    approach:
+      'From the northeast corner of parking, follow the trail north to the main east–west trail junction.',
+    sourceIds: ['mp-cube'],
+    climbs: cubeClimbs,
+    faces: [
+      face('cube-west', 'West face', 'W', ['mp-west-face-left'], cubeClimbs),
+      face('cube-south', 'South arête', 'S', ['mp-black-hat'], cubeClimbs),
+      face(
+        'cube-north',
+        'North face',
+        'N',
+        ['mp-route-111470042', 'mp-cube'],
+        cubeClimbs,
+      ),
+    ],
+  },
+  {
+    id: 'split-boulder',
+    name: 'Split Boulder',
+    aliases: ['The Split Boulder'],
+    aliasObservations: [
+      {
+        name: 'The Split Boulder',
+        sourceId: 'mp-split',
+        identityStatus: 'source-linked',
+      },
+      {
+        name: "Plumber's Crack",
+        sourceId: 'thetopo-split',
+        identityStatus: 'unresolved',
+        note: 'Candidate boulder name from a nearby theTopo coordinate. Keep separate from the north chimney and south offwidth route identities.',
+      },
+    ],
+    areaId: 'main-area',
+    areaAssignmentStatus: 'source-backed',
+    coverage: {
+      status: 'source-catalog',
+      sourceId: 'mp-split',
+      sourceClimbCount: 9,
+    },
+    location: {
+      lat: 36.15993,
+      lon: -115.41713,
+      status: 'source-observation',
+      sourceIds: ['mp-split'],
+      observations: kraftCoordinateObservations['split-boulder'],
+      note: 'Parent boulder location. Front Side Crack and Plumber’s Crack route coordinates differ and are excluded.',
+    },
+    description:
+      'Tall split rock with a north-side chimney and a south-side offwidth.',
+    approach:
+      'On the west side of the Main Area cluster, uphill from the main trail. The final approach needs a field track.',
+    sourceIds: ['mp-split', 'thetopo-split'],
+    climbs: splitClimbs,
+    faces: [
+      face(
+        'split-north',
+        'North · uphill',
+        'N',
+        ['mp-front-crack'],
+        splitClimbs,
+      ),
+      face(
+        'split-south',
+        'South · downhill',
+        'S',
+        ['mp-plumbers'],
+        splitClimbs,
+      ),
+    ],
+  },
+  {
+    id: 'pearl',
+    name: 'The Pearl',
+    aliases: [],
+    areaId: 'pearl-area',
+    areaAssignmentStatus: 'source-backed',
+    coverage: {
+      status: 'source-catalog',
+      sourceId: 'mp-pearl',
+      sourceClimbCount: 11,
+    },
+    location: {
+      lat: 36.15924,
+      lon: -115.41487,
+      status: 'source-observation',
+      sourceIds: ['mp-pearl'],
+      observations: kraftCoordinateObservations.pearl,
+    },
+    description:
+      'Trailside boulder with a smooth southeast face and climbing on its northeast side.',
+    approach:
+      'Continue east on the main trail from The Cube, past the Main Area. The Pearl sits beside the trail.',
+    sourceIds: ['mp-pearl'],
+    climbs: pearlClimbs,
+    faces: [
+      {
+        ...face(
+          'pearl-southeast',
+          'Southeast face',
+          'SE',
+          ['mp-pearl-route', 'blm-pearl-photograph', 'mp-pearl-view-reference'],
+          pearlClimbs,
+        ),
+        image: {
+          status: 'available',
+          src: '/kraft/pearl-blm.webp',
+          width: 1800,
+          height: 1350,
+          alt: 'The Pearl sandstone boulder at Kraft, showing its steep southeast surface and the ramp along the right edge.',
+          assetId: 'pearl-blm-photograph',
+        },
+        photographNote:
+          'BLM context photograph. The southeast view is matched to published references; viewpoint and route correspondence await field review. No route lines have been authored for this photograph.',
+      },
+      face(
+        'pearl-northeast',
+        'Northeast face',
+        'NE',
+        ['mp-pearl-ne'],
+        pearlClimbs,
+      ),
+    ],
+  },
+  {
+    id: 'monkey-bar',
+    name: 'Monkey Bar Boulder',
+    aliases: [],
+    areaId: 'east-cluster',
+    areaAssignmentStatus: 'source-backed',
+    coverage: {
+      status: 'source-catalog',
+      sourceId: 'mp-monkey',
+      sourceClimbCount: 26,
+    },
+    location: {
+      lat: 36.16154,
+      lon: -115.41099,
+      status: 'source-observation',
+      sourceIds: ['mp-monkey'],
+      observations: kraftCoordinateObservations['monkey-bar'],
+      note: 'The Monkey Bars route point conflicts with its parent and outbound onX link. Both are retained as observations; the parent point is selected. theTopo has a separate nearby observation.',
+    },
+    description:
+      'Eastern boulder with a jugged cave, uphill roof and several distinct faces.',
+    approach:
+      'Follow the Kraft Mountain Loop Trail east from The Cube. The trail branches around both sides of the boulder.',
+    sourceIds: ['mp-monkey', 'thetopo-monkey'],
+    climbs: monkeyClimbs,
+    faces: [
+      face(
+        'monkey-cave',
+        'Cave & roof',
+        'Unconfirmed',
+        ['mp-monkey-bars', 'mp-hyperglide', 'mp-monkey-direct'],
+        monkeyClimbs,
+      ),
+      face(
+        'monkey-northwest',
+        'Northwest face',
+        'NW',
+        ['mp-monkey-right'],
+        monkeyClimbs,
+      ),
+      face(
+        'monkey-northeast',
+        'Northeast face',
+        'NE',
+        ['mp-monkey-ne'],
+        monkeyClimbs,
+      ),
+    ],
+  },
+]
+
+export const kraftGuide: KraftGuide = {
+  id: 'kraft',
+  name: 'Kraft Boulders',
+  version: '2026-10-01-pilot-5',
+  reviewedAt,
+  status: 'content-pilot',
+  description:
+    'Four dated boulder catalogs with 58 source-listed route records and original factual synopses. Physical membership, face photography, exact topos and field verification remain under review.',
+  areas: [
+    { id: 'cube-area', name: 'Cube Area', sourceIds: ['mp-kraft'] },
+    { id: 'main-area', name: 'Main Area', sourceIds: ['mp-kraft'] },
+    { id: 'pearl-area', name: 'Pearl Area', sourceIds: ['mp-kraft'] },
+    { id: 'east-cluster', name: 'East Cluster', sourceIds: ['mp-kraft'] },
+  ],
+  boulders: kraftBoulders,
+  sources: kraftSources,
+  assets: [
+    {
+      id: 'pearl-blm-photograph',
+      src: '/kraft/pearl-blm.webp',
+      kind: 'face-photo',
+      license: 'Public domain (U.S.) / CC BY 2.0',
+      distribution: {
+        licenseIds: ['PD-USGov-BLM', 'CC-BY-2.0'],
+        evidenceUrl:
+          'https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg',
+      },
+      attribution: 'Photo: Samantha Szesciorka / BLM Nevada',
+      attributionUrl:
+        'https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg',
+      licenseUrl: 'https://creativecommons.org/licenses/by/2.0/',
+      modificationNote: 'Resized and optimized; full composition preserved.',
+      sourceIds: ['blm-pearl-photograph'],
+    },
+    {
+      id: 'kraft-geographic-layer',
+      src: '/kraft/geo-features.json',
+      kind: 'map',
+      license:
+        'Open Database License 1.0 / U.S. federal government public domain',
+      distribution: {
+        licenseIds: ['ODbL-1.0', 'PD-USGov'],
+        evidenceUrl: 'https://www.openstreetmap.org/copyright',
+      },
+      attribution:
+        '© OpenStreetMap contributors; USGS National Map 3DEP. Full terms: /kraft/geo-license.txt',
+      sourceIds: ['osm-kraft-2026-09-30', 'usgs-3dep-2026-09-30'],
+    },
+  ],
+}
