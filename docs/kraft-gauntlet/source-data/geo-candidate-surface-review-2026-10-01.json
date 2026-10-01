@@ -1,0 +1,746 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-01",
+  "reviewer": "fresh independent candidate_footprint_critic; separate from both polygon authors",
+  "scope": "Source-geometry review of batch 01; provisional visible-surface patches only. No physical base boundary, named identity, face, route, approach, field or production rendering acceptance.",
+  "status": "source-and-render-pass-provisional-visible-surfaces",
+  "inputPath": ".tmp/kraft-gauntlet/candidate-outlines/batch-01-candidates.json",
+  "inputSha256": "8e726f1958c8daaf7882d79c2087602cdcc87b9d01e4f6c2b0ec395ddff591aa",
+  "sourceId": "usgs-naip-2026-10-01",
+  "sourceRasterId": 134873,
+  "sourceAcquisitionDate": "2022-06-11",
+  "sourceReferenceSha256": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24",
+  "sourceDimensionsPixels": [
+    1907,
+    1280
+  ],
+  "sourceNominalResolutionMeters": 0.6,
+  "exportGroundSamplingMetersApprox": 0.787,
+  "counts": {
+    "reviewed": 10,
+    "acceptedProvisionalVisibleSurfaces": 10,
+    "rejected": 0,
+    "blocked": 0,
+    "highSpatialConfidence": 0,
+    "mediumSpatialConfidence": 0,
+    "lowSpatialConfidence": 10,
+    "acceptedCompletePhysicalFootprints": 0,
+    "acceptedNamedPhysicalIdentities": 0,
+    "fieldVerified": 0
+  },
+  "transform": {
+    "sourceProjection": "EPSG:3857",
+    "convention": "Pixel edges; x increases east/right, y increases south/down; north-up map. No pixel center half-offset.",
+    "worldDimensions": [
+      1192,
+      800
+    ],
+    "xFormula": "mapX = imagePixelX * 1192 / 1907",
+    "yFormula": "mapY = imagePixelY * 800 / 1280",
+    "maxRecordedVertexRoundingErrorWorld": 4.997378073312575e-05,
+    "maxSourcePointProjectionErrorPixels": 1.1368683772161603e-13,
+    "rawCropMatches": 10,
+    "selfCrossingPolygons": 0,
+    "outsideRasterPolygons": 0,
+    "exactSourceParentCoordinateMatches": 10
+  },
+  "productionAcceptanceRequirements": [
+    "Keep neutral source-coordinate markers independent and unchanged; closed surface polygons are not full physical footprints.",
+    "Expose low spatial confidence, incomplete visible-surface scope, and unresolved named association in the map legend/disclosure.",
+    "Do not merge adjacent/coincident source IDs or move published coordinates to make them fit the candidate surface.",
+    "Preserve exact geometry and source hashes; no synthetic expansion across dark faces, shadows or uncertain ground.",
+    "Fresh production map review at 320, 390 and 1440 px must check context, legend, obstruction and source marker accessibility before claiming rendered acceptance."
+  ],
+  "results": [
+    {
+      "candidateId": "surface-candidate-mp-125206006",
+      "sourceUnitId": "125206006",
+      "sourceUnitName": "Mini Split Boulder",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Pale western surface is distinguishable beside a dark eastern lobe. Northwest pale ground transition is weak; this closed cap does not describe the base.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/09-surface-raw.png",
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/09-surface-overlay.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-125206006",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 5.684341886080802e-14,
+        "maxVertexTransformErrorWorld": 4.436287360931601e-05,
+        "areaPixelsSquared": 60.375,
+        "rawCropDimensions": [
+          600,
+          600
+        ],
+        "exactNativeCropMatch": [
+          [
+            356,
+            662,
+            50,
+            12
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/125206006/mini-split-boulder",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-125206006",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-125206006"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999997664872
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-202233182",
+      "sourceUnitId": "202233182",
+      "sourceUnitName": "Smooth Business",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Small grey/pale western patch adjoining dark pixels. Ground blends across several perimeter pixels, so keep the boundary and source association low confidence.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/14-surface-raw.png",
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/14-surface-overlay.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-202233182",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 5.684341886080802e-14,
+        "maxVertexTransformErrorWorld": 4.861038280523644e-05,
+        "areaPixelsSquared": 44.125,
+        "rawCropDimensions": [
+          600,
+          600
+        ],
+        "exactNativeCropMatch": [
+          [
+            523,
+            626,
+            50,
+            12
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/202233182/smooth-business",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-202233182",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-202233182"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.0049999998679481905
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-105959355",
+      "sourceUnitId": "105959355",
+      "sourceUnitName": "The Cube",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Broad western cap is the clearest patch in this batch. Its western ground transition still blends. Eastern dark lobe and separate southeastern patch are correctly omitted.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/18-surface-raw.png",
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/18-surface-overlay.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-105959355",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 5.684341886080802e-14,
+        "maxVertexTransformErrorWorld": 4.0849501829143264e-05,
+        "areaPixelsSquared": 154.0,
+        "rawCropDimensions": [
+          600,
+          600
+        ],
+        "exactNativeCropMatch": [
+          [
+            759,
+            754,
+            50,
+            12
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/105959355/the-cube",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-105959355",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "cube"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999926781129
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-111106611",
+      "sourceUnitId": "111106611",
+      "sourceUnitName": "$600 Boulder",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Small upper western cap is a plausible exposed surface. The larger southwestern neighbor is distinct and correctly excluded. Named association is unresolved.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/25-surface-raw.png",
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/25-surface-overlay.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-111106611",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 0.0,
+        "maxVertexTransformErrorWorld": 3.938122711133474e-05,
+        "areaPixelsSquared": 36.0,
+        "rawCropDimensions": [
+          600,
+          600
+        ],
+        "exactNativeCropMatch": [
+          [
+            998,
+            713,
+            50,
+            12
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/111106611/600-boulder",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-111106611",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-111106611"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999994879545
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-106378780",
+      "sourceUnitId": "106378780",
+      "sourceUnitName": "Angel Dyno",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Small western visible surface is plausible; north/west edges blend into ground. Eastern dark pixels are correctly not treated as the base.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/26-surface-raw.png",
+        ".tmp/kraft-gauntlet/naip-candidate-surface-traces/26-surface-overlay.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-106378780",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 1.1368683772161603e-13,
+        "maxVertexTransformErrorWorld": 3.644467744834401e-05,
+        "areaPixelsSquared": 51.0,
+        "rawCropDimensions": [
+          600,
+          600
+        ],
+        "exactNativeCropMatch": [
+          [
+            1105,
+            763,
+            50,
+            12
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/106378780/angel-dyno",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-106378780",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-106378780"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999727147042
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-200619407",
+      "sourceUnitId": "200619407",
+      "sourceUnitName": "Around the World",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Tiny grey western face is supported as a surface subset. Most of the apparent feature is dark and inseparable from shadow. Nearby Split observations do not establish shared identity.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/candidate-outlines/200619407-crop.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/200619407-overlay.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/200619407-native-window.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-200619407",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 1.1368683772161603e-13,
+        "maxVertexTransformErrorWorld": 3.2669113920746895e-05,
+        "areaPixelsSquared": 8.875,
+        "rawCropDimensions": [
+          96,
+          96
+        ],
+        "exactNativeCropMatch": [
+          [
+            968,
+            707,
+            96,
+            1
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/200619407/around-the-world",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-200619407",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-200619407"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.0038017823554810093
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-106964269",
+      "sourceUnitId": "106964269",
+      "sourceUnitName": "Barndoor Boulder",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Small pale northwestern cap adjoins a large dark patch. Weak cap-to-ground transition supports only a tentative surface outline.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/candidate-outlines/106964269-crop.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/106964269-overlay.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/106964269-native-window.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-106964269",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 0.0,
+        "maxVertexTransformErrorWorld": 3.848977462439507e-05,
+        "areaPixelsSquared": 20.0,
+        "rawCropDimensions": [
+          96,
+          96
+        ],
+        "exactNativeCropMatch": [
+          [
+            1000,
+            647,
+            96,
+            1
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/106964269/barndoor-boulder",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-106964269",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-106964269"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999798030785
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-123856651",
+      "sourceUnitId": "123856651",
+      "sourceUnitName": "Black Warm-up North",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Northeastern pale cap is distinct from the larger southwestern neighbor. Source point is in a gap to its west; named association remains unresolved.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/candidate-outlines/123856651-crop.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/123856651-overlay.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/123856651-native-window.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-123856651",
+        "sourcePixelError": 1.1368683772161603e-13,
+        "sourceMapError": 1.1368683772161603e-13,
+        "maxVertexTransformErrorWorld": 4.3733612983487546e-05,
+        "areaPixelsSquared": 15.5,
+        "rawCropDimensions": [
+          96,
+          96
+        ],
+        "exactNativeCropMatch": [
+          [
+            923,
+            772,
+            96,
+            1
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/123856651/black-warm-up-north",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-123856651",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-123856651"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999725214366
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-123856648",
+      "sourceUnitId": "123856648",
+      "sourceUnitName": "Black Warm-up South",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Larger southwestern feature has a visible western/central grey cap. Published point is southwest outside the traced cap; do not move it or claim an identified rock.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/candidate-outlines/123856648-crop.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/123856648-overlay.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/123856648-native-window.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-123856648",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 1.1368683772161603e-13,
+        "maxVertexTransformErrorWorld": 4.955427380082256e-05,
+        "areaPixelsSquared": 28.375,
+        "rawCropDimensions": [
+          96,
+          96
+        ],
+        "exactNativeCropMatch": [
+          [
+            912,
+            786,
+            96,
+            1
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/123856648/black-warm-up-south",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-123856648",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-123856648"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999943493094
+      }
+    },
+    {
+      "candidateId": "surface-candidate-mp-106799341",
+      "sourceUnitId": "106799341",
+      "sourceUnitName": "Bubble Butt Boulder",
+      "decision": "accepted-provisional-visible-surface",
+      "spatialConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentityStatus": "unresolved",
+      "physicalBaseBoundaryStatus": "unobserved",
+      "fieldVerificationStatus": "not-field-verified",
+      "visualEvidenceAssessment": "Small pale western cap adjoins dark eastern pixels. Boundary is weak and nearby Timepiece may refer to this or another feature; preserve separate source identities.",
+      "inspectedScratchPaths": [
+        ".tmp/kraft-gauntlet/candidate-outlines/106799341-crop.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/106799341-overlay.png",
+        ".tmp/kraft-gauntlet/candidate-outlines/106799341-native-window.png"
+      ],
+      "mechanicalChecks": {
+        "id": "surface-candidate-mp-106799341",
+        "sourcePixelError": 0.0,
+        "sourceMapError": 1.1368683772161603e-13,
+        "maxVertexTransformErrorWorld": 4.997378073312575e-05,
+        "areaPixelsSquared": 14.0,
+        "rawCropDimensions": [
+          96,
+          96
+        ],
+        "exactNativeCropMatch": [
+          [
+            1130,
+            715,
+            96,
+            1
+          ]
+        ]
+      },
+      "selfCrossings": 0,
+      "sourceRecordUrl": "https://www.mountainproject.com/area/106799341/bubble-butt-boulder",
+      "sourceCoordinatesMatchExactMpParent": true,
+      "canonicalRuntimeTransfer": {
+        "candidateId": "surface-candidate-mp-106799341",
+        "canonicalNativeVerticesUnchanged": true,
+        "canonicalSourcePointUnchanged": true,
+        "runtimeIds": [
+          "mp-area-106799341"
+        ],
+        "runtimeDimensionsAndLimitsUnchanged": true,
+        "maximumRuntimeRoundingErrorWorld": 0.004999999873575689
+      }
+    }
+  ],
+  "fileHashes": {
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/09-surface-raw.png": "54c499034aad00e62ad971c7bad9ac8c1a20e891096ece5e365e05a544dc456d",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/09-surface-overlay.png": "4a440e4f744db8b1fb0b56294f69290db4449cd03e981b38a5cda3cb910acedd",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/14-surface-raw.png": "0fc2e148d39165ecb43f1e9dae697a0e73696e4743cf359932829a99b8dfc121",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/14-surface-overlay.png": "63ecb3d451c025168376f5bbfb36f6a6177287820345b125b1f0e497d3cf989c",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/18-surface-raw.png": "4111b8b89486c2ee54bd03de3b6c28d734e93f13028cac21ca4cd6e177fc572e",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/18-surface-overlay.png": "6b19893cbd3182bbde4a78342795bce7633e1b8f58a5edb5d15eec5dd58191d2",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/25-surface-raw.png": "97e8314f5b9e5e3d17db6ef664b909c498992f5ac6de9ef33c56b4daa1754911",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/25-surface-overlay.png": "649513a40430a1f423633f36f4be1d21f4497e1bf148fe1e6b618ea67b2688bc",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/26-surface-raw.png": "04dbabcf5735c80130d8558ca095edd22a9432b0f766f14b53d4bc106862161b",
+    ".tmp/kraft-gauntlet/naip-candidate-surface-traces/26-surface-overlay.png": "f26bab70c9696eeaf0857af6b3247fe9160c7cac8599b6df52cf503c7fc1f11d",
+    ".tmp/kraft-gauntlet/candidate-outlines/200619407-crop.png": "3089312bd2660e2f9a2517164796981a7445d0bdab4b752c139e31eebf7e0c94",
+    ".tmp/kraft-gauntlet/candidate-outlines/200619407-overlay.png": "1a3787b017322a01bdece3899462f14e816c29cb613ca2abf8b703fd51274e05",
+    ".tmp/kraft-gauntlet/candidate-outlines/200619407-native-window.png": "640e8de594220f2d5e7a28c235094d3163c2da30ccfcab720b877d8c221f4c71",
+    ".tmp/kraft-gauntlet/candidate-outlines/106964269-crop.png": "65adcbf915ff08be093bf674f4951887da3e945224ac2f3a62e6dbe263643add",
+    ".tmp/kraft-gauntlet/candidate-outlines/106964269-overlay.png": "a4e640ef7378007e5afa28e5b854288e177d72bc083d31b857b0d2c50036a3a5",
+    ".tmp/kraft-gauntlet/candidate-outlines/106964269-native-window.png": "ba63e5708a0e0eee0cb477384d1c754bc7ccba7e0558a3bbb6ec5f27e418d21f",
+    ".tmp/kraft-gauntlet/candidate-outlines/123856651-crop.png": "6d4695e1691ee45d870f5b9172133930c540755ad5adf4efbf917ef8a58e3280",
+    ".tmp/kraft-gauntlet/candidate-outlines/123856651-overlay.png": "7b257902cb61886d5d6c8e7d2d3d7e665f3e929bfaea81903497ab0311cb37f6",
+    ".tmp/kraft-gauntlet/candidate-outlines/123856651-native-window.png": "555bcb0e1b408e7e06284c1d2dce42179603221552f3ed1b199e7ed9ab30dbf3",
+    ".tmp/kraft-gauntlet/candidate-outlines/123856648-crop.png": "bc0f0ef7d74522be95fe22194d5ba0fcaa49af37926a2d26739ce3e676a943a1",
+    ".tmp/kraft-gauntlet/candidate-outlines/123856648-overlay.png": "384a8a1bd5b07af37ecf35744cdf9cb77129b4b4cc05b4e1e516339d0ad6b903",
+    ".tmp/kraft-gauntlet/candidate-outlines/123856648-native-window.png": "187e8504f77f99557b767ba0cebc5d0f4d30a9b80ff66c67a5b2eaf0eb1831ff",
+    ".tmp/kraft-gauntlet/candidate-outlines/106799341-crop.png": "92b3b6cfd0e968a5ddeb5c59ecf3827fc6136fa2d64e8048cc994f68535664bd",
+    ".tmp/kraft-gauntlet/candidate-outlines/106799341-overlay.png": "45304a647d64487736dd0d9a02f5de3a70c60289fefbe3e5968859d56cd9fc65",
+    ".tmp/kraft-gauntlet/candidate-outlines/106799341-native-window.png": "b6dfc23772552e02da3e8de51dee4f8dd7656f5d6ff21b5c2e0156811429416d",
+    ".tmp/kraft-gauntlet/candidate-outlines/batch-01-candidates.json": "8e726f1958c8daaf7882d79c2087602cdcc87b9d01e4f6c2b0ec395ddff591aa",
+    ".tmp/kraft-gauntlet/references/geo-naip-expanded-reference.jpg": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24",
+    ".tmp/kraft-gauntlet/candidate-outlines/batch-01-candidates-contact.png": "e7b37058815112da894b73742461e1417a597b027dd57ed668930d8e7c239125",
+    "lib/kraft/geography.ts": "bad5a9350c95e0745137db8ff313429a3c81c6933074bb97e83669cdb6827466",
+    "lib/kraft/mp-inventory.json": "e14a7d794c4dfaaee7630f4fca7d6487f48b19d347961fd38049f71166b1552c",
+    "docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json": "28057996312510079d356d280d17f890bfc1d44819fccd957722977d21cf6679",
+    "public/kraft/geo-surface-candidates.json": "e121bd26f0c665d7b3b2d81557e2c02175baf304c53ed616ae2a5e3f80c380fa",
+    "docs/kraft-gauntlet/source-data/geo-naip-expanded-reference.jpg": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24",
+    ".tmp/kraft-gauntlet/candidate-render-review/rendered-candidate-review.json": "db796365b22d03ceed7653df358877b96c1657581a7ff33270aba289cfd8e6bd",
+    ".tmp/kraft-gauntlet/candidate-render-review/disclosure-recheck.json": "2975984546856f288f5c7a0ed5e9c89e689665cf6cd8cddefa2e60084ecb3997"
+  },
+  "canonicalTransfer": {
+    "status": "pass",
+    "canonicalPath": "docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json",
+    "canonicalSha256": "28057996312510079d356d280d17f890bfc1d44819fccd957722977d21cf6679",
+    "runtimePath": "public/kraft/geo-surface-candidates.json",
+    "runtimeSha256": "e121bd26f0c665d7b3b2d81557e2c02175baf304c53ed616ae2a5e3f80c380fa",
+    "committedRawReferencePath": "docs/kraft-gauntlet/source-data/geo-naip-expanded-reference.jpg",
+    "committedRawReferenceSha256": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24",
+    "nativeVertexListsUnchanged": 10,
+    "sourcePointsUnchanged": 10,
+    "distinctSourceIdsPreserved": 10,
+    "completeBaseBoundaryClaims": 0,
+    "physicalIdentityClaims": 0,
+    "returnedRasterExtentMatchesMapExtent": true,
+    "maximumRuntimeRoundingErrorWorld": 0.004999999997664872,
+    "runtimeVectorPrecisionDecimals": 2,
+    "pixelConvention": "Pixel edges, no half-pixel center offset",
+    "productionRenderStatus": "pass-after-bounded-disclosure-repair"
+  },
+  "productionRenderReview": {
+    "url": "http://127.0.0.1:3130/guide/kraft",
+    "renderedVersion": "2026-10-01-catalog-5",
+    "buildId": "06g1owrW7B-PY4HKtgFBw",
+    "reviewer": "fresh independent candidate_footprint_critic",
+    "viewports": [
+      {
+        "width": 320,
+        "height": 800,
+        "geometryPathsMatchRuntime": 10,
+        "nativeMarkerActivations": 10,
+        "inputs": "native touch",
+        "exactMembershipAndSourceFocusPass": true,
+        "pageErrors": []
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "geometryPathsMatchRuntime": 10,
+        "nativeMarkerActivations": 10,
+        "inputs": "native touch",
+        "exactMembershipAndSourceFocusPass": true,
+        "pageErrors": []
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "geometryPathsMatchRuntime": 10,
+        "nativeMarkerActivations": 10,
+        "inputs": "native mouse",
+        "exactMembershipAndSourceFocusPass": true,
+        "pageErrors": []
+      }
+    ],
+    "renderedGeometryChecks": 30,
+    "nativeMarkerActivations": 30,
+    "exactClusterMembershipChecks": 30,
+    "sourceMarkerFocusReturns": 30,
+    "noninteractiveCandidateLayer": true,
+    "correctLowConfidenceLegend": true,
+    "incompleteAndUnresolvedIdentityDisclosuresPresent": true,
+    "completePhysicalFootprintClaims": 0,
+    "status": "pass-after-disclosure-repair",
+    "findings": [
+      {
+        "id": "candidate-disclosure-clipping",
+        "priority": "P2",
+        "status": "resolved",
+        "widths": [
+          320,
+          390
+        ],
+        "evidence": "320 px panel height544.5 inside408 px overflow:hidden map frame; summary/close/provenance top clipped. Close button geometric center hit area select instead. 390 px header also clipped.",
+        "requiredCorrection": "Bound the About panel to the map frame with usable scrolling and visible summary/close controls, preserving all uncertainty disclosure.",
+        "correction": "Summary and close remain outside a separately scrollable text region. Panel and text height are bounded to the measured map size.",
+        "freshProductionRecheck": "Passed visible controls, initial source text, keyboard End scroll to candidate uncertainty, native close center hit and summary focus return at 320 \u00d7 800, 390 \u00d7 844, 1440 \u00d7 900 and an additional 320 \u00d7 568."
+      }
+    ],
+    "scratchEvidencePath": ".tmp/kraft-gauntlet/candidate-render-review",
+    "screenshotPixelsIncludedInReceipt": false,
+    "limits": [
+      "No physical identity, field accuracy, complete base boundary, route geometry or Pearl UI acceptance.",
+      "Small partial outlines are subtle and some lie under catalog circles at overview scale; no synthetic enlargement was requested.",
+      "Final panel correction was rechecked independently on a fresh build; unchanged vectors/native source marker passes were retained from the prior integrated catalog5 build.",
+      "Browser integer scroll metrics leave under 1 px of final line-box rounding in one small viewport; actual text is readable in the native-pixel captures."
+    ],
+    "initialGeometryReviewBuildId": "06g1owrW7B-PY4HKtgFBw",
+    "finalDisclosureReviewBuildId": "4hhQgJ1oiYZCWvrn2CQTb",
+    "finalNativeCloseActivations": 4,
+    "finalDisclosureViewports": [
+      {
+        "width": 320,
+        "height": 800,
+        "panelWithinMapFrame": true,
+        "summaryAndCloseWithinMapFrame": true,
+        "nativeCloseCenterHit": true,
+        "initialSourceTextVisible": true,
+        "candidateTextAccessibleByKeyboardEnd": true,
+        "nativeClosePassed": true,
+        "summaryFocusReturn": true,
+        "scrollTopAtEnd": 241,
+        "scrollHeight": 500,
+        "clientHeight": 258,
+        "lastLineBoxBottomOverrunPixels": 0.6875
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "panelWithinMapFrame": true,
+        "summaryAndCloseWithinMapFrame": true,
+        "nativeCloseCenterHit": true,
+        "initialSourceTextVisible": true,
+        "candidateTextAccessibleByKeyboardEnd": true,
+        "nativeClosePassed": true,
+        "summaryFocusReturn": true,
+        "scrollTopAtEnd": 125,
+        "scrollHeight": 385,
+        "clientHeight": 260,
+        "lastLineBoxBottomOverrunPixels": 0
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "panelWithinMapFrame": true,
+        "summaryAndCloseWithinMapFrame": true,
+        "nativeCloseCenterHit": true,
+        "initialSourceTextVisible": true,
+        "candidateTextAccessibleByKeyboardEnd": true,
+        "nativeClosePassed": true,
+        "summaryFocusReturn": true,
+        "scrollTopAtEnd": 0,
+        "scrollHeight": 154,
+        "clientHeight": 154,
+        "lastLineBoxBottomOverrunPixels": 0
+      },
+      {
+        "width": 320,
+        "height": 568,
+        "panelWithinMapFrame": true,
+        "summaryAndCloseWithinMapFrame": true,
+        "nativeCloseCenterHit": true,
+        "initialSourceTextVisible": true,
+        "candidateTextAccessibleByKeyboardEnd": true,
+        "nativeClosePassed": true,
+        "summaryFocusReturn": true,
+        "scrollTopAtEnd": 289,
+        "scrollHeight": 500,
+        "clientHeight": 210,
+        "lastLineBoxBottomOverrunPixels": 0.6875
+      }
+    ],
+    "disclosureRepairScratchReceiptPath": ".tmp/kraft-gauntlet/candidate-render-review/disclosure-recheck.json",
+    "inspectedScreenshots": [
+      ".tmp/kraft-gauntlet/candidate-render-review/320x800-repaired-top.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/320x800-repaired-scrolled.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/390x844-repaired-top.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/390x844-repaired-scrolled.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/1440x900-repaired-top.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/1440x900-repaired-scrolled.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/320x568-repaired-top.png",
+      ".tmp/kraft-gauntlet/candidate-render-review/320x568-repaired-scrolled.png"
+    ],
+    "openFindings": 0
+  },
+  "consultedProvenanceSnapshot": {
+    "path": "docs/kraft-gauntlet/source-data/geo-provenance.json",
+    "sha256AtInitialSourceInspection": "f3f5989375805cf2fbced74d59907b6f1e6550fc8658fc7392cc1bf335f0ab9a",
+    "scope": "Consulted metadata snapshot. Final aggregate provenance indexes this review receipt; no circular final-file hash dependency is claimed."
+  }
+}

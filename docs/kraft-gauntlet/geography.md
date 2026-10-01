@@ -27,6 +27,7 @@ does not claim to cover the complete Kraft Mountain hiking loop.
 | Trails, roads, washes, parking and peak | OpenStreetMap, original Overpass extract plus official API western-strip supplement | ODbL 1.0; attribution and derivative database retained | Community observations, not final verified boulder approaches; private roads excluded |
 | Contours | USGS 3DEP bare-earth F32 export acquired 2026-10-01 | US public domain | New 596 × 400 grid over the exact enlarged EPSG:3857 extent; roughly 2.52 m ground sampling; 20 m contours |
 | Aerial audit reference | USGS/USDA NAIP, locked raster 134873 | US public domain | June 11, 2022 USDA-FSA-APFO imagery; nominal source resolution 0.6 m; 1907 × 1280 export samples roughly 0.79 ground m/pixel |
+| Candidate visible surfaces | Native pixel traces from the same lawful NAIP export | US public domain | Ten low-confidence partial surfaces; shaded faces/cast shadows omitted; named associations unresolved and bases unobserved |
 | Catalog locations | MP parent areas and unlinked OpenBeta source-area centroids | Factual observations with retained source links | Unknown positional accuracy; correlated imports do not independently verify a point; source unit is not necessarily a physical rock |
 
 The new western OSM extract uses the official
@@ -72,19 +73,42 @@ passed all 78 coordinate/transform/identity/provenance checks; its per-record
 [receipt](source-data/geo-placement-review-2026-10-01.json) qualifies 18 distinct
 patch opportunities, 43 ambiguous small/crowded observations and 17 apparent gaps.
 
+The first ten opportunities now have independently reviewed **candidate visible
+surfaces**: Mini Split, Smooth Business, Cube, $600, Angel Dyno, Around the World,
+Barndoor, Black Warm-up North, Black Warm-up South and Bubble Butt. Dashed partial
+surface patches are a separate layer from source points. Every candidate has
+`spatialConfidence`, `visibleBoundaryConfidence` and
+`sourceAssociationConfidence` set to `low`; the supported public confidence
+values are `high`, `medium` and `low`. Named physical identities remain
+unresolved and complete bases unobserved. Nearby Split/Around the World and
+Bubble Butt/Timepiece records are not merged. This acceptance permits tentative
+surface geometry before field verification; it does not accept full footprints.
+Fresh rendered context/legend/obstruction review passes. The mobile disclosure
+now scrolls within a bounded panel with its summary and close control visible.
+The [fresh independent candidate receipt](source-data/geo-candidate-surface-review-2026-10-01.json)
+also verifies exact transfer from author-native pixels to committed inputs and
+runtime vectors, retaining distinct catalog IDs and the unchanged raster hash.
+
 ## Rebuild inputs and offline assets
 
 `docs/kraft-gauntlet/source-data/geo-provenance.json` records exact requests,
 response extents, raster identity, failed requests and SHA-256 checksums.
 Deliberate rebuild inputs are the merged `geo-osm-source.json`, original
 `geo-osm-source-2026-09-30.json`, native `geo-osm-west-source.xml`, peak source and
-`geo-dem-source.tif`. The raw lawful aerial references remain scratch under
-`.tmp/kraft-gauntlet/references/`; the shipped map does not fetch imagery.
+`geo-dem-source.tif`. Native candidate vertices are retained in
+`geo-surface-candidates-2026-10-01.json`, with the unchanged lawful
+`geo-naip-expanded-reference.jpg` committed alongside it. Its native raster
+hash, dimensions and reported EPSG:3857 extent are checked before projection;
+the builder does not smooth or stretch the candidate geometry. The shipped map
+does not fetch aerial imagery.
 
 Run `scripts/build-kraft-geography.py` with Python containing numpy and Pillow.
 The established raster/contour builder makes no network calls and derives its
 world/bounds from provenance. Runtime `public/kraft/geo-features.json` is imported
 statically, offered under ODbL, and remains available offline. Independent USGS
-contributions remain public domain. `public/kraft/geo-license.txt` preserves the
+contributions remain public domain. Separate
+`public/kraft/geo-surface-candidates.json` contains the partial surface vectors
+and uncertainty dimensions; it is statically imported and available offline.
+`public/kraft/geo-license.txt` preserves the
 attributions. A final offline manifest rebuild is required when the runtime
 geographic asset changes.

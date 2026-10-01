@@ -207,7 +207,11 @@ test('source-unit memberships retain exact linked references without duplicating
     if (!pilotBoulders.some(pilot => pilot.id === unit.id)) {
       assert.equal(unit.unitKind, 'source-unit')
       assert.equal(unit.location.scope, 'catalog-centroid')
-      assert.deepEqual(unit.faces, [])
+      for (const face of unit.faces) {
+        assert.equal(face.orientationStatus, 'source-observation')
+        assert.equal(face.image.status, 'missing')
+        assert.ok(face.sourceFaceObservations.length)
+      }
     }
   }
   for (const area of ob.areas.filter(unit => unit.directRouteIds.length)) {

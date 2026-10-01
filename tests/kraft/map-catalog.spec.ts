@@ -126,3 +126,79 @@ test('a synthesized activation opens its own cluster without pointer coordinates
   await page.keyboard.press('Escape')
   await expect(trigger).toBeFocused()
 })
+
+test('candidate surfaces disclose uncertainty while source catalogs stay selectable', async ({
+  page,
+}) => {
+  await page.goto('/guide/kraft')
+  const map = page.getByRole('application', {
+    name: 'Illustrated north-up map of Kraft Boulders',
+  })
+  await expect(map.locator('[data-surface-candidate]')).toHaveCount(10)
+  await expect(
+    page.getByText('Possible rock surface · low confidence', { exact: true }),
+  ).toBeVisible()
+  const information = page.locator('.kraft-map-data-note')
+  await information.locator('summary').click()
+  await expect(information).toContainText('Outlines are incomplete')
+  await expect(information).toContainText(
+    'named rock associations are unresolved',
+  )
+  await expect(information).toContainText(
+    'Catalog points keep their published positions independently',
+  )
+  const close = page.getByRole('button', { name: 'Close map information' })
+  const insideFrame = await close.evaluate(element => {
+    const frame = element.closest('.kraft-map-frame')
+    if (!frame) throw new Error('Disclosure must have a map frame')
+    const target = element.getBoundingClientRect()
+    const bounds = frame.getBoundingClientRect()
+    return (
+      target.top >= bounds.top &&
+      target.bottom <= bounds.bottom &&
+      document
+        .elementFromPoint(
+          target.left + target.width / 2,
+          target.top + target.height / 2,
+        )
+        ?.closest('button') === element
+    )
+  })
+  expect(insideFrame).toBe(true)
+  const disclosure = page.getByRole('region', {
+    name: 'Map sources and uncertainty',
+  })
+  await disclosure.focus()
+  await page.keyboard.press('End')
+  await expect(close).toBeInViewport()
+  await close.click()
+  await expect(information.locator('summary')).toBeFocused()
+  await information.locator('summary').click()
+  await page.keyboard.press('Escape')
+  await expect(information.locator('summary')).toBeFocused()
+  const trigger = map.locator('[data-catalog-ids*="cube"]')
+  const multiple = (await trigger.getAttribute('data-cluster')) === 'true'
+  const center = await trigger.evaluate(element => {
+    if (!(element instanceof SVGGraphicsElement))
+      throw new Error('Catalog point must retain its SVG source geometry')
+    const matrix = element.getScreenCTM()
+    if (!matrix) throw new Error('Missing catalog point transform')
+    const point = new DOMPoint(0, 0).matrixTransform(matrix)
+    return { x: point.x, y: point.y }
+  })
+  await page.mouse.click(center.x, center.y)
+  if (multiple) {
+    const chooser = page.getByRole('dialog', {
+      name: 'Choose a nearby catalog',
+    })
+    await chooser.locator('[data-boulder-id="cube"]').click()
+  }
+  const catalog = page.getByRole('dialog').filter({
+    has: page.getByRole('button', { name: 'Back to Kraft', exact: true }),
+  })
+  await expect(catalog).toBeVisible()
+  await expect(catalog.getByRole('heading', { name: 'The Cube' })).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(catalog).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+})

@@ -71,6 +71,18 @@ test('every canonical route opens its local facts without needing a photograph o
       })
       await expect(record).toBeVisible()
       await expect(record).toContainText(climb.description)
+      const content = record.getByRole('region', {
+        name: 'Route content state',
+        exact: true,
+      })
+      await expect(content).toBeVisible()
+      for (const [dimension, state] of Object.entries(
+        climb.contentDimensions ?? {},
+      ))
+        await expect(
+          content.locator(`[data-dimension="${dimension}"]`),
+        ).toHaveAttribute('data-state', state)
+      await expect(content.locator('[data-dimension]')).toHaveCount(6)
       await expect(
         record.getByRole('region', { name: 'Published route evidence' }),
       ).toBeVisible()

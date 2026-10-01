@@ -4,7 +4,7 @@ Updated 2026-10-01. The existing goal continues on
 `feat/kraft-offline-guidebook`. Pearl-specific UI polish is frozen; its current
 presentation is sufficient to establish the interaction pattern.
 
-Counts below describe the running `2026-10-01-catalog-4` edition. Source-unit
+Counts below describe the running `2026-10-01-catalog-5` edition. Source-unit
 identities are not a verified physical-rock
 count. TheTopo records remain separately tracked pending identity/source-use
 review and cannot simply be added as unique rocks or problems.
@@ -15,11 +15,11 @@ review and cannot simply be added as unique rocks or problems.
 | Imported runtime boulder catalogs | 78: 74 MP leaf units and four unmatched OpenBeta catalogs |
 | Known MP/OpenBeta route identities | 383 (370 MP + 13 unresolved OpenBeta); 198 TheTopo research records remain unmerged |
 | Imported runtime routes | 383: 370 exact MP IDs and 13 distinct native OpenBeta IDs |
-| Mapped runtime boulders | All 78 selected source points/centroids; no accepted physical footprints |
+| Mapped runtime boulders | All 78 selected source points/centroids; 10 low-confidence partial aerial surface candidates, no verified complete footprints |
 | Boulders with face assets | 1 |
-| Routes with face assignments | 17: 14 source-backed, 3 provisional |
+| Routes with face assignments | 81: 78 source-backed, 3 provisional; 54 face groups on 31 catalogs |
 | Routes with authored overlays | 0 |
-| Routes without an authored topo | 383; legacy topo workflow: 327 evidence gaps, 15 image gaps, 41 identity/physical-membership gaps |
+| Routes without an authored topo | 383; source evidence: 187 moderate, 45 face-only, 151 unresolved; imagery and image-space corridors remain unfinished |
 | Routes hidden because of missing images, faces, lines or field verification | 0 |
 
 All 383 routes are searchable, filterable, listable and reachable through the
@@ -35,12 +35,15 @@ type checks, unit checks and automated traversal of all 78 directories and 383
 route records. The expanded map passed the 78-record source/extent audit; rendered
 touch-center correction and regression results are recorded in the map review.
 
-Next: expose identity, grade, parent, face, topo and image as separate structured
-dimensions; batch explicit source-backed face assignments, then candidate
-footprints with spatial confidence. Corroborated paths support precise corridors;
+Every route exposes identity, grade, parent, face, topo and image independently.
+The batch adds 64 explicit source-backed face assignments and ten candidate
+surface outlines with low spatial confidence. Corroborated paths support precise corridors;
 documented starts, general direction/features and finishes support broader
 moderate-confidence corridors without exact hold sequences. Face-only climbs
 remain visible without lines. Field verification improves the guide later.
+Next: build usable face imagery and route corridors, and repair the largest
+visible browsing weaknesses found by fresh product critics. Internal validation
+and documentary acceptance are not finished-product acceptance.
 
 Execution order:
 

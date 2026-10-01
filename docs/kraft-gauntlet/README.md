@@ -62,18 +62,19 @@ belong in ignored `.tmp/kraft-gauntlet/` or OS temporary storage. Previous-run
 material was preserved locally in `.tmp/kraft-gauntlet/previous-run/`; it is not
 part of the repository or the product. No application dependency uses that path.
 
-The current software edition is `2026-10-01-catalog-4`: all 78 reconciled MP/OpenBeta
+The current software edition is `2026-10-01-catalog-5`: all 78 reconciled MP/OpenBeta
 source catalogs and 383 canonical route records are visible, searchable and
 filterable, with all selected source locations plotted. Catalog groups and
 alternate memberships are qualified independently of physical rocks. Missing
 faces, images, SVG lines or field review never gate record inclusion. Structured
 factual dossiers and original summaries retain disagreements and source lineage.
+All routes expose six independent content dimensions. The latest batch contains
+81 face assignments and ten low-confidence partial aerial surface candidates.
 
-The prior `2026-10-01-workbench-3` offline receipt verifies 37 resources /
-2,483,819 bytes after denied-network browser restart. It does not independently
-certify the expanded edition or real topo accuracy. Expanded software regressions
-exercise the actual full catalog; reviewed physical imagery and route geometry
-remain separate content dimensions.
+The fresh catalog-5 offline review verifies 38 resources / 5,186,349 bytes after
+denied-transport browser restart, including traversal of all 78 catalogs and
+383 route records. This verifies software and downloaded catalog coverage;
+one face photograph and zero real SVG corridors remain a major product gap.
 
 `pnpm test:kraft:browser` writes reports and traces into
 `.tmp/kraft-gauntlet/`. Retained `source-data/` files support the stable geography

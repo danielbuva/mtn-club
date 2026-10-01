@@ -67,7 +67,7 @@ export function FaceViewer({
             ? face.image.reason
             : face
               ? 'A photograph with documented distribution rights is needed for this face.'
-              : 'A field-checked face record is needed before we can show the correct side of this boulder.'}
+              : 'A supported face record and an identified image are needed to show the correct side of this boulder.'}
         </p>
         <span className={styles.contentStatus}>
           No route lines available · Browse the climb records below

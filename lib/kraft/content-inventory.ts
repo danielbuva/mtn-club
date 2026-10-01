@@ -158,13 +158,15 @@ export function reconcileContent(): ContentRecord[] {
               : 'BLOCKED lawful image',
         reasons:
           observation.kind === 'area'
-            ? ['Source hierarchy indexed; expanded runtime coverage pending.']
+            ? [
+                'Source hierarchy indexed; physical boundaries remain a separate review dimension.',
+              ]
             : observation.kind === 'route'
               ? [
-                  'Face, independent corridor evidence and approved overlay pending.',
+                  'Face and authored corridor completeness are independent of source-record inclusion.',
                 ]
               : [
-                  'Physical unit boundary, approved face imagery and map audit pending.',
+                  'Physical boundary and approved face imagery are independent of source-record inclusion.',
                 ],
         observations: [],
       }

@@ -240,13 +240,38 @@
     },
     {
       "path": "public/kraft/geo-license.txt",
-      "bytes": 1827,
-      "sha256": "f6e51bb4580ecb26f6eef96805b67c9e62f1d97a55d3d011ae62de5b5820ab64"
+      "bytes": 2403,
+      "sha256": "90dbd6598c8b1f8e4c5e9fb1ced2bcc7fcda6553d6456ece3e37ea1d2304b4fe"
     },
     {
       "path": "docs/kraft-gauntlet/source-data/geo-placement-review-2026-10-01.json",
       "bytes": 39633,
       "sha256": "5c0bb38f5751abf846956c0d6d46a35b8e2024957c3df8f72e46553859abbeea"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-rendered-map-review-2026-10-01.json",
+      "bytes": 23810,
+      "sha256": "773023cf7d82db7e64292945dc26a8234295b7222e15afa303b25735b42abe10"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-naip-expanded-reference.jpg",
+      "bytes": 493616,
+      "sha256": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json",
+      "bytes": 14167,
+      "sha256": "28057996312510079d356d280d17f890bfc1d44819fccd957722977d21cf6679"
+    },
+    {
+      "path": "public/kraft/geo-surface-candidates.json",
+      "bytes": 10463,
+      "sha256": "e121bd26f0c665d7b3b2d81557e2c02175baf304c53ed616ae2a5e3f80c380fa"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-candidate-surface-review-2026-10-01.json",
+      "bytes": 33731,
+      "sha256": "306cc21a088d79cac0b28f223b8b04c756e6c0f5ef7b26b4a7f2eb380f3bde12"
     }
   ],
   "priorEnvelope": {
@@ -263,7 +288,7 @@
       "northUp": true
     }
   },
-  "geometryCaution": "Source catalog points are not physical identities or field verified positions. NAIP rock/shadow patches are not accepted boulder footprints.",
+  "geometryCaution": "Catalog points do not establish physical identities or field verified positions. Ten separate low-confidence partial visible-surface candidates have unresolved named associations and unobserved complete bases. NAIP dark/shadow patches are excluded from their boundaries; no complete physical footprint is accepted.",
   "runtimeVectorSummary": {
     "featureCount": 117,
     "pointCount": 6197,
@@ -282,5 +307,38 @@
     "notAccepted": "Physical footprints, exact named rock identity, field navigation or final approaches.",
     "units": 78,
     "batches": 8
+  },
+  "renderedMapReview": {
+    "path": "docs/kraft-gauntlet/source-data/geo-rendered-map-review-2026-10-01.json",
+    "sourceIdsRetained": 78,
+    "browserChecks": 12,
+    "independentScopedActivations": 18,
+    "priorIndependentMarkerCenterClicks": 34,
+    "accepted": "Rendered source-map selection, pointer/touch/synthetic/keyboard exact source IDs and opener focus; source extents and scale.",
+    "notAccepted": "Physical footprints, newly resolved physical identities, field accuracy or verified final approaches."
+  },
+  "candidateVisibleSurfaces": {
+    "sourcePath": "docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json",
+    "referencePath": "docs/kraft-gauntlet/source-data/geo-naip-expanded-reference.jpg",
+    "runtimePath": "public/kraft/geo-surface-candidates.json",
+    "candidateCount": 10,
+    "completePhysicalFootprintsAccepted": 0,
+    "geometryScope": "candidate-visible-surface",
+    "spatialConfidence": "low",
+    "visibleBoundaryConfidence": "low",
+    "sourceAssociationConfidence": "low",
+    "physicalIdentity": "unresolved",
+    "baseBoundary": "unobserved",
+    "independentSourceReview": "Accepted all ten native visible-surface candidates and canonical/runtime transfer at low confidence; source points and distinct catalog IDs retained.",
+    "processing": "Native pixel edges projected from raster reported EPSG:3857 extent; no smoothing, shadow/base inference or source-point replacement.",
+    "independentReviewPath": "docs/kraft-gauntlet/source-data/geo-candidate-surface-review-2026-10-01.json",
+    "browserChecks": 3,
+    "browserViewports": [
+      320,
+      390,
+      1440
+    ],
+    "browserAcceptance": "3/3 fresh production checks pass: uncertainty disclosure, bounded/hit-testable persistent close control, keyboard disclosure scroll, source catalog selection and focus return.",
+    "independentRenderedReview": "Accepted exact rendered vector geometry, 30 native catalog marker activations, candidate legend/uncertainty and bounded disclosure repair at320/390/1440 and short320viewport. No open findings; no complete footprints or named physical identities accepted."
   }
 }

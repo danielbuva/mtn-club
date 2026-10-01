@@ -77,5 +77,38 @@ Fresh rendered review found a 390 px hit-target overlap: tapping one 20-record
 cluster center opened a nearby five-record chooser. Pointer activation now
 resolves the nearest visible center through the SVG screen transform and retains
 that center's actual opener. A center-click regression covers exact memberships.
-The fresh build and independent interaction recheck are pending. Final field
-acceptance remains open; parking/trail labels also crowd at 320 px.
+The rebuilt map passed all 12 isolated browser checks at 320/390/1440 px.
+Independent review passed 34 native marker centers plus 18 final scoped
+activations, including actual touch, zero-coordinate synthesized activation,
+Enter/Space, exact memberships and SVG opener focus. The prior 390 px P2 is
+resolved. The final [rendered receipt](source-data/geo-rendered-map-review-2026-10-01.json)
+preserves those limits. Final field acceptance remains open; overlapping glyphs
+and parking/trail labels still crowd at small widths.
+
+## Candidate visible-surface batch 01
+
+Ten independently reviewed low-confidence partial surfaces are now drawn from
+lawful NAIP pixels: Mini Split, Smooth Business, Cube, $600, Angel Dyno, Around
+the World, Barndoor, Black Warm-up North/South and Bubble Butt. Native pixel
+vertices and the unchanged source raster are committed under source-data; the
+builder uses the reported raster extent to project the separate runtime layer.
+All ten retain low spatial, visible-boundary and source-association confidence.
+Physical identities remain unresolved; complete base boundaries remain
+unobserved. Dark faces, cast shadows and unrelated neighboring rocks are
+excluded. The dashed legend and disclosure identify possible surfaces and
+incomplete outlines. Catalog points retain their source coordinates.
+
+Mechanical verification passes 8/8 geography checks, including raw raster hash,
+native pixel projection, exact source-coordinate retention and distinct source
+IDs. Typecheck and targeted Biome checks pass. The independent source critic
+accepts the ten only at this partial low-confidence scope. Fresh production
+browser checks pass 3/3 at 320/390/1440 px: uncertainty disclosure, map-info
+focus return, exact catalog selection through the surface layer and original
+marker focus after closing. Independent rendered review passes all 30 exact
+vector/native source-marker checks and candidate context/legend. The mobile
+disclosure initially clipped its controls; its text now scrolls within a
+bounded panel while summary/close stay visible. The fresh recheck passes at
+320/390/1440 px and a short 320 × 568 viewport, with no open findings.
+The [candidate receipt](source-data/geo-candidate-surface-review-2026-10-01.json)
+preserves exact native geometry, committed input/runtime/reference hashes and
+unresolved identity/base limits.

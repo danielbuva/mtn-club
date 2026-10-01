@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { geographicFeatures } from '@/lib/kraft/geography'
+import { MapSurfaceCandidates } from './map-surface-candidates'
 
 type GeographicFeature = (typeof geographicFeatures)[number]
 
@@ -125,6 +126,7 @@ export const MapTerrain = memo(function MapTerrain({
           </g>
         )
       })}
+      <MapSurfaceCandidates />
     </g>
   )
 })

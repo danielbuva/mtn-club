@@ -1,4 +1,7 @@
 import { writeFile } from 'node:fs/promises'
+import surfaceEvidence from '../docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json' with {
+  type: 'json',
+}
 import topo from '../docs/kraft-gauntlet/source-data/thetopo-research-inventory.json' with {
   type: 'json',
 }
@@ -7,39 +10,21 @@ import {
   reconcileContent,
 } from '../lib/kraft/content-inventory.ts'
 import { kraftGuide } from '../lib/kraft/data.ts'
+import {
+  routeDimensionKeys,
+  runtimeWorkbench,
+} from './kraft-workbench-runtime.ts'
 
 const directory = new URL('../docs/kraft-gauntlet/', import.meta.url)
 const records = reconcileContent()
 const routeRecords = records.filter(record => record.kind === 'route')
 const unitRecords = records.filter(record => record.kind === 'source-unit')
-const existingSources = new Map(
-  kraftGuide.sources.map(source => [source.id, source]),
-)
-const runtimeSourceUrls = new Set(
-  kraftGuide.boulders
-    .flatMap(boulder => [
-      ...boulder.sourceIds,
-      ...boulder.climbs.flatMap(climb => climb.sourceIds),
-    ])
-    .map(id => existingSources.get(id)?.url)
-    .filter(Boolean),
-)
-const runtimeCanonicalIds = new Set(
-  kraftGuide.boulders.flatMap(boulder => [
-    ...(boulder.sourceIdentity?.mpId
-      ? [`mp-area-${boulder.sourceIdentity.mpId}`]
-      : (boulder.sourceIdentity?.openBetaIds.map(id => `ob-area-${id}`) ?? [])),
-    ...boulder.climbs.flatMap(climb =>
-      climb.sourceIdentity?.mpId
-        ? [`mp-route-${climb.sourceIdentity.mpId}`]
-        : (climb.sourceIdentity?.openBetaIds.map(id => `ob-route-${id}`) ?? []),
-    ),
-  ]),
-)
-const runtimeRouteCount = kraftGuide.boulders.reduce(
-  (count, boulder) => count + boulder.climbs.length,
-  0,
-)
+const {
+  runtimeSourceUrls,
+  runtimeCanonicalIds,
+  runtimeRouteStates,
+  runtimeRouteCount,
+} = runtimeWorkbench(kraftGuide)
 const markdown = (value: string) =>
   value.replaceAll('|', '\\|').replaceAll('\n', ' ')
 const csv = (value: string | number | boolean | null) =>
@@ -68,6 +53,13 @@ const rows: (string | number | boolean | null)[][] = [
     'topo_workflow_state',
     'runtime_record',
     'runtime_source_reference',
+    'identity_state',
+    'grade_state',
+    'parent_state',
+    'face_state',
+    'topo_state',
+    'image_state',
+    'topo_evidence_confidence',
     'confidence',
     'discrepancy_and_blocker',
   ],
@@ -94,6 +86,11 @@ for (const record of records)
       record.state,
       runtimeCanonicalIds.has(record.id),
       runtimeSourceUrls.has(observation.url),
+      ...routeDimensionKeys.map(
+        key =>
+          runtimeRouteStates.get(record.id)?.contentDimensions?.[key] ?? '',
+      ),
+      runtimeRouteStates.get(record.id)?.topoEvidence?.confidenceLevel ?? '',
       'attributed observation; exact importer link is not independent corroboration',
       [...record.reasons, observation.identity].join(' '),
     ])
@@ -119,6 +116,13 @@ for (const unit of topo.units)
     'BLOCKED identity/conflict',
     false,
     false,
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
     'single-source research observation',
     'Source unit identity/crosswalk and acquisition-policy/downstream-use review pending. No product promotion.',
   ])
@@ -143,6 +147,13 @@ for (const view of topo.views)
     'BLOCKED lawful image',
     false,
     false,
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
     'source grouping; orientation unresolved',
     'Reference-only image/artwork; geometry excluded. Acquisition-policy/downstream-use review pending.',
   ])
@@ -167,6 +178,13 @@ for (const route of topo.routes)
     'BLOCKED identity/conflict',
     false,
     false,
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
     'unreconciled source route identity',
     'No name-only merge. Source grade is Font. Identity and acquisition-policy/downstream-use review pending.',
   ])
@@ -308,7 +326,13 @@ const mapLines = unitRecords.map(record => {
           `${observation.source}: ${Math.round(distance(selected.coordinate!, observation.coordinate!))} m`,
       )
       .join('; ') || 'No independent point comparison'
-  return `| [${markdown(record.name)}](${selected.url}) | ${selected.coordinate.latitude}, ${selected.coordinate.longitude} | ${discrepancies} | Source observation only; footprint/field audit pending |`
+  const candidate = surfaceEvidence.candidates.find(surface =>
+    surface.sourceUnitIds.includes(record.id),
+  )
+  const audit = candidate
+    ? `${candidate.spatialConfidence} confidence partial aerial surface candidate; named identity/base/field unresolved`
+    : 'Source observation retained; candidate physical geometry pending'
+  return `| [${markdown(record.name)}](${selected.url}) | ${selected.coordinate.latitude}, ${selected.coordinate.longitude} | ${discrepancies} | ${audit} |`
 })
 await save(
   'kraft-map-placement-audit.md',
@@ -327,7 +351,7 @@ await save(
     '',
     'Eight MP route-to-parent coordinate outliers are preserved in `lib/kraft/mp-inventory.json` coordinateWarnings. Front Side Crack is about 1,117 km from its parent; Black Warm Up about 17.7 km; Perfect Poser about 11.3 km. Poker Chips, Monkey Bars, Monkey Crack, Plumber’s Crack and The Spreader also differ by hundreds/thousands of metres. These route observations must not replace physical-unit points.',
     '',
-    'Next: derive a batch of best-supported candidate footprints from lawful aerial landmarks and source coordinates. Record high/medium/low spatial confidence and source-association/boundary uncertainty. Field verification improves candidates later and does not prevent evidence-backed geometry from appearing now. Groups, centroids and exact coincident source IDs must remain distinct.',
+    `${surfaceEvidence.candidates.length} low-confidence visible-surface candidates are independently source-reviewed; zero complete physical footprints or named physical identities are accepted. The separate dashed candidate layer preserves unobserved bases/shadow boundaries and tentative source association. Exact source points remain unchanged. Field verification improves candidates later and does not prevent evidence-backed geometry from appearing now. Groups, centroids and exact coincident source IDs remain distinct. See current-footprint-review.md for source and rendered review scopes.`,
     '',
   ].join('\n'),
 )

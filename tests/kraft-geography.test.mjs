@@ -16,6 +16,10 @@ const provenance = readJson(
 )
 const mp = readJson('../lib/kraft/mp-inventory.json')
 const ob = readJson('../lib/kraft/openbeta-inventory.json')
+const surfaces = readJson('../public/kraft/geo-surface-candidates.json')
+const surfaceSource = readJson(
+  '../docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json',
+)
 const source = readFileSync(
   new URL('../lib/kraft/geography.ts', import.meta.url),
   'utf8',
@@ -182,4 +186,61 @@ test('retained geographic inputs match their provenance hashes', () => {
       file.path,
     )
   }
+})
+
+test('aerial candidates retain native pixel geometry and unresolved source associations', () => {
+  assert.equal(surfaces.candidates.length, 10)
+  assert.equal(surfaces.completePhysicalFootprintsAccepted, 0)
+  assert.deepEqual(surfaces.boundsWgs84, geography.KRAFT_BOUNDS)
+  const reference = surfaceSource.reference
+  const raster = readFileSync(new URL(`../${reference.path}`, import.meta.url))
+  assert.equal(
+    createHash('sha256').update(raster).digest('hex'),
+    reference.sha256,
+  )
+  const byId = new Map(surfaceSource.candidates.map(item => [item.id, item]))
+  for (const candidate of surfaces.candidates) {
+    const original = byId.get(candidate.id)
+    const area = mp.areas.find(area => area.id === original.catalogSourceId)
+    assert.ok(area, candidate.id)
+    assert.deepEqual(original.sourcePoint, area.coordinates, candidate.id)
+    assert.deepEqual(candidate.sourceUnitIds, original.sourceUnitIds)
+    assert.deepEqual(candidate.sourcePoint, original.sourcePoint)
+    assert.equal(candidate.sourceUnitIds.length, 1)
+    assert.equal(candidate.geometryScope, 'candidate-visible-surface')
+    assert.equal(candidate.status, 'candidate')
+    assert.equal(candidate.spatialConfidence, 'low')
+    assert.equal(candidate.visibleBoundaryConfidence, 'low')
+    assert.equal(candidate.sourceAssociationConfidence, 'low')
+    assert.equal(candidate.physicalIdentity, 'unresolved')
+    assert.equal(candidate.baseBoundary, 'unobserved')
+    assert.equal(candidate.rasterId, 134873)
+    assert.equal(candidate.sourceId, reference.sourceId)
+    assert.equal(candidate.points.length, original.imagePixels.length)
+    const extent = reference.extentEpsg3857
+    for (const [index, pixel] of original.imagePixels.entries()) {
+      const x =
+        extent.xmin + (pixel.x / reference.width) * (extent.xmax - extent.xmin)
+      const y =
+        extent.ymax - (pixel.y / reference.height) * (extent.ymax - extent.ymin)
+      const location = {
+        lon: (x / 6378137) * (180 / Math.PI),
+        lat:
+          (2 * Math.atan(Math.exp(y / 6378137)) - Math.PI / 2) *
+          (180 / Math.PI),
+      }
+      const expected = geography.projectLocation(location)
+      assert.ok(
+        Math.hypot(
+          candidate.points[index].x - expected.x,
+          candidate.points[index].y - expected.y,
+        ) < 0.0072,
+        `${candidate.id}, pixel ${index}`,
+      )
+    }
+  }
+  assert.equal(
+    new Set(surfaces.candidates.flatMap(item => item.sourceUnitIds)).size,
+    10,
+  )
 })

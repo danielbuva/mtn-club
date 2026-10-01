@@ -1,6 +1,7 @@
 import { cubeCatalog } from './cube-catalog.ts'
 import { monkeyCatalog } from './monkey-catalog.ts'
 import { pearlCatalog } from './pearl-catalog.ts'
+import { deriveRouteContent } from './route-content-dimensions.ts'
 import {
   runtimeMpRoutes,
   runtimeObRoutes,
@@ -13,6 +14,7 @@ import {
   buildUnmatchedObUnit,
   sectorIds,
 } from './runtime-unit-builders.ts'
+import { applySourceFaceAssignments } from './source-face-assignments.ts'
 import { splitCatalog } from './split-catalog.ts'
 import type { Boulder, Climb, EvidenceSource, KraftArea } from './types'
 
@@ -184,6 +186,10 @@ export function buildRuntimeCatalog(
         unit.directRouteIds.map(obClimbId),
       ),
     )
+  applySourceFaceAssignments(boulders)
+  for (const unit of boulders)
+    for (const climb of unit.climbs)
+      Object.assign(climb, deriveRouteContent(climb, unit.faces))
   // Preserve the pilot ordering as well as its public IDs and deep links.
   return [
     ...pilots.map(pilot => {

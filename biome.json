@@ -41,7 +41,14 @@
     "includes": [
       "**",
       "!docs/kraft-gauntlet/source-data/geo-osm-source.json",
-      "!public/kraft/geo-features.json"
+      "!docs/kraft-gauntlet/source-data/geo-osm-source-2026-09-30.json",
+      "!docs/kraft-gauntlet/source-data/geo-placement-review-2026-10-01.json",
+      "!docs/kraft-gauntlet/source-data/geo-rendered-map-review-2026-10-01.json",
+      "!docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json",
+      "!docs/kraft-gauntlet/source-data/geo-candidate-surface-review-2026-10-01.json",
+      "!docs/kraft-gauntlet/source-data/geo-surface-review-2026-10-01.json",
+      "!public/kraft/geo-features.json",
+      "!public/kraft/geo-surface-candidates.json"
     ],
     "indentStyle": "space",
     "indentWidth": 2,

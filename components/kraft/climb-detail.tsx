@@ -1,7 +1,7 @@
 import { ArrowUpRight, CornerUpRight } from 'lucide-react'
 import type { Ref } from 'react'
 import type { Climb, EvidenceSource, Face } from '@/lib/kraft/types'
-import { ContentStateNote } from './content-state-note'
+import { RouteContentState } from './route-content-state'
 import { RouteFactNotes } from './route-fact-notes'
 import { SourceNotes } from './source-notes'
 import styles from './topo.module.css'
@@ -54,8 +54,8 @@ export function ClimbDetail({
         <span className={styles.detailGrade}>{climb.grade}</span>
       </div>
       <p className={styles.climbDescription}>{climb.description}</p>
+      <RouteContentState climb={climb} />
       <RouteFactNotes climb={climb} sources={sources} />
-      <ContentStateNote record={climb} />
       {climb.boulderAssignmentStatus === 'editorial-provisional' && (
         <div className={styles.gradeNote}>
           <strong>Physical boulder identity pending</strong>

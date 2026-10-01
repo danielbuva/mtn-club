@@ -6,6 +6,13 @@ import type {
   StructuredRouteFacts,
 } from './catalog-types'
 
+import type {
+  RouteContentDimensions,
+  TopoEvidence,
+  TopoPathReview,
+} from './route-content-types'
+import type { SourceFaceObservation } from './source-face-types'
+
 export type {
   ContentState,
   ParentObservation,
@@ -15,6 +22,16 @@ export type {
   SourceIdentity,
   StructuredRouteFacts,
 } from './catalog-types'
+export type {
+  RouteContentDimensions,
+  TopoEvidence,
+  TopoPathReview,
+} from './route-content-types'
+export type {
+  SourceFaceLedgerRow,
+  SourceFaceObservation,
+  SourceFaceOrientation,
+} from './source-face-types'
 
 export type EvidenceStatus = 'source-observation' | 'field-verified'
 export type IdentityStatus = 'source-linked' | 'unresolved'
@@ -117,6 +134,7 @@ export type FaceImage =
       height: number
       alt: string
       assetId: string
+      representation?: 'photograph' | 'reconstruction'
     }
 
 export type RouteGeometry =
@@ -129,6 +147,8 @@ export type RouteGeometry =
       labelPoint: { x: number; y: number }
       sourceIds: string[]
       reviewedAt: string
+      confidenceLevel?: 'high' | 'moderate'
+      routePathReview?: TopoPathReview
       continuation?: { faceId: string; description: string }
     }
 
@@ -141,6 +161,7 @@ export type Face = {
   climbIds: string[]
   sourceIds: string[]
   groupingStatus?: Exclude<AssignmentStatus, 'unassigned'>
+  sourceFaceObservations?: SourceFaceObservation[]
   photographNote?: string
   review?: { reviewer: string; reviewedAt: string }
 }
@@ -169,6 +190,9 @@ export type Climb = {
   risk?: string
   disagreement?: string
   contentState?: ContentState
+  contentDimensions?: RouteContentDimensions
+  topoEvidence?: TopoEvidence
+  routePathReview?: TopoPathReview
   sourceIdentity?: SourceIdentity
   routeFacts?: StructuredRouteFacts
   parentObservations?: ParentObservation[]

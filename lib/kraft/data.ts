@@ -11,11 +11,11 @@ export const kraftBoulders = buildRuntimeCatalog(pilotBoulders, kraftSources)
 export const kraftGuide: KraftGuide = {
   id: 'kraft',
   name: 'Kraft Boulders',
-  version: '2026-10-01-catalog-4',
+  version: '2026-10-01-catalog-5',
   reviewedAt,
   status: 'catalog',
   description:
-    'Complete dated Kraft source catalog: 370 Mountain Project routes and 13 distinct unresolved OpenBeta entries. Source units and importer memberships are qualified separately from physical rocks; image, line and field-review gaps remain explicit.',
+    'Dated Mountain Project/OpenBeta Kraft catalog: 370 MP routes and 13 distinct OpenBeta entries. Source units and importer memberships are qualified separately from physical rocks; image, line and field-review gaps remain explicit.',
   areas: runtimeAreas(kraftSources),
   boulders: kraftBoulders,
   sources: kraftSources,
@@ -54,6 +54,20 @@ export const kraftGuide: KraftGuide = {
         'osm-kraft-west-2026-10-01',
         'usgs-3dep-2026-10-01',
       ],
+    },
+    {
+      id: 'kraft-candidate-surfaces',
+      src: '/kraft/geo-surface-candidates.json',
+      kind: 'map',
+      license: 'U.S. federal government public domain',
+      distribution: {
+        licenseIds: ['PD-USGov'],
+        evidenceUrl:
+          'https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits',
+      },
+      attribution:
+        'Partial surface vectors from locked 2022 USGS/USDA NAIP imagery. Low-confidence candidates; physical identities and base boundaries unresolved. Full terms: /kraft/geo-license.txt',
+      sourceIds: ['usgs-naip-2026-10-01'],
     },
   ],
 }

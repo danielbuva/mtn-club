@@ -1,8 +1,13 @@
 import type { ContentState, KraftGuide } from './types'
+import { validateRouteContent } from './validate-route-content.ts'
+import { validateSourceFaces } from './validate-source-faces.ts'
 
 /** Source catalogs can be incomplete, but their references and claims must agree. */
 export function validateCatalogRecords(guide: KraftGuide): string[] {
-  const errors: string[] = []
+  const errors: string[] = [
+    ...validateRouteContent(guide),
+    ...validateSourceFaces(guide),
+  ]
   const sources = new Map(guide.sources.map(source => [source.id, source]))
   const units = new Set(guide.boulders.map(unit => unit.id))
   const climbs = new Set(
@@ -114,14 +119,6 @@ export function validateCatalogRecords(guide: KraftGuide): string[] {
       )
         errors.push(
           `${climb.id}: complete catalog route requires reviewed physical faces and geometry`,
-        )
-      if (
-        unit.unitKind &&
-        unit.unitKind !== 'physical-boulder' &&
-        climb.geometry.some(geometry => geometry.status === 'authored')
-      )
-        errors.push(
-          `${climb.id}: authored geometry requires an identified physical boulder`,
         )
       for (const observation of climb.parentObservations ?? []) {
         source(`${climb.id} parent`, observation.sourceId)

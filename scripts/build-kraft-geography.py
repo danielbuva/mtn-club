@@ -5,6 +5,7 @@ north-up. The provenance supplies the envelope and output-world dimensions.
 """
 
 import json
+import hashlib
 import math
 from collections import defaultdict
 from pathlib import Path
@@ -216,9 +217,45 @@ def contour_features():
     return result
 
 
+def build_surface_candidates():
+    """Project partial visible surfaces from their native NAIP pixel edges."""
+    source = json.loads((ROOT / "docs/kraft-gauntlet/source-data/geo-surface-candidates-2026-10-01.json").read_text())
+    reference = source["reference"]
+    raster_path = ROOT / reference["path"]
+    if hashlib.sha256(raster_path.read_bytes()).hexdigest() != reference["sha256"]:
+        raise ValueError("NAIP candidate reference hash changed")
+    with Image.open(raster_path) as raster:
+        if raster.size != (reference["width"], reference["height"]):
+            raise ValueError("NAIP candidate reference dimensions changed")
+    extent = reference["extentEpsg3857"]
+    candidates = []
+    for candidate in source["candidates"]:
+        if candidate["geometryScope"] != "candidate-visible-surface" or candidate["physicalIdentity"] != "unresolved" or candidate["baseBoundary"] != "unobserved":
+            raise ValueError("Candidate cannot assert a physical identity or base")
+        for key in ["spatialConfidence", "visibleBoundaryConfidence", "sourceAssociationConfidence"]:
+            if candidate[key] not in ["high", "medium", "low"]:
+                raise ValueError(f"Unsupported confidence: {candidate[key]}")
+        points = [project_mercator(
+            extent["xmin"] + pixel["x"] / reference["width"] * (extent["xmax"] - extent["xmin"]),
+            extent["ymax"] - pixel["y"] / reference["height"] * (extent["ymax"] - extent["ymin"]),
+        ) for pixel in candidate["imagePixels"]]
+        candidates.append({key: value for key, value in candidate.items() if key != "imagePixels"} | {
+            "points": serialized_points(points), "closed": True,
+            "sourceId": reference["sourceId"], "sourceUrl": reference["sourceUrl"],
+            "rasterId": reference["rasterId"], "acquisitionDate": reference["acquisitionDate"],
+            "status": "candidate",
+        })
+    payload = {"world": {"width": WIDTH, "height": HEIGHT}, "boundsWgs84": BOUNDS,
+               "geometryScope": source["geometryScope"], "completePhysicalFootprintsAccepted": 0,
+               "sourceId": reference["sourceId"], "candidates": candidates}
+    (ROOT / "public/kraft/geo-surface-candidates.json").write_text(json.dumps(payload, separators=(",", ":")) + "\n")
+    print(f"Built {len(candidates)} partial visible-surface candidates")
+
+
 if __name__ == "__main__":
     features = osm_features() + contour_features()
     payload = {"world": {"width": WIDTH, "height": HEIGHT},
                "boundsWgs84": BOUNDS, "features": features}
     (ROOT / "public/kraft/geo-features.json").write_text(json.dumps(payload, separators=(",", ":")) + "\n")
     print(f"Built {len(features)} source-observation features")
+    build_surface_candidates()

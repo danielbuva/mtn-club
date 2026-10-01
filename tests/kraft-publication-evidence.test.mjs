@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { kraftGuide } from '../lib/kraft/data.ts'
+import { deriveRouteContent } from '../lib/kraft/route-content-dimensions.ts'
 import { validateGuide } from '../lib/kraft/validate.ts'
 import { syntheticReviewedGuide } from './fixtures/kraft-reviewed-fixture.mjs'
 
@@ -142,10 +143,12 @@ test('a provisional physical rock cannot gain a source-backed face by reciprocal
   darwin.faceIds = [face.id]
   darwin.faceAssignmentStatus = 'source-backed'
   face.climbIds.push(darwin.id)
+  Object.assign(darwin, deriveRouteContent(darwin, monkey.faces))
   assert.match(
     validateGuide(guide).join('\n'),
     /source-backed face uses unresolved physical boulder membership/,
   )
   darwin.faceAssignmentStatus = 'editorial-provisional'
+  Object.assign(darwin, deriveRouteContent(darwin, monkey.faces))
   assert.deepEqual(validateGuide(guide), [])
 })

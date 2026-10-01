@@ -22,7 +22,16 @@ USGS, USDA, The National Map: Orthoimagery, US public domain.
 NAIP USDA-FSA-APFO source raster m_3611553_se_11_060_20220611,
 acquired June 11, 2022 at nominal 0.6 metre resolution.
 https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer
-Expanded reference export accessed October 1, 2026; imagery is not shipped.
+Expanded reference export accessed October 1, 2026. The unchanged lawful audit
+raster is retained in docs/kraft-gauntlet/source-data/geo-naip-expanded-reference.jpg.
+It is not fetched or rendered as a map baselayer.
+
+Candidate visible-surface vectors in geo-surface-candidates.json:
+US public domain, derived from native pixels of the same NAIP raster.
+Ten tentative partial surface traces have low spatial, boundary and named
+association confidence. Shadows/dark lobes are omitted; physical identities
+remain unresolved and complete bases unobserved. These are incomplete visible
+surfaces, not complete boulder footprints or surveyed base boundaries.
 
 Source requests, returned bounds, source IDs and file checksums are retained
 in docs/kraft-gauntlet/source-data/geo-provenance.json.

@@ -1,7 +1,7 @@
 # Current Kraft data review
 
 Reviewed 2026-10-01 against actual `kraftGuide` edition
-`2026-10-01-catalog-4`, both durable inventories, the four approved factual
+`2026-10-01-catalog-5`, both durable inventories, the four approved factual
 dossiers, cached MP HTML and cached OpenBeta SSR. **The expanded MP/OpenBeta
 source catalog is accepted at its stated source-observation scope. The finished
 Kraft field guide remains blocked.** This verdict does not depend on UI
@@ -31,16 +31,57 @@ respectively, without duplicate climb objects. Tomahawk and Wrong! contain four
 and two native OB entries. Conflicting linked memberships reference canonical
 IDs without moving their current MP parent or duplicating routes.
 
-All records have explicit blockers and reasons:
+Every route now exposes independent dimensions. “Verified” means the exact
+published source record, selected grade or catalog relationship was checked;
+it does not mean physical coidentity or field verification. Missing comparison
+evidence is distinct from a concrete source disagreement.
 
-| Runtime record | Identity | Evidence | Lawful imagery | Complete |
-| --- | ---: | ---: | ---: | ---: |
-| 383 climbs | 41 | 327 | 15 | 0 |
-| 78 catalogs | 4 | 1 | 73 | 0 |
+| Dimension | Current result across 383 climbs |
+| --- | --- |
+| Exact source identity | 383 verified; all 13 native OB UUIDs remain visible |
+| Grade | 344 verified, 39 disputed |
+| Source parent | 378 verified, 5 disputed |
+| Registered face | 78 known, 3 provisional, 302 unknown |
+| Actual topo SVG | 383 unavailable; zero reviewed lines or authored corridors |
+| Assigned image | 2 routes have the existing Pearl context photo, 381 missing |
 
-There are 379 source synopses and four catalog-only routes, 10 retained pilot
-face groups, 17 face-assigned climbs, one lawful Pearl context photograph and
-zero authored route overlays. No record claims field verification.
+Source evidence is separately classified as **187 moderate, 45 face-only and
+151 unresolved; zero high**. Moderate requires documented start, general path
+features/direction and finish, without requiring exact holds. An unknown face
+does not erase that factual corridor evidence, but retains a no-draw policy.
+Face-only requires a registered face assignment; mere textual face/region clues
+stay qualified in the facts without claiming a confident assignment. Source
+eligibility does not pretend that image-relative SVG artwork already exists.
+
+There are 379 source synopses, four catalog-only routes, 54 face groups and
+81 face-assigned climbs. All remain source observations. The old aggregate
+field-readiness blockers do not replace these separate source dimensions.
+
+## Controlled source-face batch
+
+The new batch adds **64 exact route assignments on 44 source face groups across
+27 catalogs**: West 10, Cube Area 1, Main 34, Pearl Area 1 and East 18. All four
+pilot units, their 10 face groups, 17 assignments, assets and geometry remain
+unchanged. The recomputable `sourceFaceLedger(kraftGuide.boulders)` retains each
+exact route/parent ID, primary MP face fact, source ID, retrieval date and
+`source-catalog-face` scope.
+
+Independent assertions compare every ledger row to the original approved
+dossier and MP inventory, check reciprocal membership and source closure,
+and confirm that every new face has a missing image and no authored geometry.
+Cardinal groups describe source-observed aspects, not surveyed physical face
+divisions, shared camera views or field review. The matcher only confirms a
+controlled exact-ID rule using primary `facts.face`; route names, approaches,
+neighbor references and imported prose cannot discover assignments.
+
+Art Deco, Main Warmups, legacy Black Warmups, the historical Bipartisan face,
+wraps and relative/adjacent-rock cases remain outside this batch. In particular,
+Low Rider's adjacent rock, Halfpipe Surfer's location east of The Prowler,
+Wayward Son's west-side neighbor feature and One Legged's uphill relative
+placement do not establish faces. Negative controls reject neighboring/separate
+rock text and “Right of North Face Left” as a cardinal face claim. Perfect
+Poser's retained cross-route face evidence now includes Total Devastation in
+the new evidence source list; its own absent prose is not treated as face proof.
 
 ## Source acquisition and dossier evidence
 
@@ -87,11 +128,15 @@ or establish independent source lineage.
 
 ## Conflict and physical-identity review
 
-The 41 identity-blocked climbs comprise five conflicting numeric source parents,
-19 linked routes under unmatched legacy parents, 13 native OB records and four
-preserved provisional physical memberships. Current MP and OB parents, IDs and
-names remain visible. Front Side Crack's exact-linked OB name, “Plumbers Crack
-(North side chimney),” does not merge it with south/downhill Plumber's Crack.
+Five exact linked routes have concrete conflicting numeric source parents and
+retain disputed parent dimensions. Nineteen linked routes have unmatched legacy
+OB parent comparisons; their current exact MP parent stays verified while the
+comparison remains unresolved. All 13 native OB records have checked UUID
+identity, grade and exact OB source parent, without asserting an MP or physical
+match. Four preserved pilot routes retain provisional physical membership.
+Current MP and OB parents, IDs and names remain visible. Front Side Crack's
+exact-linked OB name, “Plumbers Crack (North side chimney),” does not merge it
+with south/downhill Plumber's Crack.
 
 Art Deco's source page explicitly describes two rocks; Warm-up Boulders Main
 describes a pair. Both remain qualified source units without invented physical
@@ -116,14 +161,29 @@ silently corrected.
 
 ## Verification and remaining limits
 
-The final scoped static run passed **62/62 tests** across full runtime, dossiers,
-inventories, serialization, catalog validation, provenance, evidence, rights,
-release invariants and geography. `validateGuide(kraftGuide)` passes. Independent
-assertions compared actual runtime to inputs and actual source caches; synthetic
-controls remain validation evidence only. Guide JSON serialization SHA-256:
-`c1eae26f6c9b1cc619c21508d0871a20e639c95097017f199266b50535168271`.
+The final scoped static run passed **97/97 Kraft tests** across full runtime, dossiers,
+inventories, serialization, source faces, independent content dimensions,
+catalog validation, provenance, evidence, rights, release invariants and
+geography. `validateGuide(kraftGuide)` passes. Independent assertions compared
+actual runtime and the complete face ledger to inputs and actual source caches;
+synthetic controls remain validation evidence only. Guide JSON SHA-256:
+`382beb0ae48cf16aadad73a626215195864e1324119eb7b507c3be1a156f203f`.
+Recomputed face-ledger JSON SHA-256:
+`388171439f77a4b8500eae699f6e6ef4b376836f2f59b8fad9516d9547e8af61`.
 Native OB factual input SHA-256:
 `03c7ea647ed109873ab0d7c118a79dc54234c777fcbab942694ed9ac2c93a2d2`.
+
+High confidence requires an explicit named, dated review of the specific path
+or documented independent corroboration, rather than an authored-object flag.
+Actual reviewed SVG additionally binds the review to that exact path. The
+repaired actual-geometry guard validates complete SVG command/parameter syntax,
+finite numbers, valid arc flags/radii, drawable segments and labels within the
+exact photo dimensions. Meaningful negative controls reject malformed text,
+incomplete commands, bad dates, wrong faces, missing specific-path reviews,
+out-of-image labels and a review attached to a different SVG path. The helper,
+64-route face batch and final full-383 source/grade/parent/dossier closure are
+accepted at their documented source scope. These controls create no production
+review, image or route artwork.
 
 TheTopo's retained 34 units, 198 routes and 48 views remain an unreconciled
 research inventory. Automated acquisition stopped when its published terms

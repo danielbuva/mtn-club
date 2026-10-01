@@ -130,7 +130,7 @@ const pilotSources: EvidenceSource[] = [
       evidenceUrl:
         'https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits',
     },
-    note: 'Expanded scratch reference locked to raster 134873, acquired June 11, 2022. Aerial rock and shadow patches are not accepted physical footprints. Reference imagery is not included in the download asset inventory.',
+    note: 'Context source input locked to raster 134873, acquired June 11, 2022. Low-confidence partial visible-surface vectors preserve uncertain named associations and unobserved base boundaries. The aerial image remains a provenance input and is not included in the field download.',
   },
   {
     id: 'usgs-3dep-2026-09-30',

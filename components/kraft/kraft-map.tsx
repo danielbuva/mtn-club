@@ -1,9 +1,8 @@
 'use client'
 
-import { LocateFixed, Minus, Plus, RotateCcw, X } from 'lucide-react'
+import { LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react'
 import { useId, useRef, useState } from 'react'
 import {
-  GEOGRAPHY_ATTRIBUTION,
   MAP_HEIGHT,
   MAP_WIDTH,
   projectLocation,
@@ -12,6 +11,7 @@ import {
 import type { Boulder } from '@/lib/kraft/types'
 import { MapCatalogLayer } from './map-boulder'
 import { MapChooser } from './map-chooser'
+import { MapInformation } from './map-information'
 import { MapLabels } from './map-labels'
 import { MapTerrain } from './map-terrain'
 import { useMapGestures } from './use-map-gestures'
@@ -41,7 +41,6 @@ export function KraftMap({
   matchingClimbCounts,
   filtersActive = false,
 }: KraftMapProps) {
-  const informationRef = useRef<HTMLDetailsElement>(null)
   const chooserTrigger = useRef<SVGGElement | null>(null)
   const [chooserIds, setChooserIds] = useState<string[]>([])
   const id = useId().replaceAll(':', '')
@@ -86,7 +85,9 @@ export function KraftMap({
           <desc>
             North-up source geographic data. Points and numbered clusters locate
             catalog records. Counts do not count physical rocks. No surveyed
-            boulder footprints or verified approaches are provided.
+            boulder footprints or verified approaches are provided. Dashed
+            surface candidates have low spatial confidence and incomplete
+            outlines; named rock associations are unresolved.
           </desc>
           <MapTerrain idPrefix={id} />
           <MapLabels
@@ -236,46 +237,15 @@ export function KraftMap({
             <i className="kraft-map-key-wash" />
             Dry wash
           </li>
+          <li>
+            <i className="kraft-map-key-surface" />
+            Possible rock surface · low confidence
+          </li>
         </ul>
-        <details
-          ref={informationRef}
-          className="kraft-map-data-note"
-          onKeyDown={event => {
-            if (event.key === 'Escape' && informationRef.current) {
-              informationRef.current.open = false
-              informationRef.current.querySelector('summary')?.focus()
-              event.stopPropagation()
-            }
-          }}
-        >
-          <summary>About this map</summary>
-          <button
-            type="button"
-            className="kraft-map-note-close"
-            aria-label="Close map information"
-            onClick={() => {
-              if (informationRef.current) {
-                informationRef.current.open = false
-                informationRef.current.querySelector('summary')?.focus()
-              }
-            }}
-          >
-            <X size={17} aria-hidden="true" />
-          </button>
-          <p id={`${id}-accuracy`}>
-            Points show published source locations with unknown accuracy.
-            Numbered clusters count catalog records, including unresolved or
-            multi-rock groups. Source area centroids are not physical boulder
-            positions. No boulder footprints or final approaches are surveyed.
-            Trails and intermittent washes follow open map data; confirm
-            conditions on the ground.
-          </p>
-          <p>
-            {GEOGRAPHY_ATTRIBUTION} Source comparisons use public-domain
-            USGS/USDA NAIP orthoimagery from June 2022. Light and shadow
-            boundaries do not establish a named rock's footprint.
-          </p>
-        </details>
+        <MapInformation
+          accuracyId={`${id}-accuracy`}
+          mapHeight={(map.bounds.maxY - map.bounds.minY) * map.pixelsPerUnit}
+        />
       </div>
       <p id={`${id}-instructions`} className="sr-only">
         Drag to pan. Pinch or use the mouse wheel to zoom. With the map focused,

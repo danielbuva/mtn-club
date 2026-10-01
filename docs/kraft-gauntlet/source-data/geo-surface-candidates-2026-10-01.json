@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-01T21:19:44.736567+00:00",
+  "reference": {
+    "path": "docs/kraft-gauntlet/source-data/geo-naip-expanded-reference.jpg",
+    "sha256": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24",
+    "width": 1907,
+    "height": 1280,
+    "sourceId": "usgs-naip-2026-10-01",
+    "rasterId": 134873,
+    "acquisitionDate": "2022-06-11",
+    "nominalSourceResolutionMeters": 0.6,
+    "exportGroundMetersPerPixelApprox": 0.787,
+    "coordinateConvention": "image-pixel edges, x right/east, y down/south; enlargements show original native pixels only",
+    "world": {
+      "width": 1192,
+      "height": 800
+    },
+    "extentEpsg3857": {
+      "xmin": -12849163.544304395,
+      "ymin": 4322135.591505952,
+      "xmax": -12847304.508808147,
+      "ymax": 4323383.405606867,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    },
+    "license": "US public domain",
+    "sourceUrl": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/134873"
+  },
+  "geometryScope": "candidate-visible-surface",
+  "completePhysicalFootprintsAccepted": 0,
+  "processing": "Native pixel edges are retained without smoothing; world vectors are generated from the reported raster EPSG:3857 extent. Closed surface patches are partial visible rock candidates, never complete physical footprints. Source-point associations remain tentative and do not move catalog locations.",
+  "candidates": [
+    {
+      "id": "surface-candidate-mp-125206006",
+      "sourceUnitIds": [
+        "mp-area-125206006"
+      ],
+      "catalogSourceId": "125206006",
+      "catalogSource": "mountain-project",
+      "sourceName": "Mini Split Boulder",
+      "sourcePoint": {
+        "latitude": 36.16039,
+        "longitude": -115.42266
+      },
+      "imagePixels": [
+        {
+          "x": 380,
+          "y": 676.5
+        },
+        {
+          "x": 383,
+          "y": 677.5
+        },
+        {
+          "x": 384,
+          "y": 681
+        },
+        {
+          "x": 383,
+          "y": 685
+        },
+        {
+          "x": 381,
+          "y": 688
+        },
+        {
+          "x": 378,
+          "y": 687
+        },
+        {
+          "x": 376.5,
+          "y": 683
+        },
+        {
+          "x": 377.5,
+          "y": 679
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Pale western patch adjacent to the MP point. North/west tonal boundaries blend into ground; eastern dark lobe omitted."
+    },
+    {
+      "id": "surface-candidate-mp-202233182",
+      "sourceUnitIds": [
+        "mp-area-202233182"
+      ],
+      "catalogSourceId": "202233182",
+      "catalogSource": "mountain-project",
+      "sourceName": "Smooth Business",
+      "sourcePoint": {
+        "latitude": 36.16065,
+        "longitude": -115.4212
+      },
+      "imagePixels": [
+        {
+          "x": 546,
+          "y": 649.5
+        },
+        {
+          "x": 548.5,
+          "y": 650
+        },
+        {
+          "x": 550.5,
+          "y": 653
+        },
+        {
+          "x": 550,
+          "y": 656.5
+        },
+        {
+          "x": 548,
+          "y": 658.5
+        },
+        {
+          "x": 545,
+          "y": 657
+        },
+        {
+          "x": 543.5,
+          "y": 654
+        },
+        {
+          "x": 544,
+          "y": 651.5
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Only the pale west/north surface cap is tentatively outlined. Several edge pixels blend into pale ground; nearby smaller patches are not joined."
+    },
+    {
+      "id": "surface-candidate-mp-105959355",
+      "sourceUnitIds": [
+        "cube"
+      ],
+      "catalogSourceId": "105959355",
+      "catalogSource": "mountain-project",
+      "sourceName": "The Cube",
+      "sourcePoint": {
+        "latitude": 36.15974,
+        "longitude": -115.41913
+      },
+      "imagePixels": [
+        {
+          "x": 774,
+          "y": 771
+        },
+        {
+          "x": 779.5,
+          "y": 771.5
+        },
+        {
+          "x": 782.5,
+          "y": 774.5
+        },
+        {
+          "x": 783,
+          "y": 778
+        },
+        {
+          "x": 781.5,
+          "y": 782
+        },
+        {
+          "x": 778.5,
+          "y": 784
+        },
+        {
+          "x": 772.5,
+          "y": 784
+        },
+        {
+          "x": 769,
+          "y": 781
+        },
+        {
+          "x": 768,
+          "y": 776.5
+        },
+        {
+          "x": 770,
+          "y": 773
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Broad pale western visible surface. Eastern dark lobe and the separate smaller southeastern patch omitted; no underside/base inference. The author judged the cap clearer than the other candidates, but still below medium boundary confidence."
+    },
+    {
+      "id": "surface-candidate-mp-111106611",
+      "sourceUnitIds": [
+        "mp-area-111106611"
+      ],
+      "catalogSourceId": "111106611",
+      "catalogSource": "mountain-project",
+      "sourceName": "$600 Boulder",
+      "sourcePoint": {
+        "latitude": 36.16003,
+        "longitude": -115.41704
+      },
+      "imagePixels": [
+        {
+          "x": 1020.5,
+          "y": 735.5
+        },
+        {
+          "x": 1023.5,
+          "y": 736
+        },
+        {
+          "x": 1025.5,
+          "y": 738
+        },
+        {
+          "x": 1025,
+          "y": 740.5
+        },
+        {
+          "x": 1022.5,
+          "y": 742.5
+        },
+        {
+          "x": 1019.5,
+          "y": 742
+        },
+        {
+          "x": 1018.5,
+          "y": 739
+        },
+        {
+          "x": 1019,
+          "y": 737
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Small pale western part of the upper rock-like feature beside the MP point. Larger lower-left feature deliberately excluded; source identity is unconfirmed."
+    },
+    {
+      "id": "surface-candidate-mp-106378780",
+      "sourceUnitIds": [
+        "mp-area-106378780"
+      ],
+      "catalogSourceId": "106378780",
+      "catalogSource": "mountain-project",
+      "sourceName": "Angel Dyno",
+      "sourcePoint": {
+        "latitude": 36.15968,
+        "longitude": -115.4161
+      },
+      "imagePixels": [
+        {
+          "x": 1127.5,
+          "y": 784.5
+        },
+        {
+          "x": 1130,
+          "y": 785
+        },
+        {
+          "x": 1131.5,
+          "y": 787.5
+        },
+        {
+          "x": 1131,
+          "y": 790.5
+        },
+        {
+          "x": 1129.5,
+          "y": 793.5
+        },
+        {
+          "x": 1127,
+          "y": 794
+        },
+        {
+          "x": 1124.5,
+          "y": 791.5
+        },
+        {
+          "x": 1124.5,
+          "y": 787.5
+        },
+        {
+          "x": 1125.5,
+          "y": 785.5
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Small pale western visible surface beside the dark eastern lobe. West/north edges have low tonal separation; dark lobe omitted."
+    },
+    {
+      "id": "surface-candidate-mp-200619407",
+      "sourceUnitIds": [
+        "mp-area-200619407"
+      ],
+      "catalogSourceId": "200619407",
+      "catalogSource": "mountain-project",
+      "sourceName": "Around the World",
+      "sourcePoint": {
+        "latitude": 36.15991,
+        "longitude": -115.4171
+      },
+      "imagePixels": [
+        {
+          "x": 1012.5,
+          "y": 751.5
+        },
+        {
+          "x": 1014.5,
+          "y": 751.5
+        },
+        {
+          "x": 1014.5,
+          "y": 754.5
+        },
+        {
+          "x": 1013,
+          "y": 755.5
+        },
+        {
+          "x": 1011.5,
+          "y": 754
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Only a tiny western grey/pale face is traced. The much larger dark eastern region cannot be separated into rock face and cast shadow. Split source unit has a nearby point: no physical identity merge."
+    },
+    {
+      "id": "surface-candidate-mp-106964269",
+      "sourceUnitIds": [
+        "mp-area-106964269"
+      ],
+      "catalogSourceId": "106964269",
+      "catalogSource": "mountain-project",
+      "sourceName": "Barndoor Boulder",
+      "sourcePoint": {
+        "latitude": 36.16033,
+        "longitude": -115.41682
+      },
+      "imagePixels": [
+        {
+          "x": 1043.5,
+          "y": 692
+        },
+        {
+          "x": 1047,
+          "y": 692
+        },
+        {
+          "x": 1047.5,
+          "y": 694
+        },
+        {
+          "x": 1047,
+          "y": 696
+        },
+        {
+          "x": 1045,
+          "y": 697
+        },
+        {
+          "x": 1043,
+          "y": 696.5
+        },
+        {
+          "x": 1042.5,
+          "y": 694.5
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Small pale upper-west cap only. Dark lower/eastern areas are omitted; cap-to-ground boundary is weak and may not indicate a complete physical rock."
+    },
+    {
+      "id": "surface-candidate-mp-123856651",
+      "sourceUnitIds": [
+        "mp-area-123856651"
+      ],
+      "catalogSourceId": "123856651",
+      "catalogSource": "mountain-project",
+      "sourceName": "Black Warm-up North",
+      "sourcePoint": {
+        "latitude": 36.15945,
+        "longitude": -115.41749
+      },
+      "imagePixels": [
+        {
+          "x": 974,
+          "y": 816
+        },
+        {
+          "x": 977,
+          "y": 816.5
+        },
+        {
+          "x": 978,
+          "y": 818
+        },
+        {
+          "x": 977.5,
+          "y": 820.5
+        },
+        {
+          "x": 975.5,
+          "y": 821
+        },
+        {
+          "x": 974,
+          "y": 819.5
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Pale west side of the smaller northeastern feature. The retained source point falls in the gap to its west; association by proximity remains low confidence. Larger southwestern neighbor is excluded."
+    },
+    {
+      "id": "surface-candidate-mp-123856648",
+      "sourceUnitIds": [
+        "mp-area-123856648"
+      ],
+      "catalogSourceId": "123856648",
+      "catalogSource": "mountain-project",
+      "sourceName": "Black Warm-up South",
+      "sourcePoint": {
+        "latitude": 36.15935,
+        "longitude": -115.41759
+      },
+      "imagePixels": [
+        {
+          "x": 965,
+          "y": 824.5
+        },
+        {
+          "x": 968,
+          "y": 825
+        },
+        {
+          "x": 968.5,
+          "y": 828
+        },
+        {
+          "x": 967.5,
+          "y": 831
+        },
+        {
+          "x": 965.5,
+          "y": 832
+        },
+        {
+          "x": 963.5,
+          "y": 830
+        },
+        {
+          "x": 963.5,
+          "y": 827
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Pale west/central face of the larger southwestern feature. The source point is outside it to the southwest. Dark eastern lobe, pale ground and smaller northeastern neighbor are excluded; named association remains unresolved."
+    },
+    {
+      "id": "surface-candidate-mp-106799341",
+      "sourceUnitIds": [
+        "mp-area-106799341"
+      ],
+      "catalogSourceId": "106799341",
+      "catalogSource": "mountain-project",
+      "sourceName": "Bubble Butt Boulder",
+      "sourcePoint": {
+        "latitude": 36.15985,
+        "longitude": -115.41568
+      },
+      "imagePixels": [
+        {
+          "x": 1176,
+          "y": 758.5
+        },
+        {
+          "x": 1178.5,
+          "y": 759.5
+        },
+        {
+          "x": 1180,
+          "y": 761
+        },
+        {
+          "x": 1179.5,
+          "y": 763
+        },
+        {
+          "x": 1177,
+          "y": 763
+        },
+        {
+          "x": 1175.5,
+          "y": 761.5
+        }
+      ],
+      "geometryScope": "candidate-visible-surface",
+      "spatialConfidence": "low",
+      "visibleBoundaryConfidence": "low",
+      "sourceAssociationConfidence": "low",
+      "physicalIdentity": "unresolved",
+      "baseBoundary": "unobserved",
+      "note": "Small pale western cap adjoining a large dark eastern lobe. Pale ground/rock transition is weak. Nearby Timepiece source point may refer to this feature or another; no shared physical identity is asserted."
+    }
+  ]
+}

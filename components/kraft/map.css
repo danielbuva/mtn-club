@@ -418,6 +418,17 @@
   border-bottom: 1px solid #d2c5a5;
   background: #d2c5a5;
 }
+.kraft-map-key-surface {
+  height: 9px;
+  border: 1px dashed #706450;
+  background: rgb(163 149 123 / 18%);
+}
+.kraft-map-surface-candidates > path {
+  fill: rgb(163 149 123 / 18%);
+  stroke: #706450;
+  stroke-width: 0.85;
+  stroke-dasharray: 1.8 1.8;
+}
 .kraft-map-data-note {
   max-width: 420px;
   color: #79664e;
@@ -603,8 +614,22 @@
   bottom: 8px;
   right: 8px;
   max-width: calc(100% - 16px);
+  max-height: calc(100% - 16px);
   padding: 17px;
   font-size: 12px;
+}
+.kraft-map-note-scroll {
+  margin-top: 12px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 8px;
+}
+.kraft-map-note-scroll:focus-visible {
+  outline: 2px solid #795139;
+  outline-offset: 3px;
+}
+.kraft-map-note-scroll > p:first-child {
+  margin-top: 0;
 }
 .kraft-map-data-note[open] summary {
   padding-right: 35px;
