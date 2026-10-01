@@ -35,9 +35,18 @@ one source omits its V grade. TheTopo entries retain their own source IDs
 pending an evidence-backed crosswalk; do not add their source count to MP as a
 count of unique real-world climbs.
 
-The four existing catalogs retain stronger individually studied synopses,
-conditions and face qualifications. They do not prove the rest of Kraft has
-the same evidence. Original MP source prose/photos remain in ignored research
+The four existing catalogs retain individually studied face qualifications.
+All 370 acquired MP routes now have independently source-reviewed original
+factual dossiers: [West/Cube](source-data/route-facts-west-cube.json),
+[Pearl/East](source-data/route-facts-pearl-east.json),
+[Main A](source-data/route-facts-main-a.json) and
+[Main B](source-data/route-facts-main-b.json). They preserve starts, general paths,
+finishes, constraints, source-linked aliases and unresolved observations at the
+resolution supported by actual prose. Their 232 exact-ID OpenBeta observations
+remain correlated imports, not independent physical confirmation. Missing fields
+stay empty; original source paragraphs are not redistributed in those dossiers.
+Runtime integration and physical-face/route correspondence remain unfinished.
+Original MP source prose/photos remain in ignored research
 only; OpenBeta descriptive content has separate CC0 provenance. The final guide
 must not require shipping a reference-only image.
 

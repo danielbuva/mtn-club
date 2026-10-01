@@ -1,0 +1,4628 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01T19:48:10.881788Z",
+  "usage": "Original factual synopses, source observations; not verified route geometry",
+  "routeCount": 89,
+  "routes": [
+    {
+      "mpRouteId": "122238448",
+      "name": "Left Side Left V1",
+      "mpParentId": "111106611",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122238448",
+          "url": "https://www.mountainproject.com/route/122238448/left-side-left-v1",
+          "retrievedAt": "2026-10-01T18:48:26.451Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Standing, left of the dihedral."
+            ],
+            "path": [
+              "Follow edges and rails up-left on the face."
+            ],
+            "finish": [
+              "Top out well left of the dihedral."
+            ],
+            "constraints": [],
+            "approach": [
+              "With your back to Plumber's Crack, look toward 2 o'clock."
+            ]
+          },
+          "synopsis": "Standing face climb left of the dihedral; edges and rails lead up-left to a finish farther left.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "123953521",
+      "name": "Twinkle Toes",
+      "mpParentId": "106378780",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "123953521",
+          "url": "https://www.mountainproject.com/route/123953521/twinkle-toes",
+          "retrievedAt": "2026-10-01T18:48:27.175Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Approximately 45-degree slab left of Earth Angel."
+            ],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [
+              "Using no hands is an optional challenge."
+            ],
+            "approach": []
+          },
+          "synopsis": "Slab left of Earth Angel, with a suggested hands-free challenge.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "118153704",
+      "name": "Sergeant Hightower",
+      "mpParentId": "106964269",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "118153704",
+          "url": "https://www.mountainproject.com/route/118153704/sergeant-hightower",
+          "retrievedAt": "2026-10-01T18:48:28.337Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Lowball to the viewer’s left of Secrets of the Barndoor."
+            ],
+            "start": [
+              "Seated; good left crimp and poor right sidepull."
+            ],
+            "path": [
+              "Climb upward."
+            ],
+            "finish": [],
+            "constraints": [
+              "An extra pad under the seat is described as a cheater start."
+            ],
+            "approach": []
+          },
+          "synopsis": "Seated lowball left of Secrets of the Barndoor; rise from an asymmetric crimp/sidepull start.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "ab91704f-ee7c-5217-8a40-ef1af5f00276",
+          "url": "https://openbeta.io/climb/ab91704f-ee7c-5217-8a40-ef1af5f00276/sargent-hightower",
+          "retrievedAt": "2026-10-01T18:49:25.081Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Sargent Hightower'; current Mountain Project name is 'Sergeant Hightower'."
+      ]
+    },
+    {
+      "mpRouteId": "106732680",
+      "name": "Big Jugs",
+      "mpParentId": "106732667",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106732680",
+          "url": "https://www.mountainproject.com/route/106732680/big-jugs",
+          "retrievedAt": "2026-10-01T18:48:28.056Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Left side of the boulder."
+            ],
+            "start": [],
+            "path": [
+              "Climb the large jugs."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Follow large jugs on the boulder’s left side.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "cb83d4a4-a846-5e74-b04f-07df8369c036",
+          "url": "https://openbeta.io/climb/cb83d4a4-a846-5e74-b04f-07df8369c036/big-jugs",
+          "retrievedAt": "2026-10-01T18:49:11.231Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "122238535",
+      "name": "Traverse",
+      "mpParentId": "123856651",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122238535",
+          "url": "https://www.mountainproject.com/route/122238535/traverse",
+          "retrievedAt": "2026-10-01T18:48:31.321Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Good sidepull."
+            ],
+            "path": [
+              "Traverse beneath the lip; the page reports a guidebook leftward direction and suggests the reverse also works."
+            ],
+            "finish": [
+              "Exit when jugs permit topping out."
+            ],
+            "constraints": [],
+            "approach": [
+              "Of the two warm-up boulders, this is the right one when facing them.",
+              "Facing away from Fin puts the starting sidepull ahead."
+            ]
+          },
+          "synopsis": "From a sidepull, traverse beneath the lip to a jug exit; the source discusses both directions.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "111106605",
+      "name": "Scare Tactics",
+      "mpParentId": "106799341",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "111106605",
+          "url": "https://www.mountainproject.com/route/111106605/scare-tactics",
+          "retrievedAt": "2026-10-01T18:48:32.858Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "West face, left side of the overhanging scoop."
+            ],
+            "start": [
+              "Seated on small crimps."
+            ],
+            "path": [
+              "Trend up-left through improving holds."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated crimp start on the west face; climb the left side of the scoop up-left as holds improve.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "9fc7f8f8-130c-5fdb-95d8-f60e442ce7a2",
+          "url": "https://openbeta.io/climb/9fc7f8f8-130c-5fdb-95d8-f60e442ce7a2/scare-tactics",
+          "retrievedAt": "2026-10-01T18:49:23.260Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "121908950",
+      "name": "Three Feet to Gold",
+      "mpParentId": "106732632",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "121908950",
+          "url": "https://www.mountainproject.com/route/121908950/three-feet-to-gold",
+          "retrievedAt": "2026-10-01T18:48:34.732Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Far left of Burnout when facing Jones'n."
+            ],
+            "start": [
+              "Seated on a good undercling."
+            ],
+            "path": [
+              "Make long moves to crimps above."
+            ],
+            "finish": [
+              "Top out."
+            ],
+            "constraints": [
+              "Nearby rocks behind the climber and by the left leg create dab concerns."
+            ],
+            "approach": []
+          },
+          "synopsis": "Seated undercling start at Burnout’s far left; long moves reach face crimps and a topout.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "48a1b924-ab04-5259-9fb7-8574269f4e3e",
+          "url": "https://openbeta.io/climb/48a1b924-ab04-5259-9fb7-8574269f4e3e/three-feet-to-gold",
+          "retrievedAt": "2026-10-01T18:49:22.279Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "124134233",
+      "name": "Brian's Butthole",
+      "mpParentId": "107430254",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "124134233",
+          "url": "https://www.mountainproject.com/route/124134233/brians-butthole",
+          "retrievedAt": "2026-10-01T18:48:34.323Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Squeeze upward through the first hole reached."
+            ],
+            "path": [
+              "Back-bending squeeze."
+            ],
+            "finish": [
+              "Exit toward the back-left; the described loop descends through the farthest hole and returns through the same squeeze."
+            ],
+            "constraints": [],
+            "approach": [
+              "Pass the Butt Crack sit start through the cave to a small rock pile."
+            ]
+          },
+          "synopsis": "Squeeze through the first hole beyond the Butt Crack start; the description gives a looping cave return.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "120588283",
+      "name": "Front Mantle",
+      "mpParentId": "120588274",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "120588283",
+          "url": "https://www.mountainproject.com/route/120588283/front-mantle",
+          "retrievedAt": "2026-10-01T18:48:35.810Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "At the lip."
+            ],
+            "path": [
+              "Mantle onto the face using a flake."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Start on the lip and use a flake to mantle onto the face.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "1749721f-0a35-521d-8dea-688650a0d2ce",
+          "url": "https://openbeta.io/climb/1749721f-0a35-521d-8dea-688650a0d2ce/front-mantle",
+          "retrievedAt": "2026-10-01T18:49:21.924Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430940",
+      "name": "Smiley Face",
+      "mpParentId": "107430930",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430940",
+          "url": "https://www.mountainproject.com/route/107430940/smiley-face",
+          "retrievedAt": "2026-10-01T18:48:36.733Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left portion of the south face."
+            ],
+            "start": [
+              "Step onto the angular arête."
+            ],
+            "path": [
+              "Climb the face on undercuts, sidepulls and crimps."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Left side of the south face: step onto the angular arête and climb through undercuts, sidepulls and crimps.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "dedfb087-3aec-5a24-ae89-93f4e592ee38",
+          "url": "https://openbeta.io/climb/dedfb087-3aec-5a24-ae89-93f4e592ee38/smiley-face",
+          "retrievedAt": "2026-10-01T18:49:25.431Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "126854481",
+      "name": "Done Better",
+      "mpParentId": "126854441",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "126854481",
+          "url": "https://www.mountainproject.com/route/126854481/done-better",
+          "retrievedAt": "2026-10-01T18:48:37.472Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left side of the east face."
+            ],
+            "start": [
+              "Hands matched in the crack."
+            ],
+            "path": [
+              "Climb upward and left on a pseudo-arête."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Matched crack start at the east face’s left side; climb up-left along a pseudo-arête.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "127185711",
+      "name": "Delicate Ecosystem",
+      "mpParentId": "127185616",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "127185711",
+          "url": "https://www.mountainproject.com/route/127185711/delicate-ecosystem",
+          "retrievedAt": "2026-10-01T18:48:38.045Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Two underclings with a low foot."
+            ],
+            "path": [
+              "Crux mantle to a hand-foot match on the spherical jug above the right starting hold."
+            ],
+            "finish": [
+              "Slab finish; the page describes a safe descent on the face opposite Angel Dyno."
+            ],
+            "constraints": [
+              "Small flat rock below the start/crux and a slight downhill fall risk at the crux."
+            ],
+            "approach": [
+              "From Angel Dyno, face south toward the gentle slab, then walk around its right side."
+            ]
+          },
+          "synopsis": "Undercling start leads to a mantle and hand-foot match on the spherical jug, then a slab finish.",
+          "unresolved": [
+            "The author reported no chalk or existing entry when climbing it and requested guidebook identification; prior listing is unresolved."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "122055516",
+      "name": "Square Arête Low",
+      "mpParentId": "111338565",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122055516",
+          "url": "https://www.mountainproject.com/route/122055516/square-arete-low",
+          "retrievedAt": "2026-10-01T18:48:38.880Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated variant of Square Arête, using crack/right-sidepull handholds."
+            ],
+            "path": [
+              "One principal difficult move is described."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated Square Arête variant, beginning on crack/right-sidepull holds.",
+          "unresolved": [
+            "Location uses the phrase “grave start” without clarifying it."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107400755",
+      "name": "Picante Left",
+      "mpParentId": "107400752",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107400755",
+          "url": "https://www.mountainproject.com/route/107400755/picante-left",
+          "retrievedAt": "2026-10-01T18:48:40.286Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated on a good rail."
+            ],
+            "path": [
+              "Move left with heel hooks and longer reaches."
+            ],
+            "finish": [
+              "Top out from good holds."
+            ],
+            "constraints": [],
+            "approach": [
+              "About 25 yards north of Potato Chips Boulder."
+            ]
+          },
+          "synopsis": "Seated rail start; heel hooks and long moves lead left to good holds and a topout.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "7ec6a075-af16-5ad4-ba86-3451ddb732a5",
+          "url": "https://openbeta.io/climb/7ec6a075-af16-5ad4-ba86-3451ddb732a5/picante-left",
+          "retrievedAt": "2026-10-01T18:49:17.599Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "123736564",
+      "name": "Cave Left",
+      "mpParentId": "105959400",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "123736564",
+          "url": "https://www.mountainproject.com/route/123736564/cave-left",
+          "retrievedAt": "2026-10-01T18:48:40.592Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Rear side, left dihedral."
+            ],
+            "start": [
+              "Standing deep in the dihedral, matched on a fair crimp rail."
+            ],
+            "path": [
+              "Wide iron-cross movement to a fair Gaston, then up-left."
+            ],
+            "finish": [
+              "Moderately difficult topout."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Standing in the rear-left dihedral, move wide to a Gaston and climb up-left to the topout.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "116356026",
+      "name": "Pretzel Left",
+      "mpParentId": "116355933",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "116356026",
+          "url": "https://www.mountainproject.com/route/116356026/pretzel-left",
+          "retrievedAt": "2026-10-01T18:48:42.419Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated on obvious jugs near the end of the V6 traverse."
+            ],
+            "path": [
+              "Follow the arête upward."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated jug start near the V6 traverse’s end; continue up the arête.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "ad7cb888-78cb-504f-9df6-80dac5576350",
+          "url": "https://openbeta.io/climb/ad7cb888-78cb-504f-9df6-80dac5576350/pretzel-left",
+          "retrievedAt": "2026-10-01T18:49:17.621Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "200870118",
+      "name": "Spence, The",
+      "mpParentId": "116107548",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "200870118",
+          "url": "https://www.mountainproject.com/route/200870118/the-spence",
+          "retrievedAt": "2026-10-01T18:48:43.294Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "About two feet left of The Prowler."
+            ],
+            "start": [
+              "Matched on a small crimp; establishing footholds is described as the hardest part."
+            ],
+            "path": [
+              "Continue through the overhanging jug."
+            ],
+            "finish": [
+              "Easy mantle topout."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "About two feet left of The Prowler, a matched crimp start reaches an overhanging jug and an easy mantle.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "110224268",
+      "name": "Shady Lady",
+      "mpParentId": "110224264",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "110224268",
+          "url": "https://www.mountainproject.com/route/110224268/shady-lady",
+          "retrievedAt": "2026-10-01T18:48:43.561Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Varnished west face."
+            ],
+            "start": [],
+            "path": [
+              "Climb on good holds."
+            ],
+            "finish": [
+              "Somewhat tenuous topout."
+            ],
+            "constraints": [],
+            "approach": [
+              "Descend via the slab finish of Front Right Mantle; the first step is described as tricky."
+            ]
+          },
+          "synopsis": "Great holds on the varnished west face lead to a somewhat tenuous topout; descent follows Front Right Mantle’s slab.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "70d577c2-5aa5-5376-ba6e-f204240f8a82",
+          "url": "https://openbeta.io/climb/70d577c2-5aa5-5376-ba6e-f204240f8a82/shady-lady",
+          "retrievedAt": "2026-10-01T18:49:11.582Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Shady lady'; current Mountain Project name is 'Shady Lady'."
+      ]
+    },
+    {
+      "mpRouteId": "117283318",
+      "name": "Flush it",
+      "mpParentId": "113973264",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "117283318",
+          "url": "https://www.mountainproject.com/route/117283318/flush-it",
+          "retrievedAt": "2026-10-01T18:48:44.220Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "West side, beside the arête; far left of Shitter Direct."
+            ],
+            "start": [
+              "Seated on a good jug with light chalk."
+            ],
+            "path": [
+              "Use a positive edge, then a jug near the lip."
+            ],
+            "finish": [
+              "Finish far left on a good jug."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated jug start beside the west arête; climb an edge to the lip and finish far left on a jug.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "40174e5c-5b1a-5c6d-b9a8-726afe34eea4",
+          "url": "https://openbeta.io/climb/40174e5c-5b1a-5c6d-b9a8-726afe34eea4/flush-it",
+          "retrievedAt": "2026-10-01T18:49:16.767Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "126016220",
+      "name": "Left",
+      "mpParentId": "126016123",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "126016220",
+          "url": "https://www.mountainproject.com/route/126016220/left",
+          "retrievedAt": "2026-10-01T18:48:44.776Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Eastern end of the north face."
+            ],
+            "start": [
+              "Seated with a good left sidepull."
+            ],
+            "path": [
+              "Climb upward and right."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated sidepull start at the north face’s eastern end; climb up and right.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "106629920",
+      "name": "Leaning Wide Crack",
+      "mpParentId": "105959392",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106629920",
+          "url": "https://www.mountainproject.com/route/106629920/leaning-wide-crack",
+          "retrievedAt": "2026-10-01T18:48:45.672Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "North-facing wide flake/crack leaning left."
+            ],
+            "start": [],
+            "path": [
+              "Use Leavittation; laybacking is an alternative described around 5.6."
+            ],
+            "finish": [],
+            "constraints": [
+              "The author regards laybacking as bypassing the intended exercise.",
+              "Painful heel-toe jams may force a head-first bail."
+            ],
+            "approach": [
+              "On the boulder north of Plumber's Crack."
+            ]
+          },
+          "synopsis": "North-facing, left-leaning wide crack behind Plumber’s Crack; the intended exercise uses Leavittation.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "9b4a4adf-42bc-53bb-a42e-fed10b9c5b40",
+          "url": "https://openbeta.io/climb/9b4a4adf-42bc-53bb-a42e-fed10b9c5b40/leaning-wide-crack",
+          "retrievedAt": "2026-10-01T18:50:23.751Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107431022",
+      "name": "Front Left",
+      "mpParentId": "107430991",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107431022",
+          "url": "https://www.mountainproject.com/route/107431022/front-left",
+          "retrievedAt": "2026-10-01T18:48:47.499Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "South face, left of the crack."
+            ],
+            "start": [
+              "Seated beneath the arête."
+            ],
+            "path": [
+              "Climb directly up the arête."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated beneath the arête left of the south-face crack; climb the arête directly.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "1cf620da-bd95-5e30-89e6-d92d81281e92",
+          "url": "https://openbeta.io/climb/1cf620da-bd95-5e30-89e6-d92d81281e92/front-left",
+          "retrievedAt": "2026-10-01T18:49:11.560Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107429192",
+      "name": "Ultimate Grandstaff",
+      "mpParentId": "107429189",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107429192",
+          "url": "https://www.mountainproject.com/route/107429192/ultimate-grandstaff",
+          "retrievedAt": "2026-10-01T18:48:47.778Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "East side of Ultimate Grandstaff Boulder."
+            ],
+            "start": [
+              "Standing on two fair head-height crimps with marginal feet."
+            ],
+            "path": [
+              "Move to a rail on the right, return left, then move right again."
+            ],
+            "finish": [
+              "Top out."
+            ],
+            "constraints": [
+              "Using the left-hand sidepull on the arête is described as a V3 variant.",
+              "The page recommends morning because afternoon sun may obstruct hold-finding."
+            ],
+            "approach": []
+          },
+          "synopsis": "Standing on head-height crimps, move to the right rail, back left, then right to top out; arête use changes the stated grade.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "26b2730e-a4b8-5b63-8461-6bbe52d164a6",
+          "url": "https://openbeta.io/climb/26b2730e-a4b8-5b63-8461-6bbe52d164a6/ultimate-grandstaff",
+          "retrievedAt": "2026-10-01T18:49:11.233Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Head-height crimps."
+            ],
+            "path": [
+              "Climb through rails."
+            ],
+            "finish": [
+              "Top out straight above."
+            ],
+            "constraints": [
+              "Some climbers treat the left arête as excluded; others allow it."
+            ],
+            "approach": []
+          },
+          "synopsis": "Head-height crimps lead through rails to a finish above; the imported text reports disagreement over left-arête use.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430241",
+      "name": "Prefunk",
+      "mpParentId": "106657477",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430241",
+          "url": "https://www.mountainproject.com/route/107430241/prefunk",
+          "retrievedAt": "2026-10-01T18:48:49.196Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Southwest side, far-left portion of the wall."
+            ],
+            "start": [
+              "Seated."
+            ],
+            "path": [
+              "Climb upward."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated start on the southwest side; climb the wall’s far-left portion.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "cf920fdb-f47e-52d8-95b9-25db07f412f4",
+          "url": "https://openbeta.io/climb/cf920fdb-f47e-52d8-95b9-25db07f412f4/prefunk",
+          "retrievedAt": "2026-10-01T18:49:11.228Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated."
+            ],
+            "path": [
+              "Climb upward on jugs."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated start climbs upward on juggy holds.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "122003753",
+      "name": "Left",
+      "mpParentId": "122003728",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122003753",
+          "url": "https://www.mountainproject.com/route/122003753/left",
+          "retrievedAt": "2026-10-01T18:48:50.271Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left end, above the detached boulder below the northwest side; brown varnish."
+            ],
+            "start": [
+              "Standing."
+            ],
+            "path": [
+              "Climb through the overlap and changing corners."
+            ],
+            "finish": [],
+            "constraints": [
+              "The detached boulder below presents a fall hazard; a spotter is suggested near the climber’s limit."
+            ],
+            "approach": []
+          },
+          "synopsis": "Standing at the left end, climb an overlap and changing corners above a detached boulder.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430960",
+      "name": "Put Your Shoes on Arete",
+      "mpParentId": "107430957",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430960",
+          "url": "https://www.mountainproject.com/route/107430960/put-your-shoes-on-arete",
+          "retrievedAt": "2026-10-01T18:48:51.050Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Overhanging northwest arête."
+            ],
+            "start": [
+              "Seated below the arête."
+            ],
+            "path": [
+              "Move up-right to a right-hand vertical slot, then follow the arête directly on improving holds."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated below the northwest overhanging arête; move right to a vertical slot, then climb directly up on better holds.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "cf6438b2-c253-5bab-aa73-71451d151098",
+          "url": "https://openbeta.io/climb/cf6438b2-c253-5bab-aa73-71451d151098/put-your-shoes-on-arete",
+          "retrievedAt": "2026-10-01T18:49:11.202Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "125230428",
+      "name": "Get Out of the Water",
+      "mpParentId": "125230403",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "125230428",
+          "url": "https://www.mountainproject.com/route/125230428/get-out-of-the-water",
+          "retrievedAt": "2026-10-01T18:49:03.989Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Matched on the lowest sloper-pinch complex near the prow’s bottom-left."
+            ],
+            "path": [
+              "Climb through triangular shark-tooth features."
+            ],
+            "finish": [
+              "Top out the slab directly above the starting hold."
+            ],
+            "constraints": [],
+            "approach": [
+              "From Hazard Pay, head east/right past large boulders and slightly uphill.",
+              "The prow’s teeth become visible beyond a couple of varnished boulders."
+            ]
+          },
+          "synopsis": "Matched low sloper-pinch start on the prow’s bottom-left; shark-tooth features lead to the slab directly above.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "125230606",
+      "name": "Chocolate Chip",
+      "mpParentId": "125230582",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "125230606",
+          "url": "https://www.mountainproject.com/route/125230606/chocolate-chip",
+          "retrievedAt": "2026-10-01T18:49:04.096Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left face, just above the overhang."
+            ],
+            "start": [
+              "Large sandy pocket."
+            ],
+            "path": [
+              "Use a sandy pinch, then better pockets and huecos; gain the large shelf around the arête’s right side."
+            ],
+            "finish": [
+              "Full mantle onto the varnished slab above."
+            ],
+            "constraints": [],
+            "approach": [
+              "In the cluster directly between Hazard Pay and Great White Prow."
+            ]
+          },
+          "synopsis": "Large sandy pocket start on the left face; climb through a pinch and improving pockets to a shelf and slab mantle.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "122238495",
+      "name": "Left Side Left (Sit Start)",
+      "mpParentId": "111106611",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122238495",
+          "url": "https://www.mountainproject.com/route/122238495/left-side-left-sit-start",
+          "retrievedAt": "2026-10-01T18:48:26.169Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated; right sidepull in the crack."
+            ],
+            "path": [
+              "Move up-left as on Left Side Left."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": [
+              "Facing away from Plumber's Crack, look a short distance toward 2 o'clock."
+            ]
+          },
+          "synopsis": "Seated Left Side Left variant, starting with a right-hand crack sidepull and joining the up-left original line.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "106705820",
+      "name": "Earth Angel",
+      "mpParentId": "106378780",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106705820",
+          "url": "https://www.mountainproject.com/route/106705820/earth-angel",
+          "retrievedAt": "2026-10-01T18:48:26.840Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated on the jug."
+            ],
+            "path": [
+              "Reach the lip."
+            ],
+            "finish": [
+              "Mantle out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated jug start reaches the lip and finishes with a mantle.",
+          "unresolved": [
+            "The page requests confirmation of the name and grade."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "495efdaa-10f9-53f2-a8aa-d83f799ca507",
+          "url": "https://openbeta.io/climb/495efdaa-10f9-53f2-a8aa-d83f799ca507/earth-angel",
+          "retrievedAt": "2026-10-01T18:49:25.420Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "123647631",
+      "name": "Secrets of the Barndoor",
+      "mpParentId": "106964269",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "123647631",
+          "url": "https://www.mountainproject.com/route/123647631/secrets-of-the-barndoor",
+          "retrievedAt": "2026-10-01T18:48:27.503Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle of Barndoor’s front face."
+            ],
+            "start": [
+              "Standing above the block; good left sidepull, fair right undercling and smeared foot."
+            ],
+            "path": [
+              "Move up-right through a swooping rail to tension-dependent reaches."
+            ],
+            "finish": [],
+            "constraints": [
+              "Rocky landing."
+            ],
+            "approach": []
+          },
+          "synopsis": "Standing above a block on a sidepull/undercling pair, climb up-right through a curving rail to tension reaches.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "125484963",
+      "name": "Perky Jugs",
+      "mpParentId": "106732667",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "125484963",
+          "url": "https://www.mountainproject.com/route/125484963/perky-jugs",
+          "retrievedAt": "2026-10-01T18:48:28.581Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Start on Big Jugs."
+            ],
+            "path": [
+              "Wide move across the face links the two problems."
+            ],
+            "finish": [
+              "Finish on Perked Up."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Link Big Jugs to Perked Up with a wide move across the face.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "113801710",
+      "name": "Left Short Face",
+      "mpParentId": "123856651",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "113801710",
+          "url": "https://www.mountainproject.com/route/113801710/left-short-face",
+          "retrievedAt": "2026-10-01T18:48:30.733Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated on crimps."
+            ],
+            "path": [
+              "Climb the face above."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": [
+              "From the trail looking at the warm-ups, this is the short right side of the right-hand boulder."
+            ]
+          },
+          "synopsis": "Seated crimps on the short side lead up the face; two descriptions use different left/right reference frames.",
+          "unresolved": [
+            "Description calls it the short left side; Location calls it the short right side from the trail. The reference-frame relationship is unspecified."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "af4aa5e7-1559-56bc-a03c-8fcfe459b028",
+          "url": "https://openbeta.io/climb/af4aa5e7-1559-56bc-a03c-8fcfe459b028/left-short-face",
+          "retrievedAt": "2026-10-01T18:49:22.282Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated on crimps."
+            ],
+            "path": [
+              "Climb the face above."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated crimp start leads up the face.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "OpenBeta parent 'Black Warm Up Boulders' (8cf3b9ff-49bd-5f3c-9f21-d6dfe564b9f0) has no reconciled current MP parent ID; current MP parent is 123856651."
+      ]
+    },
+    {
+      "mpRouteId": "112868569",
+      "name": "Leftmost Face",
+      "mpParentId": "123856648",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "112868569",
+          "url": "https://www.mountainproject.com/route/112868569/leftmost-face",
+          "retrievedAt": "2026-10-01T18:48:32.541Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The page recommends this problem for beginners but supplies no start, path or finish facts.",
+          "unresolved": [
+            "Description is present but contains no route geometry; Location is absent."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "d613fd89-4955-5fad-9b8d-d45713f920c3",
+          "url": "https://openbeta.io/climb/d613fd89-4955-5fad-9b8d-d45713f920c3/leftmost-face",
+          "retrievedAt": "2026-10-01T18:49:22.282Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "OpenBeta parent 'Black Warm Up Boulders' (8cf3b9ff-49bd-5f3c-9f21-d6dfe564b9f0) has no reconciled current MP parent ID; current MP parent is 123856648."
+      ]
+    },
+    {
+      "mpRouteId": "111214422",
+      "name": "Scare Tactics Right",
+      "mpParentId": "106799341",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "111214422",
+          "url": "https://www.mountainproject.com/route/111214422/scare-tactics-right",
+          "retrievedAt": "2026-10-01T18:48:32.810Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Right side of the overhanging northwest face."
+            ],
+            "start": [
+              "Opposing sidepull crimps at Scare Tactics’ far-right overhang."
+            ],
+            "path": [
+              "Traverse left on good crimps into Scare Tactics."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Opposing sidepull crimps on the northwest overhang’s far right lead left into Scare Tactics.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "a7ffe615-b823-5e5e-948d-a817fd17ae33",
+          "url": "https://openbeta.io/climb/a7ffe615-b823-5e5e-948d-a817fd17ae33/scare-tactics-right",
+          "retrievedAt": "2026-10-01T18:49:23.260Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107459063",
+      "name": "Fire Fresh Traverse",
+      "mpParentId": "106732632",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107459063",
+          "url": "https://www.mountainproject.com/route/107459063/fire-fresh-traverse",
+          "retrievedAt": "2026-10-01T18:48:33.991Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Standing on the left side, matched on the large jug at the rail’s beginning."
+            ],
+            "path": [
+              "Follow the left-trending rail to two poor holds, then continue through improving holds toward the top."
+            ],
+            "finish": [],
+            "constraints": [
+              "Unusual landing and a relatively high upper section; several pads and spotters are suggested."
+            ],
+            "approach": []
+          },
+          "synopsis": "Standing matched jug start at the left: follow a left-trending rail through poor holds, then better holds toward the top.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "26892b7b-f9ad-5116-b00a-d7802d5c2253",
+          "url": "https://openbeta.io/climb/26892b7b-f9ad-5116-b00a-d7802d5c2253/fire-fresh-traverse",
+          "retrievedAt": "2026-10-01T18:49:22.279Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430258",
+      "name": "Butt Crack, The",
+      "mpParentId": "107430254",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430258",
+          "url": "https://www.mountainproject.com/route/107430258/the-butt-crack",
+          "retrievedAt": "2026-10-01T18:48:34.260Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "South-facing wall."
+            ],
+            "start": [
+              "Seated below the wide crack."
+            ],
+            "path": [
+              "Jam outward and upward through the crack."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated beneath the wide crack on the south wall, jam out and up the crack.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "55c30cf3-56dc-5be5-9fc7-dcb7088046df",
+          "url": "https://openbeta.io/climb/55c30cf3-56dc-5be5-9fc7-dcb7088046df/the-butt-crack",
+          "retrievedAt": "2026-10-01T18:49:18.586Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'The Butt Crack'; current Mountain Project name is 'Butt Crack, The'."
+      ]
+    },
+    {
+      "mpRouteId": "125499203",
+      "name": "Castling",
+      "mpParentId": "120588274",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "125499203",
+          "url": "https://www.mountainproject.com/route/125499203/castling",
+          "retrievedAt": "2026-10-01T18:48:35.081Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "South corner."
+            ],
+            "start": [
+              "Seated on the arête using the low sloper shelf."
+            ],
+            "path": [
+              "Move up, then left."
+            ],
+            "finish": [
+              "Top out the face using the hollow flake."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated low sloper-shelf start on the south arête; move up-left to top out using the hollow flake.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "123473676",
+      "name": "Smiley Traverse",
+      "mpParentId": "107430930",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "123473676",
+          "url": "https://www.mountainproject.com/route/123473676/smiley-traverse",
+          "retrievedAt": "2026-10-01T18:48:37.728Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left side of the main face."
+            ],
+            "start": [
+              "Same start as Smiley Face."
+            ],
+            "path": [
+              "Traverse right instead of climbing up."
+            ],
+            "finish": [
+              "Join the V2 finish."
+            ],
+            "constraints": [
+              "Mono undercling is optional."
+            ],
+            "approach": []
+          },
+          "synopsis": "Smiley Face start, then traverse right to the V2 finish; a mono undercling is optional.",
+          "unresolved": [
+            "The V2 finish is referenced without naming the route in these sections."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "126854516",
+      "name": "Done Worse",
+      "mpParentId": "126854441",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "126854516",
+          "url": "https://www.mountainproject.com/route/126854516/done-worse",
+          "retrievedAt": "2026-10-01T18:48:37.743Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left side of the east face."
+            ],
+            "start": [
+              "Same as Done Better, in the crack."
+            ],
+            "path": [
+              "Traverse up-right."
+            ],
+            "finish": [
+              "Top out in the face’s center on jugs."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Done Better start at the east face’s left crack; trend up-right to a central jug topout.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "121883189",
+      "name": "Square Arête",
+      "mpParentId": "111338565",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "121883189",
+          "url": "https://www.mountainproject.com/route/121883189/square-arete",
+          "retrievedAt": "2026-10-01T18:48:39.112Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Lowball compression problem."
+            ],
+            "start": [
+              "Left hand on the left arête relative to its vertex; right undercling below the right arête."
+            ],
+            "path": [
+              "Compression movement."
+            ],
+            "finish": [],
+            "constraints": [
+              "A sit-start variant is reported as V9."
+            ],
+            "approach": []
+          },
+          "synopsis": "Lowball compression problem with left arête and right undercling starting holds; the sit variant is rated V9.",
+          "unresolved": [
+            "The base start’s body position is not specified; the page separately mentions a sit variant."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "db4a4eb7-d58c-5d1e-9a28-db57131929a1",
+          "url": "https://openbeta.io/climb/db4a4eb7-d58c-5d1e-9a28-db57131929a1/square-arete",
+          "retrievedAt": "2026-10-01T18:49:18.221Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Square Arete'; current Mountain Project name is 'Square Arête'."
+      ]
+    },
+    {
+      "mpRouteId": "121850917",
+      "name": "Picante Sauce",
+      "mpParentId": "107400752",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "121850917",
+          "url": "https://www.mountainproject.com/route/121850917/picante-sauce",
+          "retrievedAt": "2026-10-01T18:48:39.755Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "South face."
+            ],
+            "start": [
+              "Seated on a good jug rail."
+            ],
+            "path": [
+              "Climb directly up the arête."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated jug-rail start on the south face; follow the arête straight upward.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "088fceaf-81d4-503d-9736-5b9ab1fd8168",
+          "url": "https://openbeta.io/climb/088fceaf-81d4-503d-9736-5b9ab1fd8168/picante-sauce",
+          "retrievedAt": "2026-10-01T18:49:17.599Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "121702822",
+      "name": "Left of Wald Face",
+      "mpParentId": "105959400",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "121702822",
+          "url": "https://www.mountainproject.com/route/121702822/left-of-wald-face",
+          "retrievedAt": "2026-10-01T18:48:41.320Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Crimp line left of Wald Face."
+            ],
+            "start": [
+              "Head-height chalked crimps."
+            ],
+            "path": [
+              "Two difficult moves reach a good horn; easier climbing follows."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Head-height crimps left of Wald Face lead through two difficult moves to a horn, where climbing eases.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "c84142f5-3c46-58b8-9cef-b0a6411f9186",
+          "url": "https://openbeta.io/climb/c84142f5-3c46-58b8-9cef-b0a6411f9186/left",
+          "retrievedAt": "2026-10-01T18:49:17.625Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'left'; current Mountain Project name is 'Left of Wald Face'."
+      ]
+    },
+    {
+      "mpRouteId": "116356013",
+      "name": "Pretzel Traverse",
+      "mpParentId": "116355933",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "116356013",
+          "url": "https://www.mountainproject.com/route/116356013/pretzel-traverse",
+          "retrievedAt": "2026-10-01T18:48:42.513Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Same as Pretzel and Pretzel Direct."
+            ],
+            "path": [
+              "Near the V4’s end, take sloper crimps below the jug/sloper rail and sequence into the V1 holds."
+            ],
+            "finish": [
+              "Finish along the arête."
+            ],
+            "constraints": [
+              "Variant avoids going to the upper jug/sloper rail at the specified junction."
+            ],
+            "approach": []
+          },
+          "synopsis": "Shares Pretzel’s start; use lower sloper crimps instead of the upper jug/sloper rail and finish on the arête.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "b819defa-49c2-5d1e-b695-55a8c787f060",
+          "url": "https://openbeta.io/climb/b819defa-49c2-5d1e-b695-55a8c787f060/pretzel-traverse",
+          "retrievedAt": "2026-10-01T18:49:17.621Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "116107567",
+      "name": "Prowler, The",
+      "mpParentId": "116107548",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "116107567",
+          "url": "https://www.mountainproject.com/route/116107567/the-prowler",
+          "retrievedAt": "2026-10-01T18:48:43.115Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Obvious prow."
+            ],
+            "start": [
+              "Crouched; left hand on the arête, right on the opposing crimp midway across the face."
+            ],
+            "path": [
+              "Right-arête toe hook is the most common way to establish; reach the jugs above."
+            ],
+            "finish": [
+              "Easy topout from the jugs."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Crouched opposing arête/crimp start; establish with a commonly used toe hook and reach jugs for an easy topout.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "053038e0-d7d6-52d6-9705-4fce2e80d2de",
+          "url": "https://openbeta.io/climb/053038e0-d7d6-52d6-9705-4fce2e80d2de/the-prowler",
+          "retrievedAt": "2026-10-01T18:49:17.629Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'The Prowler'; current Mountain Project name is 'Prowler, The'."
+      ]
+    },
+    {
+      "mpRouteId": "110224293",
+      "name": "South Arete",
+      "mpParentId": "110224264",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "110224293",
+          "url": "https://www.mountainproject.com/route/110224293/south-arete",
+          "retrievedAt": "2026-10-01T18:48:43.550Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "South arête and slab."
+            ],
+            "start": [],
+            "path": [
+              "Climb the south arête; harder movement is roughly halfway up the slab, with getting on possibly hardest."
+            ],
+            "finish": [],
+            "constraints": [
+              "Ramp shape makes padding difficult."
+            ],
+            "approach": [
+              "Use the same downclimb as Shady Lady."
+            ]
+          },
+          "synopsis": "Follow the south arête; the source places difficulty around the slab’s middle and possibly at the start.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "c1cde7b5-c63e-542f-b992-3e77a61ef36d",
+          "url": "https://openbeta.io/climb/c1cde7b5-c63e-542f-b992-3e77a61ef36d/south-arete",
+          "retrievedAt": "2026-10-01T18:49:11.582Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "113994538",
+      "name": "Shitter Direct, The",
+      "mpParentId": "113973264",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "113994538",
+          "url": "https://www.mountainproject.com/route/113994538/the-shitter-direct",
+          "retrievedAt": "2026-10-01T18:48:44.547Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Middle of the west face."
+            ],
+            "start": [
+              "Opposing sidepulls."
+            ],
+            "path": [
+              "Move left to a good hold, then rock upward."
+            ],
+            "finish": [
+              "Reach the Mohawk; finishing movement is mentioned without further detail."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Opposing sidepull start in the west face’s middle; move left, rock up and reach the Mohawk.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "c6e334c7-f271-52e2-a863-b8305a1ade33",
+          "url": "https://openbeta.io/climb/c6e334c7-f271-52e2-a863-b8305a1ade33/the-shitter-direct",
+          "retrievedAt": "2026-10-01T18:49:16.767Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'The Shitter Direct'; current Mountain Project name is 'Shitter Direct, The'."
+      ]
+    },
+    {
+      "mpRouteId": "126784057",
+      "name": "Poppa Squat",
+      "mpParentId": "126016123",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "126784057",
+          "url": "https://www.mountainproject.com/route/126784057/poppa-squat",
+          "retrievedAt": "2026-10-01T18:48:44.884Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Immediately right of the arête problem at the boulder’s far-left side."
+            ],
+            "start": [
+              "Seated; right pocket and left crimp."
+            ],
+            "path": [
+              "Pull to the lip."
+            ],
+            "finish": [
+              "Top out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated pocket/crimp start immediately right of the far-left arête; pull to the lip and top out.",
+          "unresolved": [
+            "The author proposes Poppa Squat because the guidebook reportedly duplicates the neighboring problem’s name."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "106617793",
+      "name": "Front Side Crack",
+      "mpParentId": "105959392",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106617793",
+          "url": "https://www.mountainproject.com/route/106617793/front-side-crack",
+          "retrievedAt": "2026-10-01T18:48:45.538Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "North side, farthest from parking."
+            ],
+            "start": [],
+            "path": [
+              "Chimney climbing."
+            ],
+            "finish": [],
+            "constraints": [
+              "A single bolt hanger is reported at the crack’s top."
+            ],
+            "approach": []
+          },
+          "synopsis": "Chimney on the north side, farthest from parking; a single bolt hanger is reported atop the crack.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "3086a50f-0240-53c9-9350-a5177726073a",
+          "url": "https://openbeta.io/climb/3086a50f-0240-53c9-9350-a5177726073a/plumbers-crack-north-side-chimney",
+          "retrievedAt": "2026-10-01T18:50:23.751Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Plumbers Crack (North side chimney)'; current Mountain Project name is 'Front Side Crack'."
+      ]
+    },
+    {
+      "mpRouteId": "107431035",
+      "name": "Crack, The",
+      "mpParentId": "107430991",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107431035",
+          "url": "https://www.mountainproject.com/route/107431035/the-crack",
+          "retrievedAt": "2026-10-01T18:48:47.047Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle of the front/south face."
+            ],
+            "start": [
+              "Seated."
+            ],
+            "path": [
+              "Layback and jam the central crack."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated start in the center of the south face; layback and jam the crack.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "ef7be260-3844-5594-b5ea-a3a1d8d8ad8e",
+          "url": "https://openbeta.io/climb/ef7be260-3844-5594-b5ea-a3a1d8d8ad8e/the-crack",
+          "retrievedAt": "2026-10-01T18:49:11.560Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'The Crack'; current Mountain Project name is 'Crack, The'."
+      ]
+    },
+    {
+      "mpRouteId": "109961884",
+      "name": "Ultimate Grandstaff Sit",
+      "mpParentId": "107429189",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "109961884",
+          "url": "https://www.mountainproject.com/route/109961884/ultimate-grandstaff-sit",
+          "retrievedAt": "2026-10-01T18:48:48.153Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Very low; right crimp and left hand low on the arête."
+            ],
+            "path": [
+              "Join the original Ultimate Grandstaff line using tweaky beta."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Very low crimp/arête start adds moves into Ultimate Grandstaff.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "9670d49d-e43f-5608-bbad-84c28ba76f90",
+          "url": "https://openbeta.io/climb/9670d49d-e43f-5608-bbad-84c28ba76f90/ultimate-grandstaff-sit",
+          "retrievedAt": "2026-10-01T18:49:11.233Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Very low; right crimp and left hand on the arête."
+            ],
+            "path": [
+              "Additional moves join Ultimate Grandstaff."
+            ],
+            "finish": [
+              "Top out straight upward."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Very low right-crimp/left-arête start adds moves into Ultimate Grandstaff, with a straight-up topout reported.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Ultimate Grandstaff sit'; current Mountain Project name is 'Ultimate Grandstaff Sit'."
+      ]
+    },
+    {
+      "mpRouteId": "122054608",
+      "name": "Secret",
+      "mpParentId": "106657477",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122054608",
+          "url": "https://www.mountainproject.com/route/122054608/secret",
+          "retrievedAt": "2026-10-01T18:48:49.470Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Same as Fluffer."
+            ],
+            "path": [
+              "Go straight upward rather than right from the start; use a left-slanting hold and two slopers."
+            ],
+            "finish": [
+              "Commit rightward to holds just left of Fluffer’s finish."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Fluffer start, then climb straight to a left-slanting hold and two slopers before a committed rightward finish.",
+          "unresolved": [
+            "The author says it was absent from the guidebook and introduced as “the secret v2”; naming/listing status is unconfirmed."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "122003736",
+      "name": "Rail",
+      "mpParentId": "122003728",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122003736",
+          "url": "https://www.mountainproject.com/route/122003736/rail",
+          "retrievedAt": "2026-10-01T18:48:50.700Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "West side facing Your Project on the Warm-up Boulder."
+            ],
+            "start": [
+              "Seated at the upward-sloping rail’s left end."
+            ],
+            "path": [
+              "Heel-hook and hand-traverse right."
+            ],
+            "finish": [
+              "Mantle onto the lower-angle slab and top out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated at the slanting rail’s left end, heel-hook and traverse right, then mantle to the slab and top out.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430973",
+      "name": "Left",
+      "mpParentId": "107430957",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430973",
+          "url": "https://www.mountainproject.com/route/107430973/left",
+          "retrievedAt": "2026-10-01T18:48:50.973Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left side of the west face."
+            ],
+            "start": [
+              "Same as Betty."
+            ],
+            "path": [
+              "Pass the good incut crimp."
+            ],
+            "finish": [
+              "Move up-left to finish."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Betty start on the west face; after the incut crimp, diverge up-left to finish.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "8312b0c5-0dba-5d6b-aea5-2521100d9632",
+          "url": "https://openbeta.io/climb/8312b0c5-0dba-5d6b-aea5-2521100d9632/left",
+          "retrievedAt": "2026-10-01T18:49:11.202Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "125230527",
+      "name": "Chum in the Water",
+      "mpParentId": "125230403",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "125230527",
+          "url": "https://www.mountainproject.com/route/125230527/chum-in-the-water",
+          "retrievedAt": "2026-10-01T18:49:03.428Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Black slab on the prow’s right side; featureless varnished streak."
+            ],
+            "start": [
+              "Left hand on the arête’s lowest shark tooth; right on the hollow face flake."
+            ],
+            "path": [
+              "Climb upward along the black varnished streak."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Lowest shark-tooth arête hold and hollow face flake start; climb the black varnished slab on the prow’s right.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "121476571",
+      "name": "Left Side Dihedral",
+      "mpParentId": "111106611",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "121476571",
+          "url": "https://www.mountainproject.com/route/121476571/left-side-dihedral",
+          "retrievedAt": "2026-10-01T18:48:26.131Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left-facing corner."
+            ],
+            "start": [],
+            "path": [
+              "Offwidth climbing with limited face holds described as cheating aids."
+            ],
+            "finish": [
+              "Topout movement is mentioned without specifics."
+            ],
+            "constraints": [],
+            "approach": [
+              "About ten feet uphill from Plumber's Crack’s V0 side."
+            ]
+          },
+          "synopsis": "Offwidth in a left-facing corner, roughly ten feet uphill of Plumber’s Crack’s V0 side.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "ce0cf9fd-9c54-5136-a872-fea8c3aaa15f",
+          "url": "https://openbeta.io/climb/ce0cf9fd-9c54-5136-a872-fea8c3aaa15f/left-side-dihedral",
+          "retrievedAt": "2026-10-01T18:50:24.542Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "124080785",
+      "name": "Stoney Point Traverse",
+      "mpParentId": "106378780",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "124080785",
+          "url": "https://www.mountainproject.com/route/124080785/stoney-point-traverse",
+          "retrievedAt": "2026-10-01T18:48:26.880Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Same as Earth Angel."
+            ],
+            "path": [
+              "Follow the lip upward and right to the apex."
+            ],
+            "finish": [
+              "Top out at the apex."
+            ],
+            "constraints": [
+              "Height-dependent."
+            ],
+            "approach": []
+          },
+          "synopsis": "Earth Angel start follows the lip up-right to the apex and tops out; height affects difficulty.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "200415827",
+      "name": "BV3 Left",
+      "mpParentId": "106964269",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "200415827",
+          "url": "https://www.mountainproject.com/route/200415827/bv3-left",
+          "retrievedAt": "2026-10-01T18:48:27.804Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Same as Best V3 at Kraft."
+            ],
+            "path": [
+              "Move left and up through crimp and jug rails."
+            ],
+            "finish": [],
+            "constraints": [
+              "Poor landing."
+            ],
+            "approach": [
+              "Walk uphill from the Split Boulder."
+            ]
+          },
+          "synopsis": "Best V3 at Kraft start, then climb left and up through crimp and jug rails over a poor landing.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "106732670",
+      "name": "Perked Up",
+      "mpParentId": "106732667",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106732670",
+          "url": "https://www.mountainproject.com/route/106732670/perked-up",
+          "retrievedAt": "2026-10-01T18:48:28.097Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Blunt arête directly right of Big Jugs."
+            ],
+            "start": [
+              "Seated on good holds."
+            ],
+            "path": [
+              "Use a small crimp to reach a sharp edge."
+            ],
+            "finish": [
+              "Top out directly, or move left for an easier finish; shares Big Jugs’ topout."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated good-hold start on the blunt arête; climb to a sharp edge and choose a direct or easier left finish.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "b36f6edf-1d43-5aea-93e0-34b9d300922e",
+          "url": "https://openbeta.io/climb/b36f6edf-1d43-5aea-93e0-34b9d300922e/perked-up",
+          "retrievedAt": "2026-10-01T18:49:11.231Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "113801725",
+      "name": "Black Warm Up Left",
+      "mpParentId": "123856651",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "113801725",
+          "url": "https://www.mountainproject.com/route/113801725/black-warm-up-left",
+          "retrievedAt": "2026-10-01T18:48:30.255Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Varnished face just left of Black Warm Up."
+            ],
+            "start": [
+              "Standing at a swooping rail."
+            ],
+            "path": [
+              "Climb upward on positive crimps."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Standing at a curved rail just left of Black Warm Up, climb the varnished face on positive crimps.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "564d0d84-3402-5da1-ad9f-f93a17108c58",
+          "url": "https://openbeta.io/climb/564d0d84-3402-5da1-ad9f-f93a17108c58/black-warm-up-left",
+          "retrievedAt": "2026-10-01T18:49:22.282Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Swooped rail."
+            ],
+            "path": [
+              "Climb the left side of the face."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Curved-rail start climbs the face’s left side.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "OpenBeta parent 'Black Warm Up Boulders' (8cf3b9ff-49bd-5f3c-9f21-d6dfe564b9f0) has no reconciled current MP parent ID; current MP parent is 123856651."
+      ]
+    },
+    {
+      "mpRouteId": "107430176",
+      "name": "Left",
+      "mpParentId": "123856648",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430176",
+          "url": "https://www.mountainproject.com/route/107430176/left",
+          "retrievedAt": "2026-10-01T18:48:32.159Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Face toward the trail; Location includes an unclear “Side side” phrase."
+            ],
+            "start": [
+              "Below the tallest part of the face."
+            ],
+            "path": [
+              "Climb upward, trending slightly right."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Begin below the face’s tallest section and climb with a slight rightward trend.",
+          "unresolved": [
+            "The Location wording does not clearly identify a side."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "7e878fc2-2416-5973-99ee-89e5b4732d39",
+          "url": "https://openbeta.io/climb/7e878fc2-2416-5973-99ee-89e5b4732d39/left",
+          "retrievedAt": "2026-10-01T18:49:22.282Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Left side of the taller face."
+            ],
+            "start": [],
+            "path": [
+              "Climb the face’s left side."
+            ],
+            "finish": [
+              "Top out just left of the apex."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Climb the taller face’s left side and finish just left of its apex.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "OpenBeta parent 'Black Warm Up Boulders' (8cf3b9ff-49bd-5f3c-9f21-d6dfe564b9f0) has no reconciled current MP parent ID; current MP parent is 123856648."
+      ]
+    },
+    {
+      "mpRouteId": "125257113",
+      "name": "Right",
+      "mpParentId": "106799341",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "125257113",
+          "url": "https://www.mountainproject.com/route/125257113/right",
+          "retrievedAt": "2026-10-01T18:48:32.222Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle/right of the west face."
+            ],
+            "start": [
+              "Seated or crouched on opposing sidepull crimps, as for Scare Tactics Right."
+            ],
+            "path": [
+              "Move aggressively right through patina jugs, then right along a sloping rail to better varnish above the bulge’s right side."
+            ],
+            "finish": [
+              "Top out above the bulge’s right side."
+            ],
+            "constraints": [
+              "Poor upper rock quality and bad landing along the rightward rail."
+            ],
+            "approach": []
+          },
+          "synopsis": "Scare Tactics Right’s seated/crouched sidepull start leads right through patina jugs and a sloping rail to a higher topout.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "116251270",
+      "name": "Mantle Direct",
+      "mpParentId": "106732632",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "116251270",
+          "url": "https://www.mountainproject.com/route/116251270/mantle-direct",
+          "retrievedAt": "2026-10-01T18:48:33.470Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "On the Fire traverse rail, at the large chalked jug."
+            ],
+            "path": [
+              "Mantle directly upward into the seam."
+            ],
+            "finish": [],
+            "constraints": [
+              "Different from Rail to Seam, which starts farther right."
+            ],
+            "approach": []
+          },
+          "synopsis": "Fire traverse rail start at the large chalked jug; mantle directly into the seam.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "d08755b7-1c60-5666-8b5e-72e4882a018b",
+          "url": "https://openbeta.io/climb/d08755b7-1c60-5666-8b5e-72e4882a018b/mantle-direct",
+          "retrievedAt": "2026-10-01T18:49:22.279Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Mantle direct'; current Mountain Project name is 'Mantle Direct'."
+      ]
+    },
+    {
+      "mpRouteId": "107430269",
+      "name": "Southeast Face - SDS",
+      "mpParentId": "107430254",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430269",
+          "url": "https://www.mountainproject.com/route/107430269/southeast-face-sds",
+          "retrievedAt": "2026-10-01T18:48:35.441Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Southeast face/nose."
+            ],
+            "start": [
+              "Seated beneath the nose."
+            ],
+            "path": [
+              "Hard sequence to a good right undercling, then a fast reach to standing-start holds; continue up the nose on sidepulls with balance."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated below the southeast nose, reach a right undercling and the standing-start holds, then continue up the nose.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "a816308d-073c-576a-8459-34e181b063da",
+          "url": "https://openbeta.io/climb/a816308d-073c-576a-8459-34e181b063da/southeast-face-sds",
+          "retrievedAt": "2026-10-01T18:49:18.586Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "120588286",
+      "name": "Stale Mate",
+      "mpParentId": "120588274",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "120588286",
+          "url": "https://www.mountainproject.com/route/120588286/stale-mate",
+          "retrievedAt": "2026-10-01T18:48:36.461Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "South-corner lip/arête."
+            ],
+            "start": [
+              "Standing on a slanted edge at head height."
+            ],
+            "path": [
+              "Climb upward and right along the lip."
+            ],
+            "finish": [
+              "Top out on fair holds."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Standing head-height slanted edge start on the south corner; follow the lip up-right to a topout on fair holds.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "7d3d6477-841f-5ec8-8cdc-cc0675661682",
+          "url": "https://openbeta.io/climb/7d3d6477-841f-5ec8-8cdc-cc0675661682/stale-mate",
+          "retrievedAt": "2026-10-01T18:49:21.924Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Head-height slanted edge."
+            ],
+            "path": [
+              "Forceful move upward, then climb the left arête."
+            ],
+            "finish": [
+              "Reach the boulder’s apex."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Head-height slanted edge starts a forceful upward move, then the left arête leads to the apex.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430933",
+      "name": "Croupier, The",
+      "mpParentId": "107430930",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430933",
+          "url": "https://www.mountainproject.com/route/107430933/the-croupier",
+          "retrievedAt": "2026-10-01T18:48:36.459Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle of the south face."
+            ],
+            "start": [
+              "Positive holds toward the face’s right."
+            ],
+            "path": [
+              "Pull onto the face and reach up-left to the large smooth hold; match it."
+            ],
+            "finish": [
+              "Climb directly above the matched hold to finish."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Positive right-side starting holds lead up-left to a large smooth hold; match it and finish directly above.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "7211cb79-27ff-5648-8dbf-656ebfd07235",
+          "url": "https://openbeta.io/climb/7211cb79-27ff-5648-8dbf-656ebfd07235/the-croupier",
+          "retrievedAt": "2026-10-01T18:49:25.431Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'The Croupier'; current Mountain Project name is 'Croupier, The'."
+      ]
+    },
+    {
+      "mpRouteId": "126854566",
+      "name": "Done Deal",
+      "mpParentId": "126854441",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "126854566",
+          "url": "https://www.mountainproject.com/route/126854566/done-deal",
+          "retrievedAt": "2026-10-01T18:48:37.429Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "East face."
+            ],
+            "start": [
+              "Crack at the face’s left side, shared with the other two problems."
+            ],
+            "path": [
+              "Traverse right across the face."
+            ],
+            "finish": [
+              "Top out around the right arête."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Shared left crack start on the east face; traverse right and top out around the right arête.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "121377194",
+      "name": "Pink Voltage",
+      "mpParentId": "111338565",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "121377194",
+          "url": "https://www.mountainproject.com/route/121377194/pink-voltage",
+          "retrievedAt": "2026-10-01T18:48:38.971Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Just right of Square Arête."
+            ],
+            "start": [
+              "Seated on crimps."
+            ],
+            "path": [
+              "Climb the face."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": [
+              "Downhill from the $600 Boulder, around the corner left of Butterfly Kiss."
+            ]
+          },
+          "synopsis": "Seated crimps lead up the face just right of Square Arête.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "0bc1cded-de4f-5f35-b819-f6fbd389f518",
+          "url": "https://openbeta.io/climb/0bc1cded-de4f-5f35-b819-f6fbd389f518/pink-voltage",
+          "retrievedAt": "2026-10-01T18:49:18.221Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "108731193",
+      "name": "Wald Face",
+      "mpParentId": "105959400",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "108731193",
+          "url": "https://www.mountainproject.com/route/108731193/wald-face",
+          "retrievedAt": "2026-10-01T18:48:41.871Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Rear side, right of the V5 face and left of the very low-angle slab."
+            ],
+            "start": [
+              "Standing on the slabby face."
+            ],
+            "path": [
+              "Small crimps lead to progressively better holds."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Standing slab start on the rear face; small crimps lead to progressively better holds.",
+          "unresolved": [
+            "The page calls the rock Poker Chip/Beth Wald while its current parent is Potato Chip; naming relationship is not resolved here."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "18a2f6e6-6209-5783-bc0f-f9599b32b210",
+          "url": "https://openbeta.io/climb/18a2f6e6-6209-5783-bc0f-f9599b32b210/wald-face",
+          "retrievedAt": "2026-10-01T18:49:17.625Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "116355980",
+      "name": "Pretzel Direct",
+      "mpParentId": "116355933",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "116355980",
+          "url": "https://www.mountainproject.com/route/116355980/pretzel-direct",
+          "retrievedAt": "2026-10-01T18:48:42.534Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Same as Pretzel."
+            ],
+            "path": [
+              "Before the V2 finish, take the long left crimp rail rather than the flat jug; make a long move left to a sloper-jug."
+            ],
+            "finish": [
+              "Finish directly above using holds along the upper ledge."
+            ],
+            "constraints": [
+              "Any usable hold along the upper ledge is allowed."
+            ],
+            "approach": []
+          },
+          "synopsis": "Pretzel variant takes the left crimp rail before the V2 finish, reaches left to a sloper-jug and finishes directly above.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "2cae17ae-49d2-58f2-b0f7-c2f55a8a74fc",
+          "url": "https://openbeta.io/climb/2cae17ae-49d2-58f2-b0f7-c2f55a8a74fc/pretzel-direct",
+          "retrievedAt": "2026-10-01T18:49:17.621Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "123478404",
+      "name": "Halfpipe Surfer",
+      "mpParentId": "116107548",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "123478404",
+          "url": "https://www.mountainproject.com/route/123478404/halfpipe-surfer",
+          "retrievedAt": "2026-10-01T18:48:42.767Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Wave-shaped boulder about ten feet right/east of The Prowler."
+            ],
+            "start": [
+              "Low left foot on a flat edge; lift the right foot onto the dihedral’s right face."
+            ],
+            "path": [
+              "Stem and smear to the dihedral face’s top-right, then take a large step to the scoop."
+            ],
+            "finish": [],
+            "constraints": [
+              "Hands are prohibited."
+            ],
+            "approach": []
+          },
+          "synopsis": "Hands-free dihedral climb east of The Prowler: stem and smear to the top-right, then step into the scoop.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "110224426",
+      "name": "Front Right Mantle",
+      "mpParentId": "110224264",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "110224426",
+          "url": "https://www.mountainproject.com/route/110224426/front-right-mantle",
+          "retrievedAt": "2026-10-01T18:48:43.176Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Just right of the south arête."
+            ],
+            "start": [
+              "Jugs just above head height; shorter climbers may need stacked pads."
+            ],
+            "path": [
+              "Heel-assisted mantle, then slab described around 5.9."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Jugs above head height start a heel-assisted mantle right of the south arête, followed by an approximately 5.9 slab.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "61b2a231-01c5-584e-9dca-26fcdf79f0a2",
+          "url": "https://openbeta.io/climb/61b2a231-01c5-584e-9dca-26fcdf79f0a2/front-right-mantle",
+          "retrievedAt": "2026-10-01T18:49:11.582Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "200632114",
+      "name": "Backside",
+      "mpParentId": "113973264",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "200632114",
+          "url": "https://www.mountainproject.com/route/200632114/backside",
+          "retrievedAt": "2026-10-01T18:48:44.300Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Tall, low-angle west-facing rear slab."
+            ],
+            "start": [],
+            "path": [
+              "Climb the slab."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": [
+              "Just uphill from Chess Boulder."
+            ]
+          },
+          "synopsis": "Tall low-angle slab on the west-facing backside, just uphill from Chess Boulder.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "118192401",
+      "name": "Right V1",
+      "mpParentId": "126016123",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "118192401",
+          "url": "https://www.mountainproject.com/route/118192401/right-v1",
+          "retrievedAt": "2026-10-01T18:48:45.136Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Right-side overhang with a shelf."
+            ],
+            "start": [
+              "Seated with a right-hand sidepull."
+            ],
+            "path": [
+              "Climb the chunky overhang above."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated right-sidepull start below the right-hand shelf/overhang; climb the chunky overhang.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "4a8dc4fe-5ccd-50cf-959d-b7d439d159b5",
+          "url": "https://openbeta.io/climb/4a8dc4fe-5ccd-50cf-959d-b7d439d159b5/right-v1",
+          "retrievedAt": "2026-10-01T18:49:11.228Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated with a right-hand sidepull."
+            ],
+            "path": [
+              "Climb the chunky overhang above."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": [
+              "About 80 feet south of Warm Up Boulder."
+            ]
+          },
+          "synopsis": "About 80 feet south of Warm Up Boulder, seated right-sidepull start climbs the chunky overhang.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta entry maps to MP parent 106657477; current MP parent is 126016123. This is a source-parent conflict, not a geometry verification."
+      ]
+    },
+    {
+      "mpRouteId": "123599243",
+      "name": "Plumber’s Crack Traverse",
+      "mpParentId": "105959392",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "123599243",
+          "url": "https://www.mountainproject.com/route/123599243/plumbers-crack-traverse",
+          "retrievedAt": "2026-10-01T18:48:45.956Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Arête formed by Plumber's Crack."
+            ],
+            "path": [
+              "Traverse right."
+            ],
+            "finish": [
+              "Finish on Split Decision."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Start on the arête formed by Plumber’s Crack and traverse right to Split Decision’s finish.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430996",
+      "name": "Front Center",
+      "mpParentId": "107430991",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430996",
+          "url": "https://www.mountainproject.com/route/107430996/front-center",
+          "retrievedAt": "2026-10-01T18:48:47.096Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle of the south face."
+            ],
+            "start": [],
+            "path": [
+              "Climb on good slots and sidepulls."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Use slots and sidepulls to climb the middle of the south face.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "8ffef116-1013-538f-8ed8-7564893b5c68",
+          "url": "https://openbeta.io/climb/8ffef116-1013-538f-8ed8-7564893b5c68/front-center",
+          "retrievedAt": "2026-10-01T18:49:11.560Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "124041284",
+      "name": "One Pump Chump",
+      "mpParentId": "107429189",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "124041284",
+          "url": "https://www.mountainproject.com/route/124041284/one-pump-chump",
+          "retrievedAt": "2026-10-01T18:48:47.854Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Opposite Ultimate Grandstaff; left of Square Arête."
+            ],
+            "start": [
+              "Seated on a triangular hold."
+            ],
+            "path": [
+              "Establish feet and pop to the lip."
+            ],
+            "finish": [
+              "Top out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated triangular hold start opposite Ultimate Grandstaff; set feet and pop to the lip for a topout.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "106657480",
+      "name": "Fluffer",
+      "mpParentId": "106657477",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106657480",
+          "url": "https://www.mountainproject.com/route/106657480/fluffer",
+          "retrievedAt": "2026-10-01T18:48:49.157Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Main boulder’s south side, left of center."
+            ],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [
+              "The page describes the landing as safe."
+            ],
+            "approach": []
+          },
+          "synopsis": "Chalked line left of center on the main boulder’s south side; movement details are absent.",
+          "unresolved": [
+            "No start, movement sequence or finish is described."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "76379fd8-8f38-54de-9e62-cfed239e5442",
+          "url": "https://openbeta.io/climb/76379fd8-8f38-54de-9e62-cfed239e5442/fluffer",
+          "retrievedAt": "2026-10-01T18:49:11.228Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "122003762",
+      "name": "Wayward Son, The",
+      "mpParentId": "122003728",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "122003762",
+          "url": "https://www.mountainproject.com/route/122003762/the-wayward-son",
+          "retrievedAt": "2026-10-01T18:48:50.323Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Right side of the boulder on brown varnish, around the right of the west-side sloper rail."
+            ],
+            "start": [
+              "Standing near a slight undercut."
+            ],
+            "path": [
+              "Climb straight upward through crimps and small scoops."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Standing right-side start near a slight undercut; climb straight up through crimps and scoops on brown varnish.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "107430965",
+      "name": "Betty",
+      "mpParentId": "107430957",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430965",
+          "url": "https://www.mountainproject.com/route/107430965/betty",
+          "retrievedAt": "2026-10-01T18:48:50.936Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Right side of the west face."
+            ],
+            "start": [
+              "Middle of the face."
+            ],
+            "path": [
+              "Climb past the large central incut crimp."
+            ],
+            "finish": [
+              "Move upward and right to finish."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Start in the middle of the west face, pass the large incut crimp, then finish up-right.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "9c56f0bd-ba96-5b74-a4f4-4aa747a8d905",
+          "url": "https://openbeta.io/climb/9c56f0bd-ba96-5b74-a4f4-4aa747a8d905/betty",
+          "retrievedAt": "2026-10-01T18:49:11.202Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [
+              "Climb upward and right through the central incut crimp."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Climb up-right through the central incut crimp.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "112473640",
+      "name": "Kraft Dinner Right",
+      "mpParentId": "111106611",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "112473640",
+          "url": "https://www.mountainproject.com/route/112473640/kraft-dinner-right",
+          "retrievedAt": "2026-10-01T18:48:26.136Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Left of $600."
+            ],
+            "start": [
+              "Chalked triangular jug."
+            ],
+            "path": [
+              "Move up-left to the crimp rail."
+            ],
+            "finish": [
+              "Top out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Left of $600, start on the triangular jug and move up-left to a crimp rail before topping out.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "080d0841-e253-52da-b868-eec6b7e5b7b3",
+          "url": "https://openbeta.io/climb/080d0841-e253-52da-b868-eec6b7e5b7b3/kraft-dinner-right",
+          "retrievedAt": "2026-10-01T18:50:24.542Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "106705830",
+      "name": "Huck, The",
+      "mpParentId": "106378780",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106705830",
+          "url": "https://www.mountainproject.com/route/106705830/the-huck",
+          "retrievedAt": "2026-10-01T18:48:26.842Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Same as Angel Dyno."
+            ],
+            "path": [
+              "Climb approximately straight upward to a small positive right-hand crimp; arrange feet and reach long to the lip."
+            ],
+            "finish": [
+              "Mantle out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Angel Dyno start goes roughly straight up to a small right crimp, then makes a long lip reach and mantle.",
+          "unresolved": [
+            "The page requests confirmation of the name and grade."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "8c91e528-2d99-5f5d-932c-ca8edb6acc1b",
+          "url": "https://openbeta.io/climb/8c91e528-2d99-5f5d-932c-ca8edb6acc1b/the-huck",
+          "retrievedAt": "2026-10-01T18:49:25.420Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'The Huck'; current Mountain Project name is 'Huck, The'."
+      ]
+    },
+    {
+      "mpRouteId": "106964272",
+      "name": "Best V3 at Kraft",
+      "mpParentId": "106964269",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106964272",
+          "url": "https://www.mountainproject.com/route/106964272/best-v3-at-kraft",
+          "retrievedAt": "2026-10-01T18:48:27.550Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Southeast alcove-like feature."
+            ],
+            "start": [
+              "Sloping rail leaning right."
+            ],
+            "path": [
+              "Move up-right to large jugs; mantle onto them and reach the slot directly above."
+            ],
+            "finish": [
+              "Traverse right to top out."
+            ],
+            "constraints": [
+              "Relatively high, with a large boulder behind the climber presenting a fall concern."
+            ],
+            "approach": []
+          },
+          "synopsis": "Right-leaning rail start in the southeast alcove leads up-right through jugs and a slot, then traverses right to top out.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "e3428111-d6c3-5268-bb8d-079e6d008a3b",
+          "url": "https://openbeta.io/climb/e3428111-d6c3-5268-bb8d-079e6d008a3b/best-v3-at-kraft",
+          "retrievedAt": "2026-10-01T18:49:25.081Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "111720059",
+      "name": "Lowball",
+      "mpParentId": "106732667",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "111720059",
+          "url": "https://www.mountainproject.com/route/111720059/lowball",
+          "retrievedAt": "2026-10-01T18:48:28.051Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Small dark-brown boulder directly right of Perked Up."
+            ],
+            "start": [
+              "Almost reclining seated start; fair left edge and marginal right pinch/sidepull."
+            ],
+            "path": [
+              "First move is the crux; continue upward and slightly right on ledges and slopers."
+            ],
+            "finish": [
+              "Top out."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Very low seated edge/pinch start on the small dark boulder; climb up-right through ledges and slopers to top out.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "b2a3e186-99a9-5d36-86ea-1a0ef6a6088e",
+          "url": "https://openbeta.io/climb/b2a3e186-99a9-5d36-86ea-1a0ef6a6088e/lowball",
+          "retrievedAt": "2026-10-01T18:49:25.427Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "OpenBeta parent 'Big Jugs Adjacent' (d315da8b-b355-5e19-8112-0e6d073180d7) has no reconciled current MP parent ID; current MP parent is 106732667."
+      ]
+    },
+    {
+      "mpRouteId": "107003134",
+      "name": "Black Warm Up",
+      "mpParentId": "123856651",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107003134",
+          "url": "https://www.mountainproject.com/route/107003134/black-warm-up",
+          "retrievedAt": "2026-10-01T18:48:30.388Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Right side of the rock referred to as Boulder 1."
+            ],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [
+              "Many eliminate variations are mentioned."
+            ],
+            "approach": []
+          },
+          "synopsis": "Right-side line on the rock called Boulder 1; the page notes multiple eliminate variations without defining them.",
+          "unresolved": [
+            "Individual eliminate rules, start holds and finish details are not supplied."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "2dccb3b3-bf75-5413-8912-ca0b991cb8df",
+          "url": "https://openbeta.io/climb/2dccb3b3-bf75-5413-8912-ca0b991cb8df/black-warm-up",
+          "retrievedAt": "2026-10-01T18:49:22.282Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Right side of the face."
+            ],
+            "start": [],
+            "path": [
+              "Climb on jugs."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Climb the face’s right side on jugs.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Black Warm-up'; current Mountain Project name is 'Black Warm Up'.",
+        "OpenBeta parent 'Black Warm Up Boulders' (8cf3b9ff-49bd-5f3c-9f21-d6dfe564b9f0) has no reconciled current MP parent ID; current MP parent is 123856651."
+      ]
+    },
+    {
+      "mpRouteId": "107430169",
+      "name": "Fin Face",
+      "mpParentId": "123856648",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430169",
+          "url": "https://www.mountainproject.com/route/107430169/fin-face",
+          "retrievedAt": "2026-10-01T18:48:31.898Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle of the larger boulder’s face toward the path."
+            ],
+            "start": [],
+            "path": [
+              "Climb the face’s middle."
+            ],
+            "finish": [
+              "Top out just left of the apex."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Climb the middle of the larger trail-facing face and top out just left of the apex.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "e00e6947-3f84-58a8-b549-f24cb1e577dc",
+          "url": "https://openbeta.io/climb/e00e6947-3f84-58a8-b549-f24cb1e577dc/fin-face",
+          "retrievedAt": "2026-10-01T18:49:22.282Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [
+              "Right side of the face."
+            ],
+            "start": [],
+            "path": [
+              "Climb the face’s right side."
+            ],
+            "finish": [
+              "Top out just right of the apex."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Climb the face’s right side and top out just right of the apex.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": [
+        "OpenBeta parent 'Black Warm Up Boulders' (8cf3b9ff-49bd-5f3c-9f21-d6dfe564b9f0) has no reconciled current MP parent ID; current MP parent is 123856648.",
+        "Concrete conflict: Mountain Project 107430169 places the path in the middle and the finish left of the apex; exact-ID OpenBeta e00e6947-3f84-58a8-b549-f24cb1e577dc places the path right and the finish right of the apex."
+      ]
+    },
+    {
+      "mpRouteId": "106799344",
+      "name": "Bubble Butt",
+      "mpParentId": "106799341",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "106799344",
+          "url": "https://www.mountainproject.com/route/106799344/bubble-butt",
+          "retrievedAt": "2026-10-01T18:48:32.229Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Southeast corner beneath a roof."
+            ],
+            "start": [
+              "Seated under the roof."
+            ],
+            "path": [
+              "Short move to the sloping butt feature; either climb the sloping left arête or reach directly for the lip."
+            ],
+            "finish": [
+              "Jugs are reported above."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Seated below the southeast roof, reach the sloping butt feature, then use the left arête or go to the lip.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "52230b69-6a33-5795-abf6-433d09d63be7",
+          "url": "https://openbeta.io/climb/52230b69-6a33-5795-abf6-433d09d63be7/bubble-butt",
+          "retrievedAt": "2026-10-01T18:49:23.260Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Seated, matched low on the rail."
+            ],
+            "path": [
+              "Compress upward through the overhang and transfer to the slab."
+            ],
+            "finish": [
+              "High topout."
+            ],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Low matched seated rail start compresses up the overhang, transfers to a slab and reaches a high topout.",
+          "unresolved": []
+        }
+      ],
+      "discrepancyNotes": []
+    },
+    {
+      "mpRouteId": "114576719",
+      "name": "Rail to Seam",
+      "mpParentId": "106732632",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "114576719",
+          "url": "https://www.mountainproject.com/route/114576719/rail-to-seam",
+          "retrievedAt": "2026-10-01T18:48:33.987Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [],
+            "start": [
+              "Standing, left of Jones."
+            ],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Standing start left of Jones; the description offers no movement details beyond a balance characterization.",
+          "unresolved": [
+            "Start holds, route path and finish are unspecified."
+          ]
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "5b129298-9cae-571d-8f1f-916ac6ad541c",
+          "url": "https://openbeta.io/climb/5b129298-9cae-571d-8f1f-916ac6ad541c/rail-to-seam",
+          "retrievedAt": "2026-10-01T18:49:22.279Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": [
+        "Exact-ID OpenBeta name is 'Rail to seam'; current Mountain Project name is 'Rail to Seam'."
+      ]
+    },
+    {
+      "mpRouteId": "107430262",
+      "name": "Southeast Face",
+      "mpParentId": "107430254",
+      "observations": [
+        {
+          "source": "Mountain Project",
+          "sourceId": "107430262",
+          "url": "https://www.mountainproject.com/route/107430262/southeast-face",
+          "retrievedAt": "2026-10-01T18:48:35.011Z",
+          "sourceDependency": "primary-source-page",
+          "sectionAvailability": {
+            "description": "present",
+            "location": "present"
+          },
+          "facts": {
+            "face": [
+              "Middle of the southeast face, blunt nose."
+            ],
+            "start": [
+              "Begin up the blunt nose."
+            ],
+            "path": [
+              "Follow the nose using small sidepulls and balance."
+            ],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "Climb the blunt nose in the southeast face’s center on small sidepulls with balance.",
+          "unresolved": []
+        },
+        {
+          "source": "OpenBeta",
+          "sourceId": "1614fa1b-0cef-596a-9aaa-d1a947403cfc",
+          "url": "https://openbeta.io/climb/1614fa1b-0cef-596a-9aaa-d1a947403cfc/southeast-face",
+          "retrievedAt": "2026-10-01T18:49:18.586Z",
+          "sourceDependency": "correlated-mp-import",
+          "sectionAvailability": {
+            "description": "absent",
+            "location": "absent"
+          },
+          "facts": {
+            "face": [],
+            "start": [],
+            "path": [],
+            "finish": [],
+            "constraints": [],
+            "approach": []
+          },
+          "synopsis": "The exact-ID import supplies no Description or Location text.",
+          "unresolved": [
+            "These imported sections provide no route geometry facts."
+          ]
+        }
+      ],
+      "discrepancyNotes": []
+    }
+  ]
+}
