@@ -10,6 +10,10 @@ Use the [priority tracker](TODO.md), [source policy](source-policy.md), and
 status boards are being expanded from Mountain Project, OpenBeta and TheTopo;
 records must remain visible when imagery, geometry or identity is blocked.
 
+The [current breadth checkpoint](current-status.md) records running-app counts
+and the batch execution order. Pearl-specific UI polish is frozen while the
+full inventory, imports, coordinates, face assets and route corridors advance.
+
 ## Preserved baseline
 
 Edition `2026-10-01-pilot-5` contains four dated catalogs: Cube, Split Boulder,

@@ -2,6 +2,12 @@
 
 Updated 2026-10-01. Continue the existing Kraft goal and Gauntlet; the four-boulder implementation is a starting artifact, not a full-guide acceptance boundary. Scope is every known Kraft sector, physical boulder, face/topo unit and climb found through reconciled sources.
 
+Execution is breadth-first: canonical inventory → import all units/routes →
+batch coordinate reconciliation/map → batch face assets → batch route corridors.
+Pearl UI polish is frozen. Critic cadence and current counts are in the
+[breadth checkpoint](current-status.md); agreeing records use automated source
+reconciliation, with deep research reserved for conflicts and weak evidence.
+
 | Priority | Workstream | Current state | Next evidence / acceptance gate |
 | --- | --- | --- | --- |
 | P0 | Complete Kraft inventory and source reconciliation | Full acquired source inventory and 370 MP factual dossiers reviewed; runtime expansion pending | Reconcile physical units and unmatched source identities; integrate available facts/search/offline beyond the four-unit edition. Preserve aliases, grades and conflicts; give every item an explicit usable/blocked/excluded status. |
