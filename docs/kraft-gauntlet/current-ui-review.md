@@ -1,30 +1,35 @@
-# Current Kraft UI / field-use review
+# Current UI / field-use review
 
-Reviewed 2026-10-01 by a fresh independent critic against the actual production server at `http://127.0.0.1:3130/guide/kraft`. No prior critic or builder summaries were read. Product code and Git were not changed. Screenshots and browser evidence are transient under `/tmp/kraft-ui-fresh/`.
+Reviewed production `http://localhost:3130/guide/kraft`, edition `2026-10-01-workbench-2`, on 2026-10-01. Fresh artifact-first review; no prior critique or builder explanation informed the verdict. Screenshots are temporary under `/tmp/kraft-current-ui-review/` and `/tmp/kraft-current-ui-review-keyboard/`.
 
-**Verdict: the image-first detail design is a usable four-boulder shell at ordinary portrait heights, with a blocking compact-height layout defect. The finished Kraft guide does not pass.** The largest field-use gap is unavailable content: the visible edition has 4 boulders, 58 climbs, 1 of 10 face photographs, and 0 of 58 authored route topos. A climber cannot identify most rocks visually or select a real reviewed route line. Honest missing-content labels do not fulfill those tasks or full Kraft coverage.
+**Verdict: the current layout is usable as a content pilot, but the finished field-guide bar fails.** The largest gap is visible content: four boulders, 58 climbs, ten face choices, only one photograph, and no reviewed route overlays. Three boulders cannot show their rock; Pearl SE shows the rock but cannot identify a selected line. The interface honestly labels this limitation rather than presenting a comprehensive guide.
 
-## Required corrections
+## Observed working
 
-- **P1 — short portrait height can make route browsing unusable.** At 320×568, the Darwin Award synopsis is 180 px tall inside a 69.8 px route sidebar. Its sticky positioning clips the description and physical-identity note, hides the list, and prevents tapping the bottom row or full details. Opening Pearl with `#boulder=pearl&face=pearl-southeast&climb=the-pearl` also prevents normal taps on Clam Bumper Right and Northeast Face Center. At 390×664 the same Pearl taps fail because the synopsis intercepts the row. This was reproduced through normal Playwright clicks without forcing actions, with pixel captures confirming clipping. Adapt the composition to available height so the synopsis and every row can be reached; keep the face as an orientation anchor where space permits. Recheck long descriptions, identity/grade/risk notes, bottom rows, and full details at both heights.
-- **P2 — initial focus does not announce the boulder heading.** Map taps and valid direct links focus “Back to Kraft,” while the code attempts to focus the heading before the native dialog opens. Move initial focus after opening. Escape does correctly close the modal and return focus to the invoking map rock.
-- **Content gate — the requested interaction has no real topo to exercise.** No real SVG route is present. Route selection honestly says “Route line pending” or “Face assignment pending.” Do not treat renderer scaffolding, the excluded calibration fixture, or a photograph alone as acceptance of start/path/finish identification. Lawful face acquisition and independently reviewed route geometry remain required.
+- Actual pixels inspected at 320×568, 390×664, 320×844, 390×844, and 1440×1000. The Pearl opens directly onto the full photograph, with the rock, ground/start region, and topout visible. Short screens reduce the photograph without cropping it; pinch zoom remains available. Desktop gives the image the primary column and climbs the adjacent column. No horizontal dialog overflow was observed.
+- All ten face controls were tapped normally. Compact face controls and collapsed **Finding the boulder** keep the presentation ahead of metadata. All nine missing-photo views explicitly say a licensed, identified photograph is needed and that route lines are unavailable.
+- Every current route was inspected: Cube 12, Split 9, Pearl 11, Monkey Bar 26. All 58 rows were selectable without forced clicks at 320×568. Each full record and nested source section opened and closed normally; scrolling reached the last source link for all 58, and return to the climb list worked. Ordinary touch swipes separately reached Monkey Bar’s first/last climbs and Darwin Award’s last source entry, then returned to the list.
+- Lists retain the complete boulder roster across faces and progress through grade bands from easiest to hardest. Known face assignments switch the face with selection; manually choosing another face clears an incompatible selection. Face-pending and same-name identity warnings are visible. Darwin Award’s physical-rock uncertainty and Northeast Face Left’s conflicting identity/grades are reachable in full details.
+- Long selected titles, including **Monkey Bar Direct Right** and **Phazed (a.k.a. The Hole)**, remain readable. Short-phone **Details** opens and focuses the inline record summary; full factual and provisional-identity content remains reachable.
+- Pearl was inspected both unselected and through a climb deep link. Actual two-finger pinch, drag, and reset preserved the selected climb and restored the original full framing. No line coordination can be accepted while overlays are absent.
+- Keyboard Tab/Enter opens list entries and activates faces/climbs. Nested details and source links have visible focus. Escape from a normally opened list entry restores its opener.
 
-A smaller recovery gap remains: unknown boulder hashes silently display the overview, and unknown face/climb hashes silently fall back to the first face and no selection. An explicit unavailable-record message would help users recover from stale shared links.
+## Current navigation follow-up
 
-## Limited accepted subtask
+The original edition-2 direct-link close-to-BODY finding is resolved in edition
+`2026-10-01-workbench-3`. A separate fresh navigation critic inspected actual
+keyboard interaction at 320×568, 390×844 and 1440×1000. Cold boulder/face/climb
+links focus the boulder heading; Escape and Back to Kraft return cold entries to
+the Kraft title. Normal map/list/search entries restore the exact original SVG
+or HTML opener, including after nearby-boulder navigation. Face and climb
+activation retains control focus; nearby navigation focuses the new heading
+and resets dialog scroll. All full records and sources remain reachable.
 
-The ordinary-height detail hierarchy and browsing controls are accepted for the existing four-unit edition only:
+Two P3 findings remain: the empty SVG overlay group announces nonexistent route
+interaction, and a selected Details shortcut can scroll above the short-screen
+long-list viewport. The full-details summary remains reachable below the list.
+These observations do not approve full content, map accuracy or route geometry.
 
-- Actual map taps and boulder-list taps open the same detail immediately at 320×740, 390×844, and 1440×1000. Pearl SE shows the real BLM photograph as the first visual focus, with compact SE / NE controls and “Finding the boulder” collapsed. There is no redundant face-count block or tall chooser heading.
-- All 58 climb rows were selected at each of those three sizes (174 selections), including the last rows. Grade order is ascending; the selected row, synopsis, and current face remain coordinated. Long titles, provisional physical membership, same-name grade/identity notes, and landing/exposure labels remain readable at these sizes. Full facts and sources are reachable.
-- All 10 recorded face choices were opened and reloaded at all three sizes. Valid face hashes restore the selected view without horizontal overflow. Valid climb hashes and search-result destinations restore the selected record. Selecting an unassigned-face record retains the current view; selecting an explicitly assigned NE record switches to NE. Keyboard route selection and browser back/forward work.
-- Pearl’s unzoomed image retains the entire source composition, with the rock, ground/start context, top, and surroundings visible. No climb endpoints can be visually validated because no overlays exist. Actual emulated touch pinch/pan works on both photograph and map. Photograph zoom/reset and keyboard panning work; choosing another SE climb preserves photo zoom and pan position.
-- Missing photograph, image loading, empty search, location-denied, and recoverable photograph error states are explicit. Blocking the actual local WebP request produced the error message; removing the block and using “Try photograph again” restored it. The saved-download UI identifies this edition as 4 boulders / 58 climbs / 1 photo and exposes verified file inventory. This review checked that UI, not offline relaunch completeness.
-- Cream surfaces, brown map/ink, condensed headings, fine rules, and restrained controls fit MTN’s warm editorial style. The mobile map labels remain legible and directly tappable at 320 and 390 px. Map symbols are explicitly disclosed as GPS observations rather than real footprints; spatial accuracy is outside this critic’s acceptance.
+Full facts are reachable, although returning from long records shares the climb sidebar’s scroll path; there is no dedicated **Back to climbs** action in this edition.
 
-## Reference bar and limits
-
-Accessible official references informed the field-use criteria: [KAYA](https://kayaclimb.com/share-download) promises offline maps, directions, topos, and beta; [Topo Guru](https://topoguru.com/en/) describes GPS, compass, distance, and offline navigation; [TheTopo’s author guide](https://help.thetopo.com/en/help/articles/2096865-how-to-create-a-verified-topo-complete-guide) groups spot imagery and routes across views. [theCrag’s topo tutorial](https://www.thecrag.com/en/article/topotutorial) describes route-linked interactive lines and highlighting; its evidence was an indexed official-page excerpt because the full reader returned an error. These were reference-only inspections, with no copying, paid-guide access, native-app testing, or field validation.
-
-The next acceptance must repeat compact-height interaction checks after correction and exercise actual lawful, reviewed route topos. This review neither verifies climbing facts/photo identity/map placement nor grants a full-guide or offline-completeness pass.
+Source correctness, physical-face accuracy, geographic placement, and offline resilience require their separate gates. This UI review does not accept those domains or full Kraft coverage. Browser inspection has finished and all review browser sessions are closed; rebuilding is safe.

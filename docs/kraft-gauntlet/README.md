@@ -58,6 +58,12 @@ belong in ignored `.tmp/kraft-gauntlet/` or OS temporary storage. Previous-run
 material was preserved locally in `.tmp/kraft-gauntlet/previous-run/`; it is not
 part of the repository or the product. No application dependency uses that path.
 
+The current software edition is `2026-10-01-workbench-3`, with the same four-unit
+content boundary. It adds image-first detail and coordinated mobile selection.
+Its actual production regression matrix passes 33 checks, and fresh independent
+offline criticism verifies 37 resources / 2,483,819 bytes after a denied-network
+browser restart. Full inventory and reviewed real topo coverage remain required.
+
 `pnpm test:kraft:browser` writes reports and traces into
 `.tmp/kraft-gauntlet/`. Retained `source-data/` files support the stable geography
 rebuild, rights evidence and factual catalog regression; they are deliberately

@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import Link from 'next/link'
 import { SheetClose } from '@/components/ui/sheet'
 import { getViewer } from '@/lib/auth/viewer'
@@ -14,6 +15,7 @@ const explore: NavigationGroup = {
     { href: '/trips', label: 'Trips & events' },
     { href: '/calendar', label: 'Calendar' },
     { href: '/gallery', label: 'Photo gallery' },
+    { href: '/guide/kraft', label: 'Kraft field guide' },
   ],
 }
 const club: NavigationGroup = {
@@ -32,7 +34,10 @@ const club: NavigationGroup = {
 }
 
 export async function MoreNavigationLinks() {
-  const viewer = await getViewer()
+  const isPublicGuide = (await headers()).get('x-mtn-public-guide') === '1'
+  const viewer = isPublicGuide
+    ? { isAuthenticated: false, canCreateEvent: false, isAdmin: false }
+    : await getViewer()
   const account: NavigationGroup = {
     title: viewer.isAuthenticated ? 'Your account' : 'Join the community',
     links: viewer.isAuthenticated

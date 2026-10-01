@@ -23,6 +23,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "test:auth:browser": "playwright test",
+    "test:kraft:browser": "playwright test --config playwright.kraft.config.ts",
     "test:auth:services": "node --test --test-concurrency=1 tests/integration/*.test.mjs",
     "test:auth:integration": "playwright test --config playwright.auth-integration.config.ts",
     "test:admin:production": "node --env-file=.env.local scripts/check-admin-production.mjs",

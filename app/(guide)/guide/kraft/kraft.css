@@ -1,0 +1,183 @@
+.kraft-guide {
+  --kraft-paper: var(--editorial-page);
+  --kraft-ink: var(--editorial-ink);
+  --kraft-panel: var(--editorial-panel);
+  --kraft-rule: color-mix(in srgb, var(--editorial-ink) 24%, transparent);
+  background: var(--kraft-paper);
+  color: var(--kraft-ink);
+}
+.kraft-guide :where(button, a, select, input, summary):focus-visible {
+  outline: 2px solid var(--kraft-ink);
+  outline-offset: 3px;
+}
+.kraft-site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 0 4%;
+  border-bottom: 1px solid var(--kraft-rule);
+}
+.kraft-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-brand);
+  font-size: 21px;
+  text-transform: uppercase;
+}
+.kraft-series,
+.kraft-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.kraft-club-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.kraft-guide main {
+  max-width: 1600px;
+  margin: auto;
+}
+.kraft-masthead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 4% 30px;
+}
+.kraft-eyebrow {
+  color: var(--editorial-muted);
+}
+.kraft-masthead h1 {
+  margin-top: 7px;
+  font-family: var(--font-brand);
+  font-size: clamp(68px, 7vw, 112px);
+  font-weight: 700;
+  line-height: 0.88;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+}
+.kraft-masthead h1 span {
+  margin-left: 16px;
+  font-weight: 600;
+}
+.kraft-edition {
+  padding-bottom: 3px;
+  text-align: right;
+}
+.kraft-edition p {
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-style: italic;
+}
+.kraft-edition span {
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--editorial-muted);
+}
+.kraft-field-kit {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 0 4%;
+  padding: 28px;
+  border: 1px solid var(--kraft-rule);
+  background: var(--kraft-panel);
+}
+.kraft-field-kit h2 {
+  margin-top: 8px;
+  font-family: var(--font-brand);
+  font-size: 32px;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.kraft-field-kit p:not(.kraft-eyebrow) {
+  margin-top: 10px;
+  max-width: 450px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--editorial-muted);
+}
+.kraft-guide-notes {
+  margin: 24px 4% 40px;
+  border-top: 1px solid var(--kraft-rule);
+  border-bottom: 1px solid var(--kraft-rule);
+}
+.kraft-guide-notes summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  font-size: 12px;
+  font-weight: 600;
+  list-style: none;
+}
+.kraft-guide-notes summary::-webkit-details-marker {
+  display: none;
+}
+.kraft-guide-notes > div {
+  padding: 8px 0 24px;
+  max-width: 900px;
+}
+.kraft-guide-notes h2 {
+  font-family: var(--font-brand);
+  font-size: 27px;
+}
+.kraft-guide-notes p {
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.kraft-guide-notes ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  margin-top: 24px;
+}
+.kraft-guide-notes li {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+.kraft-guide-notes li a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.kraft-guide-notes li span {
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--editorial-muted);
+}
+.kraft-version {
+  color: var(--editorial-muted);
+}
+.kraft-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 4%;
+  border-top: 1px solid var(--kraft-rule);
+  font-size: 12px;
+}
+.kraft-detail-dialog {
+  width: min(960px, calc(100vw - 48px));
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  margin: auto;
+  border: 1px solid var(--kraft-rule);
+  background: var(--kraft-paper);
+  color: var(--kraft-ink);
+  overscroll-behavior: contain;
+}
+.kraft-detail-dialog::backdrop {
+  background: rgb(33 29 24 / 0.62);
+}

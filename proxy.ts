@@ -54,6 +54,16 @@ const isAllowedPath = (pathname: string) => {
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
 
+  // The guide is public and its downloaded document must never contain an
+  // account-dependent menu. Keep the bypass scoped away from member routes.
+  if (pathname === '/guide/kraft' || pathname.startsWith('/guide/')) {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-mtn-public-guide', '1')
+    const response = NextResponse.next({ request: { headers: requestHeaders } })
+    response.headers.set('X-Kraft-Public', '1')
+    return response
+  }
+
   if (!isPaymentsOnlyMode()) {
     return await updateSession(request)
   }

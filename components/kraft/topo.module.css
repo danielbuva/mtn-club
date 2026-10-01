@@ -1,0 +1,836 @@
+.boulderDetail {
+  --topo-rule: color-mix(in srgb, var(--editorial-ink) 20%, transparent);
+  padding: 0 24px 32px;
+  color: var(--editorial-ink);
+  background: var(--editorial-page);
+}
+
+.boulderDetail button:focus-visible,
+.boulderDetail a:focus-visible,
+.boulderDetail summary:focus-visible,
+.photoViewport:focus-visible {
+  outline: 2px solid var(--editorial-ink);
+  outline-offset: 4px;
+}
+
+.detailNavigation,
+.sectionHeading,
+.climbHeading,
+.photoCaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detailNavigation {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+  min-height: 52px;
+  border-bottom: 1px solid var(--topo-rule);
+  gap: 16px;
+  color: var(--editorial-muted);
+  font-size: 12px;
+  background: var(--editorial-page);
+}
+
+.backButton,
+.textButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  color: var(--editorial-ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.boulderHeader {
+  padding: 18px 0 16px;
+}
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.boulderHeader h2 {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(32px, 5vw, 46px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.boulderHeader h2:focus {
+  outline: none;
+}
+.boulderInformation {
+  margin-top: 24px;
+}
+.approach,
+.boulderNotes,
+.routeFacts {
+  border-top: 1px solid var(--topo-rule);
+}
+.approach summary,
+.boulderNotes summary,
+.routeFacts summary,
+.photoNotes summary {
+  min-height: 44px;
+  padding: 14px 0;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+}
+.approach summary svg {
+  display: inline-block;
+  margin: 0 6px -3px 2px;
+}
+.approach p,
+.boulderNotes p {
+  max-width: 70ch;
+  margin-bottom: 14px;
+  color: var(--editorial-muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.approach small,
+.boulderNotes .aliases {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--editorial-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.detailBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+.faceSection,
+.routeSidebar,
+.faceTabs {
+  min-width: 0;
+}
+
+.routeSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.selectedClimb {
+  padding: 14px;
+  border-left: 2px solid var(--editorial-ink);
+  background: var(--editorial-panel);
+}
+.selectedClimbHeading {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.selectedClimbHeading h3 {
+  flex: 1;
+  min-width: 0;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.selectedClimbHeading span {
+  flex-shrink: 0;
+  font-size: 21px;
+}
+.compactRecordButton {
+  display: none;
+}
+.selectedClimb p {
+  margin-top: 10px;
+  color: var(--editorial-muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.selectedClimb small {
+  display: block;
+  margin-top: 8px;
+  color: var(--editorial-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.routePrompt {
+  color: var(--editorial-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.climbScroll {
+  max-height: min(340px, 42dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.climbScroll:focus-visible {
+  outline: 2px solid var(--editorial-ink);
+  outline-offset: 3px;
+}
+.sectionHeading {
+  margin-bottom: 12px;
+  gap: 12px;
+}
+.sectionHeading h3 {
+  font-size: 12px;
+  font-weight: 600;
+}
+.sectionHeading > span {
+  font-size: 10px;
+}
+
+.faceToolbar {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+.faceTabs {
+  display: flex;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--topo-rule);
+}
+.faceTabs button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+}
+.faceTabs button + button {
+  border-left: 1px solid var(--topo-rule);
+}
+.faceTabs button[aria-pressed="true"] {
+  color: var(--editorial-inverse-foreground);
+  background: var(--editorial-inverse);
+}
+.faceStatus {
+  color: var(--editorial-muted);
+  font-size: 9px;
+  line-height: 1.4;
+  text-align: right;
+}
+.orientationStatus {
+  margin: 10px 0 16px;
+  color: var(--editorial-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.missingPhoto {
+  display: flex;
+  min-height: 250px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 28px;
+  border: 1px solid var(--topo-rule);
+  background: var(--editorial-panel);
+}
+.missingPhoto > svg {
+  margin-bottom: 24px;
+  color: var(--editorial-muted);
+}
+.missingPhoto .eyebrow {
+  color: var(--editorial-muted);
+}
+.missingPhoto h3,
+.missingPhoto > output {
+  max-width: 22ch;
+  margin-top: 8px;
+  font-size: 21px;
+  line-height: 1.3;
+  letter-spacing: -0.035em;
+}
+.missingPhoto p {
+  max-width: 47ch;
+  margin-top: 10px;
+  color: var(--editorial-muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.contentStatus {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--topo-rule);
+  color: var(--editorial-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.faceFigure {
+  margin: 0;
+}
+
+.photoAttribution {
+  margin-top: 8px;
+  color: var(--editorial-muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+.photoViewport {
+  position: relative;
+  max-height: var(--photo-max-height, 560px);
+  overflow: auto;
+  background: var(--editorial-panel);
+  touch-action: none;
+}
+.photoCanvas {
+  position: relative;
+  margin-inline: auto;
+}
+.photoCanvas img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.photoLoading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--editorial-muted);
+  background: var(--editorial-panel);
+  font-size: 12px;
+}
+.photoCaption {
+  min-height: 44px;
+  border-bottom: 1px solid var(--topo-rule);
+  gap: 8px;
+  font-size: 10px;
+}
+.zoomControls {
+  display: flex;
+}
+.zoomControls button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+}
+.zoomControls button:disabled,
+.lineControls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.lineControls {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: 4px;
+  padding-top: 8px;
+}
+.lineControls button {
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 10px;
+}
+.lineControls button[aria-pressed="true"] {
+  background: var(--editorial-panel);
+  font-weight: 600;
+}
+.routeOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.route {
+  cursor: pointer;
+  pointer-events: visiblePainted;
+}
+.routeHalo {
+  fill: none;
+  stroke: #211d18;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.routeLine {
+  fill: none;
+  stroke: #f8f1df;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.route[data-muted="true"] .routeHalo,
+.route[data-muted="true"] .routeLine {
+  opacity: 0.6;
+}
+.route[data-selected="true"] .routeHalo {
+  stroke-width: 10;
+}
+.route[data-selected="true"] .routeLine {
+  stroke: #ffeca2;
+  stroke-width: 5;
+}
+.routeNumberCircle {
+  fill: #f8f1df;
+  stroke: #211d18;
+  stroke-width: 2;
+}
+.route[data-selected="true"] .routeNumberCircle {
+  fill: #ffeca2;
+  stroke-width: 4;
+}
+.routeNumber {
+  fill: #211d18;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  pointer-events: none;
+}
+.routeHitTarget {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 44;
+  pointer-events: stroke;
+}
+.route:focus {
+  outline: none;
+}
+.route:focus-visible .routeHalo {
+  stroke: #fff;
+  stroke-width: 13;
+}
+.route:focus-visible .routeLine {
+  stroke: #211d18;
+  stroke-width: 7;
+}
+.climbList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--topo-rule);
+}
+.climbList button {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--topo-rule);
+  gap: 12px;
+  text-align: left;
+}
+.climbList button[aria-pressed="true"] {
+  color: var(--editorial-inverse-foreground);
+  background: var(--editorial-inverse);
+}
+.listNumber {
+  flex-shrink: 0;
+  width: 20px;
+  font-size: 10px;
+  opacity: 0.65;
+}
+.listName {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  font-weight: 500;
+}
+.listName small {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+.listGrade {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+.emptyClimbs {
+  margin-bottom: 14px;
+  color: var(--editorial-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.climbDetail {
+  scroll-margin-top: 84px;
+  padding: 22px 0 0;
+}
+.climbHeading {
+  justify-content: flex-start;
+  gap: 12px;
+}
+.climbNumber {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid var(--topo-rule);
+  place-items: center;
+  font-size: 12px;
+}
+.climbHeading > div {
+  flex: 1;
+}
+.climbHeading .eyebrow {
+  color: var(--editorial-muted);
+  font-size: 9px;
+}
+.climbHeading h3 {
+  margin-top: 3px;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+.detailGrade {
+  flex-shrink: 0;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+.climbDescription {
+  margin-top: 16px;
+  color: var(--editorial-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.gradeNote {
+  padding: 14px;
+  margin-top: 16px;
+  border-left: 2px solid var(--editorial-muted);
+  background: var(--editorial-panel);
+}
+.gradeNote strong {
+  font-size: 11px;
+}
+.gradeNote p {
+  margin-top: 6px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.gradeNote ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+.gradeNote li {
+  display: flex;
+  gap: 12px;
+  font-size: 10px;
+  line-height: 1.8;
+}
+.gradeNote li b {
+  min-width: 34px;
+}
+.gradeNote li span {
+  color: var(--editorial-muted);
+}
+.gradeNote li span small {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  line-height: 1.6;
+}
+.locationNotes {
+  padding: 12px 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--topo-rule);
+  border-bottom: 1px solid var(--topo-rule);
+}
+.continuation {
+  display: flex;
+  width: 100%;
+  min-height: 70px;
+  align-items: center;
+  padding: 14px;
+  margin-top: 20px;
+  border: 1px solid var(--topo-rule);
+  gap: 12px;
+  text-align: left;
+}
+.continuation > span {
+  flex: 1;
+}
+.continuation b {
+  display: block;
+  font-size: 11px;
+}
+.continuation span span {
+  display: block;
+  margin-top: 4px;
+  color: var(--editorial-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.otherFaces {
+  margin-top: 18px;
+  font-size: 11px;
+}
+.otherFaces small {
+  display: block;
+  color: var(--editorial-muted);
+  font-size: 10px;
+}
+.topoUnavailable {
+  padding: 12px 0;
+  margin-top: 8px;
+  border-top: 1px solid var(--topo-rule);
+  color: var(--editorial-muted);
+  font-size: 11px;
+  line-height: 1.65;
+}
+.fieldStatus {
+  padding: 12px 0;
+  font-size: 10px;
+  color: var(--editorial-muted);
+}
+.sources {
+  margin-top: 20px;
+  border-top: 1px solid var(--topo-rule);
+  border-bottom: 1px solid var(--topo-rule);
+}
+.sources summary {
+  display: list-item;
+  min-height: 48px;
+  padding: 16px 0;
+  font-size: 11px;
+  font-weight: 500;
+}
+.sourceBody {
+  padding: 0 0 16px;
+  color: var(--editorial-muted);
+  font-size: 10px;
+  line-height: 1.65;
+}
+.sourceBody ul {
+  padding: 0;
+  margin: 14px 0 0;
+  list-style: none;
+}
+.sourceBody li + li {
+  margin-top: 14px;
+}
+.sourceBody a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 6px;
+  color: var(--editorial-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sourceBody li > span {
+  display: block;
+}
+.sourceBody li p {
+  margin-top: 3px;
+}
+.neighbors {
+  margin-top: 26px;
+}
+.neighbors .eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--editorial-muted);
+}
+.neighbors button {
+  display: flex;
+  min-height: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--topo-rule);
+  gap: 12px;
+  font-size: 12px;
+}
+.neighbors button > span:first-child {
+  flex: 1;
+  text-align: left;
+}
+.neighbors small {
+  color: var(--editorial-muted);
+  font-size: 10px;
+}
+.distanceNote {
+  margin-top: 10px;
+  color: var(--editorial-muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .boulderDetail {
+    padding: 0 36px 36px;
+  }
+  .detailBody {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 28px;
+  }
+  .faceSection,
+  .routeSidebar {
+    min-width: 0;
+  }
+  .missingPhoto {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 767px) {
+  .detailBody {
+    --photo-max-height: min(240px, 30dvh);
+    height: calc(100dvh - 134px);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 16px;
+  }
+  .routeSidebar {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scroll-padding-top: 12px;
+  }
+  .routeSidebar:focus-visible {
+    outline: 2px solid var(--editorial-ink);
+    outline-offset: 3px;
+  }
+  .selectedClimb {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--topo-rule);
+  }
+  .selectedClimbHeading h3 {
+    font-size: 17px;
+  }
+  .selectedClimb p {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .selectedClimb small {
+    margin-top: 6px;
+    font-size: 9px;
+  }
+  .climbScroll {
+    max-height: none;
+    overflow: visible;
+  }
+  .detailBody:has(.photoNotes[open]) {
+    height: auto;
+    grid-template-rows: auto auto;
+  }
+  .detailBody:has(.photoNotes[open]) .routeSidebar {
+    overflow: visible;
+  }
+  .detailBody:has(.routeFacts[open]) .selectedClimb {
+    position: static;
+  }
+  .detailBody:has(.photoNotes[open]) .climbScroll {
+    max-height: min(340px, 42dvh);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .boulderDetail {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+  .detailGrade {
+    font-size: 21px;
+  }
+  .missingPhoto {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 700px) {
+  .detailBody {
+    --photo-max-height: min(144px, 22dvh);
+    height: calc(100dvh - 134px);
+    gap: 12px;
+  }
+  .missingPhoto {
+    min-height: 0;
+    padding: 12px;
+  }
+  .missingPhoto > svg {
+    display: none;
+  }
+  .missingPhoto h3,
+  .missingPhoto > output {
+    margin-top: 4px;
+    font-size: 18px;
+  }
+  .missingPhoto p {
+    margin-top: 6px;
+  }
+  .missingPhoto .contentStatus {
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+  .faceFigure {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 8px;
+  }
+  .photoViewport,
+  .photoCaption,
+  .lineControls {
+    grid-column: 1 / -1;
+  }
+  .faceFigure > .topoUnavailable {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+  .photoNotes {
+    grid-column: 2;
+  }
+  .photoNotes[open] {
+    grid-column: 1 / -1;
+  }
+  .routeSidebar {
+    gap: 8px;
+  }
+  .selectedClimb {
+    position: static;
+    padding: 4px 8px;
+  }
+  .selectedClimbHeading {
+    align-items: center;
+    gap: 8px;
+  }
+  .compactRecordButton {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .selectedClimb > p,
+  .selectedClimb > small,
+  .routePromptExplanation {
+    display: none;
+  }
+  .sectionHeading {
+    margin-bottom: 8px;
+  }
+}

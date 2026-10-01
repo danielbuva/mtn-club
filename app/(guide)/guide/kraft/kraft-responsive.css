@@ -1,0 +1,144 @@
+@media (min-width: 900px) {
+  .kraft-view-list {
+    grid-template-columns: 1fr;
+  }
+  .kraft-view-list .kraft-map-frame {
+    display: none;
+  }
+}
+@media (max-width: 899px) {
+  .kraft-site-header {
+    min-height: 52px;
+    padding: 0 20px;
+  }
+  .kraft-brand {
+    font-size: 18px;
+  }
+  .kraft-series {
+    display: none;
+  }
+  .kraft-masthead {
+    padding: 26px 20px 22px;
+  }
+  .kraft-masthead h1 {
+    font-size: 66px;
+  }
+  .kraft-masthead h1 span {
+    display: block;
+    margin: 4px 0 0;
+    font-size: 34px;
+    letter-spacing: -0.02em;
+  }
+  .kraft-edition {
+    max-width: 155px;
+    padding-bottom: 3px;
+  }
+  .kraft-edition p {
+    font-size: 16px;
+    line-height: 1.35;
+  }
+  .kraft-edition span {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .kraft-search {
+    padding: 0 20px 16px;
+  }
+  .kraft-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .kraft-area-select select {
+    width: 100%;
+  }
+  .kraft-grade-filters {
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+  .kraft-grade-filters button {
+    flex: 1;
+    padding: 0 8px;
+    white-space: nowrap;
+    font-size: 11px;
+  }
+  .kraft-explorer {
+    padding: 0 12px 20px;
+  }
+  .kraft-explorer-bar {
+    padding: 0 8px;
+    height: 54px;
+  }
+  .kraft-explorer-grid {
+    display: block;
+  }
+  .kraft-map-frame {
+    height: min(51dvh, 410px);
+    min-height: 360px;
+  }
+  .kraft-view-map .kraft-directory {
+    display: none;
+  }
+  .kraft-view-list .kraft-map-frame {
+    display: none;
+  }
+  .kraft-directory {
+    border-left: 0;
+    max-height: none;
+  }
+  .kraft-field-kit {
+    flex-direction: column;
+    gap: 20px;
+    margin: 0 20px;
+    padding: 22px;
+  }
+  .kraft-field-kit h2 {
+    font-size: 29px;
+  }
+  .kraft-guide-notes {
+    margin: 20px;
+  }
+  .kraft-guide-notes ul {
+    grid-template-columns: 1fr;
+  }
+  .kraft-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 22px 20px;
+  }
+  .kraft-detail-dialog {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kraft-guide * {
+    scroll-behavior: auto;
+  }
+}
+@media (max-width: 380px) {
+  .kraft-masthead {
+    gap: 12px;
+  }
+  .kraft-masthead h1 {
+    font-size: 56px;
+  }
+  .kraft-masthead h1 span {
+    font-size: 30px;
+  }
+  .kraft-edition {
+    max-width: 116px;
+  }
+  .kraft-edition p {
+    font-size: 14px;
+  }
+  .kraft-grade-filters button {
+    padding: 0 5px;
+  }
+}

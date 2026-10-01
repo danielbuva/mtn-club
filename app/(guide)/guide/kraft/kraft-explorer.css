@@ -1,0 +1,218 @@
+.kraft-search {
+  padding: 0 4% 22px;
+  border-bottom: 1px solid var(--kraft-rule);
+}
+.kraft-search-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--kraft-rule);
+}
+.kraft-search-input input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  font-size: 14px;
+  padding: 12px 0;
+}
+.kraft-search-input input:focus {
+  outline: none;
+}
+.kraft-search-input input::-webkit-search-cancel-button {
+  appearance: none;
+}
+.kraft-search-input:focus-within {
+  outline: 2px solid var(--kraft-ink);
+  outline-offset: 2px;
+}
+.kraft-search-input button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+.kraft-filter-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 12px;
+}
+.kraft-area-select select {
+  min-height: 44px;
+  padding: 0 32px 0 12px;
+  background: transparent;
+  border: 1px solid var(--kraft-rule);
+  font-size: 12px;
+}
+.kraft-grade-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+.kraft-grade-filters button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--kraft-rule);
+  font-size: 12px;
+  font-weight: 500;
+}
+.kraft-grade-filters button[aria-pressed="true"] {
+  background: var(--kraft-ink);
+  color: var(--kraft-paper);
+  border-color: var(--kraft-ink);
+}
+.kraft-explorer {
+  padding: 0 4% 32px;
+}
+.kraft-explorer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 62px;
+}
+.kraft-view-switch {
+  display: flex;
+  gap: 22px;
+  height: 100%;
+}
+.kraft-view-switch button {
+  min-height: 44px;
+  border-bottom: 2px solid transparent;
+  font-size: 12px;
+  font-weight: 600;
+}
+.kraft-view-switch button[aria-pressed="true"] {
+  border-color: var(--kraft-ink);
+}
+.kraft-view-switch span {
+  margin-left: 4px;
+  color: var(--editorial-muted);
+}
+.kraft-locate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+.kraft-location-status {
+  display: block;
+  max-width: 700px;
+  font-size: 12px;
+  color: var(--editorial-muted);
+}
+.kraft-location-status:not(:empty) {
+  padding: 0 0 12px;
+}
+.kraft-explorer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  border: 1px solid var(--kraft-rule);
+}
+.kraft-map-frame {
+  height: 570px;
+  min-width: 0;
+  overflow: hidden;
+}
+.kraft-directory {
+  border-left: 1px solid var(--kraft-rule);
+  max-height: 570px;
+  overflow: auto;
+}
+.kraft-directory-heading {
+  padding: 22px 20px 16px;
+  border-bottom: 1px solid var(--kraft-rule);
+}
+.kraft-directory-heading h2 {
+  font-family: var(--font-brand);
+  font-size: 28px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.kraft-directory-heading p {
+  margin-top: 8px;
+  color: var(--editorial-muted);
+  font-size: 11px;
+}
+.kraft-boulder-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--kraft-rule);
+}
+.kraft-boulder-result:hover {
+  background: var(--kraft-panel);
+}
+.kraft-rock-index {
+  align-self: flex-start;
+  padding-top: 3px;
+  font-family: var(--font-brand);
+  font-size: 18px;
+  color: var(--editorial-muted);
+}
+.kraft-result-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.kraft-result-area {
+  color: var(--editorial-muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.kraft-result-name {
+  font-family: var(--font-brand);
+  font-size: 25px;
+  text-transform: uppercase;
+}
+.kraft-result-meta {
+  font-size: 11px;
+  color: var(--editorial-muted);
+}
+.kraft-directory-note {
+  padding: 18px 20px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--editorial-muted);
+}
+.kraft-climb-results {
+  padding: 0 20px;
+  border-bottom: 1px solid var(--kraft-rule);
+}
+.kraft-climb-results button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  font-size: 12px;
+  text-align: left;
+}
+.kraft-empty {
+  padding: 28px 20px;
+}
+.kraft-empty h3 {
+  font-family: var(--font-brand);
+  font-size: 24px;
+}
+.kraft-empty p {
+  margin: 8px 0 16px;
+  font-size: 13px;
+}
+.kraft-empty button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--kraft-rule);
+  font-size: 12px;
+}

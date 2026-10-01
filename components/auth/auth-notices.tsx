@@ -8,6 +8,7 @@ import { providerLabel } from '@/lib/auth/sign-in-methods'
 export function AuthNotices() {
   const consumed = useRef(false)
   useEffect(() => {
+    if (window.location.pathname.startsWith('/guide/')) return
     if (consumed.current) return
     consumed.current = true
     consumeAuthArrival(takeAuthNotice())

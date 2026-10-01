@@ -235,7 +235,7 @@ export const kraftBoulders: Boulder[] = [
 export const kraftGuide: KraftGuide = {
   id: 'kraft',
   name: 'Kraft Boulders',
-  version: '2026-10-01-pilot-5',
+  version: '2026-10-01-workbench-3',
   reviewedAt,
   status: 'content-pilot',
   description:

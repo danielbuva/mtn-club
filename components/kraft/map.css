@@ -1,0 +1,625 @@
+.kraft-map-shell {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  flex-direction: column;
+  color: #352a20;
+  font-family: var(--font-sans);
+}
+.kraft-map-stage {
+  position: relative;
+  min-height: 385px;
+  flex: 1;
+  overflow: hidden;
+  background: #ede4ce;
+  box-shadow: inset 0 0 55px #73523410;
+}
+.kraft-map-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.kraft-map-canvas:active {
+  cursor: grabbing;
+}
+.kraft-map-canvas:focus-visible {
+  outline: 2px solid #795139;
+  outline-offset: -3px;
+}
+.kraft-map-sandstone-tint {
+  fill: #c9976d;
+  opacity: 0.19;
+}
+.kraft-map-contour-relief {
+  fill: #9f785c;
+  opacity: 0.025;
+}
+.kraft-map-contours {
+  fill: none;
+  stroke: #b19671;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+.kraft-map-contours [data-major="true"] {
+  stroke: #9d7b57;
+  stroke-width: 1.4;
+  opacity: 0.75;
+}
+.kraft-map-elevation {
+  fill: #927457;
+  font-size: 9px;
+  letter-spacing: 0.025em;
+}
+.kraft-map-landmark {
+  fill: #9c7655;
+  font-family: var(--font-brand), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+.kraft-map-landmark-subtitle {
+  fill: #a58a67;
+  font-size: 8px;
+  letter-spacing: 0.19em;
+}
+.kraft-map-wash-beds {
+  fill: none;
+  stroke: #d2c5a5;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kraft-map-wash-courses {
+  fill: none;
+  stroke: #9a967a;
+  stroke-width: 1.3;
+  stroke-dasharray: 5 7;
+  stroke-linecap: round;
+  opacity: 0.65;
+}
+.kraft-map-road-casing {
+  fill: none;
+  stroke: #b7a88b;
+  stroke-width: 8;
+  stroke-linejoin: round;
+}
+.kraft-map-roads {
+  fill: none;
+  stroke: #f7edda;
+  stroke-width: 5.7;
+  stroke-linejoin: round;
+}
+.kraft-map-trail-casing {
+  fill: none;
+  stroke: #f8f1df;
+  stroke-width: 4.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kraft-map-trails {
+  fill: none;
+  stroke: #9b7252;
+  stroke-width: 1.8;
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kraft-map-trails [data-informal="true"] {
+  stroke: #a88b6b;
+  stroke-dasharray: 1 4;
+}
+.kraft-map-parking > path {
+  fill: #ddd9bd;
+  stroke: #aaa283;
+  stroke-width: 1.2;
+}
+.kraft-map-parking g rect {
+  fill: #746a50;
+  stroke: #f6edda;
+  stroke-width: 1.5;
+}
+.kraft-map-parking g text {
+  fill: #f8f1df;
+  font-size: 16px;
+  font-weight: 600;
+}
+.kraft-map-parking g .kraft-map-place-name {
+  fill: #746a50;
+  font-size: 12px;
+  font-weight: 500;
+  paint-order: stroke;
+  stroke: #ede4ce;
+  stroke-width: 3;
+}
+.kraft-map-feature-label {
+  fill: #846f53;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  paint-order: stroke;
+  stroke: #ede4ce;
+  stroke-width: 3;
+}
+.kraft-map-feature-label--wash {
+  fill: #7e8164;
+  font-size: 12px;
+  font-style: italic;
+}
+.kraft-map-feature-label--road {
+  fill: #98836b;
+}
+.kraft-map-boulder {
+  outline: none;
+  cursor: pointer;
+}
+.kraft-map-rock-target {
+  fill: transparent;
+}
+.kraft-map-rock-ring {
+  fill: #ffeaa8;
+  stroke: #86633e;
+  stroke-width: 1.3;
+  opacity: 0;
+}
+.kraft-map-rock-shadow {
+  fill: #6c523a;
+  opacity: 0.18;
+}
+.kraft-map-rock {
+  fill: #b18a61;
+  stroke: #624c36;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+}
+.kraft-map-rock-facet {
+  fill: none;
+  stroke: #745436;
+  stroke-width: 0.9;
+  opacity: 0.75;
+}
+.kraft-map-boulder:hover .kraft-map-rock-ring {
+  opacity: 0.5;
+}
+.kraft-map-boulder:focus-visible .kraft-map-rock-ring {
+  opacity: 1;
+  stroke: #352a20;
+  stroke-width: 2.2;
+  stroke-dasharray: 3 2;
+}
+.kraft-map-boulder[data-selected="true"] .kraft-map-rock-ring {
+  opacity: 1;
+}
+.kraft-map-boulder[data-selected="true"] .kraft-map-rock {
+  fill: #765037;
+  stroke: #352a20;
+}
+.kraft-map-boulder[data-selected="true"] .kraft-map-rock-facet {
+  stroke: #f8dfaa;
+}
+.kraft-map-boulder[data-muted="true"] {
+  opacity: 0.25;
+  cursor: default;
+}
+.kraft-map-boulder-name {
+  fill: #352a20;
+  font-family: var(--font-brand), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  paint-order: stroke;
+  stroke: #ede4ce;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+.kraft-map-boulder-grade {
+  fill: #6c5742;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  paint-order: stroke;
+  stroke: #ede4ce;
+  stroke-width: 4;
+}
+.kraft-map-grade-divider {
+  opacity: 0.45;
+}
+.kraft-map-location-accuracy {
+  fill: #d7e3bf;
+  fill-opacity: 0.38;
+  stroke: #6b785d;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.kraft-map-location-ring {
+  fill: #faf5e7;
+  stroke: #64794a;
+  stroke-width: 2;
+}
+.kraft-map-location-dot {
+  fill: #64794a;
+}
+.kraft-map-edition {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  pointer-events: none;
+}
+.kraft-map-edition span:first-child {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+.kraft-map-edition span:last-child {
+  color: #856c4c;
+  font-size: 8px;
+  letter-spacing: 0.13em;
+}
+.kraft-map-north {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  display: flex;
+  width: 25px;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+.kraft-map-north span {
+  font-size: 10px;
+  font-weight: 700;
+}
+.kraft-map-north svg {
+  width: 20px;
+  height: 30px;
+}
+.kraft-map-north svg path:first-child {
+  fill: #ede4ce;
+  stroke: #6e6048;
+  stroke-width: 1;
+}
+.kraft-map-north svg path:last-child {
+  fill: #6e6048;
+}
+.kraft-map-controls {
+  position: absolute;
+  right: 15px;
+  bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #9a84644d;
+  background: #f8f1dff5;
+  box-shadow: 2px 3px 0 #4934220a;
+}
+.kraft-map-controls button {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-bottom: 1px solid #9a846433;
+  color: #564630;
+  background: transparent;
+  cursor: pointer;
+}
+.kraft-map-controls button:last-child {
+  border-bottom: 0;
+}
+.kraft-map-controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.kraft-map-controls button:not(:disabled):hover {
+  background: #e9ddc3;
+}
+.kraft-map-controls button:focus-visible {
+  outline: 2px solid #352a20;
+  outline-offset: -3px;
+}
+.kraft-map-scale {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  pointer-events: none;
+}
+.kraft-map-scale > span {
+  height: 6px;
+  border: 1px solid #5d503b;
+  border-top: 0;
+}
+.kraft-map-scale small {
+  font-size: 10px;
+}
+.kraft-map-hint {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #756144;
+  pointer-events: none;
+}
+.kraft-map-hint span {
+  font-size: 10px;
+}
+.kraft-map-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: 80%;
+  padding: 16px 20px;
+  transform: translate(-50%, -50%);
+  background: #f8f1dff5;
+  border: 1px solid #9a846440;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.kraft-map-caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 18px;
+  border-top: 1px solid #b6a38359;
+  background: #f0e8d5;
+}
+.kraft-map-key {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  color: #79664e;
+  font-size: 10px;
+}
+.kraft-map-key > li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.kraft-map-key i {
+  display: inline-block;
+  width: 16px;
+}
+.kraft-map-key-rock {
+  height: 11px;
+  border: 1px solid #6b5138;
+  background: #b18a61;
+  clip-path: polygon(15% 0, 75% 0, 100% 45%, 70% 100%, 0 70%);
+}
+.kraft-map-key-trail {
+  height: 0;
+  border-top: 2px dashed #9b7252;
+}
+.kraft-map-key-wash {
+  height: 7px;
+  border-top: 1px dashed #9a967a;
+  border-bottom: 1px solid #d2c5a5;
+  background: #d2c5a5;
+}
+.kraft-map-data-note {
+  max-width: 420px;
+  color: #79664e;
+  font-size: 10px;
+}
+.kraft-map-data-note summary {
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.kraft-map-data-note summary:focus-visible {
+  outline: 2px solid #795139;
+  outline-offset: 3px;
+}
+.kraft-map-data-note p {
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.kraft-map-data-note[open] {
+  position: absolute;
+  z-index: 5;
+  right: 10px;
+  bottom: 8px;
+  max-width: min(370px, 90%);
+  padding: 15px;
+  border: 1px solid #b6a38359;
+  background: #f8f1df;
+  box-shadow: 0 5px 20px #39281512;
+}
+@media (max-width: 600px) {
+  .kraft-map-shell {
+    min-height: 400px;
+  }
+  .kraft-map-stage {
+    min-height: 360px;
+  }
+  .kraft-map-caption {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+  .kraft-map-key {
+    gap: 8px 12px;
+    font-size: 9px;
+  }
+  .kraft-map-key i {
+    width: 13px;
+  }
+  .kraft-map-data-note {
+    font-size: 9px;
+  }
+  .kraft-map-hint {
+    display: none;
+  }
+  .kraft-map-edition {
+    top: 15px;
+    left: 16px;
+  }
+  .kraft-map-scale {
+    left: 16px;
+    bottom: 17px;
+  }
+  .kraft-map-controls {
+    right: 13px;
+    bottom: 16px;
+  }
+  .kraft-map-north {
+    right: 18px;
+  }
+}
+
+.kraft-map-summit {
+  fill: #856447;
+  stroke: #f5e5ca;
+  stroke-width: 1.2;
+}
+/* Geographic labels keep their field-readable size while the surveyed geometry zooms. */
+.kraft-map-labels {
+  paint-order: stroke;
+  stroke: #ede4ce;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.kraft-map-labels .kraft-map-landmark {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.kraft-map-labels .kraft-map-landmark-subtitle {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+.kraft-map-parking-label rect {
+  fill: #746a50;
+  stroke: #f8f1df;
+  stroke-width: 1.5px;
+}
+.kraft-map-parking-label .kraft-map-parking-letter {
+  fill: #f8f1df;
+  stroke: none;
+  font-size: 17px;
+  font-weight: 600;
+}
+.kraft-map-parking-label .kraft-map-place-name {
+  fill: #554e38;
+  font-size: 12px;
+  font-weight: 600;
+}
+.kraft-map-primary-label text {
+  fill: #735339;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+}
+.kraft-map-label-leader {
+  fill: none;
+  stroke: #947854;
+  stroke-width: 0.7px;
+  opacity: 0.65;
+}
+.kraft-map-wash-label {
+  fill: #72745d;
+  font-size: 11px;
+  font-style: italic;
+}
+.kraft-map-secondary-label {
+  fill: #846d50;
+  font-weight: 500;
+  stroke-width: 4px;
+}
+.kraft-map-trails {
+  stroke-width: 0.85;
+  stroke-dasharray: 2 3;
+}
+.kraft-map-trails [data-primary="true"] {
+  stroke: #80543b;
+  stroke-width: 1.35;
+  stroke-dasharray: 3 4;
+}
+.kraft-map-wash-courses {
+  stroke-width: 0.7;
+  stroke-dasharray: 3 5;
+}
+@media (max-width: 600px) {
+  .kraft-map-shell {
+    min-height: 346px;
+  }
+  .kraft-map-stage {
+    min-height: 300px;
+  }
+}
+
+.kraft-map-location[data-last-known="true"] .kraft-map-location-ring {
+  stroke: #8a7459;
+  stroke-dasharray: 3 3;
+  fill: #f6ecd7;
+}
+.kraft-map-location[data-last-known="true"] .kraft-map-location-dot {
+  fill: #8a7459;
+}
+.kraft-map-location[data-last-known="true"] .kraft-map-location-accuracy {
+  fill-opacity: 0.2;
+  stroke: #9a896e;
+}
+.kraft-map-note-close {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: #554730;
+  background: transparent;
+}
+.kraft-map-note-close:focus-visible {
+  outline: 2px solid #795139;
+  outline-offset: -4px;
+}
+.kraft-map-data-note[open] {
+  bottom: 8px;
+  right: 8px;
+  max-width: calc(100% - 16px);
+  padding: 17px;
+  font-size: 12px;
+}
+.kraft-map-data-note[open] summary {
+  padding-right: 35px;
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  .kraft-map-controls {
+    bottom: 14px;
+    flex-direction: row;
+  }
+  .kraft-map-controls button {
+    border-bottom: 0;
+    border-right: 1px solid #9a846433;
+  }
+  .kraft-map-controls button:last-child {
+    border-right: 0;
+  }
+}
