@@ -60,12 +60,13 @@ export function KraftGuide({ guide }: { guide: KraftGuideData }) {
           <div className="kraft-edition">
             <p>A little closer to the rock.</p>
             <span>
-              {guide.boulders.length} boulders ·{' '}
+              {guide.boulders.length} rock catalogs ·{' '}
               {guide.boulders.reduce(
                 (total, rock) => total + rock.climbs.length,
                 0,
               )}{' '}
-              climbs · Content pilot
+              climb records ·{' '}
+              {guide.status === 'catalog' ? 'Source catalogs' : 'Content pilot'}
             </span>
           </div>
         </section>
@@ -134,7 +135,7 @@ export function KraftGuide({ guide }: { guide: KraftGuideData }) {
               <div className="kraft-directory-heading">
                 <h2>Choose your rock.</h2>
                 <p>
-                  {results.length} boulders · {climbCount} matching guide
+                  {results.length} rock catalogs · {climbCount} matching guide
                   records
                 </p>
               </div>

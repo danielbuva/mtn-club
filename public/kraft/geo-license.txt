@@ -5,25 +5,30 @@ Trails, roads, intermittent washes, parking and named peak:
 https://www.openstreetmap.org/copyright
 https://opendatacommons.org/licenses/odbl/1-0/
 
-The projected/simplified OpenStreetMap geographic database in geo-features.json
-and the original extracts in docs/kraft-gauntlet/source-data/
-are available under ODbL 1.0. They are separate from the climbing catalog.
+The projected/simplified geographic database in geo-features.json and original
+extracts in docs/kraft-gauntlet/source-data/ are available under ODbL 1.0.
+They are separate from the climbing catalog. Original Overpass observations
+accessed September 30, 2026; western-strip native OSM API supplement accessed
+October 1, 2026. Exact way IDs and observation source IDs are preserved.
 
 Elevation source and generated contour observations:
 USGS National Map 3D Elevation Program (3DEP), US public domain.
 https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer
 https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits
+New expanded-envelope F32 elevation export accessed October 1, 2026.
 
-Orthoimagery reference:
+Orthoimagery audit reference:
 USGS, USDA, The National Map: Orthoimagery, US public domain.
 NAIP USDA-FSA-APFO source raster m_3611553_se_11_060_20220611,
 acquired June 11, 2022 at nominal 0.6 metre resolution.
 https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer
+Expanded reference export accessed October 1, 2026; imagery is not shipped.
 
-Observations accessed September 30, 2026 (America/Los_Angeles).
-Source requests, returned projection bounds, source IDs and file checksums
-are retained in docs/kraft-gauntlet/source-data/geo-provenance.json.
+Source requests, returned bounds, source IDs and file checksums are retained
+in docs/kraft-gauntlet/source-data/geo-provenance.json.
 
-The illustration's colors, terrain tints and boulder symbols are editorial.
-Boulder symbols are not surveyed rock outlines. Geographic observations
-are not field verified and do not constitute a verified walking route.
+Map colors are editorial. Neutral points locate source catalog records;
+numbered clusters count catalog records, not physical rocks. Source area
+centroids and cluster centers are not surveyed boulder positions. No physical
+rock footprints are asserted. Geographic observations are not field verified
+and do not constitute a verified final boulder approach.

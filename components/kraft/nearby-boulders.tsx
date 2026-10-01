@@ -11,16 +11,22 @@ export function NearbyBoulders({
   boulder: Boulder
   onBoulderSelect: (id: string) => void
 }) {
+  const origin = boulder.location
+  if (!origin) return null
   const neighbors = guide.boulders
     .filter(item => item.id !== boulder.id)
-    .map(item => ({ boulder: item, distance: distanceBetween(boulder, item) }))
+    .flatMap(item =>
+      item.location
+        ? [{ boulder: item, distance: distanceBetween(origin, item.location) }]
+        : [],
+    )
     .toSorted((a, b) => a.distance - b.distance)
     .slice(0, 3)
   if (neighbors.length === 0) return null
 
   return (
     <section className={styles.neighbors} aria-label="Boulders nearby">
-      <span className={styles.eyebrow}>Boulders nearby</span>
+      <span className={styles.eyebrow}>Nearby source locations</span>
       {neighbors.map(({ boulder: item, distance }) => (
         <button
           key={item.id}
@@ -33,21 +39,25 @@ export function NearbyBoulders({
         </button>
       ))}
       <p className={styles.distanceNote}>
-        Approximate straight-line distance from published coordinates. This is
-        not a walking route.
+        Approximate straight-line distance between published points. Some
+        catalogs cover several rocks; use the source notes to identify them.
+        This is not a walking route.
       </p>
     </section>
   )
 }
 
-function distanceBetween(from: Boulder, to: Boulder) {
+function distanceBetween(
+  from: NonNullable<Boulder['location']>,
+  to: NonNullable<Boulder['location']>,
+) {
   const radians = Math.PI / 180
-  const latitudeDelta = (to.location.lat - from.location.lat) * radians
-  const longitudeDelta = (to.location.lon - from.location.lon) * radians
+  const latitudeDelta = (to.lat - from.lat) * radians
+  const longitudeDelta = (to.lon - from.lon) * radians
   const chord =
     Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(from.location.lat * radians) *
-      Math.cos(to.location.lat * radians) *
+    Math.cos(from.lat * radians) *
+      Math.cos(to.lat * radians) *
       Math.sin(longitudeDelta / 2) ** 2
   return 6_371_000 * 2 * Math.atan2(Math.sqrt(chord), Math.sqrt(1 - chord))
 }

@@ -1,72 +1,140 @@
 # Current Kraft data review
 
-Reviewed 2026-10-01 against the expanded goal, current production modules, generated CSV/boards, cached MP HTML and cached OpenBeta SSR records. **Source inventory capture is accepted for the acquired MP/OpenBeta trees; the finished Kraft guide is not accepted.** Research coverage and runtime coverage remain very different.
+Reviewed 2026-10-01 against actual `kraftGuide` edition
+`2026-10-01-catalog-4`, both durable inventories, the four approved factual
+dossiers, cached MP HTML and cached OpenBeta SSR. **The expanded MP/OpenBeta
+source catalog is accepted at its stated source-observation scope. The finished
+Kraft field guide remains blocked.** This verdict does not depend on UI
+appearance or an earlier four-boulder build.
 
-All 81 cached MP area pages reconcile to 80 child edges and 370 unique direct route memberships; recursive advertised totals and cached breadcrumb parents match. All 49 acquired OpenBeta areas and 245 route IDs are represented. Independent UUIDv5/NIL checks validate 42 area links and 232 route links. The reconciled ledger therefore contains 78 source-unit identities and 383 route identities, not verified physical-rock/problem counts. The CSV has 1,025 observations: 451 MP, 294 OpenBeta and 280 separately indexed TheTopo research observations. TheTopo's 34 units, 198 routes and 48 views remain unreconciled; no further automated access was used.
+## Actual runtime closure
 
-Current OpenBeta names and the area path token correctly decode `$600 Boulder`, `$600` and `$500`, matching the cached rendered title/list. The decoder preserves literal UTF-8 text records and unescapes model-string dollar prefixes once. All 49 area and 245 route retrieval dates match their source caches. Source grades, types, safety, first ascent, content, coordinates and memberships remain preserved; correlated importer lineage is explicitly qualified.
+The guide contains **78 source catalogs and 383 canonical route records**:
+370 exact MP route IDs and 13 separate unresolved OpenBeta IDs. All 232 linked
+OB route IDs attach to their existing MP canonical records. The four prior
+public boulder IDs and all 58 prior route IDs, curated descriptions, selected
+grades, face memberships and qualified provenance remain intact. Runtime
+contains 760 evidence sources and 615 route-fact observations.
 
-The MP mixed-grade importer passes direct comparison with all 370 cached route headings, including all eight reported grade spans for each of these routes:
+Independent whole-batch assertions passed for exact identity sets, literal
+V/Font/YDS and risk observations, selected source-linked grades, source names,
+URLs, retrieval dates, parents, membership references, section availability and
+complete approved dossier facts/synopses. Prior curated display names and
+typographic grade-range dashes survive; literal inventory names and grade labels
+also remain separately attached. No grade conversion, averaging or name merge
+was found.
 
-| Route / MP ID | YDS | Literal V | Font | Risk |
-| --- | --- | --- | --- | --- |
-| Front Side Crack / 106617793 | 5.8 | V0 | 4 | R |
-| Leaning Wide Crack / 106629920 | 5.9 | V1 | 5 | — |
-| Plumber's Crack / 107185645 | 5.9 | V2 | 5+ | R |
+The 74 MP catalogs retain current MP memberships. Four unmatched OB catalogs
+remain separate: Black Warm Up Boulders, Big Jugs Adjacent, Tomahawk Boulder and
+Wrong! Boulder. The first two reference 18 and one existing MP canonical routes
+respectively, without duplicate climb objects. Tomahawk and Wrong! contain four
+and two native OB entries. Conflicting linked memberships reference canonical
+IDs without moving their current MP parent or duplicating routes.
 
-MP uses `rateYDS` for both YDS and V spans; the inventory preserves the literal values, source classes/labels and observations separately. Runtime records retain the three YDS grades alongside the selected V grades. Current reconciliation compares within V/YDS/Font systems: OpenBeta's matching 5.8/5.9 reports no longer become false disagreements. Genuine differences remain visible, including Apple Cider V4 versus V2+; 38 groups have shared-system grade differences. All five inventory/serialization regressions pass. Front Side Crack's OpenBeta name, “Plumbers Crack (North side chimney),” is preserved under the exact imported route identity rather than merged with the south offwidth by name.
+All records have explicit blockers and reasons:
 
-Runtime-presence flags currently agree with the actual catalog: four units and 58 climbs; the 48 linked OpenBeta climb observations correctly have `runtime_record=true` but `runtime_source_reference=false`. A true flag means the canonical catalog record exists, not that its face or route line is usable. Runtime has 58 synopses, 10 faces, 17 face-assigned climbs, one context photograph and zero authored overlays. All 383 ledger routes remain blocked: 346 on geometry/evidence and 37 on identity. The five conflicting numeric source parents, 19 unmatched legacy parents and 13 unlinked OpenBeta routes remain explicit. Eight MP coordinate outliers are preserved rather than substituted for physical-unit locations.
+| Runtime record | Identity | Evidence | Lawful imagery | Complete |
+| --- | ---: | ---: | ---: | ---: |
+| 383 climbs | 41 | 327 | 15 | 0 |
+| 78 catalogs | 4 | 1 | 73 | 0 |
 
-Largest remaining gaps:
+There are 379 source synopses and four catalog-only routes, 10 retained pilot
+face groups, 17 face-assigned climbs, one lawful Pearl context photograph and
+zero authored route overlays. No record claims field verification.
 
-- Full factual and runtime coverage is unfinished. Cached MP records contain 369 non-placeholder descriptions and 299 locations; 312 omitted routes already have descriptive evidence. The broad inventory does not yet carry reconciled starts, corridors, finishes, constraints, aliases and physical face assignments into the runtime/search/offline guide. Missing face imagery does not explain all of this factual gap.
-- Physical identity still needs editorial reconciliation beyond database-parent IDs. Leaning Wide Crack is listed under Split, but its cached description/location places it on a separate north-facing rock to the north. Runtime qualifies that assignment and omits a Split face; the canonical inventory still represents source hierarchy. Grouped rocks, unresolved TheTopo crosswalks, lawful face assets and independently supported overlays prevent full-guide acceptance. Actual SNB III content and independent KAYA factual coverage have not been established here.
+## Source acquisition and dossier evidence
 
-## Expanded route-fact prose review
+The retained MP acquisition covers 81 area pages, 80 child edges and 370 unique
+direct route memberships; cached parents and advertised totals reconcile.
+A fresh automatic check of all 370 route caches confirms retrieval dates and
+Description/Location availability: 369 descriptions and 299 locations. The
+mixed-grade importer retains separate 5.8/V0/4/R, 5.9/V1/5 and 5.9/V2/5+/R
+observations for Front Side Crack, Leaning Wide Crack and Plumber's Crack.
+YDS, V and Font remain separate systems.
 
-A fresh independent pass accepts [West/Cube](source-data/route-facts-west-cube.json) and [Pearl/East](source-data/route-facts-pearl-east.json) as source-linked factual observations for **192 of 370 MP routes**, at the resolution supported by their prose. This is documentation acceptance, not runtime, physical-face or overlay approval.
+All 49 OB areas and 245 direct route memberships match actual cached SSR
+records in source names, dates, paths, points, grades, types, safety, first
+ascent and original Description/Location/Protection fields. Exact UUIDv5/NIL
+links establish 42 area and 232 route import identities, not independent
+physical corroboration. Dollar-prefixed names decode once as `$600 Boulder`,
+`$600` and `$500`. API failures supplied no evidence; public SSR pages supplied
+the complete acquisition.
 
-| MP sector | Routes reviewed / inventoried | Source parents reconciled |
-| --- | --- | --- |
-| West Cluster | 63 / 63 | 17 |
-| Cube Area | 31 / 31 | 7 |
-| The Pearl Area | 30 / 30 | 8 |
-| East Cluster | 68 / 68 | 9 |
+The four previously independently accepted factual dossiers now reach runtime
+in full:
 
-All 192 route IDs are unique, with no missing or extra scoped routes. Every source-parent count matches the inventory; these 41 memberships establish database hierarchy rather than physical-rock boundaries. All 384 cached MP Description/Location section slots match the extraction after HTML decoding. IDs, URLs, retrieval dates, cache dates and section availability match. All 106 exact-ID OpenBeta observations match their inventory entries: 16 have prose and 90 have neither requested section. OpenBeta remains correlated MP-import evidence. Source-name differences and parent conflicts are retained; the synopses are short factual paraphrases.
+| Approved factual dossier | MP routes |
+| --- | ---: |
+| [West/Cube](source-data/route-facts-west-cube.json) | 94 |
+| [Main A](source-data/route-facts-main-a.json) | 89 |
+| [Main B](source-data/route-facts-main-b.json) | 89 |
+| [Pearl/East](source-data/route-facts-pearl-east.json) | 98 |
 
-Unknowns remain explicit: the MP observations lack a face assignment for 69 routes, a start for 23, a path for 7 and a finish for 92. Perfect Poser (`105959433`) has neither requested MP section and no OpenBeta prose. The other routes lacking a prose path are Red Ball Jets (`110174744`), Arête (`202547654`), Across the Choss (`107030493`), Six Pack (`107030486`), Umpa Lumpa (`108551582`) and West Face Right (`124064612`). These gaps do not authorize inferred line geometry.
+These contain 370 MP and 232 correlated OB observations. Prior source comparisons
+accepted concise factual writing, qualifiers, variants, eliminates, uncertain
+directions and distinct named finishes. Missing MP factual fields remain
+explicit: 127 faces, 48 starts, 19 paths and 172 finishes. A textual face
+description is not an approved photographed-face assignment. Perfect Poser has
+neither requested MP section and no linked OB prose; no path has been invented.
 
-The dossiers preserve seated/crouched/standing variants, feet-only and detached-rock exclusions, alternative exits and contested eliminates. Specific unresolved evidence includes the historical January 2024 Bang landslide; The Pearl's crimp/sidepull and hold-break chronology; Left (`114126051`)'s conflicting left/right placement on Monkey Bar; Maxy Forever's standing reference versus I Disagree's seated start; and the ambiguous rock/line wording behind Lava. Umpa Lumpa's separate rock and Darwin Award/Glory Hole's leaning shelter rock remain distinct physical-identity questions. Documented aliases and the named `12 Monkeys` whole-link variant are retained without turning variant grades into standalone-route grades.
+All 13 native OB synopses were manually compared with actual original inventory
+descriptions. Ten carry supported facts; Torso Rojo, A-Orta and Andy's Right have
+no Description/Location facts and remain catalog-only. Right Face retains
+head-high crimps without inferring a starting posture. Native Rub One Off stays
+separate from the same-name MP route because no exact numeric link exists.
+Retained non-photo OB content has CC0 evidence; this does not license its photos
+or establish independent source lineage.
 
-## Main Area and full acquired MP corpus
+## Conflict and physical-identity review
 
-Two separate fresh-context critics subsequently read all 178 Main Area route
-pages and their 126 exact-ID OpenBeta observations. [Main A](source-data/route-facts-main-a.json)
-contains 89 MP and 57 OB observations; [Main B](source-data/route-facts-main-b.json)
-contains 89 MP and 69 OB observations. Their source-fidelity repairs were verified
-against actual cached HTML before scoped acceptance. Repairs preserved qualifiers,
-right-side versus hand assignments, uncertain corner/exit locations and distinct
-named finishes. Fin Face's MP left/middle versus OB right apex remains a concrete
-conflict. Linked entries and source-name/parent differences remain qualified.
+The 41 identity-blocked climbs comprise five conflicting numeric source parents,
+19 linked routes under unmatched legacy parents, 13 native OB records and four
+preserved provisional physical memberships. Current MP and OB parents, IDs and
+names remain visible. Front Side Crack's exact-linked OB name, “Plumbers Crack
+(North side chimney),” does not merge it with south/downhill Plumber's Crack.
 
-The four dossiers now cover all **370 acquired MP routes** with **602 observations**:
-370 MP and 232 correlated OB entries. The remaining 13 unlinked OB routes retain
-their separate source inventory; these dossiers do not reconcile those identities
-or the independently indexed TheTopo research. MP prose is present for 369
-Descriptions and 299 Locations; the exact-linked OB subset has 47 descriptions
-and no captured Location prose. Missing MP factual fields remain explicit:
-127 face descriptions, 48 starts, 19 paths and 172 finishes. A recorded textual
-face description is not an approved physical face/view assignment.
+Art Deco's source page explicitly describes two rocks; Warm-up Boulders Main
+describes a pair. Both remain qualified source units without invented physical
+splits, footprints, face assignments or overlays. Leaning Wide Crack remains
+under the Split source catalog while its separate north-facing rock to the
+north is explicitly provisional. Umpa Lumpa's standalone rock and Darwin
+Award/Glory Hole's shelter complex retain their physical-membership uncertainty.
 
-Fresh critics accept these as original source-observation dossiers, with ID,
-parent, date, availability and correlated-import integrity checks passing. The
-three full-corpus regression checks cover missing records, source identity/date
-drift and accidental facts supplied for absent sections. They do not establish
-climbing correctness by themselves; the independent source comparisons do.
+Exact ID linkage does not erase path or variant conflicts. Fin Face retains
+MP's middle/left-of-apex line and OB's right/right-of-apex line. Donkey Punch -
+Right retains standing-matched versus seated-right-hand starts and different
+exits. The dossiers preserve the Pearl hold chronology, Left's conflicting
+left/right placement, the Bang landslide observation and named link/eliminate
+variants without turning them into verified current conditions or consensus
+grades. Same-name and same-grade routes remain keyed by exact source ID.
 
-The accepted dossiers have not expanded the four-unit/58-climb runtime, supplied
-lawful face assets or established image-relative route corridors. Full-guide
-acceptance remains blocked by runtime/physical-unit reconciliation, the gaps
-above and the existing map, imagery and geometry work.
+All placements are source observations. New MP catalog points and OB centroids
+have catalog scope; they are not physical outlines or measured field positions.
+Original pilot points and rejected/comparison coordinates survive. Individual
+route points do not replace or average parent placements; outliers are not
+silently corrected.
+
+## Verification and remaining limits
+
+The final scoped static run passed **62/62 tests** across full runtime, dossiers,
+inventories, serialization, catalog validation, provenance, evidence, rights,
+release invariants and geography. `validateGuide(kraftGuide)` passes. Independent
+assertions compared actual runtime to inputs and actual source caches; synthetic
+controls remain validation evidence only. Guide JSON serialization SHA-256:
+`c1eae26f6c9b1cc619c21508d0871a20e639c95097017f199266b50535168271`.
+Native OB factual input SHA-256:
+`03c7ea647ed109873ab0d7c118a79dc54234c777fcbab942694ed9ac2c93a2d2`.
+
+TheTopo's retained 34 units, 198 routes and 48 views remain an unreconciled
+research inventory. Automated acquisition stopped when its published terms
+constraint was found. No new automated access, source pixels, artwork points or
+runtime import is accepted from that inventory; source-use review remains
+required under the [source policy](source-policy.md) and
+[retained provenance](source-data/thetopo-provenance.json). Actual SNB III content
+and independent paid KAYA factual coverage have not been established.
+
+Full-guide acceptance still requires physical identity/face reconciliation,
+lawful identified views, independently supported route corridors, current
+condition and field-position evidence, and acceptance of the expanded built
+offline package. This data review establishes complete inclusion of the acquired
+MP/OpenBeta catalogs; it does not establish those remaining outcomes.

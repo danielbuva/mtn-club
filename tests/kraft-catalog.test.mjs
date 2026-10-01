@@ -15,9 +15,13 @@ const facts = JSON.parse(
   ),
 )
 
-test('dated parent tables retain all 58 route identities, published grades and risks', () => {
+test('expanded runtime retains all 58 pilot routes with their published grades and risks', () => {
   assert.deepEqual(validateGuide(kraftGuide), [])
-  assert.equal(kraftGuide.boulders.flatMap(rock => rock.climbs).length, 58)
+  assert.equal(kraftGuide.boulders.flatMap(rock => rock.climbs).length, 383)
+  assert.equal(
+    facts.reduce((count, table) => count + table.routeCount, 0),
+    58,
+  )
   for (const table of facts) {
     const rock = kraftGuide.boulders.find(
       item => item.coverage?.sourceId === table.boulderSourceId,
@@ -64,7 +68,19 @@ test('dated parent tables retain all 58 route identities, published grades and r
 test('route facts have original sourced synopses without converting prose into authored geometry', () => {
   for (const climb of kraftGuide.boulders.flatMap(rock => rock.climbs)) {
     assert.equal(climb.status, 'source-observation')
-    assert.equal(climb.betaStatus, 'source-synopsis')
+    if (climb.betaStatus === 'catalog-only') {
+      for (const field of [
+        'face',
+        'start',
+        'path',
+        'finish',
+        'constraints',
+        'approach',
+      ])
+        assert.deepEqual(climb.routeFacts[field], [])
+      assert.ok(climb.routeFacts.unresolved.length)
+      assert.notEqual(climb.contentState.status, 'complete')
+    } else assert.equal(climb.betaStatus, 'source-synopsis')
     assert.ok(climb.description.trim())
     assert.doesNotMatch(
       climb.description,
@@ -79,6 +95,19 @@ test('route facts have original sourced synopses without converting prose into a
         assert.ok(geometry.reviewedAt.trim())
       }
   }
+  assert.deepEqual(
+    kraftGuide.boulders
+      .flatMap(rock => rock.climbs)
+      .filter(climb => climb.betaStatus === 'catalog-only')
+      .map(climb => climb.id)
+      .sort(),
+    [
+      'mp-route-112868569',
+      'ob-route-7a5ee569-74ef-468d-89d5-49a3bf743cc9',
+      'ob-route-a32959e7-fe7b-49a0-b95a-8a3fac5053d3',
+      'ob-route-cab774c3-d975-5dc5-a617-f4c3a9976450',
+    ].sort(),
+  )
 })
 
 test('expanded catalog finds explicit aliases and grade range upper bounds', () => {

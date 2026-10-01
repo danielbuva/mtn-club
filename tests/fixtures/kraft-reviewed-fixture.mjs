@@ -20,8 +20,23 @@ export function syntheticReviewedGuide() {
   guide.status = 'field-guide'
   guide.boulders = [pearl]
   pearl.coverage.status = 'partial'
+  pearl.coverage.sourceClimbIds = [route.id]
+  pearl.catalogMemberships = (pearl.catalogMemberships ?? []).map(
+    membership => ({
+      ...membership,
+      climbIds: membership.climbIds.filter(id => id === route.id),
+    }),
+  )
   pearl.climbs = [route]
   pearl.faces = [face]
+  pearl.unitKind = 'physical-boulder'
+  pearl.contentState = {
+    status: 'complete',
+    confidence: 'field-verified',
+    reasons: ['Synthetic validation control; no real field acceptance.'],
+  }
+  route.contentState = { ...pearl.contentState }
+  pearl.location.scope = 'boulder-point'
   pearl.location.status = 'field-verified'
   pearl.location.review = { ...review, accuracyMeters: 3 }
   selected.status = 'field-verified'

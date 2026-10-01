@@ -18,8 +18,9 @@ export function GuideNotes({ guide }: { guide: KraftGuide }) {
         <h2>A growing Kraft field guide.</h2>
         <p>
           This edition indexes dated source catalogs for {guide.boulders.length}{' '}
-          named boulders with {climbs.length} climb records. Locations, grades
-          and physical rock assignments remain attributed observations, awaiting
+          rock catalogs with {climbs.length} distinct climb records. A source
+          catalog may describe several physical rocks. Locations, grades and
+          physical rock assignments remain attributed observations, awaiting
           field review.
         </p>
         <p>
@@ -33,6 +34,49 @@ export function GuideNotes({ guide }: { guide: KraftGuide }) {
           be needed to identify every climb. Source catalog entries that
           describe adjacent rocks carry a separate physical identity note.
         </p>
+        <dl className="kraft-coverage-counts">
+          <div>
+            <dt>Face photograph available</dt>
+            <dd>{availablePhotos}</dd>
+          </div>
+          <div>
+            <dt>Reviewed route lines</dt>
+            <dd>
+              {authored} / {climbs.length}
+            </dd>
+          </div>
+          <div>
+            <dt>Route identity unresolved</dt>
+            <dd>
+              {
+                climbs.filter(
+                  climb => climb.contentState?.status === 'blocked-identity',
+                ).length
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Route face or line evidence needed</dt>
+            <dd>
+              {
+                climbs.filter(
+                  climb => climb.contentState?.status === 'blocked-evidence',
+                ).length
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Route photograph needed</dt>
+            <dd>
+              {
+                climbs.filter(
+                  climb =>
+                    climb.contentState?.status === 'blocked-lawful-image',
+                ).length
+              }
+            </dd>
+          </div>
+        </dl>
         <p>
           Use established trails and check the physical rock before climbing.
           Sandstone is fragile when wet; wait until it is fully dry. Distances
@@ -49,19 +93,26 @@ export function GuideNotes({ guide }: { guide: KraftGuide }) {
           Edition {guide.version} · Sources checked {guide.reviewedAt}
         </p>
         <ul>
-          {guide.sources.map(source => (
-            <li key={source.id}>
-              <a href={source.url} target="_blank" rel="noreferrer">
-                {source.title} ↗
-              </a>
-              <span>
-                {source.publisher}
-                {source.license
-                  ? ` · ${source.license}`
-                  : ' · Factual reference'}
-              </span>
-            </li>
-          ))}
+          {guide.sources
+            .filter(
+              (source, index, sources) =>
+                sources.findIndex(
+                  item => item.publisher === source.publisher,
+                ) === index,
+            )
+            .map(source => (
+              <li key={source.id}>
+                <a href={source.url} target="_blank" rel="noreferrer">
+                  {source.title} ↗
+                </a>
+                <span>
+                  {source.publisher}
+                  {source.license
+                    ? ` · ${source.license}`
+                    : ' · Factual reference'}
+                </span>
+              </li>
+            ))}
         </ul>
       </div>
     </details>

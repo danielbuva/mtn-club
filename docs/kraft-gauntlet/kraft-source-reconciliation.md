@@ -1,7 +1,9 @@
 # Kraft source reconciliation
 
-Current acquisition: 2026-10-01. Runtime integration remains in progress; the
-source inventory is broader than the running four-unit / 58-climb edition.
+Current acquisition: 2026-10-01. All 78 reconciled MP/OpenBeta source catalogs
+and 383 canonical routes are included in the running `2026-10-01-catalog-4`
+edition. Basic attributed identity/parent records appear independently of face,
+image, SVG or field-verification completion.
 
 | Source | Acquired scope | Identity / reuse limits |
 | --- | --- | --- |
@@ -45,7 +47,10 @@ finishes, constraints, source-linked aliases and unresolved observations at the
 resolution supported by actual prose. Their 232 exact-ID OpenBeta observations
 remain correlated imports, not independent physical confirmation. Missing fields
 stay empty; original source paragraphs are not redistributed in those dossiers.
-Runtime integration and physical-face/route correspondence remain unfinished.
+The dossiers are integrated into runtime records; physical-face/route
+correspondence remains unfinished. Source facts support explicit face assignments
+and broad documented corridors where evidence permits, without exact hold
+sequences. Missing evidence limits visualization rather than visibility.
 Original MP source prose/photos remain in ignored research
 only; OpenBeta descriptive content has separate CC0 provenance. The final guide
 must not require shipping a reference-only image.
@@ -66,7 +71,7 @@ records stay literal. Per-record retrieval times survive replay. Then run
 `node scripts/build-kraft-workbench.ts` to regenerate the five current inventory,
 status, rights and placement artifacts. No tool publishes acquired media.
 
-Next: independently audit the normalized inventory, reconcile physical units and
-route concepts, expand runtime/search/offline records, then gather/critique each
-missing face and separately supported route corridor. Full inventory capture
+Next: batch separate completeness dimensions, source-backed face assignments,
+confidence-rated candidate footprints and separately supported route corridors.
+Reserve deep research for physical identity/source conflicts. Full inventory capture
 does not approve route geometry, maps, imagery or the assembled field guide.

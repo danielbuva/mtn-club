@@ -17,7 +17,7 @@ export function ClimbList({
   return (
     <ol className={styles.climbList}>
       {climbs.map(climb => (
-        <li key={climb.id}>
+        <li key={climb.id} data-climb-id={climb.id}>
           <button
             type="button"
             aria-pressed={climb.id === selectedClimbId}

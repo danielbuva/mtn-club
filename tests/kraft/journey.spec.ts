@@ -1,13 +1,12 @@
 import { expect, test } from '@playwright/test'
+import { mapCatalogTrigger, openMapCatalog } from './catalog-helpers'
 
 test('mobile route browsing keeps the complete face visible and preserves same-face zoom', async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name === 'desktop', 'Mobile coordinated browsing')
   await page.goto('/guide/kraft')
-  await page
-    .getByRole('button', { name: /^The Pearl, .*Open boulder\.$/ })
-    .click()
+  await openMapCatalog(page, 'pearl')
   const dialog = page.getByRole('dialog', { name: 'The Pearl boulder guide' })
   const viewer = dialog.getByRole('region', {
     name: 'Boulder faces',
@@ -38,10 +37,8 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
   await expect
     .poll(() => panel.evaluate(element => element.scrollTop))
     .toBeGreaterThan(0)
-  const pearl = panel.getByRole('button', {
-    name: '01 The Pearl SE V5',
-    exact: true,
-  })
+  const pearl = panel.locator('[data-climb-id="the-pearl"] button')
+  await expect(pearl).toHaveAccessibleName(/The Pearl SE.*V5/)
   await pearl.click()
   await expect(pearl).toHaveAttribute('aria-pressed', 'true')
   await expect(pearl).toBeFocused()
@@ -71,10 +68,10 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
     .getByRole('button', { name: 'Zoom in photograph', exact: true })
     .click()
   const zoomedPhoto = await photograph.boundingBox()
-  const nextClimb = panel.getByRole('button', {
-    name: '09 Pearl Necklace SE V6-',
-    exact: true,
-  })
+  const nextClimb = panel.locator(
+    '[data-climb-id="pearl-pearl-necklace"] button',
+  )
+  await expect(nextClimb).toHaveAccessibleName(/Pearl Necklace SE V6-/)
   await nextClimb.click()
   await expect(nextClimb).toHaveAttribute('aria-pressed', 'true')
   await expect(nextClimb).toBeFocused()
@@ -228,7 +225,7 @@ test('known climb search, source disagreement, face switch and return stay coher
   await expect(searchResult).toBeFocused()
   await page.getByRole('button', { name: 'V3–V5', exact: true }).click()
   await expect(
-    page.getByRole('heading', { name: 'No matching records in this pilot.' }),
+    page.getByRole('heading', { name: 'No matching records in this edition.' }),
   ).toBeVisible()
   await expect(searchResult).toHaveCount(0)
   await page.getByRole('button', { name: 'Reset filters', exact: true }).click()
@@ -278,17 +275,14 @@ test('the map is keyboard navigable and nearby boulder navigation returns to the
     contentType: 'image/png',
   })
   await page.keyboard.press('Home')
-  const cube = page.getByRole('button', {
-    name: /^The Cube, .*Open boulder\.$/,
-  })
+  const cube = mapCatalogTrigger(page, 'cube')
   const restingStyles = await cube.evaluate(element =>
     Array.from(element.querySelectorAll('*')).map(child => {
       const style = getComputedStyle(child)
       return [style.stroke, style.fill, style.opacity]
     }),
   )
-  await cube.focus()
-  await page.keyboard.press('Enter')
+  const openingTrigger = await openMapCatalog(page, 'cube')
   const dialog = page.getByRole('dialog', { name: 'The Cube boulder guide' })
   await expect(dialog).toBeVisible()
   await expect(
@@ -304,18 +298,17 @@ test('the map is keyboard navigable and nearby boulder navigation returns to the
   await expect(firstClimb).toBeFocused()
   await dialog
     .getByRole('region', { name: 'Boulders nearby', exact: true })
-    .getByRole('button', { name: /^Split Boulder \d+ m$/ })
+    .getByRole('button')
+    .first()
     .click()
-  const nearbyDialog = page.getByRole('dialog', {
-    name: 'Split Boulder boulder guide',
+  const nearbyDialog = page.getByRole('dialog').filter({
+    has: page.getByRole('button', { name: 'Back to Kraft', exact: true }),
   })
-  await expect(
-    nearbyDialog.getByRole('heading', { name: 'Split Boulder', exact: true }),
-  ).toBeFocused()
+  await expect(nearbyDialog.locator('#kraft-boulder-title')).toBeFocused()
   expect(await nearbyDialog.evaluate(element => element.scrollTop)).toBe(0)
   await page.keyboard.press('Escape')
-  await expect(cube).toBeFocused()
-  const focusedStyles = await cube.evaluate(element =>
+  await expect(openingTrigger).toBeFocused()
+  const focusedStyles = await openingTrigger.evaluate(element =>
     Array.from(element.querySelectorAll('*')).map(child => {
       const style = getComputedStyle(child)
       return [style.stroke, style.fill, style.opacity]

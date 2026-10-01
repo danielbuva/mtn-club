@@ -1,0 +1,270 @@
+[
+  {
+    "id": "6caac005-3400-4057-a27f-26867c4e463a",
+    "facts": {
+      "face": [],
+      "start": [
+        "Crimp sidepull to the right of Fluffer."
+      ],
+      "path": [
+        "Edges lead into the Fluffer sloper."
+      ],
+      "finish": [
+        "Top out."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "Begin right of Fluffer with a crimp sidepull; climb through edges into that problem’s sloper and exit over the lip.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "a4a75550-8ae9-49c9-855d-90d65b2a445c",
+    "facts": {
+      "face": [],
+      "start": [
+        "Seated on crimps right of Super Scream."
+      ],
+      "path": [
+        "Direct upward moves."
+      ],
+      "finish": [
+        "Exit onto the low shelf on the right."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "A seated crimp entry right of Super Scream leads directly upward to the low right-hand shelf.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "cab774c3-d975-5dc5-a617-f4c3a9976450",
+    "facts": {
+      "face": [],
+      "start": [],
+      "path": [],
+      "finish": [],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "The source entry supplies a name and grade but no route description or location facts.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "5725f4f6-b6c4-4cc4-94bb-358e71b6aef8",
+    "facts": {
+      "face": [],
+      "start": [
+        "Higher entry than Good Times."
+      ],
+      "path": [
+        "Bypass the Good Times crux."
+      ],
+      "finish": [
+        "Use the Good Times topout."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "Enter Good Times from higher holds, bypassing its initial crux and using its finish.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "185c55cd-1b64-41e0-ac03-fb9077f5a47c",
+    "facts": {
+      "face": [
+        "Right of My Tan."
+      ],
+      "start": [
+        "Sharp crimps immediately below the lip."
+      ],
+      "path": [
+        "Crimp climbing."
+      ],
+      "finish": [],
+      "constraints": [
+        "Source describes very sharp holds."
+      ],
+      "approach": []
+    },
+    "synopsis": "Begin on the sharp edges just below the lip, on the line to the right of My Tan.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "35e41ef2-6f74-4f4d-beff-2653c3bc8ad0",
+    "facts": {
+      "face": [],
+      "start": [
+        "Head-high crimps."
+      ],
+      "path": [
+        "Large upward reach to a sloping pocket."
+      ],
+      "finish": [
+        "Top out."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "From head-high crimps, reach upward into a sloping pocket and exit over the top.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "7875ca36-4f81-45be-b02c-768f0a8323dd",
+    "facts": {
+      "face": [
+        "Slab left of the arête."
+      ],
+      "start": [
+        "Seated."
+      ],
+      "path": [
+        "Follow the slab."
+      ],
+      "finish": [],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "A seated entry climbs the slab on the left side of the arête.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "80186339-522e-4148-a3bc-9eca26f58fa6",
+    "facts": {
+      "face": [],
+      "start": [
+        "Crouched at the right arête."
+      ],
+      "path": [
+        "Move upward and left."
+      ],
+      "finish": [
+        "Exit at the apex."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "A crouched entry at the right arête follows the rock diagonally left to its highest point.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "d775959b-da88-4a77-b63f-94736ce22d1e",
+    "facts": {
+      "face": [],
+      "start": [
+        "Seated."
+      ],
+      "path": [
+        "Climb the short overhang."
+      ],
+      "finish": [],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "A seated entry follows a short section of overhanging rock.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "f016b7b9-325a-4be9-8af9-95ef42dfaf0a",
+    "facts": {
+      "face": [],
+      "start": [
+        "Lowest rail: flat crimp and the sloping rail below it."
+      ],
+      "path": [
+        "Upward and left toward a face crimp rail."
+      ],
+      "finish": [
+        "Top out around the left side."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "Begin at the lowest flat edge and sloping rail, move diagonally left to an edge rail on the face, then exit around the left side.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "7a5ee569-74ef-468d-89d5-49a3bf743cc9",
+    "facts": {
+      "face": [],
+      "start": [],
+      "path": [],
+      "finish": [],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "The source entry supplies a name and grade but no route description or location facts.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "a32959e7-fe7b-49a0-b95a-8a3fac5053d3",
+    "facts": {
+      "face": [],
+      "start": [],
+      "path": [],
+      "finish": [],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "The source entry supplies a name and grade but no route description or location facts.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  },
+  {
+    "id": "dd19114f-5a57-44bb-8317-83a411fd9cf8",
+    "facts": {
+      "face": [],
+      "start": [
+        "Low opposing holds on the fridge-shaped feature."
+      ],
+      "path": [
+        "Move upward and left."
+      ],
+      "finish": [
+        "Exit at the apex."
+      ],
+      "constraints": [],
+      "approach": []
+    },
+    "synopsis": "Start low with opposing hands around the fridge-shaped feature; follow the rock upward and left to its apex.",
+    "unresolved": [
+      "No exact Mountain Project source ID is linked; original identity remains unresolved.",
+      "Face correspondence and physical line identity require review."
+    ]
+  }
+]

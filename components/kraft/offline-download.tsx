@@ -53,8 +53,8 @@ export function OfflineDownload({ guide }: { guide: KraftGuide }) {
           <h2 className="font-brand text-xl font-semibold">{label}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {ready && manifest
-              ? `${manifest.boulders} boulders · ${manifest.climbs} climbs · ${manifest.photos} face photo${manifest.photos === 1 ? '' : 's'} · ${formatOfflineBytes(manifest.totalBytes)}`
-              : `${guide.status === 'content-pilot' ? 'Pilot guide' : 'Guide'} · ${guide.boulders.length} boulders · ${climbs} climbs · ${photos} face photo${photos === 1 ? '' : 's'}`}
+              ? `${manifest.boulders} rock catalogs · ${manifest.climbs} climbs · ${manifest.photos} face photo${manifest.photos === 1 ? '' : 's'} · ${formatOfflineBytes(manifest.totalBytes)}`
+              : `${guide.status === 'content-pilot' ? 'Pilot guide' : 'Source catalog'} · ${guide.boulders.length} rock catalogs · ${climbs} climbs · ${photos} face photo${photos === 1 ? '' : 's'}`}
           </p>
         </div>
       </div>

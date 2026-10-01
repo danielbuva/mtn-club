@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { kraftBoulders } from '../../lib/kraft/data'
+import { openMapCatalog } from './catalog-helpers'
 
 test('available real photographs load, retain attribution and do not imply reviewed route geometry', async ({
   page,
@@ -8,11 +9,7 @@ test('available real photographs load, retain attribution and do not imply revie
   for (const boulder of kraftBoulders) {
     for (const face of boulder.faces) {
       if (face.image.status !== 'available') continue
-      await page
-        .getByRole('button', {
-          name: new RegExp(`^${boulder.name}, .*Open boulder\\.$`),
-        })
-        .click()
+      await openMapCatalog(page, boulder.id)
       const dialog = page.getByRole('dialog', {
         name: `${boulder.name} boulder guide`,
       })
@@ -85,11 +82,7 @@ test('catalog missing faces remain explicit without fabricated topo routes', asy
 }, testInfo) => {
   await page.goto('/guide/kraft')
   for (const boulder of kraftBoulders) {
-    await page
-      .getByRole('button', {
-        name: new RegExp(`^${boulder.name}, .*Open boulder\\.$`),
-      })
-      .click()
+    await openMapCatalog(page, boulder.id)
     const dialog = page.getByRole('dialog', {
       name: `${boulder.name} boulder guide`,
     })
@@ -124,7 +117,7 @@ test('catalog missing faces remain explicit without fabricated topo routes', asy
     const climbList = dialog
       .getByRole('region', { name: 'Climbs sorted by grade', exact: true })
       .getByRole('list')
-    await expect(climbList).toHaveCount(1)
+    await expect(climbList).toHaveCount(boulder.climbs.length ? 1 : 0)
     await expect(climbList.getByRole('listitem')).toHaveCount(
       boulder.climbs.length,
     )
@@ -148,17 +141,17 @@ test('catalog missing faces remain explicit without fabricated topo routes', asy
   }
 })
 
-test('empty local searches describe pilot coverage and can be recovered', async ({
+test('empty local searches describe catalog coverage and can be recovered', async ({
   page,
 }, testInfo) => {
   await page.goto('/guide/kraft')
   await page.getByRole('searchbox').fill('no-such-climb-in-this-edition')
   await expect(
-    page.getByRole('heading', { name: 'No matching records in this pilot.' }),
+    page.getByRole('heading', { name: 'No matching records in this edition.' }),
   ).toBeVisible()
   await expect(
     page.getByRole('complementary', { name: 'Boulder directory' }),
-  ).toContainText('This edition covers part of Kraft')
+  ).toContainText('Unresolved identities and missing images')
   await testInfo.attach('empty-search', {
     body: await page.screenshot({ scale: 'css' }),
     contentType: 'image/png',
@@ -166,6 +159,6 @@ test('empty local searches describe pilot coverage and can be recovered', async 
   await page.getByRole('button', { name: 'Reset filters', exact: true }).click()
   await expect(page.getByRole('searchbox')).toHaveValue('')
   await expect(
-    page.getByRole('button', { name: 'Boulders 4', exact: true }),
+    page.getByRole('button', { name: 'Boulders 78', exact: true }),
   ).toBeVisible()
 })

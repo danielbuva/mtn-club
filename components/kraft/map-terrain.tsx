@@ -58,12 +58,6 @@ export const MapTerrain = memo(function MapTerrain({
         height="2800"
         fill={`url(#${idPrefix}-grain)`}
       />
-      {/* Broad terrain tint generalized from georeferenced public-domain USGS/USDA NAIP.
-          This is an illustration of the visible northern rock mass, not a surveyed boundary. */}
-      <path
-        className="kraft-map-sandstone-tint"
-        d="M-20-20H940L885 89 834 130 829 189 884 234 864 281 817 308 844 361 794 390 754 372 723 316 670 335 647 302 618 298 592 357 552 353 520 327 503 303 455 320 431 354 403 347 394 309 376 310 365 280 333 296 313 318 269 307 251 277 222 290 215 329 196 351 168 318 172 276 144 268 135 228 115 191 98 218 104 265 81 279 61 252 48 195 58 149 18 115-20 94Z"
-      />
       <g className="kraft-map-contour-relief">
         {contours
           .filter(feature => feature.closed)

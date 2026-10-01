@@ -37,7 +37,7 @@ export function SourceNotes({
         {boulder?.areaAssignmentStatus === 'editorial-provisional' && (
           <p>Area grouping is an editorial choice and awaits field review.</p>
         )}
-        {boulder?.location.observations && (
+        {boulder?.location?.observations && (
           <div className={styles.locationNotes}>
             <strong>Coordinate observations</strong>
             <ul>

@@ -26,8 +26,10 @@ export function BoulderRoutePanel({
   const sidebar = useRef<HTMLElement>(null)
   const climbs = boulder.climbs.toSorted(
     (a, b) =>
-      a.gradeValue - b.gradeValue ||
-      (a.gradeMaxValue ?? a.gradeValue) - (b.gradeMaxValue ?? b.gradeValue) ||
+      (a.gradeValue ?? Number.POSITIVE_INFINITY) -
+        (b.gradeValue ?? Number.POSITIVE_INFINITY) ||
+      (a.gradeMaxValue ?? a.gradeValue ?? Number.POSITIVE_INFINITY) -
+        (b.gradeMaxValue ?? b.gradeValue ?? Number.POSITIVE_INFINITY) ||
       a.name.localeCompare(b.name),
   )
   const geometry = climb?.geometry.find(item => item.faceId === face?.id)

@@ -1,7 +1,7 @@
 """Rebuild the Kraft vector layer from the committed OSM and USGS observations.
 
 Requires Pillow and numpy. No network calls. Coordinates are Web Mercator,
-north-up, on the same 1000 × 800 world as lib/kraft/geography.ts.
+north-up. The provenance supplies the envelope and output-world dimensions.
 """
 
 import json
@@ -13,8 +13,10 @@ import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-WEST, SOUTH, EAST, NORTH = -115.4233, 36.1562, -115.4093, 36.16525
-WIDTH, HEIGHT = 1000, 800
+PROVENANCE = json.loads((ROOT / "docs/kraft-gauntlet/source-data/geo-provenance.json").read_text())
+BOUNDS = PROVENANCE["boundsWgs84"]
+WEST, SOUTH, EAST, NORTH = (BOUNDS[key] for key in ["west", "south", "east", "north"])
+WIDTH, HEIGHT = (PROVENANCE["world"][key] for key in ["width", "height"])
 RADIUS = 6378137
 
 
@@ -29,6 +31,10 @@ RIGHT, TOP = mercator(EAST, NORTH)
 
 def project(lon, lat):
     x, y = mercator(lon, lat)
+    return project_mercator(x, y)
+
+
+def project_mercator(x, y):
     return ((x - LEFT) / (RIGHT - LEFT) * WIDTH,
             (TOP - y) / (TOP - BOTTOM) * HEIGHT)
 
@@ -120,7 +126,7 @@ def osm_features():
                 "name": tags.get("name", "Intermittent wash" if kind == "wash" else "Mapped path"),
                 "points": serialized_points(simplify(path)),
                 "closed": kind == "parking" and math.dist(path[0], path[-1]) < 0.01,
-                "sourceId": "osm-kraft-2026-09-30",
+                "sourceId": element.get("sourceId", PROVENANCE["osm"]["id"]),
                 "sourceUrl": f"https://www.openstreetmap.org/way/{element['id']}",
                 "informal": tags.get("informal") == "yes", "elevation": None,
                 "intermittent": tags.get("intermittent") == "yes",
@@ -133,6 +139,14 @@ def contour_features():
     """Marching squares over raw F32 elevation, then join shared cell edges."""
     grid = np.asarray(Image.open(ROOT / "docs/kraft-gauntlet/source-data/geo-dem-source.tif"))
     rows, cols = grid.shape
+    extent = PROVENANCE["usgs3dep"]["export"]["response"]["extent"]
+
+    def grid_point(col, row):
+        return project_mercator(
+            extent["xmin"] + col / cols * (extent["xmax"] - extent["xmin"]),
+            extent["ymax"] - row / rows * (extent["ymax"] - extent["ymin"]),
+        )
+
     result = []
     for elevation in range(1120, 1440, 20):
         segments = []
@@ -152,8 +166,9 @@ def contour_features():
                         continue
                     ratio = (elevation - float(values[edge])) / (float(values[end]) - float(values[edge]))
                     a, b = corners[edge], corners[end]
-                    crossings.append((edge, (round((a[0] + ratio * (b[0] - a[0])) / cols * WIDTH, 5),
-                                              round((a[1] + ratio * (b[1] - a[1])) / rows * HEIGHT, 5))))
+                    projected = grid_point(a[0] + ratio * (b[0] - a[0]),
+                                           a[1] + ratio * (b[1] - a[1]))
+                    crossings.append((edge, tuple(round(value, 5) for value in projected)))
                 if len(crossings) == 2:
                     segments.append((crossings[0][1], crossings[1][1]))
                 elif len(crossings) == 4:
@@ -193,7 +208,7 @@ def contour_features():
                 "id": f"usgs-contour-{elevation}-{len(result)}", "kind": "contour",
                 "name": f"{elevation} m", "points": serialized_points(simplify(path)),
                 "closed": math.dist(path[0], path[-1]) < 0.01,
-                "sourceId": "usgs-3dep-2026-09-30",
+                "sourceId": PROVENANCE["usgs3dep"]["id"],
                 "sourceUrl": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
                 "informal": False, "elevation": elevation, "intermittent": False,
                 "major": elevation % 40 == 0,
@@ -203,6 +218,7 @@ def contour_features():
 
 if __name__ == "__main__":
     features = osm_features() + contour_features()
-    payload = {"world": {"width": WIDTH, "height": HEIGHT}, "features": features}
+    payload = {"world": {"width": WIDTH, "height": HEIGHT},
+               "boundsWgs84": BOUNDS, "features": features}
     (ROOT / "public/kraft/geo-features.json").write_text(json.dumps(payload, separators=(",", ":")) + "\n")
     print(f"Built {len(features)} source-observation features")

@@ -9,13 +9,18 @@ export function validateFieldGuideRelease(guide: KraftGuide): string[] {
       'field-guide release requires physical boulders and reviewed routes',
     )
   for (const boulder of guide.boulders) {
+    if (boulder.unitKind && boulder.unitKind !== 'physical-boulder')
+      errors.push(
+        `${boulder.id}: field-guide release requires identified physical boulders`,
+      )
     if (
-      boulder.location.status !== 'field-verified' ||
-      !boulder.location.review?.reviewer?.trim() ||
-      !boulder.location.review?.reviewedAt?.trim() ||
-      !Number.isFinite(boulder.location.review?.accuracyMeters) ||
-      (boulder.location.review?.accuracyMeters ?? -1) < 0 ||
-      !boulder.location.observations?.some(
+      boulder.location?.status !== 'field-verified' ||
+      boulder.location?.scope === 'catalog-centroid' ||
+      !boulder.location?.review?.reviewer?.trim() ||
+      !boulder.location?.review?.reviewedAt?.trim() ||
+      !Number.isFinite(boulder.location?.review?.accuracyMeters) ||
+      (boulder.location?.review?.accuracyMeters ?? -1) < 0 ||
+      !boulder.location?.observations?.some(
         observation =>
           observation.selection === 'selected' &&
           observation.status === 'field-verified',

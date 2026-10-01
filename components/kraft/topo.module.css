@@ -834,3 +834,28 @@
     margin-bottom: 8px;
   }
 }
+
+.factObservation {
+  margin-top: 14px;
+  border-top: 1px solid var(--kraft-rule);
+  padding-top: 8px;
+}
+
+.factObservation summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.factObservation summary:focus-visible {
+  outline: 2px solid var(--kraft-ink);
+  outline-offset: 3px;
+}
+
+.factObservation dt {
+  font-weight: 600;
+}
+
+.factObservation dd {
+  margin: 4px 0 12px;
+}

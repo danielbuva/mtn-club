@@ -2,6 +2,7 @@ import { catalogSources } from './catalog-records.ts'
 import { cubeCatalog } from './cube-catalog.ts'
 import { monkeyCatalog } from './monkey-catalog.ts'
 import { pearlCatalog } from './pearl-catalog.ts'
+import { completeRuntimeSources } from './runtime-sources.ts'
 import { splitCatalog } from './split-catalog.ts'
 import type { EvidenceSource } from './types'
 
@@ -20,7 +21,7 @@ function source(id: string, title: string, url: string): EvidenceSource {
   }
 }
 
-export const kraftSources: EvidenceSource[] = [
+const pilotSources: EvidenceSource[] = [
   {
     id: 'mp-monkey-direct-scott-2023',
     title: 'Monkey Bar Direct — Scott B post-break opinion, April 21, 2023',
@@ -85,6 +86,51 @@ export const kraftSources: EvidenceSource[] = [
       evidenceUrl: 'https://www.openstreetmap.org/copyright',
     },
     note: 'Community observations; not field verified. Original extract and projected derivative shipped.',
+  },
+  {
+    id: 'osm-kraft-west-2026-10-01',
+    title: 'Kraft western trails and roads · OpenStreetMap supplement',
+    publisher: 'OpenStreetMap contributors',
+    url: 'https://api.openstreetmap.org/api/0.6/map?bbox=-115.4265,36.156,-115.424,36.166',
+    accessedAt: '2026-10-01',
+    usage: 'open-data',
+    license: 'Open Database License 1.0',
+    distribution: {
+      licenseIds: ['ODbL-1.0'],
+      evidenceUrl: 'https://www.openstreetmap.org/copyright',
+    },
+    note: 'Official OSM API XML supplement for the expanded western envelope. Geometry merged by exact way ID with source provenance retained; final boulder approaches are not field verified.',
+  },
+  {
+    id: 'usgs-3dep-2026-10-01',
+    title: 'Expanded Kraft terrain elevation · 3DEP',
+    publisher: 'U.S. Geological Survey',
+    url: 'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer',
+    accessedAt: '2026-10-01',
+    usage: 'open-data',
+    license: 'U.S. federal government public domain',
+    distribution: {
+      licenseIds: ['PD-USGov'],
+      evidenceUrl:
+        'https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits',
+    },
+    note: '596 × 400 DEM acquisition for the expanded Kraft envelope. Export request and processing provenance are retained with the geographic assets; terrain contours do not identify physical rocks.',
+  },
+  {
+    id: 'usgs-naip-2026-10-01',
+    title: 'Expanded Kraft aerial context · locked 2022 NAIP raster',
+    publisher: 'U.S. Geological Survey / USDA',
+    url: 'https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/134873?f=pjson',
+    accessedAt: '2026-10-01',
+    publishedAt: '2022-06-11',
+    usage: 'open-data',
+    license: 'U.S. federal government public domain',
+    distribution: {
+      licenseIds: ['PD-USGov'],
+      evidenceUrl:
+        'https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits',
+    },
+    note: 'Expanded scratch reference locked to raster 134873, acquired June 11, 2022. Aerial rock and shadow patches are not accepted physical footprints. Reference imagery is not included in the download asset inventory.',
   },
   {
     id: 'usgs-3dep-2026-09-30',
@@ -238,3 +284,5 @@ export const kraftSources: EvidenceSource[] = [
     note: 'Public list observations only; copyrighted descriptions, media and topo geometry are excluded.',
   },
 ]
+
+export const kraftSources = completeRuntimeSources(pilotSources)

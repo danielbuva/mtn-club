@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { openMapCatalog } from './catalog-helpers'
 
 const screens = [
   { project: 'mobile-320', width: 320, height: 568 },
@@ -12,9 +13,7 @@ for (const screen of screens) {
     test.skip(testInfo.project.name !== screen.project, 'Matching mobile size')
     await page.setViewportSize(screen)
     await page.goto('/guide/kraft')
-    await page
-      .getByRole('button', { name: /^The Pearl, .*Open boulder\.$/ })
-      .tap()
+    await openMapCatalog(page, 'pearl')
     const dialog = page.getByRole('dialog', { name: 'The Pearl boulder guide' })
     const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
     const photograph = dialog.getByRole('img')

@@ -623,3 +623,116 @@
     border-right: 0;
   }
 }
+
+/* Catalog markers have a constant screen size and do not imply rock silhouettes. */
+.kraft-map-catalog-point {
+  fill: #79563d;
+  stroke: #f8f1df;
+  stroke-width: 1.8;
+}
+.kraft-map-boulder[data-cluster="true"] .kraft-map-catalog-point {
+  fill: #f8f1df;
+  stroke: #79563d;
+  stroke-width: 1.5;
+}
+.kraft-map-cluster-count {
+  fill: #4b3829;
+  stroke: none;
+  font-size: 12px;
+  font-weight: 700;
+}
+.kraft-map-selected-point > circle {
+  fill: #8c432c;
+  stroke: #f8f1df;
+  stroke-width: 2;
+}
+.kraft-map-boulder-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+.kraft-map-key i.kraft-map-key-rock {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #79563d;
+  clip-path: none;
+}
+.kraft-map-chooser {
+  position: absolute;
+  z-index: 4;
+  top: 56px;
+  right: 12px;
+  left: 12px;
+  width: min(360px, calc(100% - 24px));
+  max-height: calc(100% - 122px);
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid #9a8464;
+  background: #f8f1df;
+  box-shadow: 0 5px 20px #39281525;
+}
+.kraft-map-chooser-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.kraft-map-chooser p {
+  margin: 0 0 10px;
+  color: #79664e;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.kraft-map-chooser-heading p {
+  margin: 0;
+  color: #352a20;
+  font-size: 14px;
+  font-weight: 700;
+}
+.kraft-map-chooser-heading > button {
+  display: flex;
+  min-width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: #554730;
+  background: transparent;
+}
+.kraft-map-chooser ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  list-style: none;
+}
+.kraft-map-chooser li button {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  padding: 9px 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  border: 0;
+  border-top: 1px solid #9a846433;
+  color: #352a20;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+}
+.kraft-map-chooser li small {
+  color: #79664e;
+  font-size: 10px;
+}
+.kraft-map-chooser button {
+  cursor: pointer;
+}
+.kraft-map-chooser button:hover {
+  background: #e9ddc3;
+}
+.kraft-map-chooser button:focus-visible {
+  outline: 2px solid #352a20;
+  outline-offset: -2px;
+}

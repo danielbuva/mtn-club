@@ -2,7 +2,7 @@
 
 Updated 2026-10-01. 78 MP/OpenBeta source-unit identities after exact importer links; these are **not** a verified physical-rock count. TheTopo adds 34 separately indexed research units pending identity/policy review.
 
-The running starting edition still has four units / 58 climbs. No real route SVG or reconstruction is approved. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery does not hide a unit.
+The running 2026-10-01-catalog-4 edition includes all 78 reconciled source catalogs and 383 canonical route records. No real route SVG or reconstruction is approved. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery, faces, lines and field verification do not hide a catalog or route.
 
 | Source unit | Inventory ID | State | Image allocation |
 | --- | --- | --- | --- |

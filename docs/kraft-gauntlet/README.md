@@ -33,8 +33,8 @@ its source inputs and regeneration instructions.
 
 ## Current review understanding
 
-These are compact summaries of the previous independent evidence, with its
-limits. They are not fresh acceptance of the expanded guide.
+Each review records its exact scope. Data and map reviews cover the expanded
+source batch; earlier four-unit UI/offline receipts remain bounded prior evidence.
 
 - [Data and provenance](current-data-review.md)
 - [Map placement and shape](current-map-review.md)
@@ -62,11 +62,18 @@ belong in ignored `.tmp/kraft-gauntlet/` or OS temporary storage. Previous-run
 material was preserved locally in `.tmp/kraft-gauntlet/previous-run/`; it is not
 part of the repository or the product. No application dependency uses that path.
 
-The current software edition is `2026-10-01-workbench-3`, with the same four-unit
-content boundary. It adds image-first detail and coordinated mobile selection.
-Its actual production regression matrix passes 33 checks, and fresh independent
-offline criticism verifies 37 resources / 2,483,819 bytes after a denied-network
-browser restart. Full inventory and reviewed real topo coverage remain required.
+The current software edition is `2026-10-01-catalog-4`: all 78 reconciled MP/OpenBeta
+source catalogs and 383 canonical route records are visible, searchable and
+filterable, with all selected source locations plotted. Catalog groups and
+alternate memberships are qualified independently of physical rocks. Missing
+faces, images, SVG lines or field review never gate record inclusion. Structured
+factual dossiers and original summaries retain disagreements and source lineage.
+
+The prior `2026-10-01-workbench-3` offline receipt verifies 37 resources /
+2,483,819 bytes after denied-network browser restart. It does not independently
+certify the expanded edition or real topo accuracy. Expanded software regressions
+exercise the actual full catalog; reviewed physical imagery and route geometry
+remain separate content dimensions.
 
 `pnpm test:kraft:browser` writes reports and traces into
 `.tmp/kraft-gauntlet/`. Retained `source-data/` files support the stable geography

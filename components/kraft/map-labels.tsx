@@ -1,5 +1,9 @@
 import type { MapPoint } from '@/lib/kraft/geography'
-import { geographicFeatures, geographicLabels } from '@/lib/kraft/geography'
+import {
+  geographicFeatures,
+  geographicLabels,
+  projectLocation,
+} from '@/lib/kraft/geography'
 
 type Bounds = { minX: number; minY: number; maxX: number; maxY: number }
 interface MapLabelsProps {
@@ -47,9 +51,17 @@ export function MapLabels({ pixelsPerUnit, zoom, bounds }: MapLabelsProps) {
   }
   const compact = (bounds.maxX - bounds.minX) * pixelsPerUnit < 340
   const trailPoint =
-    primaryTrail && nearestPoint(primaryTrail.points, { x: 487, y: 548 })
+    primaryTrail &&
+    nearestPoint(
+      primaryTrail.points,
+      projectLocation({ lat: 36.15905, lon: -115.416482 }),
+    )
   const washPoint =
-    mainWash && nearestPoint(mainWash.points, { x: 670, y: 640 })
+    mainWash &&
+    nearestPoint(
+      mainWash.points,
+      projectLocation({ lat: 36.15801, lon: -115.41392 }),
+    )
 
   return (
     <g className="kraft-map-labels" pointerEvents="none">

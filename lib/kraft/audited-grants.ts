@@ -30,6 +30,35 @@ export const auditedGrants: AuditedGrant[] = [
     record: 'public/kraft/geo-license.txt',
   },
   {
+    sourceId: 'osm-kraft-west-2026-10-01',
+    sourceUrl:
+      'https://api.openstreetmap.org/api/0.6/map?bbox=-115.4265,36.156,-115.424,36.166',
+    evidenceUrl: 'https://www.openstreetmap.org/copyright',
+    usage: 'open-data',
+    licenseIds: ['ODbL-1.0'],
+    record: 'docs/kraft-gauntlet/source-data/geo-provenance.json',
+  },
+  {
+    sourceId: 'usgs-3dep-2026-10-01',
+    sourceUrl:
+      'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer',
+    evidenceUrl:
+      'https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits',
+    usage: 'open-data',
+    licenseIds: ['PD-USGov'],
+    record: 'docs/kraft-gauntlet/source-data/geo-provenance.json',
+  },
+  {
+    sourceId: 'usgs-naip-2026-10-01',
+    sourceUrl:
+      'https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/134873?f=pjson',
+    evidenceUrl:
+      'https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits',
+    usage: 'open-data',
+    licenseIds: ['PD-USGov'],
+    record: 'docs/kraft-gauntlet/source-data/geo-provenance.json',
+  },
+  {
     sourceId: 'usgs-3dep-2026-09-30',
     sourceUrl:
       'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer',

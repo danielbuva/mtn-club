@@ -6,6 +6,7 @@ import type { Boulder, KraftGuide } from '@/lib/kraft/types'
 import { BoulderFaceControls } from './boulder-face-controls'
 import { BoulderInformation } from './boulder-information'
 import { BoulderRoutePanel } from './boulder-route-panel'
+import { CatalogMemberships } from './catalog-memberships'
 import { FaceViewer } from './face-viewer'
 import { NearbyBoulders } from './nearby-boulders'
 import { SourceNotes } from './source-notes'
@@ -21,6 +22,7 @@ type BoulderDetailProps = {
   onClimbSelect: (id: string | null) => void
   onClose: () => void
   onBoulderSelect: (id: string) => void
+  onReferenceSelect: (boulderId: string, climbId: string) => void
 }
 
 export function BoulderDetail({
@@ -33,6 +35,7 @@ export function BoulderDetail({
   onClimbSelect,
   onClose,
   onBoulderSelect,
+  onReferenceSelect,
 }: BoulderDetailProps) {
   const climb = boulder.climbs.find(item => item.id === selectedClimbId)
   const face =
@@ -94,6 +97,11 @@ export function BoulderDetail({
         />
       </div>
       <BoulderInformation boulder={boulder} />
+      <CatalogMemberships
+        guide={guide}
+        boulder={boulder}
+        onSelect={onReferenceSelect}
+      />
       <SourceNotes
         sourceIds={boulder.sourceIds}
         sources={guide.sources}

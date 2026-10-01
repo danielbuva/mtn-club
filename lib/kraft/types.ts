@@ -1,3 +1,21 @@
+import type {
+  ContentState,
+  ParentObservation,
+  SourceDependency,
+  SourceIdentity,
+  StructuredRouteFacts,
+} from './catalog-types'
+
+export type {
+  ContentState,
+  ParentObservation,
+  RouteFactFields,
+  RouteFactObservation,
+  SourceDependency,
+  SourceIdentity,
+  StructuredRouteFacts,
+} from './catalog-types'
+
 export type EvidenceStatus = 'source-observation' | 'field-verified'
 export type IdentityStatus = 'source-linked' | 'unresolved'
 export type AssignmentStatus =
@@ -46,6 +64,8 @@ export type EvidenceSource = {
   url: string
   publisher: string
   accessedAt: string
+  /** Exact acquisition timestamp, retained separately from the display date. */
+  retrievedAt?: string
   publishedAt?: string
   usage: 'factual-reference' | 'open-data' | 'licensed-media'
   license?: string
@@ -62,6 +82,7 @@ export type GradeObservation = {
   sourceName?: string
   note?: string
   reportedAt?: string
+  sourceDependency?: SourceDependency
 }
 
 export type ConditionObservation = {
@@ -129,7 +150,7 @@ export type Climb = {
   name: string
   grade: string
   /** Lower bound of the selected source's V-grade, used with gradeMaxValue for ranges. */
-  gradeValue: number
+  gradeValue: number | null
   gradeMaxValue?: number
   gradeObservations: GradeObservation[]
   selectedGradeSourceId?: string
@@ -147,11 +168,33 @@ export type Climb = {
   sourceIds: string[]
   risk?: string
   disagreement?: string
+  contentState?: ContentState
+  sourceIdentity?: SourceIdentity
+  routeFacts?: StructuredRouteFacts
+  parentObservations?: ParentObservation[]
+  coordinateObservations?: CoordinateObservation[]
+  riskObservations?: {
+    risk: string
+    sourceId: string
+    status: EvidenceStatus
+    sourceDependency: SourceDependency
+    note: string
+  }[]
 }
 
 export type Boulder = {
   id: string
   name: string
+  unitKind?: 'physical-boulder' | 'source-unit' | 'unresolved-unit'
+  unitNote?: string
+  contentState?: ContentState
+  sourceIdentity?: SourceIdentity
+  catalogMemberships?: {
+    sourceId: string
+    climbIds: string[]
+    note: string
+  }[]
+  coordinateObservations?: CoordinateObservation[]
   aliases: string[]
   aliasObservations?: SourceAlias[]
   areaId: string
@@ -160,6 +203,7 @@ export type Boulder = {
     status: 'partial' | 'source-catalog'
     sourceId: string
     sourceClimbCount: number
+    sourceClimbIds?: string[]
   }
   location: {
     lat: number
@@ -169,7 +213,8 @@ export type Boulder = {
     note?: string
     observations?: CoordinateObservation[]
     review?: CoordinateReview
-  }
+    scope?: 'boulder-point' | 'catalog-centroid'
+  } | null
   description: string
   approach: string
   sourceIds: string[]
@@ -184,7 +229,7 @@ export type KraftGuide = {
   name: string
   version: string
   reviewedAt: string
-  status: 'content-pilot' | 'field-guide'
+  status: 'content-pilot' | 'catalog' | 'field-guide'
   description: string
   areas: KraftArea[]
   boulders: Boulder[]

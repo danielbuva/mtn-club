@@ -1,6 +1,7 @@
 import { MapPin } from 'lucide-react'
 import { gradeRange } from '@/lib/kraft/search'
 import type { Boulder } from '@/lib/kraft/types'
+import { ContentStateNote } from './content-state-note'
 import styles from './topo.module.css'
 
 export function BoulderInformation({ boulder }: { boulder: Boulder }) {
@@ -12,11 +13,18 @@ export function BoulderInformation({ boulder }: { boulder: Boulder }) {
           Finding the boulder
         </summary>
         <p>{boulder.approach}</p>
-        {boulder.location.note && <small>{boulder.location.note}</small>}
+        {boulder.location?.note && <small>{boulder.location.note}</small>}
+        {!boulder.location && (
+          <small>
+            No reconciled map position is available for this catalog.
+          </small>
+        )}
       </details>
       <details className={styles.boulderNotes}>
         <summary>About this boulder</summary>
         <p>{boulder.description}</p>
+        {boulder.unitNote && <p>{boulder.unitNote}</p>}
+        <ContentStateNote record={boulder} />
         <p>
           {boulder.coverage
             ? `${boulder.climbs.length} of ${boulder.coverage.sourceClimbCount} source-listed climbs included`

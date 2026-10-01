@@ -1,7 +1,7 @@
 'use client'
 
 import { LocateFixed, Minus, Plus, RotateCcw, X } from 'lucide-react'
-import { useId, useRef } from 'react'
+import { useId, useRef, useState } from 'react'
 import {
   GEOGRAPHY_ATTRIBUTION,
   MAP_HEIGHT,
@@ -10,7 +10,8 @@ import {
   worldUnitsForMeters,
 } from '@/lib/kraft/geography'
 import type { Boulder } from '@/lib/kraft/types'
-import { MapBoulder } from './map-boulder'
+import { MapCatalogLayer } from './map-boulder'
+import { MapChooser } from './map-chooser'
 import { MapLabels } from './map-labels'
 import { MapTerrain } from './map-terrain'
 import { useMapGestures } from './use-map-gestures'
@@ -41,8 +42,15 @@ export function KraftMap({
   filtersActive = false,
 }: KraftMapProps) {
   const informationRef = useRef<HTMLDetailsElement>(null)
+  const chooserTrigger = useRef<SVGGElement | null>(null)
+  const [chooserIds, setChooserIds] = useState<string[]>([])
   const id = useId().replaceAll(':', '')
   const map = useMapGestures()
+  function closeChooser() {
+    setChooserIds([])
+    if (chooserTrigger.current?.isConnected) chooserTrigger.current.focus()
+    else map.svgRef.current?.focus()
+  }
   const locationPoint = location ? projectLocation(location) : null
   const locationInBounds =
     locationPoint &&
@@ -76,9 +84,9 @@ export function KraftMap({
         >
           <title>Kraft Boulders field map</title>
           <desc>
-            Accurate north-up open geographic data. Tap a named rock to open its
-            documented climbs. Boulder shapes are symbols, not surveyed
-            footprints.
+            North-up source geographic data. Points and numbered clusters locate
+            catalog records. Counts do not count physical rocks. No surveyed
+            boulder footprints or verified approaches are provided.
           </desc>
           <MapTerrain idPrefix={id} />
           <MapLabels
@@ -99,23 +107,21 @@ export function KraftMap({
               />
             </g>
           )}
-          {boulders.map((boulder, index) => (
-            <MapBoulder
-              key={boulder.id}
-              boulder={boulder}
-              index={index}
-              selected={selectedBoulderId === boulder.id}
-              visible={visibleIds.has(boulder.id)}
-              pixelsPerUnit={map.pixelsPerUnit}
-              onSelect={onBoulderSelect}
-              canSelect={map.canSelect}
-              bounds={map.bounds}
-              locationPoint={locationInBounds ? locationPoint : null}
-              matchingCount={
-                filtersActive ? matchingClimbCounts?.[boulder.id] : undefined
-              }
-            />
-          ))}
+          <MapCatalogLayer
+            boulders={boulders}
+            selectedBoulderId={selectedBoulderId}
+            visibleIds={visibleIds}
+            pixelsPerUnit={map.pixelsPerUnit}
+            onSelect={onBoulderSelect}
+            onClusterSelect={(ids, trigger) => {
+              chooserTrigger.current = trigger
+              setChooserIds(ids)
+            }}
+            canSelect={map.canSelect}
+            bounds={map.bounds}
+            matchingClimbCounts={matchingClimbCounts}
+            filtersActive={filtersActive}
+          />
           {location && locationPoint && locationInBounds && (
             <g
               className="kraft-map-location"
@@ -140,6 +146,19 @@ export function KraftMap({
             </g>
           )}
         </svg>
+        {chooserIds.length > 0 && (
+          <MapChooser
+            boulders={boulders.filter(boulder =>
+              chooserIds.includes(boulder.id),
+            )}
+            onClose={closeChooser}
+            onSelect={id => {
+              chooserTrigger.current?.focus({ preventScroll: true })
+              setChooserIds([])
+              onBoulderSelect(id)
+            }}
+          />
+        )}
         <div className="kraft-map-edition" aria-hidden="true">
           <span>MTN / FIELD NOTES</span>
           <span>01 — KRAFT</span>
@@ -177,7 +196,7 @@ export function KraftMap({
           <button
             type="button"
             aria-label="Reset map view"
-            title="Return to the pilot overview"
+            title="Return to the Kraft overview"
             onClick={map.reset}
           >
             <RotateCcw size={17} />
@@ -193,11 +212,11 @@ export function KraftMap({
         </div>
         <div className="kraft-map-hint">
           <LocateFixed size={13} aria-hidden="true" />
-          <span>Tap a rock. Find your next climb.</span>
+          <span>Choose a catalog. Find your next climb.</span>
         </div>
         {!visibleBoulderIds.length && (
           <p className="kraft-map-empty">
-            No rocks match these filters.
+            No catalogs match these filters.
             <br />
             Adjust your search to explore Kraft.
           </p>
@@ -207,7 +226,7 @@ export function KraftMap({
         <ul className="kraft-map-key" aria-label="Map legend">
           <li>
             <i className="kraft-map-key-rock" />
-            Documented boulder
+            Catalog location
           </li>
           <li>
             <i className="kraft-map-key-trail" />
@@ -244,13 +263,17 @@ export function KraftMap({
             <X size={17} aria-hidden="true" />
           </button>
           <p id={`${id}-accuracy`}>
-            Rock symbols show published GPS observations. Their shapes do not
-            represent surveyed footprints. Trails and intermittent washes follow
-            open map data; confirm conditions on the ground.
+            Points show published source locations with unknown accuracy.
+            Numbered clusters count catalog records, including unresolved or
+            multi-rock groups. Source area centroids are not physical boulder
+            positions. No boulder footprints or final approaches are surveyed.
+            Trails and intermittent washes follow open map data; confirm
+            conditions on the ground.
           </p>
           <p>
-            {GEOGRAPHY_ATTRIBUTION} Terrain illustration interpreted from
-            public-domain USGS/USDA NAIP orthoimagery.
+            {GEOGRAPHY_ATTRIBUTION} Source comparisons use public-domain
+            USGS/USDA NAIP orthoimagery from June 2022. Light and shadow
+            boundaries do not establish a named rock's footprint.
           </p>
         </details>
       </div>

@@ -1,11 +1,11 @@
 import geographicData from '@/public/kraft/geo-features.json'
 
-export const MAP_WIDTH = 1000
+export const MAP_WIDTH = 1192
 export const MAP_HEIGHT = 800
 
 /** WGS84 envelope. North stays at the top of the illustrated world. */
 export const KRAFT_BOUNDS = {
-  west: -115.4233,
+  west: -115.426,
   south: 36.1562,
   east: -115.4093,
   north: 36.16525,
@@ -22,6 +22,13 @@ const bottom = mercatorY(KRAFT_BOUNDS.south)
 
 export type MapPoint = { x: number; y: number }
 export type GeographicLocation = { lat: number; lon: number }
+export type MapBounds = {
+  minX: number
+  minY: number
+  maxX: number
+  maxY: number
+}
+
 export type GeographicFeatureKind =
   | 'trail'
   | 'wash'

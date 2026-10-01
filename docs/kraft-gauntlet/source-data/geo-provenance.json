@@ -1,13 +1,13 @@
 {
-  "accessedAt": "2026-09-30",
+  "accessedAt": "2026-10-01",
   "boundsWgs84": {
-    "west": -115.4233,
+    "west": -115.426,
     "south": 36.1562,
     "east": -115.4093,
     "north": 36.16525
   },
   "world": {
-    "width": 1000,
+    "width": 1192,
     "height": 800,
     "projection": "EPSG:3857",
     "northUp": true
@@ -19,20 +19,56 @@
     "copyrightUrl": "https://www.openstreetmap.org/copyright",
     "query": "[out:json][timeout:35];(way[highway](36.156,-115.424,36.166,-115.408);way[waterway](36.156,-115.424,36.166,-115.408);way[amenity=parking](36.156,-115.424,36.166,-115.408);node[amenity=parking](36.156,-115.424,36.166,-115.408););out geom;",
     "peakQuery": "[out:json][timeout:20];node[natural=peak](36.16,-115.435,36.175,-115.408);out;",
-    "timestamp": "2026-10-01T05:30:01Z"
+    "timestamp": "2026-10-01T05:30:01Z",
+    "coverageCaution": "Source path coverage is community observation, not verified final boulder approaches.",
+    "reacquisitionAttempts": [
+      {
+        "endpoint": "https://overpass-api.de/api/interpreter",
+        "method": "GET",
+        "result": "HTTP 406"
+      },
+      {
+        "endpoint": "https://overpass-api.de/api/interpreter",
+        "method": "POST",
+        "result": "HTTP 504"
+      },
+      {
+        "endpoint": "https://overpass.kumi.systems/api/interpreter",
+        "method": "POST",
+        "result": "90s timeout"
+      }
+    ],
+    "westSupplement": {
+      "id": "osm-kraft-west-2026-10-01",
+      "request": "https://api.openstreetmap.org/api/0.6/map?bbox=-115.4265,36.156,-115.424,36.166",
+      "method": "GET",
+      "license": "ODbL-1.0",
+      "inputPath": "docs/kraft-gauntlet/source-data/geo-osm-west-source.xml",
+      "format": "OSM XML",
+      "areaBoundsWgs84": {
+        "west": -115.4265,
+        "south": 36.156,
+        "east": -115.424,
+        "north": 36.166
+      },
+      "waysObserved": 26,
+      "processing": "Native OSM node closure creates source geometry. Merge by exact way ID; newer western observation replaces only matching exact IDs. Source IDs preserved per element."
+    },
+    "sourcePath": "docs/kraft-gauntlet/source-data/geo-osm-source-2026-09-30.json",
+    "mergedPath": "docs/kraft-gauntlet/source-data/geo-osm-source.json"
   },
   "usgs3dep": {
-    "id": "usgs-3dep-2026-09-30",
+    "id": "usgs-3dep-2026-10-01",
     "license": "US public domain",
     "attribution": "USGS National Map 3D Elevation Program (3DEP). August 25, 2026.",
     "export": {
-      "request": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=-12848862.981679251%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=500%2C400&format=tiff&f=json&renderingRule=%7B%22rasterFunction%22%3A+%22None%22%7D&adjustAspectRatio=false&pixelType=F32&interpolation=RSP_BilinearInterpolation",
+      "request": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=-12849163.544304395%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=596%2C400&format=tiff&f=json&adjustAspectRatio=false&renderingRule=%7B%22rasterFunction%22%3A%22None%22%7D&pixelType=F32&interpolation=RSP_BilinearInterpolation",
       "response": {
-        "href": "https://elevation.nationalmap.gov/arcgis/rest/directories/elevation_output/3DEPElevation_ImageServer/_ags_66e68c88_b8f9_4dce_9b90_0140ee769dc6.tif",
-        "width": 500,
+        "href": "https://elevation.nationalmap.gov/arcgis/rest/directories/elevation_output/3DEPElevation_ImageServer/_ags_99fa8e78_94e8_40c8_8a5c_aa27cd3a4310.tif",
+        "width": 596,
         "height": 400,
         "extent": {
-          "xmin": -12848862.981679251,
+          "xmin": -12849163.544304395,
           "ymin": 4322135.591505952,
           "xmax": -12847304.508808147,
           "ymax": 4323383.405606867,
@@ -53,17 +89,17 @@
     "simplificationToleranceWorld": 0.5
   },
   "usgsNaip": {
-    "id": "usgs-naip-2026-09-30",
+    "id": "usgs-naip-2026-10-01",
     "license": "US public domain",
     "attribution": "USGS, USDA, The National Map: Orthoimagery.",
     "export": {
-      "request": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/exportImage?bbox=-12848862.981679251%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=1600%2C1280&format=jpg&f=json&renderingRule=%7B%22rasterFunction%22%3A+%22NaturalColor%22%7D&adjustAspectRatio=false&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicLockRaster%22%2C+%22lockRasterIds%22%3A+%5B134873%5D%2C+%22mosaicOperation%22%3A+%22MT_FIRST%22%7D",
+      "request": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/exportImage?bbox=-12849163.544304395%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=1907%2C1280&format=jpg&f=json&adjustAspectRatio=false&renderingRule=%7B%22rasterFunction%22%3A%22NaturalColor%22%7D&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B134873%5D%2C%22mosaicOperation%22%3A%22MT_FIRST%22%7D",
       "response": {
-        "href": "https://imagery.nationalmap.gov/arcgis/rest/directories/imagery_output/USGSNAIPPlus_ImageServer/_ags_96e6a631_11b0_40b5_a6e9_47382cab9262.jpg",
-        "width": 1600,
+        "href": "https://imagery.nationalmap.gov/arcgis/rest/directories/imagery_output/USGSNAIPPlus_ImageServer/_ags_0c59c87c_ede6_4e03_b4a6_710f874cd5fe.jpg",
+        "width": 1907,
         "height": 1280,
         "extent": {
-          "xmin": -12848862.981679251,
+          "xmin": -12849163.544304395,
           "ymin": 4322135.591505952,
           "xmax": -12847304.508808147,
           "ymax": 4323383.405606867,
@@ -78,22 +114,90 @@
     },
     "sourceRecord": {
       "OBJECTID": 134873,
+      "Name": "m_3611553_se_11_060_20220611",
+      "MinPS": 0,
+      "MaxPS": 19.1,
+      "Category": 1,
+      "CenterX": -12846964.69167891,
+      "CenterY": 4322144.814701792,
       "State": "NV",
       "Year": 2022,
       "raster_name": "m_3611553_se_11_060_20220611",
+      "download_url": "https://earthexplorer.usgs.gov/download/options/naip/3287318",
+      "acquisition_date": 1654905600000,
       "agency": "USDA",
       "vendor": "USDA-FSA-APFO",
       "resolution_value": 0.6,
       "resolution_units": "METER",
-      "acquisition_date": 1654905600000
+      "band_count": 4,
+      "sensor_type": "CNIR",
+      "projection_name": "UTM",
+      "projection_zone": "11N",
+      "datum": "NAD83",
+      "Shape_Length": 33168.1057242038,
+      "Shape_Area": 68089836.22601692
+    },
+    "priorReference": {
+      "path": ".tmp/kraft-gauntlet/references/geo-naip-reference.jpg",
+      "export": {
+        "request": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/exportImage?bbox=-12848862.981679251%2C4322135.591505952%2C-12847304.508808147%2C4323383.405606867&bboxSR=3857&imageSR=3857&size=1600%2C1280&format=jpg&f=json&renderingRule=%7B%22rasterFunction%22%3A+%22NaturalColor%22%7D&adjustAspectRatio=false&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicLockRaster%22%2C+%22lockRasterIds%22%3A+%5B134873%5D%2C+%22mosaicOperation%22%3A+%22MT_FIRST%22%7D",
+        "response": {
+          "href": "https://imagery.nationalmap.gov/arcgis/rest/directories/imagery_output/USGSNAIPPlus_ImageServer/_ags_96e6a631_11b0_40b5_a6e9_47382cab9262.jpg",
+          "width": 1600,
+          "height": 1280,
+          "extent": {
+            "xmin": -12848862.981679251,
+            "ymin": 4322135.591505952,
+            "xmax": -12847304.508808147,
+            "ymax": 4323383.405606867,
+            "spatialReference": {
+              "wkid": 102100,
+              "latestWkid": 3857
+            }
+          },
+          "scale": 0
+        },
+        "lockedRasterId": 134873
+      }
+    },
+    "groundSampleMetersApprox": 0.787,
+    "sourceRecordRequest": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer/134873?f=pjson",
+    "sourceFootprint": {
+      "rings": [
+        [
+          [
+            -12843296.8751,
+            4317942.483900003
+          ],
+          [
+            -12843303.7731,
+            4317528.656400003
+          ],
+          [
+            -12850774.4459,
+            4317651.682300001
+          ],
+          [
+            -12850628.7187,
+            4326759.897600003
+          ],
+          [
+            -12843151.7815,
+            4326636.4714
+          ],
+          [
+            -12843296.8751,
+            4317942.483900003
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
     }
   },
   "files": [
-    {
-      "path": "docs/kraft-gauntlet/source-data/geo-dem-source.tif",
-      "bytes": 1049850,
-      "sha256": "77dbb8cfa67f3b91124749ef9f7cd46eefc92601cea68cb8992a7113ad89f21d"
-    },
     {
       "path": ".tmp/kraft-gauntlet/references/geo-naip-reference.jpg",
       "bytes": 415084,
@@ -105,19 +209,78 @@
       "sha256": "d11c6506be5418ce37f5794f87b1c5d8821f87955b73ab4c88afd5da879c5937"
     },
     {
-      "path": "docs/kraft-gauntlet/source-data/geo-osm-source.json",
+      "path": "docs/kraft-gauntlet/source-data/geo-dem-source.tif",
+      "bytes": 1312026,
+      "sha256": "59caca75a0be5cdcfd17c0953435d43188d245c67eecc3bec7abe41ec93d80b6"
+    },
+    {
+      "path": ".tmp/kraft-gauntlet/references/geo-naip-expanded-reference.jpg",
+      "bytes": 493616,
+      "sha256": "8c8565db1215d43db6634ff158a2835d6e4927e0ad4cbb17c21954daab1b3d24"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-osm-source-2026-09-30.json",
       "bytes": 175773,
       "sha256": "4b744aeb83dfdacb29fef5030c468989f3c7f51fc2c24e013792416dc1921eae"
     },
     {
+      "path": "docs/kraft-gauntlet/source-data/geo-osm-west-source.xml",
+      "bytes": 491549,
+      "sha256": "dc790adf680a1e3ab14904954e7de8384370ed2d8a516732865b6364560132fa"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-osm-source.json",
+      "bytes": 135471,
+      "sha256": "9389af5f9223d287c6845cef3c3333d3ae0f2e9c034badcae37bd08201d87bbc"
+    },
+    {
       "path": "public/kraft/geo-features.json",
-      "bytes": 143915,
-      "sha256": "5ba8b6b1c226d86e8e8016dc8d457658dd796cbe26282c44c2eb9e0966b81246"
+      "bytes": 172428,
+      "sha256": "21c7a9d456d15ba16a5a35b4ae0d9bcf9bf0c6c5ac0299df3449ad09ae66db82"
     },
     {
       "path": "public/kraft/geo-license.txt",
-      "bytes": 1449,
-      "sha256": "efe64db0b4ea34817dd692aa299dca9bdec7eb437353cf811c05e88f1a5f9c6b"
+      "bytes": 1827,
+      "sha256": "f6e51bb4580ecb26f6eef96805b67c9e62f1d97a55d3d011ae62de5b5820ab64"
+    },
+    {
+      "path": "docs/kraft-gauntlet/source-data/geo-placement-review-2026-10-01.json",
+      "bytes": 39633,
+      "sha256": "5c0bb38f5751abf846956c0d6d46a35b8e2024957c3df8f72e46553859abbeea"
     }
-  ]
+  ],
+  "priorEnvelope": {
+    "boundsWgs84": {
+      "west": -115.4233,
+      "south": 36.1562,
+      "east": -115.4093,
+      "north": 36.16525
+    },
+    "world": {
+      "width": 1000,
+      "height": 800,
+      "projection": "EPSG:3857",
+      "northUp": true
+    }
+  },
+  "geometryCaution": "Source catalog points are not physical identities or field verified positions. NAIP rock/shadow patches are not accepted boulder footprints.",
+  "runtimeVectorSummary": {
+    "featureCount": 117,
+    "pointCount": 6197,
+    "kinds": {
+      "road": 18,
+      "parking": 1,
+      "trail": 49,
+      "wash": 9,
+      "contour": 40
+    }
+  },
+  "independentSpatialReview": {
+    "path": "docs/kraft-gauntlet/source-data/geo-placement-review-2026-10-01.json",
+    "auditedAt": "2026-10-01T20:47:36.605069+00:00",
+    "accepted": "Source-coordinate retention, projection, extent coverage, provenance, distinct IDs and bounded local clustering.",
+    "notAccepted": "Physical footprints, exact named rock identity, field navigation or final approaches.",
+    "units": 78,
+    "batches": 8
+  }
 }

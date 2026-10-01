@@ -23,7 +23,7 @@ interface Gesture {
   second?: Point
 }
 
-const INITIAL_CAMERA: Camera = { x: MAP_WIDTH / 2, y: 505, zoom: 1 }
+const INITIAL_CAMERA: Camera = { x: MAP_WIDTH / 2, y: MAP_HEIGHT / 2, zoom: 1 }
 const MIN_ZOOM = 0.8
 const MAX_ZOOM = 7
 const clamp = (value: number, min: number, max: number) =>
@@ -48,7 +48,12 @@ export function useMapGestures() {
   const sizeRef = useRef(size)
 
   function pixelsPerUnit(zoom: number, currentSize = sizeRef.current) {
-    return Math.min(currentSize.width / 960, currentSize.height / 610) * zoom
+    return (
+      Math.min(
+        currentSize.width / (MAP_WIDTH + 70),
+        currentSize.height / (MAP_HEIGHT + 70),
+      ) * zoom
+    )
   }
 
   function updateCamera(next: Camera) {

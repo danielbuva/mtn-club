@@ -61,61 +61,48 @@ test('every included Monkey Bar comparison retains both publisher Font grades', 
   const monkey = kraftGuide.boulders.find(
     boulder => boulder.id === 'monkey-bar',
   )
-  const values = monkey.climbs
-    .filter(climb =>
+  for (const [id, mpFont, topoFont] of [
+    ['monkey-bars', '5+', '6B+'],
+    ['hyperglide', '6C', '6C+'],
+    ['monkey-bar-direct', '7B', '7B+'],
+    ['monkey-bar-right', '7A', '7A+'],
+    ['monkey-northeast-left', '6A', '6B'],
+  ]) {
+    const climb = monkey.climbs.find(climb => climb.id === id)
+    assert.ok(climb, id)
+    assert.ok(
       climb.gradeObservations.some(
-        observation => observation.sourceId === 'thetopo-monkey',
+        observation =>
+          observation.system === 'Font' &&
+          observation.grade === mpFont &&
+          observation.sourceId.startsWith('mp-') &&
+          observation.identityStatus === 'source-linked',
       ),
+      id,
     )
-    .map(climb => [
-      climb.id,
-      climb.gradeObservations
-        .filter(observation => observation.system === 'Font')
-        .map(observation => [observation.grade, observation.identityStatus]),
-    ])
-  assert.deepEqual(values, [
-    [
-      'monkey-bars',
-      [
-        ['5+', 'source-linked'],
-        ['6B+', 'unresolved'],
-      ],
-    ],
-    [
-      'hyperglide',
-      [
-        ['6C', 'source-linked'],
-        ['6C+', 'unresolved'],
-      ],
-    ],
-    [
-      'monkey-bar-direct',
-      [
-        ['7B', 'source-linked'],
-        ['7B+', 'unresolved'],
-      ],
-    ],
-    [
-      'monkey-bar-right',
-      [
-        ['7A', 'source-linked'],
-        ['7A+', 'unresolved'],
-      ],
-    ],
-    [
-      'monkey-northeast-left',
-      [
-        ['6A', 'source-linked'],
-        ['6B', 'unresolved'],
-      ],
-    ],
-  ])
+    assert.ok(
+      climb.gradeObservations.some(
+        observation =>
+          observation.system === 'Font' &&
+          observation.grade === topoFont &&
+          observation.sourceId === 'thetopo-monkey' &&
+          observation.identityStatus === 'unresolved',
+      ),
+      id,
+    )
+  }
 })
 
 test('candidate boulder names cannot become canonical aliases without a linked source', () => {
   const guide = structuredClone(kraftGuide)
   const split = guide.boulders.find(boulder => boulder.id === 'split-boulder')
-  split.aliases.push("Plumber's Crack")
+  split.aliasObservations.push({
+    name: 'Unverified Split north rock',
+    sourceId: 'thetopo-split',
+    identityStatus: 'unresolved',
+    note: 'Synthetic unresolved candidate; no exact identity link.',
+  })
+  split.aliases.push('Unverified Split north rock')
   assert.match(
     validateGuide(guide).join('\n'),
     /canonical alias has no linked source/,
@@ -181,15 +168,16 @@ test('source catalogs retain physical membership contradictions with rationale',
   const provisional = kraftGuide.boulders
     .flatMap(rock => rock.climbs)
     .filter(climb => climb.boulderAssignmentStatus === 'editorial-provisional')
-  assert.deepEqual(
-    provisional.map(climb => climb.id),
-    [
-      'split-leaning-wide-crack',
-      'monkey-darwin-award',
-      'monkey-glory-hole',
-      'monkey-umpa-lumpa',
-    ],
-  )
+  for (const id of [
+    'split-leaning-wide-crack',
+    'monkey-darwin-award',
+    'monkey-glory-hole',
+    'monkey-umpa-lumpa',
+  ])
+    assert.ok(
+      provisional.some(climb => climb.id === id),
+      id,
+    )
   for (const climb of provisional) {
     assert.ok(climb.boulderAssignmentNote.trim())
     assert.deepEqual(climb.faceIds, [])

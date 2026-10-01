@@ -1,4 +1,4 @@
-import type { Boulder, SourceAlias } from './types'
+import type { Boulder, CoordinateObservation, SourceAlias } from './types'
 import { validateSelectedGrade } from './validate-grades.ts'
 
 export function validateBoulderEvidence(
@@ -26,6 +26,32 @@ export function validateBoulderEvidence(
         errors.push(`${owner}: unresolved alias rationale missing`)
     }
   }
+  function coordinate(owner: string, observations: CoordinateObservation[]) {
+    for (const observation of observations) {
+      source(`${owner} coordinate`, observation.sourceId)
+      if (
+        !Number.isFinite(observation.lat) ||
+        Math.abs(observation.lat) > 90 ||
+        !Number.isFinite(observation.lon) ||
+        Math.abs(observation.lon) > 180
+      )
+        errors.push(`${owner}: invalid coordinate observation`)
+      if (!observation.selectionReason.trim())
+        errors.push(`${owner}: coordinate selection rationale missing`)
+    }
+  }
+  coordinate(boulder.id, boulder.coordinateObservations ?? [])
+  for (const observation of boulder.coordinateObservations ?? [])
+    if (
+      observation.selection === 'selected' &&
+      (!boulder.location ||
+        observation.lat !== boulder.location.lat ||
+        observation.lon !== boulder.location.lon ||
+        !boulder.location.sourceIds.includes(observation.sourceId))
+    )
+      errors.push(
+        `${boulder.id}: plotted coordinate contradicts selected observation`,
+      )
   aliases(boulder.id, boulder.aliasObservations ?? [])
   for (const alias of boulder.aliases)
     if (
@@ -37,11 +63,11 @@ export function validateBoulderEvidence(
     )
       errors.push(`${boulder.id}: canonical alias has no linked source`)
 
-  const observations = boulder.location.observations ?? []
+  const observations = boulder.location?.observations ?? []
   const selected = observations.filter(
     observation => observation.selection === 'selected',
   )
-  if (selected.length !== 1)
+  if (boulder.location && selected.length !== 1)
     errors.push(
       `${boulder.id}: exactly one selected coordinate observation required`,
     )
@@ -58,7 +84,8 @@ export function validateBoulderEvidence(
       errors.push(`${boulder.id}: coordinate selection rationale missing`)
     if (
       observation.selection === 'selected' &&
-      (observation.lat !== boulder.location.lat ||
+      (!boulder.location ||
+        observation.lat !== boulder.location.lat ||
         observation.lon !== boulder.location.lon ||
         !boulder.location.sourceIds.includes(observation.sourceId))
     )
@@ -66,26 +93,30 @@ export function validateBoulderEvidence(
         `${boulder.id}: plotted coordinate contradicts selected observation`,
       )
   }
-  for (const id of boulder.location.sourceIds)
+  for (const id of boulder.location?.sourceIds ?? [])
     if (!selected.some(observation => observation.sourceId === id))
       errors.push(`${boulder.id}: coordinate source is not selected`)
 
   if (boulder.coverage) {
+    const covered =
+      boulder.coverage.sourceClimbIds ?? boulder.climbs.map(climb => climb.id)
     source(`${boulder.id} coverage`, boulder.coverage.sourceId)
     if (
       !Number.isInteger(boulder.coverage.sourceClimbCount) ||
-      boulder.coverage.sourceClimbCount < boulder.climbs.length
+      boulder.coverage.sourceClimbCount < covered.length ||
+      new Set(covered).size !== covered.length
     )
       errors.push(`${boulder.id}: invalid coverage count`)
     if (
       boulder.coverage.status === 'source-catalog' &&
-      boulder.coverage.sourceClimbCount !== boulder.climbs.length
+      boulder.coverage.sourceClimbCount !== covered.length
     )
       errors.push(`${boulder.id}: source catalog coverage is incomplete`)
   }
   for (const face of boulder.faces)
     if (!face.groupingStatus) errors.push(`${face.id}: grouping status missing`)
   for (const climb of boulder.climbs) {
+    coordinate(climb.id, climb.coordinateObservations ?? [])
     errors.push(...validateSelectedGrade(climb))
     if (
       !climb.boulderAssignmentStatus ||

@@ -16,19 +16,24 @@ Updated 2026-10-01. Full-guide acceptance remains open.
   MP/OpenBeta inventory criticism passes the captured trees and identity links.
   Mixed grades, dollar-prefix decoding and canonical/source runtime flags were
   repaired and independently checked. Source disagreements remain visible.
-  All 370 acquired MP routes now have independently reviewed original factual
-  dossiers, including 232 linked OpenBeta observations. Runtime expansion,
-  physical-unit reconciliation and 13 unmatched OpenBeta identities remain open.
-- **Map:** West Cluster extends outside the current geographic envelope. Proxies
-  remain shape quality debt, and source route-coordinate outliers cannot be
-  selected as physical-unit positions.
+  All 370 acquired MP routes have independently reviewed original factual
+  dossiers, including 232 linked OpenBeta observations. All 383 canonical routes
+  and 78 source catalogs are visible/searchable/filterable in runtime, including
+  native OpenBeta records and conflicting memberships. Full directory/route
+  traversal passed. Physical coidentity remains a separate review dimension.
+- **Map:** all 78 selected source locations fit the expanded/rebuilt geographic
+  extent. Repeated fictional silhouettes were removed; source points/centroids
+  and clusters remain qualified. A mobile overlapping-target defect was repaired
+  with nearest-center activation and exact-membership regression checks. Source
+  route-coordinate outliers remain retained but unselected. Candidate footprints
+  with spatial confidence are the next batch; field review is not a prerequisite.
 - **Offline:** 189 unit checks and 33 production browser checks pass. Fresh
   edition-3 criticism verifies 37 files / 2,483,819 bytes and 11 interaction/
   integrity checks after a cold restart with transport denied. Edition-2 fault
   and recovery evidence remains explicitly versioned. Expanded-content, real
   SVG and physical-device acceptance remain pending.
-- **Repository:** dedicated feature branch and initial sourced-data/Pearl commit
-  exist. Approximately 428 MB of former screenshots/history/reference scratch
+- **Repository:** dedicated feature branch and coherent sourced-data, runtime,
+  source-fact and strategy milestones were pushed. Approximately 428 MB of former screenshots/history/reference scratch
   was preserved in ignored `.tmp/`; durable reports now describe current state.
 
 Recovered errors: OpenBeta GraphQL timeouts used the actual public structured

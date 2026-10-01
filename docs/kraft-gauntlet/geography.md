@@ -1,93 +1,90 @@
 # Kraft geography workbench
 
-The guide map uses real geographic observations, rendered as an editorial field
-map. There is no live basemap request. The static layer contains 98 features:
-39 trail segments, 18 public road/track segments, 5 intermittent wash segments,
-1 parking polygon and 35 elevation contours. Private road observations are
-excluded. No route between a boulder and a trail has been invented.
+Updated 2026-10-01. The static north-up map now encloses every one of the 74
+Mountain Project leaf source units and four unlinked OpenBeta leaf units. These
+are **78 catalog records**, not a count of physical rocks. No field-map or
+physical-footprint acceptance is claimed.
 
 ## Coordinate contract
 
-`lib/kraft/geography.ts` exports a north-up **1000 × 800** world. WGS84 bounds are
-west **−115.4233**, east **−115.4093**, south **36.1562**, north **36.16525**.
-`projectLocation({ lat, lon })` uses EPSG:3857 and returns `{ x, y }`;
-`unprojectLocation({ x, y })` reverses it. North is y=0. The envelope covers
-approximately 1,258 × 1,008 metres on the ground. `worldUnitsForMeters(100)`
-provides the scale bar length, approximately 79.48 world units. Latitude scale
-variation across this small envelope is under 0.02%; x/y aspect distortion is
-under 0.1%.
+`lib/kraft/geography.ts` exports a **1192 × 800** Web Mercator world. WGS84 bounds
+are west **−115.4260**, east **−115.4093**, south **36.1562**, north **36.16525**.
+The ground envelope is approximately **1501 × 1007 m**. The width increased from
+1000 to 1192 world units as the western boundary expanded, preserving metric
+x/y scale to about 0.02% rather than stretching the old map. North stays at y=0.
+`projectLocation`, `unprojectLocation` and `worldUnitsForMeters` share the same
+contract. Projection tests cover all 78 source-unit points and round trips.
 
-`geographicFeatures` exposes `id`, `kind`, `name`, `points`, `closed`, `sourceId`,
-`sourceUrl`, `status`, `informal`, `intermittent`, `elevation` and `major`.
-`kind` is `trail | wash | parking | road | contour`.
-`mapPath(points, closed)` generates SVG line geometry. Contours use metres of
-elevation, at 20 m intervals with major lines every 40 m. A closed contour means
-the derived contour ring closed; it does not mark a rock outline or lithology.
-The Kraft Mountain label uses OSM peak node 7112921633, observed at
-36.1641215, −115.4215676 with recorded elevation 1,437 m.
+The leaf observations occupy W −115.42506 / E −115.41099 / S 36.15918 /
+N 36.16352. The old −115.4233 western edge excluded 13 MP West Cluster units.
+The enlarged envelope includes parking and southern Kraft Mountain context; it
+does not claim to cover the complete Kraft Mountain hiking loop.
 
-## Geographic evidence
+## Lawful geographic evidence
 
 | Layer | Source | Redistribution | Qualification |
 | --- | --- | --- | --- |
-| Trail, road, wash, parking and peak | [OpenStreetMap](https://www.openstreetmap.org/copyright), queried through Overpass | ODbL 1.0; credit and derivative database provided | Community observations, not a field survey; informal paths retain their status |
-| Contours | [USGS 3DEP](https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer) bare earth elevation export | US public domain, credited | 500 × 400 raw F32 samples across this envelope, roughly 2.52 m sampling; contour interpolation is derived geometry |
-| Terrain reference | [USGS/USDA NAIP](https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer), locked source raster 134873 | US public domain, credited | June 11, 2022 USDA-FSA-APFO imagery; 0.6 m nominal source resolution, exported at 1600 × 1280 |
-| Boulder observations | Four exact parent boulder records documented by the content ledger | Small factual observations; no proprietary map artwork copied | These locations have not been field verified; contradictory route GPS has been retained as a disagreement rather than used to move a boulder |
+| Trails, roads, washes, parking and peak | OpenStreetMap, original Overpass extract plus official API western-strip supplement | ODbL 1.0; attribution and derivative database retained | Community observations, not final verified boulder approaches; private roads excluded |
+| Contours | USGS 3DEP bare-earth F32 export acquired 2026-10-01 | US public domain | New 596 × 400 grid over the exact enlarged EPSG:3857 extent; roughly 2.52 m ground sampling; 20 m contours |
+| Aerial audit reference | USGS/USDA NAIP, locked raster 134873 | US public domain | June 11, 2022 USDA-FSA-APFO imagery; nominal source resolution 0.6 m; 1907 × 1280 export samples roughly 0.79 ground m/pixel |
+| Catalog locations | MP parent areas and unlinked OpenBeta source-area centroids | Factual observations with retained source links | Unknown positional accuracy; correlated imports do not independently verify a point; source unit is not necessarily a physical rock |
 
-OSM ways were projected and clipped to the envelope. Douglas–Peucker
-simplification stays within 0.5 world units (about 0.63 m) of those observations.
-USGS contours are linearly interpolated with marching squares, joined at shared
-cell edges, then simplified using the same tolerance. These processing bounds
-are not estimates of the source data's actual surveying accuracy.
+The new western OSM extract uses the official
+`https://api.openstreetmap.org/api/0.6/map?bbox=-115.4265,36.156,-115.424,36.166`
+endpoint. It retains 26 relevant complete ways from the returned OSM XML. Native
+node references create the source line geometry; exact way IDs reconcile overlap
+with the original extract. Every element retains its observation source ID.
+Three unsuccessful expanded Overpass attempts are recorded in provenance before
+the successful native API acquisition. No proprietary map artwork was acquired.
 
-The OSM polygon for Kraft Mountain Parking Area is way 255587420. Mapped streams
-are drawn as **intermittent washes**, without implying flowing water. There is
-no source-backed name “Kraft Wash” in this data. A sandstone terrain tint may be
-generalized from the NAIP image for visual legibility; it is an editorial tint,
-not a measured geological boundary. Boulder glyphs are symbols located at the
-catalog observations, not surveyed silhouettes.
+All OSM ways are projected and clipped to the same envelope. Douglas–Peucker
+simplification stays within 0.5 world units (about 0.63 m) of those lines. The DEM
+builder projects each sample using the raster response's **reported extent**;
+retaining an older DEM would retain its older georeferencing rather than stretch
+it across new bounds. Marching squares derives elevation contours, not rock
+outlines. Survey accuracy cannot be inferred from these processing tolerances.
 
-## Retained assets and reproducibility
+## Rendering and physical-identity limits
 
-`public/kraft/geo-features.json` is the 144 KB runtime vector layer. It is imported
-statically into the guide JavaScript and works without fetching a remote map.
-The geographic database is offered under ODbL 1.0; the independent USGS
-contributions remain public domain. `geo-license.txt` provides downloadable
-credit and license links. `docs/kraft-gauntlet/source-data/geo-provenance.json` records exact requests, returned
-projection extents, source observations and SHA-256 checksums.
+Small neutral points replace the four repeated invented rock silhouettes.
+Screen-space aggregation joins nearby source records while preserving every ID.
+Every pair in a cluster stays within 44 screen pixels; proximity chains cannot
+combine distant catalogs into one center.
+Cluster centers are visual aggregates, not new geographic observations. A
+keyboard-accessible chooser exposes each source record, including coincident MP
+and unresolved OB Tomahawk records. Selected labels remain at the source point.
+An OpenBeta generated bbox or polygon is never a physical rock footprint.
 
-`docs/kraft-gauntlet/source-data/` retains `geo-osm-source.json`,
-`geo-osm-peaks-source.json` and `geo-dem-source.tif` as deliberate rebuild inputs.
-They do not inflate the field download. The raw NAIP review image is local scratch
-at `.tmp/kraft-gauntlet/references/geo-naip-reference.jpg`; its exact source request,
-raster identity, size and original checksum remain in the provenance record so it
-can be reacquired for footprint review. The shipped application does not depend
-on that scratch reference.
+No numerical accuracy or physical identity is invented. The eight MP route-to-
+parent coordinate outliers remain in the source inventory and are excluded from
+map placement. MP source parent points are selected instead. Conflicting OB
+area centroids remain comparison evidence, including Big Jugs (182 m), Short
+Cube (855 m), Pretzel (481 m), Big Mac Crack (111 m), and Andy's Candies (155 m).
 
-To regenerate vectors from the committed evidence, run
-`scripts/build-kraft-geography.py` with Python containing numpy and Pillow.
-It makes no network calls. The bundled Codex Python runtime satisfies those
-requirements. Regeneration yields the same 98 features and 5,201 simplified
-points; all x/y coordinates have been checked as finite and within the map.
+A separate lawful aerial inspection finds four distinct rock-like landmarks
+near the four pilot points. Cube and Monkey are clearer candidate landmarks;
+Split is crowded, and Pearl spans only about ten export pixels. Shaded rock
+faces and cast shadows merge, so none has an accepted full physical footprint.
+The former manually drawn sandstone tint was removed rather than relocated as
+unmeasured geology. Recognizable boulder geometry remains a field/photo evidence
+gap, and physical acceptance remains open. An independent eight-batch source review
+passed all 78 coordinate/transform/identity/provenance checks; its per-record
+[receipt](source-data/geo-placement-review-2026-10-01.json) qualifies 18 distinct
+patch opportunities, 43 ambiguous small/crowded observations and 17 apparent gaps.
 
-This existing narrow Python tool is retained because Pillow decodes the raw F32
-GeoTIFF directly and numpy supplies the established elevation grid pipeline.
-Rewriting a stable raster decoder and contour rebuild solely for language
-uniformity adds no product benefit. New acquisition, reconciliation, coordinate
-and manifest tooling should use TypeScript where practical. The Python script is
-a regeneration utility, not a required application runtime or a scratch export.
+## Rebuild inputs and offline assets
 
-## Remaining geographic gaps
+`docs/kraft-gauntlet/source-data/geo-provenance.json` records exact requests,
+response extents, raster identity, failed requests and SHA-256 checksums.
+Deliberate rebuild inputs are the merged `geo-osm-source.json`, original
+`geo-osm-source-2026-09-30.json`, native `geo-osm-west-source.xml`, peak source and
+`geo-dem-source.tif`. The raw lawful aerial references remain scratch under
+`.tmp/kraft-gauntlet/references/`; the shipped map does not fetch imagery.
 
-- Field verification and independent boulder GPS survey are still missing.
-- Photographic silhouettes and a physical identification survey for the pilot
-  rocks are missing. The map must retain the “approximate symbols” explanation.
-- OSM observations are contextual paths, not a verified approach network for
-  each boulder. A GPS field walk is needed before claiming turn-by-turn routes.
-- The overview envelope deliberately covers the pilot rocks, parking and
-  southern Kraft Mountain. It does not cover the entire Kraft Mountain loop.
-
-These are retained source-backed pilot observations with explicit uncertainties.
-The current full-Kraft placement and footprint audit must reassess this layer;
-no surveyed or complete Kraft field-map acceptance is claimed.
+Run `scripts/build-kraft-geography.py` with Python containing numpy and Pillow.
+The established raster/contour builder makes no network calls and derives its
+world/bounds from provenance. Runtime `public/kraft/geo-features.json` is imported
+statically, offered under ODbL, and remains available offline. Independent USGS
+contributions remain public domain. `public/kraft/geo-license.txt` preserves the
+attributions. A final offline manifest rebuild is required when the runtime
+geographic asset changes.

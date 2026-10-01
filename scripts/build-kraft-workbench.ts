@@ -25,10 +25,20 @@ const runtimeSourceUrls = new Set(
     .filter(Boolean),
 )
 const runtimeCanonicalIds = new Set(
-  [...runtimeSourceUrls].flatMap(url => {
-    const match = url?.match(/mountainproject\.com\/(area|route)\/(\d+)/)
-    return match ? [`mp-${match[1]}-${match[2]}`] : []
-  }),
+  kraftGuide.boulders.flatMap(boulder => [
+    ...(boulder.sourceIdentity?.mpId
+      ? [`mp-area-${boulder.sourceIdentity.mpId}`]
+      : (boulder.sourceIdentity?.openBetaIds.map(id => `ob-area-${id}`) ?? [])),
+    ...boulder.climbs.flatMap(climb =>
+      climb.sourceIdentity?.mpId
+        ? [`mp-route-${climb.sourceIdentity.mpId}`]
+        : (climb.sourceIdentity?.openBetaIds.map(id => `ob-route-${id}`) ?? []),
+    ),
+  ]),
+)
+const runtimeRouteCount = kraftGuide.boulders.reduce(
+  (count, boulder) => count + boulder.climbs.length,
+  0,
 )
 const markdown = (value: string) =>
   value.replaceAll('|', '\\|').replaceAll('\n', ' ')
@@ -55,7 +65,7 @@ const rows: (string | number | boolean | null)[][] = [
     'retrieved_at',
     'latitude_observation',
     'longitude_observation',
-    'state',
+    'topo_workflow_state',
     'runtime_record',
     'runtime_source_reference',
     'confidence',
@@ -191,7 +201,7 @@ await save(
     '',
     `Updated 2026-10-01. ${unitRecords.length} MP/OpenBeta source-unit identities after exact importer links; these are **not** a verified physical-rock count. TheTopo adds ${topo.units.length} separately indexed research units pending identity/policy review.`,
     '',
-    'The running starting edition still has four units / 58 climbs. No real route SVG or reconstruction is approved. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery does not hide a unit.',
+    `The running ${kraftGuide.version} edition includes all ${kraftGuide.boulders.length} reconciled source catalogs and ${runtimeRouteCount} canonical route records. No real route SVG or reconstruction is approved. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery, faces, lines and field verification do not hide a catalog or route.`,
     '',
     '| Source unit | Inventory ID | State | Image allocation |',
     '| --- | --- | --- | --- |',
@@ -216,9 +226,11 @@ await save(
     '',
     `${topo.routes.length} TheTopo route IDs are separately indexed as research, pending source-use/identity review; they are neither silently merged nor counted as ${topo.routes.length} additional distinct physical problems. All route rows and states are in [the CSV](kraft-content-inventory.csv).`,
     '',
-    'Only 58 original source synopses currently appear in the running edition. OpenBeta has 57 nonempty route descriptions; metadata-only entries are not start/path evidence. Source-assigned faces, general corridors, eliminates, variants and finishes must be reconciled independently before drawing SVG. A render or a source topo line cannot establish the route by itself.',
+    `All ${runtimeRouteCount} canonical records are searchable, filterable and listable in the runtime. Original factual dossiers cover all 370 MP routes, with 13 native OpenBeta records retaining factual summaries where evidence exists. Topo workflow states above do not gate inclusion. Face assignments, image availability, source disagreements and authored geometry remain independent dimensions.`,
     '',
-    'Five exact-ID routes have conflicting MP/OpenBeta source parents (Right V1 and four Lava/Bowling Ball entries). Further exact route links have unmatched legacy OpenBeta parents. These remain blocked on identity rather than being assigned to a convenient rock.',
+    'For route visualization, corroborated paths support narrow corridors; documented starts, general features/direction and finishes support broader moderate-confidence corridors. Exact hold sequences are not required. Face-only records remain visible without a line; unresolved paths are not drawn. A generated image or source topo line cannot establish a route by itself.',
+    '',
+    'Five exact-ID routes have conflicting MP/OpenBeta source parents (Right V1 and four Lava/Bowling Ball entries). Further exact route links have unmatched legacy OpenBeta parents. Their canonical records remain visible under the selected attributed source catalog, and alternate memberships/conflicts are preserved for review.',
     '',
     'Inventory grade labels are provisional current-source labels. Every source V/Font grade is preserved; differences are not averaged. Grade-only conflicts do not establish different route identities.',
     '',
@@ -303,9 +315,9 @@ await save(
   [
     '# Kraft map placement and shape audit',
     '',
-    'Updated 2026-10-01. **Not accepted as a field map.** Current map has four source-coordinate symbols, no surveyed/recognizable footprints. Full-source candidate points below are not a claim that all are plotted.',
+    `Updated 2026-10-01. All ${kraftGuide.boulders.length} reconciled source catalogs are plotted with neutral points and local cluster choosers. Source points and catalog centroids remain qualified; no surveyed physical footprints are accepted.`,
     '',
-    'Current west envelope −115.4233 excludes West Cluster records reaching −115.42506 (MP) / −115.424139 (TheTopo). Expand geographic coverage and reproject terrain/source lines together; simply changing bounds without reprojecting existing paths would misalign the map.',
+    'The expanded west envelope −115.4260 encloses all 78 selected MP/OpenBeta source points. Terrain and source vectors were regenerated for the same geographic extent. The independent 78-record source/placement receipt is in source-data/geo-placement-review-2026-10-01.json; rendered interaction findings are in current-map-review.md.',
     '',
     'OpenBeta area coordinates are source centroids; its synthetic bounding polygons are excluded from physical footprints. Exact importer overlap is correlated evidence. Prefer source/aerial landmarks with uncertainty, then independently reviewed footprint outlines; otherwise clearly marked proxy geometry stays quality debt.',
     '',
@@ -315,7 +327,7 @@ await save(
     '',
     'Eight MP route-to-parent coordinate outliers are preserved in `lib/kraft/mp-inventory.json` coordinateWarnings. Front Side Crack is about 1,117 km from its parent; Black Warm Up about 17.7 km; Perfect Poser about 11.3 km. Poker Chips, Monkey Bars, Monkey Crack, Plumber’s Crack and The Spreader also differ by hundreds/thousands of metres. These route observations must not replace physical-unit points.',
     '',
-    'Next: compare all source points to lawful aerial rock landmarks, record point-selection rationale and accuracy, derive observable footprints, handle rock groups and absent coordinates explicitly, then run a separate fresh placement/shape critic.',
+    'Next: derive a batch of best-supported candidate footprints from lawful aerial landmarks and source coordinates. Record high/medium/low spatial confidence and source-association/boundary uncertainty. Field verification improves candidates later and does not prevent evidence-backed geometry from appearing now. Groups, centroids and exact coincident source IDs must remain distinct.',
     '',
   ].join('\n'),
 )

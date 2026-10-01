@@ -1,8 +1,8 @@
 # Kraft map placement and shape audit
 
-Updated 2026-10-01. **Not accepted as a field map.** Current map has four source-coordinate symbols, no surveyed/recognizable footprints. Full-source candidate points below are not a claim that all are plotted.
+Updated 2026-10-01. All 78 reconciled source catalogs are plotted with neutral points and local cluster choosers. Source points and catalog centroids remain qualified; no surveyed physical footprints are accepted.
 
-Current west envelope −115.4233 excludes West Cluster records reaching −115.42506 (MP) / −115.424139 (TheTopo). Expand geographic coverage and reproject terrain/source lines together; simply changing bounds without reprojecting existing paths would misalign the map.
+The expanded west envelope −115.4260 encloses all 78 selected MP/OpenBeta source points. Terrain and source vectors were regenerated for the same geographic extent. The independent 78-record source/placement receipt is in source-data/geo-placement-review-2026-10-01.json; rendered interaction findings are in current-map-review.md.
 
 OpenBeta area coordinates are source centroids; its synthetic bounding polygons are excluded from physical footprints. Exact importer overlap is correlated evidence. Prefer source/aerial landmarks with uncertainty, then independently reviewed footprint outlines; otherwise clearly marked proxy geometry stays quality debt.
 
@@ -89,4 +89,4 @@ OpenBeta area coordinates are source centroids; its synthetic bounding polygons 
 
 Eight MP route-to-parent coordinate outliers are preserved in `lib/kraft/mp-inventory.json` coordinateWarnings. Front Side Crack is about 1,117 km from its parent; Black Warm Up about 17.7 km; Perfect Poser about 11.3 km. Poker Chips, Monkey Bars, Monkey Crack, Plumber’s Crack and The Spreader also differ by hundreds/thousands of metres. These route observations must not replace physical-unit points.
 
-Next: compare all source points to lawful aerial rock landmarks, record point-selection rationale and accuracy, derive observable footprints, handle rock groups and absent coordinates explicitly, then run a separate fresh placement/shape critic.
+Next: derive a batch of best-supported candidate footprints from lawful aerial landmarks and source coordinates. Record high/medium/low spatial confidence and source-association/boundary uncertainty. Field verification improves candidates later and does not prevent evidence-backed geometry from appearing now. Groups, centroids and exact coincident source IDs must remain distinct.

@@ -181,3 +181,20 @@
 .kraft-detail-dialog::backdrop {
   background: rgb(33 29 24 / 0.62);
 }
+
+.kraft-coverage-counts {
+  display: grid;
+  gap: 8px;
+  margin-block: 20px;
+}
+
+.kraft-coverage-counts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.kraft-coverage-counts dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}

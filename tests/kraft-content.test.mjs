@@ -28,7 +28,9 @@ test('local discovery handles climb names, aliases, areas and V grade boundaries
   assert.equal(query('', 'all', 'pearl-area')[0].boulder.id, 'pearl')
   const experts = query('', 'expert').flatMap(result => result.climbs)
   assert.ok(experts.some(climb => climb.name === 'A Clockwork Orange'))
-  assert.ok(experts.every(climb => climb.gradeValue >= 9))
+  assert.ok(
+    experts.every(climb => (climb.gradeMaxValue ?? climb.gradeValue) >= 9),
+  )
   assert.equal(query('does not exist').length, 0)
   assert.equal(query('Plumber', 'hard').length, 0)
 })

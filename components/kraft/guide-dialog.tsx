@@ -21,7 +21,7 @@ export function GuideDialog({
   onSelectFace: (id: string, climbId: string | null) => void
   onSelectClimb: (id: string | null) => void
   onClose: () => void
-  onSelectBoulder: (id: string) => void
+  onSelectBoulder: (id: string, climbId?: string) => void
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -75,6 +75,7 @@ export function GuideDialog({
           onClimbSelect={onSelectClimb}
           onClose={onClose}
           onBoulderSelect={onSelectBoulder}
+          onReferenceSelect={onSelectBoulder}
         />
       )}
     </dialog>

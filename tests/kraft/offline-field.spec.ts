@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { kraftGuide } from '../../lib/kraft/data'
+import { openMapCatalog } from './catalog-helpers'
 
 test('verified production download survives zero network, reload and a reopened tab', async ({
   page,
@@ -27,7 +28,7 @@ test('verified production download survives zero network, reload and a reopened 
     asset => asset.kind === 'face-photo',
   ).length
   await expect(offlineKit).toContainText(
-    `${kraftGuide.boulders.length} boulders · ${climbCount} climbs · ${photoCount} face photo${photoCount === 1 ? '' : 's'}`,
+    `${kraftGuide.boulders.length} rock catalogs · ${climbCount} climbs · ${photoCount} face photo${photoCount === 1 ? '' : 's'}`,
   )
   await offlineKit.getByText(/^View verified download/).click()
   const inventory = offlineKit.getByRole('list', {
@@ -78,9 +79,7 @@ test('verified production download survives zero network, reload and a reopened 
   await page.keyboard.press('+')
   await page.keyboard.press('ArrowRight')
   await page.keyboard.press('Home')
-  await page
-    .getByRole('button', { name: /^The Cube, .*Open boulder\.$/ })
-    .click()
+  await openMapCatalog(page, 'cube')
   const cube = page.getByRole('dialog', { name: 'The Cube boulder guide' })
   await expect(
     cube.getByRole('heading', {
@@ -106,17 +105,21 @@ test('verified production download survives zero network, reload and a reopened 
     })
     .click()
   await expect(fearDetails).toBeVisible()
-  await cube
-    .getByRole('region', { name: 'Boulders nearby' })
-    .getByRole('button', { name: /^Split Boulder / })
+  await cube.getByRole('button', { name: 'Back to Kraft', exact: true }).click()
+  await page.getByRole('searchbox').fill('The Split Boulder')
+  await page
+    .locator('.kraft-results > [data-boulder-id="split-boulder"] > button')
     .click()
   const split = page.getByRole('dialog', {
     name: 'Split Boulder boulder guide',
   })
   await expect(split).toBeVisible()
   await split
-    .getByRole('region', { name: 'Boulders nearby' })
-    .getByRole('button', { name: /^The Pearl / })
+    .getByRole('button', { name: 'Back to Kraft', exact: true })
+    .click()
+  await page.getByRole('searchbox').fill('The Pearl')
+  await page
+    .locator('.kraft-results > [data-boulder-id="pearl"] > button')
     .click()
   const pearl = page.getByRole('dialog', { name: 'The Pearl boulder guide' })
   const photo = pearl
@@ -148,7 +151,7 @@ test('verified production download survives zero network, reload and a reopened 
   await page.getByRole('searchbox').fill('Monkey Bars')
   await page.getByRole('button', { name: 'V3–V5', exact: true }).click()
   await expect(
-    page.getByRole('heading', { name: 'No matching records in this pilot.' }),
+    page.getByRole('heading', { name: 'No matching records in this edition.' }),
   ).toBeVisible()
   await page.getByRole('button', { name: 'All grades', exact: true }).click()
   await page

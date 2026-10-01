@@ -70,7 +70,7 @@ test('factual references and sources without grants cannot authorize shipped pho
 
 test('map rights require the actual open-data grants and photo rights cannot use database permission', () => {
   const map = structuredClone(kraftGuide)
-  const source = map.sources.find(item => item.id === 'usgs-3dep-2026-09-30')
+  const source = map.sources.find(item => item.id === 'usgs-3dep-2026-10-01')
   source.usage = 'factual-reference'
   assert.match(
     validateGuide(map).join('\n'),
