@@ -199,6 +199,14 @@
   font-size: 12px;
   text-align: left;
 }
+.kraft-more-climb-results > summary {
+  min-height: 44px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--kraft-rule);
+  font-size: 12px;
+  color: var(--editorial-muted);
+  cursor: pointer;
+}
 .kraft-empty {
   padding: 28px 20px;
 }

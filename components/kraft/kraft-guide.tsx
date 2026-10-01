@@ -143,6 +143,7 @@ export function KraftGuide({ guide }: { guide: KraftGuideData }) {
                 results={results}
                 areas={guide.areas}
                 query={state.query}
+                filtersActive={state.grade !== 'all' || Boolean(state.areaId)}
                 onSelect={selectBoulder}
                 onReset={() => update({ query: '', grade: 'all', areaId: '' })}
               />

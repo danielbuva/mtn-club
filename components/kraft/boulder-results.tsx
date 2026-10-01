@@ -3,17 +3,20 @@
 import { ArrowUpRight } from 'lucide-react'
 import { type BoulderResult, gradeRange } from '@/lib/kraft/search'
 import type { KraftArea } from '@/lib/kraft/types'
+import { MatchingClimbs } from './matching-climbs'
 
 export function BoulderResults({
   results,
   areas,
   query,
+  filtersActive,
   onSelect,
   onReset,
 }: {
   results: BoulderResult[]
   areas: KraftArea[]
   query: string
+  filtersActive: boolean
   onSelect: (boulderId: string, climbId?: string) => void
   onReset: () => void
 }) {
@@ -61,39 +64,14 @@ export function BoulderResults({
             </span>
             <ArrowUpRight size={22} aria-hidden="true" />
           </button>
-          {query.trim() && (
-            <ul
-              className="kraft-climb-results"
-              aria-label={`${boulder.name} climb results`}
-            >
-              {climbs.map(climb => (
-                <li key={climb.id} data-climb-id={climb.id}>
-                  <button
-                    type="button"
-                    onClick={() => onSelect(boulder.id, climb.id)}
-                  >
-                    <span>{climb.name}</span>
-                    <strong>{climb.grade}</strong>
-                  </button>
-                </li>
-              ))}
-              {referenceClimbs.map(({ boulder: parent, climb }) => (
-                <li key={climb.id} data-climb-id={climb.id}>
-                  <button
-                    type="button"
-                    onClick={() => onSelect(parent.id, climb.id)}
-                  >
-                    <span>
-                      {climb.name}
-                      <small>
-                        Current record in {parent.name} · source parent differs
-                      </small>
-                    </span>
-                    <strong>{climb.grade}</strong>
-                  </button>
-                </li>
-              ))}
-            </ul>
+          {(query.trim() || filtersActive) && (
+            <MatchingClimbs
+              boulder={boulder}
+              climbs={climbs}
+              references={referenceClimbs}
+              compact={!query.trim()}
+              onSelect={onSelect}
+            />
           )}
         </li>
       ))}

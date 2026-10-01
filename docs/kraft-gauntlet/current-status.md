@@ -45,6 +45,11 @@ Next: build usable face imagery and route corridors, and repair the largest
 visible browsing weaknesses found by fresh product critics. Internal validation
 and documentary acceptance are not finished-product acceptance.
 
+The latest output review also improved grade/area browsing: compact matching
+climb rows open routes directly, with additional matches expandable per catalog.
+An independent phone/desktop check passed route selection, readable grades and
+return with filters, scroll and opener focus preserved.
+
 Execution order:
 
 1. Complete the canonical inventory and explicit unresolved identities.
