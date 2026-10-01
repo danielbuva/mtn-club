@@ -22,7 +22,7 @@ type TopoRoutesProps = {
 }
 
 // Paths and label points use the unchanged base photograph's pixel coordinates.
-// Route geometry is separately authored; it is never inferred from an image.
+// Route geometry is separately authored from source facts and image correspondence.
 export function TopoRoutes({
   width,
   height,
@@ -40,6 +40,15 @@ export function TopoRoutes({
         Number(b.climb.id === selectedClimbId),
     )
   const labelRadius = Math.max(width / 35, 18)
+  const clipId = useId()
+  // Every route's hit area leaves all badges clear, including shared corridors.
+  const badgeHoles = visibleRoutes
+    .map(({ geometry }) => {
+      const { x, y } = geometry.labelPoint
+      const radius = labelRadius + 3
+      return `M${x - radius} ${y}a${radius} ${radius} 0 1 0 ${radius * 2} 0a${radius} ${radius} 0 1 0 ${-radius * 2} 0Z`
+    })
+    .join(' ')
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: SVG routes form a keyboard-accessible group; HTML fieldsets cannot contain native SVG paths.
@@ -50,6 +59,14 @@ export function TopoRoutes({
       aria-labelledby={titleId}
     >
       <title id={titleId}>Interactive routes. Select a numbered line.</title>
+      <defs>
+        <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
+          <path
+            d={`M0 0H${width}V${height}H0Z ${badgeHoles}`}
+            clipRule="evenodd"
+          />
+        </clipPath>
+      </defs>
       {visibleRoutes.map(({ climb, geometry, number }) => {
         const selected = climb.id === selectedClimbId
         return (
@@ -59,6 +76,7 @@ export function TopoRoutes({
             className={styles.route}
             data-selected={selected}
             data-muted={selectedClimbId !== null && !selected}
+            data-confidence={geometry.confidenceLevel ?? 'high'}
             role="button"
             tabIndex={0}
             aria-label={`Route ${number}: ${climb.name}, ${climb.grade}`}
@@ -71,19 +89,39 @@ export function TopoRoutes({
               }
             }}
           >
-            <path
-              d={geometry.path}
-              className={styles.routeHalo}
-              vectorEffect="non-scaling-stroke"
-            />
-            <path
-              d={geometry.path}
-              className={styles.routeLine}
-              strokeDasharray={
-                selected ? undefined : number % 2 ? '5 5' : '12 5'
-              }
-              vectorEffect="non-scaling-stroke"
-            />
+            <g clipPath={`url(#${clipId})`}>
+              {geometry.confidenceLevel === 'moderate' && (
+                <path
+                  d={geometry.path}
+                  className={styles.routeCorridor}
+                  strokeWidth={geometry.corridorWidth ?? width / 20}
+                />
+              )}
+              <path
+                d={geometry.path}
+                className={styles.routeHalo}
+                vectorEffect="non-scaling-stroke"
+              />
+              <path
+                d={geometry.path}
+                className={styles.routeLine}
+                strokeDasharray={
+                  geometry.confidenceLevel === 'moderate'
+                    ? '5 5'
+                    : selected
+                      ? undefined
+                      : number % 2
+                        ? '5 5'
+                        : '12 5'
+                }
+                vectorEffect="non-scaling-stroke"
+              />
+              <path
+                d={geometry.path}
+                className={styles.routeHitTarget}
+                vectorEffect="non-scaling-stroke"
+              />
+            </g>
             <circle
               cx={geometry.labelPoint.x}
               cy={geometry.labelPoint.y}
@@ -100,11 +138,6 @@ export function TopoRoutes({
             >
               {number}
             </text>
-            <path
-              d={geometry.path}
-              className={styles.routeHitTarget}
-              vectorEffect="non-scaling-stroke"
-            />
           </g>
         )
       })}

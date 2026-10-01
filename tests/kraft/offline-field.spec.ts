@@ -137,7 +137,10 @@ test('verified production download survives zero network, reload and a reopened 
     )
     .toBe(true)
   await pearl.getByText('Photo notes & credit', { exact: true }).click()
-  await expect(pearl).toContainText('No route lines have been authored')
+  await expect(pearl).toContainText(
+    'Two independently reviewed moderate corridors',
+  )
+  await expect(pearl.locator('g[data-confidence="moderate"]')).toHaveCount(2)
   await pearl
     .getByRole('button', { name: 'Zoom in photograph', exact: true })
     .click()

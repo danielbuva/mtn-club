@@ -74,7 +74,18 @@ test('pilot faces, IDs, reciprocal memberships and image provenance remain exact
     for (const climb of pilot.climbs) {
       const current = unit.climbs.find(item => item.id === climb.id)
       assert.deepEqual(current.faceIds, climb.faceIds)
-      assert.deepEqual(current.geometry, climb.geometry)
+      if (['the-pearl', 'pearl-pearl-necklace'].includes(climb.id)) {
+        assert.ok(climb.geometry.every(item => item.status === 'missing'))
+        assert.deepEqual(
+          current.geometry.map(item => item.faceId),
+          climb.geometry.map(item => item.faceId),
+        )
+        assert.equal(current.geometry.length, 1)
+        assert.equal(current.geometry[0].status, 'authored')
+        assert.equal(current.geometry[0].confidenceLevel, 'moderate')
+        assert.equal(current.contentDimensions.topo, 'corridor')
+        assert.equal(current.topoEvidence.confidenceLevel, 'moderate')
+      } else assert.deepEqual(current.geometry, climb.geometry)
     }
   }
 })

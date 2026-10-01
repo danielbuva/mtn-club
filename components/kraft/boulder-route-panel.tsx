@@ -77,7 +77,7 @@ export function BoulderRoutePanel({
             {climb.faceIds.length === 0
               ? 'Face assignment pending'
               : geometry?.status === 'authored'
-                ? `Line highlighted · ${face?.name}`
+                ? `${geometry.confidenceLevel === 'moderate' ? 'Approximate corridor' : 'Reviewed line'} available · ${face?.name}`
                 : `Route line pending · ${face?.name}`}
             {gradeRecordNote(climb) && ` · ${gradeRecordNote(climb)}`}
           </small>

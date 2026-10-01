@@ -59,13 +59,22 @@ const pilotSources: EvidenceSource[] = [
     note: 'BLM official-duty photograph taken 8 March 2024. Commons PD-US-BLM and Flickr CC BY 2.0 checked; user identifies The Pearl. Local derivative resized and optimized, with no compositional edits.',
   },
   {
+    id: 'mp-pearl-finish-reference',
+    title: 'The Pearl · named-route finishing lip photograph',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/112437405/random-guy-named-kevin-hangs-off-the-topout-jugs-of-the-pearl-v5',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Reference-only actual pixels and route-linked caption inspected for the general finishing lip. Independently matched with the full-face reference and approved BLM base; no source photograph, composition or topo artwork is distributed.',
+  },
+  {
     id: 'mp-pearl-view-reference',
     title: 'The Pearl southeast view · photographic identification reference',
     publisher: 'Chris Tregge / Mountain Project',
     url: 'https://www.mountainproject.com/photo/106120934',
     accessedAt: reviewedAt,
     usage: 'factual-reference',
-    note: 'Published Pearl chalk-hold and adjacent Clam Bumper ramp identification supports a source match to the BLM context photograph. No Mountain Project image or route artwork is shipped. Viewpoint/route correspondence awaits field review.',
+    note: 'Published Pearl seam and adjacent Clam Bumper ramp identify the face in the BLM photograph. Independent physical-feature comparison supports a moderate Pearl/Necklace corridor; no Mountain Project pixels or route artwork are shipped. Field verification remains separate.',
   },
   ...catalogSources([
     ...cubeCatalog,

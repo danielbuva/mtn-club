@@ -51,9 +51,14 @@ test('available real photographs load, retain attribution and do not imply revie
           viewer.getByText(face.photographNote, { exact: true }),
         ).toBeVisible()
       await expect(viewer).toContainText(
-        'viewpoint and route correspondence await field review',
+        'field verification and current hold conditions remain unverified',
       )
-      await expect(viewer).toContainText('No route lines have been authored')
+      await expect(viewer).toContainText(
+        'Two independently reviewed moderate corridors',
+      )
+      await expect(viewer.locator('g[data-confidence="moderate"]')).toHaveCount(
+        2,
+      )
       await viewer
         .getByRole('button', { name: 'Zoom in photograph', exact: true })
         .click()

@@ -148,6 +148,8 @@ export type RouteGeometry =
       sourceIds: string[]
       reviewedAt: string
       confidenceLevel?: 'high' | 'moderate'
+      /** Approximate corridor width in the base image's native coordinates. */
+      corridorWidth?: number
       routePathReview?: TopoPathReview
       continuation?: { faceId: string; description: string }
     }

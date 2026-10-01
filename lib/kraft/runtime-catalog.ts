@@ -1,3 +1,4 @@
+import { applyAuthoredRouteCorridors } from './authored-route-corridors.ts'
 import { cubeCatalog } from './cube-catalog.ts'
 import { monkeyCatalog } from './monkey-catalog.ts'
 import { pearlCatalog } from './pearl-catalog.ts'
@@ -187,6 +188,7 @@ export function buildRuntimeCatalog(
       ),
     )
   applySourceFaceAssignments(boulders)
+  applyAuthoredRouteCorridors(boulders)
   for (const unit of boulders)
     for (const climb of unit.climbs)
       Object.assign(climb, deriveRouteContent(climb, unit.faces))

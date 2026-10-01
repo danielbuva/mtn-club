@@ -11,7 +11,7 @@ export const kraftBoulders = buildRuntimeCatalog(pilotBoulders, kraftSources)
 export const kraftGuide: KraftGuide = {
   id: 'kraft',
   name: 'Kraft Boulders',
-  version: '2026-10-01-catalog-5',
+  version: '2026-10-01-catalog-6',
   reviewedAt,
   status: 'catalog',
   description:

@@ -21,7 +21,7 @@ function contentState(climb: Climb, faces: Face[], identityConflict: boolean) {
     climb.betaStatus === 'source-synopsis'
       ? 'Original source-qualified route facts are available; they do not verify a physical line.'
       : 'The source catalog does not supply usable route start, path or finish facts.',
-    'Route geometry and current conditions require a documented field review.',
+    'Current conditions remain unverified. Corridors can use documented start, general features and finish once image correspondence is established.',
   ]
   if (identityConflict)
     return {

@@ -204,6 +204,11 @@ export function FaceViewer({
           Route lines await authoring and review.
         </p>
       )}
+      {routes.some(route => route.geometry.confidenceLevel === 'moderate') && (
+        <p className={styles.topoUnavailable}>
+          Shaded corridors show approximate route regions, not exact holds.
+        </p>
+      )}
       <details className={styles.photoNotes}>
         <summary>Photo notes & credit</summary>
         {face.photographNote && (

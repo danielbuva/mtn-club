@@ -274,10 +274,15 @@ test('image availability changes its dimension without reclassifying source rela
   const missing = deriveRouteContent(entry.climb, faces)
   assert.equal(initial.contentDimensions.image, 'available')
   assert.equal(missing.contentDimensions.image, 'missing')
-  for (const key of ['identity', 'grade', 'parent', 'face', 'topo'])
+  assert.equal(initial.contentDimensions.topo, 'corridor')
+  assert.equal(missing.contentDimensions.topo, 'unavailable')
+  for (const key of ['identity', 'grade', 'parent', 'face'])
     assert.equal(
       initial.contentDimensions[key],
       missing.contentDimensions[key],
       key,
     )
+  assert.equal(initial.topoEvidence.confidenceLevel, 'moderate')
+  assert.equal(initial.topoEvidence.drawingPolicy, 'general-corridor')
+  assert.deepEqual(missing.topoEvidence, initial.topoEvidence)
 })

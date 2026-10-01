@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { kraftGuide } from '../../lib/kraft/data.ts'
+import { deriveRouteContent } from '../../lib/kraft/route-content-dimensions.ts'
 
 /** Validation-only metadata and geometry; this fixture is never field evidence. */
 export function syntheticReviewedGuide() {
@@ -56,5 +57,7 @@ export function syntheticReviewedGuide() {
       reviewedAt: review.reviewedAt,
     },
   ]
+  route.sourceIds = [...new Set([...route.sourceIds, 'blm-pearl-photograph'])]
+  Object.assign(route, deriveRouteContent(route, pearl.faces))
   return guide
 }

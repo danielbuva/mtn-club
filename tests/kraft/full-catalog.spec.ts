@@ -87,7 +87,9 @@ test('every canonical route opens its local facts without needing a photograph o
         record.getByRole('region', { name: 'Published route evidence' }),
       ).toBeVisible()
       await expect(record).toContainText(
-        'Published descriptions do not establish a reviewed line on the guide image.',
+        climb.contentDimensions?.topo === 'unavailable'
+          ? 'Published descriptions do not establish a reviewed line on the guide image.'
+          : 'The available corridor combines source facts with independently reviewed image correspondence. Exact holds and field verification remain separate.',
       )
       await dialog
         .getByRole('button', { name: 'Back to Kraft', exact: true })

@@ -64,8 +64,9 @@ export function RouteFactNotes({
         <p>{evidence.discrepancyNotes.join(' ')}</p>
       )}
       <p>
-        Published descriptions do not establish a reviewed line on the guide
-        image.
+        {climb.contentDimensions?.topo === 'unavailable'
+          ? 'Published descriptions do not establish a reviewed line on the guide image.'
+          : 'The available corridor combines source facts with independently reviewed image correspondence. Exact holds and field verification remain separate.'}
       </p>
     </section>
   )

@@ -1,35 +1,36 @@
 # Current face and topo review
 
-Status on 2026-10-01: the full guide's physical-face accuracy and route overlays
-are not accepted. The preserved baseline has one licensed image and no authored
-real Kraft SVG path. Ten existing face slots are a partial research organization,
-not a complete physical-face inventory.
+Updated 2026-10-01. Two original moderate corridors are accepted on the unchanged
+approved BLM Pearl photograph: The Pearl and Pearl Necklace. A separate geometry
+critic compared multiple named route photographs, corrected the upper endpoint
+to the projecting shoulder lip, and accepted both general route concepts.
 
-The [Pearl BLM photograph](pearl-photograph.md) is an available southeast context
-view, inferred through source comparison. Its right-hand surface is not verified
-as northeast. Route starts, finishes and photograph-relative correspondence
-remain unresolved. Its production derivative and attribution are retained locally
-and included in the offline package.
+The Pearl corridor begins in the documented pocket/crimp region, follows the
+central ascending seam and reaches the shoulder lip. Pearl Necklace begins
+lower in a broad seated-entry region and joins that line. Broad shading and
+dashed centerlines show approximate regions; neither claims exact holds or field
+verification. The final artwork uses no pixels or copied topo art from the
+reference-only photographs. Original MP/OpenBeta observations remain intact;
+additional photographic observations retain their own source IDs.
 
-Earlier independent renderer/navigation inspection exercised image/overlay
-alignment, loading/failure recovery, cached remounts, route selection, clean/selected
-modes and cross-view continuation on an explicitly synthetic calibration. A
-later independent offline check exercised Pearl photo pinch and pan. Those
-mechanics demonstrate no real route geometry or climb correspondence.
+A separate running-product check passed phone and desktop route selection,
+keyboard controls, selected-only and clean-photo modes. It caught overlapping
+SVG touch targets and misleading hidden-line wording; both corrections passed
+physical badge taps and a focused clean-photo recheck.
 
-The active UI requirement supersedes the prior text/beta-first direction:
-opening a rock shows its boulder presentation immediately, with a compact face
-toggle and coordinated climb list. Directions stay collapsed. Mobile assets must
-show the climb-bearing face, starts/finishes and enough context without critical
-feature obstruction.
+There are 81 assigned routes in 54 face groups. The remaining 381 routes have no
+authored line and remain fully visible. The approved Pearl image is still the
+only production face asset. Its source-matched southeast view does not verify
+other sides or supply route evidence for unrelated climbs.
 
-The [reconstruction workstream](reconstruction-workstream.md) is an additional
-high-priority path alongside lawful photography. Its Monkey pilot must be judged
-against multiple real views for recognizable factual geometry, orientation,
-climb-bearing features, guide-camera usefulness and independence from a single
-copyrighted composition. Unverified attractive rock artwork does not pass.
+The original Cube east-view study failed independent guide-image criticism even
+after major-plane corrections. Its rail and upper finishing terrain remain too
+generic for reliable recognition. The independent critic found photographs
+materially more useful; the scene stays in scratch. Owned or permissioned field
+photography is preferred to forcing this asset. Monkey Bar reconstruction
+remains blocked by missing roof/cave geometry.
 
-Fresh face and route critics must inspect actual production candidates. SVG
-corridors require independent route evidence and explicit confidence; a
-reconstructed feature never establishes a climb's path by itself. Reference-only
-images and copied topo art must remain absent from shipped assets.
+Independent reconstruction must preserve recognizable factual geometry and
+choose its own camera. A rendered feature does not establish a climb's route.
+Reference-only imagery and existing topo artwork remain absent from the offline
+package. Full-guide face and topo coverage remain unfinished.

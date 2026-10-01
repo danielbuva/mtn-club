@@ -30,6 +30,11 @@ const byMp = new Map(
     .filter(climb => climb.sourceIdentity.mpId)
     .map(climb => [climb.sourceIdentity.mpId, climb]),
 )
+const corridorIds = ['the-pearl', 'pearl-pearl-necklace']
+const photographSourceIds = [
+  'mp-pearl-view-reference',
+  'mp-pearl-finish-reference',
+]
 
 test('actual runtime contains every exact MP route once and 13 distinct unresolved OB entries', () => {
   assert.equal(kraftGuide.status, 'catalog')
@@ -90,20 +95,56 @@ test('full approved dossiers, verbatim grades and retrieval timestamps reach the
       climb.routeFacts.discrepancyNotes,
       dossier.discrepancyNotes,
     )
-    assert.equal(
-      climb.routeFacts.observations.length,
+    const original = climb.routeFacts.observations.slice(
+      0,
       dossier.observations.length,
     )
-    for (const observation of dossier.observations) {
-      const runtime = climb.routeFacts.observations.find(
-        item => sources.get(item.sourceId)?.url === observation.url,
-      )
+    for (const [index, observation] of dossier.observations.entries()) {
+      const runtime = original[index]
       assert.ok(runtime, `${dossier.mpRouteId} ${observation.url}`)
-      assert.deepEqual(runtime.facts, observation.facts)
-      assert.equal(runtime.synopsis, observation.synopsis)
-      assert.equal(runtime.retrievedAt, observation.retrievedAt)
-      assert.equal(runtime.sourceDependency, observation.sourceDependency)
-      assert.deepEqual(runtime.unresolved, observation.unresolved)
+      assert.equal(sources.get(runtime.sourceId)?.url, observation.url)
+      assert.deepEqual(runtime, {
+        sourceId: runtime.sourceId,
+        publisher: observation.source,
+        retrievedAt: observation.retrievedAt,
+        sourceDependency: observation.sourceDependency,
+        sectionAvailability: observation.sectionAvailability,
+        facts: observation.facts,
+        synopsis: observation.synopsis,
+        unresolved: observation.unresolved,
+      })
+    }
+    const added = climb.routeFacts.observations.slice(
+      dossier.observations.length,
+    )
+    assert.deepEqual(
+      added.map(observation => observation.sourceId),
+      corridorIds.includes(climb.id) ? photographSourceIds : [],
+      climb.id,
+    )
+    for (const observation of added) {
+      const source = sources.get(observation.sourceId)
+      assert.ok(climb.sourceIds.includes(observation.sourceId))
+      assert.equal(source.usage, 'factual-reference')
+      assert.match(source.url, /mountainproject\.com\/photo\//)
+      assert.equal(observation.publisher, 'Mountain Project')
+      assert.equal(observation.retrievedAt, '2026-10-01')
+      assert.equal(observation.sourceDependency, 'primary-source-page')
+      assert.deepEqual(observation.sectionAvailability, {
+        description: 'present',
+        location: 'absent',
+      })
+      for (const field of ['face', 'start', 'constraints', 'approach'])
+        assert.deepEqual(observation.facts[field], [])
+      const field =
+        observation.sourceId === 'mp-pearl-view-reference' ? 'path' : 'finish'
+      assert.equal(observation.facts[field].length, 1)
+      assert.deepEqual(
+        observation.facts[field === 'path' ? 'finish' : 'path'],
+        [],
+      )
+      assert.ok(observation.synopsis.length)
+      assert.ok(observation.unresolved.length)
     }
   }
   for (const record of mp.routes) {
@@ -157,12 +198,13 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
         'gradeMaxValue',
         'description',
         'faceIds',
-        'geometry',
         'boulderAssignmentStatus',
         'boulderAssignmentNote',
         'selectedGradeSourceId',
       ])
         assert.deepEqual(climb[key], original[key], `${original.id}.${key}`)
+      if (!corridorIds.includes(original.id))
+        assert.deepEqual(climb.geometry, original.geometry, original.id)
       for (const id of original.sourceIds)
         assert.ok(climb.sourceIds.includes(id), `${original.id}:${id}`)
       for (const observation of original.gradeObservations)
@@ -180,6 +222,47 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
     climbById.get('split-leaning-wide-crack').boulderAssignmentStatus,
     'editorial-provisional',
   )
+})
+
+test('only the two Pearl routes gain moderate source-closed corridors on their original face', () => {
+  const authored = climbs.filter(climb =>
+    climb.geometry.some(geometry => geometry.status === 'authored'),
+  )
+  assert.deepEqual(
+    authored.map(climb => climb.id).sort(),
+    [...corridorIds].sort(),
+  )
+  for (const climb of authored) {
+    assert.equal(climb.geometry.length, 1)
+    const geometry = climb.geometry[0]
+    assert.equal(geometry.faceId, 'pearl-southeast')
+    assert.deepEqual(climb.faceIds, [geometry.faceId])
+    assert.equal(geometry.confidenceLevel, 'moderate')
+    assert.equal(geometry.reviewedAt, '2026-10-01')
+    assert.equal(geometry.corridorWidth, 90)
+    assert.deepEqual(geometry.sourceIds, [
+      climb.id === 'the-pearl' ? 'mp-pearl-route' : 'mp-route-107444907',
+      ...photographSourceIds,
+    ])
+    for (const sourceId of geometry.sourceIds) {
+      assert.ok(sources.has(sourceId), sourceId)
+      assert.ok(climb.sourceIds.includes(sourceId), sourceId)
+      assert.ok(
+        climb.routeFacts.observations.some(item => item.sourceId === sourceId),
+        sourceId,
+      )
+    }
+    assert.equal(climb.contentDimensions.topo, 'corridor')
+    assert.equal(climb.topoEvidence.confidenceLevel, 'moderate')
+    assert.equal(climb.topoEvidence.drawingPolicy, 'general-corridor')
+    assert.equal(geometry.routePathReview, undefined)
+    assert.equal(climb.routePathReview, undefined)
+    assert.equal(climb.status, 'source-observation')
+  }
+  const standing = climbById.get('the-pearl').geometry[0]
+  const seated = climbById.get('pearl-pearl-necklace').geometry[0]
+  assert.ok(seated.labelPoint.y > standing.labelPoint.y)
+  assert.ok(seated.path.includes(standing.path.slice(1)))
 })
 
 test('source-unit memberships retain exact linked references without duplicating physical climbs', () => {

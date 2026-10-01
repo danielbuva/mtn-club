@@ -166,7 +166,7 @@ export const pilotBoulders: Boulder[] = [
           assetId: 'pearl-blm-photograph',
         },
         photographNote:
-          'BLM context photograph. The southeast view is matched to published references; viewpoint and route correspondence await field review. No route lines have been authored for this photograph.',
+          'BLM context photograph. The southeast view is matched to published references. Two independently reviewed moderate corridors show approximate route regions; field verification and current hold conditions remain unverified.',
       },
       face(
         'pearl-northeast',

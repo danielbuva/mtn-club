@@ -4,7 +4,7 @@ Updated 2026-10-01. The existing goal continues on
 `feat/kraft-offline-guidebook`. Pearl-specific UI polish is frozen; its current
 presentation is sufficient to establish the interaction pattern.
 
-Counts below describe the running `2026-10-01-catalog-5` edition. Source-unit
+Counts below describe the `2026-10-01-catalog-6` edition. Source-unit
 identities are not a verified physical-rock
 count. TheTopo records remain separately tracked pending identity/source-use
 review and cannot simply be added as unique rocks or problems.
@@ -18,8 +18,8 @@ review and cannot simply be added as unique rocks or problems.
 | Mapped runtime boulders | All 78 selected source points/centroids; 10 low-confidence partial aerial surface candidates, no verified complete footprints |
 | Boulders with face assets | 1 |
 | Routes with face assignments | 81: 78 source-backed, 3 provisional; 54 face groups on 31 catalogs |
-| Routes with authored overlays | 0 |
-| Routes without an authored topo | 383; source evidence: 187 moderate, 45 face-only, 151 unresolved; imagery and image-space corridors remain unfinished |
+| Routes with authored overlays | 2 independently reviewed moderate corridors: The Pearl and Pearl Necklace |
+| Routes without an authored topo | 381; source evidence: 189 moderate, 43 face-only, 151 unresolved; most imagery and image-space corridors remain unfinished |
 | Routes hidden because of missing images, faces, lines or field verification | 0 |
 
 All 383 routes are searchable, filterable, listable and reachable through the
@@ -49,6 +49,12 @@ The latest output review also improved grade/area browsing: compact matching
 climb rows open routes directly, with additional matches expandable per catalog.
 An independent phone/desktop check passed route selection, readable grades and
 return with filters, scroll and opener focus preserved.
+
+The first two actual corridors use the unchanged approved BLM Pearl photograph.
+A separate geometry critic accepted their documented starts, shared ascending
+seam and corrected shoulder-lip finish at moderate confidence. Broad shading
+and dashed centerlines communicate approximate regions; exact holds and field
+verification are not claimed. Original source observations remain intact.
 
 Execution order:
 
