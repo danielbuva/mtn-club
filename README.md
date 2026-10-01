@@ -12,6 +12,7 @@ UNLV Mountain Club.
 - Member profile, trip, and officer tools
 - Auth and data via Supabase
 - Maps and geo utilities for trips
+- Kraft Boulders guide at `/guide/kraft`, with an illustrated map, sourced route catalog, local discovery, and an explicitly downloadable offline edition
 - Current dues through Zelle with officer confirmation
 - Disabled Stripe checkout skeleton for a possible future upgrade
 
@@ -122,6 +123,27 @@ This repo uses Lefthook for pre-commit and pre-push checks.
 Production deploys are handled by Vercel. Pushing to `main` triggers a production build. Preview deployments are created per PR.
 
 ## Operations
+
+The active Kraft goal is a complete offline guide across the reconciled area,
+boulder, face and route inventory. [The Kraft workbench](docs/kraft-gauntlet/README.md)
+tracks coverage, provenance, current independent reviews and unresolved evidence.
+The previous four-boulder content pilot is the starting implementation; full
+source acquisition, image-first boulder details, map placement/footprints and
+real route geometry remain in progress. One licensed BLM Pearl context photograph
+is available. The [priority tracker](docs/kraft-gauntlet/TODO.md) includes a
+high-priority [independent boulder-view reconstruction workstream](docs/kraft-gauntlet/reconstruction-workstream.md),
+with Monkey Bar as its proposed pilot and Pearl as the photo control.
+
+Guide records live in `lib/kraft/`; local assets live in `public/kraft/`.
+Publication validation rejects unlicensed imagery, disconnected geometry,
+unqualified identity comparisons and inconsistent coordinate decisions.
+No new environment variables or database migrations are required. The scoped
+service worker saves only the public guide and its exact local dependencies;
+account pages are outside the package.
+
+Transient guide screenshots, reference captures, experiments and Playwright
+reports live under ignored `.tmp/kraft-gauntlet/`. Durable workbench docs keep
+current conclusions and deliberate provenance inputs instead of scratch history.
 
 See `RUNBOOK.md` for infra ownership, access, and incident response.
 

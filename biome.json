@@ -30,6 +30,7 @@
   "files": {
     "includes": [
       "**",
+      "!!**/.tmp",
       "!!**/public/maplibre/maplibre-gl-worker-dev.js",
       "!!**/public/maplibre/maplibre-gl-worker.js",
       "!!**/public/maplibre/maplibre-gl-csp-worker.js"
@@ -38,7 +39,9 @@
   },
   "formatter": {
     "includes": [
-      "**"
+      "**",
+      "!docs/kraft-gauntlet/source-data/geo-osm-source.json",
+      "!public/kraft/geo-features.json"
     ],
     "indentStyle": "space",
     "indentWidth": 2,

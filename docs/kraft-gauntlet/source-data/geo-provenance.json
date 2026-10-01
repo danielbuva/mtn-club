@@ -95,7 +95,7 @@
       "sha256": "77dbb8cfa67f3b91124749ef9f7cd46eefc92601cea68cb8992a7113ad89f21d"
     },
     {
-      "path": "docs/kraft-gauntlet/source-data/geo-naip-reference.jpg",
+      "path": ".tmp/kraft-gauntlet/references/geo-naip-reference.jpg",
       "bytes": 415084,
       "sha256": "f8d7c12adec990ef3d4ee74813d49e3200f573a96022491e2c090c018d720927"
     },

@@ -1,0 +1,1256 @@
+{
+  "schemaVersion": 3,
+  "id": "monkey-cave-independent-view-research-1",
+  "updatedAt": "2026-10-01",
+  "builder": "Codex reconstruction workstream; research record only",
+  "stage": "research",
+  "workState": "blocked",
+  "blockers": [
+    "Inspected views do not constrain full cave/roof/start/finish geometry.",
+    {
+      "id": "multi-view-geometry",
+      "missing": "Inspected overlapping view set for cave/lip/arête and hidden finishes; no measured feature model.",
+      "unblockInput": "Visually inspect independent captures and obtain missing own/rights-cleared views, with feature-level correspondence and uncertainty."
+    },
+    {
+      "id": "orientation-and-membership",
+      "missing": "Cave cardinal orientation and whether uphill roof belongs in the same approved view; neighboring rock identities.",
+      "unblockInput": "Field/source reconciliation with bearings and uncertainty, separate rock identities and explicit view boundaries."
+    },
+    {
+      "id": "scale-and-human-review",
+      "missing": "Useful relative/metric scale evidence with uncertainty and named human review of the actual reconstructed image; field verification is not yet available.",
+      "unblockInput": "Record independent feature/scale observations and a named reviewer with an exact-image approval. Prefer our own field evidence; photographic review must not be labelled field verified."
+    },
+    {
+      "id": "independent-svg",
+      "missing": "Independently corroborated start/finish regions, general path, variants/shared sections and cross-face continuity in an approved image.",
+      "unblockInput": "Reconcile multiple factual route observations or field evidence, author original general SVG corridors and obtain separate route review; the reconstruction itself is not route evidence."
+    },
+    {
+      "id": "direct-current-condition",
+      "missing": "Monkey Bar Direct has reported-break observations later than the indexed photo publication dates; exact affected feature/current shape unknown.",
+      "unblockInput": "Contemporary feature-specific photographs or our own field observation with capture date and named reviewer; exclude Direct from the bounded reconstructed topo if unresolved."
+    }
+  ],
+  "boulder": {
+    "id": "monkey-bar",
+    "name": "Monkey Bar Boulder",
+    "physicalIdentityStatus": "source-observation",
+    "locationEvidence": "MP parent reports 36.16154, -115.41099. Existing location-observations.ts retains contradictory route coordinate and nearby theTopo comparison; not a surveyed model anchor."
+  },
+  "face": {
+    "candidateLabel": "Cave, lip and arête; exact view boundary unresolved",
+    "existingFaceIds": [
+      "monkey-cave"
+    ],
+    "orientation": null,
+    "orientationStatus": "unknown",
+    "evidenceReferenceIds": [
+      "mp-monkey-bars",
+      "mp-hyperglide",
+      "mp-monkey-direct"
+    ],
+    "boundedClimbIds": [
+      "monkey-bars",
+      "hyperglide",
+      "monkey-bar-direct"
+    ]
+  },
+  "confidence": {
+    "level": "unresolved",
+    "reason": "No reconstructed image exists; no complete independent photographic geometry review or field verification has been performed."
+  },
+  "unresolvedGeometry": [
+    "Two or more overlapping low, oblique views spanning full left cave start through the lip/corner, with visible fixed features and ground; measure at least one roof depth and opening height.",
+    "Unobstructed overlapping views from lower corner to the entire upper exit/topout and around adjacent corner; identify common features in both.",
+    "Record compass/GNSS camera position and look direction, physical face outward normal separately, world directions of image left/right, and no-mirroring verification.",
+    "At least two overlapping views around the main rock and adjacent slab that expose gaps/contact/tunnel and ground; map separate rocks before reconciling shelter routes.",
+    "Known-length scale or measured distances on each intended face, plus multiple surrounding camera stations; record measurement uncertainty.",
+    "Dated own/permitted Direct-specific close and context photographs identifying the reportedly changed feature; compare pre/post feature correspondence and record actual observation date with a knowledgeable reviewer."
+  ],
+  "control": "pearl-southeast: existing /kraft/pearl-blm.webp photo, source-matched context view; docs/kraft-gauntlet/pearl-photograph.md. Available licensed photo; no field or SVG approval.",
+  "references": [
+    {
+      "id": "mp-photo-118345965",
+      "url": "https://www.mountainproject.com/photo/118345965/the-monkey-bar-boulder-with-lv-skyline-in-the-distance",
+      "creator": "Karl Johnson",
+      "captureGroup": "mp-photo-118345965",
+      "publishedDate": "2020-02-16",
+      "consultedAt": "2026-10-01",
+      "consultation": "actual-photo-pixels-and-page-metadata",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse permission established. Inspect physical facts only; do not reproduce photographic expression.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Elevated, broad landscape context with boulder near lower image region. Layered cap, lower face and nearby blocks visible; people and pads obscure ground contact. Exact lens and camera bearings unknown.",
+      "limitations": "Qualitative observed sector only; full cave depth, complete starts/finishes, calibrated bearings/scale and current Direct are unresolved.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": "None of these captures identifies the reportedly changed Monkey Bar Direct feature with an actual contemporary observation date.",
+      "observedAt": null,
+      "dateEvidence": "Creator and date displayed on MP photo page. Capture date absent; file/cache timestamps are not capture evidence.",
+      "dateUncertainty": "Actual capture date unknown. No current field observation claimed.",
+      "mediaType": "photograph-page",
+      "independenceEvidence": {
+        "visuallyInspectedCaptureGroupCount": 6,
+        "groups": [
+          "mp-photo-118345965",
+          "mp-photo-122312420",
+          "mp-photo-116581508",
+          "mp-photo-110045620",
+          "mp-photo-111701333",
+          "mp-photo-202529384"
+        ],
+        "assessment": "All six are visually distinct captures, not different sizes/reposts of one photograph. Credits differ. Karl/Will overlap a broad elevated camera sector but differ in people/pads, framing and relative size. Victor is a closer oblique capture with distinct people/context. Aubrey is a close broad-face capture with different silhouette/perspective and no crowd. Glenn/Chloe overlap a low close region but show distinct climbers/people, lighting and perspectives.",
+        "caution": "Six captures are not six surveyed surrounding stations. Different credits/page IDs alone would not establish independence; pixel differences inspected."
+      },
+      "visibleFeatureIds": [
+        "layered-cap",
+        "overhung-lower-mass",
+        "rounded-neighbor",
+        "adjacent-slab-candidate",
+        "rough-ground"
+      ],
+      "viewpointEvidence": null,
+      "occlusion": null,
+      "observedFullImageUrl": "https://mountainproject.com/assets/photos/climb/118345965_large_1581839063.jpg?cache=1702073595",
+      "sha256": "2602c491f597199d4c2546cf9a78f6985bbdf1f8669022cb717cf11a5eebe02b",
+      "width": 1805,
+      "height": 1500,
+      "inspectionMethod": "Codex in-app browser page provenance and full-image pixel view; retained original bytes in ignored scratch only.",
+      "productionInput": false,
+      "cameraBearingDegrees": null,
+      "cameraPositionBearingDegrees": null,
+      "faceOutwardNormalDegrees": null,
+      "cardinalImageLeft": null,
+      "cardinalImageRight": null,
+      "mirroringVerified": false
+    },
+    {
+      "id": "mp-photo-122312420",
+      "url": "https://www.mountainproject.com/photo/122312420/monkey-bar-boulder",
+      "creator": "Will S",
+      "captureGroup": "mp-photo-122312420",
+      "publishedDate": "2022-04-28",
+      "consultedAt": "2026-10-01",
+      "consultation": "actual-photo-pixels-and-page-metadata",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse permission established. Inspect physical facts only; do not reproduce photographic expression.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Broad elevated portrait context; main exterior and upper cap overlap Karl view but people/pads differ and foreground/relative sizes differ. Underside remains dark and small. Exact camera bearings unknown.",
+      "limitations": "Qualitative observed sector only; full cave depth, complete starts/finishes, calibrated bearings/scale and current Direct are unresolved.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": "None of these captures identifies the reportedly changed Monkey Bar Direct feature with an actual contemporary observation date.",
+      "observedAt": null,
+      "dateEvidence": "Creator and date displayed on MP photo page. Capture date absent; file/cache timestamps are not capture evidence.",
+      "dateUncertainty": "Actual capture date unknown. No current field observation claimed.",
+      "mediaType": "photograph-page",
+      "independenceEvidence": {
+        "visuallyInspectedCaptureGroupCount": 6,
+        "groups": [
+          "mp-photo-118345965",
+          "mp-photo-122312420",
+          "mp-photo-116581508",
+          "mp-photo-110045620",
+          "mp-photo-111701333",
+          "mp-photo-202529384"
+        ],
+        "assessment": "All six are visually distinct captures, not different sizes/reposts of one photograph. Credits differ. Karl/Will overlap a broad elevated camera sector but differ in people/pads, framing and relative size. Victor is a closer oblique capture with distinct people/context. Aubrey is a close broad-face capture with different silhouette/perspective and no crowd. Glenn/Chloe overlap a low close region but show distinct climbers/people, lighting and perspectives.",
+        "caution": "Six captures are not six surveyed surrounding stations. Different credits/page IDs alone would not establish independence; pixel differences inspected."
+      },
+      "visibleFeatureIds": [
+        "layered-cap",
+        "overhung-lower-mass",
+        "rounded-neighbor",
+        "adjacent-slab-candidate",
+        "rough-ground"
+      ],
+      "viewpointEvidence": null,
+      "occlusion": null,
+      "observedFullImageUrl": "https://mountainproject.com/assets/photos/climb/122312420_large_1651204588.jpg?cache=1702074196",
+      "sha256": "3bba0b706ae53ac883b6f6b4c58274f6f4d796e9ffbe6ab32d61497f3964c6d3",
+      "width": 1000,
+      "height": 1500,
+      "inspectionMethod": "Codex in-app browser page provenance and full-image pixel view; retained original bytes in ignored scratch only.",
+      "productionInput": false,
+      "cameraBearingDegrees": null,
+      "cameraPositionBearingDegrees": null,
+      "faceOutwardNormalDegrees": null,
+      "cardinalImageLeft": null,
+      "cardinalImageRight": null,
+      "mirroringVerified": false
+    },
+    {
+      "id": "mp-photo-116581508",
+      "url": "https://www.mountainproject.com/photo/116581508/monkey-bar-boulder-from-the-hill",
+      "creator": "Victor Pinto",
+      "captureGroup": "mp-photo-116581508",
+      "publishedDate": "2019-03-05",
+      "consultedAt": "2026-10-01",
+      "consultation": "actual-photo-pixels-and-page-metadata",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse permission established. Inspect physical facts only; do not reproduce photographic expression.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Closer oblique broad exterior view, cap and broad lower mass visible; numerous people/pads and a shrub obstruct lower boundary/roof. A prominent layer boundary slopes across the visible face; image-right projects and curves under. Hill caption is not a bearing.",
+      "limitations": "Qualitative observed sector only; full cave depth, complete starts/finishes, calibrated bearings/scale and current Direct are unresolved.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": "None of these captures identifies the reportedly changed Monkey Bar Direct feature with an actual contemporary observation date.",
+      "observedAt": null,
+      "dateEvidence": "Creator and date displayed on MP photo page. Capture date absent; file/cache timestamps are not capture evidence.",
+      "dateUncertainty": "Actual capture date unknown. No current field observation claimed.",
+      "mediaType": "photograph-page",
+      "independenceEvidence": {
+        "visuallyInspectedCaptureGroupCount": 6,
+        "groups": [
+          "mp-photo-118345965",
+          "mp-photo-122312420",
+          "mp-photo-116581508",
+          "mp-photo-110045620",
+          "mp-photo-111701333",
+          "mp-photo-202529384"
+        ],
+        "assessment": "All six are visually distinct captures, not different sizes/reposts of one photograph. Credits differ. Karl/Will overlap a broad elevated camera sector but differ in people/pads, framing and relative size. Victor is a closer oblique capture with distinct people/context. Aubrey is a close broad-face capture with different silhouette/perspective and no crowd. Glenn/Chloe overlap a low close region but show distinct climbers/people, lighting and perspectives.",
+        "caution": "Six captures are not six surveyed surrounding stations. Different credits/page IDs alone would not establish independence; pixel differences inspected."
+      },
+      "visibleFeatureIds": [
+        "layered-cap",
+        "overhung-lower-mass",
+        "long-layer-boundary",
+        "rounded-neighbor",
+        "adjacent-slab-candidate",
+        "rough-ground",
+        "human-relative-scale"
+      ],
+      "viewpointEvidence": null,
+      "occlusion": null,
+      "observedFullImageUrl": "https://mountainproject.com/assets/photos/climb/116581508_large_1551809474.jpg?cache=1702073262",
+      "sha256": "f1f1aeb5823bea8cf6488a7bf838a11658e568b24f3ecd99028471c1e9d4d2de",
+      "width": 2000,
+      "height": 1125,
+      "inspectionMethod": "Codex in-app browser page provenance and full-image pixel view; retained original bytes in ignored scratch only.",
+      "productionInput": false,
+      "cameraBearingDegrees": null,
+      "cameraPositionBearingDegrees": null,
+      "faceOutwardNormalDegrees": null,
+      "cardinalImageLeft": null,
+      "cardinalImageRight": null,
+      "mirroringVerified": false
+    },
+    {
+      "id": "mp-photo-110045620",
+      "url": "https://www.mountainproject.com/photo/110045620/north-side-of-the-monkey-bar-boulder",
+      "creator": "Aubrey Runyon",
+      "captureGroup": "mp-photo-110045620",
+      "publishedDate": "2015-02-07",
+      "consultedAt": "2026-10-01",
+      "consultation": "actual-photo-pixels-and-page-metadata",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse permission established. Inspect physical facts only; do not reproduce photographic expression.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Close broad face with pronounced diagonal layer boundaries and projecting/curving image-right lower mass. Ground contact and part of lower edge cropped/dark; top silhouette is visible. Caption north-side remains a source observation rather than a surveyed normal/camera bearing.",
+      "limitations": "Qualitative observed sector only; full cave depth, complete starts/finishes, calibrated bearings/scale and current Direct are unresolved.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": "None of these captures identifies the reportedly changed Monkey Bar Direct feature with an actual contemporary observation date.",
+      "observedAt": null,
+      "dateEvidence": "Creator and date displayed on MP photo page. Capture date absent; file/cache timestamps are not capture evidence.",
+      "dateUncertainty": "Actual capture date unknown. No current field observation claimed.",
+      "mediaType": "photograph-page",
+      "independenceEvidence": {
+        "visuallyInspectedCaptureGroupCount": 6,
+        "groups": [
+          "mp-photo-118345965",
+          "mp-photo-122312420",
+          "mp-photo-116581508",
+          "mp-photo-110045620",
+          "mp-photo-111701333",
+          "mp-photo-202529384"
+        ],
+        "assessment": "All six are visually distinct captures, not different sizes/reposts of one photograph. Credits differ. Karl/Will overlap a broad elevated camera sector but differ in people/pads, framing and relative size. Victor is a closer oblique capture with distinct people/context. Aubrey is a close broad-face capture with different silhouette/perspective and no crowd. Glenn/Chloe overlap a low close region but show distinct climbers/people, lighting and perspectives.",
+        "caution": "Six captures are not six surveyed surrounding stations. Different credits/page IDs alone would not establish independence; pixel differences inspected."
+      },
+      "visibleFeatureIds": [
+        "layered-cap",
+        "overhung-lower-mass",
+        "long-layer-boundary"
+      ],
+      "viewpointEvidence": null,
+      "occlusion": null,
+      "observedFullImageUrl": "https://mountainproject.com/assets/photos/climb/110045620_large_1494368142.jpg?cache=1701318791",
+      "sha256": "5a7b3f12af127812bc554c96ccbdad8bbe67be9c0d1a75e3de4cf16affa78460",
+      "width": 2000,
+      "height": 1125,
+      "inspectionMethod": "Codex in-app browser page provenance and full-image pixel view; retained original bytes in ignored scratch only.",
+      "productionInput": false,
+      "cameraBearingDegrees": null,
+      "cameraPositionBearingDegrees": null,
+      "faceOutwardNormalDegrees": null,
+      "cardinalImageLeft": null,
+      "cardinalImageRight": null,
+      "mirroringVerified": false
+    },
+    {
+      "id": "mp-monkey",
+      "url": "https://www.mountainproject.com/area/105937674/monkey-bar-boulder",
+      "creator": "Mountain Project contributors",
+      "captureGroup": "mp-parent-105937674",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse license established; retain URL for factual inspection only.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Parent catalog contains 26 named entries and reports coordinate 36.16154, -115.41099.",
+      "limitations": "Parent catalog does not reconcile every entry to one physical rock; coordinate is not field verified.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-monkey-bars",
+      "url": "https://www.mountainproject.com/route/106657521/monkey-bars",
+      "creator": "Mountain Project contributors",
+      "captureGroup": "mp-route-106657521",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse license established; retain URL for factual inspection only.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Published climbing facts identify a cave start, rightward movement and arête exit.",
+      "limitations": "No physical camera, dimensions, exact hold positions, verified SVG or target continuation face established.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-hyperglide",
+      "url": "https://www.mountainproject.com/route/107074342/hyperglide",
+      "creator": "Mountain Project contributors",
+      "captureGroup": "mp-route-107074342",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse license established; retain URL for factual inspection only.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Existing source research describes the Monkey Bars starting area with an up-left exit.",
+      "limitations": "Text consulted through the existing source ledger in this pass. Shared start does not prove one image covers both full routes.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-monkey-direct",
+      "url": "https://www.mountainproject.com/route/107378329/monkey-bar-direct",
+      "creator": "Mountain Project contributors",
+      "captureGroup": "mp-route-107378329",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse license established; retain URL for factual inspection only.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Existing source research describes an uphill roof with a low jug and pockets.",
+      "limitations": "Text consulted through the existing source ledger in this pass. Cardinal orientation and shared-view membership remain unconfirmed.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-monkey-right",
+      "url": "https://www.mountainproject.com/route/106683440/monkey-bar-right",
+      "creator": "Mountain Project contributors",
+      "captureGroup": "mp-route-106683440",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse license established; retain URL for factual inspection only.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Published source assigns Monkey Bar Right to the northwest side.",
+      "limitations": "No physical feature measurements or photographic correspondence established.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-monkey-ne",
+      "url": "https://www.mountainproject.com/route/113880181/northeast-face-left",
+      "creator": "Mountain Project contributors",
+      "captureGroup": "mp-route-113880181",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "No production reuse license established; retain URL for factual inspection only.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Published source identifies a northeast face line.",
+      "limitations": "No northeast boundary, full silhouette, scale or top-out geometry established.",
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "usgs-naip-2026-09-30",
+      "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer",
+      "creator": "USGS / USDA-FSA-APFO",
+      "captureGroup": "naip-raster-134873-2022-06-11",
+      "publishedDate": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "open-geographic-data",
+      "license": "U.S. federal government public domain",
+      "rightsEvidence": "docs/kraft-gauntlet/geography.md and source-data/geo-provenance.json; source data retained separately from public guide assets.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Existing geography ledger retains 2022-06-11 aerial raster 134873, 0.6 m nominal resolution, with extraction metadata.",
+      "limitations": "Only geographic context; cannot establish cave, holds, face depth or fine rock shape. Image pixels were not re-inspected in this pass.",
+      "capturedAt": "2022-06-11",
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": "USGS NAIP source raster OBJECTID 134873 acquisition_date 1654905600000, retained in source-data/geo-provenance.json.",
+      "dateUncertainty": "Acquisition date known to day precision; exact capture time unknown. Aerial context does not establish contemporary climb-bearing feature condition.",
+      "mediaType": "aerial-metadata",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-monkey-direct-scott-2023",
+      "url": "https://www.mountainproject.com/route/107378329/monkey-bar-direct#Comment-124063243",
+      "creator": "Scott B / Mountain Project",
+      "captureGroup": "mp-comment-124063243",
+      "publishedDate": "2023-04-21",
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "Dated factual observation retained by content-evidence.md and monkey-route-facts.ts; no production media use.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Reports post-break beta and proposes approximately V10; a dated individual opinion, not a current geometry or consensus observation.",
+      "limitations": "Not a photographic measurement. Break date, affected feature, current shape and route geometry remain unresolved.",
+      "capturedAt": null,
+      "conditionEra": "reported-post-break; current condition unverified",
+      "conditionEvidence": "docs/kraft-gauntlet/content-evidence.md and lib/kraft/monkey-route-facts.ts; exact comment anchor retained.",
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-monkey-direct-radke-2024",
+      "url": "https://www.mountainproject.com/route/107378329/monkey-bar-direct#Comment-125879656",
+      "creator": "Zachary Radke / Mountain Project",
+      "captureGroup": "mp-comment-125879656",
+      "publishedDate": "2024-03-28",
+      "consultedAt": "2026-10-01",
+      "consultation": "text-facts",
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": "Dated factual observation retained by content-evidence.md and monkey-route-facts.ts; no production media use.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": "Discusses the reported break while retaining a V8 opinion; no exact affected feature or present condition established.",
+      "limitations": "Not a photographic measurement. Break date, affected feature, current shape and route geometry remain unresolved.",
+      "capturedAt": null,
+      "conditionEra": "reported-post-break; current condition unverified",
+      "conditionEvidence": "docs/kraft-gauntlet/content-evidence.md and lib/kraft/monkey-route-facts.ts; exact comment anchor retained.",
+      "observedAt": null,
+      "dateEvidence": "Dated source text or repository evidence ledger; this is not a dated field capture.",
+      "dateUncertainty": "Actual physical capture/observation date unknown; publication or consultation dates must not substitute.",
+      "mediaType": "source-text",
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    },
+    {
+      "id": "mp-photo-111701333",
+      "creator": "Glenn Fitkin",
+      "captureGroup": "mp-photo-111701333",
+      "url": "https://www.mountainproject.com/photo/111701333/flowing-through-the-roof-on-monkey-bars",
+      "observedFullImageUrl": "https://mountainproject.com/assets/photos/climb/111701333_large_1494300620.jpg?cache=1772513815",
+      "sha256": "67aac014ec57beb7299137b786dc0f3076d466c25f14a93506f535fc126c10b8",
+      "width": 960,
+      "height": 640,
+      "publishedDate": "2016-03-16",
+      "capturedAt": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "actual-photo-pixels-and-page-metadata",
+      "inspectionMethod": "Codex in-app browser page provenance and full-image pixel view; retained original bytes in ignored scratch only.",
+      "dateEvidence": "Creator and date displayed on MP photo page. Capture date absent; file/cache timestamps are not capture evidence.",
+      "dateUncertainty": "Actual capture date unknown. No current field observation claimed.",
+      "license": null,
+      "usage": "reference-only",
+      "rightsEvidence": "No production reuse permission established. Inspect physical facts only; do not reproduce photographic expression.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "productionInput": false,
+      "observations": "Route-linked close low view of Monkey Bars area. Shows underside/steep face with shelves and concave hollows, curving image-right edge and adjacent slab; climber occludes part. Full left start region and entire top silhouette/finish not included.",
+      "visibleFeatureIds": [
+        "overhung-lower-mass",
+        "lower-shelf-hollow-complex",
+        "curved-side-corner",
+        "adjacent-slab-candidate",
+        "rough-ground",
+        "human-relative-scale"
+      ],
+      "cameraBearingDegrees": null,
+      "cameraPositionBearingDegrees": null,
+      "faceOutwardNormalDegrees": null,
+      "cardinalImageLeft": null,
+      "cardinalImageRight": null,
+      "mirroringVerified": false,
+      "conditionEvidence": "None of these captures identifies the reportedly changed Monkey Bar Direct feature with an actual contemporary observation date.",
+      "limitations": "Qualitative observed sector only; full cave depth, complete starts/finishes, calibrated bearings/scale and current Direct are unresolved.",
+      "independenceEvidence": {
+        "visuallyInspectedCaptureGroupCount": 6,
+        "groups": [
+          "mp-photo-118345965",
+          "mp-photo-122312420",
+          "mp-photo-116581508",
+          "mp-photo-110045620",
+          "mp-photo-111701333",
+          "mp-photo-202529384"
+        ],
+        "assessment": "All six are visually distinct captures, not different sizes/reposts of one photograph. Credits differ. Karl/Will overlap a broad elevated camera sector but differ in people/pads, framing and relative size. Victor is a closer oblique capture with distinct people/context. Aubrey is a close broad-face capture with different silhouette/perspective and no crowd. Glenn/Chloe overlap a low close region but show distinct climbers/people, lighting and perspectives.",
+        "caution": "Six captures are not six surveyed surrounding stations. Different credits/page IDs alone would not establish independence; pixel differences inspected."
+      }
+    },
+    {
+      "id": "mp-photo-202529384",
+      "creator": "Chloe Crusan",
+      "captureGroup": "mp-photo-202529384",
+      "url": "https://www.mountainproject.com/photo/202529384/ryan-pulling-the-crux",
+      "observedFullImageUrl": "https://mountainproject.com/assets/photos/climb/202529384_large_1772509263.jpg?cache=1785959149",
+      "sha256": "4ba76db464ba02dee4d12f80886bdaf4538f167ed0f8fd6133588c09a5585bdd",
+      "width": 2000,
+      "height": 1500,
+      "publishedDate": "2026-03-02",
+      "capturedAt": null,
+      "consultedAt": "2026-10-01",
+      "consultation": "actual-photo-pixels-and-page-metadata",
+      "inspectionMethod": "Codex in-app browser page provenance and full-image pixel view; retained original bytes in ignored scratch only.",
+      "dateEvidence": "Creator and date displayed on MP photo page. Capture date absent; file/cache timestamps are not capture evidence.",
+      "dateUncertainty": "Actual capture date unknown. No current field observation claimed.",
+      "license": null,
+      "usage": "reference-only",
+      "rightsEvidence": "No production reuse permission established. Inspect physical facts only; do not reproduce photographic expression.",
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "productionInput": false,
+      "observations": "Different low close view of the Monkey Bars corner. Visible shelf/hollow complex and curving side edge overlap Glenn capture; different people/clothing/positions, source dimensions and lighting make this visibly distinct. Climber blocks side feature and crop excludes left cave extent and full finish. 2026 page date does not establish actual capture date or Direct condition.",
+      "visibleFeatureIds": [
+        "overhung-lower-mass",
+        "lower-shelf-hollow-complex",
+        "curved-side-corner",
+        "adjacent-slab-candidate",
+        "rough-ground",
+        "human-relative-scale"
+      ],
+      "cameraBearingDegrees": null,
+      "cameraPositionBearingDegrees": null,
+      "faceOutwardNormalDegrees": null,
+      "cardinalImageLeft": null,
+      "cardinalImageRight": null,
+      "mirroringVerified": false,
+      "conditionEvidence": "None of these captures identifies the reportedly changed Monkey Bar Direct feature with an actual contemporary observation date.",
+      "limitations": "Qualitative observed sector only; full cave depth, complete starts/finishes, calibrated bearings/scale and current Direct are unresolved.",
+      "independenceEvidence": {
+        "visuallyInspectedCaptureGroupCount": 6,
+        "groups": [
+          "mp-photo-118345965",
+          "mp-photo-122312420",
+          "mp-photo-116581508",
+          "mp-photo-110045620",
+          "mp-photo-111701333",
+          "mp-photo-202529384"
+        ],
+        "assessment": "All six are visually distinct captures, not different sizes/reposts of one photograph. Credits differ. Karl/Will overlap a broad elevated camera sector but differ in people/pads, framing and relative size. Victor is a closer oblique capture with distinct people/context. Aubrey is a close broad-face capture with different silhouette/perspective and no crowd. Glenn/Chloe overlap a low close region but show distinct climbers/people, lighting and perspectives.",
+        "caution": "Six captures are not six surveyed surrounding stations. Different credits/page IDs alone would not establish independence; pixel differences inspected."
+      }
+    }
+  ],
+  "featureClaims": [
+    {
+      "id": "cave-to-arete",
+      "kind": "arete",
+      "observation": "Monkey Bars source observation involves a cave and an arête exit; exact lip/top-out/upper-face geometry is unmeasured.",
+      "supportingReferenceIds": [
+        "mp-monkey-bars"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": "Text establishes a feature relationship, not a reconstructable cross-section or camera. Requires independent pixel/field observations.",
+      "geometryStatus": "source-observation",
+      "measurement": null,
+      "affectedClimbIds": [
+        "monkey-bars"
+      ],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "shared-start-candidate",
+      "kind": "face-membership",
+      "observation": "Hyperglide is described with the Monkey Bars starting area and a different exit; full shared-view membership is provisional.",
+      "supportingReferenceIds": [
+        "mp-monkey-bars",
+        "mp-hyperglide"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": "Two related route descriptions do not constitute two independent shape observations.",
+      "geometryStatus": "source-observation",
+      "measurement": null,
+      "affectedClimbIds": [
+        "monkey-bars",
+        "hyperglide"
+      ],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "uphill-roof-candidate",
+      "kind": "face-membership",
+      "observation": "Monkey Bar Direct is reported on an uphill roof; equivalence with the cave guide view is unresolved.",
+      "supportingReferenceIds": [
+        "mp-monkey-direct"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": "No reviewed photo, bearing or depth correspondence.",
+      "geometryStatus": "source-observation",
+      "measurement": null,
+      "affectedClimbIds": [
+        "monkey-bar-direct"
+      ],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "northwest-source-label",
+      "kind": "orientation",
+      "observation": "Monkey Bar Right has a source-supported northwest assignment; it is a candidate separate view.",
+      "supportingReferenceIds": [
+        "mp-monkey-right"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": "Published cardinal label is not field-confirmed camera or measured physical outward normal.",
+      "geometryStatus": "source-observation",
+      "measurement": null,
+      "affectedClimbIds": [
+        "monkey-bar-right"
+      ],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "northeast-source-label",
+      "kind": "orientation",
+      "observation": "Northeast Face Left is described on the northeast side; it is a candidate separate view.",
+      "supportingReferenceIds": [
+        "mp-monkey-ne"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": "Source description does not resolve the physical boundary or match the north-side photo caption to this line.",
+      "geometryStatus": "source-observation",
+      "measurement": null,
+      "affectedClimbIds": [
+        "monkey-northeast-left"
+      ],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "direct-condition-era",
+      "kind": "hold-feature",
+      "observation": "Dated 2023/2024 comments refer to a reported break but do not establish which feature changed or its current shape. Old indexed photos cannot establish contemporary Direct holds.",
+      "supportingReferenceIds": [
+        "mp-monkey-direct-scott-2023",
+        "mp-monkey-direct-radke-2024"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": "Condition reports and grade opinions are not measurements; capture dates and current field correspondence are missing.",
+      "geometryStatus": "source-observation",
+      "measurement": null,
+      "affectedClimbIds": [
+        "monkey-bar-direct"
+      ],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "layered-cap",
+      "kind": "overall-mass-and-layering",
+      "observation": "Main exterior is an irregular layered block with a stepped/jagged upper cap; it is not a uniform rounded dome. Several broad rock layers create ledges and recesses.",
+      "supportingReferenceIds": [
+        "mp-photo-118345965",
+        "mp-photo-122312420",
+        "mp-photo-116581508",
+        "mp-photo-110045620"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "high",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "The qualitative cap and layering recur. Rear thickness, far-side silhouette, exact layer cross-sections and upper-surface contour are unobserved; do not trace any source silhouette.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "overhung-lower-mass",
+      "kind": "exterior-undercut",
+      "observation": "A broad lower exterior mass bulges outward and curves back beneath a projecting edge, leaving an overhung/undercut region above the ground.",
+      "supportingReferenceIds": [
+        "mp-photo-118345965",
+        "mp-photo-122312420",
+        "mp-photo-116581508",
+        "mp-photo-110045620",
+        "mp-photo-111701333",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "high",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Broad exterior relationship recurs in wide and close views. Deepest cave, actual wall/roof angles, cross-section and ground contact are not recoverable from these views. A shadow is not a cavity depth measurement.",
+      "affectedClimbIds": [
+        "monkey-bars",
+        "hyperglide"
+      ],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "long-layer-boundary",
+      "kind": "major-seam-or-ledge",
+      "observation": "One prominent oblique layer boundary traverses the broad face and continues toward a projecting portion; neighboring bands roughly share its orientation in each image.",
+      "supportingReferenceIds": [
+        "mp-photo-116581508",
+        "mp-photo-110045620"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "medium",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Appearance varies strongly with view. This is a layer boundary/ledge claim, not an open crack-width claim. Exact correspondence across corners, slope in world coordinates and bearing remain unknown.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "lower-shelf-hollow-complex",
+      "kind": "concave-and-protruding-features",
+      "observation": "The close Monkey Bars views overlap an irregular lower shelf/hollow cluster: an elongated concavity above deeper hollows and intervening protruding rock. The underside also contains slanting layered bands.",
+      "supportingReferenceIds": [
+        "mp-photo-111701333",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "medium-high",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Qualitative cluster correspondence is supported by two clearly distinct close captures and matching adjacent slab/curved edge. Exact cavity count, depth, individual hold inventory and present condition are not measured. Climber occlusion/crops obstruct parts. Do not draw precise pockets or beta from this claim.",
+      "affectedClimbIds": [
+        "monkey-bars",
+        "hyperglide"
+      ],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "curved-side-corner",
+      "kind": "lip-and-corner",
+      "observation": "The visible side of the close Monkey Bars region curves from projecting upper/lateral rock into the underside, producing a rounded/blunt corner rather than a single perfectly sharp straight vertical edge.",
+      "supportingReferenceIds": [
+        "mp-photo-111701333",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "medium-high",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Only the visible side corner is supported. Its full upper continuation, back side, exact relation to the text-described exit arête, and full climbing finish remain unconfirmed.",
+      "affectedClimbIds": [
+        "monkey-bars"
+      ],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "adjacent-slab-candidate",
+      "kind": "neighbor-relationship",
+      "observation": "A distinct-looking slab/block sits immediately beside the main rock near the projecting/undercut side; close views show a triangular profile and a dark intervening gap.",
+      "supportingReferenceIds": [
+        "mp-photo-118345965",
+        "mp-photo-122312420",
+        "mp-photo-116581508",
+        "mp-photo-111701333",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "medium",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Adjacency and gap are visible repeatedly. Source-described leaning shelter membership, contact points, tunnel extent, separate-rock topology and exact west/cardinal assignment need further overlapping coverage. Model as separate unresolved context, never as an invented main-rock buttress.",
+      "affectedClimbIds": [
+        "monkey-darwin-award",
+        "monkey-glory-hole"
+      ],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "rounded-neighbor",
+      "kind": "neighbor-context",
+      "observation": "Wide captures repeat a large rounded, darker-faced neighboring boulder on their image-left behind/beside the main rock, with other smaller blocks nearby.",
+      "supportingReferenceIds": [
+        "mp-photo-118345965",
+        "mp-photo-122312420",
+        "mp-photo-116581508"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "medium-high",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "The repeated arrangement supports a recognizable neighbor relationship. No name, route membership, measured distance, bearing or mapping into close-view image-left/right is established.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "rough-ground",
+      "kind": "ground-context",
+      "observation": "Rock rests in a rough dirt/gravel-and-block setting with an uneven surface near the base; the local climbing area is not a perfectly flat studio plane.",
+      "supportingReferenceIds": [
+        "mp-photo-118345965",
+        "mp-photo-122312420",
+        "mp-photo-116581508",
+        "mp-photo-111701333",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "high",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Exact surface elevations/slope and rock contact are obscured by people, pads, vegetation and crop. Do not reproduce a source foreground/background arrangement or fabricate surveyed terrain.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "human-relative-scale",
+      "kind": "scale-context",
+      "observation": "Standing people in Victor view are smaller than the main visible rock; close climbers give an order-of-magnitude human-scale context.",
+      "supportingReferenceIds": [
+        "mp-photo-116581508",
+        "mp-photo-111701333",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "low",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "People are at different depths/poses and their heights are unknown. This cannot set meters, exact height/width ratio, roof reach or guide-grade angle. Metric scale remains null.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "route-face-membership",
+      "kind": "route-correspondence",
+      "observation": "The two close captures are both directly parented to Monkey Bars. Text independently relates Monkey Bars to a cave and corner/arête exit, and Hyperglide to its starting area.",
+      "supportingReferenceIds": [
+        "mp-photo-111701333",
+        "mp-photo-202529384",
+        "mp-monkey-bars",
+        "mp-hyperglide"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "medium",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Parent association and route text support the local region, not the full left start/topout or a complete route corridor. The uphill Direct roof must not be assumed equivalent to this cave.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "orientation-unresolved",
+      "kind": "orientation",
+      "observation": "Aubrey caption says north side; Right primary text says northwest; Northeast Face Left primary text says northeast. These are separate source labels.",
+      "supportingReferenceIds": [
+        "mp-photo-110045620",
+        "mp-monkey-right",
+        "mp-monkey-ne"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "No surveyed bearing or consistent physical feature mapping reconciles labels. World directions of image-left/right and face outward normals remain null; no mirroring or south/southeast camera claim is supported.",
+      "affectedClimbIds": [],
+      "currentConditionStatus": "unknown"
+    },
+    {
+      "id": "direct-current-feature-unresolved",
+      "kind": "condition-and-route-feature",
+      "observation": "Reported Direct break comments do not identify the changed feature/current shape. The recent-page Monkey Bars close capture is not Direct-specific condition evidence.",
+      "supportingReferenceIds": [
+        "mp-monkey-direct",
+        "mp-monkey-direct-scott-2023",
+        "mp-monkey-direct-radke-2024",
+        "mp-photo-202529384"
+      ],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceScope": "Qualitative visible physical fact only; not numerical mesh accuracy.",
+      "measurement": null,
+      "measurementUncertainty": "No calibrated lens, surveyed bearing, known scale or physical measurement. Perspective and occlusion prevent metric reconstruction.",
+      "limitations": "Capture dates are unknown; only source publication dates known. No contemporary feature-specific dated photograph/field comparison of Direct exists in this set. Exclude affected Direct geometry and line.",
+      "affectedClimbIds": [
+        "monkey-bar-direct"
+      ],
+      "currentConditionStatus": "blocked-current-shape"
+    }
+  ],
+  "productionInputReferenceIds": [],
+  "model": null,
+  "camera": null,
+  "render": null,
+  "reviews": {
+    "geometryCritic": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No render exists. Future fresh critic must compare geometry/orientation/climb-bearing features against independent photographs and audit camera/composition independence.",
+      "comparedReferenceIds": [],
+      "criteria": {
+        "recognizableGeometry": null,
+        "orientation": null,
+        "climbBearingFeatures": null,
+        "currentCondition": null,
+        "unresolvedFeatureFindings": []
+      }
+    },
+    "fieldHuman": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No actual field observation or field verification exists. This record accepts dated physical field evidence only; photographic human geometry approval belongs in geometryHuman.",
+      "method": null,
+      "reviewBasis": null,
+      "observedAt": null,
+      "fieldObservationEvidence": null,
+      "outcome": null,
+      "requiredReviewBasis": "in-field"
+    },
+    "publicationHuman": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No approval asserted. Named human publication approval must identify the assembled manifest SHA-256 and guide version, including exact renders, reviewed SVGs, face assignments and continuation assignments.",
+      "manifestSha256": null,
+      "guideVersion": null,
+      "method": null
+    },
+    "compositionCritic": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No rendered asset reviewed. Compare each real source viewpoint, crop, lighting and foreground/background arrangement against the independently authored render.",
+      "comparedReferenceIds": [],
+      "sourceComparisons": []
+    },
+    "topoUsefulnessCritic": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No rendered asset reviewed. Compare guide recognition, framing, route separation and camera usefulness with the normal photo control and obtaining our own photograph.",
+      "cameraGoalFindings": []
+    },
+    "geometryHuman": {
+      "status": "not-reviewed",
+      "reviewBasis": null,
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "comparedReferenceIds": [],
+      "evidence": null,
+      "corrections": [],
+      "outcome": null,
+      "findings": "No clean-image geometry approval exists. Photographic or in-field human review must identify the exact clean render and corrections resolved against revised hashes; photographic review is not field verification."
+    }
+  },
+  "routeVerification": [
+    {
+      "climbId": "monkey-bars",
+      "status": "blocked",
+      "startFinishEvidence": null,
+      "pathEvidence": null,
+      "continuationEvidence": null,
+      "svgSha256": null,
+      "independentReviewer": null,
+      "reviewDate": null,
+      "baseRenderSha256": null,
+      "baseWidth": null,
+      "baseHeight": null,
+      "geometryPrecision": "general-corridor",
+      "supportingReferenceIds": [
+        "mp-monkey-bars"
+      ],
+      "conflictingReferenceIds": [],
+      "confidence": "unresolved",
+      "variantsAndEliminatesEvidence": null,
+      "blockedReason": "The source route description supports factual movement, but no approved image and independently corroborated image-relative route corridor are available."
+    },
+    {
+      "climbId": "hyperglide",
+      "status": "blocked",
+      "startFinishEvidence": null,
+      "pathEvidence": null,
+      "continuationEvidence": null,
+      "svgSha256": null,
+      "independentReviewer": null,
+      "reviewDate": null,
+      "baseRenderSha256": null,
+      "baseWidth": null,
+      "baseHeight": null,
+      "geometryPrecision": "general-corridor",
+      "supportingReferenceIds": [
+        "mp-hyperglide"
+      ],
+      "conflictingReferenceIds": [],
+      "confidence": "unresolved",
+      "variantsAndEliminatesEvidence": null,
+      "blockedReason": "The source route description supports factual movement, but no approved image and independently corroborated image-relative route corridor are available."
+    },
+    {
+      "climbId": "monkey-bar-direct",
+      "status": "blocked",
+      "startFinishEvidence": null,
+      "pathEvidence": null,
+      "continuationEvidence": null,
+      "svgSha256": null,
+      "independentReviewer": null,
+      "reviewDate": null,
+      "baseRenderSha256": null,
+      "baseWidth": null,
+      "baseHeight": null,
+      "geometryPrecision": "general-corridor",
+      "supportingReferenceIds": [
+        "mp-monkey-direct"
+      ],
+      "conflictingReferenceIds": [],
+      "confidence": "unresolved",
+      "variantsAndEliminatesEvidence": null,
+      "blockedReason": "The source route description supports factual movement, but no approved image and independently corroborated image-relative route corridor are available."
+    }
+  ],
+  "offline": {
+    "status": "not-tested",
+    "guideVersion": null,
+    "assetIds": [],
+    "inventoryEvidence": null,
+    "coldRelaunchEvidence": null,
+    "researchAssetsExcluded": true
+  },
+  "publicationManifest": null,
+  "coverageScope": "One physical face/view within the reconciled full Kraft inventory; pilot acceptance is not full-guide completion.",
+  "referenceCoverage": {
+    "visuallyInspectedCaptureGroups": [
+      "mp-photo-118345965",
+      "mp-photo-122312420",
+      "mp-photo-116581508",
+      "mp-photo-110045620",
+      "mp-photo-111701333",
+      "mp-photo-202529384"
+    ],
+    "adequatelyCoveredFeatureIds": [],
+    "missingCoverage": [
+      "Two or more overlapping low, oblique views spanning full left cave start through the lip/corner, with visible fixed features and ground; measure at least one roof depth and opening height.",
+      "Unobstructed overlapping views from lower corner to the entire upper exit/topout and around adjacent corner; identify common features in both.",
+      "Record compass/GNSS camera position and look direction, physical face outward normal separately, world directions of image left/right, and no-mirroring verification.",
+      "At least two overlapping views around the main rock and adjacent slab that expose gaps/contact/tunnel and ground; map separate rocks before reconciling shelter routes.",
+      "Known-length scale or measured distances on each intended face, plus multiple surrounding camera stations; record measurement uncertainty.",
+      "Dated own/permitted Direct-specific close and context photographs identifying the reportedly changed feature; compare pre/post feature correspondence and record actual observation date with a knowledgeable reviewer."
+    ],
+    "sufficientForModeling": false,
+    "evidence": "Enough factual pixel overlap now exists to study broad recognizable exterior identity. It does not constrain full cave depth, left start/upper finish continuity, coordinate frame, neighbor topology or contemporary Direct. A complete freely movable guide view would fill critical geometry with guesses.",
+    "qualitativeExteriorFeatureIds": [
+      "layered-cap",
+      "overhung-lower-mass",
+      "rough-ground"
+    ],
+    "sufficientForCoarseExteriorResearchStudy": true
+  },
+  "photoComparison": {
+    "status": "not-compared",
+    "reconstructionEvidence": null,
+    "ownPhotoEvidence": null,
+    "recognition": null,
+    "startFinishVisibility": null,
+    "routeSeparation": null,
+    "cameraFreedom": null,
+    "uncertainty": null,
+    "effortAndAvailability": null,
+    "preferredApproach": null,
+    "rationale": "Monkey is the research candidate; own field photography remains a competing approach until recognition, topo framing and evidence cost can be compared on actual artifacts.",
+    "independentReviewer": null,
+    "reviewDate": null,
+    "currentEvidenceComparison": {
+      "status": "evidence-comparison-without-produced-artifacts",
+      "recognition": "Own neutral full-face photographs would capture supported exterior identity and irregular small-scale details directly; a coarse research proxy could test broad identity but cannot yet establish guide recognition.",
+      "startFinishVisibility": "Existing capture crops/occlusions leave start/finish correspondence unresolved. Own face-specific images can deliberately include both with breathing room.",
+      "routeSeparation": "Neither route separation in an approved photo nor in an actual render has been tested. Choose own views around corners where one view is insufficient.",
+      "cameraFreedom": "Reconstruction would offer camera freedom only after missing geometry is captured. Present camera freedom would expose guessed roof/back/ground geometry.",
+      "uncertainty": "Own photographs reduce visible-face geometry uncertainty; multi-view measurements still needed for movable geometry. Direct-specific current condition observation remains necessary in either workflow.",
+      "effortAndAvailability": "No field date/access/person availability established. A dedicated photo walk requires travel but can gather lawful guide images, current observations, scale and bearing in one visit; a defensible reconstruction also needs much of that evidence plus authoring/critique/review.",
+      "preferredNextApproach": "Obtain own/permitted face-specific multi-view photos and condition observations; compare an actual exterior study only after their missing facts resolve. Do not force successful reconstruction verdict.",
+      "fieldPhotoShotList": [
+        "Full neutral view of Monkey Bars/Hyperglide cave including complete start region and upper exits.",
+        "Two oblique corner views sharing named visible physical features with the full view.",
+        "Low roof views showing back/start/lip cross-section and ground.",
+        "Uphill Direct context and affected-feature closeups with actual observation date.",
+        "Neighbor/slab/tunnel/ground relationship around two sides.",
+        "Known scale and camera/face-bearing notes for each intended view."
+      ]
+    }
+  }
+}

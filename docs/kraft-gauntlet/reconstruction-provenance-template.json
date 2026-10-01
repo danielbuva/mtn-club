@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 3,
+  "id": "TEMPLATE-NOT-AN-ASSET",
+  "updatedAt": null,
+  "builder": null,
+  "stage": "research",
+  "workState": "blocked",
+  "blockers": [
+    {
+      "id": null,
+      "missing": null,
+      "unblockInput": null
+    }
+  ],
+  "boulder": {
+    "id": null,
+    "name": null,
+    "physicalIdentityStatus": "unresolved",
+    "locationEvidence": null
+  },
+  "face": {
+    "candidateLabel": null,
+    "existingFaceIds": [],
+    "orientation": null,
+    "orientationStatus": "unknown",
+    "evidenceReferenceIds": [],
+    "boundedClimbIds": []
+  },
+  "confidence": {
+    "level": "unresolved",
+    "reason": null
+  },
+  "unresolvedGeometry": [],
+  "control": null,
+  "references": [
+    {
+      "id": null,
+      "url": null,
+      "creator": null,
+      "captureGroup": null,
+      "publishedDate": null,
+      "consultedAt": null,
+      "consultation": null,
+      "usage": "reference-only",
+      "license": null,
+      "rightsEvidence": null,
+      "permittedUses": [
+        "factual-reference"
+      ],
+      "shipped": false,
+      "observations": null,
+      "limitations": null,
+      "capturedAt": null,
+      "conditionEra": "unknown",
+      "conditionEvidence": null,
+      "observedAt": null,
+      "dateEvidence": null,
+      "dateUncertainty": null,
+      "mediaType": null,
+      "independenceEvidence": null,
+      "visibleFeatureIds": [],
+      "viewpointEvidence": null,
+      "occlusion": null
+    }
+  ],
+  "featureClaims": [
+    {
+      "id": null,
+      "kind": null,
+      "observation": null,
+      "supportingReferenceIds": [],
+      "contradictingReferenceIds": [],
+      "confidence": "unresolved",
+      "confidenceReason": null,
+      "geometryStatus": "not-measured",
+      "measurement": null,
+      "affectedClimbIds": [],
+      "visibility": null,
+      "measurementUncertainty": null,
+      "currentConditionStatus": "unknown"
+    }
+  ],
+  "productionInputReferenceIds": [],
+  "modelFields": {
+    "path": null,
+    "sha256": null,
+    "authoringMethod": null,
+    "coordinateFrame": null,
+    "units": null,
+    "scaleEvidence": null,
+    "modeledClaimIds": [],
+    "unresolvedGeometry": [],
+    "cameraCanMove": null,
+    "featureNodeIdsByClaimId": {}
+  },
+  "cameraFields": {
+    "position": null,
+    "target": null,
+    "up": null,
+    "projection": null,
+    "verticalFovDegrees": null,
+    "orthographicWidth": null,
+    "bearingDegrees": null,
+    "orientationEvidence": null,
+    "independentCompositionRationale": null,
+    "candidateComparisonEvidence": null,
+    "selectedCandidateId": null,
+    "faceOutwardNormalBearingDegrees": null,
+    "cameraPositionBearingFromBoulderDegrees": null,
+    "goals": [
+      {
+        "goal": "entire-relevant-face-visible",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "starts-finishes-visible",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "perspective-readable",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "corners-aretes-understandable",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "routes-separable",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "foreground-unobstructed",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "physical-context-recognizable",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      },
+      {
+        "goal": "consistent-guide-presentation",
+        "pass": null,
+        "evidence": null,
+        "unresolved": null
+      }
+    ],
+    "bearingConvention": "bearingDegrees is the horizontal camera-to-look-target direction, clockwise from true north: 0 north, 90 east. Undefined if the horizontal look direction is zero.",
+    "faceOutwardNormalBearingConvention": "Horizontal bearing of the physical face outward normal, clockwise from true north; source/field orientation evidence is separate from camera transforms.",
+    "cameraPositionBearingConvention": "Horizontal direction from the documented boulder scene origin to the camera position, clockwise from true north; distinct from camera-to-target bearing.",
+    "imageOrientation": {
+      "coordinateFrameEvidence": null,
+      "coordinateFrameHandedness": null,
+      "imageRightWorldDirection": null,
+      "imageLeftWorldDirection": null,
+      "imageUpWorldDirection": null,
+      "mirrored": null,
+      "featureCorrespondenceEvidence": null,
+      "reviewStatus": "not-reviewed"
+    }
+  },
+  "renderFields": {
+    "path": null,
+    "sha256": null,
+    "width": null,
+    "height": null,
+    "creator": null,
+    "rights": null,
+    "rightsEvidence": null,
+    "lighting": null,
+    "guideAssetId": null,
+    "productionInputReferenceIds": []
+  },
+  "reviews": {
+    "geometryCritic": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No approval asserted. Record exact artifact hashes when reviewed.",
+      "comparedReferenceIds": [],
+      "criteria": {
+        "recognizableGeometry": null,
+        "orientation": null,
+        "climbBearingFeatures": null,
+        "currentCondition": null,
+        "unresolvedFeatureFindings": []
+      }
+    },
+    "fieldHuman": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No actual field observation or field verification exists. This record accepts dated physical field evidence only; photographic human geometry approval belongs in geometryHuman.",
+      "method": null,
+      "reviewBasis": null,
+      "observedAt": null,
+      "fieldObservationEvidence": null,
+      "outcome": null,
+      "requiredReviewBasis": "in-field"
+    },
+    "publicationHuman": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No approval asserted. Named human publication approval must identify the assembled manifest SHA-256 and guide version, including exact renders, reviewed SVGs, face assignments and continuation assignments.",
+      "manifestSha256": null,
+      "guideVersion": null,
+      "method": null
+    },
+    "compositionCritic": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No rendered asset reviewed. Compare each real source viewpoint, crop, lighting and foreground/background arrangement against the independently authored render.",
+      "comparedReferenceIds": [],
+      "sourceComparisons": []
+    },
+    "topoUsefulnessCritic": {
+      "status": "not-reviewed",
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "evidence": null,
+      "findings": "No rendered asset reviewed. Compare guide recognition, framing, route separation and camera usefulness with the normal photo control and obtaining our own photograph.",
+      "cameraGoalFindings": []
+    },
+    "geometryHuman": {
+      "status": "not-reviewed",
+      "reviewBasis": null,
+      "reviewer": null,
+      "date": null,
+      "modelSha256": null,
+      "renderSha256": null,
+      "comparedReferenceIds": [],
+      "evidence": null,
+      "corrections": [
+        {
+          "id": null,
+          "featureClaimIds": [],
+          "requestedChange": null,
+          "resolution": null,
+          "beforeModelSha256": null,
+          "beforeRenderSha256": null,
+          "revisedModelSha256": null,
+          "revisedRenderSha256": null,
+          "resolutionReviewer": null,
+          "resolutionReviewDate": null,
+          "outcome": null
+        }
+      ],
+      "outcome": null,
+      "findings": "No clean-image geometry approval exists. Photographic or in-field human review must identify the exact clean render and corrections resolved against revised hashes; photographic review is not field verification."
+    }
+  },
+  "routeVerification": [
+    {
+      "climbId": null,
+      "status": "blocked",
+      "startFinishEvidence": null,
+      "pathEvidence": null,
+      "continuationEvidence": null,
+      "svgSha256": null,
+      "independentReviewer": null,
+      "reviewDate": null,
+      "baseRenderSha256": null,
+      "baseWidth": null,
+      "baseHeight": null,
+      "geometryPrecision": "general-corridor",
+      "supportingReferenceIds": [],
+      "conflictingReferenceIds": [],
+      "confidence": "unresolved",
+      "variantsAndEliminatesEvidence": null,
+      "blockedReason": "No independently corroborated image-relative route geometry exists."
+    }
+  ],
+  "offline": {
+    "status": "not-tested",
+    "guideVersion": null,
+    "assetIds": [],
+    "inventoryEvidence": null,
+    "coldRelaunchEvidence": null,
+    "researchAssetsExcluded": true
+  },
+  "publicationManifestFields": {
+    "path": null,
+    "sha256": null,
+    "guideVersion": null,
+    "renderSha256ByFaceId": {},
+    "svgSha256ByClimbAndFaceId": {},
+    "viewAssignments": [],
+    "continuationAssignments": []
+  },
+  "coverageScope": "One physical face/view within the reconciled full Kraft inventory; pilot acceptance is not full-guide completion.",
+  "referenceCoverage": {
+    "visuallyInspectedCaptureGroups": [],
+    "adequatelyCoveredFeatureIds": [],
+    "missingCoverage": [
+      "Specify missing feature/view coverage before modeling."
+    ],
+    "sufficientForModeling": false,
+    "evidence": null
+  },
+  "photoComparison": {
+    "status": "not-compared",
+    "reconstructionEvidence": null,
+    "ownPhotoEvidence": null,
+    "recognition": null,
+    "startFinishVisibility": null,
+    "routeSeparation": null,
+    "cameraFreedom": null,
+    "uncertainty": null,
+    "effortAndAvailability": null,
+    "preferredApproach": null,
+    "rationale": null,
+    "independentReviewer": null,
+    "reviewDate": null
+  }
+}

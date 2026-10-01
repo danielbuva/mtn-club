@@ -1,0 +1,61 @@
+{
+  "source": "TheTopo / former 27 Crags",
+  "retrievedAt": "2026-10-01T18:53:07.598Z",
+  "inventoryPath": "docs/kraft-gauntlet/source-data/thetopo-research-inventory.json",
+  "inventorySha256": "4577d260c08140db9c58c95796aae82a823621494e29fe42237fce7874adda71",
+  "sourceUrls": [
+    "https://thetopo.com/crags/kraft-wash-red-rock/map",
+    "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-ups",
+    "https://thetopo.com/crags/kraft-wash-red-rock/routelist"
+  ],
+  "counts": {
+    "units": 34,
+    "routes": 198,
+    "views": 48,
+    "routePagesRetrieved": 198,
+    "acquisitionFailures": 0,
+    "routesAssignedToSourceViews": 163,
+    "routesWithoutSourceViews": 35,
+    "routesWithTextualFactClaims": 30
+  },
+  "acquisition": "All public map/sector/topo/route pages were acquired before the terms constraint was inspected. Automated acquisition stopped when the published constraint was found. No live acquirer has been committed.",
+  "termsEvidence": {
+    "url": "https://thetopo.com/site/terms",
+    "checkedDate": "2026-10-01",
+    "clauses": [
+      {
+        "section": "2",
+        "summary": "Visitor provisions incorporate the prohibited-behavior rules."
+      },
+      {
+        "section": "3.3.2(3)(5)",
+        "summary": "The published terms list automated scraping of service content among prohibited behavior."
+      },
+      {
+        "section": "3.4.2",
+        "summary": "The published license does not grant general reproduction or distribution rights for service content."
+      }
+    ],
+    "reviewStatus": "Human review of acquisition policy and downstream use is required. No publication permission inferred."
+  },
+  "rights": {
+    "photos": "Reference-only; never ship these photographs.",
+    "topoArtwork": "Reference-only; original route line points excluded.",
+    "factualClaims": "Research and reconciliation only until review; prefer independent public-domain/open sources for product records."
+  },
+  "normalizedExtractor": "Ignored scratch TypeScript only; parser excludes source artwork points and source prose. No runtime import.",
+  "evidenceStorage": ".tmp/kraft-gauntlet/research/thetopo-raw/ (temporary local reference evidence, excluded from commits)",
+  "validation": [
+    "34 map units and 34 index units match by source URL.",
+    "198 unique route URLs and 198 unique numeric route IDs.",
+    "Every route appears in exactly one source-sector list.",
+    "Every view association targets an acquired route.",
+    "All 198 route detail pages were retrieved.",
+    "All declared route counts match parsed per-unit counts.",
+    "Declared topo counts omitted by the source remain null; they are never interpreted as zero."
+  ],
+  "knownFailures": [
+    "Initial raw-map JSON parser overmatched its script wrapper; adjusted to the exact JSON call boundary and recovered.",
+    "Authors page provided no usable content; independent photographer identities were not established."
+  ]
+}

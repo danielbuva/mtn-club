@@ -58,15 +58,25 @@ credit and license links. `docs/kraft-gauntlet/source-data/geo-provenance.json` 
 projection extents, source observations and SHA-256 checksums.
 
 `docs/kraft-gauntlet/source-data/` retains `geo-osm-source.json`,
-`geo-osm-peaks-source.json`, `geo-dem-source.tif` and `geo-naip-reference.jpg`. The raw DEM and source
-extracts are review artifacts and do not need to inflate the field download.
-The NAIP image is useful for side-by-side review with the illustrated map.
+`geo-osm-peaks-source.json` and `geo-dem-source.tif` as deliberate rebuild inputs.
+They do not inflate the field download. The raw NAIP review image is local scratch
+at `.tmp/kraft-gauntlet/references/geo-naip-reference.jpg`; its exact source request,
+raster identity, size and original checksum remain in the provenance record so it
+can be reacquired for footprint review. The shipped application does not depend
+on that scratch reference.
 
 To regenerate vectors from the committed evidence, run
 `scripts/build-kraft-geography.py` with Python containing numpy and Pillow.
 It makes no network calls. The bundled Codex Python runtime satisfies those
 requirements. Regeneration yields the same 98 features and 5,201 simplified
 points; all x/y coordinates have been checked as finite and within the map.
+
+This existing narrow Python tool is retained because Pillow decodes the raw F32
+GeoTIFF directly and numpy supplies the established elevation grid pipeline.
+Rewriting a stable raster decoder and contour rebuild solely for language
+uniformity adds no product benefit. New acquisition, reconciliation, coordinate
+and manifest tooling should use TypeScript where practical. The Python script is
+a regeneration utility, not a required application runtime or a scratch export.
 
 ## Remaining geographic gaps
 
@@ -78,5 +88,6 @@ points; all x/y coordinates have been checked as finite and within the map.
 - The overview envelope deliberately covers the pilot rocks, parking and
   southern Kraft Mountain. It does not cover the entire Kraft Mountain loop.
 
-This is an accurate source-backed pilot geography layer, with explicit
-uncertainties. It is not the same as a surveyed, complete Kraft field map.
+These are retained source-backed pilot observations with explicit uncertainties.
+The current full-Kraft placement and footprint audit must reassess this layer;
+no surveyed or complete Kraft field-map acceptance is claimed.

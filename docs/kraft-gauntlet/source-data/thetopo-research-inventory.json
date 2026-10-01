@@ -1,0 +1,4925 @@
+{
+  "source": "TheTopo",
+  "retrievedAt": "2026-10-01T18:53:07.598Z",
+  "status": "research-only: acquisition-policy and reuse review pending; prohibited from runtime imports or publication as a distribution-approved dataset",
+  "scope": "Every Kraft source sector exposed by map and warm-ups index; every row in Kraft all-routes list; every source topo view in those sectors; every route detail page.",
+  "termsUrl": "https://thetopo.com/site/terms",
+  "counts": {
+    "units": 34,
+    "routes": 198,
+    "views": 48,
+    "routePagesRetrieved": 198,
+    "acquisitionFailures": 0,
+    "routesAssignedToSourceViews": 163,
+    "routesWithoutSourceViews": 35,
+    "routesWithTextualFactClaims": 30
+  },
+  "sourceUrls": [
+    "https://thetopo.com/crags/kraft-wash-red-rock/map",
+    "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-ups",
+    "https://thetopo.com/crags/kraft-wash-red-rock/routelist"
+  ],
+  "units": [
+    {
+      "sourceId": "thetopo-sector-600-boulder",
+      "name": "$600 Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/600-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/600-boulder",
+      "coordinates": {
+        "latitude": 36.160066,
+        "longitude": -115.41701,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/600-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 10,
+      "declaredTopoCount": 3,
+      "routeSourceIds": [
+        "thetopo-route-arete-jump",
+        "thetopo-route-kraft-dinner",
+        "thetopo-route-kraft-dinner-right",
+        "thetopo-route-500",
+        "thetopo-route-600",
+        "thetopo-route-beat-meat-manifesto",
+        "thetopo-route-backside-right",
+        "thetopo-route-left-side-left",
+        "thetopo-route-the-50-hooker",
+        "thetopo-route-backside-crack"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8535",
+        "thetopo-view-58482",
+        "thetopo-view-58483"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-slopey-traverse",
+      "name": "Alexisizer",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/slopey-traverse",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/slopey-traverse",
+      "coordinates": {
+        "latitude": 36.160148,
+        "longitude": -115.41216,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/slopey-traverse",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 5,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-the-slopey-traverse",
+        "thetopo-route-timmy-s-problem",
+        "thetopo-route-timmy-s-problem-traverse",
+        "thetopo-route-mantle-1",
+        "thetopo-route-alexisizer-direct"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8569"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-barndoor-boulder-and-the-abyss",
+      "name": "Barndoor Boulder and The Abyss",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/barndoor-boulder-and-the-abyss",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/barndoor-boulder-and-the-abyss",
+      "coordinates": {
+        "latitude": 36.159845,
+        "longitude": -115.416183,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/barndoor-boulder-and-the-abyss",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 2,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-the-best-v3-at-kraft",
+        "thetopo-route-secrets-of-a-barndoor"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8522"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-bathtub-boulder",
+      "name": "Bathtub Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/bathtub-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bathtub-boulder",
+      "coordinates": {
+        "latitude": 36.159832,
+        "longitude": -115.412933,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bathtub-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 12,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-orange-top-blue-sky",
+        "thetopo-route-special-k-36489",
+        "thetopo-route-big-k",
+        "thetopo-route-the-bathtub",
+        "thetopo-route-super-fragilistic",
+        "thetopo-route-southwest-arete",
+        "thetopo-route-south-face-crack",
+        "thetopo-route-south-face-50435",
+        "thetopo-route-shit-or-get-off-the-pot",
+        "thetopo-route-project-50437",
+        "thetopo-route-tied-to-the-whippin-post",
+        "thetopo-route-dog-leash-boy"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8565",
+        "thetopo-view-8566"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-beth-wald-boulder",
+      "name": "Beth Wald Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/beth-wald-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/beth-wald-boulder",
+      "coordinates": {
+        "latitude": 36.159447,
+        "longitude": -115.416752,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/beth-wald-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 6,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-poker-chips",
+        "thetopo-route-potato-chips",
+        "thetopo-route-center",
+        "thetopo-route-right-lip-traverse",
+        "thetopo-route-potato-chips-direct",
+        "thetopo-route-poker-chips-113815"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8521"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-big-jugs",
+      "name": "Big Jugs",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/big-jugs",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/big-jugs",
+      "coordinates": {
+        "latitude": 36.159698,
+        "longitude": -115.416688,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/big-jugs",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 5,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-big-jugs",
+        "thetopo-route-perked-up",
+        "thetopo-route-right-face",
+        "thetopo-route-lowball-143555",
+        "thetopo-route-right-face-238321"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8537"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-big-mac-crack",
+      "name": "Big Mac Crack",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/big-mac-crack",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/big-mac-crack",
+      "coordinates": {
+        "latitude": 36.160963,
+        "longitude": -115.423828,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/big-mac-crack",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 2,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-big-mac-crack",
+        "thetopo-route-dihedral-50352"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8551"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-bitch-slap-5",
+      "name": "Bitch Slap 5",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/bitch-slap-5",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bitch-slap-5",
+      "coordinates": {
+        "latitude": 36.161621,
+        "longitude": -115.412321,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bitch-slap-5",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 1,
+      "declaredTopoCount": null,
+      "routeSourceIds": [
+        "thetopo-route-bitch-slap-5"
+      ],
+      "viewSourceIds": [],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-bubble-butt-boulder",
+      "name": "Bubble Butt Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/bubble-butt-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bubble-butt-boulder",
+      "coordinates": {
+        "latitude": 36.159806,
+        "longitude": -115.415652,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bubble-butt-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 4,
+      "declaredTopoCount": 3,
+      "routeSourceIds": [
+        "thetopo-route-bubble-butt",
+        "thetopo-route-scare-tactics-v10",
+        "thetopo-route-scare-tactics-stand",
+        "thetopo-route-scare-tactics-right"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8564",
+        "thetopo-view-8746",
+        "thetopo-view-8749"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-butt-crack-boulder",
+      "name": "Butt Crack Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/butt-crack-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butt-crack-boulder",
+      "coordinates": {
+        "latitude": 36.159655,
+        "longitude": -115.416698,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butt-crack-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 3,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-the-butt-crack",
+        "thetopo-route-southeast-face",
+        "thetopo-route-southeast-face-sit"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8515"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-butterfly-kiss",
+      "name": "Butterfly Kiss",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/butterfly-kiss",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butterfly-kiss",
+      "coordinates": {
+        "latitude": 36.159771,
+        "longitude": -115.416315,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butterfly-kiss",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 4,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-butterfly-kiss",
+        "thetopo-route-crack-right",
+        "thetopo-route-north-sit",
+        "thetopo-route-square-arete-535206"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-42217",
+        "thetopo-view-58531"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-caliman-boulder",
+      "name": "Caliman Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/caliman-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/caliman-boulder",
+      "coordinates": {
+        "latitude": 36.16088,
+        "longitude": -115.411474,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/caliman-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 1,
+      "declaredTopoCount": null,
+      "routeSourceIds": [
+        "thetopo-route-caliman"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-33994"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-heart-and-sole",
+      "name": "Heart and Sole",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/heart-and-sole",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/heart-and-sole",
+      "coordinates": {
+        "latitude": 36.160837,
+        "longitude": -115.423688,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/heart-and-sole",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 2,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-heart-and-sole-50382",
+        "thetopo-route-heart-and-sole-left"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8553"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-hound-dog-arete",
+      "name": "Hound Dog Arete",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/hound-dog-arete",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/hound-dog-arete",
+      "coordinates": {
+        "latitude": 36.159769,
+        "longitude": -115.416347,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/hound-dog-arete",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 2,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-left-face-196520",
+        "thetopo-route-hound-dog-arete"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-42216"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-kraft-boulders",
+      "name": "Kraft Boulders",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/kraft-boulders",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/kraft-boulders",
+      "coordinates": {
+        "latitude": 36.160166,
+        "longitude": -115.415647,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/kraft-boulders",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 15,
+      "declaredTopoCount": null,
+      "routeSourceIds": [
+        "thetopo-route-the-huck",
+        "thetopo-route-spook-eyes",
+        "thetopo-route-fin-35978",
+        "thetopo-route-monkey-bars-sit",
+        "thetopo-route-the-muffler",
+        "thetopo-route-family-feud-114334",
+        "thetopo-route-fin-face",
+        "thetopo-route-600-dollars",
+        "thetopo-route-rub-one-off-225062",
+        "thetopo-route-perked-up-225063",
+        "thetopo-route-atomic-wedgie-278009",
+        "thetopo-route-poison-control",
+        "thetopo-route-spring-loaded-278029",
+        "thetopo-route-nickelodeon",
+        "thetopo-route-the-prowler-327150"
+      ],
+      "viewSourceIds": [],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-monkey-bar-boulder",
+      "name": "Monkey Bar Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/monkey-bar-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/monkey-bar-boulder",
+      "coordinates": {
+        "latitude": 36.161478,
+        "longitude": -115.410975,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/monkey-bar-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 24,
+      "declaredTopoCount": 4,
+      "routeSourceIds": [
+        "thetopo-route-pit-and-the-pendulum",
+        "thetopo-route-monkey-bar-traverse",
+        "thetopo-route-classic-monkey",
+        "thetopo-route-monkey-bar-direct-33381",
+        "thetopo-route-the-peter-north-pump",
+        "thetopo-route-monkey-bar-direct-right-start",
+        "thetopo-route-the-myth",
+        "thetopo-route-right-of-the-crack",
+        "thetopo-route-blunt-arete",
+        "thetopo-route-seam",
+        "thetopo-route-curious-george-49386",
+        "thetopo-route-center-face",
+        "thetopo-route-hyperglide",
+        "thetopo-route-monkey-bars",
+        "thetopo-route-prow-direct",
+        "thetopo-route-re-direct",
+        "thetopo-route-monkey-crack-164246",
+        "thetopo-route-monkey-bars-right-v2",
+        "thetopo-route-monkey-bars-left-v2",
+        "thetopo-route-pockets-sit-start",
+        "thetopo-route-pockets-stand",
+        "thetopo-route-northeast-face-left",
+        "thetopo-route-left-left",
+        "thetopo-route-left-238014"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8431",
+        "thetopo-view-8432",
+        "thetopo-view-58474",
+        "thetopo-view-58475"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-bill-s-boulder",
+      "name": "My Tan",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/bill-s-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bill-s-boulder",
+      "coordinates": {
+        "latitude": 36.159754,
+        "longitude": -115.413136,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bill-s-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 7,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-burnt",
+        "thetopo-route-dusty-coffee",
+        "thetopo-route-my-tan",
+        "thetopo-route-right-arete-50428",
+        "thetopo-route-i-disagree",
+        "thetopo-route-venom-56502",
+        "thetopo-route-my-tan-right-side"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8554"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-picante-sauce",
+      "name": "Picante Sauce",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/picante-sauce",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/picante-sauce",
+      "coordinates": {
+        "latitude": 36.15965,
+        "longitude": -115.416395,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/picante-sauce",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 2,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-picante-left",
+        "thetopo-route-picante-sauce"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8525"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-plumber-s-crack",
+      "name": "Plumber's Crack",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/plumber-s-crack",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/plumber-s-crack",
+      "coordinates": {
+        "latitude": 36.159949,
+        "longitude": -115.417154,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/plumber-s-crack",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 12,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-slice-n-dice",
+        "thetopo-route-porn-star",
+        "thetopo-route-past-tension",
+        "thetopo-route-traverse-50442",
+        "thetopo-route-east-face-project",
+        "thetopo-route-the-heist-50444",
+        "thetopo-route-fulton-problem",
+        "thetopo-route-plumber-s-crack-traverse",
+        "thetopo-route-plunger",
+        "thetopo-route-split-decision-50448",
+        "thetopo-route-split-ends-50449",
+        "thetopo-route-the-mole-50450"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8561",
+        "thetopo-view-8562"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-pretzel-boulder",
+      "name": "Pretzel Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/pretzel-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/pretzel-boulder",
+      "coordinates": {
+        "latitude": 36.159616,
+        "longitude": -115.416784,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/pretzel-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 3,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-left-50424",
+        "thetopo-route-traverse-50425",
+        "thetopo-route-right-50426"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8567"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-sorange",
+      "name": "Sorange",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/sorange",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/sorange",
+      "coordinates": {
+        "latitude": 36.161131,
+        "longitude": -115.424139,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/sorange",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 6,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-sorange",
+        "thetopo-route-sorange-traverse",
+        "thetopo-route-arete-50340",
+        "thetopo-route-left-arete-50341",
+        "thetopo-route-welcome-to-detroit",
+        "thetopo-route-woods-problem"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8549"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-spitting-venom",
+      "name": "Spitting Venom",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/spitting-venom",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/spitting-venom",
+      "coordinates": {
+        "latitude": 36.161188,
+        "longitude": -115.423779,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/spitting-venom",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 3,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-spitting-venom",
+        "thetopo-route-left-face",
+        "thetopo-route-shark-tooth-327152"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-98676",
+        "thetopo-view-8552"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-spook-eyes",
+      "name": "Spook Eyes",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/spook-eyes",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/spook-eyes",
+      "coordinates": {
+        "latitude": 36.160486,
+        "longitude": -115.411919,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/spook-eyes",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 1,
+      "declaredTopoCount": null,
+      "routeSourceIds": [
+        "thetopo-route-spook-eyes-72701"
+      ],
+      "viewSourceIds": [],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-super-scream",
+      "name": "Super scream",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/super-scream",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/super-scream",
+      "coordinates": {
+        "latitude": 36.159664,
+        "longitude": -115.417118,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/super-scream",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 4,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-front-left",
+        "thetopo-route-crack-238326",
+        "thetopo-route-front-center",
+        "thetopo-route-crack-238328"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-58534",
+        "thetopo-view-58536"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-the-angel-dyno",
+      "name": "The Angel Dyno",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/the-angel-dyno",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-angel-dyno",
+      "coordinates": {
+        "latitude": 36.159672,
+        "longitude": -115.416055,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-angel-dyno",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 5,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-angel-dyno",
+        "thetopo-route-earth-angel",
+        "thetopo-route-stoney-point-traverse",
+        "thetopo-route-left-exit",
+        "thetopo-route-progressive-guy-49378"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8517"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-the-black-bitch",
+      "name": "The Black Bitch",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/the-black-bitch",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-black-bitch",
+      "coordinates": {
+        "latitude": 36.15965,
+        "longitude": -115.416489,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-black-bitch",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 3,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-the-black-bitch",
+        "thetopo-route-right-arete-49402",
+        "thetopo-route-smiley-face-49403"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8524"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-the-burnout-boulder",
+      "name": "The Burnout Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/the-burnout-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-burnout-boulder",
+      "coordinates": {
+        "latitude": 36.159741,
+        "longitude": -115.416441,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-burnout-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 7,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-donkey-punch-46299",
+        "thetopo-route-three-feet-to-gold",
+        "thetopo-route-fire-fresh-traverse",
+        "thetopo-route-direct-mantle",
+        "thetopo-route-rail-to-seam",
+        "thetopo-route-jones-n",
+        "thetopo-route-dusty-coffee-49373"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-the-cube",
+      "name": "The Cube",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/the-cube",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-cube",
+      "coordinates": {
+        "latitude": 36.159784,
+        "longitude": -115.419123,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-cube",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 14,
+      "declaredTopoCount": 4,
+      "routeSourceIds": [
+        "thetopo-route-fear-of-a-black-hat",
+        "thetopo-route-a-clockwork-orange-49359",
+        "thetopo-route-marriage",
+        "thetopo-route-big-love",
+        "thetopo-route-total-devastation-left-start",
+        "thetopo-route-total-devasation",
+        "thetopo-route-the-mad-hatter-project",
+        "thetopo-route-engagement",
+        "thetopo-route-perfect-poser",
+        "thetopo-route-west-face-left",
+        "thetopo-route-west-face-50416",
+        "thetopo-route-martinet-s-rails",
+        "thetopo-route-left-start",
+        "thetopo-route-seth-s-mantle"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8557",
+        "thetopo-view-8558",
+        "thetopo-view-8559",
+        "thetopo-view-8560"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-the-pearl",
+      "name": "The Pearl",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/the-pearl",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-pearl",
+      "coordinates": {
+        "latitude": 36.159273,
+        "longitude": -115.414799,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-pearl",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 8,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-the-pearl",
+        "thetopo-route-jenna-s-jewelry",
+        "thetopo-route-clam-bumper",
+        "thetopo-route-across-the-choss",
+        "thetopo-route-six-pack",
+        "thetopo-route-northeast-face-center",
+        "thetopo-route-the-spreader",
+        "thetopo-route-the-pearl-necklace"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8518",
+        "thetopo-view-58472"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-the-wave-18175",
+      "name": "The Wave",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/the-wave-18175",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-wave-18175",
+      "coordinates": {
+        "latitude": 36.159732,
+        "longitude": -115.414284,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-wave-18175",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 6,
+      "declaredTopoCount": 2,
+      "routeSourceIds": [
+        "thetopo-route-the-wave-35977",
+        "thetopo-route-the-wave-right",
+        "thetopo-route-the-wave-left",
+        "thetopo-route-good-times-197818",
+        "thetopo-route-south-face-left",
+        "thetopo-route-the-wave-direct-478419"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-42214",
+        "thetopo-view-58471"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-ultimate-grandstaff",
+      "name": "Ultimate Grandstaff",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/ultimate-grandstaff",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/ultimate-grandstaff",
+      "coordinates": {
+        "latitude": 36.159758,
+        "longitude": -115.416275,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/ultimate-grandstaff",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 2,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-ultimate-grandstaff",
+        "thetopo-route-ultimate-grandstaff-sitstart"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-42215"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-warm-up-boulders-sector",
+      "name": "Warm Up Boulders Sector",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/warm-up-boulders-sector",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-up-boulders-sector",
+      "coordinates": {
+        "latitude": 36.159577,
+        "longitude": -115.416988,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-up-boulders-sector",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 9,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-prefunk",
+        "thetopo-route-fluffer",
+        "thetopo-route-rub-one-off",
+        "thetopo-route-center-49396",
+        "thetopo-route-donkey-punch-49397",
+        "thetopo-route-donkey-punch-right",
+        "thetopo-route-32-oz",
+        "thetopo-route-your-project",
+        "thetopo-route-my-project"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-warm-ups",
+      "name": "Warm ups",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/warm-ups",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-ups",
+      "coordinates": {
+        "latitude": 36.161071,
+        "longitude": -115.423838,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-ups",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 4,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-left-50347",
+        "thetopo-route-arete-left",
+        "thetopo-route-arete-right",
+        "thetopo-route-traverse-50350"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8550"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    },
+    {
+      "sourceId": "thetopo-sector-wolfgang-gullich-memorial-boulder",
+      "name": "Wolfgang Gullich Memorial Boulder",
+      "kind": "source-sector",
+      "sourceKind": "boulder",
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/sectors/wolfgang-gullich-memorial-boulder",
+      "topoUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/wolfgang-gullich-memorial-boulder",
+      "coordinates": {
+        "latitude": 36.159616,
+        "longitude": -115.416945,
+        "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/map",
+        "corroboratingUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/wolfgang-gullich-memorial-boulder",
+        "confidence": "source-observed-not-field-verified"
+      },
+      "declaredRouteCount": 4,
+      "declaredTopoCount": 1,
+      "routeSourceIds": [
+        "thetopo-route-put-your-shoes-on-arete",
+        "thetopo-route-left-50421",
+        "thetopo-route-betty",
+        "thetopo-route-right-to-left"
+      ],
+      "viewSourceIds": [
+        "thetopo-view-8563"
+      ],
+      "confidence": "one-source observed; physical identity and position are not verified"
+    }
+  ],
+  "views": [
+    {
+      "sourceId": "thetopo-view-8535",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "sourceTopoId": 8535,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/600-boulder#topo-image-8535",
+      "label": "$600 Boulder 1 / 3",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54779/p1120q40-375372a3f2ccf5b840a9a710fc50083d.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-arete-jump",
+        "thetopo-route-kraft-dinner",
+        "thetopo-route-kraft-dinner-right",
+        "thetopo-route-500",
+        "thetopo-route-600",
+        "thetopo-route-beat-meat-manifesto"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58482",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "sourceTopoId": 58482,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/600-boulder#topo-image-58482",
+      "label": "$600 Boulder 2 / 3",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130229/p1120q40-41b2320dd7f5a665df7943fffa8c20c0.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-the-50-hooker",
+        "thetopo-route-backside-crack"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58483",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "sourceTopoId": 58483,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/600-boulder#topo-image-58483",
+      "label": "$600 Boulder 3 / 3",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130230/p1120q40-b579d237dbd64d52bd2c8deb2feb3ddc.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-left-side-left"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8569",
+      "unitSourceId": "thetopo-sector-slopey-traverse",
+      "sourceTopoId": 8569,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/slopey-traverse#topo-image-8569",
+      "label": "Alexisizer 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54825/p1120q40-a835e549f60ce68d95e47051b2016f53.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-the-slopey-traverse",
+        "thetopo-route-timmy-s-problem",
+        "thetopo-route-timmy-s-problem-traverse",
+        "thetopo-route-alexisizer-direct",
+        "thetopo-route-mantle-1"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8522",
+      "unitSourceId": "thetopo-sector-barndoor-boulder-and-the-abyss",
+      "sourceTopoId": 8522,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/barndoor-boulder-and-the-abyss#topo-image-8522",
+      "label": "Barndoor Boulder and The Abyss 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54743/p1120q40-c9b394af7b325da250958af859c08530.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-the-best-v3-at-kraft"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8565",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "sourceTopoId": 8565,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bathtub-boulder#topo-image-8565",
+      "label": "Bathtub Boulder 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54821/p1120q40-a6cb4a86d4b23c924d740f2128f6310d.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-shit-or-get-off-the-pot",
+        "thetopo-route-orange-top-blue-sky",
+        "thetopo-route-tied-to-the-whippin-post",
+        "thetopo-route-project-50437",
+        "thetopo-route-dog-leash-boy"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8566",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "sourceTopoId": 8566,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bathtub-boulder#topo-image-8566",
+      "label": "Bathtub Boulder 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54822/p1120q40-1ffd66f2527948981df862171cbb4648.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-big-k",
+        "thetopo-route-special-k-36489",
+        "thetopo-route-southwest-arete",
+        "thetopo-route-south-face-crack",
+        "thetopo-route-south-face-50435"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8521",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "sourceTopoId": 8521,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/beth-wald-boulder#topo-image-8521",
+      "label": "Beth Wald Boulder 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54742/p1120q40-119efae0237cbd61340e4f11e22d78c3.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-poker-chips",
+        "thetopo-route-center",
+        "thetopo-route-potato-chips",
+        "thetopo-route-right-lip-traverse"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8537",
+      "unitSourceId": "thetopo-sector-big-jugs",
+      "sourceTopoId": 8537,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/big-jugs#topo-image-8537",
+      "label": "Big Jugs 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54782/p1120q40-d5481ca530714bf3f85a13f7b5e99a95.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-right-face",
+        "thetopo-route-big-jugs",
+        "thetopo-route-perked-up",
+        "thetopo-route-right-face-238321",
+        "thetopo-route-lowball-143555"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8551",
+      "unitSourceId": "thetopo-sector-big-mac-crack",
+      "sourceTopoId": 8551,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/big-mac-crack#topo-image-8551",
+      "label": "Big Mac Crack 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54807/p1120q40-76da0fb7c8e9e7cc2ff345e68b43949e.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-dihedral-50352",
+        "thetopo-route-big-mac-crack"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8564",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "sourceTopoId": 8564,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bubble-butt-boulder#topo-image-8564",
+      "label": "Bubble Butt Boulder 1 / 3",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54820/p1120q40-b59b53db456dcd7cadb1dcd72c8a98b5.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-scare-tactics-v10",
+        "thetopo-route-bubble-butt"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8746",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "sourceTopoId": 8746,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bubble-butt-boulder#topo-image-8746",
+      "label": "Bubble Butt Boulder 2 / 3",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/055/55147/p1120q40-817652e60032490bfe9ddbfd51e644b2.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-scare-tactics-stand",
+        "thetopo-route-scare-tactics-v10",
+        "thetopo-route-scare-tactics-right"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8749",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "sourceTopoId": 8749,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bubble-butt-boulder#topo-image-8749",
+      "label": "Bubble Butt Boulder 3 / 3",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/055/55150/p1120q40-9fadcdd74ec9f0efa9cbdf60e5e568d1.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-bubble-butt"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8515",
+      "unitSourceId": "thetopo-sector-butt-crack-boulder",
+      "sourceTopoId": 8515,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butt-crack-boulder#topo-image-8515",
+      "label": "Butt Crack Boulder 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54736/p1120q40-a3f9b0f48d97eaf447fe247d40bb3d1d.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-the-butt-crack",
+        "thetopo-route-southeast-face",
+        "thetopo-route-southeast-face-sit"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-42217",
+      "unitSourceId": "thetopo-sector-butterfly-kiss",
+      "sourceTopoId": 42217,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butterfly-kiss#topo-image-42217",
+      "label": "Butterfly Kiss 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/108/108098/p1120q40-b4f34c7d03e24ed22c4277f257eecd85.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-butterfly-kiss",
+        "thetopo-route-crack-right"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58531",
+      "unitSourceId": "thetopo-sector-butterfly-kiss",
+      "sourceTopoId": 58531,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/butterfly-kiss#topo-image-58531",
+      "label": "Butterfly Kiss 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130310/p1120q40-a0781a6c961177e88fb2e5a7631ab03f.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-north-sit",
+        "thetopo-route-square-arete-535206"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-33994",
+      "unitSourceId": "thetopo-sector-caliman-boulder",
+      "sourceTopoId": 33994,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/caliman-boulder#topo-image-33994",
+      "label": "Caliman Boulder 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/093/93277/p1120q40-447bd1532bdfa90fe7db6b3192e32eff.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": []
+    },
+    {
+      "sourceId": "thetopo-view-8553",
+      "unitSourceId": "thetopo-sector-heart-and-sole",
+      "sourceTopoId": 8553,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/heart-and-sole#topo-image-8553",
+      "label": "Heart and Sole 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54809/p1120q40-4d6f89de695dcd469dd6f885e4f34146.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-heart-and-sole-left",
+        "thetopo-route-heart-and-sole-50382"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-42216",
+      "unitSourceId": "thetopo-sector-hound-dog-arete",
+      "sourceTopoId": 42216,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/hound-dog-arete#topo-image-42216",
+      "label": "Hound Dog Arete 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/108/108097/p1120q40-2d201183a9556b0380d2d060abae7b55.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-left-face-196520",
+        "thetopo-route-hound-dog-arete"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8431",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "sourceTopoId": 8431,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/monkey-bar-boulder#topo-image-8431",
+      "label": "Monkey Bar Boulder 1 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54573/p1120q40-7b586aece5589ca68747ecdff10b4eb6.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-the-peter-north-pump",
+        "thetopo-route-hyperglide",
+        "thetopo-route-prow-direct",
+        "thetopo-route-monkey-bars",
+        "thetopo-route-monkey-bar-traverse",
+        "thetopo-route-monkey-bar-direct-33381",
+        "thetopo-route-re-direct",
+        "thetopo-route-classic-monkey"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8432",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "sourceTopoId": 8432,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/monkey-bar-boulder#topo-image-8432",
+      "label": "Monkey Bar Boulder 2 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54574/p1120q40-943cde142bc4fa122bf37f5889fee170.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-right-of-the-crack",
+        "thetopo-route-blunt-arete",
+        "thetopo-route-center-face",
+        "thetopo-route-seam",
+        "thetopo-route-curious-george-49386"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58474",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "sourceTopoId": 58474,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/monkey-bar-boulder#topo-image-58474",
+      "label": "Monkey Bar Boulder 3 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130207/p1120q40-119b5d6424af460c28013746c10038f2.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-northeast-face-left",
+        "thetopo-route-pockets-sit-start",
+        "thetopo-route-pockets-stand",
+        "thetopo-route-monkey-bars-left-v2",
+        "thetopo-route-monkey-bars-right-v2"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58475",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "sourceTopoId": 58475,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/monkey-bar-boulder#topo-image-58475",
+      "label": "Monkey Bar Boulder 4 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130208/p1120q40-687e80adce8e6ef4a69300dec2ceb151.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-left-left",
+        "thetopo-route-left-238014",
+        "thetopo-route-monkey-crack-164246"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8554",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "sourceTopoId": 8554,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/bill-s-boulder#topo-image-8554",
+      "label": "My Tan 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54810/p1120q40-4b78652c74ca008cc6250930b852529e.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-my-tan",
+        "thetopo-route-burnt",
+        "thetopo-route-right-arete-50428",
+        "thetopo-route-my-tan-right-side",
+        "thetopo-route-i-disagree"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8525",
+      "unitSourceId": "thetopo-sector-picante-sauce",
+      "sourceTopoId": 8525,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/picante-sauce#topo-image-8525",
+      "label": "Picante Sauce 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54746/p1120q40-2ca5083b32b3dac2947d4883cb805700.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-picante-left",
+        "thetopo-route-picante-sauce"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8561",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "sourceTopoId": 8561,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/plumber-s-crack#topo-image-8561",
+      "label": "Plumber's Crack 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54817/p1120q40-7dc7dcf2be5f063e376222ced293d871.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-porn-star",
+        "thetopo-route-past-tension",
+        "thetopo-route-traverse-50442",
+        "thetopo-route-east-face-project"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8562",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "sourceTopoId": 8562,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/plumber-s-crack#topo-image-8562",
+      "label": "Plumber's Crack 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54818/p1120q40-805eb9c7ea3b85c038029cb274b9905f.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-traverse-50442",
+        "thetopo-route-the-heist-50444",
+        "thetopo-route-plumber-s-crack-traverse",
+        "thetopo-route-fulton-problem",
+        "thetopo-route-slice-n-dice",
+        "thetopo-route-plunger",
+        "thetopo-route-the-mole-50450",
+        "thetopo-route-split-decision-50448",
+        "thetopo-route-split-ends-50449"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8567",
+      "unitSourceId": "thetopo-sector-pretzel-boulder",
+      "sourceTopoId": 8567,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/pretzel-boulder#topo-image-8567",
+      "label": "Pretzel Boulder 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54823/p1120q40-67f1433977b9a17df3ce93d158072b8b.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-left-50424",
+        "thetopo-route-right-50426",
+        "thetopo-route-traverse-50425"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8549",
+      "unitSourceId": "thetopo-sector-sorange",
+      "sourceTopoId": 8549,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/sorange#topo-image-8549",
+      "label": "Sorange 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54805/p1120q40-c0681f18acd26df82455a28233712911.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-left-arete-50341",
+        "thetopo-route-sorange",
+        "thetopo-route-sorange-traverse",
+        "thetopo-route-arete-50340"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-98676",
+      "unitSourceId": "thetopo-sector-spitting-venom",
+      "sourceTopoId": 98676,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/spitting-venom#topo-image-98676",
+      "label": "Spitting Venom 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/186/186936/p1120q40-07b7ffd22f3fe5da19a201369fcf8bc5.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-shark-tooth-327152"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8552",
+      "unitSourceId": "thetopo-sector-spitting-venom",
+      "sourceTopoId": 8552,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/spitting-venom#topo-image-8552",
+      "label": "Spitting Venom 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54808/p1120q40-be4becbeba0d0640514d4169186b9cd8.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-spitting-venom",
+        "thetopo-route-left-face"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58534",
+      "unitSourceId": "thetopo-sector-super-scream",
+      "sourceTopoId": 58534,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/super-scream#topo-image-58534",
+      "label": "Super scream 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130313/p1120q40-9dada865552d51898393b864b0767b79.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-front-left",
+        "thetopo-route-crack-238326",
+        "thetopo-route-front-center"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58536",
+      "unitSourceId": "thetopo-sector-super-scream",
+      "sourceTopoId": 58536,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/super-scream#topo-image-58536",
+      "label": "Super scream 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130315/p1120q40-79360ba546ab540e509df3f7e13e3c51.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-crack-238328"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8517",
+      "unitSourceId": "thetopo-sector-the-angel-dyno",
+      "sourceTopoId": 8517,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-angel-dyno#topo-image-8517",
+      "label": "The Angel Dyno 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54738/p1120q40-0f0e216afcb0c60882901594c9abe983.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-stoney-point-traverse",
+        "thetopo-route-earth-angel",
+        "thetopo-route-left-exit",
+        "thetopo-route-angel-dyno",
+        "thetopo-route-progressive-guy-49378"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8524",
+      "unitSourceId": "thetopo-sector-the-black-bitch",
+      "sourceTopoId": 8524,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-black-bitch#topo-image-8524",
+      "label": "The Black Bitch 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54745/p1120q40-9bc9d458d217d7f1c7bd00a5a29d224e.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-smiley-face-49403",
+        "thetopo-route-the-black-bitch",
+        "thetopo-route-right-arete-49402"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8516",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "sourceTopoId": 8516,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-burnout-boulder#topo-image-8516",
+      "label": "The Burnout Boulder 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54737/p1120q40-b828aa60dabed12d61997065f3068c58.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-three-feet-to-gold",
+        "thetopo-route-fire-fresh-traverse",
+        "thetopo-route-direct-mantle",
+        "thetopo-route-rail-to-seam",
+        "thetopo-route-jones-n",
+        "thetopo-route-dusty-coffee-49373"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8557",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "sourceTopoId": 8557,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-cube#topo-image-8557",
+      "label": "The Cube 1 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54813/p1120q40-9ebee8c00bf4c92497ac8fd0d8737d04.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-west-face-left",
+        "thetopo-route-west-face-50416",
+        "thetopo-route-left-start",
+        "thetopo-route-martinet-s-rails",
+        "thetopo-route-seth-s-mantle"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8558",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "sourceTopoId": 8558,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-cube#topo-image-8558",
+      "label": "The Cube 2 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54814/p1120q40-40938d010c3388ed44558b20f3afcb39.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-total-devasation",
+        "thetopo-route-the-mad-hatter-project",
+        "thetopo-route-engagement",
+        "thetopo-route-marriage"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8559",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "sourceTopoId": 8559,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-cube#topo-image-8559",
+      "label": "The Cube 3 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54815/p1120q40-6f23d9d0357bc52d280a6708cfa13bc2.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-marriage",
+        "thetopo-route-perfect-poser",
+        "thetopo-route-big-love"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8560",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "sourceTopoId": 8560,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-cube#topo-image-8560",
+      "label": "The Cube 4 / 4",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54816/p1120q40-4bf931ac35df750d9c1d3a59dfbb9a38.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-fear-of-a-black-hat",
+        "thetopo-route-a-clockwork-orange-49359",
+        "thetopo-route-total-devastation-left-start",
+        "thetopo-route-total-devasation"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8518",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "sourceTopoId": 8518,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-pearl#topo-image-8518",
+      "label": "The Pearl 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54739/p1120q40-93989b600d3a842e1747b59355453b04.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-across-the-choss",
+        "thetopo-route-the-pearl",
+        "thetopo-route-the-pearl-necklace",
+        "thetopo-route-clam-bumper"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58472",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "sourceTopoId": 58472,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-pearl#topo-image-58472",
+      "label": "The Pearl 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130205/p1120q40-181900ab46988ddb0e2e3db231d58b7c.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-six-pack",
+        "thetopo-route-northeast-face-center",
+        "thetopo-route-the-spreader",
+        "thetopo-route-jenna-s-jewelry"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-42214",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "sourceTopoId": 42214,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-wave-18175#topo-image-42214",
+      "label": "The Wave 1 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/108/108095/p1120q40-3d1a7957807d7bc118b33b3bddd33a80.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-the-wave-left",
+        "thetopo-route-the-wave-35977",
+        "thetopo-route-the-wave-right",
+        "thetopo-route-the-wave-direct-478419"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-58471",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "sourceTopoId": 58471,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/the-wave-18175#topo-image-58471",
+      "label": "The Wave 2 / 2",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/130/130204/p1120q40-13f96dbedd860fd8501cebb810962253.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-south-face-left"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-42215",
+      "unitSourceId": "thetopo-sector-ultimate-grandstaff",
+      "sourceTopoId": 42215,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/ultimate-grandstaff#topo-image-42215",
+      "label": "Ultimate Grandstaff 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/108/108096/p1120q40-27ee7c197fd83d5cff480b6c30328130.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-ultimate-grandstaff-sitstart",
+        "thetopo-route-ultimate-grandstaff"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8523",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "sourceTopoId": 8523,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-up-boulders-sector#topo-image-8523",
+      "label": "Warm Up Boulders Sector 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54744/p1120q40-24305393e8a0cf3497017e3da6255399.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-prefunk",
+        "thetopo-route-fluffer",
+        "thetopo-route-rub-one-off",
+        "thetopo-route-center-49396",
+        "thetopo-route-donkey-punch-49397",
+        "thetopo-route-donkey-punch-right",
+        "thetopo-route-32-oz"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8550",
+      "unitSourceId": "thetopo-sector-warm-ups",
+      "sourceTopoId": 8550,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/warm-ups#topo-image-8550",
+      "label": "Warm ups 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54806/p1120q40-dc1a134270488682007c7871c1e64bd0.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-left-50347",
+        "thetopo-route-arete-left",
+        "thetopo-route-arete-right",
+        "thetopo-route-traverse-50350"
+      ]
+    },
+    {
+      "sourceId": "thetopo-view-8563",
+      "unitSourceId": "thetopo-sector-wolfgang-gullich-memorial-boulder",
+      "sourceTopoId": 8563,
+      "sourceUrl": "https://thetopo.com/crags/kraft-wash-red-rock/topos/wolfgang-gullich-memorial-boulder#topo-image-8563",
+      "label": "Wolfgang Gullich Memorial Boulder 1 / 1",
+      "caption": null,
+      "orientation": null,
+      "orientationStatus": "not-stated-by-source",
+      "referenceImageUrl": "https://storage.e5gc6.upcloudobjects.com/photos/000/054/54819/p1120q40-24cbe12aa194d206f15cca7ca0b16654.jpg",
+      "photographerCredit": null,
+      "rights": "reference-only; no evidence of production redistribution permission",
+      "routeSourceIds": [
+        "thetopo-route-put-your-shoes-on-arete",
+        "thetopo-route-left-50421",
+        "thetopo-route-betty",
+        "thetopo-route-right-to-left"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "sourceId": "thetopo-route-pit-and-the-pendulum",
+      "sourceRouteId": 13324,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/pit-and-the-pendulum",
+      "name": "Pit and the Pendulum",
+      "grade": "8B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "8B",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-burnt",
+      "sourceRouteId": 13370,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/burnt",
+      "name": "Burnt",
+      "grade": "8A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "8A+",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8554"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-bubble-butt",
+      "sourceRouteId": 20057,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/bubble-butt",
+      "name": "Bubble Butt",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8564",
+        "thetopo-view-8749"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bar-traverse",
+      "sourceRouteId": 20058,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bar-traverse",
+      "name": "Monkey Bar Traverse",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-classic-monkey",
+      "sourceRouteId": 20059,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/classic-monkey",
+      "name": "Monkey Bar Right",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-pearl",
+      "sourceRouteId": 20621,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-pearl",
+      "name": "The Pearl",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-8518"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bar-direct-33381",
+      "sourceRouteId": 33381,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bar-direct-33381",
+      "name": "Monkey Bar Direct",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-slice-n-dice",
+      "sourceRouteId": 34578,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/slice-n-dice",
+      "name": "Slice n Dice",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-peter-north-pump",
+      "sourceRouteId": 34581,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-peter-north-pump",
+      "name": "The Peter North Pump",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-orange-top-blue-sky",
+      "sourceRouteId": 34593,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/orange-top-blue-sky",
+      "name": "Orange Top Blue Sky",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8565"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-slopey-traverse",
+      "sourceRouteId": 34615,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-slopey-traverse",
+      "name": "The Alexisizer",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A (/7A+)",
+      "unitSourceId": "thetopo-sector-slopey-traverse",
+      "viewSourceIds": [
+        "thetopo-view-8569"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-angel-dyno",
+      "sourceRouteId": 35787,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/angel-dyno",
+      "name": "Angel Dyno",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-the-angel-dyno",
+      "viewSourceIds": [
+        "thetopo-view-8517"
+      ],
+      "factualClaims": {
+        "condition": "Source notes that difficulty varies with climber height.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-caliman",
+      "sourceRouteId": 35797,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/caliman",
+      "name": "Caliman",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-caliman-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-huck",
+      "sourceRouteId": 35811,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-huck",
+      "name": "The Huck",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-spook-eyes",
+      "sourceRouteId": 35812,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/spook-eyes",
+      "name": "Snake Eyes",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-wave-35977",
+      "sourceRouteId": 35977,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-wave-35977",
+      "name": "The Wave",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "viewSourceIds": [
+        "thetopo-view-42214"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-fin-35978",
+      "sourceRouteId": 35978,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/fin-35978",
+      "name": "Fin",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-scare-tactics-v10",
+      "sourceRouteId": 36153,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/scare-tactics-v10",
+      "name": "Scare Tactics",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8564",
+        "thetopo-view-8746"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bar-direct-right-start",
+      "sourceRouteId": 36185,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bar-direct-right-start",
+      "name": "Monkey Bar Direct (right start)",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-special-k-36489",
+      "sourceRouteId": 36489,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/special-k-36489",
+      "name": "Vino Rojo",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8566"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-fear-of-a-black-hat",
+      "sourceRouteId": 42239,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/fear-of-a-black-hat",
+      "name": "Fear of a Black Hat",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8560"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-dusty-coffee",
+      "sourceRouteId": 44775,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/dusty-coffee",
+      "name": "Dusty Coffee",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (V4/5)",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [],
+      "factualClaims": {
+        "startFeature": "Crimp holds",
+        "path": "Dynamic move to the top edge",
+        "finish": "Lip",
+        "location": "Burnout Boulder",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-jenna-s-jewelry",
+      "sourceRouteId": 46298,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/jenna-s-jewelry",
+      "name": "Jenna's Jewelry",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-58472"
+      ],
+      "factualClaims": {
+        "location": "A face reached by turning the corner from The Pearl problem",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-donkey-punch-46299",
+      "sourceRouteId": 46299,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/donkey-punch-46299",
+      "name": "Donkey Punch",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [],
+      "factualClaims": {
+        "location": "Burnout Boulder, right of Fluffer",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-big-k",
+      "sourceRouteId": 46633,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/big-k",
+      "name": "Big K",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8566"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-myth",
+      "sourceRouteId": 49025,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-myth",
+      "name": "The Myth",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [],
+      "factualClaims": {
+        "variant": "Extended version of Monkey Bar Traverse; source does not specify where the extra moves occur.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-a-clockwork-orange-49359",
+      "sourceRouteId": 49359,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/a-clockwork-orange-49359",
+      "name": "A Clockwork Orange",
+      "grade": "8A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "8A+",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8560"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-marriage",
+      "sourceRouteId": 49360,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/marriage",
+      "name": "Marriage",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8558",
+        "thetopo-view-8559"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-big-love",
+      "sourceRouteId": 49361,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/big-love",
+      "name": "Big Love",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8559"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-butt-crack",
+      "sourceRouteId": 49362,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-butt-crack",
+      "name": "The Butt Crack",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-butt-crack-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8515"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-southeast-face",
+      "sourceRouteId": 49363,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/southeast-face",
+      "name": "Southeast Face",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-butt-crack-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8515"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-poker-chips",
+      "sourceRouteId": 49364,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/poker-chips",
+      "name": "Poker Chips",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8521"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-potato-chips",
+      "sourceRouteId": 49365,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/potato-chips",
+      "name": "Potato Chips",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8521"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-center",
+      "sourceRouteId": 49366,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/center",
+      "name": "Center",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8521"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-lip-traverse",
+      "sourceRouteId": 49367,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-lip-traverse",
+      "name": "Right Lip Traverse",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/6C)",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8521"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-three-feet-to-gold",
+      "sourceRouteId": 49368,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/three-feet-to-gold",
+      "name": "Three Feet to Gold",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-fire-fresh-traverse",
+      "sourceRouteId": 49369,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/fire-fresh-traverse",
+      "name": "Fire Fresh Traverse",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A (/7A+)",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-direct-mantle",
+      "sourceRouteId": 49370,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/direct-mantle",
+      "name": "Direct Mantle",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (/6C+)",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-rail-to-seam",
+      "sourceRouteId": 49371,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/rail-to-seam",
+      "name": "Rail to Seam",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-jones-n",
+      "sourceRouteId": 49372,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/jones-n",
+      "name": "Jones'n",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-dusty-coffee-49373",
+      "sourceRouteId": 49373,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/dusty-coffee-49373",
+      "name": "Dusty Coffee",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+ (/7A)",
+      "unitSourceId": "thetopo-sector-the-burnout-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8516"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-earth-angel",
+      "sourceRouteId": 49374,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/earth-angel",
+      "name": "Earth Angel",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-angel-dyno",
+      "viewSourceIds": [
+        "thetopo-view-8517"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-stoney-point-traverse",
+      "sourceRouteId": 49375,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/stoney-point-traverse",
+      "name": "Stoney Point Traverse",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (/6C+)",
+      "unitSourceId": "thetopo-sector-the-angel-dyno",
+      "viewSourceIds": [
+        "thetopo-view-8517"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-exit",
+      "sourceRouteId": 49376,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-exit",
+      "name": "Left Exit",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-the-angel-dyno",
+      "viewSourceIds": [
+        "thetopo-view-8517"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-progressive-guy-49378",
+      "sourceRouteId": 49378,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/progressive-guy-49378",
+      "name": "Progressive Guy",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-the-angel-dyno",
+      "viewSourceIds": [
+        "thetopo-view-8517"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-clam-bumper",
+      "sourceRouteId": 49379,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/clam-bumper",
+      "name": "Clam Bumper",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B (/6C+)",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-8518"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-of-the-crack",
+      "sourceRouteId": 49383,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-of-the-crack",
+      "name": "Right of the crack",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8432"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-blunt-arete",
+      "sourceRouteId": 49384,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/blunt-arete",
+      "name": "Blunt Arete",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+ (/6B+)",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8432"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-seam",
+      "sourceRouteId": 49385,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/seam",
+      "name": "Seam",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8432"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-curious-george-49386",
+      "sourceRouteId": 49386,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/curious-george-49386",
+      "name": "Curious George",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/6C)",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8432"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-center-face",
+      "sourceRouteId": 49387,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/center-face",
+      "name": "Center Face",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/6C)",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8432"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-hyperglide",
+      "sourceRouteId": 49388,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/hyperglide",
+      "name": "Hyperglide",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+ (/7A)",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bars",
+      "sourceRouteId": 49389,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bars",
+      "name": "Monkey Bars",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-prow-direct",
+      "sourceRouteId": 49390,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/prow-direct",
+      "name": "Prow Direct",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-best-v3-at-kraft",
+      "sourceRouteId": 49391,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-best-v3-at-kraft",
+      "name": "The Best v3 at Kraft",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-barndoor-boulder-and-the-abyss",
+      "viewSourceIds": [
+        "thetopo-view-8522"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-prefunk",
+      "sourceRouteId": 49393,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/prefunk",
+      "name": "Prefunk",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-fluffer",
+      "sourceRouteId": 49394,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/fluffer",
+      "name": "Fluffer",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-rub-one-off",
+      "sourceRouteId": 49395,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/rub-one-off",
+      "name": "Rub One Off",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-center-49396",
+      "sourceRouteId": 49396,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/center-49396",
+      "name": "Center",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B (/7B+)",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-donkey-punch-49397",
+      "sourceRouteId": 49397,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/donkey-punch-49397",
+      "name": "Donkey Punch",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-donkey-punch-right",
+      "sourceRouteId": 49398,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/donkey-punch-right",
+      "name": "Donkey Punch Right",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-32-oz",
+      "sourceRouteId": 49399,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/32-oz",
+      "name": "32 oz.",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [
+        "thetopo-view-8523"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-your-project",
+      "sourceRouteId": 49400,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/your-project",
+      "name": "Your Project",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-black-bitch",
+      "sourceRouteId": 49401,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-black-bitch",
+      "name": "The Black Bitch",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-the-black-bitch",
+      "viewSourceIds": [
+        "thetopo-view-8524"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-arete-49402",
+      "sourceRouteId": 49402,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-arete-49402",
+      "name": "Right Arete",
+      "grade": "5+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5+",
+      "unitSourceId": "thetopo-sector-the-black-bitch",
+      "viewSourceIds": [
+        "thetopo-view-8524"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-smiley-face-49403",
+      "sourceRouteId": 49403,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/smiley-face-49403",
+      "name": "Smiley Face",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-the-black-bitch",
+      "viewSourceIds": [
+        "thetopo-view-8524"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-picante-left",
+      "sourceRouteId": 49404,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/picante-left",
+      "name": "Picante Left",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-picante-sauce",
+      "viewSourceIds": [
+        "thetopo-view-8525"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-picante-sauce",
+      "sourceRouteId": 49405,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/picante-sauce",
+      "name": "Picante Sauce",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+ (/6B)",
+      "unitSourceId": "thetopo-sector-picante-sauce",
+      "viewSourceIds": [
+        "thetopo-view-8525"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-arete-jump",
+      "sourceRouteId": 49788,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/arete-jump",
+      "name": "Arete Jump",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (/6C+)",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8535"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-kraft-dinner",
+      "sourceRouteId": 49789,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/kraft-dinner",
+      "name": "Kraft Dinner",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8535"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-kraft-dinner-right",
+      "sourceRouteId": 49790,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/kraft-dinner-right",
+      "name": "Kraft Dinner Right",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8535"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-500",
+      "sourceRouteId": 49791,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/500",
+      "name": "$500",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8535"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-600",
+      "sourceRouteId": 49792,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/600",
+      "name": "$600",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8535"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-beat-meat-manifesto",
+      "sourceRouteId": 49793,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/beat-meat-manifesto",
+      "name": "Beat Meat Manifesto",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8535"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-big-jugs",
+      "sourceRouteId": 49794,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/big-jugs",
+      "name": "Big Jugs",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A (/6B)",
+      "unitSourceId": "thetopo-sector-big-jugs",
+      "viewSourceIds": [
+        "thetopo-view-8537"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-perked-up",
+      "sourceRouteId": 49795,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/perked-up",
+      "name": "Perked Up",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-big-jugs",
+      "viewSourceIds": [
+        "thetopo-view-8537"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-face",
+      "sourceRouteId": 49796,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-face",
+      "name": "Left Face",
+      "grade": "5+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5+",
+      "unitSourceId": "thetopo-sector-big-jugs",
+      "viewSourceIds": [
+        "thetopo-view-8537"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-sorange",
+      "sourceRouteId": 50338,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/sorange",
+      "name": "Sorange",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-sorange",
+      "viewSourceIds": [
+        "thetopo-view-8549"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-sorange-traverse",
+      "sourceRouteId": 50339,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/sorange-traverse",
+      "name": "Sorange Traverse",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/6C)",
+      "unitSourceId": "thetopo-sector-sorange",
+      "viewSourceIds": [
+        "thetopo-view-8549"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-arete-50340",
+      "sourceRouteId": 50340,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/arete-50340",
+      "name": "Arete",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-sorange",
+      "viewSourceIds": [
+        "thetopo-view-8549"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-arete-50341",
+      "sourceRouteId": 50341,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-arete-50341",
+      "name": "Left arete",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B (/6B+)",
+      "unitSourceId": "thetopo-sector-sorange",
+      "viewSourceIds": [
+        "thetopo-view-8549"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-50347",
+      "sourceRouteId": 50347,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-50347",
+      "name": "Left",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-warm-ups",
+      "viewSourceIds": [
+        "thetopo-view-8550"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-arete-left",
+      "sourceRouteId": 50348,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/arete-left",
+      "name": "Arete Left",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B (/6B+)",
+      "unitSourceId": "thetopo-sector-warm-ups",
+      "viewSourceIds": [
+        "thetopo-view-8550"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-arete-right",
+      "sourceRouteId": 50349,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/arete-right",
+      "name": "Arete Right",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B (/6B+)",
+      "unitSourceId": "thetopo-sector-warm-ups",
+      "viewSourceIds": [
+        "thetopo-view-8550"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-traverse-50350",
+      "sourceRouteId": 50350,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/traverse-50350",
+      "name": "Traverse",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+ (/6B)",
+      "unitSourceId": "thetopo-sector-warm-ups",
+      "viewSourceIds": [
+        "thetopo-view-8550"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-big-mac-crack",
+      "sourceRouteId": 50351,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/big-mac-crack",
+      "name": "Big Mac Crack",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-big-mac-crack",
+      "viewSourceIds": [
+        "thetopo-view-8551"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-dihedral-50352",
+      "sourceRouteId": 50352,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/dihedral-50352",
+      "name": "Dihedral",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-big-mac-crack",
+      "viewSourceIds": [
+        "thetopo-view-8551"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-spitting-venom",
+      "sourceRouteId": 50353,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/spitting-venom",
+      "name": "Spitting Venom",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+ (/7C)",
+      "unitSourceId": "thetopo-sector-spitting-venom",
+      "viewSourceIds": [
+        "thetopo-view-8552"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-face",
+      "sourceRouteId": 50354,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-face",
+      "name": "Left face",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-spitting-venom",
+      "viewSourceIds": [
+        "thetopo-view-8552"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-heart-and-sole-50382",
+      "sourceRouteId": 50382,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/heart-and-sole-50382",
+      "name": "Heart and Sole",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/7A)",
+      "unitSourceId": "thetopo-sector-heart-and-sole",
+      "viewSourceIds": [
+        "thetopo-view-8553"
+      ],
+      "factualClaims": {
+        "start": "Both sitting and standing starts are noted; source does not separate their grades.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-heart-and-sole-left",
+      "sourceRouteId": 50384,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/heart-and-sole-left",
+      "name": "Heart and Sole Left",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B (/6B+)",
+      "unitSourceId": "thetopo-sector-heart-and-sole",
+      "viewSourceIds": [
+        "thetopo-view-8553"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-total-devastation-left-start",
+      "sourceRouteId": 50410,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/total-devastation-left-start",
+      "name": "Total Devastation Left Start",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (/6C+)",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8560"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-total-devasation",
+      "sourceRouteId": 50411,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/total-devasation",
+      "name": "Total Devasation",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/6C)",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8558",
+        "thetopo-view-8560"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-mad-hatter-project",
+      "sourceRouteId": 50412,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-mad-hatter-project",
+      "name": "The Mad Hatter Project",
+      "grade": "N/A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "N/A",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8558"
+      ],
+      "factualClaims": {
+        "condition": "Source says the project has no ascent; date of claim is not supplied.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-engagement",
+      "sourceRouteId": 50413,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/engagement",
+      "name": "Engagement",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8558"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-perfect-poser",
+      "sourceRouteId": 50414,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/perfect-poser",
+      "name": "Perfect Poser",
+      "grade": "3",
+      "gradeSystem": "Font",
+      "routePageGradeText": "3",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8559"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-west-face-left",
+      "sourceRouteId": 50415,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/west-face-left",
+      "name": "West Face Left",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+ (/6B)",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8557"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-west-face-50416",
+      "sourceRouteId": 50416,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/west-face-50416",
+      "name": "West Face",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (/6C+)",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8557"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-martinet-s-rails",
+      "sourceRouteId": 50417,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/martinet-s-rails",
+      "name": "Martinet's Rails",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8557"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-start",
+      "sourceRouteId": 50418,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-start",
+      "name": "Left Start",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8557"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-seth-s-mantle",
+      "sourceRouteId": 50419,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/seth-s-mantle",
+      "name": "Seth's Mantle",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-cube",
+      "viewSourceIds": [
+        "thetopo-view-8557"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-put-your-shoes-on-arete",
+      "sourceRouteId": 50420,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/put-your-shoes-on-arete",
+      "name": "Put Your Shoes on Arete",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+ (/6C)",
+      "unitSourceId": "thetopo-sector-wolfgang-gullich-memorial-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8563"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-50421",
+      "sourceRouteId": 50421,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-50421",
+      "name": "Left",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-wolfgang-gullich-memorial-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8563"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-betty",
+      "sourceRouteId": 50422,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/betty",
+      "name": "Betty",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-wolfgang-gullich-memorial-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8563"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-to-left",
+      "sourceRouteId": 50423,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-to-left",
+      "name": "Right to Left",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-wolfgang-gullich-memorial-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8563"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-50424",
+      "sourceRouteId": 50424,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-50424",
+      "name": "Left",
+      "grade": "3",
+      "gradeSystem": "Font",
+      "routePageGradeText": "3",
+      "unitSourceId": "thetopo-sector-pretzel-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8567"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-traverse-50425",
+      "sourceRouteId": 50425,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/traverse-50425",
+      "name": "Traverse",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-pretzel-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8567"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-50426",
+      "sourceRouteId": 50426,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-50426",
+      "name": "Right",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-pretzel-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8567"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-my-tan",
+      "sourceRouteId": 50427,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/my-tan",
+      "name": "My Tan",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8554"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-arete-50428",
+      "sourceRouteId": 50428,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-arete-50428",
+      "name": "Right Arete",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8554"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-i-disagree",
+      "sourceRouteId": 50429,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/i-disagree",
+      "name": "I Disagree",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8554"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-bathtub",
+      "sourceRouteId": 50430,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-bathtub",
+      "name": "The Bathtub",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-super-fragilistic",
+      "sourceRouteId": 50431,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/super-fragilistic",
+      "name": "Super Fragilistic",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-southwest-arete",
+      "sourceRouteId": 50433,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/southwest-arete",
+      "name": "Southwest arete",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C (/6C+)",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8566"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-south-face-crack",
+      "sourceRouteId": 50434,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/south-face-crack",
+      "name": "South Face Crack",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8566"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-south-face-50435",
+      "sourceRouteId": 50435,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/south-face-50435",
+      "name": "South Face",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8566"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-shit-or-get-off-the-pot",
+      "sourceRouteId": 50436,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/shit-or-get-off-the-pot",
+      "name": "Shit or Get Off the Pot",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+ (/6C)",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8565"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-project-50437",
+      "sourceRouteId": 50437,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/project-50437",
+      "name": "Project",
+      "grade": "N/A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "N/A",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8565"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-tied-to-the-whippin-post",
+      "sourceRouteId": 50438,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/tied-to-the-whippin-post",
+      "name": "Tied to the Whippin' Post",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8565"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-dog-leash-boy",
+      "sourceRouteId": 50439,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/dog-leash-boy",
+      "name": "Dog Leash Boy",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-bathtub-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8565"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-porn-star",
+      "sourceRouteId": 50440,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/porn-star",
+      "name": "Porn Star",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A (/7A+)",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8561"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-past-tension",
+      "sourceRouteId": 50441,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/past-tension",
+      "name": "Past Tension",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8561"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-traverse-50442",
+      "sourceRouteId": 50442,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/traverse-50442",
+      "name": "Traverse",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8561",
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-east-face-project",
+      "sourceRouteId": 50443,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/east-face-project",
+      "name": "East Face Project",
+      "grade": "N/A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "N/A",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8561"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-heist-50444",
+      "sourceRouteId": 50444,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-heist-50444",
+      "name": "The Heist",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-fulton-problem",
+      "sourceRouteId": 50445,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/fulton-problem",
+      "name": "Fulton Problem",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-plumber-s-crack-traverse",
+      "sourceRouteId": 50446,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/plumber-s-crack-traverse",
+      "name": "Plumber's Crack Traverse",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-plunger",
+      "sourceRouteId": 50447,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/plunger",
+      "name": "Plunger",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-split-decision-50448",
+      "sourceRouteId": 50448,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/split-decision-50448",
+      "name": "Split Decision",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B (/6B+)",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-split-ends-50449",
+      "sourceRouteId": 50449,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/split-ends-50449",
+      "name": "Split Ends",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-mole-50450",
+      "sourceRouteId": 50450,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-mole-50450",
+      "name": "The Mole",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-plumber-s-crack",
+      "viewSourceIds": [
+        "thetopo-view-8562"
+      ],
+      "factualClaims": {
+        "condition": "Source reports a break and no subsequent ascent; date and affected feature are not supplied.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-scare-tactics-stand",
+      "sourceRouteId": 53139,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/scare-tactics-stand",
+      "name": "Scare Tactics Stand",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8746"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-timmy-s-problem",
+      "sourceRouteId": 54876,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/timmy-s-problem",
+      "name": "Timmy's Problem",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-slopey-traverse",
+      "viewSourceIds": [
+        "thetopo-view-8569"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-bitch-slap-5",
+      "sourceRouteId": 55493,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/bitch-slap-5",
+      "name": "Bitch Slap 5",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-bitch-slap-5",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-across-the-choss",
+      "sourceRouteId": 56501,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/across-the-choss",
+      "name": "Across The Choss",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-8518"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-venom-56502",
+      "sourceRouteId": 56502,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/venom-56502",
+      "name": "Venom",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [],
+      "factualClaims": {
+        "location": "A face around a corner from I Disagree",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bars-sit",
+      "sourceRouteId": 61426,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bars-sit",
+      "name": "Monkey Bars Sit",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-muffler",
+      "sourceRouteId": 71031,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-muffler",
+      "name": "The Muffler",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-spook-eyes-72701",
+      "sourceRouteId": 72701,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/spook-eyes-72701",
+      "name": "Spook Eyes",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-spook-eyes",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-my-project",
+      "sourceRouteId": 84971,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/my-project",
+      "name": "My Project",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-warm-up-boulders-sector",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-re-direct",
+      "sourceRouteId": 86873,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/re-direct",
+      "name": "Re-Direct",
+      "grade": "8A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "8A+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8431"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-potato-chips-direct",
+      "sourceRouteId": 108022,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/potato-chips-direct",
+      "name": "Potato Chips Direct",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-scare-tactics-right",
+      "sourceRouteId": 108023,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/scare-tactics-right",
+      "name": "Scare Tactics Right",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-bubble-butt-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8746"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-poker-chips-113815",
+      "sourceRouteId": 113815,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/poker-chips-113815",
+      "name": "Poker Chips",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-beth-wald-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-ultimate-grandstaff",
+      "sourceRouteId": 113816,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/ultimate-grandstaff",
+      "name": "Ultimate Grandstaff",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-ultimate-grandstaff",
+      "viewSourceIds": [
+        "thetopo-view-42215"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-timmy-s-problem-traverse",
+      "sourceRouteId": 114333,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/timmy-s-problem-traverse",
+      "name": "Timmy's Problem Traverse",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-slopey-traverse",
+      "viewSourceIds": [
+        "thetopo-view-8569"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-family-feud-114334",
+      "sourceRouteId": 114334,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/family-feud-114334",
+      "name": "Family Feud",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-secrets-of-a-barndoor",
+      "sourceRouteId": 115338,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/secrets-of-a-barndoor",
+      "name": "Secrets of a Barndoor",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-barndoor-boulder-and-the-abyss",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-six-pack",
+      "sourceRouteId": 143109,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/six-pack",
+      "name": "Six Pack",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-58472"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-northeast-face-center",
+      "sourceRouteId": 143110,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/northeast-face-center",
+      "name": "Northeast face center",
+      "grade": "5+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5+",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-58472"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-spreader",
+      "sourceRouteId": 143111,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-spreader",
+      "name": "The Spreader",
+      "grade": "4",
+      "gradeSystem": "Font",
+      "routePageGradeText": "4",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-58472"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-wave-right",
+      "sourceRouteId": 143547,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-wave-right",
+      "name": "The Wave right",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "viewSourceIds": [
+        "thetopo-view-42214"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-wave-left",
+      "sourceRouteId": 143548,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-wave-left",
+      "name": "The Wave left",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "viewSourceIds": [
+        "thetopo-view-42214"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-lowball-143555",
+      "sourceRouteId": 143555,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/lowball-143555",
+      "name": "Lowball",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-big-jugs",
+      "viewSourceIds": [
+        "thetopo-view-8537"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-fin-face",
+      "sourceRouteId": 164244,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/fin-face",
+      "name": "Fin Face",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-backside-right",
+      "sourceRouteId": 164245,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/backside-right",
+      "name": "Backside right",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-crack-164246",
+      "sourceRouteId": 164246,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-crack-164246",
+      "name": "Monkey Crack",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58475"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-pearl-necklace",
+      "sourceRouteId": 165208,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-pearl-necklace",
+      "name": "The Pearl Necklace",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-the-pearl",
+      "viewSourceIds": [
+        "thetopo-view-8518"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-welcome-to-detroit",
+      "sourceRouteId": 195986,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/welcome-to-detroit",
+      "name": "Welcome to Detroit",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-sorange",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-ultimate-grandstaff-sitstart",
+      "sourceRouteId": 196519,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/ultimate-grandstaff-sitstart",
+      "name": "Ultimate Grandstaff sitstart",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A (7a+)",
+      "unitSourceId": "thetopo-sector-ultimate-grandstaff",
+      "viewSourceIds": [
+        "thetopo-view-42215"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-face-196520",
+      "sourceRouteId": 196520,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-face-196520",
+      "name": "Left Face",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-hound-dog-arete",
+      "viewSourceIds": [
+        "thetopo-view-42216"
+      ],
+      "factualClaims": {
+        "start": "Standing",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-hound-dog-arete",
+      "sourceRouteId": 196521,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/hound-dog-arete",
+      "name": "Hound Dog Arete",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-hound-dog-arete",
+      "viewSourceIds": [
+        "thetopo-view-42216"
+      ],
+      "factualClaims": {
+        "startFeature": "Right hand on a sidepull, left hand wrapped around the corner",
+        "path": "Arete",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-butterfly-kiss",
+      "sourceRouteId": 196522,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/butterfly-kiss",
+      "name": "Butterfly Kiss",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-butterfly-kiss",
+      "viewSourceIds": [
+        "thetopo-view-42217"
+      ],
+      "factualClaims": {
+        "start": "Sitting below the overhang",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-good-times-197818",
+      "sourceRouteId": 197818,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/good-times-197818",
+      "name": "Good times",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "viewSourceIds": [],
+      "factualClaims": {
+        "start": "Sitting",
+        "startFeature": "Low rail for the left hand and a pinch for the right",
+        "path": "Short angular arete, then rightward along the top edge",
+        "finish": "Topout right of the arete",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-600-dollars",
+      "sourceRouteId": 222628,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/600-dollars",
+      "name": "600 Dollars",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-mantle-1",
+      "sourceRouteId": 225034,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/mantle-1",
+      "name": "Mantle 1",
+      "grade": "6C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C",
+      "unitSourceId": "thetopo-sector-slopey-traverse",
+      "viewSourceIds": [
+        "thetopo-view-8569"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-rub-one-off-225062",
+      "sourceRouteId": 225062,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/rub-one-off-225062",
+      "name": "Rub One off",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-perked-up-225063",
+      "sourceRouteId": 225063,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/perked-up-225063",
+      "name": "Perked Up",
+      "grade": "5+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-woods-problem",
+      "sourceRouteId": 233910,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/woods-problem",
+      "name": "Woods Problem",
+      "grade": "8A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "8A+",
+      "unitSourceId": "thetopo-sector-sorange",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-south-face-left",
+      "sourceRouteId": 238007,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/south-face-left",
+      "name": "South face left",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "viewSourceIds": [
+        "thetopo-view-58471"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bars-right-v2",
+      "sourceRouteId": 238008,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bars-right-v2",
+      "name": "Monkey bars right v2",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58474"
+      ],
+      "factualClaims": {
+        "start": "Standing",
+        "startFeature": "Edges with elevated feet, immediately left of the large hollow",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-monkey-bars-left-v2",
+      "sourceRouteId": 238009,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/monkey-bars-left-v2",
+      "name": "Monkey bars left v2",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58474"
+      ],
+      "factualClaims": {
+        "start": "Standing",
+        "startFeature": "Sidepulls",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-pockets-sit-start",
+      "sourceRouteId": 238010,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/pockets-sit-start",
+      "name": "Pockets sit start",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58474"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "startFeature": "Pockets",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-pockets-stand",
+      "sourceRouteId": 238011,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/pockets-stand",
+      "name": "Pockets stand",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58474"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-northeast-face-left",
+      "sourceRouteId": 238012,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/northeast-face-left",
+      "name": "Northeast face left",
+      "grade": "6B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58474"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-left",
+      "sourceRouteId": 238013,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-left",
+      "name": "Left left",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58475"
+      ],
+      "factualClaims": {
+        "startFeature": "Undercling",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-238014",
+      "sourceRouteId": 238014,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-238014",
+      "name": "Left",
+      "grade": "4+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "4+",
+      "unitSourceId": "thetopo-sector-monkey-bar-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58475"
+      ],
+      "factualClaims": {
+        "start": "Standing",
+        "startFeature": "Small crimps",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-left-side-left",
+      "sourceRouteId": 238318,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/left-side-left",
+      "name": "Left side left",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58483"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-50-hooker",
+      "sourceRouteId": 238319,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-50-hooker",
+      "name": "The $50 Hooker",
+      "grade": "5",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58482"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-backside-crack",
+      "sourceRouteId": 238320,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/backside-crack",
+      "name": "Backside crack",
+      "grade": "4",
+      "gradeSystem": "Font",
+      "routePageGradeText": "4",
+      "unitSourceId": "thetopo-sector-600-boulder",
+      "viewSourceIds": [
+        "thetopo-view-58482"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-right-face-238321",
+      "sourceRouteId": 238321,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/right-face-238321",
+      "name": "Right face",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-big-jugs",
+      "viewSourceIds": [
+        "thetopo-view-8537"
+      ],
+      "factualClaims": {
+        "startFeature": "Undercling",
+        "path": "Upward and rightward",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-southeast-face-sit",
+      "sourceRouteId": 238322,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/southeast-face-sit",
+      "name": "Southeast face sit",
+      "grade": "6C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6C+",
+      "unitSourceId": "thetopo-sector-butt-crack-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8515"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-crack-right",
+      "sourceRouteId": 238323,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/crack-right",
+      "name": "Crack right",
+      "grade": "6A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A+",
+      "unitSourceId": "thetopo-sector-butterfly-kiss",
+      "viewSourceIds": [
+        "thetopo-view-42217"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-north-sit",
+      "sourceRouteId": 238324,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/north-sit",
+      "name": "North sit",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-butterfly-kiss",
+      "viewSourceIds": [
+        "thetopo-view-58531"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "startFeature": "Crack; right hand uses the lowest crimp holds",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-front-left",
+      "sourceRouteId": 238325,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/front-left",
+      "name": "Front left",
+      "grade": "6A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6A",
+      "unitSourceId": "thetopo-sector-super-scream",
+      "viewSourceIds": [
+        "thetopo-view-58534"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "startFeature": "Undercling",
+        "restriction": "Features left of the corner are excluded.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-crack-238326",
+      "sourceRouteId": 238326,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/crack-238326",
+      "name": "Crack",
+      "grade": "5+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5+",
+      "unitSourceId": "thetopo-sector-super-scream",
+      "viewSourceIds": [
+        "thetopo-view-58534"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "path": "Layback along the crack",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-front-center",
+      "sourceRouteId": 238327,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/front-center",
+      "name": "Front center",
+      "grade": "5+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "5+",
+      "unitSourceId": "thetopo-sector-super-scream",
+      "viewSourceIds": [
+        "thetopo-view-58534"
+      ],
+      "factualClaims": {
+        "startFeature": "Crimps",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-crack-238328",
+      "sourceRouteId": 238328,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/crack-238328",
+      "name": "Crack",
+      "grade": "4+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "4+",
+      "unitSourceId": "thetopo-sector-super-scream",
+      "viewSourceIds": [
+        "thetopo-view-58536"
+      ],
+      "factualClaims": {
+        "start": "Sitting",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-atomic-wedgie-278009",
+      "sourceRouteId": 278009,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/atomic-wedgie-278009",
+      "name": "Atomic wedgie",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-poison-control",
+      "sourceRouteId": 278012,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/poison-control",
+      "name": "Poison Control",
+      "grade": "7C",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-spring-loaded-278029",
+      "sourceRouteId": 278029,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/spring-loaded-278029",
+      "name": "Spring loaded",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-nickelodeon",
+      "sourceRouteId": 303579,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/nickelodeon",
+      "name": "Route #12",
+      "grade": "N/A",
+      "gradeSystem": "Font",
+      "routePageGradeText": null,
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-prowler-327150",
+      "sourceRouteId": 327150,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-prowler-327150",
+      "name": "The Prowler",
+      "grade": "7A",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A",
+      "unitSourceId": "thetopo-sector-kraft-boulders",
+      "viewSourceIds": [],
+      "factualClaims": {
+        "condition": "A source note reports V3–4 using newer beta and V6–7 using the older method; the route list still shows its own Font grade.",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-alexisizer-direct",
+      "sourceRouteId": 327151,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/alexisizer-direct",
+      "name": "Alexisizer direct",
+      "grade": "7B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B+",
+      "unitSourceId": "thetopo-sector-slopey-traverse",
+      "viewSourceIds": [
+        "thetopo-view-8569"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-shark-tooth-327152",
+      "sourceRouteId": 327152,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/shark-tooth-327152",
+      "name": "Shark tooth",
+      "grade": "7C+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7C+",
+      "unitSourceId": "thetopo-sector-spitting-venom",
+      "viewSourceIds": [
+        "thetopo-view-98676"
+      ],
+      "factualClaims": {
+        "location": "Tooth-shaped rock downhill from Spitting Venom",
+        "confidence": "single-source-claim-needs-reconciliation"
+      },
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-the-wave-direct-478419",
+      "sourceRouteId": 478419,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/the-wave-direct-478419",
+      "name": "The Wave direct",
+      "grade": "6B+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "6B+",
+      "unitSourceId": "thetopo-sector-the-wave-18175",
+      "viewSourceIds": [
+        "thetopo-view-42214"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-my-tan-right-side",
+      "sourceRouteId": 493404,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/my-tan-right-side",
+      "name": "My tan right side",
+      "grade": "7B",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7B",
+      "unitSourceId": "thetopo-sector-bill-s-boulder",
+      "viewSourceIds": [
+        "thetopo-view-8554"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    },
+    {
+      "sourceId": "thetopo-route-square-arete-535206",
+      "sourceRouteId": 535206,
+      "url": "https://thetopo.com/crags/kraft-wash-red-rock/routes/square-arete-535206",
+      "name": "Square Arete",
+      "grade": "7A+",
+      "gradeSystem": "Font",
+      "routePageGradeText": "7A+",
+      "unitSourceId": "thetopo-sector-butterfly-kiss",
+      "viewSourceIds": [
+        "thetopo-view-58531"
+      ],
+      "factualClaims": null,
+      "routePageRetrieved": true
+    }
+  ],
+  "limitations": [
+    "Entries labelled boulder by this source can be one physical boulder, a climb-specific unit, or a group. Never treat the 34 source sectors as 34 independently verified physical boulders.",
+    "Photographic viewpoint IDs are presentation units; orientations require evidence from independent photographs, coordinates, and field observations.",
+    "Thirty short original factual claim records summarize explicit route-page notes. They are unverified source claims, not field beta. The other 168 routes lack usable textual start/path claims on their public route page.",
+    "Authored route-path points, source descriptive prose, photo pixels, topo drawings, and user profiles are excluded.",
+    "This inventory is a current research workbench source index. Its existence does not imply permission to automate future acquisition or redistribute a source compilation."
+  ],
+  "failures": []
+}

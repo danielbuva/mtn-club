@@ -15,6 +15,9 @@
 /playwright-report
 /test-results
 
+# local research, screenshots, traces, and temporary guide exports
+/.tmp/
+
 # next.js
 /.next/
 /.next-auth-browser/

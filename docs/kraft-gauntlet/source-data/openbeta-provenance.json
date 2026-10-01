@@ -1,0 +1,126 @@
+{
+  "sourceId": "openbeta",
+  "rootId": "bfc783a7-d23c-5794-84c7-d7658c387b08",
+  "sourceUrl": "https://openbeta.io/area/bfc783a7-d23c-5794-84c7-d7658c387b08/kraft-boulders",
+  "retrievedAt": "2026-10-01T18:50:24.971Z",
+  "licenseId": "CC0-1.0",
+  "licenseScope": "Climbing content excluding photos.",
+  "licenseEvidence": [
+    {
+      "url": "https://openbeta.io/about",
+      "inspectedOn": "2026-10-01",
+      "claim": "OpenBeta states all climbing content excluding photos is Creative Commons Public Domain."
+    },
+    {
+      "url": "https://github.com/OpenBeta/climbing-data/blob/main/LICENSE",
+      "inspectedOn": "2026-10-01",
+      "claim": "OpenBeta climbing-data repository has CC0 1.0 Universal legal code."
+    }
+  ],
+  "excludedContent": "All photographs/media, media tagging/topo artwork, UI artwork and source code are excluded from redistributed factual seed.",
+  "acquisition": "Public OpenBeta area HTML serialized structured records, recursively following actual rendered child links. Official API fallback attempts timed out/returned 502; successful SSR traversal covers entire advertised hierarchy.",
+  "coverage": {
+    "areasIncludingRoot": 49,
+    "descendantAreas": 48,
+    "leafSourceUnits": 46,
+    "directRootAreas": 37,
+    "routes": 245,
+    "rootAdvertisedRoutes": 245,
+    "missingAreas": [],
+    "exactMpAreaMatches": 42,
+    "exactMpRouteMatches": 232
+  },
+  "originalSourceDependency": "OpenBeta USA import is historically Mountain Project-derived. Exact UUIDv5 matches establish identifier lineage, not independent real-world evidence, current agreement or physical-boulder membership.",
+  "importerEvidence": [
+    {
+      "url": "https://github.com/OpenBeta/openbeta-graphql/blob/develop/src/db/import/usa/AreaTree.ts",
+      "rule": "Leaf source units use UUIDv5(MP numeric area ID, NIL); nonleaf containers use UUIDv5(pipe-delimited path, NIL)."
+    },
+    {
+      "url": "https://github.com/OpenBeta/openbeta-graphql/blob/develop/src/db/import/ClimbTransformer.ts",
+      "rule": "Routes use UUIDv5(MP route ID, NIL), with MP sector ID + dot + left-right index fallback when MP route ID is empty."
+    }
+  ],
+  "geometryCaution": "Coordinates are source centroids. The OpenBeta bbox/polygon rows are generated convex coverage extents or about 100 m squares, not measured boulder footprints. Do not use them as rock outlines.",
+  "missingFields": "Public SSR route records omit original MP IDs, route coordinates, location/protection details in many cases. Recovered MP IDs are deterministic exact-importer links; absent descriptions remain absent. No coordinate or geometry filled from guesswork.",
+  "unresolvedIdentities": [
+    {
+      "id": "6caac005-3400-4057-a27f-26867c4e463a",
+      "name": "Rub One Off",
+      "parentId": "fd409330-0964-529e-badd-7e6492fd1bd8",
+      "sourceUrl": "https://openbeta.io/climb/6caac005-3400-4057-a27f-26867c4e463a/rub-one-off"
+    },
+    {
+      "id": "a4a75550-8ae9-49c9-855d-90d65b2a445c",
+      "name": "Coors Light",
+      "parentId": "3dd093bf-c198-5c99-9d86-a676f84cdc40",
+      "sourceUrl": "https://openbeta.io/climb/a4a75550-8ae9-49c9-855d-90d65b2a445c/coors-light"
+    },
+    {
+      "id": "cab774c3-d975-5dc5-a617-f4c3a9976450",
+      "name": "Torso Rojo",
+      "parentId": "67db3297-4dd7-51c1-840a-60f3385e041c",
+      "sourceUrl": "https://openbeta.io/climb/cab774c3-d975-5dc5-a617-f4c3a9976450/torso-rojo"
+    },
+    {
+      "id": "5725f4f6-b6c4-4cc4-94bb-358e71b6aef8",
+      "name": "OK Times",
+      "parentId": "2c82a742-f269-5548-8708-c814f5cd8ae8",
+      "sourceUrl": "https://openbeta.io/climb/5725f4f6-b6c4-4cc4-94bb-358e71b6aef8/ok-times"
+    },
+    {
+      "id": "185c55cd-1b64-41e0-ac03-fb9077f5a47c",
+      "name": "Cutters",
+      "parentId": "9c2c22b1-6aec-5489-a8de-01d4b778e536",
+      "sourceUrl": "https://openbeta.io/climb/185c55cd-1b64-41e0-ac03-fb9077f5a47c/cutters"
+    },
+    {
+      "id": "35e41ef2-6f74-4f4d-beff-2653c3bc8ad0",
+      "name": "Right Face",
+      "parentId": "9c2c22b1-6aec-5489-a8de-01d4b778e536",
+      "sourceUrl": "https://openbeta.io/climb/35e41ef2-6f74-4f4d-beff-2653c3bc8ad0/right-face"
+    },
+    {
+      "id": "7875ca36-4f81-45be-b02c-768f0a8323dd",
+      "name": "Left Arete",
+      "parentId": "0cc93bf5-be90-4623-a413-d6d17f480f28",
+      "sourceUrl": "https://openbeta.io/climb/7875ca36-4f81-45be-b02c-768f0a8323dd/left-arete"
+    },
+    {
+      "id": "80186339-522e-4148-a3bc-9eca26f58fa6",
+      "name": "Slopey Traverse",
+      "parentId": "0cc93bf5-be90-4623-a413-d6d17f480f28",
+      "sourceUrl": "https://openbeta.io/climb/80186339-522e-4148-a3bc-9eca26f58fa6/slopey-traverse"
+    },
+    {
+      "id": "d775959b-da88-4a77-b63f-94736ce22d1e",
+      "name": "Front",
+      "parentId": "0cc93bf5-be90-4623-a413-d6d17f480f28",
+      "sourceUrl": "https://openbeta.io/climb/d775959b-da88-4a77-b63f-94736ce22d1e/front"
+    },
+    {
+      "id": "f016b7b9-325a-4be9-8af9-95ef42dfaf0a",
+      "name": "Tomahawk",
+      "parentId": "0cc93bf5-be90-4623-a413-d6d17f480f28",
+      "sourceUrl": "https://openbeta.io/climb/f016b7b9-325a-4be9-8af9-95ef42dfaf0a/tomahawk"
+    },
+    {
+      "id": "7a5ee569-74ef-468d-89d5-49a3bf743cc9",
+      "name": "A-Orta",
+      "parentId": "70663b9a-bf80-51ac-a593-81c0d0398b4f",
+      "sourceUrl": "https://openbeta.io/climb/7a5ee569-74ef-468d-89d5-49a3bf743cc9/a-orta"
+    },
+    {
+      "id": "a32959e7-fe7b-49a0-b95a-8a3fac5053d3",
+      "name": "Andy's Right",
+      "parentId": "7bd32660-9e2d-4895-8f42-1e87be4c578d",
+      "sourceUrl": "https://openbeta.io/climb/a32959e7-fe7b-49a0-b95a-8a3fac5053d3/andys-right"
+    },
+    {
+      "id": "dd19114f-5a57-44bb-8317-83a411fd9cf8",
+      "name": "Wrong",
+      "parentId": "7bd32660-9e2d-4895-8f42-1e87be4c578d",
+      "sourceUrl": "https://openbeta.io/climb/dd19114f-5a57-44bb-8317-83a411fd9cf8/wrong"
+    }
+  ]
+}

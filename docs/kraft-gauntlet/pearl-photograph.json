@@ -29,7 +29,10 @@
     "sha1": "365c0570899592dd9748804496dc056990a93163"
   },
   "reuse": {
-    "commonsTemplates": ["Cc-by-2.0", "PD-USGov-BLM"],
+    "commonsTemplates": [
+      "Cc-by-2.0",
+      "PD-USGov-BLM"
+    ],
     "publicDomainJurisdiction": "United States",
     "flickrLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
     "commonsFlickrReviewAt": "2025-02-11T18:36:52Z",

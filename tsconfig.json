@@ -39,6 +39,7 @@
   ],
   "exclude": [
     "node_modules",
+    ".tmp",
     ".next-auth-browser",
     ".next-registration-browser"
   ]
