@@ -186,20 +186,24 @@
 }
 
 .faceToolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   min-height: 44px;
-  align-items: center;
-  justify-content: space-between;
+  justify-items: start;
   margin-bottom: 8px;
-  gap: 8px;
+  gap: 6px;
 }
 .faceTabs {
   display: flex;
+  width: fit-content;
   max-width: 100%;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   border: 1px solid var(--topo-rule);
+  scrollbar-width: thin;
 }
 .faceTabs button {
+  flex: 0 0 auto;
   min-width: 44px;
   min-height: 44px;
   padding: 8px 12px;
@@ -218,7 +222,7 @@
   color: var(--editorial-muted);
   font-size: 9px;
   line-height: 1.4;
-  text-align: right;
+  text-align: left;
 }
 .orientationStatus {
   margin: 10px 0 16px;
@@ -352,52 +356,28 @@
   cursor: pointer;
   pointer-events: visiblePainted;
 }
-.routeHalo {
-  fill: none;
-  stroke: #211d18;
-  stroke-width: 7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.routeCorridor {
-  fill: none;
-  stroke: #efb971;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.2;
-}
-.route[data-muted="true"] .routeCorridor {
-  opacity: 0.06;
-}
-.route[data-selected="true"] .routeCorridor {
-  opacity: 0.35;
-}
 .routeLine {
   fill: none;
   stroke: #f8f1df;
-  stroke-width: 3;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.route[data-muted="true"] .routeHalo,
 .route[data-muted="true"] .routeLine {
-  opacity: 0.6;
-}
-.route[data-selected="true"] .routeHalo {
-  stroke-width: 10;
+  opacity: 0.35;
 }
 .route[data-selected="true"] .routeLine {
   stroke: #ffeca2;
-  stroke-width: 5;
+  stroke-width: 2;
 }
 .routeNumberCircle {
   fill: #f8f1df;
   stroke: #211d18;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .route[data-selected="true"] .routeNumberCircle {
   fill: #ffeca2;
-  stroke-width: 4;
+  stroke-width: 1;
 }
 .routeNumber {
   fill: #211d18;
@@ -414,13 +394,9 @@
 .route:focus {
   outline: none;
 }
-.route:focus-visible .routeHalo {
-  stroke: #fff;
-  stroke-width: 13;
-}
 .route:focus-visible .routeLine {
-  stroke: #211d18;
-  stroke-width: 7;
+  stroke: #fff;
+  stroke-width: 2.5;
 }
 .climbList {
   list-style: none;

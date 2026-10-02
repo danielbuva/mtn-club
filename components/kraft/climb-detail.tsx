@@ -154,7 +154,7 @@ export function ClimbDetail({
         <p className={styles.topoUnavailable}>
           {geometry?.status === 'missing'
             ? face?.image.status === 'available'
-              ? 'Route lines for this photograph await local authoring and review.'
+              ? 'Route lines for this face image await local authoring and review.'
               : geometry.reason
             : 'No reviewed route geometry is available for this face.'}
         </p>

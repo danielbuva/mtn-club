@@ -70,10 +70,29 @@ test('every face assignment exposes exact source-parent facts and dated source s
 test('pilot faces, IDs, reciprocal memberships and image provenance remain exact', () => {
   for (const pilot of pilotBoulders) {
     const unit = kraftGuide.boulders.find(item => item.id === pilot.id)
-    assert.deepEqual(unit.faces, pilot.faces)
+    for (const face of pilot.faces)
+      assert.deepEqual(
+        unit.faces.find(item => item.id === face.id),
+        face,
+      )
+    const newViews = unit.faces.filter(
+      face => !pilot.faces.some(original => original.id === face.id),
+    )
+    assert.ok(newViews.every(face => face.sourceViewObservations.length))
     for (const climb of pilot.climbs) {
       const current = unit.climbs.find(item => item.id === climb.id)
-      assert.deepEqual(current.faceIds, climb.faceIds)
+      const addedView = newViews.find(face =>
+        face.sourceViewObservations.some(
+          observation => observation.mpRouteId === current.sourceIdentity.mpId,
+        ),
+      )
+      if (addedView) {
+        assert.deepEqual(climb.faceIds, [])
+        assert.deepEqual(current.faceIds, [addedView.id])
+        assert.equal(current.geometry.length, 1)
+        assert.equal(current.geometry[0].status, 'missing')
+        assert.equal(current.geometry[0].faceId, addedView.id)
+      } else assert.deepEqual(current.faceIds, climb.faceIds)
       if (['the-pearl', 'pearl-pearl-necklace'].includes(climb.id)) {
         assert.ok(climb.geometry.every(item => item.status === 'missing'))
         assert.deepEqual(
@@ -85,12 +104,12 @@ test('pilot faces, IDs, reciprocal memberships and image provenance remain exact
         assert.equal(current.geometry[0].confidenceLevel, 'moderate')
         assert.equal(current.contentDimensions.topo, 'corridor')
         assert.equal(current.topoEvidence.confidenceLevel, 'moderate')
-      } else assert.deepEqual(current.geometry, climb.geometry)
+      } else if (!addedView) assert.deepEqual(current.geometry, climb.geometry)
     }
   }
 })
 
-test('neighbor, relative, historical, grouped and conflicted facts do not acquire faces', () => {
+test('neighboring, historical and conflicted facts do not acquire faces while grouped catalogs retain qualified views', () => {
   for (const id of [
     '125206063', // Low Rider: adjacent rock's south-facing line.
     '123478404', // Halfpipe: east is relative location from The Prowler.
@@ -104,12 +123,20 @@ test('neighbor, relative, historical, grouped and conflicted facts do not acquir
     assert.ok(!ledger.some(row => row.mpRouteId === id), id)
   }
   for (const unit of kraftGuide.boulders) {
-    if (
-      ['125752769', '106657477', '123856651', '123856648'].includes(
-        unit.sourceIdentity.mpId,
-      )
-    )
+    if (['125752769', '106657477'].includes(unit.sourceIdentity.mpId))
       assert.deepEqual(unit.faces, [], unit.id)
+    if (['123856651', '123856648'].includes(unit.sourceIdentity.mpId))
+      for (const face of unit.faces) {
+        assert.equal(face.orientation, 'unknown')
+        assert.equal(face.orientationStatus, 'unknown')
+        assert.equal(face.sourceFaceObservations, undefined)
+        assert.ok(face.sourceViewObservations.length)
+        assert.ok(
+          face.sourceViewObservations.every(
+            observation => observation.scope === 'source-catalog-view',
+          ),
+        )
+      }
     for (const climb of unit.climbs)
       if (climb.contentDimensions.parent === 'disputed')
         assert.ok(!ledger.some(row => row.climbId === climb.id), climb.id)

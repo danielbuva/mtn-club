@@ -28,6 +28,10 @@ export function FaceViewer({
   const [imageError, setImageError] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
   const imageElement = useRef<HTMLImageElement>(null)
+  const reconstructed =
+    face?.image.status === 'available' &&
+    face.image.representation === 'reconstruction'
+  const imageLabel = reconstructed ? 'image' : 'photograph'
   useEffect(() => {
     if (selectedClimbId) {
       setLineMode(mode => (mode === 'photo' ? 'selected' : mode))
@@ -80,7 +84,7 @@ export function FaceViewer({
     return (
       <div className={styles.missingPhoto}>
         <Camera size={30} strokeWidth={1.25} aria-hidden="true" />
-        <output>This face photograph could not be opened</output>
+        <output>This face {imageLabel} could not be opened</output>
         <p>
           Try loading it again. If you are offline, return to the Kraft map and
           check your downloaded content.
@@ -90,7 +94,7 @@ export function FaceViewer({
           className={styles.textButton}
           onClick={() => setImageError(false)}
         >
-          Try photograph again
+          Try {imageLabel} again
         </button>
       </div>
     )
@@ -107,13 +111,13 @@ export function FaceViewer({
         onPointerUp={photoGestures.onPointerUp}
         onPointerCancel={photoGestures.onPointerCancel}
         onClickCapture={photoGestures.onClickCapture}
-        aria-label="Scrollable face photograph"
+        aria-label={`Scrollable face ${imageLabel}`}
         // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard focus lets arrow keys pan this scrollable zoomed photograph.
         tabIndex={0}
       >
         {!imageLoaded && (
           <output className={styles.photoLoading}>
-            Opening face photograph…
+            Opening face {imageLabel}…
           </output>
         )}
         <div
@@ -123,7 +127,7 @@ export function FaceViewer({
             width: `min(${zoom * 100}%, calc(${(face.image.width / face.image.height) * zoom} * var(--photo-max-height, 560px)))`,
           }}
         >
-          {/* The independent SVG must retain the base photograph's full framing. */}
+          {/* Image and independent SVG share native dimensions and framing. */}
           {/* biome-ignore lint/performance/noImgElement: Local guide images are downloaded in their native dimensions for exact SVG alignment. */}
           <img
             ref={imageElement}
@@ -139,6 +143,7 @@ export function FaceViewer({
             <TopoRoutes
               width={face.image.width}
               height={face.image.height}
+              zoom={zoom}
               routes={routes}
               selectedClimbId={selectedClimbId}
               selectedOnly={lineMode === 'selected'}
@@ -150,29 +155,33 @@ export function FaceViewer({
       <figcaption className={styles.photoCaption}>
         <span>
           {face.name} · {face.orientation}
+          {reconstructed && ' · Reconstructed view'}
         </span>
-        <fieldset className={styles.zoomControls} aria-label="Photograph zoom">
+        <fieldset
+          className={styles.zoomControls}
+          aria-label={reconstructed ? 'Image zoom' : 'Photograph zoom'}
+        >
           <button
             type="button"
-            aria-label="Zoom out photograph"
+            aria-label={`Zoom out ${imageLabel}`}
             disabled={zoom === 1}
-            onClick={() => setZoom(Math.max(1, zoom - 0.5))}
+            onClick={() => photoGestures.zoomBy(-0.5)}
           >
             <Minus size={16} aria-hidden="true" />
           </button>
           <button
             type="button"
-            aria-label="Reset photograph zoom"
+            aria-label={`Reset ${imageLabel} zoom`}
             disabled={zoom === 1}
-            onClick={() => setZoom(1)}
+            onClick={photoGestures.resetZoom}
           >
             <RotateCcw size={15} aria-hidden="true" />
           </button>
           <button
             type="button"
-            aria-label="Zoom in photograph"
+            aria-label={`Zoom in ${imageLabel}`}
             disabled={zoom === 3}
-            onClick={() => setZoom(Math.min(3, zoom + 0.5))}
+            onClick={() => photoGestures.zoomBy(0.5)}
           >
             <Plus size={16} aria-hidden="true" />
           </button>
@@ -195,7 +204,7 @@ export function FaceViewer({
                 ? 'All lines'
                 : mode === 'selected'
                   ? 'Selected line'
-                  : 'Clean photograph'}
+                  : `Clean ${imageLabel}`}
             </button>
           ))}
         </fieldset>
@@ -206,11 +215,11 @@ export function FaceViewer({
       )}
       {routes.some(route => route.geometry.confidenceLevel === 'moderate') && (
         <p className={styles.topoUnavailable}>
-          Shaded corridors show approximate route regions, not exact holds.
+          Lines show approximate routes, not exact holds.
         </p>
       )}
       <details className={styles.photoNotes}>
-        <summary>Photo notes & credit</summary>
+        <summary>{reconstructed ? 'Image' : 'Photo'} notes & credit</summary>
         {face.photographNote && (
           <p className={styles.orientationStatus}>{face.photographNote}</p>
         )}

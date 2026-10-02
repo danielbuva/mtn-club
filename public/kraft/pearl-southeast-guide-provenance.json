@@ -1,0 +1,133 @@
+{
+  "assetId": "pearl-southeast-guide",
+  "sourceId": "mtn-club-pearl-southeast-guide",
+  "recordedAt": "2026-10-01",
+  "representation": "original raster reconstruction",
+  "creationAuthorization": {
+    "basis": "User-directed creation and use as the permanent guide face image",
+    "userInstructions": [
+      "Produce one real guide-quality, straight-on face image for The Pearl and then use that as the quality bar for future boulders.",
+      "use this as the permanent face image in the guide."
+    ],
+    "label": "Original MTN Club guide asset",
+    "distributionId": "MTN-Club-original",
+    "scope": "Records original asset creation for this guide. The BLM reference reuse terms describe the reference photograph, not this generated reconstruction; this record makes no public-domain claim or general copyright guarantee for generated output."
+  },
+  "generation": {
+    "tool": "built-in image_gen",
+    "candidate": "02",
+    "originalPng": {
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2961399,
+      "sha256": "f2b548580331a07f83855514e713069991be229418d98da80fe6f2b83b63433a"
+    },
+    "prompt": "Create one NEW original realistic raster field-guide image of The Pearl boulder at Kraft, Nevada. Use the two attached lawful inputs to preserve factual rock geometry; image 1 is the public-domain BLM reference, image 2 is our OWN rejected generated candidate. They are NOT the desired camera/composition. Crucial correction: DO NOT recreate either input's three-quarter camera, crop, lighting or background arrangement. Physically ORBIT THE CAMERA 35 degrees LEFT around the boulder, aiming perpendicular to the MAIN BROAD CLIMBING WALL, so that wall is near-straight-on in the output. Camera at climber eye height, moderate telephoto about 70mm equivalent from enough distance, no wide-angle stretching. The main wall should read as one nearly frontal plane, with its left and right vertical directions similar in scale. The right-hand flank should become a narrow oblique edge instead of occupying a third of the picture. Keep the adjoining inclined block/ramp at its true size at the bottom-right of the main plane, but reduce its foreground exaggeration by camera position; do not delete or change it into a shelf.\n\nMultiple other independent real photos were consulted as FACTUAL references ONLY and their pixels are not tool inputs. Factual synthesis: this is a freestanding large tall red sandstone boulder, not a continuous cliff or a generic round rock. Broad slightly overhanging red/orange southeast main wall, high irregular left/central shoulder, dark mottled desert varnish toward the left upper shoulder, crest sloping down toward the right side. Main wall has subtle long near-vertical sandstone grain/seams, tiny shallow pockets and crimps, some faint existing chalk smudges. There are NO huge invented huecos, no deep basin, no great ladders of horizontal ledges. On the right, a real diagonal break separates the steep main face from the attached inclined flaked sandstone ramp/block whose base meets the same ground; keep the distinctive seam and real angular facets. An independently photographed near-frontal climb view confirms that the Pearl's general climb-bearing line lies left of that adjoining ramp, on the steep smooth reddish main wall, rising toward an irregular projecting shoulder lip BELOW and LEFT of the very highest crest. An independent upper finish photograph shows small rounded shallow sandstone scoops at that shoulder lip, not a brand-new giant shelf. Preserve silhouette and relative face proportions from the factual evidence. Do not invent holds, cracks or major features.\n\nCompose this as a purpose-made mobile climbing topo guide view: entire relevant main plane and shoulder/topout visible, rock centered, boulder occupies about 88% of width and 84% of height, modest 5-7% breathing room at top and sides, a narrow but clear sandy ground band showing full base/start zones. Landscape 4:3 frame, sufficient detail for zoom. Sparse desert gravel and low scrub context and distant Red Rock terrain subordinate to the boulder, independently arranged from the chosen new camera; no large empty sky, no dramatic mountain ridge or giant foreground shrub. Soft neutral daylight renders the actual red sandstone texture and shallow features clearly, no dramatic shadow obscuring climbing face. This should look like a convincing outdoor photograph of THIS SAME real Pearl boulder from our new straight-on guide camera. No people, no crash pads, no text, no symbols, no topo lines. Absolutely no vector, polygons, low-poly look, cartoon, painting or primitive rock rendering. Not merely a re-lit/cropped input: a materially new frontal camera is REQUIRED.",
+    "camera": "Independently composed near-frontal main southeast plane, camera orbit left from the references, eye height and moderate telephoto framing; not a crop of a reference composition.",
+    "pixelInputs": [
+      {
+        "name": "User-supplied the-pearl.jpg",
+        "sourceId": "blm-pearl-photograph",
+        "url": "https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg",
+        "photographer": "Samantha Szesciorka / BLM Nevada",
+        "referenceReuse": "Public domain (U.S.) / CC BY 2.0",
+        "sha256": "ab3f5205373567937b2deef1776d4886df525b147bfa7967be94174a562124d2",
+        "role": "Lawful factual geometry reference; reference camera/composition was explicitly rejected"
+      },
+      {
+        "name": "Our own rejected generated candidate 01",
+        "sha256": "df16bbd13ad2564c8f3aceb3967fd39b4833cb1e4e00bf0a5ceced7f9b8545a8",
+        "role": "Original intermediate output; its three-quarter camera/composition was explicitly rejected"
+      }
+    ],
+    "factualReferences": [
+      "https://www.mountainproject.com/photo/106120934",
+      "https://www.mountainproject.com/photo/114467060",
+      "https://www.mountainproject.com/photo/112437405",
+      "https://www.mountainproject.com/photo/108381010",
+      "https://www.mountainproject.com/photo/111196516"
+    ],
+    "factualReferenceUse": "Actual reference photos were inspected for major physical geometry only. Mountain Project pixels were not generator inputs, are not shipped, and their composition or topo artwork is not reproduced."
+  },
+  "shippedAsset": {
+    "src": "/kraft/pearl-southeast-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 531292,
+    "sha256": "c254759e4ce659f0e9ebd13439a04af1a04588f1604dd156bbe5c14f344d67d6",
+    "conversion": "Sharp WebP quality 92, effort 6; native dimensions preserved with no crop"
+  },
+  "review": {
+    "reviewer": "Independent Pearl raster output critic (agent)",
+    "verdict": "pass",
+    "originalPngSha256": "f2b548580331a07f83855514e713069991be229418d98da80fe6f2b83b63433a",
+    "scope": "Actual raster appearance only; recognizable major geometry and guide composition, not exact holds or current field condition. Rendered topo integration still needs its own output review.",
+    "referencePhotosInspected": 6,
+    "questions": {
+      "looks_like_actual_pearl": {
+        "answer": "yes",
+        "evidence": "The broad steep main plane, dark left arete, asymmetric high left shoulder, descending right roofline, diagonal seam, and attached right wedge remain recognizable together. The photographic closeups support the broad plane and weathered finish lip."
+      },
+      "straight_on_enough_for_topo": {
+        "answer": "yes",
+        "evidence": "The main plane now reads nearly square to the camera, with a nearly level base. The visible right flank is much narrower and no longer dominates the wall view."
+      },
+      "clearly_better_guide_composition_than_source": {
+        "answer": "yes",
+        "evidence": "The camera presentation visibly changes the wall-to-flank proportions, rather than simply tightening the source crop. The whole face, shoulder, ramp toe, and landing edge are clear under even light."
+      },
+      "boulder_dominates_frame_appropriately": {
+        "answer": "yes",
+        "evidence": "The complete boulder fills most of the frame with small sky, side, and ground margins; its boundaries remain readable."
+      },
+      "climber_would_trust_and_use_as_requested_guide": {
+        "answer": "yes",
+        "evidence": "It is recognizable and has a coherent near-frontal surface for an overview route trace. This judgment does not endorse generated micro-holds or any exact sequence."
+      }
+    },
+    "requiredRasterCorrections": [],
+    "humanReview": "pending",
+    "fieldVerification": "not performed",
+    "limitations": "Generated micro-holds and surface texture are illustrative. This appearance review does not establish exact holds, route sequences, current conditions or reviewed route geometry."
+  },
+  "retainedReferenceAsset": {
+    "src": "/kraft/pearl-blm.webp",
+    "use": "Historical lawful research reference only; replaced in the active guide and excluded from its download inventory"
+  },
+  "faceGeometry": {
+    "boulder": "The Pearl",
+    "faceId": "pearl-southeast",
+    "sourceOrientation": "SE",
+    "orientationBasis": "Source observations; physical bearing has not been field verified",
+    "camera": "Near-frontal main plane from an independently chosen virtual view",
+    "calibratedCameraBearing": null,
+    "confidence": "moderate; recognizable major geometry independently compared with multiple real photographs",
+    "unresolvedGeometry": [
+      "Exact small holds and surface texture",
+      "Metric dimensions and calibrated camera bearing",
+      "Current hold and ground conditions"
+    ],
+    "humanVerification": "pending",
+    "fieldVerification": "not performed"
+  },
+  "renderedTopoReview": {
+    "reviewer": "Fresh Pearl rendered-output critic (agent)",
+    "reviewedAt": "2026-10-01",
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "verdict": "accept",
+    "imageSha256": "c254759e4ce659f0e9ebd13439a04af1a04588f1604dd156bbe5c14f344d67d6",
+    "scope": "Recognizable main face, near-frontal guide framing, broad source-supported standing/seated corridors and shoulder-lip finish; actual badge/keyboard, face switching, display modes and zoom interactions",
+    "exactHoldsVerified": false,
+    "humanApproval": false,
+    "fieldVerified": false
+  }
+}

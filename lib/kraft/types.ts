@@ -12,6 +12,7 @@ import type {
   TopoPathReview,
 } from './route-content-types'
 import type { SourceFaceObservation } from './source-face-types'
+import type { SourceViewObservation } from './source-view-assignments'
 
 export type {
   ContentState,
@@ -40,12 +41,13 @@ export type AssignmentStatus =
   | 'editorial-provisional'
   | 'unassigned'
 
-/** Only documented redistribution grants supported by the publication checker. */
+/** Documented reuse grants and original asset creation supported by the publication checker. */
 export type DistributionLicense =
   | 'CC-BY-2.0'
   | 'PD-USGov-BLM'
   | 'PD-USGov'
   | 'ODbL-1.0'
+  | 'MTN-Club-original'
 
 export type DistributionRights = {
   licenseIds: DistributionLicense[]
@@ -164,6 +166,7 @@ export type Face = {
   sourceIds: string[]
   groupingStatus?: Exclude<AssignmentStatus, 'unassigned'>
   sourceFaceObservations?: SourceFaceObservation[]
+  sourceViewObservations?: SourceViewObservation[]
   photographNote?: string
   review?: { reviewer: string; reviewedAt: string }
 }

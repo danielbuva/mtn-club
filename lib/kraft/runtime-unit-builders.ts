@@ -162,7 +162,7 @@ export function buildMpUnit(
       confidence: 'source-observation',
       reasons: [
         pilotNote,
-        'A lawful context photograph is available; exact route correspondence, remaining face images and reviewed route lines are incomplete.',
+        'A reviewed guide face image is available; remaining face images, route corridors and field verification are incomplete.',
       ],
     }
   return boulder

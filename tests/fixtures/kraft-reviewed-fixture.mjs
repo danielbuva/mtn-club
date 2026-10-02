@@ -53,11 +53,13 @@ export function syntheticReviewedGuide() {
       faceId: face.id,
       path: 'M100 100 L200 200',
       labelPoint: { x: 100, y: 100 },
-      sourceIds: ['blm-pearl-photograph'],
+      sourceIds: ['mtn-club-pearl-southeast-guide'],
       reviewedAt: review.reviewedAt,
     },
   ]
-  route.sourceIds = [...new Set([...route.sourceIds, 'blm-pearl-photograph'])]
+  route.sourceIds = [
+    ...new Set([...route.sourceIds, 'mtn-club-pearl-southeast-guide']),
+  ]
   Object.assign(route, deriveRouteContent(route, pearl.faces))
   return guide
 }

@@ -18,7 +18,7 @@ for (const screen of screens) {
     const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
     const photograph = dialog.getByRole('img')
     const photographViewport = dialog.getByRole('region', {
-      name: 'Scrollable face photograph',
+      name: 'Scrollable face image',
     })
     const climbs = panel.getByRole('region', { name: 'Climbs sorted by grade' })
     const first = climbs.getByRole('button', { name: /Clam Bumper Right/ })
@@ -114,7 +114,7 @@ for (const screen of screens) {
     const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
     const photograph = dialog.getByRole('img')
     const viewport = dialog.getByRole('region', {
-      name: 'Scrollable face photograph',
+      name: 'Scrollable face image',
     })
     await expect(
       dialog.getByRole('heading', { name: 'The Pearl' }).first(),
@@ -123,9 +123,9 @@ for (const screen of screens) {
     await expect(
       panel.getByRole('button', { name: 'Open The Pearl full climb record' }),
     ).toBeInViewport({ ratio: 1 })
-    await dialog.getByRole('button', { name: 'Zoom in photograph' }).tap()
+    await dialog.getByRole('button', { name: 'Zoom in image' }).tap()
     await expect(viewport).toBeInViewport({ ratio: 1 })
-    await dialog.getByRole('button', { name: 'Reset photograph zoom' }).tap()
+    await dialog.getByRole('button', { name: 'Reset image zoom' }).tap()
     await expect(photograph).toBeInViewport({ ratio: 1 })
     const last = panel
       .getByRole('region', { name: 'Climbs sorted by grade' })

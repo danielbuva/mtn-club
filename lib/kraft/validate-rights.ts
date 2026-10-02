@@ -11,6 +11,7 @@ const licenseLabels: Record<DistributionLicense, string> = {
   'PD-USGov-BLM': 'Public domain (U.S.)',
   'PD-USGov': 'U.S. federal government public domain',
   'ODbL-1.0': 'Open Database License 1.0',
+  'MTN-Club-original': 'Original MTN Club guide asset',
 }
 
 function matchesAuditedGrant(source: EvidenceSource): boolean {

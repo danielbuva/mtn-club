@@ -32,7 +32,7 @@ export default async function KraftGuidePage() {
       '/kraft/icon-192.png',
       '/kraft/icon-512.png',
       '/kraft/geo-license.txt',
-      '/kraft/pearl-photo-license.txt',
+      '/kraft/pearl-southeast-guide-provenance.json',
     ],
     boulders: kraftGuide.boulders.length,
     climbs: kraftGuide.boulders.reduce(

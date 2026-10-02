@@ -272,7 +272,15 @@ test('image availability changes its dimension without reclassifying source rela
     face.image = { status: 'missing', reason: 'Test image gap' }
   })
   const missing = deriveRouteContent(entry.climb, faces)
-  assert.equal(initial.contentDimensions.image, 'available')
+  assert.equal(initial.contentDimensions.image, 'reconstruction')
+  const photographicFaces = structuredClone(entry.faces)
+  for (const face of photographicFaces)
+    if (face.image.status === 'available')
+      face.image.representation = 'photograph'
+  assert.equal(
+    deriveRouteContent(entry.climb, photographicFaces).contentDimensions.image,
+    'available',
+  )
   assert.equal(missing.contentDimensions.image, 'missing')
   assert.equal(initial.contentDimensions.topo, 'corridor')
   assert.equal(missing.contentDimensions.topo, 'unavailable')

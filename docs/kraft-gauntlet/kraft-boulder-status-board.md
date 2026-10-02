@@ -2,7 +2,7 @@
 
 Updated 2026-10-01. 78 MP/OpenBeta source-unit identities after exact importer links; these are **not** a verified physical-rock count. TheTopo adds 34 separately indexed research units pending identity/policy review.
 
-The running 2026-10-01-catalog-6 edition includes all 78 reconciled source catalogs and 383 canonical route records. No real route SVG or reconstruction is approved. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery, faces, lines and field verification do not hide a catalog or route.
+The running 2026-10-01-catalog-7 edition includes all 78 reconciled source catalogs and 383 canonical route records. The Pearl has an original guide reconstruction and two moderate source corridors; human/field image review and exact route-path review remain pending. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery, faces, lines and field verification do not hide a catalog or route.
 
 | Source unit | Inventory ID | State | Image allocation |
 | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ The running 2026-10-01-catalog-6 edition includes all 78 reconciled source catal
 | [Disappearing Dike Traverse](https://www.mountainproject.com/area/202547607/disappearing-dike-traverse) | mp-area-202547607 | BLOCKED lawful image | Lawful photo search / field photograph first; assess multi-view evidence before reconstruction |
 | [Earth Tide Boulder](https://www.mountainproject.com/area/125484924/earth-tide-boulder) | mp-area-125484924 | BLOCKED lawful image | Lawful photo search / field photograph first; assess multi-view evidence before reconstruction |
 | [Good Times Boulder](https://www.mountainproject.com/area/121775048/good-times-boulder) | mp-area-121775048 | BLOCKED lawful image | Lawful photo search / field photograph first; assess multi-view evidence before reconstruction |
-| [The Pearl](https://www.mountainproject.com/area/106056258/the-pearl) | mp-area-106056258 | BLOCKED lawful image | BLM southeast photo control; other views need own photo |
+| [The Pearl](https://www.mountainproject.com/area/106056258/the-pearl) | mp-area-106056258 | BLOCKED lawful image | Original near-frontal southeast guide control; human/field review pending; other views need independent images |
 | [Swirly Arête Boulder](https://www.mountainproject.com/area/125692223/swirly-arete-boulder) | mp-area-125692223 | BLOCKED lawful image | Lawful photo search / field photograph first; assess multi-view evidence before reconstruction |
 | [The Wake Boulder](https://www.mountainproject.com/area/125851761/the-wake-boulder) | mp-area-125851761 | BLOCKED lawful image | Lawful photo search / field photograph first; assess multi-view evidence before reconstruction |
 | [The Wave Boulder](https://www.mountainproject.com/area/113802231/the-wave-boulder) | mp-area-113802231 | BLOCKED lawful image | Lawful photo search / field photograph first; assess multi-view evidence before reconstruction |

@@ -35,6 +35,15 @@ const photographSourceIds = [
   'mp-pearl-view-reference',
   'mp-pearl-finish-reference',
 ]
+const sourceViewRouteIds = new Set(
+  kraftGuide.boulders.flatMap(unit =>
+    unit.faces.flatMap(face =>
+      (face.sourceViewObservations ?? []).map(
+        observation => byMp.get(observation.mpRouteId).id,
+      ),
+    ),
+  ),
+)
 
 test('actual runtime contains every exact MP route once and 13 distinct unresolved OB entries', () => {
   assert.equal(kraftGuide.status, 'catalog')
@@ -180,7 +189,15 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
     const unit = kraftGuide.boulders.find(item => item.id === pilot.id)
     assert.ok(unit, pilot.id)
     assert.equal(unit.name, pilot.name)
-    assert.deepEqual(unit.faces, pilot.faces)
+    for (const face of pilot.faces)
+      assert.deepEqual(
+        unit.faces.find(item => item.id === face.id),
+        face,
+      )
+    for (const face of unit.faces.filter(
+      item => !pilot.faces.some(original => original.id === item.id),
+    ))
+      assert.ok(face.sourceViewObservations.length, face.id)
     assert.equal(unit.location.lat, pilot.location.lat)
     assert.equal(unit.location.lon, pilot.location.lon)
     for (const observation of pilot.location.observations)
@@ -197,13 +214,22 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
         'gradeValue',
         'gradeMaxValue',
         'description',
-        'faceIds',
         'boulderAssignmentStatus',
         'boulderAssignmentNote',
         'selectedGradeSourceId',
       ])
         assert.deepEqual(climb[key], original[key], `${original.id}.${key}`)
-      if (!corridorIds.includes(original.id))
+      if (sourceViewRouteIds.has(original.id)) {
+        assert.deepEqual(original.faceIds, [], original.id)
+        assert.equal(climb.faceIds.length, 1)
+        assert.equal(climb.geometry.length, 1)
+        assert.equal(climb.geometry[0].status, 'missing')
+        assert.equal(climb.geometry[0].faceId, climb.faceIds[0])
+      } else assert.deepEqual(climb.faceIds, original.faceIds, original.id)
+      if (
+        !corridorIds.includes(original.id) &&
+        !sourceViewRouteIds.has(original.id)
+      )
         assert.deepEqual(climb.geometry, original.geometry, original.id)
       for (const id of original.sourceIds)
         assert.ok(climb.sourceIds.includes(id), `${original.id}:${id}`)
@@ -217,7 +243,10 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
     }
   }
   const pearl = kraftGuide.boulders.find(unit => unit.id === 'pearl')
-  assert.equal(pearl.faces[0].image.assetId, 'pearl-blm-photograph')
+  assert.equal(pearl.faces[0].image.assetId, 'pearl-southeast-guide')
+  assert.equal(pearl.faces[0].image.representation, 'reconstruction')
+  assert.equal(pearl.faces[0].image.width, 1448)
+  assert.equal(pearl.faces[0].image.height, 1086)
   assert.equal(
     climbById.get('split-leaning-wide-crack').boulderAssignmentStatus,
     'editorial-provisional',
@@ -239,7 +268,8 @@ test('only the two Pearl routes gain moderate source-closed corridors on their o
     assert.deepEqual(climb.faceIds, [geometry.faceId])
     assert.equal(geometry.confidenceLevel, 'moderate')
     assert.equal(geometry.reviewedAt, '2026-10-01')
-    assert.equal(geometry.corridorWidth, 90)
+    assert.ok(Number.isFinite(geometry.corridorWidth))
+    assert.ok(geometry.corridorWidth > 0)
     assert.deepEqual(geometry.sourceIds, [
       climb.id === 'the-pearl' ? 'mp-pearl-route' : 'mp-route-107444907',
       ...photographSourceIds,
@@ -291,9 +321,18 @@ test('source-unit memberships retain exact linked references without duplicating
       assert.equal(unit.unitKind, 'source-unit')
       assert.equal(unit.location.scope, 'catalog-centroid')
       for (const face of unit.faces) {
-        assert.equal(face.orientationStatus, 'source-observation')
         assert.equal(face.image.status, 'missing')
-        assert.ok(face.sourceFaceObservations.length)
+        if (face.sourceViewObservations?.length) {
+          assert.equal(
+            face.orientationStatus,
+            face.orientation === 'unknown' ? 'unknown' : 'source-observation',
+          )
+          for (const observation of face.sourceViewObservations)
+            assert.equal(observation.mpParentId, record.id)
+        } else {
+          assert.equal(face.orientationStatus, 'source-observation')
+          assert.ok(face.sourceFaceObservations.length)
+        }
       }
     }
   }

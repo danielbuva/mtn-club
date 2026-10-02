@@ -1,0 +1,54 @@
+.notice,
+.compact {
+  padding: 12px 14px;
+  border-left: 3px solid var(--editorial-ink);
+  color: var(--editorial-ink);
+  background: var(--editorial-panel);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.notice {
+  margin-bottom: 20px;
+}
+
+.compact {
+  margin-top: 10px;
+  padding: 8px 10px;
+}
+
+.notice strong,
+.compact strong {
+  font-size: 12px;
+}
+
+.notice p,
+.compact p {
+  margin: 6px 0 0;
+  font-size: 11px;
+}
+
+.source {
+  color: var(--editorial-muted);
+  overflow-wrap: anywhere;
+}
+
+.source a {
+  color: var(--editorial-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.notice summary {
+  min-height: 44px;
+  padding-top: 12px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.rowLabel {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 1.5;
+}

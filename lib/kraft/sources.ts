@@ -44,6 +44,21 @@ const pilotSources: EvidenceSource[] = [
     note: 'Dated public route comment. Original factual paraphrase of a post-break V8 opinion; no current-condition or consensus assertion.',
   },
   {
+    id: 'mtn-club-pearl-southeast-guide',
+    title: 'The Pearl southeast guide image · original MTN Club reconstruction',
+    publisher: 'MTN Club',
+    url: 'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
+    accessedAt: '2026-10-01',
+    usage: 'licensed-media',
+    license: 'Original MTN Club guide asset',
+    distribution: {
+      licenseIds: ['MTN-Club-original'],
+      evidenceUrl:
+        'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
+    },
+    note: 'User-directed original guide asset with a new near-frontal camera. Only the lawful BLM reference and our own first candidate were generator pixel inputs; MP photos were consulted for factual geometry only. Original creation record, exact prompt, hashes and review scope are retained. Human and field verification remain pending.',
+  },
+  {
     id: 'blm-pearl-photograph',
     title: 'Interesting Geology at Kraft Mountain · BLM photograph',
     publisher: 'Samantha Szesciorka / BLM Nevada',
@@ -56,7 +71,7 @@ const pilotSources: EvidenceSource[] = [
       evidenceUrl:
         'https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg',
     },
-    note: 'BLM official-duty photograph taken 8 March 2024. Commons PD-US-BLM and Flickr CC BY 2.0 checked; user identifies The Pearl. Local derivative resized and optimized, with no compositional edits.',
+    note: 'BLM official-duty photograph taken 8 March 2024. Commons PD-US-BLM and Flickr CC BY 2.0 checked; user identifies The Pearl. Retained as a lawful reference; its local derivative is no longer an active guide asset. These source reuse terms do not label the original MTN Club reconstruction.',
   },
   {
     id: 'mp-pearl-finish-reference',
@@ -65,7 +80,7 @@ const pilotSources: EvidenceSource[] = [
     url: 'https://www.mountainproject.com/photo/112437405/random-guy-named-kevin-hangs-off-the-topout-jugs-of-the-pearl-v5',
     accessedAt: '2026-10-01',
     usage: 'factual-reference',
-    note: 'Reference-only actual pixels and route-linked caption inspected for the general finishing lip. Independently matched with the full-face reference and approved BLM base; no source photograph, composition or topo artwork is distributed.',
+    note: 'Reference-only actual pixels and route-linked caption inspected for the general finishing lip. Independently matched with the full-face reference and lawful BLM reference; no source photograph, composition or topo artwork is distributed.',
   },
   {
     id: 'mp-pearl-view-reference',
@@ -74,7 +89,7 @@ const pilotSources: EvidenceSource[] = [
     url: 'https://www.mountainproject.com/photo/106120934',
     accessedAt: reviewedAt,
     usage: 'factual-reference',
-    note: 'Published Pearl seam and adjacent Clam Bumper ramp identify the face in the BLM photograph. Independent physical-feature comparison supports a moderate Pearl/Necklace corridor; no Mountain Project pixels or route artwork are shipped. Field verification remains separate.',
+    note: 'Published Pearl seam and adjacent Clam Bumper ramp identify the face in the lawful BLM reference. Physical features informed the independently composed original guide reconstruction; no Mountain Project pixels or route artwork are shipped. Field verification remains separate.',
   },
   ...catalogSources([
     ...cubeCatalog,

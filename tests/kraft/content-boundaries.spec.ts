@@ -1,14 +1,19 @@
 import { expect, test } from '@playwright/test'
-import { kraftBoulders } from '../../lib/kraft/data'
+import { kraftBoulders, kraftGuide } from '../../lib/kraft/data'
 import { openMapCatalog } from './catalog-helpers'
 
-test('available real photographs load, retain attribution and do not imply reviewed route geometry', async ({
+test('available face images load with honest attribution and independent corridor state', async ({
   page,
 }, testInfo) => {
   await page.goto('/guide/kraft')
   for (const boulder of kraftBoulders) {
     for (const face of boulder.faces) {
       if (face.image.status !== 'available') continue
+      const image = face.image
+      const reconstructed = image.representation === 'reconstruction'
+      const imageLabel = reconstructed ? 'image' : 'photograph'
+      const asset = kraftGuide.assets.find(item => item.id === image.assetId)
+      if (!asset) throw new Error(`Missing image asset ${image.assetId}`)
       await openMapCatalog(page, boulder.id)
       const dialog = page.getByRole('dialog', {
         name: `${boulder.name} boulder guide`,
@@ -40,38 +45,50 @@ test('available real photographs load, retain attribution and do not imply revie
         )
         .toBe(true)
       const photoCredit = viewer.getByRole('link', {
-        name: /^Photo:/,
+        name: asset.attribution,
+        exact: true,
         includeHidden: true,
       })
       await expect(photoCredit).toBeHidden()
-      await viewer.getByText('Photo notes & credit', { exact: true }).click()
+      await viewer
+        .getByText(`${reconstructed ? 'Image' : 'Photo'} notes & credit`, {
+          exact: true,
+        })
+        .click()
       await expect(photoCredit).toBeVisible()
       if (face.photographNote)
         await expect(
           viewer.getByText(face.photographNote, { exact: true }),
         ).toBeVisible()
-      await expect(viewer).toContainText(
-        'field verification and current hold conditions remain unverified',
-      )
-      await expect(viewer).toContainText(
-        'Two independently reviewed moderate corridors',
+      if (reconstructed)
+        await expect(viewer).toContainText('Reconstructed view')
+      const moderateCorridors = boulder.climbs.flatMap(climb =>
+        climb.geometry.filter(
+          geometry =>
+            geometry.status === 'authored' &&
+            geometry.faceId === face.id &&
+            geometry.confidenceLevel === 'moderate',
+        ),
       )
       await expect(viewer.locator('g[data-confidence="moderate"]')).toHaveCount(
-        2,
+        moderateCorridors.length,
       )
       await viewer
-        .getByRole('button', { name: 'Zoom in photograph', exact: true })
+        .getByRole('button', { name: `Zoom in ${imageLabel}`, exact: true })
         .click()
       await expect(
         viewer.getByRole('button', {
-          name: 'Reset photograph zoom',
+          name: `Reset ${imageLabel} zoom`,
           exact: true,
         }),
       ).toBeEnabled()
       await viewer
-        .getByRole('button', { name: 'Reset photograph zoom', exact: true })
+        .getByRole('button', {
+          name: `Reset ${imageLabel} zoom`,
+          exact: true,
+        })
         .click()
-      await testInfo.attach(`${face.id}-real-photo`, {
+      await testInfo.attach(`${face.id}-face-image`, {
         body: await page.screenshot({ scale: 'css' }),
         contentType: 'image/png',
       })

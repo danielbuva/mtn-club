@@ -1,5 +1,10 @@
+import {
+  accessClosedLabel,
+  climbAccessNotice,
+} from '@/lib/kraft/access-notices'
 import type { CatalogClimbReference } from '@/lib/kraft/search'
 import type { Boulder, Climb } from '@/lib/kraft/types'
+import styles from './access-notice.module.css'
 
 export function MatchingClimbs({
   boulder,
@@ -32,6 +37,9 @@ export function MatchingClimbs({
         <button type="button" onClick={() => onSelect(parent.id, climb.id)}>
           <span>
             {climb.name}
+            {climbAccessNotice(climb) && (
+              <small className={styles.rowLabel}>{accessClosedLabel}</small>
+            )}
             {parent.id !== boulder.id && (
               <small>
                 Current record in {parent.name} · source parent differs

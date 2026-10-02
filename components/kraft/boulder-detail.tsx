@@ -2,7 +2,9 @@
 
 import { ArrowLeft } from 'lucide-react'
 import type { RefObject } from 'react'
+import { boulderAccessNotice } from '@/lib/kraft/access-notices'
 import type { Boulder, KraftGuide } from '@/lib/kraft/types'
+import { AccessNotice } from './access-notice'
 import { BoulderFaceControls } from './boulder-face-controls'
 import { BoulderInformation } from './boulder-information'
 import { BoulderRoutePanel } from './boulder-route-panel'
@@ -71,6 +73,7 @@ export function BoulderDetail({
           {boulder.name}
         </h2>
       </header>
+      <AccessNotice notice={boulderAccessNotice(boulder)} />
       <div className={styles.detailBody}>
         <section className={styles.faceSection} aria-label="Boulder faces">
           <BoulderFaceControls

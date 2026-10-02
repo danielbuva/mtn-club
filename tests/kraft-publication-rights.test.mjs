@@ -15,7 +15,7 @@ test('redistribution prohibition cannot pass a pilot or a synthetic field releas
     guide.assets[0].license = 'All rights reserved; redistribution prohibited'
     assert.match(
       validateGuide(guide).join('\n'),
-      /pearl-blm-photograph: supported asset distribution rights missing/,
+      /pearl-southeast-guide: supported asset distribution rights missing/,
     )
   }
 })
@@ -50,17 +50,19 @@ test('factual references and sources without grants cannot authorize shipped pho
   for (const original of [kraftGuide, syntheticReviewedGuide()]) {
     const guide = structuredClone(original)
     const source = guide.sources.find(
-      item => item.id === 'blm-pearl-photograph',
+      item => item.id === 'mtn-club-pearl-southeast-guide',
     )
     source.usage = 'factual-reference'
     delete source.license
     assert.match(
       validateGuide(guide).join('\n'),
-      /blm-pearl-photograph cannot authorize face-photo distribution/,
+      /mtn-club-pearl-southeast-guide cannot authorize face-photo distribution/,
     )
   }
   const guide = structuredClone(kraftGuide)
-  const source = guide.sources.find(item => item.id === 'blm-pearl-photograph')
+  const source = guide.sources.find(
+    item => item.id === 'mtn-club-pearl-southeast-guide',
+  )
   delete source.distribution
   assert.match(
     validateGuide(guide).join('\n'),
@@ -79,7 +81,7 @@ test('map rights require the actual open-data grants and photo rights cannot use
   const guide = structuredClone(kraftGuide)
   const photograph = guide.assets[0]
   const mediaSource = guide.sources.find(
-    item => item.id === 'blm-pearl-photograph',
+    item => item.id === 'mtn-club-pearl-southeast-guide',
   )
   for (const record of [photograph, mediaSource]) {
     record.license = 'Open Database License 1.0'
@@ -88,5 +90,19 @@ test('map rights require the actual open-data grants and photo rights cannot use
   assert.match(
     validateGuide(guide).join('\n'),
     /database rights cannot authorize a face photograph/,
+  )
+})
+
+test('the original reconstruction requires its own creation record rather than the BLM reference grant', () => {
+  const guide = structuredClone(kraftGuide)
+  const asset = guide.assets.find(item => item.id === 'pearl-southeast-guide')
+  assert.equal(asset.license, 'Original MTN Club guide asset')
+  assert.deepEqual(asset.distribution.licenseIds, ['MTN-Club-original'])
+  assert.deepEqual(asset.sourceIds, ['mtn-club-pearl-southeast-guide'])
+  assert.ok(!guide.assets.some(item => item.src === '/kraft/pearl-blm.webp'))
+  asset.sourceIds = ['blm-pearl-photograph']
+  assert.match(
+    validateGuide(guide).join('\n'),
+    /asset distribution grant contradicts its sources/,
   )
 })

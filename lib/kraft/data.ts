@@ -11,7 +11,7 @@ export const kraftBoulders = buildRuntimeCatalog(pilotBoulders, kraftSources)
 export const kraftGuide: KraftGuide = {
   id: 'kraft',
   name: 'Kraft Boulders',
-  version: '2026-10-01-catalog-6',
+  version: '2026-10-01-catalog-7',
   reviewedAt,
   status: 'catalog',
   description:
@@ -21,21 +21,21 @@ export const kraftGuide: KraftGuide = {
   sources: kraftSources,
   assets: [
     {
-      id: 'pearl-blm-photograph',
-      src: '/kraft/pearl-blm.webp',
+      id: 'pearl-southeast-guide',
+      src: '/kraft/pearl-southeast-guide.webp',
       kind: 'face-photo',
-      license: 'Public domain (U.S.) / CC BY 2.0',
+      license: 'Original MTN Club guide asset',
       distribution: {
-        licenseIds: ['PD-USGov-BLM', 'CC-BY-2.0'],
+        licenseIds: ['MTN-Club-original'],
         evidenceUrl:
-          'https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg',
+          'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
       },
-      attribution: 'Photo: Samantha Szesciorka / BLM Nevada',
+      attribution: 'Original MTN Club guide reconstruction',
       attributionUrl:
-        'https://commons.wikimedia.org/wiki/File:Interesting_Geology_at_Kraft_Mountain_(54084251954).jpg',
-      licenseUrl: 'https://creativecommons.org/licenses/by/2.0/',
-      modificationNote: 'Resized and optimized; full composition preserved.',
-      sourceIds: ['blm-pearl-photograph'],
+        'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
+      modificationNote:
+        'Original near-frontal camera composed from factual references. Native 1448 × 1086 raster optimized as WebP; human and field verification pending.',
+      sourceIds: ['mtn-club-pearl-southeast-guide'],
     },
     {
       id: 'kraft-geographic-layer',

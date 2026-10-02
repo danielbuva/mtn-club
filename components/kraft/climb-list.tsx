@@ -1,4 +1,8 @@
 import { ArrowRight } from 'lucide-react'
+import {
+  accessClosedLabel,
+  climbAccessNotice,
+} from '@/lib/kraft/access-notices'
 import type { Boulder, Climb } from '@/lib/kraft/types'
 import { gradeRecordNote } from './source-notes'
 import styles from './topo.module.css'
@@ -28,6 +32,7 @@ export function ClimbList({
             </span>
             <span className={styles.listName}>
               {climb.name}
+              {climbAccessNotice(climb) && <small>{accessClosedLabel}</small>}
               <small>
                 {climb.faceIds.length > 0
                   ? boulder.faces

@@ -14,7 +14,7 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
   })
   const photograph = viewer.getByRole('img')
   const photographViewport = viewer.getByRole('region', {
-    name: 'Scrollable face photograph',
+    name: 'Scrollable face image',
   })
   const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
   await expect(photograph).toBeInViewport({ ratio: 1 })
@@ -48,7 +48,7 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
   ).toBeInViewport({ ratio: 1 })
   await expect(
     dialog.getByRole('region', { name: 'Selected climb' }),
-  ).toContainText('Route line pending · Southeast face')
+  ).toContainText('Approximate corridor available · Southeast face')
   await expect(
     dialog.getByRole('article', {
       name: 'The Pearl details',
@@ -65,7 +65,7 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
   })
 
   await viewer
-    .getByRole('button', { name: 'Zoom in photograph', exact: true })
+    .getByRole('button', { name: 'Zoom in image', exact: true })
     .click()
   const zoomedPhoto = await photograph.boundingBox()
   const nextClimb = panel.locator(
@@ -77,7 +77,7 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
   await expect(nextClimb).toBeFocused()
   await expect(photographViewport).toBeInViewport({ ratio: 1 })
   await expect(
-    viewer.getByRole('button', { name: 'Reset photograph zoom', exact: true }),
+    viewer.getByRole('button', { name: 'Reset image zoom', exact: true }),
   ).toBeEnabled()
   expect(await photograph.boundingBox()).toEqual(zoomedPhoto)
   expect(await dialog.evaluate(element => element.scrollTop)).toBe(

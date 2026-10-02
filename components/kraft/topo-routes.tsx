@@ -15,17 +15,19 @@ export type TopoRoute = {
 type TopoRoutesProps = {
   width: number
   height: number
+  zoom?: number
   routes: TopoRoute[]
   selectedClimbId: string | null
   selectedOnly: boolean
   onClimbSelect: (id: string) => void
 }
 
-// Paths and label points use the unchanged base photograph's pixel coordinates.
+// Paths and labels use the base image's native pixel coordinates.
 // Route geometry is separately authored from source facts and image correspondence.
 export function TopoRoutes({
   width,
   height,
+  zoom = 1,
   routes,
   selectedClimbId,
   selectedOnly,
@@ -39,10 +41,12 @@ export function TopoRoutes({
         Number(a.climb.id === selectedClimbId) -
         Number(b.climb.id === selectedClimbId),
     )
-  const labelRadius = Math.max(width / 35, 18)
+  const showMarkers = zoom < 2
+  const labelRadius = Math.max(width / 55, 18) / zoom ** 1.5
+  const markerOpacity = Math.max(0, 1 - (zoom - 1) * 1.4)
   const clipId = useId()
   // Every route's hit area leaves all badges clear, including shared corridors.
-  const badgeHoles = visibleRoutes
+  const badgeHoles = (showMarkers ? visibleRoutes : [])
     .map(({ geometry }) => {
       const { x, y } = geometry.labelPoint
       const radius = labelRadius + 3
@@ -58,7 +62,7 @@ export function TopoRoutes({
       role="group"
       aria-labelledby={titleId}
     >
-      <title id={titleId}>Interactive routes. Select a numbered line.</title>
+      <title id={titleId}>Interactive routes. Select a line or climb.</title>
       <defs>
         <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
           <path
@@ -90,30 +94,9 @@ export function TopoRoutes({
             }}
           >
             <g clipPath={`url(#${clipId})`}>
-              {geometry.confidenceLevel === 'moderate' && (
-                <path
-                  d={geometry.path}
-                  className={styles.routeCorridor}
-                  strokeWidth={geometry.corridorWidth ?? width / 20}
-                />
-              )}
-              <path
-                d={geometry.path}
-                className={styles.routeHalo}
-                vectorEffect="non-scaling-stroke"
-              />
               <path
                 d={geometry.path}
                 className={styles.routeLine}
-                strokeDasharray={
-                  geometry.confidenceLevel === 'moderate'
-                    ? '5 5'
-                    : selected
-                      ? undefined
-                      : number % 2
-                        ? '5 5'
-                        : '12 5'
-                }
                 vectorEffect="non-scaling-stroke"
               />
               <path
@@ -122,22 +105,27 @@ export function TopoRoutes({
                 vectorEffect="non-scaling-stroke"
               />
             </g>
-            <circle
-              cx={geometry.labelPoint.x}
-              cy={geometry.labelPoint.y}
-              r={labelRadius}
-              className={styles.routeNumberCircle}
-            />
-            <text
-              x={geometry.labelPoint.x}
-              y={geometry.labelPoint.y}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize={labelRadius * 1.1}
-              className={styles.routeNumber}
-            >
-              {number}
-            </text>
+            {showMarkers && (
+              <g opacity={markerOpacity}>
+                <circle
+                  cx={geometry.labelPoint.x}
+                  cy={geometry.labelPoint.y}
+                  r={labelRadius}
+                  className={styles.routeNumberCircle}
+                  vectorEffect="non-scaling-stroke"
+                />
+                <text
+                  x={geometry.labelPoint.x}
+                  y={geometry.labelPoint.y}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={labelRadius * 1.25}
+                  className={styles.routeNumber}
+                >
+                  {number}
+                </text>
+              </g>
+            )}
           </g>
         )
       })}

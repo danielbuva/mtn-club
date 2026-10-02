@@ -65,6 +65,41 @@ export function usePhotoGestures(
     }
   }, [zoom])
 
+  function zoomBy(step: number) {
+    const nextZoom = Math.max(1, Math.min(3, zoom + step))
+    if (nextZoom === zoom) return
+    const viewport = viewportRef.current
+    const canvas = canvasRef.current
+    if (viewport && canvas && canvas.clientWidth && canvas.clientHeight) {
+      const center = {
+        x: viewport.clientWidth / 2,
+        y: viewport.clientHeight / 2,
+      }
+      pendingAnchor.current = {
+        point: {
+          x:
+            (viewport.scrollLeft + center.x - canvas.offsetLeft) /
+            canvas.clientWidth,
+          y:
+            (viewport.scrollTop + center.y - canvas.offsetTop) /
+            canvas.clientHeight,
+        },
+        midpoint: center,
+      }
+    }
+    onZoomChange(nextZoom)
+  }
+
+  function resetZoom() {
+    pendingAnchor.current = null
+    const viewport = viewportRef.current
+    if (viewport) {
+      viewport.scrollLeft = 0
+      viewport.scrollTop = 0
+    }
+    onZoomChange(1)
+  }
+
   function beginPinch() {
     const points = [...pointers.current.values()]
     const canvas = canvasRef.current
@@ -182,6 +217,8 @@ export function usePhotoGestures(
   return {
     viewportRef,
     canvasRef,
+    zoomBy,
+    resetZoom,
     onPointerDown,
     onPointerMove,
     onPointerUp,

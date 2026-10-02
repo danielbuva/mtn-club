@@ -94,7 +94,7 @@ test('unrelated and proprietary permission URLs cannot replace audited media gra
         )
       } else {
         const source = guide.sources.find(
-          item => item.id === 'blm-pearl-photograph',
+          item => item.id === 'mtn-club-pearl-southeast-guide',
         )
         source.distribution.evidenceUrl =
           'https://www.mountainproject.com/photo/106120934'
@@ -107,9 +107,11 @@ test('unrelated and proprietary permission URLs cannot replace audited media gra
   }
 })
 
-test('a known permissive license does not authorize an unaudited replacement source URL', () => {
+test('a declared license does not authorize an unaudited replacement source URL', () => {
   const guide = structuredClone(kraftGuide)
-  const source = guide.sources.find(item => item.id === 'blm-pearl-photograph')
+  const source = guide.sources.find(
+    item => item.id === 'mtn-club-pearl-southeast-guide',
+  )
   source.url = 'https://www.mountainproject.com/photo/106120934'
   assert.match(
     validateGuide(guide).join('\n'),

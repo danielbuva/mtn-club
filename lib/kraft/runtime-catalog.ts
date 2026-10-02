@@ -16,6 +16,7 @@ import {
   sectorIds,
 } from './runtime-unit-builders.ts'
 import { applySourceFaceAssignments } from './source-face-assignments.ts'
+import { applySourceViewAssignments } from './source-view-assignments.ts'
 import { splitCatalog } from './split-catalog.ts'
 import type { Boulder, Climb, EvidenceSource, KraftArea } from './types'
 
@@ -188,6 +189,7 @@ export function buildRuntimeCatalog(
       ),
     )
   applySourceFaceAssignments(boulders)
+  applySourceViewAssignments(boulders)
   applyAuthoredRouteCorridors(boulders)
   for (const unit of boulders)
     for (const climb of unit.climbs)

@@ -28,7 +28,7 @@ test('verified production download survives zero network, reload and a reopened 
     asset => asset.kind === 'face-photo',
   ).length
   await expect(offlineKit).toContainText(
-    `${kraftGuide.boulders.length} rock catalogs · ${climbCount} climbs · ${photoCount} face photo${photoCount === 1 ? '' : 's'}`,
+    `${kraftGuide.boulders.length} rock catalogs · ${climbCount} climbs · ${photoCount} face image${photoCount === 1 ? '' : 's'}`,
   )
   await offlineKit.getByText(/^View verified download/).click()
   const inventory = offlineKit.getByRole('list', {
@@ -136,13 +136,13 @@ test('verified production download survives zero network, reload and a reopened 
       ),
     )
     .toBe(true)
-  await pearl.getByText('Photo notes & credit', { exact: true }).click()
+  await pearl.getByText('Image notes & credit', { exact: true }).click()
   await expect(pearl).toContainText(
     'Two independently reviewed moderate corridors',
   )
   await expect(pearl.locator('g[data-confidence="moderate"]')).toHaveCount(2)
   await pearl
-    .getByRole('button', { name: 'Zoom in photograph', exact: true })
+    .getByRole('button', { name: 'Zoom in image', exact: true })
     .click()
   await testInfo.attach('offline-real-pearl-photo', {
     body: await page.screenshot({ scale: 'css' }),

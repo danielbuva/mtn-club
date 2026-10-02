@@ -9,8 +9,18 @@ type AuditedGrant = {
   record: string
 }
 
-/** Audited primary-source grants. New media needs a documented rights review. */
+/** Audited reuse grants and user-directed original asset creation records. */
 export const auditedGrants: AuditedGrant[] = [
+  {
+    sourceId: 'mtn-club-pearl-southeast-guide',
+    sourceUrl:
+      'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
+    evidenceUrl:
+      'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
+    usage: 'licensed-media',
+    licenseIds: ['MTN-Club-original'],
+    record: 'public/kraft/pearl-southeast-guide-provenance.json',
+  },
   {
     sourceId: 'blm-pearl-photograph',
     sourceUrl:

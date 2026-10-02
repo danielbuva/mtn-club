@@ -129,10 +129,12 @@ boulder, face and route inventory. [The Kraft workbench](docs/kraft-gauntlet/REA
 tracks coverage, provenance, current independent reviews and unresolved evidence.
 The previous four-boulder content pilot is the starting implementation; full
 source acquisition, image-first boulder details, map placement/footprints and
-real route geometry remain in progress. One licensed BLM Pearl context photograph
-is available. The [priority tracker](docs/kraft-gauntlet/TODO.md) includes a
+real route geometry remain in progress. An original realistic near-frontal Pearl
+face and two moderate SVG corridors passed independent raster and rendered
+phone/desktop review. The [priority tracker](docs/kraft-gauntlet/TODO.md) includes a
 high-priority [independent boulder-view reconstruction workstream](docs/kraft-gauntlet/reconstruction-workstream.md),
-with Monkey Bar as its proposed pilot and Pearl as the photo control.
+with Pearl as the first accepted raster example and Monkey Bar's cave/roof
+geometry still blocked. The lawful BLM photo remains a factual reference.
 
 Guide records live in `lib/kraft/`; local assets live in `public/kraft/`.
 Publication validation rejects unlicensed imagery, disconnected geometry,

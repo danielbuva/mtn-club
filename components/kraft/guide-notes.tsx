@@ -24,8 +24,8 @@ export function GuideNotes({ guide }: { guide: KraftGuide }) {
           field review.
         </p>
         <p>
-          {availablePhotos} of {faces.length} face photographs and {authored} of{' '}
-          {climbs.length} route topos are available. Missing photographs and
+          {availablePhotos} of {faces.length} face images and {authored} of{' '}
+          {climbs.length} route topos are available. Missing images and
           unreviewed lines are marked on each face. Downloading saves the
           available edition; it does not fill those gaps.
         </p>
@@ -36,7 +36,7 @@ export function GuideNotes({ guide }: { guide: KraftGuide }) {
         </p>
         <dl className="kraft-coverage-counts">
           <div>
-            <dt>Face photograph available</dt>
+            <dt>Face image available</dt>
             <dd>{availablePhotos}</dd>
           </div>
           <div>
@@ -66,7 +66,7 @@ export function GuideNotes({ guide }: { guide: KraftGuide }) {
             </dd>
           </div>
           <div>
-            <dt>Route photograph needed</dt>
+            <dt>Route face image needed</dt>
             <dd>
               {
                 climbs.filter(

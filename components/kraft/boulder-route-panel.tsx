@@ -1,7 +1,9 @@
 'use client'
 
 import { useRef } from 'react'
+import { climbAccessNotice } from '@/lib/kraft/access-notices'
 import type { Boulder, Climb, EvidenceSource, Face } from '@/lib/kraft/types'
+import { AccessNotice } from './access-notice'
 import { ClimbDetail } from './climb-detail'
 import { ClimbList } from './climb-list'
 import { gradeRecordNote } from './source-notes'
@@ -72,6 +74,7 @@ export function BoulderRoutePanel({
               Details
             </button>
           </div>
+          <AccessNotice notice={climbAccessNotice(climb)} compact />
           <p>{climb.description}</p>
           <small>
             {climb.faceIds.length === 0

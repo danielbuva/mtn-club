@@ -1,6 +1,10 @@
 'use client'
 
 import { ArrowUpRight } from 'lucide-react'
+import {
+  accessClosedLabel,
+  boulderAccessNotice,
+} from '@/lib/kraft/access-notices'
 import { type BoulderResult, gradeRange } from '@/lib/kraft/search'
 import type { KraftArea } from '@/lib/kraft/types'
 import { MatchingClimbs } from './matching-climbs'
@@ -51,6 +55,9 @@ export function BoulderResults({
                 {boulder.unitKind !== 'physical-boulder' && ' · Source catalog'}
               </span>
               <span className="kraft-result-name">{boulder.name}</span>
+              {boulderAccessNotice(boulder) && (
+                <span className="kraft-result-meta">{accessClosedLabel}</span>
+              )}
               <span className="kraft-result-meta">
                 {climbs.length} climb records
                 {referenceClimbs.length > 0 &&

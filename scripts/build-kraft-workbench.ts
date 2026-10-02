@@ -208,7 +208,7 @@ const unitLines = unitRecords.map(record => {
   const allocation = record.name.includes('Monkey Bar')
     ? 'Reconstruction research; geometry blocked; compare field photo'
     : record.name === 'The Pearl'
-      ? 'BLM southeast photo control; other views need own photo'
+      ? 'Original near-frontal southeast guide control; human/field review pending; other views need independent images'
       : 'Lawful photo search / field photograph first; assess multi-view evidence before reconstruction'
   return `| [${markdown(record.name)}](${source.url}) | ${record.id} | ${record.state} | ${allocation} |`
 })
@@ -219,7 +219,7 @@ await save(
     '',
     `Updated 2026-10-01. ${unitRecords.length} MP/OpenBeta source-unit identities after exact importer links; these are **not** a verified physical-rock count. TheTopo adds ${topo.units.length} separately indexed research units pending identity/policy review.`,
     '',
-    `The running ${kraftGuide.version} edition includes all ${kraftGuide.boulders.length} reconciled source catalogs and ${runtimeRouteCount} canonical route records. No real route SVG or reconstruction is approved. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery, faces, lines and field verification do not hide a catalog or route.`,
+    `The running ${kraftGuide.version} edition includes all ${kraftGuide.boulders.length} reconciled source catalogs and ${runtimeRouteCount} canonical route records. The Pearl has an original guide reconstruction and two moderate source corridors; human/field image review and exact route-path review remain pending. Every source observation, including all TheTopo units/views/routes, remains in [the inventory](kraft-content-inventory.csv). Missing imagery, faces, lines and field verification do not hide a catalog or route.`,
     '',
     '| Source unit | Inventory ID | State | Image allocation |',
     '| --- | --- | --- | --- |',
@@ -268,16 +268,18 @@ const imageRows = [
 for (const record of unitRecords)
   imageRows.push([
     record.id,
-    record.name === 'The Pearl' ? '/kraft/pearl-blm.webp' : '',
+    record.name === 'The Pearl' ? '/kraft/pearl-southeast-guide.webp' : '',
     record.name === 'The Pearl'
-      ? 'PD-USGov-BLM / CC-BY-2.0'
+      ? 'MTN-Club-original / Original MTN Club guide asset'
       : 'no production face asset approved',
     record.name === 'The Pearl'
-      ? 'source-matched southeast context photo; not topo-approved'
+      ? 'original near-frontal southeast reconstruction; human/field review pending'
       : 'BLOCKED lawful image',
-    record.name.includes('Monkey Bar')
-      ? 'independent reconstruction research + field-photo comparison'
-      : 'lawful photo / field photography first',
+    record.name === 'The Pearl'
+      ? 'original reconstruction quality control; human/field review pending'
+      : record.name.includes('Monkey Bar')
+        ? 'independent reconstruction research + field-photo comparison'
+        : 'lawful photo / field photography first',
     record.observations.map(observation => observation.url).join(' '),
   ])
 for (const view of topo.views)

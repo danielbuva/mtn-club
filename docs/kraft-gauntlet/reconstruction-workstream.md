@@ -1,14 +1,14 @@
 # Independent boulder-view reconstruction
 
-**High priority in the existing Kraft Gauntlet. Stage: research; production reconstruction blocked.** Continue all full-Kraft inventory, map, photo/SVG, UI and offline work alongside it. The authoring scene may be 3D; the guide ships clean 2D face images and independent interactive SVGs.
+**High priority in the existing Kraft Gauntlet. Pearl's realistic near-frontal raster passed actual image and rendered topo review; other candidates remain independently assessed.** Continue full-Kraft inventory, map, face/SVG, UI and offline work alongside it. Authoring geometry may be 3D; the guide ships realistic raster face images and independent SVG routes.
 
 Create an original, recognizable depiction of factual physical geometry from our own guide camera. A pretty but physically incorrect boulder fails. This is a risk-reduction strategy, not a guarantee of legal safety; preserve evidence for human publication review.
 
 ## Pilot, control and coverage
 
-**Monkey Bar Boulder** is the first reconstruction candidate: multiple surfaces, cave/lip/arête movement and linkups make freely movable cameras useful. Its initial 26-entry source catalog is not a reconciled inventory of one physical rock. Keep separate-rock and leaning-slab memberships provisional until evidence resolves them.
+**Monkey Bar Boulder** remains a complex reconstruction candidate: multiple surfaces, cave/lip/arête movement and linkups make freely movable cameras useful. Its 26-entry source catalog is not a reconciled inventory of one physical rock. Keep separate-rock and leaning-slab memberships provisional until evidence resolves them.
 
-**The Pearl** is the ordinary photo control: retain the user-supplied Samantha Szesciorka / BLM Nevada image, its public-domain (U.S.) / CC BY 2.0 provenance and source-matched southeast-view qualification. It is available, not field- or route-approved. Compare the two approaches through the same image-first viewer, mobile framing, climb selection and real offline tests. [Photo provenance](pearl-photograph.md).
+**The Pearl** is the first full-quality raster example under the latest user direction. Retain Samantha Szesciorka / BLM Nevada's lawful photo and provenance as reference, then combine its geometry with factual observations from five independent photographs. The accepted new camera is nearly frontal and deliberately framed for the guide. The actual raster and separate phone/desktop topo output passed fresh critics; human publication and field review remain pending. [Original asset record](../../public/kraft/pearl-southeast-guide-provenance.json), [BLM reference provenance](pearl-photograph.md).
 
 | Initial Monkey view candidate | Supported starting observation | Required geometry evidence |
 | --- | --- | --- |
@@ -24,7 +24,7 @@ South/southeast and west/southwest cameras remain illustrative possibilities, no
 1. **Gather and classify references.** Consult multiple independent captures wherever possible: our own photos/observations, public-domain or compatible licensed imagery, factual third-party photos, lawful aerial imagery, coordinates, permitted guide/map descriptions and verified climb data. Reposts of one capture count once. Record creator, capture group, rights, consultation level, date uncertainty, viewpoint and each fact supported. Metadata-only pages are not visual geometry evidence.
 2. **Build the feature ledger.** Record overall silhouette/proportions, ground relationship, neighboring rocks, cracks, arêtes, ledges, major holes and climb-bearing surfaces. Give each feature supporting and conflicting observations, confidence, measurement/relative-scale uncertainty, visibility and affected climbs. Keep unobserved geometry explicit. Capture date differs from page date; reported breaks require contemporary feature-specific evidence. Never invent holds, cracks, ledges, arêtes, holes or hidden finishes.
 3. **Author an original movable representation.** Prefer a simplified Blender/3D proxy with named feature IDs, separate ground/neighbors and a documented coordinate frame. Depth/shape reconstruction from permitted inputs, hand-built vector/painted geometry or another method may be used when it gives equal factual control. Relative proportions can be represented with explicit uncertainty; claim metric scale only with evidence. Preserve the source scene, not just a flattened image, so cameras can move later.
-4. **Select our camera deliberately.** Compare several independently composed viewpoints, including slight oblique views where corners read better. Retain transforms, projection/lens, dimensions, rationale and a per-goal scorecard. Use independently chosen neutral lighting, ground/context and crop. Produce an unannotated clean view first; any finish must preserve the supported geometry.
+4. **Select our camera and produce a realistic raster.** Compare independently composed viewpoints, including slight oblique views where corners read better. Retain requested camera/lens, dimensions and rationale, qualifying uncalibrated bearings. Use a capable image-generation/rendering system; the environment's built-in image generator is available. Export optimized WebP/AVIF/JPEG with realistic rock geometry and texture, neutral light, visible starts/finishes and modest context. SVG polygons, CSS shapes, flat/vector art and low-poly rock illustrations are never final face assets. Internal proxies may support factual control, but cannot substitute for the raster or its actual visual review.
 5. **Use a fresh independent asset critic.** Give a critic the actual render and multiple real references, without a builder-authored verdict. Check recognizable geometry, orientation, climb-bearing features, source-composition independence and topo usefulness. Compare field evidence where available. Record failures by feature and exact image/scene hashes, repair, and repeat with a fresh critic. Reviewing this document is not reviewing an image.
 6. **Obtain distinct human geometry/correction approval.** In geometryHuman, record reviewer/date, photographic or in-field reviewBasis, comparison evidence, exact clean-image/scene hashes and outcome. A person able to compare the depiction with real evidence checks geometry, identity and recognizability; corrections identify affected features, requested change, resolution and revised hashes for re-review. Approval applies only to the reviewed image hash with required corrections resolved. Prefer someone familiar with the boulder and our own evidence. Keep fieldHuman exclusively for dated actual field observations: photographic geometry approval neither implies nor requires field verification. Keep assembled-guide publicationHuman separate. Insufficient evidence stays BLOCKED; critic approval cannot substitute for human approval.
 7. **Verify SVG routes separately.** Corroborate start/finish regions, general route corridor, movement direction, sit/stand variants, eliminates, shared sections and wraps using independent route evidence. Exact holds are not required for a defensible general corridor; unsupported precise beta/geometry is withheld. Draw original SVG paths in native image coordinates, never copy topo artwork or infer a line from a rendered feature. Bind review to base-image hash/dimensions, SVG hash and continuation/view assignments. A changed camera/crop/export invalidates correspondence review.
@@ -49,6 +49,19 @@ Record pass/fail, evidence and unresolved features for each camera goal:
 7. Enough real boulder/ground/neighbor context for recognition.
 8. Consistent Kraft presentation, legible on a 320 px phone and useful alongside the climb list.
 
+Preserve Pearl's observed-in-the-field visual direction. Sandstone should have
+natural asymmetry, worn edges, uneven coloration, varied weathering and nuanced
+surface texture in believable desert light. Retain supported chalk and stain
+behavior without inventing route-defining marks or holds. Slight messiness is
+desirable; uniform texture, overly smooth planes, idealized massing and a sterile
+isolated-object presentation fail even when the image is nominally realistic.
+Critics must judge this character in the actual raster alongside recognizable
+physical geometry. Added texture cannot repair incorrect geometry.
+
+Route annotation remains subordinate to the rock: one thin solid path, small
+markers, no broad highlight band or dashed treatment. Stroke width stays fixed
+while zoom reveals more rock; route numbers shrink and fade, then disappear.
+
 A mirrored face, invented major feature, wrong rock, hidden critical finish or uncorroborated climb-bearing geometry fails. Lighting/texture cannot hide uncertainty. The fresh critic must explicitly compare framing, lighting, crop, foreground/background layout and viewpoint against each source; agreement with physical features alone does not establish compositional independence.
 
 For the pilot also record **reconstruction versus taking our own photo**: recognition, start/finish visibility, route separation, camera freedom, evidence gaps, effort and time to obtain a lawful image. If reconstruction is less useful than field photography, say so and choose photography; do not force a successful pilot verdict.
@@ -67,11 +80,13 @@ Exact blockers are full cave/roof cross-section and left-start coverage; continu
 
 | Reconciled face/boulder | Current preferred path | Reason / next decision |
 | --- | --- | --- |
-| Pearl southeast | Normal BLM photo control | Legal source-matched image available; test recognition and start/finish coverage, then independently supported routes. |
+| Pearl southeast | Original realistic near-frontal raster | Actual image and rendered topo accepted against multiple real photographs; two independent moderate corridors. Human/field review remains separate. |
 | Pearl northeast | Own field photograph first | Missing exact legal view; do not label an unseen BLM side as northeast. Reconstruction needs adequate multi-view coverage. |
 | Monkey Bar | High-priority reconstruction research plus field-photo comparison | Multiple surfaces and wraps benefit from cameras, but hidden geometry/condition remain the main risk. |
 | Cube north/west/south | Field photography first; secondary reconstruction candidate | Full highball face/top-out and arête views need trustworthy geometry and identity. |
-| Split north/south | Resolve identity/coordinates, then field photography | Crack/chimney side and location/name conflicts precede modeling. |
+| Split north/uphill | Bounded chimney raster study; field-photo fallback | Second raster passed qualitative geometry and natural field character; guide/route review pending. Other uphill climbs are outside this image's supported scope. South and identity/coordinate conflicts remain separate. |
+| Potato Chip north/front | Multi-reference raster candidate | Three views support the half-moon face, overhang and flaked lip; rear-side geometry remains separate. |
+| Warm-up Main south/southwest | Multi-reference raster candidate | Three views support the main plane; companion rock and complete east-side geometry remain outside scope. |
 | Adjacent rocks / every remaining Kraft unit | Inventory assessment pending | Allocate every reconciled unit; no automatic reconstruction of unreviewed full-guide candidates. Track why legal image, evidence-supported reconstruction or field photo is selected. |
 
 Next tasks: obtain the recorded missing unobstructed scale/corner/start/finish observations; decide the bounded face set and actual photo comparison; author a movable proxy only from supported facts; render original candidate cameras; obtain fresh asset critique/human approval; verify SVGs separately; run the full real offline control-versus-pilot comparison. Full-Kraft work continues throughout these gates.
