@@ -87,8 +87,8 @@ export const FALL_2026_TRIPS: FallTrip[] = [
     hosts: [{ name: 'Sophia Pascual', title: 'Community Director' }],
   },
   {
-    startDate: '2026-10-16',
-    endDate: '2026-10-18',
+    startDate: '2026-10-23',
+    endDate: '2026-10-25',
     title: 'Camp and Climb in Joshua Tree National Park',
     activity: 'sport_climbing',
     hosts: [{ name: 'Dax Whitaker', title: 'Club President' }],

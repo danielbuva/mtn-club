@@ -36,8 +36,8 @@ test('publishes all ten supplied special trips as date-only inventory', () => {
       ['2026-10-03', '2026-10-04', 'Camping in Lovell Canyon'],
       ['2026-10-10', undefined, 'Echo Overlook Hike'],
       [
-        '2026-10-16',
-        '2026-10-18',
+        '2026-10-23',
+        '2026-10-25',
         'Camp and Climb in Joshua Tree National Park',
       ],
       [
