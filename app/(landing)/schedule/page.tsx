@@ -1,14 +1,19 @@
 import type { Metadata, Viewport } from 'next'
 import { connection } from 'next/server'
 import { Suspense } from 'react'
+import {
+  TripScheduleList,
+  TripScheduleSkeleton,
+  TripScheduleUnavailable,
+} from '@/components/landing/trip-schedule-list'
 import { TripSchedulePage } from '@/components/landing/trip-schedule-page'
-import { FALL_2026_TRIPS, getFallTripScheduleKey } from '@/lib/club-content'
-import { createClient } from '@/lib/supabase/server'
+import { getOfficialSchedule } from '@/lib/events/official-schedule'
+import { createPublicClient } from '@/lib/supabase/public'
 
 export const metadata: Metadata = {
-  title: 'Fall 2026 Trip Schedule | UNLV Mountain Club',
+  title: 'Official Trip Schedule | UNLV Mountain Club',
   description:
-    'See the UNLV Mountain Club weekly meetups and public Fall 2026 trip schedule.',
+    'See the UNLV Mountain Club weekly meetups and official trip schedule.',
 }
 
 export const viewport: Viewport = {
@@ -18,48 +23,21 @@ export const viewport: Viewport = {
 
 async function TripScheduleContent() {
   await connection()
-  const supabase = await createClient()
-  const scheduleKeys = FALL_2026_TRIPS.map(getFallTripScheduleKey)
-  const result = await supabase
-    .from('trips')
-    .select('id, schedule_key, lifecycle_status, cancellation_reason')
-    .in('schedule_key', scheduleKeys)
-
-  const tripDetailHrefs = Object.fromEntries(
-    (result.data ?? []).flatMap(trip =>
-      trip.schedule_key
-        ? [[trip.schedule_key, `/trips/${trip.id}`] as const]
-        : [],
-    ),
-  )
-
-  const tripStates = Object.fromEntries(
-    (result.data ?? []).flatMap(trip =>
-      trip.schedule_key
-        ? [
-            [
-              trip.schedule_key,
-              {
-                lifecycleStatus: trip.lifecycle_status,
-                cancellationReason: trip.cancellation_reason,
-              },
-            ],
-          ]
-        : [],
-    ),
-  )
-  return (
-    <TripSchedulePage
-      tripDetailHrefs={tripDetailHrefs}
-      tripStates={tripStates}
-    />
-  )
+  try {
+    const trips = await getOfficialSchedule(createPublicClient())
+    return <TripScheduleList trips={trips} />
+  } catch (error) {
+    console.error('Official trip schedule unavailable.', error)
+    return <TripScheduleUnavailable />
+  }
 }
 
 export default function Page() {
   return (
-    <Suspense fallback={<TripSchedulePage tripDetailHrefs={{}} />}>
-      <TripScheduleContent />
-    </Suspense>
+    <TripSchedulePage>
+      <Suspense fallback={<TripScheduleSkeleton />}>
+        <TripScheduleContent />
+      </Suspense>
+    </TripSchedulePage>
   )
 }

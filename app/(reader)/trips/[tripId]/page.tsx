@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import { ScheduledTripDetail } from '@/components/trips/detail/scheduled-trip-detail'
 import { TripAttendeesPreview } from '@/components/trips/detail/TripAttendeesPreview'
 import { TripDescription } from '@/components/trips/detail/TripDescription'
 import { TripDetailEditor } from '@/components/trips/detail/TripDetailEditor'
@@ -14,7 +13,6 @@ import { TripStickyRsvpBar } from '@/components/trips/detail/TripStickyRsvpBar'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
 import { TripFollowControl } from '@/components/trips/trip-follow-control'
 import { Card, CardContent } from '@/components/ui/card'
-import { FALL_2026_TRIPS, getFallTripScheduleKey } from '@/lib/club-content'
 import { fetchPublicHostsByTrip } from '@/lib/events/queries'
 import {
   legacyRsvpChoice,
@@ -220,21 +218,19 @@ export default async function TripDetailPage({
   const { edit, returnTo } = await searchParams
   const isEditMode = edit === '1'
 
-  const scheduled = FALL_2026_TRIPS.find(
-    item => getFallTripScheduleKey(item) === tripId,
-  )
-  if (scheduled) {
+  // Keep existing schedule URLs tied to a live event, including after renames.
+  if (tripId.startsWith('fall-2026-')) {
     const client = await createClient()
     const { data, error } = await client
       .from('trips')
       .select('id')
       .eq('schedule_key', tripId)
+      .in('lifecycle_status', ['published', 'canceled'])
       .maybeSingle()
     if (error)
       throw new Error('Trip details could not be loaded. Please try again.')
-    if (data) redirect(`/trips/${data.id}`)
-    if (scheduled.lifecycleStatus === 'archived') notFound()
-    return <ScheduledTripDetail scheduled={scheduled} />
+    if (!data) notFound()
+    redirect(`/trips/${data.id}`)
   }
 
   const trip = await getTripDetail(tripId)

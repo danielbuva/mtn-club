@@ -7,7 +7,7 @@ UNLV Mountain Club.
 
 - Involvement-fair entry point at `/welcome`
 - Community action chooser at `/join`
-- Public Fall 2026 calendar and gallery
+- Public event calendar and gallery
 - Account-linked membership sign up at `/membership-sign-up`
 - Member profile, trip, and officer tools
 - Auth and data via Supabase
@@ -224,3 +224,15 @@ unchanged timestamps (including seconds), and reports registration deadline
 conflicts before saving. Server-side assignment loaders require explicit
 `service_role` grants on `trip_leaders`, `trip_private`, and `trip_tag_options`.
 Coverage: `tests/trip-edit-dates.test.mjs` and `tests/trip-editing.sql`.
+
+### Official schedule and event synchronization
+
+`/schedule` reads published and canceled official events directly from `trips`,
+with current dates, titles, host credits, and cancellation reasons. Only public
+and minimal-visibility events appear. Archived, deleted, and unofficial events
+are omitted. Existing Fall 2026 schedule URLs resolve to the live event and
+return not found when it is removed. The calendar also uses only live event
+records, and `/trips` is no longer limited to the original Fall 2026 date range.
+Create, edit, official-status, and lifecycle actions refresh all three views.
+Database failures show retryable errors instead of a stale static schedule.
+No database migration or new environment variable is required.

@@ -2,7 +2,6 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
   CLUB_DISCLAIMER,
-  FALL_2026_TRIPS,
   WEEKLY_MEETUP_NOTE,
   WEEKLY_MEETUPS,
 } from '../lib/club-content.ts'
@@ -21,33 +20,6 @@ test('links the Tuesday meetup to Nevada Climbing Center', () => {
     location: 'NCC',
     href: 'https://nevadaclimbingcenters.com/',
   })
-})
-
-test('publishes all ten supplied special trips as date-only inventory', () => {
-  assert.equal(FALL_2026_TRIPS.length, 10)
-  assert.deepEqual(
-    FALL_2026_TRIPS.map(trip => [trip.startDate, trip.endDate, trip.title]),
-    [
-      ['2026-09-06', undefined, 'Red Rock Sport Climbing'],
-      ['2026-09-13', undefined, 'Black Mountain Hike'],
-      ['2026-09-19', undefined, 'Red Rock South Oak Creek Hike'],
-      ['2026-09-20', undefined, 'Cathedral Rock Sunrise Hike'],
-      ['2026-09-26', undefined, 'Kraft Mountain Night Bouldering'],
-      ['2026-10-03', '2026-10-04', 'Camping in Lovell Canyon'],
-      ['2026-10-10', undefined, 'Echo Overlook Hike'],
-      [
-        '2026-10-23',
-        '2026-10-25',
-        'Camp and Climb in Joshua Tree National Park',
-      ],
-      [
-        '2026-11-06',
-        '2026-11-08',
-        'Camp, Climb, and Hike in Zion National Park',
-      ],
-      ['2026-11-27', '2026-11-29', 'Camp and Climb in Bishop'],
-    ],
-  )
 })
 
 test('keeps the required disclaimer verbatim', () => {

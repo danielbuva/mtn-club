@@ -249,9 +249,10 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     if (insertionError) throw insertionError
   }
 
+  revalidatePath('/schedule')
+  revalidatePath('/calendar')
   revalidatePath('/trips')
   revalidatePath(`/trips/${tripId}`)
-  revalidatePath('/calendar')
   return { ok: true } as const
 }
 

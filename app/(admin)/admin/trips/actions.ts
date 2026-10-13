@@ -68,6 +68,8 @@ export async function setTripOfficialAction(formData: FormData) {
   )
   revalidatePath('/admin')
   revalidatePath('/admin/trips')
+  revalidatePath('/schedule')
+  revalidatePath('/calendar')
   revalidatePath('/trips')
   revalidatePath(`/trips/${tripId}`)
 }
@@ -107,9 +109,9 @@ export async function changeTripLifecycleAction(formData: FormData) {
   )
   revalidatePath('/admin')
   revalidatePath('/admin/trips')
-  revalidatePath('/trips')
-  revalidatePath('/calendar')
   revalidatePath('/schedule')
+  revalidatePath('/calendar')
+  revalidatePath('/trips')
   revalidatePath('/profile/trips')
   revalidatePath(`/trips/${tripId}/rsvp`)
   revalidatePath(`/admin/trips/${tripId}/registrations`)
@@ -173,5 +175,7 @@ export async function purgeTestTripAction(formData: FormData) {
   )
   revalidatePath('/admin')
   revalidatePath('/admin/trips')
+  revalidatePath('/schedule')
+  revalidatePath('/calendar')
   revalidatePath('/trips')
 }

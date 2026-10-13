@@ -1,7 +1,7 @@
 import { TripsList } from '@/components/trips/TripsList'
 import { Card, CardContent } from '@/components/ui/card'
 import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
-import { fetchPublicHostsByTrip, fetchTripsInRange } from '@/lib/events/queries'
+import { fetchPublicHostsByTrip, fetchVisibleTrips } from '@/lib/events/queries'
 import type { EventRow } from '@/lib/events/types'
 import {
   legacyRsvpChoice,
@@ -106,13 +106,7 @@ const toTripListItem = (
 
 export default async function TripsPage() {
   const supabase = await createClient()
-  const rangeStart = new Date('2026-09-01T00:00:00-07:00')
-  const rangeEnd = new Date('2026-12-01T23:59:59.999-08:00')
-
-  const events = await fetchTripsInRange(supabase, {
-    start: rangeStart,
-    end: rangeEnd,
-  })
+  const events = await fetchVisibleTrips(supabase)
 
   const tripIds = events.map(event => event.id)
   const [registrations, hostsByTrip] = await Promise.all([
@@ -161,7 +155,7 @@ export default async function TripsPage() {
           Trips & Events
         </h1>
         <p className="text-sm text-muted-foreground">
-          Showing trips from Sep 1, 2026 to Dec 1, 2026.
+          Browse official club trips and community events.
         </p>
         <WeeklyMeetupNote className="text-foreground/80" />
       </section>

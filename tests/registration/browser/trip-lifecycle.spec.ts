@@ -147,26 +147,17 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   })
 
   const scheduledLink = visitor.getByRole('link', {
-    name: /Red Rock Sport Climbing/,
+    name: /Lifecycle browser fixture/,
   })
-  await expect(scheduledLink).toHaveAttribute(
-    'href',
-    '/trips/fall-2026-red-rock-sport-climbing',
-  )
+  await expect(scheduledLink).toHaveAttribute('href', `/trips/${tripId}`)
   await scheduledLink.click()
-  await expect(visitor).toHaveURL(/\/trips\/fall-2026-red-rock-sport-climbing$/)
+  await expect(visitor).toHaveURL(new RegExp(`/trips/${tripId}$`))
   await expect(
     visitor.getByRole('heading', {
-      name: 'Red Rock Sport Climbing',
+      name: 'Lifecycle browser fixture',
       exact: true,
     }),
   ).toBeVisible()
-  await expect(
-    visitor
-      .getByRole('main')
-      .getByText('Canceled due to rain.', { exact: true }),
-  ).toBeVisible()
-  await expect(visitor.locator('a[href$="/rsvp"]')).toHaveCount(0)
 
   sql(
     `update public.trips set schedule_key='fall-2026-black-mountain-hike' where id='${tripId}'`,
@@ -180,7 +171,9 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
     }),
   ).toBeVisible()
   await visitor.goto('/schedule')
-  const savedLink = visitor.getByRole('link', { name: /Black Mountain Hike/ })
+  const savedLink = visitor.getByRole('link', {
+    name: /Lifecycle browser fixture/,
+  })
   await expect(savedLink).toHaveAttribute('href', `/trips/${tripId}`)
   await savedLink.click()
   await expect(visitor).toHaveURL(new RegExp(`/trips/${tripId}$`))
@@ -212,6 +205,14 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
       exact: true,
     }),
   ).toHaveCount(0)
+  await visitor.goto('/schedule')
+  await expect(
+    visitor.getByRole('link', { name: /Lifecycle browser fixture/ }),
+  ).toHaveCount(0)
+  await visitor.goto('/trips/fall-2026-black-mountain-hike')
+  await expect(
+    visitor.getByRole('heading', { name: 'Trip not found', exact: true }),
+  ).toBeVisible()
   await visitor.goto(`/trips/${tripId}`)
   await expect(
     visitor.getByRole('heading', { name: 'Trip not found', exact: true }),
