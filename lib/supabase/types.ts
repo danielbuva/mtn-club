@@ -530,6 +530,7 @@ export type Database = {
       }
       membership_applications: {
         Row: {
+          signup_completed_at: string | null
           age_status: Database['public']['Enums']['membership_age_status']
           confirmed_at: string | null
           confirmed_by: string | null
@@ -547,6 +548,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          signup_completed_at?: string | null
           age_status: Database['public']['Enums']['membership_age_status']
           confirmed_at?: string | null
           confirmed_by?: string | null
@@ -564,6 +566,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          signup_completed_at?: string | null
           age_status?: Database['public']['Enums']['membership_age_status']
           confirmed_at?: string | null
           confirmed_by?: string | null
@@ -2251,6 +2254,19 @@ export type Database = {
       complete_account_merge: {
         Args: { p_actor: string; p_primary: string; p_secondary: string }
         Returns: boolean
+      }
+      submit_membership_signup: {
+        Args: {
+          p_user_id: string
+          p_full_name: string
+          p_contact_email: string
+          p_age_status: Database['public']['Enums']['membership_age_status']
+          p_dues_payment_claimed: boolean
+          p_primary_interest: string
+          p_experience_notes: string | null
+          p_mailing_list_opt_in: boolean
+        }
+        Returns: string
       }
       get_active_announcement: {
         Args: never

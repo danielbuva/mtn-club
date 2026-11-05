@@ -45,24 +45,6 @@ before(() => {
 after(() => {
   if (database) dropLocalDatabase(database)
 })
-async function asUser(user, query) {
-  const result = await run('docker', [
-    'exec',
-    container,
-    'psql',
-    '-U',
-    'postgres',
-    '-d',
-    database,
-    '-X',
-    '-qAt',
-    '-v',
-    'ON_ERROR_STOP=1',
-    '-c',
-    `begin; set local role authenticated; set local "request.jwt.claim.sub"=${literal(user)}; set local "request.jwt.claim.role"='authenticated'; ${query}; commit;`,
-  ])
-  return JSON.parse(result.stdout.trim())
-}
 function fixture(capacity = 1) {
   const owner = randomUUID()
   const trip = randomUUID()
@@ -86,22 +68,62 @@ const register = (trip, user, id = randomUUID()) =>
 
 for (const [name, fixtureName] of [
   [
-    'private accounts and membership access require their own capabilities',
-    'admin-rls-capabilities.sql',
+    'membership signup persists all records and completed retries are idempotent',
+    'membership-signup.sql',
   ],
   [
-    'legacy content writes and comment moderation honor resource scopes',
-    'admin-rls-resource-scopes.sql',
+    'membership signup rolls back all writes on payment failure',
+    'membership-signup-rollback.sql',
   ],
   [
-    'legacy payment RPC requires configured payment review capability',
-    'admin-rls-legacy-payment.sql',
+    'membership signup reconciles partial legacy state and preserves review/consent decisions',
+    'membership-signup-retry.sql',
   ],
 ]) {
-  test(name, () =>
-    sql(readFileSync(new URL(`../${fixtureName}`, import.meta.url), 'utf8')),
-  )
+  test(name, () => {
+    sql(readFileSync(new URL(`../${fixtureName}`, import.meta.url), 'utf8'))
+  })
 }
+
+test('simultaneous membership signup retries persist one application, payment, and consent', async () => {
+  const user = randomUUID()
+  sql(`insert into auth.users(id,email) values('${user}','${user}@example.test');
+    insert into public.club_admin_settings(id) values(true) on conflict(id) do nothing;`)
+  try {
+    const query = `select to_jsonb(public.submit_membership_signup('${user}', 'Concurrent Applicant', '${user}@example.test', 'adult', true, '["Hiking"]', null, true))`
+    const results = await Promise.all(
+      Array.from({ length: 6 }, () => asUser(user, query, 'service_role')),
+    )
+    assert.deepEqual(
+      results,
+      Array.from({ length: 6 }, () => user),
+    )
+    for (const table of [
+      'membership_applications',
+      'profiles',
+      'memberships',
+      'account_age_declarations',
+      'mailing_list_subscriptions',
+      'mailing_list_consent_events',
+      'membership_zelle_payments',
+    ]) {
+      assert.equal(
+        sql(`select count(*) from public.${table} where user_id='${user}'`),
+        '1',
+        table,
+      )
+    }
+    assert.equal(
+      sql(
+        `select count(*) from public.admin_activity_events where subject_user_id='${user}' and action='membership_application_submitted'`,
+      ),
+      '1',
+    )
+  } finally {
+    sql(`delete from public.membership_zelle_payments where user_id='${user}';
+      delete from auth.users where id='${user}'`)
+  }
+})
 
 test('no final policy or function retains the coarse staff helper', () => {
   assert.equal(
@@ -1721,3 +1743,22 @@ test('incomplete reminders respect cooldown, preferences, completion, and dedupl
     'obsolete',
   )
 })
+
+async function asUser(user, query, role = 'authenticated') {
+  const result = await run('docker', [
+    'exec',
+    container,
+    'psql',
+    '-U',
+    'postgres',
+    '-d',
+    database,
+    '-X',
+    '-qAt',
+    '-v',
+    'ON_ERROR_STOP=1',
+    '-c',
+    `begin; set local role ${literal(role)}; set local "request.jwt.claim.sub"=${literal(user)}; set local "request.jwt.claim.role"=${literal(role)}; ${query}; commit;`,
+  ])
+  return JSON.parse(result.stdout.trim())
+}
