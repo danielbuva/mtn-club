@@ -74,6 +74,11 @@ before(() => {
       'utf8',
     ),
   )
+  // This fixed container runs Auth without Storage. Minimal metadata tables
+  // exercise the account merge's Storage ownership and stale-session guards.
+  sql(`create schema if not exists storage;
+    create table if not exists storage.buckets(id text primary key,name text not null,owner uuid,owner_id text);
+    create table if not exists storage.objects(id uuid primary key,bucket_id text references storage.buckets(id),name text,owner uuid,owner_id text);`)
   const migrations = new URL('../../supabase/migrations/', import.meta.url)
   for (const name of readdirSync(migrations)
     .filter(
@@ -140,6 +145,9 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
     'registration-opening.sql',
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
+})
+test('atomic account merge transfers ownership, rolls back failures, and resumes auth cleanup', () => {
+  sql(readFileSync(new URL('../account-merge.sql', import.meta.url), 'utf8'))
 })
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
@@ -415,7 +423,7 @@ test('expired worker leases retry with the same job identity and exhausted lease
   )
 })
 
-test('registration racing an account merge cannot leave a seat on the merged account', async () => {
+test('registration racing an atomic account merge cannot leave a seat on the merged account', async () => {
   const f = fixture()
   const secondary = f.users[0]
   const primary = f.users[1]
@@ -433,7 +441,7 @@ test('registration racing an account merge cannot leave a seat on the merged acc
       '-v',
       'ON_ERROR_STOP=1',
       '-c',
-      `select public.merge_trip_registrations('${primary}','${secondary}')`,
+      `select public.merge_accounts('${f.owner}','${primary}','${secondary}',false)`,
     ]),
   ])
   assert.equal(
