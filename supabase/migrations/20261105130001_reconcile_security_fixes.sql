@@ -355,6 +355,16 @@ begin
   update public.trip_attendance s set attended=p.attended from public.trip_attendance p
     where s.user_id=p_secondary and p.user_id=p_primary and s.trip_id=p.trip_id
       and p.attended is not null and s.attended is not null and p.attended<>s.attended;
+  -- The registration helper records the merge alias before expiring offers, and
+  -- expiry notifies the offer's owner. Expire the secondary's overdue offers
+  -- first (trips locked in id order, as every expiry caller does), so no
+  -- notification is created for an already-aliased account.
+  for item in select distinct o.trip_id from public.registration_offers o
+      where o.user_id=p_secondary and o.status='pending' and o.expires_at<=clock_timestamp()
+      order by o.trip_id loop
+    perform 1 from public.trips where id=item.trip_id for update;
+    perform registration_private.expire_offers(item.trip_id);
+  end loop;
   perform public.merge_trip_registrations(p_primary,p_secondary);
 
   -- Partial unique keys: retain primary pending items; preserve the secondary

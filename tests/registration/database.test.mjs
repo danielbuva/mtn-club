@@ -697,6 +697,45 @@ test('expired worker leases retry with the same job identity and exhausted lease
   )
 })
 
+test('account merge expires the secondary account overdue offers before aliasing it', async () => {
+  const f = fixture()
+  const secondary = f.users[1]
+  const primary = f.users[2]
+  await register(f.trip, f.users[0])
+  await register(f.trip, secondary)
+  await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','cancel','${randomUUID()}',1)`,
+  )
+  await asUser(
+    f.owner,
+    `select public.registration_command('${f.trip}','issue_offer','${randomUUID()}',1,'{}','${secondary}')`,
+  )
+  sql(
+    `update public.registration_offers set expires_at=now()-interval '1 minute' where trip_id='${f.trip}' and user_id='${secondary}'`,
+  )
+  sql(
+    `select public.merge_accounts('${f.owner}','${primary}','${secondary}',false)`,
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_offers where trip_id='${f.trip}' and status='pending'`,
+    ),
+    '0',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_notifications where user_id='${secondary}'`,
+    ),
+    '0',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_account_merges where secondary_id='${secondary}' and primary_id='${primary}'`,
+    ),
+    '1',
+  )
+})
 test('registration racing an atomic account merge cannot leave a seat on the merged account', async () => {
   const f = fixture()
   const secondary = f.users[0]
