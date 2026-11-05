@@ -8,11 +8,12 @@ declare
   v_role_id uuid := gen_random_uuid();
   grant_id uuid;
 begin
-  insert into auth.users(id,email)
-    select id,id::text || '@example.test' from unnest(array[actor,subject,newcomer]) id;
+  insert into auth.users(id,email,email_confirmed_at)
+    select id,id::text || '@example.test',now() from unnest(array[actor,subject,newcomer]) id;
   insert into public.profiles(user_id,display_name) values(actor,'Officer'),(subject,'Member');
   insert into public.profile_private(user_id,phone) values(actor,'own'),(subject,'private');
   insert into public.memberships(user_id,status,role) values(actor,'pending','regular'),(subject,'pending','regular');
+  insert into public.account_age_declarations(user_id,is_18_or_older) values(subject,true);
   insert into public.user_waivers(user_id,waiver_key,version) values(subject,'legacy','1');
   insert into public.admin_roles(id,key,name) values(v_role_id,'rls_' || replace(v_role_id::text,'-','_'),'RLS regression');
   insert into public.admin_capabilities(key,resource,action,label,is_active)

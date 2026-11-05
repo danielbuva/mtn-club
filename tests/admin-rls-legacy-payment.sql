@@ -34,6 +34,21 @@ begin
   -- Proper capability works even without a legacy officer membership role.
   update public.memberships set role='regular' where user_id=actor;
   insert into public.admin_role_grants(role_id,capability_key,scope) values(v_role_id,'membership.confirm_payment','all');
+  -- Payment capability alone cannot activate an unverified applicant.
+  update auth.users set email_confirmed_at=null where id=applicant;
+  set local role service_role;
+  begin
+    perform public.confirm_zelle_membership_application(applicant,actor);
+    raise exception 'Payment reviewer bypassed activation eligibility';
+  exception when raise_exception then
+    if sqlerrm <> 'account email must be confirmed before membership activation' then raise; end if;
+  end;
+  reset role;
+  if exists(select 1 from public.membership_entitlements where user_id=applicant)
+    or exists(select 1 from public.membership_zelle_payments where user_id=applicant) then
+    raise exception 'Ineligible confirmation wrote payment or entitlement';
+  end if;
+  update auth.users set email_confirmed_at=now() where id=applicant;
   set local role service_role;
   expires := public.confirm_zelle_membership_application(applicant,actor);
   reset role;

@@ -8,7 +8,7 @@ end $$;
 create trigger test_merge_failure before delete on public.profiles for each row execute function pg_temp.fail_account_merge();
 create function pg_temp.merge_snapshot() returns jsonb language plpgsql as $$
 declare r record; rows jsonb; result jsonb:='{}'; begin
-  for r in select schemaname,tablename from pg_tables where schemaname in ('public','storage') order by schemaname,tablename loop
+  for r in select schemaname,tablename from pg_tables where schemaname in ('public','storage','trip_write_private') order by schemaname,tablename loop
     execute format('select coalesce(jsonb_agg(to_jsonb(t) order by to_jsonb(t)::text),''[]'') from %I.%I t',r.schemaname,r.tablename) into rows;
     result:=result||jsonb_build_object(r.schemaname||'.'||r.tablename,rows);
   end loop;
@@ -18,14 +18,14 @@ do $$
 #variable_conflict use_variable
 declare
   actor uuid:=gen_random_uuid(); primary_id uuid:=gen_random_uuid(); secondary_id uuid:=gen_random_uuid(); privileged uuid:=gen_random_uuid();
-  role_id uuid:=gen_random_uuid(); tid uuid:=gen_random_uuid(); draft uuid:=gen_random_uuid(); activity uuid:=gen_random_uuid();
+  role_id uuid:=gen_random_uuid(); tid uuid:=gen_random_uuid(); draft uuid:=gen_random_uuid(); receipt uuid:=gen_random_uuid(); activity uuid:=gen_random_uuid();
   checkout uuid:=gen_random_uuid(); payment uuid:=gen_random_uuid(); zelle uuid:=gen_random_uuid(); entitlement uuid:=gen_random_uuid();
   override_id uuid:=gen_random_uuid(); waiver uuid:=gen_random_uuid(); signature uuid:=gen_random_uuid(); disclosure uuid:=gen_random_uuid();
   snapshot jsonb; result jsonb; item record; n bigint; before_events bigint;
 begin
   insert into auth.users(id,email) values(actor,actor||'@example.test'),(primary_id,primary_id||'@example.test'),
     (secondary_id,secondary_id||'@example.test'),(privileged,privileged||'@example.test');
-  insert into public.admin_roles(id,key,name,is_super_admin) values(role_id,'merge_'||replace(role_id::text,'-','_'),'Merge test admin',true);
+  select id into strict role_id from public.admin_roles where is_super_admin;
   insert into public.admin_user_roles(user_id,role_id) values(actor,role_id),(privileged,role_id);
   perform set_config('request.jwt.claim.sub',actor::text,true);
   perform set_config('request.jwt.claim.role','service_role',true);
@@ -47,6 +47,8 @@ begin
   insert into public.trips(id,title,starts_at,ends_at,created_by,canceled_by)
     values(tid,'Merge fixture trip',now()+interval '2 days',now()+interval '3 days',actor,secondary_id);
   insert into public.trip_drafts(id,created_by,title) values(draft,secondary_id,'Do not cascade this draft');
+  insert into trip_write_private.draft_publications(draft_id,draft_owner_id,published_by,trip_id)
+    values(receipt,secondary_id,secondary_id,tid);
   insert into public.trip_leaders(trip_id,user_id) values(tid,primary_id),(tid,secondary_id) on conflict do nothing;
   insert into public.trip_update_followers(trip_id,user_id) values(tid,primary_id),(tid,secondary_id);
   insert into public.trip_favorites(trip_id,user_id) values(tid,primary_id),(tid,secondary_id);
@@ -145,6 +147,12 @@ begin
   result:=public.merge_accounts(actor,primary_id,secondary_id,false);
   execute 'reset role';
   if result->>'status'<>'pending_auth_delete' then raise exception 'Missing resumable merge state'; end if;
+  if not exists(select 1 from trip_write_private.draft_publications
+      where draft_id=receipt and draft_owner_id=primary_id and published_by=primary_id)
+    or not exists(select 1 from public.account_merge_jobs where secondary_user_id=secondary_id
+      and secondary_snapshot->'draft_publications'->0->>'published_by'=secondary_id::text) then
+    raise exception 'Publication receipt ownership or original attribution lost';
+  end if;
   if exists(select 1 from public.profiles where user_id=secondary_id)
     or not exists(select 1 from public.trip_drafts where id=draft and created_by=primary_id)
     or (select phone from public.profile_private where user_id=primary_id)<>'5551234567'

@@ -8,7 +8,7 @@ declare
   leader_id uuid := gen_random_uuid();
   admin_id uuid := gen_random_uuid();
   unrelated_id uuid := gen_random_uuid();
-  setup_role uuid := gen_random_uuid();
+  setup_role uuid;
   reader_role uuid := gen_random_uuid();
   unrelated_role uuid := gen_random_uuid();
   trip_id uuid := gen_random_uuid();
@@ -25,7 +25,7 @@ begin
   insert into auth.users(id,email) select id,id||'@example.test'
     from unnest(array[owner_id,member_id,leader_id,admin_id,unrelated_id]) id;
   insert into public.profiles(user_id,display_name) values(owner_id,'Creator') on conflict do nothing;
-  insert into public.admin_roles(id,key,name,is_super_admin) values(setup_role,'visibility_'||replace(setup_role::text,'-','_'),'Fixture creator',true);
+  select id into strict setup_role from public.admin_roles where is_super_admin;
   insert into public.admin_user_roles(user_id,role_id) values(owner_id,setup_role);
   insert into public.admin_roles(id,key,name) values
     (reader_role,'visibility_'||replace(reader_role::text,'-','_'),'Trip reader'),
@@ -117,6 +117,7 @@ begin
   delete from public.trip_leaders where user_id=admin_id;
   set local role authenticated;
   if not exists(select 1 from public.trips where id=trip_id) then raise exception 'Trips update admin lost access'; end if;
+  if not public.can_view_trip_private(trip_id,admin_id) then raise exception 'Trips update admin lost private access'; end if;
   reset role;
   delete from public.trip_leaders where user_id=leader_id;
   perform set_config('request.jwt.claim.sub',leader_id::text,true);

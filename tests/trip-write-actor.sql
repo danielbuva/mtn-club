@@ -50,6 +50,16 @@ begin
     denied := true;
   end;
   if not denied then raise exception 'Member promoted own trip'; end if;
+  -- A forged service JWT claim is not a trusted database service session.
+  perform set_config('request.jwt.claim.role', 'service_role', true);
+  begin
+    insert into public.trips(title, starts_at, created_by, is_official)
+    values('Forged service creator', now()+interval '2 days', creator, true);
+    raise exception 'Member forged a service actor';
+  exception when raise_exception then
+    if sqlerrm <> 'Trip creator must be the current actor.' then raise; end if;
+  end;
+  perform set_config('request.jwt.claim.role', 'authenticated', true);
   reset role;
   -- Even an inactive historical creator cannot block the current authorized admin.
   update public.membership_access_overrides set revoked_at = now(), revoked_by = admin_actor,

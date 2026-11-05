@@ -11,12 +11,15 @@ declare
   trip_ids uuid[];
   next_id uuid := gen_random_uuid();
   meetup_id uuid := gen_random_uuid();
+  hidden_id uuid := gen_random_uuid();
   h uuid := gen_random_uuid();
   before_analytics jsonb;
   before_overview jsonb;
   analytics jsonb;
   overview jsonb;
   filtered jsonb;
+  visible_overview jsonb;
+  visible_analytics jsonb;
   k text;
 begin
   insert into auth.users(id, email) values
@@ -94,7 +97,8 @@ begin
     select id, owner_id from unnest(member_ids) id;
 
   -- More than both the old overview's 100 trip limit and the API's 1000 row limit.
-  perform set_config('request.jwt.claim.sub', owner_id::text, true);
+  -- Seed system-owned trips without impersonating an end-user creator.
+  perform set_config('request.jwt.claim.sub', '', true);
   select array_agg(gen_random_uuid()) into trip_ids from generate_series(1, 1005);
   insert into public.trips(id, title, starts_at, ends_at, created_by, is_official, location_public, description_public, activity_tags)
     select id, 'Scale regression', now() + interval '2 days', now() + interval '3 days', null, false, 'Trailhead', 'Description', array['hiking', 'hiking', 'outdoor']
@@ -102,6 +106,7 @@ begin
   insert into public.club_hosts(id, public_name, club_title, is_active) values(h, 'Inactive regression host', 'Host', false);
   insert into public.trip_hosts(trip_id, host_id, credited_title) select id, h, 'Host' from unnest(trip_ids) id;
 
+  perform set_config('request.jwt.claim.sub', owner_id::text, true);
   set local role authenticated;
   overview := public.get_admin_overview_totals();
   perform set_config('request.jwt.claim.sub', analyst::text, true);
@@ -142,7 +147,8 @@ begin
     raise exception 'Analytics date range not respected';
   end if;
   reset role;
-  -- Next trip selection is global, excludes meetups, and reads only its hosts.
+  -- Next trip selection excludes meetups and reads only the selected trip's hosts.
+  perform set_config('request.jwt.claim.sub', '', true);
   insert into public.trips(id, title, starts_at, ends_at, is_official, activity_tags) values
     (meetup_id, 'Meetup', now() + interval '1 second', now() + interval '1 hour', true, array['Meetup']),
     (next_id, 'Next official trip', now() + interval '2 seconds', now() + interval '1 hour', true, array['hiking']);
@@ -156,6 +162,52 @@ begin
     raise exception 'Next trip or incomplete trip aggregation incorrect: %', overview;
   end if;
   reset role;
+  -- Neither dashboard capability exposes leaders-only counts, tags or nextTrip.
+  visible_overview := overview;
+  perform set_config('request.jwt.claim.sub', analyst::text, true);
+  set local role authenticated;
+  visible_analytics := public.get_admin_analytics_totals();
+  reset role;
+  perform set_config('request.jwt.claim.sub', '', true);
+  insert into public.trips(id, title, visibility, starts_at, ends_at, is_official, activity_tags)
+    values(hidden_id, 'Confidential leaders trip', 'leaders', now()+interval '1 second',
+      now()+interval '1 hour', true, array['confidential-activity']);
+  -- Assigned scope without an assignment must also stay closed.
+  insert into public.admin_role_grants(role_id, capability_key, scope) values
+    (overview_role, 'trips.read', 'assigned'), (analytics_role, 'trips.read', 'assigned');
+  perform set_config('request.jwt.claim.sub', owner_id::text, true);
+  set local role authenticated;
+  overview := public.get_admin_overview_totals();
+  perform set_config('request.jwt.claim.sub', analyst::text, true);
+  analytics := public.get_admin_analytics_totals();
+  reset role;
+  if overview <> visible_overview or analytics <> visible_analytics then
+    raise exception 'Unassigned dashboard role learned about a leaders trip';
+  end if;
+  insert into public.trip_leaders(trip_id,user_id) values(hidden_id,owner_id),(hidden_id,analyst);
+  perform set_config('request.jwt.claim.sub', owner_id::text, true);
+  set local role authenticated;
+  overview := public.get_admin_overview_totals();
+  perform set_config('request.jwt.claim.sub', analyst::text, true);
+  analytics := public.get_admin_analytics_totals();
+  reset role;
+  if (overview->>'upcomingTrips')::bigint <> (visible_overview->>'upcomingTrips')::bigint + 1
+    or overview->'nextTrip'->>'id' <> hidden_id::text
+    or (analytics->>'trips')::bigint <> (visible_analytics->>'trips')::bigint + 1
+    or not exists(select 1 from jsonb_array_elements(analytics->'tripActivities') a
+      where a->>'activity'='confidential-activity' and a->>'count'='1') then
+    raise exception 'Assigned dashboard role lost authorized leaders aggregates';
+  end if;
+  delete from public.trip_leaders where trip_id=hidden_id;
+  perform set_config('request.jwt.claim.sub', owner_id::text, true);
+  set local role authenticated;
+  overview := public.get_admin_overview_totals();
+  perform set_config('request.jwt.claim.sub', analyst::text, true);
+  analytics := public.get_admin_analytics_totals();
+  reset role;
+  if overview <> visible_overview or analytics <> visible_analytics then
+    raise exception 'Removed leaders retained aggregate access';
+  end if;
   -- Restricted and unauthenticated identities cannot call the RPCs either.
   insert into public.membership_account_restrictions(user_id, restriction, restricted_at)
     values (analyst, 'suspended', now());

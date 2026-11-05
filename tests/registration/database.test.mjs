@@ -17,12 +17,39 @@ let database
 const legacyVisibilityOwner = randomUUID()
 const legacyVisibilityTrip = randomUUID()
 const legacyVisibilityDraft = randomUUID()
+const legacyReceiptPrimary = randomUUID()
+const legacyReceiptSecondary = randomUUID()
+const legacyReceiptTrip = randomUUID()
+const legacyReceiptDraft = randomUUID()
 const literal = value => `'${String(value).replaceAll("'", "''")}'`
 function sql(query) {
   return databaseSql(query, database)
 }
 before(() => {
   database = createLocalDatabase((name, db) => {
+    if (name === '20261105130001_reconcile_security_fixes.sql') {
+      databaseSql(
+        `insert into auth.users(id,email) values
+          ('${legacyReceiptPrimary}','${legacyReceiptPrimary}@example.test'),
+          ('${legacyReceiptSecondary}','${legacyReceiptSecondary}@example.test');
+        insert into public.profiles(user_id,display_name) values
+          ('${legacyReceiptPrimary}','Retained publisher'),('${legacyReceiptSecondary}','Merged publisher') on conflict do nothing;
+        insert into public.admin_user_roles(user_id,role_id)
+          select '${legacyReceiptPrimary}',id from public.admin_roles where is_super_admin;
+        insert into public.trips(id,title,created_by,visibility,starts_at,ends_at)
+          values('${legacyReceiptTrip}','Legacy publication receipt','${legacyReceiptSecondary}','leaders',now()+interval '2 days',now()+interval '3 days');
+        insert into trip_write_private.draft_publications(draft_id,draft_owner_id,published_by,trip_id)
+          values('${legacyReceiptDraft}','${legacyReceiptSecondary}','${legacyReceiptSecondary}','${legacyReceiptTrip}');
+        begin;
+        set local "request.jwt.claim.role"='service_role';
+        set local role service_role;
+        select public.merge_accounts('${legacyReceiptPrimary}','${legacyReceiptPrimary}','${legacyReceiptSecondary}',false);
+        commit;
+        delete from auth.users where id='${legacyReceiptSecondary}';
+        select public.complete_account_merge('${legacyReceiptPrimary}','${legacyReceiptPrimary}','${legacyReceiptSecondary}');`,
+        db,
+      )
+    }
     if (name === '20261105040001_atomic_account_merge.sql') {
       // This fixed container runs Auth without Storage. Minimal metadata tables
       // exercise the account merge's Storage ownership and stale-session guards.
@@ -358,6 +385,35 @@ test('legacy minimal trips and drafts migrate to leaders and reject future minim
 })
 test('atomic account merge transfers ownership, rolls back failures, and resumes auth cleanup', () => {
   sql(readFileSync(new URL('../account-merge.sql', import.meta.url), 'utf8'))
+})
+test('account merge preserves leaders access, publication receipts, signup checkpoints and renewal terms without trip authority', () => {
+  sql(
+    readFileSync(
+      new URL('../security-reconciliation.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
+test('reconciliation repairs receipts from completed legacy merges and archives their attribution', async () => {
+  assert.equal(
+    sql(`select count(*) from trip_write_private.draft_publications
+      where draft_id='${legacyReceiptDraft}' and draft_owner_id='${legacyReceiptPrimary}' and published_by='${legacyReceiptPrimary}'`),
+    '1',
+  )
+  assert.equal(
+    sql(`select count(*) from public.account_merge_jobs where secondary_user_id='${legacyReceiptSecondary}' and status='completed'
+      and secondary_snapshot->'draft_publications'->0->>'published_by'='${legacyReceiptSecondary}'
+      and counts->>'secondary_draft_publications_draft_owner_id'='1'
+      and counts->>'secondary_draft_publications_published_by'='1'`),
+    '1',
+  )
+  assert.equal(
+    await asUser(
+      legacyReceiptPrimary,
+      `select to_jsonb(public.get_published_trip_for_draft('${legacyReceiptDraft}'))`,
+    ),
+    legacyReceiptTrip,
+  )
 })
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
