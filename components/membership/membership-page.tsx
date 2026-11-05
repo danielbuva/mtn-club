@@ -1,13 +1,16 @@
 import { ArrowRight, BadgeCheck, Clock3, ShieldAlert } from 'lucide-react'
 import Link from 'next/link'
-import { claimZelleMembershipPayment } from '@/app/(site)/membership/actions'
 import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { PublicShell } from '@/components/landing/public-shell'
-import { Button } from '@/components/ui/button'
+import { ZellePaymentClaimForm } from '@/components/membership/zelle-payment-claim-form'
 import type { Viewer } from '@/lib/auth/viewer'
 import { ZELLE_PHONE_DISPLAY } from '@/lib/constants'
 import type { MembershipAccount } from '@/lib/memberships/account'
 import { MEMBERSHIP_INTEREST_OPTIONS } from '@/lib/memberships/application-options'
+import {
+  getMembershipPaymentState,
+  getMembershipSummary,
+} from '@/lib/memberships/payment-state'
 
 const formatDateTime = (value: string) =>
   new Intl.DateTimeFormat('en-US', {
@@ -136,12 +139,9 @@ function SignedInMembershipPage({
   account: MembershipAccount | null
   signedIn: boolean
 }) {
-  const application = account?.schemaReady ? account.application : null
-  const showZelleInstructions = Boolean(
-    account?.schemaReady &&
-      account.restriction === 'normal' &&
-      !application?.duesPaymentClaimed &&
-      !account.accessActive,
+  const paymentState = getMembershipPaymentState(account)
+  const showZelleInstructions = ['initial', 'renewal', 'rejected'].includes(
+    paymentState,
   )
 
   return (
@@ -162,7 +162,7 @@ function SignedInMembershipPage({
             Membership status.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#211D18]/70">
-            {getSignedInSummary(account)}
+            {getMembershipSummary(account)}
           </p>
         </div>
       </section>
@@ -175,36 +175,6 @@ function SignedInMembershipPage({
       </section>
     </PublicShell>
   )
-}
-
-function getSignedInSummary(account: MembershipAccount | null) {
-  if (!account?.schemaReady) {
-    return 'We could not load your membership status right now.'
-  }
-  if (account.restriction !== 'normal') {
-    return `Your account is ${account.restriction}.`
-  }
-  if (account.accessActive) {
-    return 'Your membership is active.'
-  }
-  if (!account.application) {
-    return account.latestZelleStatus === 'rejected'
-      ? 'Leadership could not match your dues payment. Contact the club to resolve it.'
-      : 'Your account is awaiting dues payment confirmation by leadership.'
-  }
-  if (
-    account.application.ageStatus === 'minor' &&
-    account.application.guardianConsent === 'pending'
-  ) {
-    return 'Your form is complete. Guardian consent is still required before leadership can activate your membership.'
-  }
-  if (account.application.duesPaymentClaimed) {
-    return 'Leadership is confirming your dues.'
-  }
-  if (account.latestZelleStatus === 'rejected') {
-    return 'Leadership could not match the previous payment claim. You can report a new payment after checking the Zelle details.'
-  }
-  return 'Your form is complete. Send your dues to receive full membership access.'
 }
 
 function ZellePanel() {
@@ -270,7 +240,9 @@ function MembershipStatus({
     )
   }
 
-  if (account.accessActive) {
+  const paymentState = getMembershipPaymentState(account)
+
+  if (paymentState === 'active') {
     return (
       <StatusBox icon={BadgeCheck} title="Membership active">
         {account.accessExpiresAt
@@ -280,7 +252,22 @@ function MembershipStatus({
     )
   }
 
-  if (!account.application) {
+  if (paymentState === 'withdrawn' || paymentState === 'activation') {
+    return (
+      <StatusBox
+        icon={ShieldAlert}
+        title={
+          paymentState === 'withdrawn'
+            ? 'Application withdrawn'
+            : 'Activation needed'
+        }
+      >
+        {getMembershipSummary(account)}
+      </StatusBox>
+    )
+  }
+
+  if (paymentState === 'incomplete') {
     return (
       <StatusBox
         icon={Clock3}
@@ -293,7 +280,7 @@ function MembershipStatus({
         <p>
           {account.latestZelleStatus === 'rejected'
             ? 'Leadership could not match your payment. Contact the club with your payment details.'
-            : 'Your account is in the membership review queue. Send your dues through Zelle and leadership will activate your membership after confirming payment.'}
+            : 'Complete your membership application before reporting a dues payment.'}
         </p>
         <StatusLink href="/membership-sign-up">
           Complete your application
@@ -302,10 +289,7 @@ function MembershipStatus({
     )
   }
 
-  if (
-    account.application.ageStatus === 'minor' &&
-    account.application.guardianConsent === 'pending'
-  ) {
+  if (paymentState === 'guardian') {
     return (
       <StatusBox icon={ShieldAlert} title="Guardian consent needed">
         A parent or guardian must provide consent before leadership can confirm
@@ -314,7 +298,7 @@ function MembershipStatus({
     )
   }
 
-  if (account.application.duesPaymentClaimed) {
+  if (paymentState === 'pending') {
     return (
       <StatusBox icon={Clock3} title="Confirmation pending">
         Leadership is checking your Zelle payment. Full member actions remain
@@ -323,35 +307,30 @@ function MembershipStatus({
     )
   }
 
-  if (account.latestZelleStatus === 'rejected') {
+  if (paymentState === 'rejected') {
     return (
       <StatusBox icon={ShieldAlert} title="Payment not matched">
         <p>
           Check the Zelle recipient and report the payment again when ready.
         </p>
-        <form action={claimZelleMembershipPayment} className="mt-4">
-          <Button
-            type="submit"
-            className="rounded-none bg-[#211D18] text-[#FFECA2]"
-          >
-            I sent the dues
-          </Button>
-        </form>
+        <ZellePaymentClaimForm />
       </StatusBox>
     )
   }
 
   return (
-    <StatusBox icon={Clock3} title="Form received">
-      <p>Send the $25 dues through Zelle, then let leadership know.</p>
-      <form action={claimZelleMembershipPayment} className="mt-4">
-        <Button
-          type="submit"
-          className="rounded-none bg-[#211D18] text-[#FFECA2]"
-        >
-          I sent the dues
-        </Button>
-      </form>
+    <StatusBox
+      icon={Clock3}
+      title={
+        paymentState === 'renewal' ? 'Membership expired' : 'Form received'
+      }
+    >
+      <p>
+        {paymentState === 'renewal'
+          ? 'Send a new $25 payment through Zelle, then report it below. Leadership will confirm a new 12-month term.'
+          : 'Send the $25 dues through Zelle, then let leadership know.'}
+      </p>
+      <ZellePaymentClaimForm renewal={paymentState === 'renewal'} />
     </StatusBox>
   )
 }

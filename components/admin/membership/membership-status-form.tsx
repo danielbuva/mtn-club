@@ -56,7 +56,7 @@ export function MembershipStatusForm({
             <>
               <option value="accepted">Payment confirmed</option>
               <option value="pending">Payment not yet received</option>
-              <option value="rejected">Application rejected</option>
+              <option value="rejected">Payment not matched</option>
             </>
           ) : null}
           {canGrantComplimentary ? (

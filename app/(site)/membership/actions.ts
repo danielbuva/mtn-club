@@ -16,13 +16,39 @@ export type CheckoutActionResult =
 
 const CHECKOUT_LIFETIME_SECONDS = 30 * 60
 
-export async function claimZelleMembershipPayment() {
-  const supabase = await createClient()
-  const { error } = await supabase.rpc('claim_zelle_membership_payment')
-  if (error) throw error
-  revalidatePath('/membership')
-  revalidatePath('/admin')
-  revalidatePath('/admin/membership')
+export type ZelleClaimState = {
+  status: 'idle' | 'success' | 'error'
+  message: string
+}
+
+export async function claimZelleMembershipPayment(
+  _previousState: ZelleClaimState,
+  _formData: FormData,
+): Promise<ZelleClaimState> {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.rpc('claim_zelle_membership_payment')
+    if (error) {
+      return {
+        status: 'error',
+        message: `${error.message}. Contact club leadership if you need help.`,
+      }
+    }
+    revalidatePath('/membership')
+    revalidatePath('/admin')
+    revalidatePath('/admin/membership')
+    return {
+      status: 'success',
+      message: 'Your payment claim is ready for review.',
+    }
+  } catch (error: unknown) {
+    console.error('Unable to report Zelle membership payment:', error)
+    return {
+      status: 'error',
+      message:
+        'Your payment claim could not be saved. Try again or contact club leadership.',
+    }
+  }
 }
 
 export async function createMembershipCheckout(): Promise<CheckoutActionResult> {

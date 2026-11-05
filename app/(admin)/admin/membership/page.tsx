@@ -174,7 +174,7 @@ async function AdminMembershipPageContent({
           <MembershipReviewPanel
             applications={reviewQueues.archived}
             payments={payments}
-            emptyMessage="No rejected applications are archived."
+            emptyMessage="No completed or rejected applications are archived."
             {...reviewPanelPermissions}
           />
         }

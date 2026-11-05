@@ -132,6 +132,93 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
 })
+test('existing Stripe checkout, refund and dispute regressions remain supported', () => {
+  const member = randomUUID()
+  sql(`insert into auth.users(id,email,email_confirmed_at) values('${member}','${member}@example.test',now());
+    insert into public.account_age_declarations(user_id,is_18_or_older) values('${member}',true);
+    insert into public.membership_access_overrides(user_id,starts_at,ends_at,reason,granted_by)
+      values('${member}',now()-interval '1 year',now()-interval '1 day','Legacy Stripe regression fixture','${member}');`)
+  sql(
+    readFileSync(
+      new URL('../membership-integration.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
+for (const [name, fixture] of [
+  [
+    'all membership activation paths enforce eligibility',
+    'membership-activation-eligibility.sql',
+  ],
+  [
+    'expired members renew with new claims and new terms',
+    'membership-renewal.sql',
+  ],
+  [
+    'Stripe activation and duplicate review preserve payment-backed terms',
+    'membership-stripe-activation.sql',
+  ],
+  [
+    'account-only and complimentary membership reviews remain supported',
+    'account-membership-review.sql',
+  ],
+]) {
+  test(name, () =>
+    sql(readFileSync(new URL(`../${fixture}`, import.meta.url), 'utf8')),
+  )
+}
+test('competing renewal claims and confirmations create exactly one new term', async () => {
+  const f = fixture()
+  const member = f.users[0]
+  sql(`update auth.users set email_confirmed_at=now() where id='${member}';
+    insert into public.membership_zelle_payments(id,user_id,amount_cents,status,reviewed_by,reviewed_at,created_at)
+      values('${randomUUID()}','${member}',2500,'confirmed','${f.owner}',now()-interval '2 years',now()-interval '2 years');
+    insert into public.membership_entitlements(user_id,zelle_payment_id,starts_at,ends_at)
+      select '${member}',id,now()-interval '2 years',now()-interval '1 year'
+      from public.membership_zelle_payments where user_id='${member}';`)
+  const claims = await Promise.all(
+    Array.from({ length: 4 }, () =>
+      asUser(
+        member,
+        'select to_jsonb(public.claim_zelle_membership_payment())',
+      ),
+    ),
+  )
+  assert.equal(new Set(claims).size, 1)
+  const confirmations = await Promise.all(
+    Array.from({ length: 4 }, () =>
+      run('docker', [
+        'exec',
+        container,
+        'psql',
+        '-U',
+        'postgres',
+        '-d',
+        database,
+        '-X',
+        '-qAt',
+        '-v',
+        'ON_ERROR_STOP=1',
+        '-c',
+        `begin; set local role service_role; set local "request.jwt.claim.role"='service_role'; select public.review_zelle_membership_payment('${claims[0]}','${f.owner}','confirmed'); commit;`,
+      ]),
+    ),
+  )
+  assert.ok(confirmations.every(result => result.stdout.trim() === 't'))
+  assert.equal(
+    sql(
+      `select count(*) from public.membership_entitlements where user_id='${member}'`,
+    ),
+    '2',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.membership_entitlements where zelle_payment_id='${claims[0]}'`,
+    ),
+    '1',
+  )
+})
+
 test('annual waiver signing at 23:30 Pacific covers a same-evening trip', () => {
   sql(
     readFileSync(
