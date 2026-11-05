@@ -23,9 +23,11 @@ const notification = {
 test('offer email escapes user content and links to review, never an acceptance command', () => {
   const email = registrationEmail(notification, 'https://club.example.test')
   assert.ok(email.html.includes('&lt;img'))
-  assert.ok(!email.html.includes('<img'))
+  assert.ok(!email.html.includes('<img src=x'))
   assert.ok(email.text.includes(`/trips/${tripId}/rsvp`))
-  assert.ok(!email.html.includes('?'))
+  const anchors = email.html.match(/<a\b[^>]*href="[^"]*"/g) ?? []
+  assert.ok(anchors.some(anchor => anchor.includes(`/trips/${tripId}/rsvp"`)))
+  assert.ok(anchors.every(anchor => !/href="[^"]*\?/.test(anchor)))
   assert.ok(email.text.includes('America/Los_Angeles'))
 })
 test('email origins cannot use script URLs', () => {

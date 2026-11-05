@@ -176,3 +176,7 @@ Earlier, after approval of the confirmation policy and the Resend switch, the wo
 - [ ] Tests, typecheck, production build pass; no new lint or hydration warnings. Baseline has six unrelated existing image warnings.
 
 References: [Supabase CAPTCHA](https://supabase.com/docs/guides/auth/auth-captcha), [SMTP](https://supabase.com/docs/guides/auth/auth-smtp), [email templates](https://supabase.com/docs/guides/auth/auth-email-templates), [protected metadata](https://supabase.com/docs/guides/database/postgres/row-level-security), [admin CAPTCHA exemption](https://github.com/supabase/auth/blob/master/internal/api/middleware.go), [Turnstile testing](https://developers.cloudflare.com/turnstile/troubleshooting/testing/).
+
+## Email design — November 5, 2026
+
+Auth and trip-notification emails share one design system in `lib/email/` (shell, blocks, tokens) and follow `.claude/skills/mtn-club-design`. The four Supabase templates are **generated**: edit `lib/email/auth-templates.ts`, run `node scripts/build-auth-emails.ts`, then paste each file into the matching Supabase dashboard template (subjects are unchanged). `tests/auth-email-brand.test.mjs` fails if the committed templates are stale. The header uses the official red badge at `{{ .SiteURL }}/email/club-badge-v1.png`; deploy the site before publishing templates that reference a new image. The badge is email-only for now and is not used on the site.
