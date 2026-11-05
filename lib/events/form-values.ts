@@ -78,9 +78,6 @@ export function normalizeEventValues(
     title: values.title.trim(),
     maxParticipants: noLimit ? '' : values.maxParticipants,
     isOfficial: canChooseOfficial && values.isOfficial,
-    visibility:
-      !canChooseOfficial && values.visibility === 'leaders_only'
-        ? 'members'
-        : values.visibility,
+    visibility: values.visibility,
   }
 }

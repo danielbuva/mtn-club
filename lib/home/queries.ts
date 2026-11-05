@@ -2,7 +2,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { addMonths } from 'date-fns'
 import { cacheTag } from 'next/cache'
 import { AUTH_CACHE_TAG } from '@/lib/auth/tags'
-import { fetchTripsInRange } from '@/lib/events/queries'
+import {
+  fetchPublicTripsInRange,
+  fetchTripsInRange,
+} from '@/lib/events/queries'
 import type { CalendarTrip } from '@/lib/events/types'
 import { homeTripRowToCalendarTrip } from '@/lib/home/mappers'
 import type { HomeTripRow } from '@/lib/home/types'
@@ -24,8 +27,11 @@ async function fetchHomeTripsInRange(
   client: SupabaseClient<Database>,
   range: DateRange,
   limit: number,
+  publicOnly = false,
 ): Promise<HomeTripRow[]> {
-  const events = await fetchTripsInRange(client, range)
+  const events = await (publicOnly
+    ? fetchPublicTripsInRange(client, range)
+    : fetchTripsInRange(client, range))
   return events.slice(0, limit)
 }
 
@@ -45,7 +51,7 @@ export async function getHomeTripsPublicCached({
   cacheTag(AUTH_CACHE_TAG)
   const supabase = createPublicClient()
   const range = resolveHomeRange(monthsAhead)
-  const events = await fetchHomeTripsInRange(supabase, range, limit)
+  const events = await fetchHomeTripsInRange(supabase, range, limit, true)
   return events.map(homeTripRowToCalendarTrip)
 }
 

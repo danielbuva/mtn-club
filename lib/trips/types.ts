@@ -36,7 +36,7 @@ export type TripListItem = {
   lifecycleStatus?: 'published' | 'canceled' | 'archived'
   cancellationReason?: string | null
   status: TripStatus
-  visibility?: 'public' | 'members' | 'minimal'
+  visibility?: 'public' | 'members' | 'minimal' | 'leaders'
   waitlistEnabled?: boolean
   currentUserRsvp?: TripRsvpChoice
   registrationState?: TripRegistrationSnapshot['state']
@@ -114,6 +114,6 @@ export type TripDetail = {
   registrationState?: TripRegistrationSnapshot['state']
   registrationActionRequired?: boolean
   canManageRegistration?: boolean
-  visibility?: 'public' | 'members' | 'minimal'
+  visibility?: 'public' | 'members' | 'minimal' | 'leaders'
   waitlistEnabled?: boolean
 }

@@ -44,11 +44,15 @@ export function baselinePlan() {
   }
 }
 
-export function applyBaseline(sql) {
+export function applyBaseline(sql, beforeMigration) {
   const plan = baselinePlan()
   sql(plan.schema)
   sql(plan.reference)
   // Replay every migration after the checkpoint, including bootstrap reconciliation.
-  for (const migration of plan.pending) sql(migration.sql)
+  for (const migration of plan.pending) {
+    // Tests may seed legacy rows that only a specific migration transforms.
+    beforeMigration?.(migration.name)
+    sql(migration.sql)
+  }
   return plan
 }

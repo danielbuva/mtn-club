@@ -37,7 +37,7 @@ export function sql(query, database) {
     .trim()
 }
 
-export function createLocalDatabase() {
+export function createLocalDatabase(beforeMigration) {
   const database = `mtn_replay_${randomUUID().replaceAll('-', '_')}`
   const listPath = `/tmp/${database}.list`
   sql(`create database ${database} template template0`, 'postgres')
@@ -93,7 +93,10 @@ export function createLocalDatabase() {
       'create schema if not exists public authorization postgres; alter schema public owner to postgres',
       database,
     )
-    const plan = applyBaseline(query => sql(query, database))
+    const plan = applyBaseline(
+      query => sql(query, database),
+      beforeMigration && (name => beforeMigration(name, database)),
+    )
     return { database, plan }
   } catch (error) {
     dropLocalDatabase(database)

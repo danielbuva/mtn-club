@@ -275,10 +275,30 @@ Coverage: `tests/trip-edit-dates.test.mjs` and `tests/trip-editing.sql`.
 
 `/schedule` reads published and canceled official events directly from `trips`,
 with current dates, titles, host credits, and cancellation reasons. Only public
-and minimal-visibility events appear. Archived, deleted, and unofficial events
+events appear. Archived, deleted, and unofficial events
 are omitted. Existing Fall 2026 schedule URLs resolve to the live event and
 return not found when it is removed. The calendar also uses only live event
 records, and `/trips` is no longer limited to the original Fall 2026 date range.
 Create, edit, official-status, and lifecycle actions refresh all three views.
 Database failures show retryable errors instead of a stale static schedule.
 No database migration or new environment variable is required.
+
+### Leaders-only trip visibility
+
+Apply `20261105010001` and `20261105010002` in order, as separate migration
+transactions, before deploying the visibility mapping. Invalidate existing public
+trip caches during deployment so pre-migration data is no longer served.
+`leaders` trips are readable only by their assigned leaders and admins with
+`trips.read` or `trips.update` for that trip. Membership, creator status, unrelated
+admin capabilities, provisional access, and an existing RSVP do not grant access.
+The public schedule, calendar, homepage, and gallery omit these trips. Member
+queries use the viewer’s RLS permissions, including assigned leaders.
+
+Published drafts are deleted, and both the form and drafts previously stored
+“Leaders only” as `minimal`, so historical intent cannot be recovered reliably.
+The migration conservatively restricts **all** existing `minimal` trips and drafts
+to `leaders` and rejects future `minimal` writes. Review any legacy trips intended
+to be public and explicitly republish them as `public`. Registration/profile RPCs
+and linked gallery metadata enforce the same restriction. Existing public gallery
+asset URLs cannot be revoked by metadata RLS; review previously published images
+for affected trips separately. No sitemap, ICS, or feed endpoint exists in this repo.
