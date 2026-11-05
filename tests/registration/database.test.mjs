@@ -383,6 +383,14 @@ test('legacy minimal trips and drafts migrate to leaders and reject future minim
     `delete from public.trip_drafts where id='${legacyVisibilityDraft}'; delete from public.trips where id='${legacyVisibilityTrip}'; delete from auth.users where id='${legacyVisibilityOwner}'`,
   )
 })
+test('account merge moves a complimentary application whose override is unique', () => {
+  sql(
+    readFileSync(
+      new URL('../account-merge-application-override.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
 test('atomic account merge transfers ownership, rolls back failures, and resumes auth cleanup', () => {
   sql(readFileSync(new URL('../account-merge.sql', import.meta.url), 'utf8'))
 })

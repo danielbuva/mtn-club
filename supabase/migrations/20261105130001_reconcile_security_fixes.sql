@@ -329,6 +329,12 @@ begin
       merged:=merged||jsonb_build_object('email',coalesce((select email from auth.users where id=p_primary),left_row->>'email',right_row->>'email'),
         'subscribed',false,'subscribed_at',null,'unsubscribed_at',now());
     end if;
+    if item.table_name='membership_applications' then
+      -- membership_access_override_id is unique: release the source row's
+      -- reference before the retained row takes it over.
+      update public.membership_applications set membership_access_override_id=null
+        where user_id=p_secondary and membership_access_override_id is not null;
+    end if;
     select string_agg(format('%I=excluded.%I',attname,attname),',') into assignments
       from pg_attribute where attrelid=format('public.%I',item.table_name)::regclass and attnum>0 and not attisdropped and attname<>'user_id';
     execute format('insert into public.%1$I select * from jsonb_populate_record(null::public.%1$I,$1) on conflict(user_id) do update set %2$s',item.table_name,assignments) using merged;
