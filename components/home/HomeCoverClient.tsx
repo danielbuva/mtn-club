@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { covers } from '@/components/home/covers'
 import useIsMd from '@/hooks/use-is-md'
 import { cn } from '@/lib/utils'
@@ -16,16 +16,6 @@ export function HomeCoverClient({
   const loadedIndexesRef = useRef<Set<number>>(new Set())
   const isMd = useIsMd()
   const cover = covers[coverIndex] ?? covers[0]
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    covers.forEach(entry => {
-      const url = entry?.src?.src
-      if (!url) return
-      const img = new window.Image()
-      img.src = url
-    })
-  }, [])
 
   const setCover = (nextIndex: number) => {
     // If we've already loaded this cover before, don't fade to black.

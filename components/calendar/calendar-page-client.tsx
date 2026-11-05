@@ -36,6 +36,7 @@ import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 import type { CalendarYearData, ViewerKey } from '@/lib/events/calendar'
 import { getSingleTripForDay } from '@/lib/events/calendar-day-selection'
 import { getClubCalendarDate, parseCalendarDate } from '@/lib/events/formatters'
+import { mergeCalendarTrips } from '@/lib/events/merge-calendar-trips'
 import type { CalendarTrip } from '@/lib/events/types'
 import { cn } from '@/lib/utils'
 
@@ -217,7 +218,10 @@ export function CalendarPageClient({
   )
 
   const allTrips = useMemo(
-    () => loadedYears.flatMap(year => yearDataByYear[year]?.trips ?? []),
+    () =>
+      mergeCalendarTrips(
+        loadedYears.map(year => yearDataByYear[year]?.trips ?? []),
+      ),
     [loadedYears, yearDataByYear],
   )
 
