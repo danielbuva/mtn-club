@@ -2239,6 +2239,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      merge_accounts: {
+        Args: {
+          p_actor: string
+          p_primary: string
+          p_secondary: string
+          p_dry_run?: boolean
+        }
+        Returns: Json
+      }
+      complete_account_merge: {
+        Args: { p_actor: string; p_primary: string; p_secondary: string }
+        Returns: boolean
+      }
       get_active_announcement: {
         Args: never
         Returns: {

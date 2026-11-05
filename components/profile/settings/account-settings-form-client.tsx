@@ -178,7 +178,7 @@ export function AccountSettingsFormClient({
         dryRun
           ? 'Dry run complete. Review affected row counts below.'
           : payload.applied
-            ? 'Merge complete. Secondary account was soft-deleted.'
+            ? 'Merge complete. Secondary account was deleted.'
             : 'Merge request completed.',
       )
     } catch (error) {

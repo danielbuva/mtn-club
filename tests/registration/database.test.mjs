@@ -171,6 +171,9 @@ test('legacy minimal trips and drafts migrate to leaders and reject future minim
     `delete from public.trip_drafts where id='${legacyVisibilityDraft}'; delete from public.trips where id='${legacyVisibilityTrip}'; delete from auth.users where id='${legacyVisibilityOwner}'; delete from public.admin_roles where id='${legacyVisibilityOwner}'`,
   )
 })
+test('atomic account merge transfers ownership, rolls back failures, and resumes auth cleanup', () => {
+  sql(readFileSync(new URL('../account-merge.sql', import.meta.url), 'utf8'))
+})
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
   const results = await Promise.all(f.users.map(user => register(f.trip, user)))
@@ -445,7 +448,7 @@ test('expired worker leases retry with the same job identity and exhausted lease
   )
 })
 
-test('registration racing an account merge cannot leave a seat on the merged account', async () => {
+test('registration racing an atomic account merge cannot leave a seat on the merged account', async () => {
   const f = fixture()
   const secondary = f.users[0]
   const primary = f.users[1]
@@ -463,7 +466,7 @@ test('registration racing an account merge cannot leave a seat on the merged acc
       '-v',
       'ON_ERROR_STOP=1',
       '-c',
-      `select public.merge_trip_registrations('${primary}','${secondary}')`,
+      `select public.merge_accounts('${f.owner}','${primary}','${secondary}',false)`,
     ]),
   ])
   assert.equal(
