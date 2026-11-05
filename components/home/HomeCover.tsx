@@ -33,9 +33,14 @@ export function HomeCoverNavigation({
 }) {
   if (!isAuthenticated) {
     return (
-      <Link href="/welcome" className={primaryLinkClass}>
-        Welcome →
-      </Link>
+      <>
+        <Link href="/welcome" className={primaryLinkClass}>
+          Welcome →
+        </Link>
+        <Link href="/auth/login" className={secondaryLinkClass}>
+          Log in →
+        </Link>
+      </>
     )
   }
 
