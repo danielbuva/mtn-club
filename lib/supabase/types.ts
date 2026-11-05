@@ -2416,7 +2416,6 @@ export type Database = {
       has_provisional_membership_access: { Args: never; Returns: boolean }
       is_active_member: { Args: { p_uid: string }; Returns: boolean }
       is_banned: { Args: { p_uid: string }; Returns: boolean }
-      is_staff_or_admin: { Args: { p_uid: string }; Returns: boolean }
       is_super_admin: { Args: { p_uid: string }; Returns: boolean }
       process_membership_checkout_event: {
         Args: {
