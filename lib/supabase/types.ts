@@ -2268,6 +2268,34 @@ export type Database = {
         }
         Returns: string
       }
+      get_published_trip_for_draft: {
+        Args: { p_draft_id: string }
+        Returns: string | null
+      }
+      publish_trip_draft: {
+        Args: {
+          p_draft_id: string
+          p_data: Json
+          p_meetup_point: string | null
+          p_public_host_ids: string[]
+          p_leader_user_ids: string[]
+          p_risk_statements: string[]
+          p_waiver_activities: string[]
+          p_registration_enabled: boolean
+          p_collect_transportation: boolean
+        }
+        Returns: string
+      }
+      save_trip_detail_edits: {
+        Args: {
+          p_trip_id: string
+          p_data: Json
+          p_meetup_point: string | null
+          p_public_host_ids?: string[]
+          p_leader_user_ids?: string[]
+        }
+        Returns: string
+      }
       get_active_announcement: {
         Args: never
         Returns: {

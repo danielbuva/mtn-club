@@ -66,9 +66,18 @@ export function EventForm(props: EventFormProps) {
         return 'Draft saved. You can come back to it from your drafts.'
       }}
       onPublish={async payload => {
+        // Retain the draft key before publication so failed requests can retry safely.
+        let sourceDraftId = draftId.current
+        if (!sourceDraftId) {
+          const draft = await saveTripDraftAction(payload)
+          sourceDraftId = draft.id
+          draftId.current = draft.id
+          router.replace(`${pathname}?draft=${draft.id}`, { scroll: false })
+        }
+        if (!sourceDraftId) throw new Error('Save a draft before publishing.')
         const result = await publishTripFormAction({
           ...payload,
-          sourceDraftId: draftId.current,
+          sourceDraftId,
         })
         if (result.configurationPending) {
           draftId.current = undefined
