@@ -3,6 +3,19 @@ import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
+const templateNames = [
+  'confirmation',
+  'recovery',
+  'verification-code',
+  'password-changed',
+  'invite',
+  'email-change',
+  'reauthentication',
+  'email-changed',
+  'identity-linked',
+  'identity-unlinked',
+]
+
 test('email PNG stays in sync with the landing-page wordmark', () => {
   execFileSync(
     process.execPath,
@@ -22,12 +35,7 @@ test('auth templates are generated from lib/email/auth-templates.ts', () => {
 })
 
 test('all auth templates use the public club badge with fallback text', () => {
-  for (const name of [
-    'confirmation',
-    'recovery',
-    'verification-code',
-    'password-changed',
-  ]) {
+  for (const name of templateNames) {
     const html = readFileSync(
       new URL(`../supabase/templates/${name}.html`, import.meta.url),
       'utf8',
@@ -43,12 +51,7 @@ test('all auth templates use the public club badge with fallback text', () => {
 })
 
 test('auth email layout survives removal of document-level email styles', () => {
-  for (const name of [
-    'confirmation',
-    'recovery',
-    'verification-code',
-    'password-changed',
-  ]) {
+  for (const name of templateNames) {
     const html = readFileSync(
       new URL(`../supabase/templates/${name}.html`, import.meta.url),
       'utf8',

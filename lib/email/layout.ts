@@ -15,6 +15,10 @@ export type EmailLayout = {
   reason: string
   siteUrl: string
   footerLinks?: string
+  /** Club mailing address, required on bulk mail such as announcements. */
+  postalAddress?: boolean
+  /** Red eyebrow for safety and schedule alerts. */
+  urgent?: boolean
 }
 
 const d = t.dark
@@ -29,7 +33,7 @@ u+.body a.em-plain,#MessageViewBody a.em-plain{color:inherit;text-decoration:non
 @media (prefers-color-scheme:dark){
 body,.body,.em-paper{background-color:${d.paper}!important}
 .em-card{background-color:${d.card}!important;border-color:${d.rule}!important;border-top-color:${t.red}!important}
-.em-card h1,.em-card p,.em-card td,.em-card a,.em-card span{color:${d.text}!important}
+.em-card h1,.em-card p,.em-card td,.em-card a,.em-card span,.em-card div{color:${d.text}!important}
 .em-card .em-muted,.em-foot p,.em-foot a{color:${d.muted}!important}
 .em-card .em-hair{border-top-color:${d.rule}!important}
 .em-card .em-frame{border-top-color:${d.text}!important;border-bottom-color:${d.text}!important}
@@ -42,6 +46,9 @@ body,.body,.em-paper{background-color:${d.paper}!important}
 .em-card .em-tag-positive{background-color:${t.highlight}!important;color:${t.ink}!important}
 .em-card .em-tag-pending{border-color:${d.text}!important}
 .em-card .em-tag-negative{color:${d.red}!important;border-color:${d.red}!important}
+.em-card .em-urgent{color:${d.red}!important}
+.em-card .em-notice{border-color:${d.red}!important}
+.em-card .em-story-title{color:${d.text}!important}
 }
 [data-ogsb] body,[data-ogsb] .body,[data-ogsb] .em-paper{background-color:${d.paper}!important}
 [data-ogsb] .em-card{background-color:${d.card}!important;border-color:${d.rule}!important;border-top-color:${t.red}!important}
@@ -50,7 +57,7 @@ body,.body,.em-paper{background-color:${d.paper}!important}
 [data-ogsb] .em-card .em-callout,[data-ogsb] .em-card .em-code{background-color:${d.paper}!important;border:1px solid ${d.rule}!important}
 [data-ogsb] .em-card .em-outline,[data-ogsb] .em-card .em-tag-pending{border-color:${d.text}!important}
 [data-ogsb] .em-card .em-button-cell,[data-ogsb] .em-card .em-button,[data-ogsb] .em-card .em-tag-positive{background-color:${t.highlight}!important}
-[data-ogsc] .em-card h1,[data-ogsc] .em-card p,[data-ogsc] .em-card td,[data-ogsc] .em-card a,[data-ogsc] .em-card span{color:${d.text}!important}
+[data-ogsc] .em-card h1,[data-ogsc] .em-card p,[data-ogsc] .em-card td,[data-ogsc] .em-card a,[data-ogsc] .em-card span,[data-ogsc] .em-card div{color:${d.text}!important}
 [data-ogsc] .em-card .em-button,[data-ogsc] .em-card .em-tag-positive{color:${t.ink}!important}
 [data-ogsc] .em-card .em-callout-value{color:${t.highlight}!important}
 [data-ogsc] .em-card .em-tag-negative{color:${d.red}!important;border-color:${d.red}!important}
@@ -79,14 +86,14 @@ export function renderEmail(email: EmailLayout): string {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;margin:0 auto;border-collapse:collapse">
 <tr><td style="padding:32px 4px 20px"><a href="${site}" style="text-decoration:none"><img src="${site}/email/club-badge-v1.png" width="168" height="88" alt="UNLV Mountain Club" style="display:block;width:168px;height:auto;border:0;font-family:${t.body};font-size:16px;line-height:20px;font-weight:700;color:${t.red}"></a></td></tr>
 <tr><td class="em-card" bgcolor="${t.card}" style="padding:36px 32px 28px;background-color:${t.card};border:1px solid ${t.rule};border-top:4px solid ${t.red}">
-<p class="em-muted" style="margin:0 0 12px;font-family:${t.display};font-size:13px;line-height:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${t.muted}">${email.eyebrow}</p>
+<p class="${email.urgent ? 'em-urgent' : 'em-muted'}" style="margin:0 0 12px;font-family:${t.display};font-size:13px;line-height:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${email.urgent ? t.redText : t.muted}">${email.eyebrow}</p>
 <h1 style="margin:0 0 20px;font-family:${t.display};font-size:34px;line-height:36px;font-weight:700;text-transform:uppercase;color:${t.ink}">${email.heading}</h1>
 ${email.content}
 </td></tr>
 <tr><td class="em-foot" style="padding:24px 4px 40px">
 <p style="${footerText}">${email.reason}</p>
 <p style="${footerText}">${links}</p>
-<p style="${footerText};margin:0">UNLV Mountain Club &middot; A student organization at the University of Nevada, Las Vegas</p>
+<p style="${footerText};margin:0">UNLV Mountain Club &middot; A student organization at the University of Nevada, Las Vegas${email.postalAddress ? '<br>4505 S. Maryland Pkwy, Las Vegas, NV 89154' : ''}</p>
 </td></tr>
 </table>
 <!--[if mso]></td></tr></table><![endif]-->
