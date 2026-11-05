@@ -22,9 +22,11 @@ begin
     (v_complimentary_account, v_complimentary_account || '@example.com', now());
   -- This fixture also runs against a schema-only sandbox with no seeded roles.
   insert into public.admin_roles (id, key, name, is_super_admin)
-    values (v_role, 'test_' || replace(v_role::text, '-', '_'), 'Test reviewer', true);
+    values (v_role, 'test_' || replace(v_role::text, '-', '_'), 'Test reviewer', true) on conflict do nothing;
   insert into public.admin_user_roles (user_id, role_id)
-    values (v_reviewer, v_role);
+    select v_reviewer, id from public.admin_roles where is_super_admin;
+  insert into public.account_age_declarations (user_id, is_18_or_older) values
+    (v_account, true), (v_complimentary_account, true);
 
   if has_function_privilege('anon', 'public.activate_confirmed_zelle_membership(uuid)', 'EXECUTE')
     or has_function_privilege('authenticated', 'public.activate_confirmed_zelle_membership(uuid)', 'EXECUTE')
@@ -66,6 +68,16 @@ begin
   );
   if (select count(*) from public.membership_entitlements where user_id = v_account) <> 1 then
     raise exception 'Repeated confirmation duplicated membership';
+  end if;
+  -- An account-only member can complete their application after activation.
+  insert into public.membership_applications (
+    user_id, full_name, contact_email, age_status, guardian_consent, primary_interest
+  ) values (v_account, 'Existing paid account', v_account || '@example.com', 'adult', 'not_required', 'Hiking');
+  perform public.set_zelle_membership_payment_status(v_account, v_reviewer, 'confirmed', null);
+  if not exists (select 1 from public.membership_applications
+    where user_id = v_account and status = 'confirmed' and confirmed_by = v_reviewer)
+    or (select count(*) from public.membership_entitlements where user_id = v_account) <> 1 then
+    raise exception 'Existing term did not complete the later application idempotently';
   end if;
 
   insert into public.membership_applications (

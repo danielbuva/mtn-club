@@ -69,12 +69,15 @@ export function getApplicantClaimTimestamp(
   application: Pick<
     MembershipReviewAccount,
     'dues_payment_claimed' | 'dues_claimed_at'
-  >,
+  > &
+    Partial<Pick<MembershipReviewAccount, 'status'>>,
   payment?: { claimed_at: string },
 ): string | null {
   return (
     payment?.claimed_at ??
-    (application.dues_payment_claimed ? application.dues_claimed_at : null)
+    (application.status !== 'confirmed' && application.dues_payment_claimed
+      ? application.dues_claimed_at
+      : null)
   )
 }
 
@@ -97,7 +100,9 @@ export function partitionMembershipReviewAccounts(
   const archived: MembershipReviewAccount[] = []
   for (const account of accounts) {
     const destination =
-      latestPaymentByUser.get(account.user_id)?.status === 'rejected'
+      latestPaymentByUser.get(account.user_id)?.status === 'rejected' ||
+      (account.status === 'confirmed' &&
+        latestPaymentByUser.get(account.user_id)?.status !== 'claimed')
         ? archived
         : review
     destination.push(account)

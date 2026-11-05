@@ -136,3 +136,37 @@ test('a newer payment claim restores an archived account to review', () => {
   assert.deepEqual(queues.review, rows)
   assert.deepEqual(queues.archived, [])
 })
+
+test('completed applications with historical payments are archived until a new renewal claim', () => {
+  const completed = {
+    ...buildMembershipReviewAccounts([], [account], new Map())[0],
+    status: 'confirmed',
+    dues_payment_claimed: true,
+    dues_claimed_at: '2025-09-04T20:00:00Z',
+  }
+  const oldPayment = {
+    user_id: account.id,
+    status: 'confirmed',
+    created_at: '2025-09-04T20:00:00Z',
+  }
+  assert.deepEqual(
+    partitionMembershipReviewAccounts([completed], [oldPayment]),
+    {
+      review: [],
+      archived: [completed],
+    },
+  )
+  assert.equal(getApplicantClaimTimestamp(completed), null)
+  const renewal = {
+    user_id: account.id,
+    status: 'claimed',
+    created_at: '2026-11-05T20:00:00Z',
+  }
+  assert.deepEqual(
+    partitionMembershipReviewAccounts([completed], [oldPayment, renewal]),
+    {
+      review: [completed],
+      archived: [],
+    },
+  )
+})

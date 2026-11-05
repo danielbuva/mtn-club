@@ -2418,6 +2418,10 @@ export type Database = {
       is_banned: { Args: { p_uid: string }; Returns: boolean }
       is_staff_or_admin: { Args: { p_uid: string }; Returns: boolean }
       is_super_admin: { Args: { p_uid: string }; Returns: boolean }
+      membership_activation_ineligibility: {
+        Args: { p_user_id: string }
+        Returns: string | null
+      }
       process_membership_checkout_event: {
         Args: {
           p_amount_cents: number
