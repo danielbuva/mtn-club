@@ -2239,6 +2239,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_admin_analytics_totals: {
+        Args: { p_range_start?: string }
+        Returns: Json
+      }
+      get_admin_overview_totals: {
+        Args: never
+        Returns: Json
+      }
       get_active_announcement: {
         Args: never
         Returns: {

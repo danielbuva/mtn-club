@@ -141,6 +141,9 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
 })
+test('admin aggregates count beyond API row limits and enforce capabilities', () => {
+  sql(readFileSync(new URL('../admin-aggregates.sql', import.meta.url), 'utf8'))
+})
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
   const results = await Promise.all(f.users.map(user => register(f.trip, user)))
