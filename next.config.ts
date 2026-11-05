@@ -16,6 +16,8 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Preserve the existing Cache Components behavior during the 16.4 upgrade.
+  partialPrefetching: false,
   allowedDevOrigins: ['mtnclub.local'],
   async headers() {
     // Custom-domain previews need this too; hosting defaults may only cover
