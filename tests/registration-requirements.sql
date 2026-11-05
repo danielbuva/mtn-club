@@ -5,7 +5,7 @@ declare owner_id uuid:=gen_random_uuid(); user1 uuid:=gen_random_uuid(); user2 u
  minor_id uuid:=gen_random_uuid(); payload jsonb; snap jsonb; doc uuid; rec record; job jsonb; evidence_count integer;
 begin
  insert into auth.users(id,email) values(owner_id,owner_id||'@example.test'),(user1,user1||'@example.test'),(user2,user2||'@example.test');
- insert into public.admin_roles(id,key,name,is_super_admin) values(role_id,'registration_'||replace(role_id::text,'-','_'),'RSVP test admin',true);
+ select id into role_id from public.admin_roles where is_super_admin;
  insert into public.admin_user_roles(user_id,role_id) values(owner_id,role_id);
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
  perform set_config('request.jwt.claim.role','authenticated',true);

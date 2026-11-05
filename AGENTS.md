@@ -143,6 +143,7 @@ Frontend (run from `/`):
 
 Supabase utilities:
 - Types: `npx supabase gen types typescript --project-id <id>` writes `lib/supabase/database.types.ts`.
+- Local schema replay: `pnpm test:db:replay` and `pnpm test:registration:db` use throwaway databases in `supabase_db_mtn-auth-integration`. See README's database reproduction instructions. Preserve the checkpoint in `supabase/baseline.json` and all applied migrations; add new migrations instead. A bare `supabase db reset` does not include the missing historical baseline.
 
 ## Coding Style & Naming Conventions
 - TypeScript/React uses strict TS settings and 2-space indentation.

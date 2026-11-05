@@ -1,5 +1,6 @@
 const neutralizeSpreadsheetFormula = (value: string) =>
-  /^[=+\-@]/.test(value) ? `'${value}` : value
+  // Spreadsheet parsers can ignore leading whitespace and control characters.
+  /^[\s\p{Cc}]*[=+\-@\t\r\n]/u.test(value) ? `'${value}` : value
 
 export const escapeCsvCell = (value: string) =>
   `"${neutralizeSpreadsheetFormula(value).replaceAll('"', '""')}"`

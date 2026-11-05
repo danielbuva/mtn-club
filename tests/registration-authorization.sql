@@ -5,7 +5,7 @@ declare owner_id uuid:=gen_random_uuid(); uid uuid:=gen_random_uuid(); leader uu
  tid uuid:=gen_random_uuid(); other_trip uuid:=gen_random_uuid(); minor_id uuid:=gen_random_uuid(); settings jsonb; snapshot jsonb;
 begin
  insert into auth.users(id,email) values(owner_id,owner_id||'@example.test'),(uid,uid||'@example.test'),(leader,leader||'@example.test');
- insert into public.admin_roles(id,key,name,is_super_admin) values(role_id,'authorization_'||replace(role_id::text,'-','_'),'Test admin',true);
+ select id into role_id from public.admin_roles where is_super_admin;
  insert into public.admin_user_roles(user_id,role_id) values(owner_id,role_id);
  insert into public.account_age_declarations(user_id,is_18_or_older) values(uid,true);
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
