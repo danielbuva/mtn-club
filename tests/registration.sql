@@ -9,7 +9,7 @@ begin
  insert into auth.users(id,email,email_confirmed_at) values
  (owner_id,owner_id||'@example.test',now()),(first_id,first_id||'@example.test',now()),
  (second_id,second_id||'@example.test',now()),(third_id,third_id||'@example.test',now()),(minor_id,minor_id||'@example.test',now());
- insert into public.admin_roles(id,key,name,is_super_admin) values(role_id,'rsvp_test_'||replace(role_id::text,'-','_'),'RSVP test admin',true);
+ select id into role_id from public.admin_roles where is_super_admin;
  insert into public.admin_user_roles(user_id,role_id) values(owner_id,role_id);
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
  perform set_config('request.jwt.claim.role','authenticated',true);

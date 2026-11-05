@@ -127,6 +127,52 @@ See `RUNBOOK.md` for infra ownership, access, and incident response.
 
 Trip registration setup, notification delivery, pilot gates, local acceptance, and recovery are documented in [RSVP_RUNBOOK.md](RSVP_RUNBOOK.md). Annual waiver content review, migration, trip risk revisions, guardian signing, and record retention are documented in [ANNUAL_WAIVER_RUNBOOK.md](ANNUAL_WAIVER_RUNBOOK.md).
 
+### Reproduce the database locally
+
+The migration history starts after the original application tables were created.
+Keep those applied migrations unchanged. A bare `supabase db reset` cannot
+reconstruct this repository's application schema from migrations alone. The
+supported clean replay uses the committed checkpoint in
+[`supabase/baseline.json`](supabase/baseline.json):
+
+```bash
+pnpm test:db:replay
+pnpm test:registration:db
+```
+
+Both commands require the already running local Docker container
+`supabase_db_mtn-auth-integration` (configured in `tests/integration/supabase/`).
+They create uniquely named `mtn_replay_*` databases from `template0`, copy only
+the local stack's platform schema definitions, then restore
+`supabase/schema-only.sql` and `supabase/baseline-reference.sql`. The reference
+file restores the historical RBAC catalogs and default settings, with no users
+or role assignments. The checkpoint covers the 30 migrations through
+`202609030001_admin_production_hardening.sql`; checksums protect that snapshot
+and its covered migration files. Every subsequent migration runs in filename
+order, including bootstrap reconciliation. No later migration is skipped.
+
+`scripts/database-baseline.mjs` is the shared replay plan; registration tests
+use exactly the same path before adding their own fixtures. The standalone
+check verifies that replay succeeds, application tables contain no users,
+trips, or account role assignments, and the current waiver RPC exists. Both
+commands drop their throwaway database on completion and leave the shared
+stack running. They accept no remote URLs, credentials, or database targets.
+No application data is copied from the local stack.
+
+This checkpoint is a local reconstruction mechanism, not a production
+migration or a migration-history repair. Do not apply it to an existing
+database. Add future changes as new migrations after the checkpoint; do not
+edit the pinned snapshot, reference catalogs, or historical migrations.
+`supabase/seed.sql` is intentionally empty. Email `content_path` values resolve
+from the project root, as shown in the [Supabase template documentation](https://supabase.com/docs/guides/local-development/customizing-email-templates);
+seed paths resolve from `supabase/`.
+
+Annual waiver date-only validity uses `America/Los_Angeles`, matching
+`CLUB_TIME_ZONE` in `lib/events/formatters.ts`. Signing, guardian verification,
+waiver selection, and trip coverage share this business calendar even if a
+session or trip display uses another timezone. Existing signed evidence is
+immutable and is not rewritten by the timezone migration.
+
 ### Supabase CLI ownership
 
 The GitHub identity used for this repository does not need a seat in the

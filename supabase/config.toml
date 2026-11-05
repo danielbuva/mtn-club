@@ -234,52 +234,53 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Template content_path is relative to the project root (the parent of supabase/).
 [auth.email.template.invite]
 subject = "You’re invited to UNLV Mountain Club"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/invite.html"
+content_path = "./supabase/templates/invite.html"
 
 [auth.email.template.email_change]
 subject = "Confirm your new Mountain Club email"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/email-change.html"
+content_path = "./supabase/templates/email-change.html"
 
 [auth.email.template.reauthentication]
 subject = "Your Mountain Club confirmation code"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/reauthentication.html"
+content_path = "./supabase/templates/reauthentication.html"
 
 [auth.email.template.recovery]
 subject = "Reset your Mountain Club password"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/recovery.html"
+content_path = "./supabase/templates/recovery.html"
 
 [auth.email.template.confirmation]
 subject = "Confirm your Mountain Club email"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/confirmation.html"
+content_path = "./supabase/templates/confirmation.html"
 
 [auth.email.template.magic_link]
 subject = "Your Mountain Club verification code"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/verification-code.html"
+content_path = "./supabase/templates/verification-code.html"
 
 [auth.email.notification.password_changed]
 enabled = true
 subject = "Your Mountain Club password was changed"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/password-changed.html"
+content_path = "./supabase/templates/password-changed.html"
 
 # Branded and ready; enabling is an owner decision (see AUTH_RUNBOOK.md).
 [auth.email.notification.email_changed]
 enabled = false
 subject = "Your Mountain Club email was changed"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/email-changed.html"
+content_path = "./supabase/templates/email-changed.html"
 
 # Branded and ready; enabling is an owner decision (see AUTH_RUNBOOK.md).
 [auth.email.notification.identity_linked]
 enabled = false
 subject = "A sign-in method was added to your account"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/identity-linked.html"
+content_path = "./supabase/templates/identity-linked.html"
 
 # Branded and ready; enabling is an owner decision (see AUTH_RUNBOOK.md).
 [auth.email.notification.identity_unlinked]
 enabled = false
 subject = "A sign-in method was removed from your account"
-content_path = "/Users/dani/Documents/code/unlv/mtn-club/supabase/templates/identity-unlinked.html"
+content_path = "./supabase/templates/identity-unlinked.html"
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.

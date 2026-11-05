@@ -1,96 +1,33 @@
 import assert from 'node:assert/strict'
-import { execFile, execFileSync } from 'node:child_process'
+import { execFile } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import { readdirSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { after, before, test } from 'node:test'
 import { promisify } from 'node:util'
 
+import {
+  container,
+  createLocalDatabase,
+  sql as databaseSql,
+  dropLocalDatabase,
+} from '../../scripts/local-database.mjs'
+
 const run = promisify(execFile)
-const container = 'supabase_db_mtn-auth-integration'
-const database = `registration_test_${process.pid}`
+let database
 const literal = value => `'${String(value).replaceAll("'", "''")}'`
-function sql(query, db = database) {
-  return execFileSync(
-    'docker',
-    [
-      'exec',
-      '-i',
-      container,
-      'psql',
-      '-U',
-      'supabase_admin',
-      '-d',
-      db,
-      '-X',
-      '-qAt',
-      '-v',
-      'ON_ERROR_STOP=1',
-    ],
-    { input: query, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 },
-  ).trim()
+function sql(query) {
+  return databaseSql(query, database)
 }
 before(() => {
-  // Fixed local container only. No connection strings or hosted credentials accepted.
-  sql(`create database ${database}`, 'postgres')
-  const schema = execFileSync(
-    'docker',
-    [
-      'exec',
-      container,
-      'pg_dump',
-      '-U',
-      'postgres',
-      '--schema-only',
-      '--no-owner',
-      'postgres',
-    ],
-    { maxBuffer: 32 * 1024 * 1024 },
-  )
-  execFileSync(
-    'docker',
-    [
-      'exec',
-      '-i',
-      container,
-      'psql',
-      '-U',
-      'supabase_admin',
-      '-d',
-      database,
-      '-X',
-      '-q',
-      '-v',
-      'ON_ERROR_STOP=1',
-    ],
-    { input: schema, stdio: ['pipe', 'pipe', 'pipe'] },
-  )
-  // Rebuild the application from its committed baseline, then apply every subsequent schema change.
-  sql(
-    'set client_min_messages=warning; drop schema public cascade; drop schema if exists registration_private cascade; create schema public authorization postgres;',
-  )
-  sql(
-    readFileSync(
-      new URL('../../supabase/schema-only.sql', import.meta.url),
-      'utf8',
-    ),
-  )
-  const migrations = new URL('../../supabase/migrations/', import.meta.url)
-  for (const name of readdirSync(migrations)
-    .filter(
-      name =>
-        name.endsWith('.sql') &&
-        name >= '202609040001' &&
-        !name.startsWith('202609040007'),
-    )
-    .sort()) {
-    sql(readFileSync(new URL(name, migrations), 'utf8'))
-  }
+  database = createLocalDatabase().database
   // Legacy regression fixtures explicitly retain the old per-trip model. Annual journeys opt in below.
   sql(
     'alter table public.trip_registration_settings alter column annual_waiver set default false',
   )
 })
-after(() => sql(`drop database if exists ${database} with (force)`, 'postgres'))
+after(() => {
+  if (database) dropLocalDatabase(database)
+})
 async function asUser(user, query) {
   const result = await run('docker', [
     'exec',
@@ -140,6 +77,14 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
     'registration-opening.sql',
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
+})
+test('annual waiver signing at 23:30 Pacific covers a same-evening trip', () => {
+  sql(
+    readFileSync(
+      new URL('../annual-waiver-business-dates.sql', import.meta.url),
+      'utf8',
+    ),
+  )
 })
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
