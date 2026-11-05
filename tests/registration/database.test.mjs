@@ -1,114 +1,86 @@
 import assert from 'node:assert/strict'
-import { execFile, execFileSync } from 'node:child_process'
+import { execFile } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import { readdirSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { after, before, test } from 'node:test'
 import { promisify } from 'node:util'
 
+import {
+  container,
+  createLocalDatabase,
+  sql as databaseSql,
+  dropLocalDatabase,
+} from '../../scripts/local-database.mjs'
+
 const run = promisify(execFile)
-const container = 'supabase_db_mtn-auth-integration'
-const database = `registration_test_${process.pid}`
+let database
+const legacyVisibilityOwner = randomUUID()
+const legacyVisibilityTrip = randomUUID()
+const legacyVisibilityDraft = randomUUID()
+const legacyReceiptPrimary = randomUUID()
+const legacyReceiptSecondary = randomUUID()
+const legacyReceiptTrip = randomUUID()
+const legacyReceiptDraft = randomUUID()
 const literal = value => `'${String(value).replaceAll("'", "''")}'`
-function sql(query, db = database) {
-  return execFileSync(
-    'docker',
-    [
-      'exec',
-      '-i',
-      container,
-      'psql',
-      '-U',
-      'supabase_admin',
-      '-d',
-      db,
-      '-X',
-      '-qAt',
-      '-v',
-      'ON_ERROR_STOP=1',
-    ],
-    { input: query, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 },
-  ).trim()
+function sql(query) {
+  return databaseSql(query, database)
 }
 before(() => {
-  // Fixed local container only. No connection strings or hosted credentials accepted.
-  sql(`create database ${database}`, 'postgres')
-  const schema = execFileSync(
-    'docker',
-    [
-      'exec',
-      container,
-      'pg_dump',
-      '-U',
-      'postgres',
-      '--schema-only',
-      '--no-owner',
-      'postgres',
-    ],
-    { maxBuffer: 32 * 1024 * 1024 },
-  )
-  execFileSync(
-    'docker',
-    [
-      'exec',
-      '-i',
-      container,
-      'psql',
-      '-U',
-      'supabase_admin',
-      '-d',
-      database,
-      '-X',
-      '-q',
-      '-v',
-      'ON_ERROR_STOP=1',
-    ],
-    { input: schema, stdio: ['pipe', 'pipe', 'pipe'] },
-  )
-  // Rebuild the application from its committed baseline, then apply every subsequent schema change.
-  sql(
-    'set client_min_messages=warning; drop schema public cascade; drop schema if exists registration_private cascade; create schema public authorization postgres;',
-  )
-  sql(
-    readFileSync(
-      new URL('../../supabase/schema-only.sql', import.meta.url),
-      'utf8',
-    ),
-  )
-  const migrations = new URL('../../supabase/migrations/', import.meta.url)
-  for (const name of readdirSync(migrations)
-    .filter(
-      name =>
-        name.endsWith('.sql') &&
-        name >= '202609040001' &&
-        !name.startsWith('202609040007'),
+  database = createLocalDatabase((name, db) => {
+    if (name === '20261105130001_reconcile_security_fixes.sql') {
+      databaseSql(
+        `insert into auth.users(id,email) values
+          ('${legacyReceiptPrimary}','${legacyReceiptPrimary}@example.test'),
+          ('${legacyReceiptSecondary}','${legacyReceiptSecondary}@example.test');
+        insert into public.profiles(user_id,display_name) values
+          ('${legacyReceiptPrimary}','Retained publisher'),('${legacyReceiptSecondary}','Merged publisher') on conflict do nothing;
+        insert into public.admin_user_roles(user_id,role_id)
+          select '${legacyReceiptPrimary}',id from public.admin_roles where is_super_admin;
+        insert into public.trips(id,title,created_by,visibility,starts_at,ends_at)
+          values('${legacyReceiptTrip}','Legacy publication receipt','${legacyReceiptSecondary}','leaders',now()+interval '2 days',now()+interval '3 days');
+        insert into trip_write_private.draft_publications(draft_id,draft_owner_id,published_by,trip_id)
+          values('${legacyReceiptDraft}','${legacyReceiptSecondary}','${legacyReceiptSecondary}','${legacyReceiptTrip}');
+        begin;
+        set local "request.jwt.claim.role"='service_role';
+        set local role service_role;
+        select public.merge_accounts('${legacyReceiptPrimary}','${legacyReceiptPrimary}','${legacyReceiptSecondary}',false);
+        commit;
+        delete from auth.users where id='${legacyReceiptSecondary}';
+        select public.complete_account_merge('${legacyReceiptPrimary}','${legacyReceiptPrimary}','${legacyReceiptSecondary}');`,
+        db,
+      )
+    }
+    if (name === '20261105040001_atomic_account_merge.sql') {
+      // This fixed container runs Auth without Storage. Minimal metadata tables
+      // exercise the account merge's Storage ownership and stale-session guards.
+      databaseSql(
+        `create schema if not exists storage;
+        create table if not exists storage.buckets(id text primary key,name text not null,owner uuid,owner_id text);
+        create table if not exists storage.objects(id uuid primary key,bucket_id text references storage.buckets(id),name text,owner uuid,owner_id text);`,
+        db,
+      )
+    }
+    if (name !== '20261105010002_restrict_leaders_trip_reads.sql') return
+    databaseSql(
+      `insert into auth.users(id,email) values('${legacyVisibilityOwner}','${legacyVisibilityOwner}@example.test');
+        insert into public.profiles(user_id,display_name) values('${legacyVisibilityOwner}','Legacy visibility') on conflict do nothing;
+                insert into public.admin_user_roles(user_id,role_id) select '${legacyVisibilityOwner}',id from public.admin_roles where is_super_admin;
+        insert into public.trips(id,title,created_by,visibility,starts_at,ends_at,is_official)
+        values('${legacyVisibilityTrip}','Legacy leaders trip','${legacyVisibilityOwner}','minimal',now()+interval '2 days',now()+interval '3 days',true);
+        insert into public.trip_drafts(id,created_by,visibility) values('${legacyVisibilityDraft}','${legacyVisibilityOwner}','minimal');
+        delete from public.admin_user_roles where user_id='${legacyVisibilityOwner}';
+        `,
+      db,
     )
-    .sort()) {
-    sql(readFileSync(new URL(name, migrations), 'utf8'))
-  }
+  }).database
   // Legacy regression fixtures explicitly retain the old per-trip model. Annual journeys opt in below.
   sql(
     'alter table public.trip_registration_settings alter column annual_waiver set default false',
   )
 })
-after(() => sql(`drop database if exists ${database} with (force)`, 'postgres'))
-async function asUser(user, query) {
-  const result = await run('docker', [
-    'exec',
-    container,
-    'psql',
-    '-U',
-    'postgres',
-    '-d',
-    database,
-    '-X',
-    '-qAt',
-    '-v',
-    'ON_ERROR_STOP=1',
-    '-c',
-    `begin; set local role authenticated; set local "request.jwt.claim.sub"=${literal(user)}; set local "request.jwt.claim.role"='authenticated'; ${query}; commit;`,
-  ])
-  return JSON.parse(result.stdout.trim())
-}
+after(() => {
+  if (database) dropLocalDatabase(database)
+})
 function fixture(capacity = 1) {
   const owner = randomUUID()
   const trip = randomUUID()
@@ -130,6 +102,101 @@ const register = (trip, user, id = randomUUID()) =>
     `select public.registration_command('${trip}','register','${id}',0,'{"formVersion":2,"answers":{}}')`,
   )
 
+for (const [name, fixtureName] of [
+  [
+    'private accounts and membership access require their own capabilities',
+    'admin-rls-capabilities.sql',
+  ],
+  [
+    'legacy content writes and comment moderation honor resource scopes',
+    'admin-rls-resource-scopes.sql',
+  ],
+  [
+    'legacy payment RPC requires configured payment review capability',
+    'admin-rls-legacy-payment.sql',
+  ],
+]) {
+  test(name, () =>
+    sql(readFileSync(new URL(`../${fixtureName}`, import.meta.url), 'utf8')),
+  )
+}
+
+for (const [name, fixtureName] of [
+  [
+    'membership signup persists all records and completed retries are idempotent',
+    'membership-signup.sql',
+  ],
+  [
+    'membership signup rolls back all writes on payment failure',
+    'membership-signup-rollback.sql',
+  ],
+  [
+    'membership signup reconciles partial legacy state and preserves review/consent decisions',
+    'membership-signup-retry.sql',
+  ],
+]) {
+  test(name, () => {
+    sql(readFileSync(new URL(`../${fixtureName}`, import.meta.url), 'utf8'))
+  })
+}
+
+test('simultaneous membership signup retries persist one application, payment, and consent', async () => {
+  const user = randomUUID()
+  sql(`insert into auth.users(id,email) values('${user}','${user}@example.test');
+    insert into public.club_admin_settings(id) values(true) on conflict(id) do nothing;`)
+  try {
+    const query = `select to_jsonb(public.submit_membership_signup('${user}', 'Concurrent Applicant', '${user}@example.test', 'adult', true, '["Hiking"]', null, true))`
+    const results = await Promise.all(
+      Array.from({ length: 6 }, () => asUser(user, query, 'service_role')),
+    )
+    assert.deepEqual(
+      results,
+      Array.from({ length: 6 }, () => user),
+    )
+    for (const table of [
+      'membership_applications',
+      'profiles',
+      'memberships',
+      'account_age_declarations',
+      'mailing_list_subscriptions',
+      'mailing_list_consent_events',
+      'membership_zelle_payments',
+    ]) {
+      assert.equal(
+        sql(`select count(*) from public.${table} where user_id='${user}'`),
+        '1',
+        table,
+      )
+    }
+    assert.equal(
+      sql(
+        `select count(*) from public.admin_activity_events where subject_user_id='${user}' and action='membership_application_submitted'`,
+      ),
+      '1',
+    )
+  } finally {
+    sql(`delete from public.membership_zelle_payments where user_id='${user}';
+      delete from auth.users where id='${user}'`)
+  }
+})
+
+test('no final policy or function retains the coarse staff helper', () => {
+  assert.equal(
+    sql("select to_regprocedure('public.is_staff_or_admin(uuid)') is null"),
+    't',
+  )
+  assert.equal(
+    sql(`select count(*) from pg_policies where
+    coalesce(qual, '') || coalesce(with_check, '') like '%is_staff_or_admin%'`),
+    '0',
+  )
+  assert.equal(
+    sql(`select count(*) from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname in ('public','registration_private') and p.prosrc like '%is_staff_or_admin%'`),
+    '0',
+  )
+})
+
 test('transactional workflow, requirements, waiver evidence, and merge SQL', () => {
   for (const name of [
     'registration.sql',
@@ -137,9 +204,224 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
     'registration-authorization.sql',
     'admin-member-access.sql',
     'trip-editing.sql',
+    'trip-visibility.sql',
     'registration-opening.sql',
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
+})
+test('admin aggregates count beyond API row limits and enforce capabilities', () => {
+  sql(readFileSync(new URL('../admin-aggregates.sql', import.meta.url), 'utf8'))
+})
+test('draft publication is idempotent and rolls back every write on a late failure', () => {
+  sql(readFileSync(new URL('../trip-publication.sql', import.meta.url), 'utf8'))
+})
+test('simultaneous publication of one draft creates one fully configured trip', async () => {
+  const f = fixture(20)
+  const draft = randomUUID()
+  const title = `Publication race ${draft}`
+  sql(`insert into public.profiles(user_id,display_name) values('${f.owner}','Publisher') on conflict do nothing;
+    insert into public.trip_drafts(id,created_by,title) values('${draft}','${f.owner}',${literal(title)})`)
+  const payload =
+    sql(`select jsonb_build_object('title',${literal(title)},'starts_at',now()+interval '2 days',
+    'ends_at',now()+interval '3 days','location_public','Trailhead','visibility','members')`)
+  const command = `select to_jsonb(public.publish_trip_draft('${draft}',${literal(payload)}::jsonb,
+    'Private meetup','{}','{}',array['Uneven ground.'],array['hiking'],false,true))`
+  const ids = await Promise.all(
+    Array.from({ length: 5 }, () => asUser(f.owner, command)),
+  )
+  assert.equal(new Set(ids).size, 1)
+  assert.equal(
+    sql(`select count(*) from public.trips where title=${literal(title)}`),
+    '1',
+  )
+  assert.equal(
+    sql(`select count(*) from public.trip_drafts where id='${draft}'`),
+    '0',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_risk_disclosures where trip_id='${ids[0]}'`,
+    ),
+    '1',
+  )
+  assert.equal(
+    sql(
+      `select collect_transportation from public.trip_registration_settings where trip_id='${ids[0]}'`,
+    ),
+    't',
+  )
+})
+test('trip edits validate first and replace assignments atomically', () => {
+  sql(readFileSync(new URL('../trip-write-edits.sql', import.meta.url), 'utf8'))
+})
+test('trip authorization follows the current actor and preserves system writes', () => {
+  sql(readFileSync(new URL('../trip-write-actor.sql', import.meta.url), 'utf8'))
+})
+test('existing Stripe checkout, refund and dispute regressions remain supported', () => {
+  const member = randomUUID()
+  sql(`insert into auth.users(id,email,email_confirmed_at) values('${member}','${member}@example.test',now());
+    insert into public.account_age_declarations(user_id,is_18_or_older) values('${member}',true);
+    insert into public.membership_access_overrides(user_id,starts_at,ends_at,reason,granted_by)
+      values('${member}',now()-interval '1 year',now()-interval '1 day','Legacy Stripe regression fixture','${member}');`)
+  sql(
+    readFileSync(
+      new URL('../membership-integration.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
+for (const [name, fixture] of [
+  [
+    'all membership activation paths enforce eligibility',
+    'membership-activation-eligibility.sql',
+  ],
+  [
+    'expired members renew with new claims and new terms',
+    'membership-renewal.sql',
+  ],
+  [
+    'Stripe activation and duplicate review preserve payment-backed terms',
+    'membership-stripe-activation.sql',
+  ],
+  [
+    'account-only and complimentary membership reviews remain supported',
+    'account-membership-review.sql',
+  ],
+]) {
+  test(name, () =>
+    sql(readFileSync(new URL(`../${fixture}`, import.meta.url), 'utf8')),
+  )
+}
+test('competing renewal claims and confirmations create exactly one new term', async () => {
+  const f = fixture()
+  const member = f.users[0]
+  sql(`update auth.users set email_confirmed_at=now() where id='${member}';
+    insert into public.membership_zelle_payments(id,user_id,amount_cents,status,reviewed_by,reviewed_at,created_at)
+      values('${randomUUID()}','${member}',2500,'confirmed','${f.owner}',now()-interval '2 years',now()-interval '2 years');
+    insert into public.membership_entitlements(user_id,zelle_payment_id,starts_at,ends_at)
+      select '${member}',id,now()-interval '2 years',now()-interval '1 year'
+      from public.membership_zelle_payments where user_id='${member}';`)
+  const claims = await Promise.all(
+    Array.from({ length: 4 }, () =>
+      asUser(
+        member,
+        'select to_jsonb(public.claim_zelle_membership_payment())',
+      ),
+    ),
+  )
+  assert.equal(new Set(claims).size, 1)
+  const confirmations = await Promise.all(
+    Array.from({ length: 4 }, () =>
+      run('docker', [
+        'exec',
+        container,
+        'psql',
+        '-U',
+        'postgres',
+        '-d',
+        database,
+        '-X',
+        '-qAt',
+        '-v',
+        'ON_ERROR_STOP=1',
+        '-c',
+        `begin; set local role service_role; set local "request.jwt.claim.role"='service_role'; select public.review_zelle_membership_payment('${claims[0]}','${f.owner}','confirmed'); commit;`,
+      ]),
+    ),
+  )
+  assert.ok(confirmations.every(result => result.stdout.trim() === 't'))
+  assert.equal(
+    sql(
+      `select count(*) from public.membership_entitlements where user_id='${member}'`,
+    ),
+    '2',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.membership_entitlements where zelle_payment_id='${claims[0]}'`,
+    ),
+    '1',
+  )
+})
+
+test('annual waiver signing at 23:30 Pacific covers a same-evening trip', () => {
+  sql(
+    readFileSync(
+      new URL('../annual-waiver-business-dates.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
+test('legacy minimal trips and drafts migrate to leaders and reject future minimal writes', () => {
+  assert.equal(
+    sql(
+      `select visibility from public.trips where id='${legacyVisibilityTrip}'`,
+    ),
+    'leaders',
+  )
+  assert.equal(
+    sql(
+      `select visibility from public.trip_drafts where id='${legacyVisibilityDraft}'`,
+    ),
+    'leaders',
+  )
+  assert.throws(
+    () =>
+      sql(
+        `update public.trips set visibility='minimal' where id='${legacyVisibilityTrip}'`,
+      ),
+    /trips_no_legacy_minimal/,
+  )
+  assert.throws(
+    () =>
+      sql(
+        `update public.trip_drafts set visibility='minimal' where id='${legacyVisibilityDraft}'`,
+      ),
+    /trip_drafts_no_legacy_minimal/,
+  )
+  sql(
+    `delete from public.trip_drafts where id='${legacyVisibilityDraft}'; delete from public.trips where id='${legacyVisibilityTrip}'; delete from auth.users where id='${legacyVisibilityOwner}'`,
+  )
+})
+test('account merge moves a complimentary application whose override is unique', () => {
+  sql(
+    readFileSync(
+      new URL('../account-merge-application-override.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
+test('atomic account merge transfers ownership, rolls back failures, and resumes auth cleanup', () => {
+  sql(readFileSync(new URL('../account-merge.sql', import.meta.url), 'utf8'))
+})
+test('account merge preserves leaders access, publication receipts, signup checkpoints and renewal terms without trip authority', () => {
+  sql(
+    readFileSync(
+      new URL('../security-reconciliation.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
+test('reconciliation repairs receipts from completed legacy merges and archives their attribution', async () => {
+  assert.equal(
+    sql(`select count(*) from trip_write_private.draft_publications
+      where draft_id='${legacyReceiptDraft}' and draft_owner_id='${legacyReceiptPrimary}' and published_by='${legacyReceiptPrimary}'`),
+    '1',
+  )
+  assert.equal(
+    sql(`select count(*) from public.account_merge_jobs where secondary_user_id='${legacyReceiptSecondary}' and status='completed'
+      and secondary_snapshot->'draft_publications'->0->>'published_by'='${legacyReceiptSecondary}'
+      and counts->>'secondary_draft_publications_draft_owner_id'='1'
+      and counts->>'secondary_draft_publications_published_by'='1'`),
+    '1',
+  )
+  assert.equal(
+    await asUser(
+      legacyReceiptPrimary,
+      `select to_jsonb(public.get_published_trip_for_draft('${legacyReceiptDraft}'))`,
+    ),
+    legacyReceiptTrip,
+  )
 })
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
@@ -415,7 +697,46 @@ test('expired worker leases retry with the same job identity and exhausted lease
   )
 })
 
-test('registration racing an account merge cannot leave a seat on the merged account', async () => {
+test('account merge expires the secondary account overdue offers before aliasing it', async () => {
+  const f = fixture()
+  const secondary = f.users[1]
+  const primary = f.users[2]
+  await register(f.trip, f.users[0])
+  await register(f.trip, secondary)
+  await asUser(
+    f.users[0],
+    `select public.registration_command('${f.trip}','cancel','${randomUUID()}',1)`,
+  )
+  await asUser(
+    f.owner,
+    `select public.registration_command('${f.trip}','issue_offer','${randomUUID()}',1,'{}','${secondary}')`,
+  )
+  sql(
+    `update public.registration_offers set expires_at=now()-interval '1 minute' where trip_id='${f.trip}' and user_id='${secondary}'`,
+  )
+  sql(
+    `select public.merge_accounts('${f.owner}','${primary}','${secondary}',false)`,
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_offers where trip_id='${f.trip}' and status='pending'`,
+    ),
+    '0',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_notifications where user_id='${secondary}'`,
+    ),
+    '0',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_account_merges where secondary_id='${secondary}' and primary_id='${primary}'`,
+    ),
+    '1',
+  )
+})
+test('registration racing an atomic account merge cannot leave a seat on the merged account', async () => {
   const f = fixture()
   const secondary = f.users[0]
   const primary = f.users[1]
@@ -433,7 +754,7 @@ test('registration racing an account merge cannot leave a seat on the merged acc
       '-v',
       'ON_ERROR_STOP=1',
       '-c',
-      `select public.merge_trip_registrations('${primary}','${secondary}')`,
+      `select public.merge_accounts('${f.owner}','${primary}','${secondary}',false)`,
     ]),
   ])
   assert.equal(
@@ -1601,3 +1922,22 @@ test('incomplete reminders respect cooldown, preferences, completion, and dedupl
     'obsolete',
   )
 })
+
+async function asUser(user, query, role = 'authenticated') {
+  const result = await run('docker', [
+    'exec',
+    container,
+    'psql',
+    '-U',
+    'postgres',
+    '-d',
+    database,
+    '-X',
+    '-qAt',
+    '-v',
+    'ON_ERROR_STOP=1',
+    '-c',
+    `begin; set local role ${literal(role)}; set local "request.jwt.claim.sub"=${literal(user)}; set local "request.jwt.claim.role"=${literal(role)}; ${query}; commit;`,
+  ])
+  return JSON.parse(result.stdout.trim())
+}

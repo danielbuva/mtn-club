@@ -77,14 +77,18 @@ export function MembershipReviewPanel({
         const userPayments = paymentsByUser.get(application.user_id) ?? []
         const currentPayment = userPayments[0]
         const applicantClaim = userPayments.find(
-          payment => payment.claim_source !== 'admin',
+          payment =>
+            payment === currentPayment &&
+            payment.status === 'claimed' &&
+            payment.claim_source !== 'admin',
         )
         const claimedAt = getApplicantClaimTimestamp(
           application,
           applicantClaim,
         )
         const applicantReportedPayment = Boolean(
-          (application.dues_payment_claimed &&
+          (application.status !== 'confirmed' &&
+            application.dues_payment_claimed &&
             !userPayments.some(payment => payment.claim_source === 'admin')) ||
             applicantClaim,
         )
@@ -106,7 +110,11 @@ export function MembershipReviewPanel({
                 </p>
               </div>
               <div className="flex min-w-0 flex-wrap items-center gap-2 sm:shrink-0 sm:flex-nowrap">
-                <Badge variant="outline">{application.status}</Badge>
+                <Badge variant="outline">
+                  {application.status === 'confirmed'
+                    ? 'Renewal'
+                    : application.status}
+                </Badge>
                 <Badge
                   variant={
                     currentPayment?.status === 'confirmed'
@@ -190,6 +198,14 @@ export function MembershipReviewPanel({
                   membership page.
                 </p>
               </div>
+
+              {application.status === 'confirmed' ? (
+                <p className="mt-4 text-sm">
+                  {currentPayment?.status === 'claimed'
+                    ? 'Review this new renewal payment. Accepting it creates a new 12-month term; the original application remains complete.'
+                    : 'No new renewal claim is awaiting review. Previous accepted payments cannot renew an expired term.'}
+                </p>
+              ) : null}
 
               <div className="mt-5 flex flex-wrap gap-3 border-t border-[#211D18]/10 pt-5 dark:border-border">
                 {application.guardian_consent === 'pending' &&

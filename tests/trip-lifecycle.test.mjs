@@ -49,6 +49,7 @@ function fixture(rows, error) {
   const queries = {
     fetchOfficialTrips: read,
     fetchTripsInRange: read,
+    fetchPublicTripsInRange: read,
     fetchPublicHostsByTrip: async (_client, ids) =>
       new Map(ids.map(id => [id, [host]])),
   }

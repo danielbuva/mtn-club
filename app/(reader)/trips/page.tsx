@@ -1,112 +1,28 @@
+import Link from 'next/link'
+import { Suspense } from 'react'
 import { TripsList } from '@/components/trips/TripsList'
+import { TripsListLoading } from '@/components/trips/trips-list-loading'
 import { Card, CardContent } from '@/components/ui/card'
 import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
-import { fetchPublicHostsByTrip, fetchVisibleTrips } from '@/lib/events/queries'
-import type { EventRow } from '@/lib/events/types'
+import { fetchPublicHostsByTrip } from '@/lib/events/queries'
 import {
   legacyRsvpChoice,
   registrationTripStatus,
 } from '@/lib/registration/presentation'
 import { getRegistrationSummaries } from '@/lib/registration/server'
 import { createClient } from '@/lib/supabase/server'
-import type {
-  TripActivityType,
-  TripDifficulty,
-  TripListItem,
-  TripRsvpChoice,
-  TripStatus,
-} from '@/lib/trips/types'
+import { toTripListItem } from '@/lib/trips/list-item'
+import { fetchTripListPage, parseTripListParams } from '@/lib/trips/list-query'
+import type { TripListItem } from '@/lib/trips/types'
 
-const resolveActivityType = (
-  activityTags: string[] | null,
-): TripActivityType => {
-  const normalizedTags = (activityTags ?? []).map(tag => tag.toLowerCase())
-  if (
-    normalizedTags.some(tag => tag.includes('climb') || tag.includes('boulder'))
-  ) {
-    return 'climbing'
-  }
-
-  if (normalizedTags.some(tag => tag.includes('backpack'))) {
-    return 'backpacking'
-  }
-
-  if (normalizedTags.some(tag => tag.includes('camp'))) {
-    return 'camping'
-  }
-
-  if (normalizedTags.some(tag => tag.includes('hike'))) {
-    return 'hiking'
-  }
-
-  return 'other'
+type TripsPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-const resolveDifficulty = (
-  raw: EventRow['difficulty'] | null,
-): TripDifficulty | undefined => {
-  if (!raw) {
-    return undefined
-  }
-
-  if (raw === 'beginner') {
-    return 'beginner'
-  }
-
-  if (raw === 'intermediate') {
-    return 'intermediate'
-  }
-
-  if (raw === 'hard') {
-    return 'advanced'
-  }
-
-  return raw === 'expert' ? 'expert' : undefined
-}
-
-const toTripListItem = (
-  event: EventRow,
-  rsvpCount: number,
-  currentUserRsvp: TripRsvpChoice,
-  status: TripStatus,
-  leaderName?: string,
-): TripListItem => {
-  const difficulty = resolveDifficulty(event.difficulty)
-  const activityTags = event.activity_tags ?? []
-  const activityType = resolveActivityType(activityTags)
-  const tags = activityTags.filter(
-    tag => tag.trim().toLowerCase() !== 'outdoor',
-  )
-
-  return {
-    id: event.id,
-    cancellationReason: event.cancellation_reason,
-    lifecycleStatus: event.lifecycle_status,
-    title: event.title,
-    activityType,
-    activityTags,
-    heroImageUrl: event.cover_image_path ?? undefined,
-    locationName: event.location_public ?? 'TBD',
-    startAt: new Date(event.starts_at),
-    endAt: event.ends_at ? new Date(event.ends_at) : undefined,
-    isAllDay: event.is_all_day,
-    isOfficial: event.is_official,
-    difficulty,
-    capacity: event.capacity ?? undefined,
-    rsvpCount,
-    status,
-    visibility: event.visibility,
-    waitlistEnabled: event.waitlist_enabled,
-    currentUserRsvp,
-    leaderName,
-    tags: tags.length ? tags : undefined,
-    detailHref: `/trips/${event.id}`,
-  }
-}
-
-export default async function TripsPage() {
+async function TripResults({ searchParams }: TripsPageProps) {
   const supabase = await createClient()
-  const events = await fetchVisibleTrips(supabase)
+  const { view, page } = parseTripListParams(await searchParams)
+  const { events, hasMore } = await fetchTripListPage(supabase, view, page)
 
   const tripIds = events.map(event => event.id)
   const [registrations, hostsByTrip] = await Promise.all([
@@ -146,6 +62,57 @@ export default async function TripsPage() {
   }, [])
 
   return (
+    <div className="space-y-6">
+      <nav aria-label="Trip dates" className="flex gap-4">
+        {(['upcoming', 'past'] as const).map(option => (
+          <Link
+            key={option}
+            href={`/trips?view=${option}`}
+            aria-current={view === option ? 'page' : undefined}
+            className="rounded-sm text-sm font-semibold underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {option === 'past' ? 'Past trips' : 'Upcoming trips'}
+          </Link>
+        ))}
+      </nav>
+      {trips.length === 0 ? (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              {view === 'past'
+                ? 'No past trips on this page.'
+                : 'No upcoming trips on this page. Check back soon.'}
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <TripsList trips={trips} />
+      )}
+      <nav aria-label="Trip pages" className="flex items-center gap-4 text-sm">
+        {page > 1 ? (
+          <Link
+            className="rounded-sm underline focus-visible:ring-2 focus-visible:ring-ring"
+            href={`/trips?view=${view}&page=${page - 1}`}
+          >
+            Previous
+          </Link>
+        ) : null}
+        <span>Page {page}</span>
+        {hasMore ? (
+          <Link
+            className="rounded-sm underline focus-visible:ring-2 focus-visible:ring-ring"
+            href={`/trips?view=${view}&page=${page + 1}`}
+          >
+            Next
+          </Link>
+        ) : null}
+      </nav>
+    </div>
+  )
+}
+
+export default function TripsPage(props: TripsPageProps) {
+  return (
     <main className="public-page-top mx-auto w-full max-w-7xl px-4 pb-16 md:pb-20">
       <section className="mb-8 space-y-2">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -160,17 +127,9 @@ export default async function TripsPage() {
         <WeeklyMeetupNote className="text-foreground/80" />
       </section>
 
-      {trips.length === 0 ? (
-        <Card>
-          <CardContent className="p-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              No upcoming trips are scheduled yet. Check back soon.
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <TripsList trips={trips} />
-      )}
+      <Suspense fallback={<TripsListLoading />}>
+        <TripResults {...props} />
+      </Suspense>
     </main>
   )
 }

@@ -142,39 +142,38 @@ export async function upsertProfile(
     privatePayload.updated_at = payload.updated_at
   }
 
-  if (Object.keys(profilePayload).length > 0) {
+  // Profiles can be missing for authenticated users. Keep creation separate so
+  // the insert-only display name default never overwrites an existing name.
+  const { data: existingProfile, error: lookupError } = await client
+    .from('profiles')
+    .select('user_id')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (lookupError) {
+    throw lookupError
+  }
+
+  if (!existingProfile) {
     const profileInsert: Database['public']['Tables']['profiles']['Insert'] = {
       user_id: userId,
       display_name: profilePayload.display_name ?? 'Member',
       ...profilePayload,
     }
 
+    const { error } = await client.from('profiles').insert(profileInsert)
+
+    if (error) {
+      throw error
+    }
+  } else if (Object.keys(profilePayload).length > 0) {
     const { error } = await client
       .from('profiles')
-      .upsert(profileInsert, { onConflict: 'user_id' })
-
-    if (error) {
-      throw error
-    }
-  } else {
-    const { data: existingProfile, error } = await client
-      .from('profiles')
-      .select('user_id')
+      .update(profilePayload)
       .eq('user_id', userId)
-      .maybeSingle()
 
     if (error) {
       throw error
-    }
-
-    if (!existingProfile) {
-      const { error: insertError } = await client
-        .from('profiles')
-        .insert({ user_id: userId, display_name: 'Member' })
-
-      if (insertError) {
-        throw insertError
-      }
     }
   }
 

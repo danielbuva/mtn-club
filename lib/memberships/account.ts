@@ -33,6 +33,7 @@ export type MembershipAccount = {
   checkoutProcessing: boolean
   reviewRequired: boolean
   latestZelleStatus: 'claimed' | 'confirmed' | 'rejected' | 'reversed' | null
+  zelleActivationPending: boolean
   application: {
     status: 'submitted' | 'confirmed' | 'withdrawn'
     ageStatus: 'adult' | 'minor'
@@ -54,6 +55,7 @@ export const unavailableMembershipAccount: MembershipAccount = {
   checkoutProcessing: false,
   reviewRequired: false,
   latestZelleStatus: null,
+  zelleActivationPending: false,
   application: null,
   paymentHistory: [],
 }
@@ -79,7 +81,7 @@ async function loadMembershipAccount(
   const [
     restriction,
     entitlements,
-    activeOverride,
+    overrides,
     checkout,
     review,
     application,
@@ -93,20 +95,15 @@ async function loadMembershipAccount(
       .maybeSingle(),
     admin
       .from('membership_entitlements')
-      .select('starts_at, ends_at, revoked_at')
+      .select('starts_at, ends_at, revoked_at, zelle_payment_id')
       .eq('user_id', userId)
-      .is('revoked_at', null)
       .order('ends_at', { ascending: false }),
     admin
       .from('membership_access_overrides')
       .select('starts_at, ends_at')
       .eq('user_id', userId)
       .is('revoked_at', null)
-      .lte('starts_at', now)
-      .or(`ends_at.is.null,ends_at.gt.${now}`)
-      .order('starts_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
+      .order('starts_at', { ascending: false }),
     admin
       .from('membership_checkout_attempts')
       .select('status, expires_at')
@@ -131,7 +128,7 @@ async function loadMembershipAccount(
       .maybeSingle(),
     admin
       .from('membership_zelle_payments')
-      .select('status')
+      .select('id, status')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(1)
@@ -142,7 +139,7 @@ async function loadMembershipAccount(
   if (
     restriction.error ||
     entitlements.error ||
-    activeOverride.error ||
+    overrides.error ||
     checkout.error ||
     review.error ||
     application.error ||
@@ -153,11 +150,19 @@ async function loadMembershipAccount(
   }
 
   const restrictionState = restriction.data?.restriction ?? 'normal'
-  const currentEntitlement = (entitlements.data ?? []).find(
+  const validEntitlements = (entitlements.data ?? []).filter(
+    entitlement => !entitlement.revoked_at,
+  )
+  const currentEntitlement = validEntitlements.find(
     entitlement => entitlement.starts_at <= now && entitlement.ends_at > now,
   )
-  const latestEntitlement = entitlements.data?.[0] ?? null
-  const hasOverride = Boolean(activeOverride.data)
+  const latestEntitlement = validEntitlements[0] ?? null
+  const activeOverride = (overrides.data ?? []).find(
+    override =>
+      override.starts_at <= now &&
+      (!override.ends_at || override.ends_at > now),
+  )
+  const hasOverride = Boolean(activeOverride)
   const accessActive =
     restrictionState === 'normal' &&
     (Boolean(currentEntitlement) || hasOverride)
@@ -174,10 +179,13 @@ async function loadMembershipAccount(
     restriction: restrictionState,
     accessActive,
     accessExpiresAt:
-      currentEntitlement?.ends_at ?? activeOverride.data?.ends_at ?? null,
+      currentEntitlement?.ends_at ?? activeOverride?.ends_at ?? null,
     provisionalAccess,
     hasExpiredEntitlement: Boolean(
-      latestEntitlement && latestEntitlement.ends_at <= now,
+      (latestEntitlement && latestEntitlement.ends_at <= now) ||
+        overrides.data?.some(
+          override => override.ends_at && override.ends_at <= now,
+        ),
     ),
     checkoutProcessing: Boolean(
       checkout.data?.status === 'open' && checkout.data.expires_at > now,
@@ -186,6 +194,12 @@ async function loadMembershipAccount(
       review.data || checkout.data?.status === 'review_required',
     ),
     latestZelleStatus: zellePayment.data?.status ?? null,
+    zelleActivationPending: Boolean(
+      zellePayment.data?.status === 'confirmed' &&
+        !entitlements.data?.some(
+          entitlement => entitlement.zelle_payment_id === zellePayment.data?.id,
+        ),
+    ),
     application: application.data
       ? {
           status: application.data.status,

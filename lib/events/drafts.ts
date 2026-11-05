@@ -3,6 +3,7 @@ import type { Database } from '@/lib/supabase/types'
 import { normalizeActivityTags } from './activity-tags'
 import { EVENT_KINDS } from './constants'
 import { eventDateTimeToIso, eventLocalDateTime } from './date-time'
+import { mapVisibilityFromTrip, mapVisibilityToTrip } from './visibility'
 
 const mapDifficultyToTrip = (
   difficulty: EventFormValues['difficulty'],
@@ -38,31 +39,6 @@ const mapDifficultyFromTrip = (
     return 'Expert'
   }
   return 'Easy'
-}
-
-const mapVisibilityToTrip = (
-  visibility: EventFormValues['visibility'],
-): Database['public']['Enums']['trip_visibility'] => {
-  if (visibility === 'public') {
-    return 'public'
-  }
-  if (visibility === 'members') {
-    return 'members'
-  }
-  return 'minimal'
-}
-
-const mapVisibilityFromTrip = (
-  visibility: Database['public']['Enums']['trip_visibility'],
-  canChooseOfficial: boolean,
-): EventFormValues['visibility'] => {
-  if (visibility === 'public') {
-    return 'public'
-  }
-  if (visibility === 'minimal') {
-    return canChooseOfficial ? 'leaders_only' : 'members'
-  }
-  return 'members'
 }
 
 function draftDateTime(value: string, timeZone: string) {
@@ -183,7 +159,7 @@ export const toEventFormValuesFromDraft = ({
       overviewWeather: draft.overview_weather ?? '',
       overviewEquipment: draft.overview_equipment ?? '',
       overviewCarpoolNeedGear: draft.overview_carpool_need_gear ?? '',
-      visibility: mapVisibilityFromTrip(draft.visibility, canChooseOfficial),
+      visibility: mapVisibilityFromTrip(draft.visibility),
       maxParticipants:
         typeof draft.max_participants === 'number'
           ? String(draft.max_participants)

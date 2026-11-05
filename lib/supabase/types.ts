@@ -530,6 +530,7 @@ export type Database = {
       }
       membership_applications: {
         Row: {
+          signup_completed_at: string | null
           age_status: Database['public']['Enums']['membership_age_status']
           confirmed_at: string | null
           confirmed_by: string | null
@@ -547,6 +548,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          signup_completed_at?: string | null
           age_status: Database['public']['Enums']['membership_age_status']
           confirmed_at?: string | null
           confirmed_by?: string | null
@@ -564,6 +566,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          signup_completed_at?: string | null
           age_status?: Database['public']['Enums']['membership_age_status']
           confirmed_at?: string | null
           confirmed_by?: string | null
@@ -2239,6 +2242,68 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      merge_accounts: {
+        Args: {
+          p_actor: string
+          p_primary: string
+          p_secondary: string
+          p_dry_run?: boolean
+        }
+        Returns: Json
+      }
+      complete_account_merge: {
+        Args: { p_actor: string; p_primary: string; p_secondary: string }
+        Returns: boolean
+      }
+      submit_membership_signup: {
+        Args: {
+          p_user_id: string
+          p_full_name: string
+          p_contact_email: string
+          p_age_status: Database['public']['Enums']['membership_age_status']
+          p_dues_payment_claimed: boolean
+          p_primary_interest: string
+          p_experience_notes: string | null
+          p_mailing_list_opt_in: boolean
+        }
+        Returns: string
+      }
+      get_published_trip_for_draft: {
+        Args: { p_draft_id: string }
+        Returns: string | null
+      }
+      publish_trip_draft: {
+        Args: {
+          p_draft_id: string
+          p_data: Json
+          p_meetup_point: string | null
+          p_public_host_ids: string[]
+          p_leader_user_ids: string[]
+          p_risk_statements: string[]
+          p_waiver_activities: string[]
+          p_registration_enabled: boolean
+          p_collect_transportation: boolean
+        }
+        Returns: string
+      }
+      save_trip_detail_edits: {
+        Args: {
+          p_trip_id: string
+          p_data: Json
+          p_meetup_point: string | null
+          p_public_host_ids?: string[]
+          p_leader_user_ids?: string[]
+        }
+        Returns: string
+      }
+      get_admin_analytics_totals: {
+        Args: { p_range_start?: string }
+        Returns: Json
+      }
+      get_admin_overview_totals: {
+        Args: never
+        Returns: Json
+      }
       get_active_announcement: {
         Args: never
         Returns: {
@@ -2416,8 +2481,11 @@ export type Database = {
       has_provisional_membership_access: { Args: never; Returns: boolean }
       is_active_member: { Args: { p_uid: string }; Returns: boolean }
       is_banned: { Args: { p_uid: string }; Returns: boolean }
-      is_staff_or_admin: { Args: { p_uid: string }; Returns: boolean }
       is_super_admin: { Args: { p_uid: string }; Returns: boolean }
+      membership_activation_ineligibility: {
+        Args: { p_user_id: string }
+        Returns: string | null
+      }
       process_membership_checkout_event: {
         Args: {
           p_amount_cents: number
@@ -2637,7 +2705,7 @@ export type Database = {
         | 'invited'
         | 'removed'
         | 'waitlisted'
-      trip_visibility: 'public' | 'members' | 'minimal'
+      trip_visibility: 'public' | 'members' | 'minimal' | 'leaders'
       webhook_processing_status: 'processing' | 'succeeded' | 'failed'
       zelle_payment_status: 'claimed' | 'confirmed' | 'rejected' | 'reversed'
     }
@@ -2817,7 +2885,7 @@ export const Constants = {
         'removed',
         'waitlisted',
       ],
-      trip_visibility: ['public', 'members', 'minimal'],
+      trip_visibility: ['public', 'members', 'minimal', 'leaders'],
       webhook_processing_status: ['processing', 'succeeded', 'failed'],
       zelle_payment_status: ['claimed', 'confirmed', 'rejected', 'reversed'],
     },

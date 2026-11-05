@@ -7,7 +7,6 @@ import {
   isDifficultyTag,
   normalizeActivityTags,
 } from '@/lib/events/activity-tags'
-import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { resolveTripEditDates } from '@/lib/events/trip-edit-dates'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
@@ -162,92 +161,19 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     starts_at: dates.startsAt,
     is_all_day: dates.isAllDay,
     ends_at: dates.endsAt,
-    updated_at: new Date().toISOString(),
   }
 
-  const { data: savedTrip, error: tripError } = await supabase
-    .from('trips')
-    .update(tripUpdate)
-    .eq('id', tripId)
-    .select('id')
-    .maybeSingle()
-
-  if (tripError) {
-    throw tripError
-  }
-
-  if (!savedTrip) {
-    return {
-      ok: false,
-      error: 'The event was not saved. Refresh and check your editing access.',
-    } as const
-  }
-
-  const meetupPoint = parseStringField(formData.get('locationNotes'))
-  const { error: privateError } = await supabase.from('trip_private').upsert(
-    {
-      trip_id: tripId,
-      meetup_point: meetupPoint,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: 'trip_id' },
-  )
-
-  if (privateError) {
-    throw privateError
-  }
-
-  if (activityTags.length) {
-    const { error: tagOptionsError } = await supabase
-      .from('trip_tag_options')
-      .upsert(
-        activityTags.map(tag => ({ tag })),
-        { onConflict: 'tag' },
-      )
-
-    if (tagOptionsError) {
-      throw tagOptionsError
-    }
-  }
-
+  // Parse and authorize assignments before the transactional write starts.
   const publicHostIds = parseUuidList(formData.get('publicHostIds'))
   const leaderIds = parseUuidList(formData.get('leaderIds'))
-  if (publicHostIds || leaderIds) {
-    const scope = await supabase.rpc('admin_capability_scope', {
-      p_uid: user.id,
-      p_capability_key: 'trips.update',
-    })
-    if (scope.error) throw scope.error
-    if (scope.data !== 'all') {
-      throw new Error('All-trip permission is required to reassign leaders.')
-    }
-    const hostAssignments = await buildHostAssignments(
-      supabase,
-      tripId,
-      publicHostIds ?? [],
-    )
-    const deletionResults = await Promise.all([
-      supabase.from('trip_hosts').delete().eq('trip_id', tripId),
-      supabase.from('trip_leaders').delete().eq('trip_id', tripId),
-    ])
-    const deletionError = deletionResults.find(result => result.error)?.error
-    if (deletionError) throw deletionError
-    const insertionResults = await Promise.all([
-      publicHostIds?.length
-        ? supabase.from('trip_hosts').insert(hostAssignments)
-        : Promise.resolve({ error: null }),
-      leaderIds?.length
-        ? supabase.from('trip_leaders').insert(
-            leaderIds.map(leaderId => ({
-              trip_id: tripId,
-              user_id: leaderId,
-            })),
-          )
-        : Promise.resolve({ error: null }),
-    ])
-    const insertionError = insertionResults.find(result => result.error)?.error
-    if (insertionError) throw insertionError
-  }
+  const { error: saveError } = await supabase.rpc('save_trip_detail_edits', {
+    p_trip_id: tripId,
+    p_data: tripUpdate,
+    p_meetup_point: parseStringField(formData.get('locationNotes')),
+    ...(publicHostIds !== null ? { p_public_host_ids: publicHostIds } : {}),
+    ...(leaderIds !== null ? { p_leader_user_ids: leaderIds } : {}),
+  })
+  if (saveError) throw saveError
 
   revalidatePath('/schedule')
   revalidatePath('/calendar')

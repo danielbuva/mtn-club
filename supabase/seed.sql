@@ -1,0 +1,2 @@
+-- Intentionally empty: local resets must not create users, grant admin access,
+-- publish waivers, or import production content. Tests own their fixture data.

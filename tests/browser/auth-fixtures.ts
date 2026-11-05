@@ -82,9 +82,11 @@ export async function mockAuthServices(page: Page) {
 }
 
 export async function fillLogin(page: Page) {
+  // The CAPTCHA mock renders only after hydration. Controlled inputs filled
+  // before hydration are reset, so wait for it before typing.
+  await expect(page.getByText('Security check complete')).toBeVisible()
   await page
     .getByLabel('Email address', { exact: true })
     .fill('member@example.test')
   await page.getByLabel('Password', { exact: true }).fill('existing-short')
-  await expect(page.getByText('Security check complete')).toBeVisible()
 }

@@ -617,7 +617,6 @@ export type Database = {
       }
       is_active_member: { Args: { p_uid: string }; Returns: boolean }
       is_banned: { Args: { p_uid: string }; Returns: boolean }
-      is_staff_or_admin: { Args: { p_uid: string }; Returns: boolean }
       try_uuid: { Args: { p: string }; Returns: string }
     }
     Enums: {
@@ -639,7 +638,7 @@ export type Database = {
         | 'invited'
         | 'removed'
         | 'waitlisted'
-      trip_visibility: 'public' | 'members' | 'minimal'
+      trip_visibility: 'public' | 'members' | 'minimal' | 'leaders'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -787,7 +786,7 @@ export const Constants = {
         'removed',
         'waitlisted',
       ],
-      trip_visibility: ['public', 'members', 'minimal'],
+      trip_visibility: ['public', 'members', 'minimal', 'leaders'],
     },
   },
 } as const
