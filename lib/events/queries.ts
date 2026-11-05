@@ -30,6 +30,7 @@ const buildTripsQuery = (
     .from('trips')
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
+    .in('visibility', ['public', 'members', 'leaders'])
     .in(
       'lifecycle_status',
       includeArchived
@@ -52,7 +53,7 @@ export async function fetchOfficialTrips(
 ): Promise<EventRow[]> {
   const { data, error } = await buildTripsQuery(client)
     .eq('is_official', true)
-    .in('visibility', ['public', 'minimal'])
+    .eq('visibility', 'public')
   if (error) throw error
   return data ?? []
 }
@@ -86,6 +87,18 @@ export async function fetchTripsInRange(
     console.error('TRIPS ERROR', error)
     throw error
   }
+  return data ?? []
+}
+
+export async function fetchPublicTripsInRange(
+  client: SupabaseClient<Database>,
+  range: DateRange,
+): Promise<EventRow[]> {
+  const { data, error } = await buildTripsRangeQuery(client, range, false).eq(
+    'visibility',
+    'public',
+  )
+  if (error) throw error
   return data ?? []
 }
 
@@ -131,8 +144,7 @@ export async function fetchPastTripsInRangePublic(
   client: SupabaseClient<Database>,
   range: DateRange,
 ): Promise<EventRow[]> {
-  // Public client relies on RLS for past-only visibility; we only bound the date window.
-  return fetchTripsInRange(client, range)
+  return fetchPublicTripsInRange(client, range)
 }
 
 export async function fetchUpcomingTripsInRangeMember(
@@ -164,6 +176,7 @@ export async function fetchPastTripsPublic(
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
     .in('lifecycle_status', ['published', 'canceled'])
+    .eq('visibility', 'public')
     .lt('starts_at', nowIso)
     .order('starts_at', { ascending: false })
     .limit(limit)

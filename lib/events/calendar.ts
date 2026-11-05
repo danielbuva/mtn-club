@@ -1,6 +1,10 @@
 import { endOfYear, startOfYear } from 'date-fns'
 import { eventToCalendarTrip } from '@/lib/events/mappers'
-import { fetchPublicHostsByTrip, fetchTripsInRange } from '@/lib/events/queries'
+import {
+  fetchPublicHostsByTrip,
+  fetchPublicTripsInRange,
+  fetchTripsInRange,
+} from '@/lib/events/queries'
 import type { CalendarTrip, TripTeaserDay } from '@/lib/events/types'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createClient } from '@/lib/supabase/server'
@@ -29,7 +33,9 @@ export async function getCalendarYearData({
 
   const supabase =
     viewerKey === 'member' ? await createClient() : createPublicClient()
-  const events = await fetchTripsInRange(supabase, range)
+  const events = await (viewerKey === 'member'
+    ? fetchTripsInRange(supabase, range)
+    : fetchPublicTripsInRange(supabase, range))
   const hostsByTrip = await fetchPublicHostsByTrip(
     supabase,
     events.map(event => event.id),

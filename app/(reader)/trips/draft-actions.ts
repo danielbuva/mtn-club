@@ -10,6 +10,7 @@ import {
 } from '@/lib/events/drafts'
 import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
+import { mapVisibilityToTrip } from '@/lib/events/visibility'
 import { riskStatements } from '@/lib/registration/risk-activities'
 import { rosterSchema } from '@/lib/registration/schema'
 import { createClient } from '@/lib/supabase/server'
@@ -22,18 +23,6 @@ const publishFieldLabels: Partial<Record<keyof EventFormValues, string>> = {
   endAt: 'When (end)',
   timezone: 'Timezone',
   primaryLocationName: 'Where',
-}
-
-const mapVisibilityToTrip = (
-  visibility: EventFormValues['visibility'],
-): Database['public']['Enums']['trip_visibility'] => {
-  if (visibility === 'public') {
-    return 'public'
-  }
-  if (visibility === 'members') {
-    return 'members'
-  }
-  return 'minimal'
 }
 
 const mapDifficultyToTrip = (
@@ -59,7 +48,9 @@ const resolveAllowedVisibility = (
   canChooseOfficial: boolean,
 ): EventFormValues['visibility'] => {
   if (!canChooseOfficial && visibility === 'leaders_only') {
-    return 'members'
+    throw new Error(
+      'Trip administration permission is required for leaders-only visibility.',
+    )
   }
   return visibility
 }

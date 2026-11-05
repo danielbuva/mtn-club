@@ -8,6 +8,9 @@ import { promisify } from 'node:util'
 const run = promisify(execFile)
 const container = 'supabase_db_mtn-auth-integration'
 const database = `registration_test_${process.pid}`
+const legacyVisibilityOwner = randomUUID()
+const legacyVisibilityTrip = randomUUID()
+const legacyVisibilityDraft = randomUUID()
 const literal = value => `'${String(value).replaceAll("'", "''")}'`
 function sql(query, db = database) {
   return execFileSync(
@@ -83,6 +86,17 @@ before(() => {
         !name.startsWith('202609040007'),
     )
     .sort()) {
+    if (name === '20261105010002_restrict_leaders_trip_reads.sql') {
+      sql(`insert into auth.users(id,email) values('${legacyVisibilityOwner}','${legacyVisibilityOwner}@example.test');
+        insert into public.profiles(user_id,display_name) values('${legacyVisibilityOwner}','Legacy visibility') on conflict do nothing;
+        insert into public.admin_roles(id,key,name,is_super_admin) values('${legacyVisibilityOwner}','legacy_${legacyVisibilityOwner.replaceAll('-', '_')}','Legacy visibility',true);
+        insert into public.admin_user_roles(user_id,role_id) values('${legacyVisibilityOwner}','${legacyVisibilityOwner}');
+        insert into public.trips(id,title,created_by,visibility,starts_at,ends_at,is_official)
+        values('${legacyVisibilityTrip}','Legacy leaders trip','${legacyVisibilityOwner}','minimal',now()+interval '2 days',now()+interval '3 days',true);
+        insert into public.trip_drafts(id,created_by,visibility) values('${legacyVisibilityDraft}','${legacyVisibilityOwner}','minimal');
+        delete from public.admin_user_roles where user_id='${legacyVisibilityOwner}';
+        delete from public.admin_roles where id='${legacyVisibilityOwner}';`)
+    }
     sql(readFileSync(new URL(name, migrations), 'utf8'))
   }
   // Legacy regression fixtures explicitly retain the old per-trip model. Annual journeys opt in below.
@@ -137,9 +151,41 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
     'registration-authorization.sql',
     'admin-member-access.sql',
     'trip-editing.sql',
+    'trip-visibility.sql',
     'registration-opening.sql',
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
+})
+test('legacy minimal trips and drafts migrate to leaders and reject future minimal writes', () => {
+  assert.equal(
+    sql(
+      `select visibility from public.trips where id='${legacyVisibilityTrip}'`,
+    ),
+    'leaders',
+  )
+  assert.equal(
+    sql(
+      `select visibility from public.trip_drafts where id='${legacyVisibilityDraft}'`,
+    ),
+    'leaders',
+  )
+  assert.throws(
+    () =>
+      sql(
+        `update public.trips set visibility='minimal' where id='${legacyVisibilityTrip}'`,
+      ),
+    /trips_no_legacy_minimal/,
+  )
+  assert.throws(
+    () =>
+      sql(
+        `update public.trip_drafts set visibility='minimal' where id='${legacyVisibilityDraft}'`,
+      ),
+    /trip_drafts_no_legacy_minimal/,
+  )
+  sql(
+    `delete from public.trip_drafts where id='${legacyVisibilityDraft}'; delete from public.trips where id='${legacyVisibilityTrip}'; delete from auth.users where id='${legacyVisibilityOwner}'; delete from public.admin_roles where id='${legacyVisibilityOwner}'`,
+  )
 })
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()

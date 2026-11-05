@@ -2637,7 +2637,7 @@ export type Database = {
         | 'invited'
         | 'removed'
         | 'waitlisted'
-      trip_visibility: 'public' | 'members' | 'minimal'
+      trip_visibility: 'public' | 'members' | 'minimal' | 'leaders'
       webhook_processing_status: 'processing' | 'succeeded' | 'failed'
       zelle_payment_status: 'claimed' | 'confirmed' | 'rejected' | 'reversed'
     }
@@ -2817,7 +2817,7 @@ export const Constants = {
         'removed',
         'waitlisted',
       ],
-      trip_visibility: ['public', 'members', 'minimal'],
+      trip_visibility: ['public', 'members', 'minimal', 'leaders'],
       webhook_processing_status: ['processing', 'succeeded', 'failed'],
       zelle_payment_status: ['claimed', 'confirmed', 'rejected', 'reversed'],
     },

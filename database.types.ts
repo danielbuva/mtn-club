@@ -639,7 +639,7 @@ export type Database = {
         | 'invited'
         | 'removed'
         | 'waitlisted'
-      trip_visibility: 'public' | 'members' | 'minimal'
+      trip_visibility: 'public' | 'members' | 'minimal' | 'leaders'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -787,7 +787,7 @@ export const Constants = {
         'removed',
         'waitlisted',
       ],
-      trip_visibility: ['public', 'members', 'minimal'],
+      trip_visibility: ['public', 'members', 'minimal', 'leaders'],
     },
   },
 } as const

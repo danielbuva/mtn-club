@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import ts from 'typescript'
 import * as dateTime from '../lib/events/date-time.ts'
+import * as visibility from '../lib/events/visibility.ts'
 import * as riskActivities from '../lib/registration/risk-activities.ts'
 
 function compile(path, dependencies) {
@@ -213,9 +214,13 @@ const { eventFormSchema } = compile('../lib/events/schema.ts', {
 const draftHelpers = compile('../lib/events/drafts.ts', {
   './activity-tags': activityTags,
   './constants': constants,
+  './visibility': visibility,
   './date-time': dateTime,
 })
-const { emptyEventValues } = compile('../lib/events/form-values.ts', {})
+const { emptyEventValues, normalizeEventValues } = compile(
+  '../lib/events/form-values.ts',
+  {},
+)
 const { formatTimeRange } = compile('../lib/events/formatters.ts', {})
 test('creation supports explicit no end, including draft round trips', () => {
   const values = {
@@ -276,5 +281,26 @@ test('creation supports explicit no end, including draft round trips', () => {
       timezoneFallback: 'America/Los_Angeles',
     }).values.noEndTime,
     false,
+  )
+})
+
+test('draft helpers preserve leaders-only visibility even after creation permission is lost', () => {
+  const values = { ...emptyEventValues(), visibility: 'leaders_only' }
+  const draft = draftHelpers.toDraftRowInput({
+    values,
+    isNoLimitEnabled: true,
+    createdBy: 'creator',
+    canChooseOfficial: true,
+  })
+  assert.equal(draft.visibility, 'leaders')
+  const restored = draftHelpers.toEventFormValuesFromDraft({
+    draft,
+    canChooseOfficial: false,
+    timezoneFallback: 'America/Los_Angeles',
+  })
+  assert.equal(restored.values.visibility, 'leaders_only')
+  assert.equal(
+    normalizeEventValues(restored.values, true, false).visibility,
+    'leaders_only',
   )
 })
