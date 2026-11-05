@@ -617,7 +617,6 @@ export type Database = {
       }
       is_active_member: { Args: { p_uid: string }; Returns: boolean }
       is_banned: { Args: { p_uid: string }; Returns: boolean }
-      is_staff_or_admin: { Args: { p_uid: string }; Returns: boolean }
       try_uuid: { Args: { p: string }; Returns: string }
     }
     Enums: {

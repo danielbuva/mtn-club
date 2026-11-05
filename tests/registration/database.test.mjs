@@ -84,6 +84,42 @@ const register = (trip, user, id = randomUUID()) =>
     `select public.registration_command('${trip}','register','${id}',0,'{"formVersion":2,"answers":{}}')`,
   )
 
+for (const [name, fixtureName] of [
+  [
+    'private accounts and membership access require their own capabilities',
+    'admin-rls-capabilities.sql',
+  ],
+  [
+    'legacy content writes and comment moderation honor resource scopes',
+    'admin-rls-resource-scopes.sql',
+  ],
+  [
+    'legacy payment RPC requires configured payment review capability',
+    'admin-rls-legacy-payment.sql',
+  ],
+]) {
+  test(name, () =>
+    sql(readFileSync(new URL(`../${fixtureName}`, import.meta.url), 'utf8')),
+  )
+}
+
+test('no final policy or function retains the coarse staff helper', () => {
+  assert.equal(
+    sql("select to_regprocedure('public.is_staff_or_admin(uuid)') is null"),
+    't',
+  )
+  assert.equal(
+    sql(`select count(*) from pg_policies where
+    coalesce(qual, '') || coalesce(with_check, '') like '%is_staff_or_admin%'`),
+    '0',
+  )
+  assert.equal(
+    sql(`select count(*) from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname in ('public','registration_private') and p.prosrc like '%is_staff_or_admin%'`),
+    '0',
+  )
+})
+
 test('transactional workflow, requirements, waiver evidence, and merge SQL', () => {
   for (const name of [
     'registration.sql',
