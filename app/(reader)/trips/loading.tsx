@@ -1,13 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card'
-
-const skeletonKeys = [
-  'trip-skeleton-one',
-  'trip-skeleton-two',
-  'trip-skeleton-three',
-  'trip-skeleton-four',
-  'trip-skeleton-five',
-  'trip-skeleton-six',
-]
+import { TripsListLoading } from '@/components/trips/trips-list-loading'
+import { WeeklyMeetupNote } from '@/components/weekly-meetup-note'
 
 export default function TripsLoading() {
   return (
@@ -19,20 +11,13 @@ export default function TripsLoading() {
         <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
           Trips & Events
         </h1>
+        <p className="text-sm text-muted-foreground">
+          Browse official club trips and community events.
+        </p>
+        <WeeklyMeetupNote className="text-foreground/80" />
       </section>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {skeletonKeys.map(key => (
-          <Card key={key} className="overflow-hidden">
-            <div className="aspect-[16/9] animate-pulse bg-muted" />
-            <CardContent className="space-y-3 p-4">
-              <div className="h-5 w-4/5 animate-pulse rounded bg-muted" />
-              <div className="h-4 w-3/5 animate-pulse rounded bg-muted" />
-              <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <TripsListLoading />
     </main>
   )
 }

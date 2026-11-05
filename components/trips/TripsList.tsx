@@ -1,7 +1,7 @@
 'use client'
 
 import { LayoutGrid, Rows3 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { TripCard } from '@/components/trips/TripCard'
 import { Button } from '@/components/ui/button'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -17,11 +17,6 @@ export function TripsList({ trips }: TripsListProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const isMobile = useIsMobile()
   const effectiveViewMode: ViewMode = isMobile ? 'list' : viewMode
-
-  const sortedTrips = useMemo(
-    () => [...trips].sort((a, b) => a.startAt.getTime() - b.startAt.getTime()),
-    [trips],
-  )
 
   return (
     <section className="space-y-4">
@@ -53,7 +48,7 @@ export function TripsList({ trips }: TripsListProps) {
             : 'grid grid-cols-1 gap-4'
         }
       >
-        {sortedTrips.map(trip => (
+        {trips.map(trip => (
           <TripCard key={trip.id} trip={trip} viewMode={effectiveViewMode} />
         ))}
       </div>
