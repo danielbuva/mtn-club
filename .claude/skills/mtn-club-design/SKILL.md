@@ -25,7 +25,11 @@ description: Brand and design rules for UNLV Mountain Club UI and email. Load be
 
 ## Email craft (from Litmus, caniemail, Gmail CSS docs, goodemailcode)
 
-Code lives in `lib/email/layout.ts` (shared shell + blocks). Auth templates are generated: edit `lib/email/auth-templates.ts`, run `node scripts/build-auth-emails.ts`; tests run it with `--check`. Trip notifications use the same blocks in `lib/registration/email.ts`.
+Code lives in `lib/email/` — `theme.ts` (tokens), `blocks.ts` (paragraph, button, secondaryButton, codeBlock, callout, details, statusTag, image, notice, storyList, linkFallback), `layout.ts` (shell).
+- Supabase Auth: `auth-templates.ts` (signup, recovery, code, password changed) and `account-templates.ts` (invite, email change, reauthentication, security notices).
+- Trip notifications: `lib/registration/email.ts` + `email-copy.ts` (one entry per notification kind: heading, message, status tone, action).
+- Broadcasts: `announcement.ts` (news, trip, digest, alert) and `resend-templates.ts` (Resend dashboard templates with `{{{VARS}}}`).
+- Run `node scripts/build-auth-emails.ts` to regenerate `supabase/templates/` and `docs/email/resend/`; tests run it with `--check`.
 
 - Tables with `role="presentation"`, 600px max container, MSO ghost table for Outlook. All essential styles inline; `<style>` only for dark mode and enhancements (Gmail drops the whole block on one syntax error).
 - Px line-heights plus `mso-line-height-rule:exactly`; MSO font override to Arial.

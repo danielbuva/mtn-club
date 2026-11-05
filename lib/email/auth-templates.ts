@@ -1,31 +1,29 @@
 // Supabase Auth email bodies. Supabase fills the Go-template placeholders;
 // regenerate supabase/templates with `node scripts/build-auth-emails.ts`.
+
+import {
+  type AuthTemplate,
+  accountReason,
+  contact,
+  resetHref,
+  site,
+} from './auth-shared.ts'
 import {
   button,
   codeBlock,
   finePrint,
-  inlineLink,
   linkFallback,
   paragraph,
   renderEmail,
   secondaryButton,
 } from './layout.ts'
 
-const site = '{{ .SiteURL }}'
-const contact = inlineLink(
-  'mailto:unlvmountainclub@gmail.com',
-  'email the club',
-)
-const accountReason =
-  'You’re getting this because {{ .Email }} has an account with UNLV Mountain Club.'
-
-export type AuthTemplate = { file: string; subject: string; html: string }
+export type { AuthTemplate } from './auth-shared.ts'
 
 const confirmHref =
   '{{ .RedirectTo }}&amp;token_hash={{ .TokenHash }}&amp;type=signup'
 const recoveryHref =
   '{{ .RedirectTo }}&amp;token_hash={{ .TokenHash }}&amp;type=recovery'
-const resetHref = `${site}/auth/forgot-password?returnTo=%2Fprofile%2Fuser%2Faccount`
 
 export const authTemplates: AuthTemplate[] = [
   {
