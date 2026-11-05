@@ -1,0 +1,148 @@
+{
+  "assetId": "warm-main-southwest-guide",
+  "sourceId": "mtn-club-warm-main-southwest-guide",
+  "recordedAt": "2026-10-01",
+  "representation": "original raster reconstruction",
+  "creationAuthorization": {
+    "basis": "User-directed original face-image creation using The Pearl as the quality bar for future boulders",
+    "userInstructions": [
+      "Produce one real guide-quality, straight-on face image for The Pearl and then use that as the quality bar for future boulders."
+    ],
+    "label": "Original MTN Club guide asset",
+    "distributionId": "MTN-Club-original",
+    "scope": "Records original asset creation for this guide. It is not a third-party photographic license, public-domain assertion or general copyright guarantee for generated output."
+  },
+  "generation": {
+    "tool": "built-in image_gen",
+    "candidate": "02",
+    "originalPng": {
+      "width": 1448,
+      "height": 1086,
+      "bytes": 3059199,
+      "sha256": "9f821dce4d3b798129e3716ed2b7898b6cefdc42c0e57b3e929812590ad2cd1d"
+    },
+    "prompt": "Revise this OWN generated raster into a believable ordinary FIELD PHOTO at Kraft, Nevada. This is our generated study, not a third-party photo. Preserve the observed rock's major factual silhouette, proportions, planes, existing features and ground relationship; do not add holds or major cracks. The change is away from a flawlessly lit commercial hero image, toward a useful casually observed photo somebody actually took outdoors. Keep the guide's clear near-frontal view and whole face/start/finish context, but reduce immaculate presentation: ordinary slightly hazy or patchily clouded daytime light, moderate rather than spectacular contrast, less saturated blue sky, uneven natural sky fill and subtle shade, modest sharpness and realistic fine camera texture, no glossy polished rock, dramatic cinematic light, HDR clarity, uniformly perfect texture or showroom quality. Weathering, dusty uneven color, worn/spalled edges and small asymmetries remain natural and varied, not a procedural all-over noise pattern. Dusty loose rubble, unmanicured scrub and imperfect ordinary desert surroundings ground the rock. No people/pads/text/route lines. The image must remain clearly readable at mobile zoom, not deliberately blurred, damaged or filtered. Surface grain/incidentally worn marks are illustrative, not surveyed holds. Maintain exact major geometry and approximately the same native image composition for subsequent guide correspondence; do not straighten away real irregularity.\nWARM-UP MAIN SOUTH/SOUTHWEST: KEEP the rounded/trapezoidal main wall, blunt left margin, curved right corner/narrow flank, worn OBLIQUE shallow central-lower break with rounded relief beneath, and uneven low foot/apron. Keep the partial companion edge and narrow right passage separate; no invented complete companion/back. Do not transform into a neat perfect panel or flatten characteristic relief. Existing chalk/wear is naturally irregular, subordinate and not a mapped route sequence. Ordinary patchy daylight and restrained contrast should convey the rough plates/varnish/exposed sandstone without immaculate evenly arranged commercial lighting.\n",
+    "camera": "Original near-frontal main-plane camera retained from our own candidate01, with ordinary uneven daylight and only a modest right flank and partial companion edge.",
+    "pixelInputs": [
+      {
+        "name": "Our own generated Warm Main candidate01",
+        "sha256": "f79d671d02305f8eeec44e2b52e1c34a50cdb4907992b7809300760e25de4fdc",
+        "role": "Only input pixels for the field-style revision; not a third-party photograph"
+      }
+    ],
+    "factualReferences": [
+      {
+        "sourceId": "mp-warm-main-photo-107432437",
+        "photoId": "107432437",
+        "url": "https://www.mountainproject.com/photo/107432437/warm-up-boulder-east-face-topo",
+        "width": 400,
+        "height": 600,
+        "sha256": "53907e93e20c318f1ba5b7229ce3a0c2e816b313b44087a0f777b8675fe41270",
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      },
+      {
+        "sourceId": "mp-warm-main-photo-107030500",
+        "photoId": "107030500",
+        "url": "https://www.mountainproject.com/photo/107030500/east-face-of-the-main-warm-up-boulder",
+        "width": 338,
+        "height": 600,
+        "sha256": "6bd1689442e8efea3f0565191d8d1f26523a074cb58cf1b51d0d8c53a57496a6",
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      },
+      {
+        "sourceId": "mp-warm-main-photo-107432433",
+        "photoId": "107432433",
+        "url": "https://www.mountainproject.com/photo/107432433/warm-up-boulder-south-face-topo",
+        "width": 800,
+        "height": 534,
+        "sha256": "2e570a221011fa6cbed1ced3c9f015d860294e38bc7a6e7d6fc213f935b55351",
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      }
+    ],
+    "factualReferenceUse": "Actual reference photographs were inspected for major rock morphology and field material facts only. Mountain Project pixels and topo artwork were not generator inputs, are not shipped, and no reference camera composition or route artwork is reproduced.",
+    "priorOriginalGeneration": {
+      "tool": "built-in image_gen",
+      "candidate": "01",
+      "originalPng": {
+        "width": 1448,
+        "height": 1086,
+        "bytes": 3222298,
+        "sha256": "f79d671d02305f8eeec44e2b52e1c34a50cdb4907992b7809300760e25de4fdc"
+      },
+      "prompt": "Create a realistic original raster field-guide image of this ACTUAL Kraft boulder, based only on the following factual synthesis from multiple independently inspected real photographs. No source photograph pixels or topo art are supplied. Choose our own guide-specific camera, daylight and composition, never recreate a photographer's exact framing. Photographic outdoor realism with the natural field character of an observed Nevada sandstone boulder: irregular wear, muted rusty orange/peach/buff variation, uneven weathered varnish, slightly messy natural terrain, warm directional sun and cooler sky fill. No uniform orange material, repeated noise texture, architectural bevels, polished planes, studio gradients, simplified massing, isolated showroom object, stylized/vector/low-poly art. Major cracks/ledges/holes must ONLY follow the factual geometry below. Fine texture and any incidental pale smears are illustrative, not exact holds. Do not add an invented chalk sequence. No people, pads, text, numbers, logos, painted lines or overlays. Boulder dominates frame with whole climb-bearing face, finish crown, base/start terrain and modest recognition context visible; camera near standing-eye level, moderate perspective without fisheye. Enough varied real-feeling desert ground/rubble/scrub and subordinate rock slopes for natural contact; do not manufacture a clean empty pedestal.\n\nBOULDER: Warm-up Boulders MAIN ROCK, SOUTH/SOUTHWEST broad plane. One whole-face photograph plus two independently photographed east flanks establish this particular large main rock; source catalog includes a PAIR, but the companion is separate and not part of the main outline.\nGEOMETRY: broad steep rounded/trapezoidal sandstone wall, a little wider than its visible height, crowned by a LOW rounded cap that rolls naturally into its narrower east flank. Blunt irregular near-vertical LEFT margin, curved RIGHT-HAND CORNER separating broad main plane from narrow steep side. Rock is asymmetric with subtle changes in surface curvature and substantial mass behind the face, not a perfect rectilinear block, squat smooth dome or isolated thin slab.\nPhysical relief on the broad plane: irregular patchy plate-like sandstone and shallow vertical grooves, rugged upper/left relief transitioning to larger rounded lower-middle bulges. An irregular OBLIQUE ledge/flake break rises across central-lower wall, with broad rounded convex relief BELOW the break. It is a shallow worn broken seam/rail, not a giant terrace, repeated horizontal shelves, stepped staircase, cavern or deep unobserved fissure. On left region an irregular shallow vertical break connects worn upper protruding plates to lower angled foot. Right corner turns into a steeper narrower flank with natural plate/crease transitions; do not reveal a hidden full east plane or fabricate route holds. Face descends to a low uneven slanting sandstone foot/apron and rough reddish ground. A narrow shaded passage runs along the right side toward a separate companion rock; show only a subordinate PARTIAL companion edge at frame boundary if needed, not an invented complete second boulder.\nMATERIAL: warm rusty orange, dusty salmon, pale buff exposed facets and irregular dark brown varnish create nuanced large and small value changes. More rugged and varied than Potato Chip: worn rock plates, peeling patina, shallow depressions and occasional fine cracks, all uneven rather than tiled. Existing cap/corner/ledge edges are weathered and chipped, never clean sculpted bevels. Sparse dull chalk smears/pale abrasion near contacted relief may look natural and irregular but do not reproduce a source chalk map or invent a route sequence. Maintain depth in creases and the right passage through cool reflected light; no glossy plastic.\nCAMERA: original near-frontal eye-level view facing broad main south/southwest plane, modest glimpse of rounded right corner for orientation, independent distance/lateral offset and daylight/background. Landscape 4:3, main boulder dominant and compositionally centered with whole crown, left/right silhouette, angled foot and sufficient irregular ground visible. Use small margins; no huge empty sky. Uneven dusty rubble and sparse scrub contextualize ground without hiding principal start regions; partial source-occluded basal areas remain small and generic. Unseen back/underside, metric dimensions and full companion geometry are unknown and must not be invented as guide features. This is a believable naturally worn main Kraft boulder in real desert light, never a sanitized object or a generic AI sandstone wall.\n",
+      "camera": "Original near-frontal standing-eye-height camera of the observed main south/southwest plane, with modest right-corner context; no complete companion or hidden back.",
+      "pixelInputs": []
+    }
+  },
+  "shippedAsset": {
+    "src": "/kraft/warm-main-southwest-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 547270,
+    "sha256": "f6478881753c6a912c4d50b309a57e3dc8c1aef16cfe6cdfb9e78def19953417",
+    "conversion": "Sharp WebP quality 92, effort 6; native dimensions preserved with no crop"
+  },
+  "review": {
+    "reviewer": "Independent raster field-style critic (agent)",
+    "reviewedAt": "2026-10-01",
+    "verdict": "accept-scoped-macro-geometry-and-casual-field-style",
+    "originalPngSha256": "9f821dce4d3b798129e3716ed2b7898b6cefdc42c0e57b3e929812590ad2cd1d",
+    "scope": "Actual new raster pixels, prior own raster pixels and actual factual reference photos: major physical identity, natural casual outdoor field-photo character and independent guide-camera clarity.",
+    "geometryObservations": [
+      "The broad rounded/trapezoidal standing wall, low crown, blunt left margin and curved right corner remain recognizable.",
+      "The oblique central-lower break, larger rounded relief beneath it and angled rubble-contact foot are retained.",
+      "The narrow right passage and cropped companion fragment remain subordinate; no complete unseen companion or east wall is reconstructed."
+    ],
+    "styleObservations": [
+      "Muted peach/rust stone, broken brown varnish and softer uneven daylight remove much of the previous polished brightness while retaining readable relief.",
+      "Rough plates, creases, local pale wear, dusty angular rubble and marginal scrub still read as naturally worn outdoor stone.",
+      "Fine relief and material patches remain illustrative rather than surveyed climbing holds."
+    ],
+    "guideCamera": "pass; original near-frontal dominant climbing plane with readable crown, sides, foot and modest right-corner context",
+    "approvedImageScope": "Observed main south/southwest plane and modest right flank only; source-qualified aspect, no full east plane, back or companion outline approval.",
+    "limitations": "Raster acceptance covers observed macro identity, independently composed framing and ordinary field-photo character only. Generated fine holds and material are illustrative; exact route paths, hand placements and current conditions are not approved.",
+    "humanReview": "pending",
+    "fieldVerification": "not performed",
+    "routePathApproval": "pending",
+    "guideOutputReview": "pending"
+  },
+  "faceGeometry": {
+    "sourceUnit": "Warm-up Boulders Main",
+    "mpParentId": "106657477",
+    "sourceUnitScope": "The source parent describes two boulders; this image covers only the observed main plane and partial right flank, not a complete two-rock physical inventory.",
+    "faceIds": [
+      "mp-view-106657477-main-south",
+      "mp-view-106657477-main-southwest",
+      "mp-view-106657477-fluffer-donkey-relative-region"
+    ],
+    "sourceOrientations": [
+      "south",
+      "southwest",
+      "unknown"
+    ],
+    "orientationBasis": "Primary route observations retain source cardinal labels; the four relative routes remain unknown/editorial-provisional. No surveyed compass bearing is asserted.",
+    "imageEligibleClimbIds": [
+      "mp-route-106657480",
+      "mp-route-107430241",
+      "mp-route-107396283",
+      "mp-route-107116919",
+      "mp-route-107432448",
+      "mp-route-122054608",
+      "mp-route-125574115"
+    ],
+    "scope": "Observed broad main south/southwest plane with modest right-corner context. Full east plane, back, complete companion outline and other source-catalog routes are excluded.",
+    "confidence": "Macro geometry and ordinary field-photo character accepted by a fresh independent agent; image-space route correspondence is separate",
+    "unresolvedGeometry": [
+      "Precise footprint, underside and back",
+      "Full frontal east plane and complete companion outline",
+      "Metric scale and calibrated camera bearing",
+      "Exact holds, start locations, route paths and finishes",
+      "Current rock and ground conditions"
+    ],
+    "humanVerification": "pending",
+    "fieldVerification": "not performed"
+  }
+}

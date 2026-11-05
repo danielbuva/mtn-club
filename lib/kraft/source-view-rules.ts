@@ -1,21 +1,7 @@
-import type { RouteFactFields } from './catalog-types'
-import type { SourceFaceOrientation } from './source-face-types'
+import { mainSourceViewGroups } from './source-view-main-rules.ts'
+import type { SourceViewFactRule, SourceViewGroup } from './source-view-types'
 
-export type SourceViewFactRule = {
-  mpRouteId: string
-  factField: keyof RouteFactFields
-  sourceFact: string
-}
-
-type SourceViewGroup = {
-  mpParentId: string
-  key: string
-  orientation: SourceFaceOrientation | 'unknown'
-  routes: Record<string, string | Omit<SourceViewFactRule, 'mpRouteId'>>
-  relations: SourceViewFactRule[]
-  faceId?: string
-  assignmentStatus?: 'source-backed' | 'editorial-provisional'
-}
+export type { SourceViewFactRule, SourceViewGroup } from './source-view-types'
 
 function view(
   mpParentId: string,
@@ -162,4 +148,5 @@ export const sourceViewGroups: SourceViewGroup[] = [
   view('113973264', 'west-rear-slab', 'west', {
     '200632114': 'Tall, low-angle west-facing rear slab.',
   }),
+  ...mainSourceViewGroups,
 ]

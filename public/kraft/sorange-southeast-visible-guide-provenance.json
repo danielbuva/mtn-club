@@ -1,0 +1,60 @@
+{
+  "assetId": "sorange-southeast-visible-guide",
+  "sourceId": "mtn-club-sorange-southeast-visible-guide",
+  "generatedAt": "2026-10-01",
+  "tool": "built-in image_gen",
+  "generatedPng": "/Users/dani/.codex/generated_images/01a0f5ef-17bf-7ab2-9484-75daf8891ce7/exec-bad41b64-ef7c-4ec1-a0c2-b9777d7f7a9d.png",
+  "pngSha256": "56d428a87506364ebe41d0540371ec0be4e4f64cdcd406055ce47f651978fc2a",
+  "actualPrompt": "Use case: photorealistic-natural. ORIGINAL realistic outdoor field-guide raster, aspect4:3. The actual named Kraft sandstone boulder below, reconstructed from a factual synthesis of several independently inspected photographs. NO input source photograph, no imitation of photographic framing. Choose our own near-frontal slightly oblique standing-eye-level guide camera showing major depth. Full relevant climbing plane, entire crown and starts visible, rock dominant with modest breathing space. Ordinary everyday desert light, slight exposure imperfection, incidental rocky sandy ground and sparse scrub. Rough granular sandstone, irregular bedding, mottled purple-brown varnish, eroded corners, chalk smudges, not polished or uniform. No people, pads, arrows, route art, lettering, watermark. NOT an illustration, studio render, low-poly model, generic rounded rock or hero shot. Maintain substantial true three-dimensional thickness and depth; do not flatten the actual protrusions into one sloping slab. No new prominent features beyond the supplied observed facts.\nSORANGE main southeast panel: strongly diagonal asymmetric sandstone mass. A prominent long, STEEP, RAISED OBLIQUE RIB/FIN separates a lighter smoother left slab plane from a darker, narrower, steep southeast climbing panel on its right. This dominant fin/flake must project noticeably out of the plane with a jagged layered crest; do not reduce it to a low square block. The silhouette, crown, and left outer contour rise STRONGLY from lower left toward high right, with a pointed/blunt high right shoulder. Main southeast panel is steep, narrower and obliquely grainy, with discontinuous rails across lower center and distinct right outer arete; it is not a broad level horizontal rectangular wall. Lower-left edge is broken and undercut, rough support stones under narrow foot. Top lip projects naturally; small asymmetric eroded crimp-sized texture without invented prominent holes. Entire fin, panel, high right crown and ground visible from our original near-frontal/slightly oblique camera. Ordinary crag shot, sandstone character, not simplified massing.",
+  "generatorPixelInputs": [],
+  "references": [
+    {
+      "sourceId": "mp-visible-photo-120119406",
+      "photoId": "120119406",
+      "url": "https://www.mountainproject.com/photo/120119406",
+      "title": "Sorange boulder.",
+      "sha256": "6add75f3daea2efb911c3e7c91d60fcdeaf7969a83e94ccf97d5313c819efac3",
+      "width": 800,
+      "height": 600,
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "sourceId": "mp-visible-photo-116534421",
+      "photoId": "116534421",
+      "url": "https://www.mountainproject.com/photo/116534421",
+      "title": "sorange v3. classic in my book!",
+      "sha256": "a5df4edc737bb219e36d0812d3ba208c0b1de76b95886ae2d2e005bf5aa276b1",
+      "width": 338,
+      "height": 600,
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    }
+  ],
+  "camera": "Original near-frontal guide viewpoint chosen independently, rather than reproducing a reference composition.",
+  "scope": "Only the pictured plane and source-supported general line regions; alternate sides are excluded.",
+  "unresolved": [
+    "Fine surface detail is illustrative; individual holds are not calibrated.",
+    "Field conditions and human field verification pending."
+  ],
+  "review": {
+    "status": "geometry review",
+    "critic": "Independent batch output critic",
+    "date": "2026-10-01",
+    "receipt": ".tmp/kraft-gauntlet/immersive-visible-batch-critic/initial-raster-receipt.json",
+    "decision": "Macro geometry accepted; rendered guide and corridor batch review pending."
+  },
+  "shippedAsset": {
+    "src": "/kraft/sorange-southeast-visible-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 403458,
+    "sha256": "aad644a64418e68b12361e55ff3b7315b85498b1469b486b42bc79cde030b6c3",
+    "conversion": "Sharp WebP quality88 effort6; native dimensions, no crop"
+  },
+  "productionRights": {
+    "licenseId": "MTN-Club-original",
+    "owner": "MTN Club",
+    "note": "User-directed original raster creation. Reference-only third-party photographs are not input pixels or distributable assets."
+  }
+}

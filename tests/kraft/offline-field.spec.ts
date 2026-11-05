@@ -90,9 +90,18 @@ test('verified production download survives zero network, reload and a reopened 
   await cube
     .getByRole('button', { name: 'South arête · S', exact: true })
     .click()
-  await cube
+  await cube.getByRole('button', { name: 'Browse climbs', exact: true }).click()
+  const cubePicker = cube.getByRole('region', {
+    name: 'Climb picker',
+    exact: true,
+  })
+  await cubePicker
     .getByRole('button', { name: /^03 Fear of a Black Hat .*V9$/ })
     .click()
+  await expect(cubePicker).toBeHidden()
+  await expect(page).toHaveURL(/climb=fear-of-a-black-hat/)
+  await expect(page).toHaveURL(/face=cube-south/)
+
   const fearDetails = cube.getByRole('article', {
     name: 'Fear of a Black Hat details',
     includeHidden: true,
@@ -100,11 +109,15 @@ test('verified production download survives zero network, reload and a reopened 
   await expect(fearDetails).toHaveCount(1)
   await expect(fearDetails).toBeHidden()
   await cube
-    .getByLabel('View Fear of a Black Hat climb details', {
+    .getByRole('button', {
+      name: 'Open Fear of a Black Hat full climb record',
       exact: true,
     })
     .click()
   await expect(fearDetails).toBeVisible()
+  await cube
+    .getByRole('button', { name: 'Close climb details', exact: true })
+    .click()
   await cube.getByRole('button', { name: 'Back to Kraft', exact: true }).click()
   await page.getByRole('searchbox').fill('The Split Boulder')
   await page
@@ -136,10 +149,18 @@ test('verified production download survives zero network, reload and a reopened 
       ),
     )
     .toBe(true)
-  await pearl.getByText('Image notes & credit', { exact: true }).click()
-  await expect(pearl).toContainText(
-    'Two independently reviewed moderate corridors',
-  )
+  await pearl
+    .getByRole('button', { name: 'Boulder details', exact: true })
+    .click()
+  const pearlDetails = pearl.getByRole('region', {
+    name: 'Boulder details',
+    exact: true,
+  })
+  await pearlDetails.getByText('Image notes & credit', { exact: true }).click()
+  await expect(pearlDetails).toContainText('Original MTN Club reconstruction')
+  await pearlDetails
+    .getByRole('button', { name: 'Close boulder details', exact: true })
+    .click()
   await expect(pearl.locator('g[data-confidence="moderate"]')).toHaveCount(2)
   await pearl
     .getByRole('button', { name: 'Zoom in image', exact: true })
@@ -170,7 +191,10 @@ test('verified production download survives zero network, reload and a reopened 
   await expect(monkeyDetails).toHaveCount(1)
   await expect(monkeyDetails).toBeHidden()
   await monkey
-    .getByLabel('View Monkey Bars climb details', { exact: true })
+    .getByRole('button', {
+      name: 'Open Monkey Bars full climb record',
+      exact: true,
+    })
     .click()
   await expect(monkeyDetails).toBeVisible()
   await expect(monkeyDetails).toContainText(
@@ -188,7 +212,10 @@ test('verified production download survives zero network, reload and a reopened 
     reopened.getByRole('dialog', { name: 'Monkey Bar Boulder boulder guide' }),
   ).toBeVisible()
   await expect(
-    reopened.getByLabel('View Monkey Bars climb details', { exact: true }),
+    reopened.getByRole('button', {
+      name: 'Open Monkey Bars full climb record',
+      exact: true,
+    }),
   ).toBeVisible()
   const reopenedDetails = reopened.getByRole('article', {
     name: 'Monkey Bars details',
@@ -197,7 +224,10 @@ test('verified production download survives zero network, reload and a reopened 
   await expect(reopenedDetails).toHaveCount(1)
   await expect(reopenedDetails).toBeHidden()
   await reopened
-    .getByLabel('View Monkey Bars climb details', { exact: true })
+    .getByRole('button', {
+      name: 'Open Monkey Bars full climb record',
+      exact: true,
+    })
     .click()
   await expect(reopenedDetails).toBeVisible()
   await expect(reopenedDetails).toContainText(
@@ -207,6 +237,9 @@ test('verified production download survives zero network, reload and a reopened 
     body: await reopened.screenshot({ scale: 'css' }),
     contentType: 'image/png',
   })
+  await reopened
+    .getByRole('button', { name: 'Close climb details', exact: true })
+    .click()
   await reopened
     .getByRole('button', { name: 'Back to Kraft', exact: true })
     .click()

@@ -1,0 +1,981 @@
+{
+  "review": {
+    "reviewer": "MTN Club source evidence review",
+    "reviewedAt": "2026-10-01"
+  },
+  "rules": [
+    {
+      "mpRouteId": "106056281",
+      "mpParentId": "106056258",
+      "retrievedAt": "2026-10-01T18:48:53.472Z",
+      "startFacts": [
+        "Left hand in a pocket; right hand on a lower crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "106652010",
+      "mpParentId": "106056258",
+      "retrievedAt": "2026-10-01T18:48:53.094Z",
+      "startFacts": [
+        "Hands on a positive ledge."
+      ],
+      "startKind": "two-hands-on-feature",
+      "movementFacts": {
+        "path": [
+          "Reach the lip dynamically or with static movement."
+        ],
+        "constraints": [
+          "A separate eliminate jumps toward a horn left of the starting holds; the excluded holds are not listed."
+        ]
+      }
+    },
+    {
+      "mpRouteId": "106732641",
+      "mpParentId": "106732632",
+      "retrievedAt": "2026-10-01T18:48:32.855Z",
+      "startFacts": [
+        "Begin right of Jones\u2019n, matched on a thin positive rail."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "106800770",
+      "mpParentId": "106800767",
+      "retrievedAt": "2026-10-01T18:48:57.923Z",
+      "startFacts": [
+        "Large flake/jug; posture is unspecified."
+      ],
+      "movementFacts": {
+        "path": [
+          "Move left to a jug with a long deadpoint, or use slopers and crimps for a static sequence; further crimps are described higher up."
+        ],
+        "constraints": [
+          "Dynamic and static sequences are described as alternatives."
+        ]
+      }
+    },
+    {
+      "mpRouteId": "106800785",
+      "mpParentId": "106800767",
+      "retrievedAt": "2026-10-01T18:48:57.563Z",
+      "startFacts": [
+        "Standing on two positive crimps."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "106802785",
+      "mpParentId": "106657514",
+      "retrievedAt": "2026-10-01T18:48:55.238Z",
+      "startFacts": [
+        "Low left-hand sidepull and right hand on the lowest part of the sloping corner."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107406873",
+      "mpParentId": "107406864",
+      "retrievedAt": "2026-10-01T18:49:03.703Z",
+      "startFacts": [
+        "Standing with the large pocket shared with Snake Eyes and a right-hand sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107414804",
+      "mpParentId": "106657507",
+      "retrievedAt": "2026-10-01T18:48:58.246Z",
+      "startFacts": [
+        "Standing below Vino Rojo's start: left hand on a sidepull/undercling crimp, right hand on a sloping ar\u00eate crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107429192",
+      "mpParentId": "107429189",
+      "retrievedAt": "2026-10-01T18:48:47.778Z",
+      "startFacts": [
+        "Standing on two fair head-height crimps with marginal feet."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107429316",
+      "mpParentId": "106657507",
+      "retrievedAt": "2026-10-01T18:48:58.182Z",
+      "startFacts": [
+        "Standing with a right-hand sidepull."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "107430182",
+      "mpParentId": "123856648",
+      "retrievedAt": "2026-10-01T18:48:31.084Z",
+      "startFacts": [
+        "Sit beneath the arete with fingers on two small positive crimps."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107430220",
+      "mpParentId": "123856651",
+      "retrievedAt": "2026-10-01T18:48:28.593Z",
+      "startFacts": [
+        "Use a left-hand crimp and right-hand sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107432448",
+      "mpParentId": "106657477",
+      "retrievedAt": "2026-10-01T18:48:48.483Z",
+      "startFacts": [
+        "Stand matched on a good seam or flake, using good feet."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "107444907",
+      "mpParentId": "106056258",
+      "retrievedAt": "2026-10-01T18:48:52.635Z",
+      "startFacts": [
+        "Seated extension of The Pearl, with both hands lower than its standing start."
+      ],
+      "startKind": "seated-hands-low"
+    },
+    {
+      "mpRouteId": "107459063",
+      "mpParentId": "106732632",
+      "retrievedAt": "2026-10-01T18:48:33.991Z",
+      "startFacts": [
+        "Standing on the left side, matched on the large jug at the rail\u2019s beginning."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "107974932",
+      "mpParentId": "105959392",
+      "retrievedAt": "2026-10-01T18:48:46.191Z",
+      "startFacts": [
+        "Opposed sidepulls with a wide stem."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "107974947",
+      "mpParentId": "105959392",
+      "retrievedAt": "2026-10-01T18:48:45.539Z",
+      "startFacts": [
+        "Sit with an incut left sidepull and low flat right crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "108595477",
+      "mpParentId": "108595418",
+      "retrievedAt": "2026-10-01T18:49:03.044Z",
+      "startFacts": [
+        "Seated with matched hands on a positive hold to the left."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "109961884",
+      "mpParentId": "107429189",
+      "retrievedAt": "2026-10-01T18:48:48.153Z",
+      "startFacts": [
+        "Very low; right crimp and left hand low on the ar\u00eate."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "110174744",
+      "mpParentId": "110174546",
+      "retrievedAt": "2026-10-01T18:48:24.375Z",
+      "startFacts": [
+        "Right-hand sidepull/pinch."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "110174781",
+      "mpParentId": "110174546",
+      "retrievedAt": "2026-10-01T18:48:24.663Z",
+      "startFacts": [
+        "Right-hand sidepull."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "110174831",
+      "mpParentId": "200234406",
+      "retrievedAt": "2026-10-01T18:48:23.673Z",
+      "startFacts": [
+        "Standing with a right sidepull."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "111214422",
+      "mpParentId": "106799341",
+      "retrievedAt": "2026-10-01T18:48:32.810Z",
+      "startFacts": [
+        "Opposing sidepull crimps at Scare Tactics\u2019 far-right overhang."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "111338570",
+      "mpParentId": "111338565",
+      "retrievedAt": "2026-10-01T18:48:38.011Z",
+      "startFacts": [
+        "Hands begin on an undercling beneath the roof."
+      ],
+      "startKind": "two-hands-on-feature"
+    },
+    {
+      "mpRouteId": "111720059",
+      "mpParentId": "106732667",
+      "retrievedAt": "2026-10-01T18:48:28.051Z",
+      "startFacts": [
+        "Almost reclining seated start; fair left edge and marginal right pinch/sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "112381487",
+      "mpParentId": "106732632",
+      "retrievedAt": "2026-10-01T18:48:33.211Z",
+      "startFacts": [
+        "Match the insecure thin crimp rail right of Jones\u2019n and the Dusty Coffee start."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "113802237",
+      "mpParentId": "113802231",
+      "retrievedAt": "2026-10-01T18:48:54.597Z",
+      "startFacts": [
+        "At the far right end of the sloping shelf, with both hands and a heel; posture is unspecified."
+      ],
+      "startKind": "two-hands-on-feature"
+    },
+    {
+      "mpRouteId": "113852043",
+      "mpParentId": "111338565",
+      "retrievedAt": "2026-10-01T18:48:39.466Z",
+      "startFacts": [
+        "Right hand uses a sidepull; left hand uses a meat wrap."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "113994538",
+      "mpParentId": "113973264",
+      "retrievedAt": "2026-10-01T18:48:44.547Z",
+      "startFacts": [
+        "Opposing sidepulls."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "114000041",
+      "mpParentId": "105937674",
+      "retrievedAt": "2026-10-01T18:49:00.396Z",
+      "startFacts": [
+        "Seated with matched hands on a small sidepull."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "114000113",
+      "mpParentId": "114000100",
+      "retrievedAt": "2026-10-01T18:48:20.879Z",
+      "startFacts": [
+        "Two scooped/pinch holds."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "114126089",
+      "mpParentId": "114000100",
+      "retrievedAt": "2026-10-01T18:48:21.237Z",
+      "startFacts": [
+        "Same two starting holds as Sorange."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "114200319",
+      "mpParentId": "114200315",
+      "retrievedAt": "2026-10-01T18:48:21.692Z",
+      "startFacts": [
+        "Seated; left rail and right crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "114236573",
+      "mpParentId": "105959400",
+      "retrievedAt": "2026-10-01T18:48:41.616Z",
+      "startFacts": [
+        "Use the two lowest positive opposing sidepulls; left hand is several feet left of the Potato Chips start crimps and right hand is just below."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "116107567",
+      "mpParentId": "116107548",
+      "retrievedAt": "2026-10-01T18:48:43.115Z",
+      "startFacts": [
+        "Crouched; left hand on the ar\u00eate, right on the opposing crimp midway across the face."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "116355888",
+      "mpParentId": "114200315",
+      "retrievedAt": "2026-10-01T18:48:21.741Z",
+      "startFacts": [
+        "Crimp with a mono pocket and the lowest right-side mono pocket."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "116385877",
+      "mpParentId": "105959392",
+      "retrievedAt": "2026-10-01T18:48:45.387Z",
+      "startFacts": [
+        "Sit on two crimps, below and roughly four feet left of the vertical crack/seam; multiple foot choices are mentioned."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "116680131",
+      "mpParentId": "105959400",
+      "retrievedAt": "2026-10-01T18:48:40.557Z",
+      "startFacts": [
+        "Begin a couple feet left of Potato Chips with a small right crimp and a left crimp or undercling."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "118057327",
+      "mpParentId": "105959400",
+      "retrievedAt": "2026-10-01T18:48:41.885Z",
+      "startFacts": [
+        "Sit very low, matched on the lowest horizontal rail, using a stretched toe or heel to leave the ground."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "118153704",
+      "mpParentId": "106964269",
+      "retrievedAt": "2026-10-01T18:48:28.337Z",
+      "startFacts": [
+        "Seated; good left crimp and poor right sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "118192401",
+      "mpParentId": "126016123",
+      "retrievedAt": "2026-10-01T18:48:45.136Z",
+      "startFacts": [
+        "Seated with a right-hand sidepull."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "118345857",
+      "mpParentId": "107430254",
+      "retrievedAt": "2026-10-01T18:48:35.365Z",
+      "startFacts": [
+        "Begin at the boulder\u2019s right side with a right-hand incut finger bucket and left-hand quarter-pad edge."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "119981210",
+      "mpParentId": "119981199",
+      "retrievedAt": "2026-10-01T18:48:14.194Z",
+      "startFacts": [
+        "Seated; left undercling and right sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "119981258",
+      "mpParentId": "119981199",
+      "retrievedAt": "2026-10-01T18:48:14.245Z",
+      "startFacts": [
+        "Seated; left undercling and right sidepull; shared with Andy's Candies."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "119994468",
+      "mpParentId": "119994404",
+      "retrievedAt": "2026-10-01T18:48:39.870Z",
+      "startFacts": [
+        "Begin on two slopers at the boulder\u2019s left side, using a good foothold around thigh height."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "120120065",
+      "mpParentId": "118341819",
+      "retrievedAt": "2026-10-01T18:48:15.396Z",
+      "startFacts": [
+        "Standing; high right crimp and left sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "120120085",
+      "mpParentId": "118341819",
+      "retrievedAt": "2026-10-01T18:48:15.871Z",
+      "startFacts": [
+        "Seated; left sloper and right ar\u00eate hold."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "120211275",
+      "mpParentId": "106657507",
+      "retrievedAt": "2026-10-01T18:48:59.213Z",
+      "startFacts": [
+        "A positive right-hand jug; posture is unspecified."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "120256456",
+      "mpParentId": "111338565",
+      "retrievedAt": "2026-10-01T18:48:38.071Z",
+      "startFacts": [
+        "Sit with a left crimp and right finger jug."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "120512326",
+      "mpParentId": "113802231",
+      "retrievedAt": "2026-10-01T18:48:53.784Z",
+      "startFacts": [
+        "At the shelf's right end with both hands and a right heel; shared start with The Wave."
+      ],
+      "startKind": "two-hands-on-feature"
+    },
+    {
+      "mpRouteId": "120554237",
+      "mpParentId": "106378780",
+      "retrievedAt": "2026-10-01T18:48:26.482Z",
+      "startFacts": [
+        "Sit matched on the good lower left-facing rail, down-left of the Angel Dyno/The Huck start."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "120588296",
+      "mpParentId": "120588274",
+      "retrievedAt": "2026-10-01T18:48:36.144Z",
+      "startFacts": [
+        "Crouch with a left-hand pinch and right-hand crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "121564836",
+      "mpParentId": "108057748",
+      "retrievedAt": "2026-10-01T18:48:15.010Z",
+      "startFacts": [
+        "Seated; left flat ar\u00eate/thumb dimple and right flat ar\u00eate/thumb catch."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "121742287",
+      "mpParentId": "105937674",
+      "retrievedAt": "2026-10-01T18:49:02.791Z",
+      "startFacts": [
+        "One crimp on each side of the seam."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "121775062",
+      "mpParentId": "121775048",
+      "retrievedAt": "2026-10-01T18:48:51.591Z",
+      "startFacts": [
+        "Seated with a low left-hand rail and a right-hand pinch."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "121850817",
+      "mpParentId": "106657496",
+      "retrievedAt": "2026-10-01T18:48:57.485Z",
+      "startFacts": [
+        "Standing: right hand on a sidepull with a pocket thumb catch, left hand on a crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "121883189",
+      "mpParentId": "111338565",
+      "retrievedAt": "2026-10-01T18:48:39.112Z",
+      "startFacts": [
+        "Left hand on the left ar\u00eate relative to its vertex; right undercling below the right ar\u00eate."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "122054559",
+      "mpParentId": "106657477",
+      "retrievedAt": "2026-10-01T18:48:48.204Z",
+      "startFacts": [
+        "Sit with both hands on the right-facing flake; the source describes cramped positioning and uncertain feet."
+      ],
+      "startKind": "two-hands-on-feature"
+    },
+    {
+      "mpRouteId": "122116313",
+      "mpParentId": "122116121",
+      "retrievedAt": "2026-10-01T18:48:19.303Z",
+      "startFacts": [
+        "Seated, hands matched on the left corner pillar."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "122117131",
+      "mpParentId": "122116121",
+      "retrievedAt": "2026-10-01T18:48:19.280Z",
+      "startFacts": [
+        "Seated; hands matched on the low-right projecting rock."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "122238495",
+      "mpParentId": "111106611",
+      "retrievedAt": "2026-10-01T18:48:26.169Z",
+      "startFacts": [
+        "Seated; right sidepull in the crack."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "122646008",
+      "mpParentId": "200619407",
+      "retrievedAt": "2026-10-01T18:48:27.145Z",
+      "startFacts": [
+        "Face away from the flake with hands matched on a thin flaky crimp and one foot pressed into a small chip overhead."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "123223360",
+      "mpParentId": "110224264",
+      "retrievedAt": "2026-10-01T18:48:43.943Z",
+      "startFacts": [
+        "Sit with a flat crimp-like left sidepull and small dish crimp for the right hand; feet are awkwardly placed left."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "123320476",
+      "mpParentId": "116181708",
+      "retrievedAt": "2026-10-01T18:48:16.167Z",
+      "startFacts": [
+        "Seated or crouched; high left crimp and lower right edge."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "123427987",
+      "mpParentId": "106657496",
+      "retrievedAt": "2026-10-01T18:48:56.885Z",
+      "startFacts": [
+        "Standing with matched hands on a tiny curved crimp rail at head height above the overhang."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "123647631",
+      "mpParentId": "106964269",
+      "retrievedAt": "2026-10-01T18:48:27.503Z",
+      "startFacts": [
+        "Standing above the block; good left sidepull, fair right undercling and smeared foot."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "123736564",
+      "mpParentId": "105959400",
+      "retrievedAt": "2026-10-01T18:48:40.592Z",
+      "startFacts": [
+        "Standing deep in the dihedral, matched on a fair crimp rail."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "123941974",
+      "mpParentId": "121775048",
+      "retrievedAt": "2026-10-01T18:48:52.247Z",
+      "startFacts": [
+        "Use the two furthest-left crimps on Good Times Boulder."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "124045669",
+      "mpParentId": "105959355",
+      "retrievedAt": "2026-10-01T18:48:22.970Z",
+      "startFacts": [
+        "Standing; left crimp near seven feet and higher right pocket/crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "124045709",
+      "mpParentId": "105959355",
+      "retrievedAt": "2026-10-01T18:48:22.990Z",
+      "startFacts": [
+        "Seated; right jug/crimp and left crimp reported near four feet."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125074020",
+      "mpParentId": "123856651",
+      "retrievedAt": "2026-10-01T18:48:29.536Z",
+      "startFacts": [
+        "Use the two low holds at the left rear."
+      ],
+      "startKind": "hands-low"
+    },
+    {
+      "mpRouteId": "125155543",
+      "mpParentId": "125155528",
+      "retrievedAt": "2026-10-01T18:48:25.313Z",
+      "startFacts": [
+        "Seated or crouched; left block/edge and right ar\u00eate hold."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125195801",
+      "mpParentId": "118341819",
+      "retrievedAt": "2026-10-01T18:48:15.348Z",
+      "startFacts": [
+        "Crouched; good holds flanking the A-shaped feature."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125212748",
+      "mpParentId": "125212738",
+      "retrievedAt": "2026-10-01T18:48:22.259Z",
+      "startFacts": [
+        "Matched sidepull jug."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "125230428",
+      "mpParentId": "125230403",
+      "retrievedAt": "2026-10-01T18:49:03.989Z",
+      "startFacts": [
+        "Matched on the lowest sloper-pinch complex near the prow\u2019s bottom-left."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "125230527",
+      "mpParentId": "125230403",
+      "retrievedAt": "2026-10-01T18:49:03.428Z",
+      "startFacts": [
+        "Left hand on the ar\u00eate\u2019s lowest shark tooth; right on the hollow face flake."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125257113",
+      "mpParentId": "106799341",
+      "retrievedAt": "2026-10-01T18:48:32.222Z",
+      "startFacts": [
+        "Seated or crouched on opposing sidepull crimps, as for Scare Tactics Right."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125447077",
+      "mpParentId": "106657507",
+      "retrievedAt": "2026-10-01T18:48:58.912Z",
+      "startFacts": [
+        "Crossed setup: left-hand sidepull/lieback, right-hand downward-facing edge.",
+        "The author reports using the original handholds from standing after foothold breaks; an earlier guidebook described a seated start."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125484941",
+      "mpParentId": "125484924",
+      "retrievedAt": "2026-10-01T18:48:52.008Z",
+      "startFacts": [
+        "Seated or crouched on two opposing slanted edges; foot choice is left open."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "125499359",
+      "mpParentId": "125499343",
+      "retrievedAt": "2026-10-01T18:48:15.551Z",
+      "startFacts": [
+        "Matched crimp near head height."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "125752822",
+      "mpParentId": "125752769",
+      "retrievedAt": "2026-10-01T18:48:14.580Z",
+      "startFacts": [
+        "Seated; lowest named hole with the right hand and a left crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "126016220",
+      "mpParentId": "126016123",
+      "retrievedAt": "2026-10-01T18:48:44.776Z",
+      "startFacts": [
+        "Seated with a good left sidepull."
+      ],
+      "startKind": "required-plus-other"
+    },
+    {
+      "mpRouteId": "126761647",
+      "mpParentId": "106657496",
+      "retrievedAt": "2026-10-01T18:48:56.086Z",
+      "startFacts": [
+        "Two positive crimps and a usable foothold; posture is unspecified."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "126784057",
+      "mpParentId": "126016123",
+      "retrievedAt": "2026-10-01T18:48:44.884Z",
+      "startFacts": [
+        "Seated; right pocket and left crimp."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "126830908",
+      "mpParentId": "107430930",
+      "retrievedAt": "2026-10-01T18:48:36.815Z",
+      "startFacts": [
+        "Sit using two good holds."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "126854481",
+      "mpParentId": "126854441",
+      "retrievedAt": "2026-10-01T18:48:37.472Z",
+      "startFacts": [
+        "Hands matched in the crack."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "127185711",
+      "mpParentId": "127185616",
+      "retrievedAt": "2026-10-01T18:48:38.045Z",
+      "startFacts": [
+        "Two underclings with a low foot."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "127381481",
+      "mpParentId": "125427180",
+      "retrievedAt": "2026-10-01T18:48:16.402Z",
+      "startFacts": [
+        "Matched right-side jugs."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "200237164",
+      "mpParentId": "106657514",
+      "retrievedAt": "2026-10-01T18:48:54.917Z",
+      "startFacts": [
+        "Standing in compression: left hand on a positive undercling, right hand on the ar\u00eate."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200247732",
+      "mpParentId": "106657507",
+      "retrievedAt": "2026-10-01T18:48:58.936Z",
+      "startFacts": [
+        "Two low handholds with a high right foot."
+      ],
+      "startKind": "hands-low"
+    },
+    {
+      "mpRouteId": "200284515",
+      "mpParentId": "110174546",
+      "retrievedAt": "2026-10-01T18:48:24.677Z",
+      "startFacts": [
+        "Left hand low on Thumbs Up's ar\u00eate; right hand low on a shallow sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200302939",
+      "mpParentId": "200302919",
+      "retrievedAt": "2026-10-01T18:48:47.761Z",
+      "startFacts": [
+        "Match the left-facing rail."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "200389592",
+      "mpParentId": "114200315",
+      "retrievedAt": "2026-10-01T18:48:21.627Z",
+      "startFacts": [
+        "Seated Poison Control entry: left crimp and low right pocket."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200412186",
+      "mpParentId": "200412165",
+      "retrievedAt": "2026-10-01T18:48:51.323Z",
+      "startFacts": [
+        "Seated: right hand high on a sidepull beneath a seam, left hand low on a crimp/undercling."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200432818",
+      "mpParentId": "106657496",
+      "retrievedAt": "2026-10-01T18:48:56.092Z",
+      "startFacts": [
+        "Just right of I Disagree's starting holds, using a positive foothold, a flat left-hand edge and a flat right-hand sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200433996",
+      "mpParentId": "106657496",
+      "retrievedAt": "2026-10-01T18:48:55.800Z",
+      "startFacts": [
+        "Low in the roof: right hand in a pocket, left hand on an undercling/sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200443145",
+      "mpParentId": "200443140",
+      "retrievedAt": "2026-10-01T18:48:25.034Z",
+      "startFacts": [
+        "Seated far right on the sloping ar\u00eate; crimp and right-facing sloping sidepull."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "200619597",
+      "mpParentId": "200619407",
+      "retrievedAt": "2026-10-01T18:48:27.142Z",
+      "startFacts": [
+        "Begin low on two chalked handholds at the southwest corner."
+      ],
+      "startKind": "hands-low"
+    },
+    {
+      "mpRouteId": "200770663",
+      "mpParentId": "200770349",
+      "retrievedAt": "2026-10-01T18:48:16.646Z",
+      "startFacts": [
+        "Matched lowest jug on the cave's right side."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "200852251",
+      "mpParentId": "200770349",
+      "retrievedAt": "2026-10-01T18:48:16.925Z",
+      "startFacts": [
+        "Seated; matched undercling with widely spaced feet."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "200870118",
+      "mpParentId": "116107548",
+      "retrievedAt": "2026-10-01T18:48:43.294Z",
+      "startFacts": [
+        "Matched on a small crimp; establishing footholds is described as the hardest part."
+      ],
+      "startKind": "matched-hands"
+    },
+    {
+      "mpRouteId": "202641466",
+      "mpParentId": "200770349",
+      "retrievedAt": "2026-10-01T18:48:17.124Z",
+      "startFacts": [
+        "Hands split between the two rear-cave huecos."
+      ],
+      "startKind": "two-required-holds"
+    },
+    {
+      "mpRouteId": "202695721",
+      "mpParentId": "202292980",
+      "retrievedAt": "2026-10-01T18:48:46.494Z",
+      "startFacts": [
+        "Begin several feet left of the large hollow flake with a right crimp and left sidepull."
+      ],
+      "startKind": "two-required-holds"
+    }
+  ],
+  "excluded": [
+    {
+      "mpRouteId": "113679909",
+      "reason": "The primary record gives different V7 and direct V9 starting holds."
+    },
+    {
+      "mpRouteId": "120588302",
+      "reason": "The primary description gives matched and opposing-sidepull starts with different reported grades."
+    },
+    {
+      "mpRouteId": "121616668",
+      "reason": "The primary record gives a standing setup and a seated variant without its starting holds."
+    },
+    {
+      "mpRouteId": "123326041",
+      "reason": "The source compares a guide start with a different lower-left-hand video setup; the defining start is unresolved."
+    },
+    {
+      "mpRouteId": "125230717",
+      "reason": "The primary record combines separately graded standing and seated starts."
+    },
+    {
+      "mpRouteId": "125419031",
+      "reason": "The start is historical; the source reports a landslide changed this rock and made the route unclimbable."
+    },
+    {
+      "mpRouteId": "125601778",
+      "reason": "The start is historical; the source reports a landslide changed this rock and made the route unclimbable."
+    }
+  ]
+}

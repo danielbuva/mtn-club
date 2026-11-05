@@ -5,6 +5,7 @@ import {
   type PointerEvent,
   useLayoutEffect,
   useRef,
+  useState,
 } from 'react'
 
 type Point = { x: number; y: number }
@@ -13,21 +14,6 @@ type PendingAnchor = { point: Point; midpoint: Point }
 
 function midpoint(a: Point, b: Point): Point {
   return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
-}
-
-function scrollingParent(element: HTMLElement): HTMLElement | null {
-  let parent = element.parentElement
-  while (parent) {
-    if (
-      parent.scrollHeight > parent.clientHeight &&
-      /auto|scroll/.test(getComputedStyle(parent).overflowY)
-    )
-      return parent
-    parent = parent.parentElement
-  }
-  return document.scrollingElement instanceof HTMLElement
-    ? document.scrollingElement
-    : null
 }
 
 function positionPhoto(
@@ -45,6 +31,9 @@ function positionPhoto(
 export function usePhotoGestures(
   zoom: number,
   onZoomChange: (zoom: number) => void,
+  centerInitial = false,
+  frameKey?: string,
+  selectionKey: string | null = null,
 ) {
   const viewportRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -53,17 +42,89 @@ export function usePhotoGestures(
   const pinch = useRef<Pinch | null>(null)
   const pendingAnchor = useRef<PendingAnchor | null>(null)
   const suppressClick = useRef(false)
+  const initialized = useRef(false)
+  const framing = useRef(frameKey)
+  const focusedSelection = useRef<string | null>(null)
+  const selectedCenter = useRef<Point | null>(null)
+  const [annotationScale, setAnnotationScale] = useState(1)
+  const [overviewSelection, setOverviewSelection] = useState<string | null>(
+    null,
+  )
 
   useLayoutEffect(() => {
-    if (zoom >= 1) {
-      positionPhoto(
-        viewportRef.current,
-        canvasRef.current,
-        pendingAnchor.current,
+    function positionCamera() {
+      const viewport = viewportRef.current
+      const canvas = canvasRef.current
+      // The parent dialog opens after its children mount. Wait for its real
+      // dimensions before establishing the first image anchor.
+      if (zoom < 1 || !viewport?.clientWidth || !canvas?.clientWidth) return
+      const scale = Math.max(
+        1,
+        canvas.clientWidth / viewport.clientWidth / zoom,
       )
+      setAnnotationScale(previous =>
+        Math.abs(previous - scale) < 0.01 ? previous : scale,
+      )
+      const changedFrame = framing.current !== frameKey
+      if (!initialized.current || framing.current !== frameKey) {
+        initialized.current = true
+        framing.current = frameKey
+        if (centerInitial)
+          pendingAnchor.current = {
+            point: { x: 0.5, y: 0.5 },
+            midpoint: {
+              // Leave breathing room beside the floating face selector.
+              x: viewport.clientWidth * 0.55,
+              y: viewport.clientHeight / 2,
+            },
+          }
+      }
+      if (!selectionKey) {
+        focusedSelection.current = null
+        selectedCenter.current = null
+      } else if (
+        focusedSelection.current !== selectionKey ||
+        (changedFrame && frameKey === 'fill')
+      ) {
+        const newSelection = focusedSelection.current !== selectionKey
+        const line = canvas.querySelector('[data-guide-selected-path="true"]')
+        const svg = line?.closest('svg')
+        if (line instanceof SVGPathElement && svg instanceof SVGSVGElement) {
+          const bounds = line.getBBox()
+          const native = svg.viewBox.baseVal
+          if (newSelection) {
+            const pixels = canvas.clientWidth / native.width
+            const tooWide = bounds.width * pixels > viewport.clientWidth * 0.9
+            const top = bounds.y * pixels + canvas.offsetTop
+            const bottom =
+              (bounds.y + bounds.height) * pixels + canvas.offsetTop
+            const obscured = top < 90 || bottom > viewport.clientHeight - 100
+            setOverviewSelection(tooWide || obscured ? selectionKey : null)
+          }
+          selectedCenter.current = {
+            x: (bounds.x + bounds.width / 2) / native.width,
+            y: (bounds.y + bounds.height / 2) / native.height,
+          }
+          focusedSelection.current = selectionKey
+          pendingAnchor.current = {
+            point: selectedCenter.current,
+            midpoint: {
+              x: viewport.clientWidth / 2,
+              y: viewport.clientHeight / 2,
+            },
+          }
+        }
+      }
+      positionPhoto(viewport, canvas, pendingAnchor.current)
       pendingAnchor.current = null
     }
-  }, [zoom])
+    positionCamera()
+    const viewport = viewportRef.current
+    if (!viewport) return
+    const observer = new ResizeObserver(positionCamera)
+    observer.observe(viewport)
+    return () => observer.disconnect()
+  }, [centerInitial, frameKey, selectionKey, zoom])
 
   function zoomBy(step: number) {
     const nextZoom = Math.max(1, Math.min(3, zoom + step))
@@ -91,11 +152,23 @@ export function usePhotoGestures(
   }
 
   function resetZoom() {
-    pendingAnchor.current = null
     const viewport = viewportRef.current
-    if (viewport) {
-      viewport.scrollLeft = 0
-      viewport.scrollTop = 0
+    pendingAnchor.current = viewport
+      ? {
+          point:
+            selectedCenter.current ??
+            (centerInitial ? { x: 0.5, y: 0.5 } : { x: 0, y: 0 }),
+          midpoint: centerInitial
+            ? {
+                x: viewport.clientWidth * (selectedCenter.current ? 0.55 : 0.5),
+                y: viewport.clientHeight / 2,
+              }
+            : { x: 0, y: 0 },
+        }
+      : null
+    if (zoom === 1) {
+      positionPhoto(viewport, canvasRef.current, pendingAnchor.current)
+      pendingAnchor.current = null
     }
     onZoomChange(1)
   }
@@ -121,10 +194,7 @@ export function usePhotoGestures(
   }
 
   function onPointerDown(event: PointerEvent<HTMLElement>) {
-    if (event.pointerType !== 'touch') {
-      suppressClick.current = false
-      return
-    }
+    if (event.button !== 0) return
     if (pointers.current.size === 0) {
       suppressClick.current = false
       origin.current = { x: event.clientX, y: event.clientY }
@@ -191,11 +261,7 @@ export function usePhotoGestures(
     event.currentTarget.setPointerCapture(event.pointerId)
     event.preventDefault()
     viewport.scrollLeft += previous.x - event.clientX
-    const verticalTarget =
-      viewport.scrollHeight > viewport.clientHeight
-        ? viewport
-        : scrollingParent(viewport)
-    if (verticalTarget) verticalTarget.scrollTop += previous.y - event.clientY
+    viewport.scrollTop += previous.y - event.clientY
   }
 
   function onPointerUp(event: PointerEvent<HTMLElement>) {
@@ -217,6 +283,8 @@ export function usePhotoGestures(
   return {
     viewportRef,
     canvasRef,
+    annotationScale,
+    overviewSelection,
     zoomBy,
     resetZoom,
     onPointerDown,

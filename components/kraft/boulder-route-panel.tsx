@@ -1,11 +1,16 @@
 'use client'
 
-import { useRef } from 'react'
-import { climbAccessNotice } from '@/lib/kraft/access-notices'
+import { ChevronUp, List } from 'lucide-react'
+import {
+  accessClosedLabel,
+  boulderAccessNotice,
+  climbAccessNotice,
+} from '@/lib/kraft/access-notices'
 import type { Boulder, Climb, EvidenceSource, Face } from '@/lib/kraft/types'
 import { AccessNotice } from './access-notice'
 import { ClimbDetail } from './climb-detail'
 import { ClimbList } from './climb-list'
+import { GuideSheet, type GuideSheetKind } from './guide-sheet'
 import { gradeRecordNote } from './source-notes'
 import styles from './topo.module.css'
 
@@ -14,6 +19,9 @@ export function BoulderRoutePanel({
   face,
   climb,
   sources,
+  activeSheet,
+  onOpenSheet,
+  onCloseSheet,
   onFaceSelect,
   onClimbSelect,
 }: {
@@ -21,11 +29,12 @@ export function BoulderRoutePanel({
   face: Face | null
   climb: Climb | undefined
   sources: EvidenceSource[]
+  activeSheet: GuideSheetKind
+  onOpenSheet: (sheet: 'climbs' | 'climb', control: HTMLButtonElement) => void
+  onCloseSheet: () => void
   onFaceSelect: (id: string) => void
   onClimbSelect: (id: string) => void
 }) {
-  const fullRecord = useRef<HTMLDetailsElement>(null)
-  const sidebar = useRef<HTMLElement>(null)
   const climbs = boulder.climbs.toSorted(
     (a, b) =>
       (a.gradeValue ?? Number.POSITIVE_INFINITY) -
@@ -35,91 +44,105 @@ export function BoulderRoutePanel({
       a.name.localeCompare(b.name),
   )
   const geometry = climb?.geometry.find(item => item.faceId === face?.id)
+  const accessNotice = climb
+    ? climbAccessNotice(climb)
+    : boulderAccessNotice(boulder)
 
-  function openFullRecord() {
-    const record = fullRecord.current
-    const panel = sidebar.current
-    if (!record || !panel) return
-    record.open = true
-    panel.scrollTop +=
-      record.getBoundingClientRect().top - panel.getBoundingClientRect().top
-    record.querySelector('summary')?.focus({ preventScroll: true })
+  function selectClimb(id: string) {
+    onClimbSelect(id)
+    onCloseSheet()
+  }
+
+  function selectFace(id: string) {
+    onFaceSelect(id)
+    onCloseSheet()
   }
 
   return (
-    <aside
-      ref={sidebar}
-      className={styles.routeSidebar}
-      aria-label="Boulder climbs"
-      // biome-ignore lint/a11y/noNoninteractiveTabindex: Mobile browsing scrolls this panel while keeping the face photograph in view.
-      tabIndex={0}
-    >
-      {climb ? (
-        <section
-          className={styles.selectedClimb}
-          aria-label="Selected climb"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          <div className={styles.selectedClimbHeading}>
-            <h3>{climb.name}</h3>
-            <span>{climb.grade}</span>
-            <button
-              type="button"
-              className={styles.compactRecordButton}
-              aria-label={`Open ${climb.name} full climb record`}
-              aria-controls={`${climb.id}-full-record`}
-              onClick={openFullRecord}
-            >
-              Details
-            </button>
-          </div>
-          <AccessNotice notice={climbAccessNotice(climb)} compact />
-          <p>{climb.description}</p>
-          <small>
-            {climb.faceIds.length === 0
-              ? 'Face assignment pending'
-              : geometry?.status === 'authored'
-                ? `${geometry.confidenceLevel === 'moderate' ? 'Approximate corridor' : 'Reviewed line'} available · ${face?.name}`
-                : `Route line pending · ${face?.name}`}
-            {gradeRecordNote(climb) && ` · ${gradeRecordNote(climb)}`}
-          </small>
-          {climb.boulderAssignmentStatus === 'editorial-provisional' && (
-            <small>
-              Physical boulder identity pending; see the full record.
+    <>
+      <aside className={styles.routeDock} aria-label="Boulder climbs">
+        {climb ? (
+          <section
+            className={styles.selectedClimb}
+            aria-label="Selected climb"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <div className={styles.selectedClimbHeading}>
+              <h3>{climb.name}</h3>
+              <span>{climb.grade}</span>
+              <button
+                type="button"
+                className={styles.compactRecordButton}
+                aria-label={`Open ${climb.name} full climb record`}
+                aria-expanded={activeSheet === 'climb'}
+                onClick={event => onOpenSheet('climb', event.currentTarget)}
+              >
+                Details
+              </button>
+            </div>
+            <small className={styles.selectionStatus}>
+              {accessNotice
+                ? `${accessClosedLabel} · historical route record`
+                : climb.faceIds.length === 0
+                  ? 'Face assignment pending'
+                  : geometry?.status === 'authored'
+                    ? `${geometry.confidenceLevel === 'moderate' ? 'Approximate corridor' : 'Reviewed line'} available · ${face?.name}`
+                    : `Route line pending · ${face?.name}`}
             </small>
-          )}
-          {climb.risk && <small>Landing & exposure: {climb.risk}</small>}
-        </section>
-      ) : (
-        <p className={styles.routePrompt}>
-          Choose a climb below.
-          <span className={styles.routePromptExplanation}>
-            {' '}
-            Reviewed lines appear when available.
+            {climb.boulderAssignmentStatus === 'editorial-provisional' && (
+              <small className={styles.selectionStatus}>
+                Physical boulder identity pending
+              </small>
+            )}
+          </section>
+        ) : (
+          <p className={styles.routePrompt}>
+            {accessNotice
+              ? `${accessClosedLabel} · historical records`
+              : 'Choose a climb'}
+            <span>{climbs.length} climb records</span>
+          </p>
+        )}
+        <button
+          type="button"
+          className={styles.browseClimbsButton}
+          aria-label="Browse climbs"
+          aria-expanded={activeSheet === 'climbs'}
+          onClick={event =>
+            activeSheet === 'climbs'
+              ? onCloseSheet()
+              : onOpenSheet('climbs', event.currentTarget)
+          }
+        >
+          <List size={17} aria-hidden="true" />
+          <span>
+            Climbs <small>{climbs.length}</small>
           </span>
-        </p>
-      )}
-      <section
-        className={styles.climbsSection}
-        aria-labelledby="kraft-climb-list"
+          <ChevronUp size={17} aria-hidden="true" />
+        </button>
+      </aside>
+      <GuideSheet
+        open={activeSheet === 'climbs'}
+        label="Climb picker"
+        title="Climbs"
+        onClose={onCloseSheet}
       >
         <div className={styles.sectionHeading}>
-          <h3 id="kraft-climb-list">Climbs</h3>
           <span>{climbs.length} · easiest first</span>
         </div>
         {climbs.length > 0 ? (
           <section
             className={styles.climbScroll}
             aria-label="Climbs sorted by grade"
-            // biome-ignore lint/a11y/noNoninteractiveTabindex: This independently scrollable route list must be reachable by keyboard.
+            // biome-ignore lint/a11y/noNoninteractiveTabindex: This scrollable route list is reachable by keyboard.
             tabIndex={0}
           >
             <ClimbList
               climbs={climbs}
               boulder={boulder}
               selectedClimbId={climb?.id ?? null}
-              onClimbSelect={onClimbSelect}
+              onClimbSelect={selectClimb}
             />
           </section>
         ) : (
@@ -127,27 +150,28 @@ export function BoulderRoutePanel({
             No climb records are available for this boulder yet.
           </p>
         )}
-      </section>
+      </GuideSheet>
       {climb && (
-        <details
-          key={climb.id}
-          ref={fullRecord}
-          id={`${climb.id}-full-record`}
-          className={styles.routeFacts}
+        <GuideSheet
+          open={activeSheet === 'climb'}
+          label="Climb details"
+          title="Climb details & sources"
+          onClose={onCloseSheet}
         >
-          <summary aria-label={`View ${climb.name} climb details`}>
-            Full climb details & sources
-          </summary>
+          <AccessNotice notice={climbAccessNotice(climb)} />
+          {gradeRecordNote(climb) && (
+            <p className={styles.fieldStatus}>{gradeRecordNote(climb)}</p>
+          )}
           <ClimbDetail
             climb={climb}
             number={boulder.climbs.indexOf(climb) + 1}
             face={face}
             faces={boulder.faces}
             sources={sources}
-            onFaceSelect={onFaceSelect}
+            onFaceSelect={selectFace}
           />
-        </details>
+        </GuideSheet>
       )}
-    </aside>
+    </>
   )
 }

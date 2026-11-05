@@ -1,3 +1,4 @@
+import { validateRouteAnnotations } from './route-annotations.ts'
 import type { KraftGuide } from './types'
 import { validateCatalogRecords } from './validate-catalog.ts'
 import { validateEvidenceDates } from './validate-dates.ts'
@@ -84,6 +85,13 @@ export function validateGuide(guide: KraftGuide): string[] {
     for (const climb of boulder.climbs) {
       identify(climb.id)
       checkSources(climb.id, climb.sourceIds)
+      if (climb.routeAnnotations)
+        errors.push(
+          ...validateRouteAnnotations(climb.routeAnnotations, {
+            sourceIds: climb.sourceIds,
+            reviewedBefore: guide.reviewedAt,
+          }).map(error => `${climb.id}: ${error}`),
+        )
       if (
         climb.gradeValue !== null &&
         (!Number.isFinite(climb.gradeValue) ||
@@ -100,6 +108,15 @@ export function validateGuide(guide: KraftGuide): string[] {
         if (!face || !climb.faceIds.includes(geometry.faceId))
           errors.push(`${climb.id}: geometry face is unassigned`)
         if (geometry.status !== 'authored') continue
+        if (geometry.annotations)
+          errors.push(
+            ...validateRouteAnnotations(geometry.annotations, {
+              sourceIds: climb.sourceIds,
+              reviewedBefore: guide.reviewedAt,
+              image:
+                face?.image.status === 'available' ? face.image : undefined,
+            }).map(error => `${climb.id} annotations: ${error}`),
+          )
         checkSources(`${climb.id} geometry`, geometry.sourceIds)
         if (!geometry.reviewedAt || !geometry.path.trim())
           errors.push(`${climb.id}: route authoring review missing`)

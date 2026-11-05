@@ -1,0 +1,77 @@
+{
+  "assetId": "super-scream-south-visible-guide",
+  "sourceId": "mtn-club-super-scream-south-visible-guide",
+  "recordedAt": "2026-10-01",
+  "representation": "original raster reconstruction",
+  "creationAuthorization": {
+    "basis": "User-directed production expansion of original casual field-photo style MTN Club guide images and source-qualified general corridors",
+    "label": "Original MTN Club guide asset",
+    "distributionId": "MTN-Club-original",
+    "scope": "Records original asset creation for this guide; no third-party photographic reuse grant is asserted."
+  },
+  "generation": {
+    "tool": "built-in image_gen",
+    "prompt": "Use case: photorealistic-natural. Asset type: base rock image for an interactive bouldering guide. Create an original, very ordinary candid field photograph of the described Red Rock Canyon sandstone boulder. This is a new camera composition derived solely from general factual landform descriptions, no input photo and no imitation of a specific photographer. Landscape roughly 4:3, high resolution. Rock face occupies about 85% of frame, complete base and lip visible, small natural margins. Eye-level hiker's compact-camera view, close and nearly frontal with enough perspective to distinguish edges. Modest midday desert light, realistic shadows, honest natural color and slightly uneven exposure, real granular sandstone with random weathering and fissures. A little rocky sandy desert ground at bottom and incidental distant scrub and neighboring sandstone at sides, narrow unremarkable sky margin. No humans, no gear, no lettering, no logos, no chalk route patterns, no colored marks, no route artwork, no arrows, no graphic treatment. Avoid epic scenic composition, wide landscapes, dramatic sunset, glowing rock, immaculate symmetrical boulders, smooth CGI surfaces, vector graphics, poster illustration, staged hero photography.\nSubject: the south/front face of Super Scream Boulder. A low broad rectangular salmon sandstone block with a near-vertical roughly trapezoidal south face, noticeably asymmetric: a lower ledge section on the left and a taller broad flat-topped main block on the right. A prominent dark open vertical crack/cleft separates the left ledge section from the broad main face. The main face has varied shallow pockets, rough small slots and sidepull-like natural breaks, a few darker varnish patches; its right outer arete drops almost straight into a shadowed gap beside a neighboring rock. The face sits on a broken rocky foot with a small dark recess, the lower left edge steps down. The left section has a clean left outer arete. This is the front south face, so do not turn the view to the smoother overhanging east traverse wall. New near-frontal standing hiker-camera view with slightly shifted position, complete base and both top rims visible, sandstone slope just incidental behind.",
+    "pixelInputs": [],
+    "factualReferenceUse": "Mountain Project photographs inspected only for broad landform and named route-region facts. No third-party pixels were generator inputs or shipped; original camera composition and corridors are authored separately.",
+    "factualReferences": [
+      {
+        "sourceId": "mp-visible-photo-107432472",
+        "photoId": "107432472",
+        "url": "https://www.mountainproject.com/photo/107432472/super-scream-boulder-south-face-topo",
+        "title": "Super Scream Boulder South Face Topo",
+        "sha256": "d7ccaed11aa28d157e9455da068a0e753287f2fd90cd084509f4c279e648bbcf",
+        "width": 800,
+        "height": 534,
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      },
+      {
+        "sourceId": "mp-visible-photo-117899833",
+        "photoId": "117899833",
+        "url": "https://www.mountainproject.com/photo/117899833",
+        "title": "Super Scream",
+        "sha256": "41daaffed0206810a04af2a0933d79d9bcbefa1dec0e09632558e04c5f01740f",
+        "width": 800,
+        "height": 450,
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      }
+    ],
+    "originalPng": {
+      "width": 1448,
+      "height": 1086,
+      "bytes": 3261249,
+      "sha256": "b402a67f21a9a07a7961a5e6c56591cfcb49a11635efe1e3d4a535cb261bde1a"
+    }
+  },
+  "shippedAsset": {
+    "src": "/kraft/super-scream-south-visible-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 625712,
+    "sha256": "76988d40bfbeeceedc9e2c048cf14de800c9435fe2d986af0a2aec4191886914",
+    "conversion": "Pillow WebP quality 92, method 6; native dimensions preserved, no crop"
+  },
+  "faceGeometry": {
+    "mpParentId": "107430991",
+    "faceId": "mp-face-107430991-south",
+    "mpRouteIds": [
+      "107431022",
+      "107431035",
+      "107430996",
+      "107431004"
+    ],
+    "scope": "Source-observed broad visible plane/arete regions; unseen faces and exact holds excluded.",
+    "sourceBearing": "south",
+    "fieldVerification": "not performed"
+  },
+  "corridorAuthoring": {
+    "reviewer": "MTN Club corridor author (agent)",
+    "reviewedAt": "2026-10-01",
+    "confidenceLevel": "moderate",
+    "method": "Independent broad native-image SVG paths from primary route descriptions and macro photo landmarks; source topo artwork is not copied.",
+    "handPlacement": "Reviewed start zones only when primary route facts document a start. No individual hand coordinates or left/right offsets inferred from generated texture.",
+    "review": "Awaiting fresh integrated batch critic; no independent route approval asserted."
+  }
+}

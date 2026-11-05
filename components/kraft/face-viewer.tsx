@@ -1,8 +1,10 @@
 'use client'
 
-import { Camera, Minus, Plus, RotateCcw } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { Camera } from 'lucide-react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Climb, Face, GuideAsset } from '@/lib/kraft/types'
+import { FaceImageNotes } from './face-image-notes'
+import { FaceViewerControls, type LineMode } from './face-viewer-controls'
 import styles from './topo.module.css'
 import { type TopoRoute, TopoRoutes } from './topo-routes'
 import { usePhotoGestures } from './use-photo-gestures'
@@ -13,6 +15,7 @@ type FaceViewerProps = {
   climbs: Climb[]
   selectedClimbId: string | null
   onClimbSelect: (id: string) => void
+  immersive?: boolean
 }
 
 export function FaceViewer({
@@ -21,21 +24,41 @@ export function FaceViewer({
   climbs,
   selectedClimbId,
   onClimbSelect,
+  immersive = false,
 }: FaceViewerProps) {
   const [zoom, setZoom] = useState(1)
-  const photoGestures = usePhotoGestures(zoom, setZoom)
-  const [lineMode, setLineMode] = useState<'all' | 'selected' | 'photo'>('all')
-  const [imageError, setImageError] = useState(false)
+  const [wholeFace, setWholeFace] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const selectedHasLine = climbs.some(
+    climb =>
+      climb.id === selectedClimbId &&
+      climb.geometry.some(
+        geometry =>
+          geometry.status === 'authored' && geometry.faceId === face?.id,
+      ),
+  )
+  const photoGestures = usePhotoGestures(
+    zoom,
+    setZoom,
+    immersive,
+    wholeFace ? 'whole' : 'fill',
+    immersive && imageLoaded && selectedHasLine ? selectedClimbId : null,
+  )
+  const [lineMode, setLineMode] = useState<LineMode>('all')
+  const [imageError, setImageError] = useState(false)
   const imageElement = useRef<HTMLImageElement>(null)
   const reconstructed =
     face?.image.status === 'available' &&
     face.image.representation === 'reconstruction'
   const imageLabel = reconstructed ? 'image' : 'photograph'
+
+  useLayoutEffect(() => {
+    if (photoGestures.overviewSelection) setWholeFace(true)
+  }, [photoGestures.overviewSelection])
+
   useEffect(() => {
-    if (selectedClimbId) {
+    if (selectedClimbId)
       setLineMode(mode => (mode === 'photo' ? 'selected' : mode))
-    }
   }, [selectedClimbId])
   useEffect(() => {
     if (imageError) return
@@ -74,7 +97,7 @@ export function FaceViewer({
               : 'A supported face record and an identified image are needed to show the correct side of this boulder.'}
         </p>
         <span className={styles.contentStatus}>
-          No route lines available · Browse the climb records below
+          No route lines available · Open Climbs to browse the records
         </span>
       </div>
     )
@@ -105,14 +128,18 @@ export function FaceViewer({
       <section
         ref={photoGestures.viewportRef}
         className={styles.photoViewport}
-        style={{ aspectRatio: `${face.image.width} / ${face.image.height}` }}
+        style={
+          immersive
+            ? undefined
+            : { aspectRatio: `${face.image.width} / ${face.image.height}` }
+        }
         onPointerDown={photoGestures.onPointerDown}
         onPointerMove={photoGestures.onPointerMove}
         onPointerUp={photoGestures.onPointerUp}
         onPointerCancel={photoGestures.onPointerCancel}
         onClickCapture={photoGestures.onClickCapture}
         aria-label={`Scrollable face ${imageLabel}`}
-        // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard focus lets arrow keys pan this scrollable zoomed photograph.
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: Arrow keys pan this focusable camera without moving the guide controls.
         tabIndex={0}
       >
         {!imageLoaded && (
@@ -124,11 +151,14 @@ export function FaceViewer({
           ref={photoGestures.canvasRef}
           className={styles.photoCanvas}
           style={{
-            width: `min(${zoom * 100}%, calc(${(face.image.width / face.image.height) * zoom} * var(--photo-max-height, 560px)))`,
+            width:
+              immersive && !wholeFace
+                ? `max(${zoom * 100}%, calc(${(face.image.width / face.image.height) * zoom} * var(--photo-height, 100dvh)))`
+                : `min(${zoom * 100}%, calc(${(face.image.width / face.image.height) * zoom} * ${immersive ? 'var(--overview-height)' : 'var(--photo-max-height, 560px)'}))`,
           }}
         >
-          {/* Image and independent SVG share native dimensions and framing. */}
-          {/* biome-ignore lint/performance/noImgElement: Local guide images are downloaded in their native dimensions for exact SVG alignment. */}
+          {/* Image and SVG retain their shared native framing at every zoom. */}
+          {/* biome-ignore lint/performance/noImgElement: Local guide images retain native dimensions for exact SVG alignment. */}
           <img
             ref={imageElement}
             src={face.image.src}
@@ -143,7 +173,8 @@ export function FaceViewer({
             <TopoRoutes
               width={face.image.width}
               height={face.image.height}
-              zoom={zoom}
+              assetId={face.image.assetId}
+              zoom={zoom * photoGestures.annotationScale}
               routes={routes}
               selectedClimbId={selectedClimbId}
               selectedOnly={lineMode === 'selected'}
@@ -154,94 +185,28 @@ export function FaceViewer({
       </section>
       <figcaption className={styles.photoCaption}>
         <span>
-          {face.name} · {face.orientation}
+          {face.name}
           {reconstructed && ' · Reconstructed view'}
+          {routes.length === 0 && ' · Lines pending'}
         </span>
-        <fieldset
-          className={styles.zoomControls}
-          aria-label={reconstructed ? 'Image zoom' : 'Photograph zoom'}
-        >
-          <button
-            type="button"
-            aria-label={`Zoom out ${imageLabel}`}
-            disabled={zoom === 1}
-            onClick={() => photoGestures.zoomBy(-0.5)}
-          >
-            <Minus size={16} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            aria-label={`Reset ${imageLabel} zoom`}
-            disabled={zoom === 1}
-            onClick={photoGestures.resetZoom}
-          >
-            <RotateCcw size={15} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            aria-label={`Zoom in ${imageLabel}`}
-            disabled={zoom === 3}
-            onClick={() => photoGestures.zoomBy(0.5)}
-          >
-            <Plus size={16} aria-hidden="true" />
-          </button>
-        </fieldset>
       </figcaption>
-      {routes.length > 0 ? (
-        <fieldset
-          className={styles.lineControls}
-          aria-label="Route line display"
-        >
-          {(['all', 'selected', 'photo'] as const).map(mode => (
-            <button
-              key={mode}
-              type="button"
-              aria-pressed={mode === lineMode}
-              disabled={mode === 'selected' && selectedClimbId === null}
-              onClick={() => setLineMode(mode)}
-            >
-              {mode === 'all'
-                ? 'All lines'
-                : mode === 'selected'
-                  ? 'Selected line'
-                  : `Clean ${imageLabel}`}
-            </button>
-          ))}
-        </fieldset>
-      ) : (
-        <p className={styles.topoUnavailable}>
-          Route lines await authoring and review.
-        </p>
-      )}
-      {routes.some(route => route.geometry.confidenceLevel === 'moderate') && (
-        <p className={styles.topoUnavailable}>
-          Lines show approximate routes, not exact holds.
-        </p>
-      )}
-      <details className={styles.photoNotes}>
-        <summary>{reconstructed ? 'Image' : 'Photo'} notes & credit</summary>
-        {face.photographNote && (
-          <p className={styles.orientationStatus}>{face.photographNote}</p>
-        )}
-        <p className={styles.photoAttribution}>
-          {asset.attributionUrl ? (
-            <a href={asset.attributionUrl} target="_blank" rel="noreferrer">
-              {asset.attribution}
-            </a>
-          ) : (
-            asset.attribution
-          )}{' '}
-          ·{' '}
-          {asset.licenseUrl ? (
-            <a href={asset.licenseUrl} target="_blank" rel="noreferrer">
-              {asset.license}
-            </a>
-          ) : (
-            asset.license
-          )}
-          {asset.modificationNote && <> · {asset.modificationNote}</>}
-        </p>
-      </details>
+      <FaceViewerControls
+        imageLabel={imageLabel}
+        zoom={zoom}
+        lineMode={lineMode}
+        hasRoutes={routes.length > 0}
+        hasSelection={selectedClimbId !== null}
+        immersive={immersive}
+        wholeFace={wholeFace}
+        onFraming={() => {
+          photoGestures.resetZoom()
+          setWholeFace(current => !current)
+        }}
+        onZoom={photoGestures.zoomBy}
+        onReset={photoGestures.resetZoom}
+        onLineMode={setLineMode}
+      />
+      {!immersive && <FaceImageNotes face={face} asset={asset} />}
     </figure>
   )
 }

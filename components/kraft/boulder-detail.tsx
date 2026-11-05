@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Info } from 'lucide-react'
 import type { RefObject } from 'react'
 import { boulderAccessNotice } from '@/lib/kraft/access-notices'
 import type { Boulder, KraftGuide } from '@/lib/kraft/types'
@@ -9,10 +9,13 @@ import { BoulderFaceControls } from './boulder-face-controls'
 import { BoulderInformation } from './boulder-information'
 import { BoulderRoutePanel } from './boulder-route-panel'
 import { CatalogMemberships } from './catalog-memberships'
+import { FaceImageNotes } from './face-image-notes'
 import { FaceViewer } from './face-viewer'
+import { GuideSheet } from './guide-sheet'
 import { NearbyBoulders } from './nearby-boulders'
 import { SourceNotes } from './source-notes'
 import styles from './topo.module.css'
+import { useGuideSheet } from './use-guide-sheet'
 
 type BoulderDetailProps = {
   guide: KraftGuide
@@ -39,6 +42,7 @@ export function BoulderDetail({
   onBoulderSelect,
   onReferenceSelect,
 }: BoulderDetailProps) {
+  const sheet = useGuideSheet()
   const climb = boulder.climbs.find(item => item.id === selectedClimbId)
   const face =
     boulder.faces.find(item => item.id === selectedFaceId) ??
@@ -58,63 +62,93 @@ export function BoulderDetail({
 
   return (
     <section
-      className={styles.boulderDetail}
+      className={`${styles.boulderDetail} ${styles.immersiveDetail}`}
       aria-labelledby="kraft-boulder-title"
+      onKeyDownCapture={sheet.onKeyDownCapture}
     >
-      <div className={styles.detailNavigation}>
-        <button type="button" onClick={onClose} className={styles.backButton}>
-          <ArrowLeft size={17} aria-hidden="true" />
-          Back to Kraft
-        </button>
-        <span>{area?.name ?? guide.name}</span>
-      </div>
-      <header className={styles.boulderHeader}>
-        <h2 id="kraft-boulder-title" ref={headingRef} tabIndex={-1}>
-          {boulder.name}
-        </h2>
-      </header>
-      <AccessNotice notice={boulderAccessNotice(boulder)} />
-      <div className={styles.detailBody}>
-        <section className={styles.faceSection} aria-label="Boulder faces">
-          <BoulderFaceControls
-            faces={boulder.faces}
-            face={face}
-            onFaceSelect={selectFace}
-          />
-          <FaceViewer
-            key={face?.id ?? 'unassigned'}
-            face={face}
-            asset={faceAsset}
-            climbs={boulder.climbs}
-            selectedClimbId={selectedClimbId}
-            onClimbSelect={onClimbSelect}
-          />
-        </section>
-        <BoulderRoutePanel
-          boulder={boulder}
+      <section className={styles.faceSection} aria-label="Boulder faces">
+        <FaceViewer
+          key={face?.id ?? 'unassigned'}
           face={face}
-          climb={climb}
-          sources={guide.sources}
-          onFaceSelect={selectFace}
+          asset={faceAsset}
+          climbs={boulder.climbs}
+          selectedClimbId={selectedClimbId}
           onClimbSelect={onClimbSelect}
+          immersive
+        />
+      </section>
+      <div className={styles.floatingGuideHeader}>
+        <header className={styles.immersiveHeader}>
+          <button
+            type="button"
+            onClick={onClose}
+            className={styles.backButton}
+            aria-label="Back to Kraft"
+          >
+            <ArrowLeft size={19} aria-hidden="true" />
+            <span>Kraft</span>
+          </button>
+          <div className={styles.boulderTitle}>
+            <h2 id="kraft-boulder-title" ref={headingRef} tabIndex={-1}>
+              {boulder.name}
+            </h2>
+            <span>{area?.name ?? guide.name}</span>
+          </div>
+          <button
+            type="button"
+            className={styles.boulderInfoButton}
+            aria-label="Boulder details"
+            aria-expanded={sheet.activeSheet === 'boulder'}
+            onClick={event => sheet.openSheet('boulder', event.currentTarget)}
+          >
+            <Info size={20} aria-hidden="true" />
+          </button>
+        </header>
+        <BoulderFaceControls
+          faces={boulder.faces}
+          face={face}
+          onFaceSelect={id => {
+            selectFace(id)
+            sheet.dismissSheet()
+          }}
         />
       </div>
-      <BoulderInformation boulder={boulder} />
-      <CatalogMemberships
-        guide={guide}
+      <BoulderRoutePanel
         boulder={boulder}
-        onSelect={onReferenceSelect}
-      />
-      <SourceNotes
-        sourceIds={boulder.sourceIds}
+        face={face}
+        climb={climb}
         sources={guide.sources}
-        boulder={boulder}
+        activeSheet={sheet.activeSheet}
+        onOpenSheet={sheet.openSheet}
+        onCloseSheet={sheet.closeSheet}
+        onFaceSelect={selectFace}
+        onClimbSelect={onClimbSelect}
       />
-      <NearbyBoulders
-        guide={guide}
-        boulder={boulder}
-        onBoulderSelect={onBoulderSelect}
-      />
+      <GuideSheet
+        open={sheet.activeSheet === 'boulder'}
+        label="Boulder details"
+        title={`${boulder.name} · guide notes`}
+        onClose={sheet.closeSheet}
+      >
+        <AccessNotice notice={boulderAccessNotice(boulder)} />
+        <FaceImageNotes face={face} asset={faceAsset} />
+        <BoulderInformation boulder={boulder} />
+        <CatalogMemberships
+          guide={guide}
+          boulder={boulder}
+          onSelect={onReferenceSelect}
+        />
+        <SourceNotes
+          sourceIds={boulder.sourceIds}
+          sources={guide.sources}
+          boulder={boulder}
+        />
+        <NearbyBoulders
+          guide={guide}
+          boulder={boulder}
+          onBoulderSelect={onBoulderSelect}
+        />
+      </GuideSheet>
     </section>
   )
 }

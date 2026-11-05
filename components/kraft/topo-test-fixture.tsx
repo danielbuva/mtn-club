@@ -3,6 +3,12 @@
 // Development-only calibration fixture; never part of the Kraft content library.
 import { useState } from 'react'
 import type { Climb, Face, GuideAsset } from '@/lib/kraft/types'
+import {
+  alternativeFixtureAnnotations,
+  matchedFixtureAnnotations,
+  regionFixtureAnnotations,
+  seatedFixtureAnnotations,
+} from '@/tests/fixtures/kraft-annotation-fixture'
 import { ClimbDetail } from './climb-detail'
 import { FaceViewer } from './face-viewer'
 
@@ -51,6 +57,14 @@ const climbs: Climb[] = ['test-route-a', 'test-route-b'].map((id, index) => ({
     labelPoint: { x: index === 0 ? 260 : 750, y: 640 },
     sourceIds: ['test-fixture'],
     reviewedAt: '2026-09-30',
+    annotations:
+      index === 0
+        ? faceIndex === 0
+          ? matchedFixtureAnnotations
+          : regionFixtureAnnotations
+        : faceIndex === 0
+          ? alternativeFixtureAnnotations
+          : seatedFixtureAnnotations,
     ...(faceIndex === 0 && index === 0
       ? {
           continuation: {

@@ -5,6 +5,7 @@ import { pearlCatalog } from './pearl-catalog.ts'
 import { completeRuntimeSources } from './runtime-sources.ts'
 import { splitCatalog } from './split-catalog.ts'
 import type { EvidenceSource } from './types'
+import { visibleProductionSources } from './visible-production-batch.ts'
 
 export const kraftReviewedAt = '2026-09-30'
 const reviewedAt = kraftReviewedAt
@@ -57,6 +58,90 @@ const pilotSources: EvidenceSource[] = [
         'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/pearl-southeast-guide-provenance.json',
     },
     note: 'User-directed original guide asset with a new near-frontal camera. Only the lawful BLM reference and our own first candidate were generator pixel inputs; MP photos were consulted for factual geometry only. Original creation record, exact prompt, hashes and review scope are retained. Human and field verification remain pending.',
+  },
+  {
+    id: 'mtn-club-split-north-chimney-guide',
+    title: 'Split north chimney guide image · original MTN Club reconstruction',
+    publisher: 'MTN Club',
+    url: 'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/split-north-chimney-guide-provenance.json',
+    accessedAt: '2026-10-01',
+    usage: 'licensed-media',
+    license: 'Original MTN Club guide asset',
+    distribution: {
+      licenseIds: ['MTN-Club-original'],
+      evidenceUrl:
+        'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/split-north-chimney-guide-provenance.json',
+    },
+    note: 'User-directed original near-frontal chimney view for Front Side Crack only. Current candidate 03 uses our own candidate 02 as its sole pixel input, with three MP photos as factual references only. Fresh raster review accepts macro geometry and ordinary field-photo character; route correspondence, rendered guide, human and field review remain pending.',
+  },
+  {
+    id: 'mtn-club-warm-main-southwest-guide',
+    title: 'Warm-up Main guide image · original MTN Club reconstruction',
+    publisher: 'MTN Club',
+    url: 'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/warm-main-southwest-guide-provenance.json',
+    accessedAt: '2026-10-01',
+    usage: 'licensed-media',
+    license: 'Original MTN Club guide asset',
+    distribution: {
+      licenseIds: ['MTN-Club-original'],
+      evidenceUrl:
+        'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/warm-main-southwest-guide-provenance.json',
+    },
+    note: 'User-directed original near-frontal main-plane reconstruction for seven qualified memberships, without upgrading relative compass bearings or neighboring-plane scope. Candidate 02 uses only our own first study as pixel input; three MP photos provide factual geometry only. Actual raster review accepts macro identity and ordinary field-photo character; route, rendered guide, human and field review remain pending.',
+  },
+  {
+    id: 'mp-warm-main-photo-107432433',
+    title: 'Warm-up Main south plane · factual photographic reference',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/107432433/warm-up-boulder-south-face-topo',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Underlying rock pixels inspected for whole main-plane massing, crown, oblique lower break and ground contact. Source topo artwork and pixels are excluded from generator inputs and distribution; no authored route coordinates are transferred.',
+  },
+  {
+    id: 'mp-warm-main-photo-107432437',
+    title: 'Warm-up Main flank · factual photographic reference',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/107432437/warm-up-boulder-east-face-topo',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Underlying rock pixels inspected for the curved right flank, crown transition and narrow companion passage. This oblique clipped frame does not establish a complete frontal east plane. Source pixels and topo artwork are excluded from generator inputs and distribution.',
+  },
+  {
+    id: 'mp-warm-main-photo-107030500',
+    title: 'Warm-up Main flank · independent factual photographic reference',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/107030500/east-face-of-the-main-warm-up-boulder',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Distinct actual photograph inspected for main-block depth, rounded corner and separate companion passage. Clipped oblique framing leaves the complete east plane unresolved. No source pixels are generator inputs or distributed.',
+  },
+  {
+    id: 'mp-split-photo-112791386',
+    title: 'Split chimney · uphill-side photographic reference',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/112791386/plumbers-crack-from-the-uphill-side-instagramcomradam-gnawrot',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Actual reference-only pixels and uphill-side caption inspected for the two-slab silhouette, through-chimney and overlapping base block. No reference pixels were generator inputs or are distributed; neighboring free-climb views remain unresolved.',
+  },
+  {
+    id: 'mp-split-photo-106617801',
+    title: 'Split chimney · independent route-linked photographic reference',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/106617801/awesome',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Actual reference-only pixels inspected for opposing inner walls, asymmetric slab tips and base occlusion. Factual observations only; no source pixels, composition or route artwork are distributed.',
+  },
+  {
+    id: 'mp-split-photo-111794980',
+    title: 'Split chimney · independent whole-region photographic reference',
+    publisher: 'Mountain Project contributors',
+    url: 'https://www.mountainproject.com/photo/111794980/popular-chimney-route-at-kraft-boulders',
+    accessedAt: '2026-10-01',
+    usage: 'factual-reference',
+    note: 'Actual reference-only pixels inspected for central chimney massing and irregular natural varnish. Factual observations only; no source pixels, composition or route artwork are distributed. Exact holds and route correspondence are unverified.',
   },
   {
     id: 'blm-pearl-photograph',
@@ -195,6 +280,11 @@ const pilotSources: EvidenceSource[] = [
   ),
   source('mp-pearl', 'The Pearl boulder', `${mp}/area/106056258/the-pearl`),
   source(
+    'mp-pearl-start-reference',
+    'Pearl standing-start photographic reference',
+    `${mp}/photo/114467060/molly-on-the-start-of-the-pearl`,
+  ),
+  source(
     'mp-monkey',
     'Monkey Bar Boulder',
     `${mp}/area/105937674/monkey-bar-boulder`,
@@ -309,4 +399,7 @@ const pilotSources: EvidenceSource[] = [
   },
 ]
 
-export const kraftSources = completeRuntimeSources(pilotSources)
+export const kraftSources = completeRuntimeSources([
+  ...pilotSources,
+  ...visibleProductionSources,
+])

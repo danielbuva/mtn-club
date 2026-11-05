@@ -33,6 +33,8 @@ export default async function KraftGuidePage() {
       '/kraft/icon-512.png',
       '/kraft/geo-license.txt',
       '/kraft/pearl-southeast-guide-provenance.json',
+      '/kraft/split-north-chimney-guide-provenance.json',
+      '/kraft/warm-main-southwest-guide-provenance.json',
     ],
     boulders: kraftGuide.boulders.length,
     climbs: kraftGuide.boulders.reduce(

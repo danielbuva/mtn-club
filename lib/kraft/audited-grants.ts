@@ -1,4 +1,5 @@
 import type { DistributionLicense } from './types'
+import { visibleProductionGrants } from './visible-production-batch.ts'
 
 type AuditedGrant = {
   sourceId: string
@@ -11,6 +12,7 @@ type AuditedGrant = {
 
 /** Audited reuse grants and user-directed original asset creation records. */
 export const auditedGrants: AuditedGrant[] = [
+  ...visibleProductionGrants,
   {
     sourceId: 'mtn-club-pearl-southeast-guide',
     sourceUrl:
@@ -20,6 +22,26 @@ export const auditedGrants: AuditedGrant[] = [
     usage: 'licensed-media',
     licenseIds: ['MTN-Club-original'],
     record: 'public/kraft/pearl-southeast-guide-provenance.json',
+  },
+  {
+    sourceId: 'mtn-club-split-north-chimney-guide',
+    sourceUrl:
+      'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/split-north-chimney-guide-provenance.json',
+    evidenceUrl:
+      'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/split-north-chimney-guide-provenance.json',
+    usage: 'licensed-media',
+    licenseIds: ['MTN-Club-original'],
+    record: 'public/kraft/split-north-chimney-guide-provenance.json',
+  },
+  {
+    sourceId: 'mtn-club-warm-main-southwest-guide',
+    sourceUrl:
+      'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/warm-main-southwest-guide-provenance.json',
+    evidenceUrl:
+      'https://github.com/danielbuva/mtn-club/blob/feat/kraft-offline-guidebook/public/kraft/warm-main-southwest-guide-provenance.json',
+    usage: 'licensed-media',
+    licenseIds: ['MTN-Club-original'],
+    record: 'public/kraft/warm-main-southwest-guide-provenance.json',
   },
   {
     sourceId: 'blm-pearl-photograph',

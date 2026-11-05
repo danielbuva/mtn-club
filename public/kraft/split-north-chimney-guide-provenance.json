@@ -1,0 +1,170 @@
+{
+  "assetId": "split-north-chimney-guide",
+  "sourceId": "mtn-club-split-north-chimney-guide",
+  "recordedAt": "2026-10-01",
+  "representation": "original raster reconstruction",
+  "creationAuthorization": {
+    "basis": "User-directed original face-image creation using The Pearl as the quality bar for future boulders",
+    "userInstructions": [
+      "Produce one real guide-quality, straight-on face image for The Pearl and then use that as the quality bar for future boulders."
+    ],
+    "label": "Original MTN Club guide asset",
+    "distributionId": "MTN-Club-original",
+    "scope": "Records original asset creation for this guide. It is not a third-party photographic license, public-domain assertion or general copyright guarantee for generated output."
+  },
+  "generation": {
+    "tool": "built-in image_gen",
+    "candidate": "03",
+    "originalPng": {
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2820196,
+      "sha256": "1e63efe3b84693e15df94c22e84933eddf5fa8726a2485d3df3eb94376e64763"
+    },
+    "prompt": "Revise this OWN generated raster into a believable ordinary FIELD PHOTO at Kraft, Nevada. This is our generated study, not a third-party photo. Preserve the observed rock's major factual silhouette, proportions, planes, existing features and ground relationship; do not add holds or major cracks. The change is away from a flawlessly lit commercial hero image, toward a useful casually observed photo somebody actually took outdoors. Keep the guide's clear near-frontal view and whole face/start/finish context, but reduce immaculate presentation: ordinary slightly hazy or patchily clouded daytime light, moderate rather than spectacular contrast, less saturated blue sky, uneven natural sky fill and subtle shade, modest sharpness and realistic fine camera texture, no glossy polished rock, dramatic cinematic light, HDR clarity, uniformly perfect texture or showroom quality. Weathering, dusty uneven color, worn/spalled edges and small asymmetries remain natural and varied, not a procedural all-over noise pattern. Dusty loose rubble, unmanicured scrub and imperfect ordinary desert surroundings ground the rock. No people/pads/text/route lines. The image must remain clearly readable at mobile zoom, not deliberately blurred, damaged or filtered. Surface grain/incidentally worn marks are illustrative, not surveyed holds. Maintain exact major geometry and approximately the same native image composition for subsequent guide correspondence; do not straighten away real irregularity.\nSPLIT NORTH/UPHILL: KEEP the slender upright left slab, broader descending right wedge, modestly higher left inner tip, actual open person-accessible through-chimney visible down upper/middle slot, and substantial foreground rock overlapped inward across the lower left slab toward the chimney. Do not narrow the chimney, level the summit tips, move the base block outward or turn the rock into a polished architectural pair. Do not reproduce existing copyrighted photographer compositions. Preserve photographic color complexity without excessive crisp uniform stippling. Aim a modest naturally exposed ordinary desert shot, warmer dust subdued by real ambient light, an imperfect quietly observed boulder rather than an advertisement.\n",
+    "camera": "Original near-frontal north/uphill chimney camera retained from our own candidate02, with ordinary cloud-filtered field light; full slab boundaries, slot and base overlap remain visible.",
+    "pixelInputs": [
+      {
+        "name": "Our own generated Split candidate02",
+        "sha256": "d152d6061ae184969cec5a6b458cb6ec1b1e96fa8fe05b371e8442b20e32b630",
+        "role": "Only input pixels for the field-style revision; not a third-party photograph"
+      }
+    ],
+    "factualReferences": [
+      {
+        "sourceId": "mp-split-photo-112791386",
+        "photoId": "112791386",
+        "url": "https://www.mountainproject.com/photo/112791386/plumbers-crack-from-the-uphill-side-instagramcomradam-gnawrot",
+        "width": 800,
+        "height": 533,
+        "sha256": "1906dff928c0307bff00b2e5467a4269f79fa7248e0ecd99ac157b240e2d18ff",
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      },
+      {
+        "sourceId": "mp-split-photo-106617801",
+        "photoId": "106617801",
+        "url": "https://www.mountainproject.com/photo/106617801/awesome",
+        "width": 225,
+        "height": 300,
+        "sha256": "a73ac6f8465cb693158b3b94db21bca6ea393c73c101e32a1a8224edc495a32f",
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      },
+      {
+        "sourceId": "mp-split-photo-111794980",
+        "photoId": "111794980",
+        "url": "https://www.mountainproject.com/photo/111794980/popular-chimney-route-at-kraft-boulders",
+        "width": 400,
+        "height": 267,
+        "sha256": "f6fc0a6f8aa73c1081966c1f0cccb409d2d7bfaf614a67577ee2e0e2f2afa51a",
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      }
+    ],
+    "factualReferenceUse": "Actual reference photographs were inspected for major rock morphology and field material facts only. Mountain Project pixels and topo artwork were not generator inputs, are not shipped, and no reference camera composition or route artwork is reproduced.",
+    "priorOriginalGeneration": {
+      "tool": "built-in image_gen",
+      "candidate": "02",
+      "originalPng": {
+        "width": 1448,
+        "height": 1086,
+        "bytes": 2966472,
+        "sha256": "d152d6061ae184969cec5a6b458cb6ec1b1e96fa8fe05b371e8442b20e32b630"
+      },
+      "prompt": "Revise our OWN generated Split Boulder north/uphill candidate into a substantially more authentic, geometry-correct realistic field-guide raster. The attached image is our original generated candidate, not a third-party photograph. It is a starting study to correct, not a texture/composition to preserve. No copyrighted reference photographs are supplied as pixel inputs. The following factual geometry was separately observed in three independent photographs of the real Split Boulder at Kraft, Nevada. Create our independently composed near-frontal guide camera, not a recreation of any source photograph.\n\nMOST IMPORTANT PHYSICAL CORRECTIONS:\n1. This is a person-accessible, through-going CHIMNEY BETWEEN TWO DISTINCT SLABS, not a hairline fissure. Substantially widen the present gap, approximately doubling its visible proportional opening while keeping tall deep opposing inner wall planes. The opening should read as open air through much of the upper and middle height, with far desert sky/light visible between the slabs and naturally darker depth/base. Do not create an arch, cave mouth or painted black crack. No people or measuring objects.\n2. The angular foreground base boulder belongs substantially IN FRONT OF the LOWER LEFT SLAB, extending inward toward and partly obscuring the chimney approach. Move it inward from its current outside-left-corner position. It has meaningful height, roughly the lower third of the slab, and an irregular inclined top. Keep this actual occlusion rather than exposing an invented clean starting zone. Ground is uneven and rocky.\n3. The INNER LEFT SUMMIT TIP is modestly but clearly HIGHER than the inner right summit. Left upper outline slopes upward from its outer shoulder to that inner tip. The broad right wedge crest then descends away from the gap into its much lower outer shoulder. Preserve that asymmetry rather than nearly level inner tips.\n\nIDENTITY TO PRESERVE: tall freestanding sandstone, relatively slender near-rectangular left slab and much broader right wedge; right visible breadth roughly two to two-and-a-half times left, without making a flat symmetric block. Large outer planes are relatively planar but naturally uneven and weathered, with real rounded/chipped margins and subtle surface relief. Retain distinct inner wall depth and the existing two-slab silhouette. Do not invent big holds, huecos, shelves, new major cracks or a new attached route wall. This image depicts ONLY the observed north/uphill chimney and enclosing slabs, not every climb filed under that source face.\n\nUSER'S MATERIAL AND VISUAL DIRECTION: the rock must feel observed in the field, never cleanly manufactured. Favor authenticity over idealization. Warm rusty orange, dusty pale salmon, buff and muted brown vary in irregular, nonuniform zones. Dark desert varnish is patchy and weathered: larger uneven worn areas alternate with smaller flecks, exposed sandstone and subtle runoff/stain differences, rather than identical high-frequency stippling over every plane. Grain varies by plane and erosion; there is occasional shallow surface roughness, fine natural bedding/abrasion, micro-pitting and worn chipped edge detail. Preserve slight lumps, edge wear and small asymmetries without changing major climb-defining geometry. No repeated noise texture, evenly spaced cracks or pits, perfectly straight manufactured bevels, smooth orange plastic, waxy surfaces, sharp polygon panels or architectural massing.\nNatural chalk/stain behavior should be restrained and non-graphical: only subtle irregular pale abrasion or isolated incidental weathered smudges where plausible, not a conspicuous invented sequence of white holds. Do not add a new route-specific chalk map. Natural pale stone must remain distinguishable from any chalk. Fine material details are illustrative and cannot establish holds.\n\nLIGHT AND GROUND: believable outdoor Nevada desert light, gently directional daytime sun with cooler sky fill, varied warm lit planes and detailed cooler shade in the chimney and recesses. Avoid studio evenness, a clean gradient backdrop, overly dramatic orange sunset, cinematic glow, synthetic showroom lighting or lifeless isolated-object presentation. Keep irregular dusty gravel, angular fragments, small real-feeling ground relief and uneven contact shadows around the base; sparse dusty gray-green scrub and subordinate broken desert rocks can situate it. Use a different independently chosen subordinate background and daylight than any factual reference. No foreground brush obscuring the main face beyond the supported base boulder. No people, crash pads, signage, topo marks, text or route lines.\n\nGUIDE CAMERA: near-frontal to the actual north/uphill slot, camera near standing eye level, moderate natural perspective without a dramatic wide-angle/fisheye effect. Center the climb-bearing two-slab formation as a whole, not just the slot. Boulder should dominate useful frame, complete summit tips, side boundaries, supported base obstruction and small ground band visible with modest breathing room. Aim landscape 4:3 framing suitable for mobile topo display, without cropping either summit or spreading excess blank sky/background. A subtle oblique angle is allowed only if it conveys real chimney depth better. The result must read as a believable photograph of a characterful actual desert boulder, more useful than the rejected smooth, simplified study. Real raster image, no SVG, vector illustration, cartoon, low-poly art or diagrams.\n",
+      "camera": "Independently composed near-frontal north/uphill chimney view near standing eye level, with moderate natural perspective and complete enclosing slab boundaries.",
+      "pixelInputs": [
+        {
+          "name": "Our own rejected Split generated candidate 01",
+          "sha256": "e8d9e4f872995df6bbac62f4804f570fe1f38bf32bcfaadff38579262a5ebba0",
+          "role": "Original intermediate output; corrected for chimney width, base-block placement, summit relationship and natural field character"
+        }
+      ],
+      "factualReferences": [
+        {
+          "sourceId": "mp-split-photo-112791386",
+          "photoId": "112791386",
+          "url": "https://www.mountainproject.com/photo/112791386/plumbers-crack-from-the-uphill-side-instagramcomradam-gnawrot",
+          "width": 800,
+          "height": 533,
+          "sha256": "1906dff928c0307bff00b2e5467a4269f79fa7248e0ecd99ac157b240e2d18ff",
+          "generatorPixelInput": false,
+          "shippedPixels": false
+        },
+        {
+          "sourceId": "mp-split-photo-106617801",
+          "photoId": "106617801",
+          "url": "https://www.mountainproject.com/photo/106617801/awesome",
+          "width": 225,
+          "height": 300,
+          "sha256": "a73ac6f8465cb693158b3b94db21bca6ea393c73c101e32a1a8224edc495a32f",
+          "generatorPixelInput": false,
+          "shippedPixels": false
+        },
+        {
+          "sourceId": "mp-split-photo-111794980",
+          "photoId": "111794980",
+          "url": "https://www.mountainproject.com/photo/111794980/popular-chimney-route-at-kraft-boulders",
+          "width": 400,
+          "height": 267,
+          "sha256": "f6fc0a6f8aa73c1081966c1f0cccb409d2d7bfaf614a67577ee2e0e2f2afa51a",
+          "generatorPixelInput": false,
+          "shippedPixels": false
+        }
+      ],
+      "factualReferenceUse": "Three actual Mountain Project photographs were inspected for silhouette, major planes, chimney opening, base occlusion and natural material facts. Their pixels were not generator inputs, are not shipped, and their photographic composition or topo artwork is not reproduced."
+    }
+  },
+  "shippedAsset": {
+    "src": "/kraft/split-north-chimney-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 474572,
+    "sha256": "ad0cd7f2b61c2c2ce59e1988b394a4689cff48518eb6dfaf6d4406f2a9cd1b6f",
+    "conversion": "Sharp WebP quality 92, effort 6; native dimensions preserved with no crop"
+  },
+  "review": {
+    "reviewer": "Independent raster field-style critic (agent)",
+    "reviewedAt": "2026-10-01",
+    "verdict": "accept-scoped-macro-geometry-and-casual-field-style",
+    "originalPngSha256": "1e63efe3b84693e15df94c22e84933eddf5fa8726a2485d3df3eb94376e64763",
+    "scope": "Actual new raster pixels, prior own raster pixels and actual factual reference photos: major physical identity, natural casual outdoor field-photo character and independent guide-camera clarity.",
+    "geometryObservations": [
+      "Narrow upright left slab, much broader descending right wedge and visibly higher left inner tip remain recognizable.",
+      "The separation remains a real through-chimney with visible background down the slot and visible ground entry; the earlier thin black-fissure problem is corrected.",
+      "The substantial angular base rock still overlaps the lower left slab and reaches inward toward the chimney approach."
+    ],
+    "styleObservations": [
+      "Softer cloud-filtered daylight, restrained saturation and matte worn surfaces read closer to an ordinary outdoor field photograph than the brighter preceding asset.",
+      "Irregular dark varnish, exposed warm sandstone, rubble and sparse scrub remain visible; there is no glossy surface or flawless studio-light gradient.",
+      "Some generated microtexture is illustrative; this acceptance is about overall field-photo character and supported macro identity, not current rock conditions or exact holds."
+    ],
+    "guideCamera": "pass; independent near-frontal framing retains complete observed slabs, chimney summit and base as dominant, readable guide geometry",
+    "approvedImageScope": "Central chimney / Front Side Crack region only. The Mole and Slice N Dice are outside this approved image scope.",
+    "limitations": "Raster acceptance covers observed macro identity, independently composed framing and ordinary field-photo character only. Generated fine holds and material are illustrative; exact route paths, hand placements and current conditions are not approved.",
+    "humanReview": "pending",
+    "fieldVerification": "not performed",
+    "routePathApproval": "pending",
+    "guideOutputReview": "pending"
+  },
+  "faceGeometry": {
+    "boulder": "Split Boulder",
+    "faceId": "split-north-chimney",
+    "sourceOrientation": "N",
+    "orientationBasis": "Source-observed north/uphill route description and caption; physical bearing is not field verified",
+    "imageEligibleClimbIds": [
+      "front-side-crack"
+    ],
+    "scope": "Only the central north/uphill chimney and enclosing slabs. Mole and Slice N Dice remain on the separate north source group without image correspondence.",
+    "confidence": "Macro geometry and casual field-photo character accepted by a fresh independent agent; image-space route correspondence and actual rendered guide review remain pending",
+    "unresolvedGeometry": [
+      "Metric dimensions and calibrated camera bearing",
+      "Exact holds, starting spot, exit and reported summit bolt location",
+      "Adjacent free-climbing planes and their boundaries relative to the chimney",
+      "Current rock and ground conditions"
+    ],
+    "humanVerification": "pending",
+    "fieldVerification": "not performed"
+  }
+}

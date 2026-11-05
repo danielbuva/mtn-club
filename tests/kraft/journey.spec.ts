@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { mapCatalogTrigger, openMapCatalog } from './catalog-helpers'
 
-test('mobile route browsing keeps the complete face visible and preserves same-face zoom', async ({
+test('mobile route browsing keeps the photograph immersive and preserves same-face zoom', async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name === 'desktop', 'Mobile coordinated browsing')
@@ -12,54 +12,46 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
     name: 'Boulder faces',
     exact: true,
   })
-  const photograph = viewer.getByRole('img')
-  const photographViewport = viewer.getByRole('region', {
-    name: 'Scrollable face image',
+  const viewport = viewer.getByRole('region', { name: 'Scrollable face image' })
+  const photograph = viewport.getByRole('img')
+  const dock = dialog.getByRole('complementary', { name: 'Boulder climbs' })
+  const browse = dock.getByRole('button', {
+    name: 'Browse climbs',
+    exact: true,
   })
-  const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
-  await expect(photograph).toBeInViewport({ ratio: 1 })
-  await expect(panel).toHaveAttribute('tabindex', '0')
+  const picker = dialog.getByRole('region', {
+    name: 'Climb picker',
+    exact: true,
+  })
+  await expect(viewport).toBeInViewport({ ratio: 1 })
+  await expect(photograph).toBeVisible()
+  await expect(browse).toHaveAttribute('aria-expanded', 'false')
+  await expect(picker).toBeHidden()
   const initialPhoto = await photograph.boundingBox()
   const initialDialogScroll = await dialog.evaluate(
     element => element.scrollTop,
   )
-  const initialFrame = await photographViewport.evaluate(element => ({
-    height: element.clientHeight,
-    contentHeight: element.scrollHeight,
-  }))
-  expect(initialFrame.contentHeight).toBeLessThanOrEqual(
-    initialFrame.height + 1,
-  )
 
-  // Browse the contained panel as a user does, before choosing a lower row.
-  await panel.hover()
-  await page.mouse.wheel(0, 700)
-  await expect
-    .poll(() => panel.evaluate(element => element.scrollTop))
-    .toBeGreaterThan(0)
-  const pearl = panel.locator('[data-climb-id="the-pearl"] button')
-  await expect(pearl).toHaveAccessibleName(/The Pearl SE.*V5/)
+  await browse.click()
+  const pearl = picker.getByRole('button', { name: /The Pearl SE.*V5/ })
   await pearl.click()
-  await expect(pearl).toHaveAttribute('aria-pressed', 'true')
-  await expect(pearl).toBeFocused()
-  await expect(photograph).toBeInViewport({ ratio: 1 })
+  await expect(picker).toBeHidden()
+  await expect(browse).toBeFocused()
+  await expect(page).toHaveURL(/climb=the-pearl/)
+  await expect(page).toHaveURL(/face=pearl-southeast/)
+  const selected = dock.getByRole('region', { name: 'Selected climb' })
+  await expect(selected).toBeInViewport({ ratio: 1 })
+  await expect(selected).toContainText(
+    'Approximate corridor available · Southeast face',
+  )
   await expect(
-    dialog.getByRole('region', { name: 'Selected climb' }),
-  ).toBeInViewport({ ratio: 1 })
-  await expect(
-    dialog.getByRole('region', { name: 'Selected climb' }),
-  ).toContainText('Approximate corridor available · Southeast face')
-  await expect(
-    dialog.getByRole('article', {
-      name: 'The Pearl details',
-      includeHidden: true,
-    }),
+    dialog.getByRole('region', { name: 'Climb details', exact: true }),
   ).toBeHidden()
   expect(await dialog.evaluate(element => element.scrollTop)).toBe(
     initialDialogScroll,
   )
   expect(await photograph.boundingBox()).toEqual(initialPhoto)
-  await testInfo.attach('mobile-route-with-complete-face', {
+  await testInfo.attach('mobile-route-in-immersive-view', {
     body: await page.screenshot({ scale: 'css' }),
     contentType: 'image/png',
   })
@@ -68,14 +60,17 @@ test('mobile route browsing keeps the complete face visible and preserves same-f
     .getByRole('button', { name: 'Zoom in image', exact: true })
     .click()
   const zoomedPhoto = await photograph.boundingBox()
-  const nextClimb = panel.locator(
-    '[data-climb-id="pearl-pearl-necklace"] button',
-  )
-  await expect(nextClimb).toHaveAccessibleName(/Pearl Necklace SE V6-/)
+  await browse.click()
+  await expect(pearl).toHaveAttribute('aria-pressed', 'true')
+  const nextClimb = picker.getByRole('button', {
+    name: /Pearl Necklace SE V6-/,
+  })
   await nextClimb.click()
-  await expect(nextClimb).toHaveAttribute('aria-pressed', 'true')
-  await expect(nextClimb).toBeFocused()
-  await expect(photographViewport).toBeInViewport({ ratio: 1 })
+  await expect(picker).toBeHidden()
+  await expect(browse).toBeFocused()
+  await expect(page).toHaveURL(/climb=pearl-pearl-necklace/)
+  await expect(page).toHaveURL(/face=pearl-southeast/)
+  await expect(viewport).toBeInViewport({ ratio: 1 })
   await expect(
     viewer.getByRole('button', { name: 'Reset image zoom', exact: true }),
   ).toBeEnabled()
@@ -132,13 +127,17 @@ test('known climb search, source disagreement, face switch and return stay coher
     name: 'Monkey Bar Boulder boulder guide',
   })
   await expect(dialog).toBeVisible()
-  const details = dialog.getByRole('article', {
-    name: 'Monkey Bars details',
-    includeHidden: true,
+  const detailsSheet = dialog.getByRole('region', {
+    name: 'Climb details',
+    exact: true,
   })
-  await expect(details).toHaveCount(1)
-  await expect(details).toBeHidden()
-  await expect(details).not.toBeFocused()
+  const details = detailsSheet.getByRole('article', {
+    name: 'Monkey Bars details',
+  })
+  await expect(detailsSheet).toBeHidden()
+  await expect(page).toHaveURL(/boulder=monkey-bar/)
+  await expect(page).toHaveURL(/climb=monkey-bars/)
+  await expect(page).toHaveURL(/face=monkey-cave/)
   await expect(
     dialog.getByRole('region', { name: 'Selected climb', exact: true }),
   ).toContainText('Monkey Bars')
@@ -146,55 +145,45 @@ test('known climb search, source disagreement, face switch and return stay coher
     name: 'Back to Kraft',
     exact: true,
   })
-  await expect(back).toBeInViewport()
+  await expect(back).toBeInViewport({ ratio: 1 })
   const boulderHeading = dialog.getByRole('heading', {
     name: 'Monkey Bar Boulder',
     exact: true,
   })
   await expect(boulderHeading).toBeFocused()
-  const headingBox = await boulderHeading.boundingBox()
-  const backHeaderBottom = await back.evaluate(
-    element =>
-      (element.parentElement ?? element).getBoundingClientRect().bottom,
-  )
-  expect(headingBox?.y).toBeGreaterThanOrEqual(backHeaderBottom)
+  await expect(boulderHeading).toBeInViewport({ ratio: 1 })
   await expect(
     dialog.getByRole('button', {
       name: 'Cave & roof · Unconfirmed',
       exact: true,
     }),
   ).toHaveAttribute('aria-pressed', 'true')
-  const fullDetails = dialog.getByLabel('View Monkey Bars climb details', {
+  const fullDetails = dialog.getByRole('button', {
+    name: 'Open Monkey Bars full climb record',
     exact: true,
   })
-  await expect(fullDetails).toHaveJSProperty('tagName', 'SUMMARY')
-  await expect(fullDetails).toHaveText('Full climb details & sources')
   await fullDetails.focus()
   await page.keyboard.press('Enter')
+  await expect(detailsSheet).toBeVisible()
   await expect(details).toBeVisible()
-  await expect(fullDetails).toBeFocused()
-  await expect(details).not.toBeFocused()
+  await expect(details).toContainText('Physical line identity is unresolved')
+  await expect(details).toContainText(
+    'no grade conversion or consensus is inferred',
+  )
   const detailsHeading = details.getByRole('heading', {
     name: 'Monkey Bars',
     exact: true,
   })
   await detailsHeading.scrollIntoViewIfNeeded()
   await expect(detailsHeading).toBeInViewport()
-  await expect(back).toBeInViewport()
-  const detailsHeadingBox = await detailsHeading.boundingBox()
-  const expandedBackHeaderBottom = await back.evaluate(
-    element =>
-      (element.parentElement ?? element).getBoundingClientRect().bottom,
-  )
-  expect(detailsHeadingBox?.y).toBeGreaterThanOrEqual(expandedBackHeaderBottom)
-  await expect(details).toContainText('Physical line identity is unresolved')
-  await expect(details).toContainText(
-    'no grade conversion or consensus is inferred',
-  )
   await testInfo.attach('selected-climb', {
     body: await page.screenshot({ scale: 'css' }),
     contentType: 'image/png',
   })
+  await page.keyboard.press('Escape')
+  await expect(detailsSheet).toBeHidden()
+  await expect(dialog).toBeVisible()
+  await expect(fullDetails).toBeFocused()
   const northwestFace = dialog.getByRole('button', {
     name: 'Northwest face · NW',
     exact: true,
@@ -202,15 +191,28 @@ test('known climb search, source disagreement, face switch and return stay coher
   await northwestFace.click()
   await expect(northwestFace).toHaveAttribute('aria-pressed', 'true')
   await expect(northwestFace).toBeFocused()
+  await expect(page).toHaveURL(/face=monkey-northwest/)
+  await expect(page).not.toHaveURL(/climb=monkey-bars/)
+  const browse = dialog.getByRole('button', {
+    name: 'Browse climbs',
+    exact: true,
+  })
+  await browse.click()
+  const picker = dialog.getByRole('region', {
+    name: 'Climb picker',
+    exact: true,
+  })
   await expect(
-    dialog.getByRole('heading', { name: 'Climbs', exact: true }),
+    picker.getByRole('heading', { name: 'Climbs', exact: true }),
   ).toBeVisible()
   await expect(
-    dialog
+    picker
       .getByRole('region', { name: 'Climbs sorted by grade', exact: true })
       .getByRole('list'),
   ).toContainText('Monkey Bars')
-  await expect(details).toHaveCount(0)
+  await page.keyboard.press('Escape')
+  await expect(picker).toBeHidden()
+  await expect(browse).toBeFocused()
   await dialog
     .getByRole('button', { name: 'Back to Kraft', exact: true })
     .click()
@@ -288,19 +290,35 @@ test('the map is keyboard navigable and nearby boulder navigation returns to the
   await expect(
     dialog.getByRole('heading', { name: 'The Cube', exact: true }),
   ).toBeFocused()
-  const firstClimb = dialog
+  const browse = dialog.getByRole('button', {
+    name: 'Browse climbs',
+    exact: true,
+  })
+  await browse.click()
+  const picker = dialog.getByRole('region', {
+    name: 'Climb picker',
+    exact: true,
+  })
+  const firstClimb = picker
     .getByRole('region', { name: 'Climbs sorted by grade', exact: true })
     .getByRole('button')
     .first()
   await firstClimb.focus()
   await page.keyboard.press('Enter')
-  await expect(firstClimb).toHaveAttribute('aria-pressed', 'true')
-  await expect(firstClimb).toBeFocused()
+  await expect(picker).toBeHidden()
+  await expect(browse).toBeFocused()
+  await expect(page).toHaveURL(/boulder=cube/)
+  await expect(page).toHaveURL(/climb=/)
   await dialog
+    .getByRole('button', { name: 'Boulder details', exact: true })
+    .click()
+  await dialog
+    .getByRole('region', { name: 'Boulder details', exact: true })
     .getByRole('region', { name: 'Boulders nearby', exact: true })
     .getByRole('button')
     .first()
     .click()
+  await expect(page).not.toHaveURL(/boulder=cube(?:&|$)/)
   const nearbyDialog = page.getByRole('dialog').filter({
     has: page.getByRole('button', { name: 'Back to Kraft', exact: true }),
   })

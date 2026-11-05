@@ -1,0 +1,77 @@
+{
+  "assetId": "wave-front-visible-guide",
+  "sourceId": "mtn-club-wave-front-visible-guide",
+  "generatedAt": "2026-10-01",
+  "tool": "built-in image_gen",
+  "generatedPng": "/Users/dani/.codex/generated_images/01a0f5ef-17bf-7ab2-9484-75daf8891ce7/exec-a6681075-463c-4730-bcc4-f7fd341860b3.png",
+  "pngSha256": "837ce592f1f49099d1c265b614920c258e42422d83eaee91f4bce42ec7c4d73f",
+  "actualPrompt": "Use case: photorealistic-natural. ORIGINAL realistic outdoor field-guide raster, aspect4:3. The actual named Kraft sandstone boulder below, reconstructed from a factual synthesis of several independently inspected photographs. NO input source photograph, no imitation of photographic framing. Choose our own near-frontal slightly oblique standing-eye-level guide camera showing major depth. Full relevant climbing plane, entire crown and starts visible, rock dominant with modest breathing space. Ordinary everyday desert light, slight exposure imperfection, incidental rocky sandy ground and sparse scrub. Rough granular sandstone, irregular bedding, mottled purple-brown varnish, eroded corners, chalk smudges, not polished or uniform. No people, pads, arrows, route art, lettering, watermark. NOT an illustration, studio render, low-poly model, generic rounded rock or hero shot. Maintain substantial true three-dimensional thickness and depth; do not flatten the actual protrusions into one sloping slab. No new prominent features beyond the supplied observed facts.\nTHE WAVE: compact, THICK projecting sandstone block. Its apparent overall width is about1.4–1.6times its height, not a long thin triangle. High blocky shoulder at left. Rounded thick central prow/nose projects toward camera and bulges OUT in the lower-middle area: this central nose is the principal recognizable form. A clearly HORIZONTAL elevated roof/lip below the nose hangs well above ground, with a dark deep underside and support contact farther back/left. Short THICK right overhanging wing tapering modestly, still clearly elevated, NOT a long thin tip descending to the ground. Irregular pale bedded cap slopes somewhat from higher left to lower right, but the visible climbing facade remains compact and massive. Dark varnished blunt left plane; central protruding round nose has pale orange eroded rock with rough irregular patches; short right side has diagonal/horizontal sandstone strata. Separate rough vertical/slanting support slab at rear-left, rocky ground. Entire face from shelf rightward entry through central bulge to left arete shown. Avoid triangular flat plate, enormous width, groundward right tip, continuous shallow overhang only.",
+  "generatorPixelInputs": [],
+  "references": [
+    {
+      "unit": "wave",
+      "photoId": "116581459",
+      "photoUrl": "https://www.mountainproject.com/photo/116581459/the-wave-boulder-from-a-distance",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/116581459_medium_1551808193.jpg?cache=1702073261",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/wave-116581459-reference-only.jpg",
+      "sha256": "6e56da235930991eda7f354516232065893217a38c723b0200d332ab9de3dc67",
+      "bytes": 165915,
+      "title": "The Wave Boulder from a distance.",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "wave",
+      "photoId": "120151644",
+      "photoUrl": "https://www.mountainproject.com/photo/120151644/about-the-only-time-youll-have-this-boulder-to-yourself",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/120151644_medium_1609766693.jpg?cache=1702073971",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/wave-120151644-reference-only.jpg",
+      "sha256": "30dc5a0f9623d0b7acbebfef85c44716b75149646b7647ec8bcbc5c39340f84f",
+      "bytes": 110898,
+      "title": "About the only time you'll have this boulder to yourself.",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "wave",
+      "photoId": "113802236",
+      "photoUrl": "https://www.mountainproject.com/photo/113802236/david-on-the-wave",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/113802236_medium_1510176266.jpg?cache=1702072718",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/wave-113802236-reference-only.jpg",
+      "sha256": "6ad6564a5b267e7409b437378db0410f64e34ff499ad4b912a0e4c8d8a842329",
+      "bytes": 216689,
+      "title": "David on the Wave",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    }
+  ],
+  "camera": "Original near-frontal guide viewpoint chosen independently, rather than reproducing a reference composition.",
+  "scope": "Only the pictured plane and source-supported general line regions; alternate sides are excluded.",
+  "unresolved": [
+    "Fine surface detail is illustrative; individual holds are not calibrated.",
+    "Field conditions and human field verification pending."
+  ],
+  "review": {
+    "status": "geometry review",
+    "critic": "Independent batch output critic",
+    "date": "2026-10-01",
+    "receipt": ".tmp/kraft-gauntlet/immersive-visible-batch-critic/initial-raster-receipt.json",
+    "decision": "Macro geometry accepted; rendered guide and corridor batch review pending."
+  },
+  "shippedAsset": {
+    "src": "/kraft/wave-front-visible-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 448652,
+    "sha256": "d61cfed875e69acc0095f0a18bad5893a300bc5d296941e2e8359d8e728739ae",
+    "conversion": "Sharp WebP quality88 effort6; native dimensions, no crop"
+  },
+  "productionRights": {
+    "licenseId": "MTN-Club-original",
+    "owner": "MTN Club",
+    "note": "User-directed original raster creation. Reference-only third-party photographs are not input pixels or distributable assets."
+  }
+}

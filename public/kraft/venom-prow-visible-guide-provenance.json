@@ -1,0 +1,77 @@
+{
+  "assetId": "venom-prow-visible-guide",
+  "sourceId": "mtn-club-venom-prow-visible-guide",
+  "recordedAt": "2026-10-01",
+  "representation": "original raster reconstruction",
+  "creationAuthorization": {
+    "basis": "User-directed production expansion of original casual field-photo style MTN Club guide images and source-qualified general corridors",
+    "label": "Original MTN Club guide asset",
+    "distributionId": "MTN-Club-original",
+    "scope": "Records original asset creation for this guide; no third-party photographic reuse grant is asserted."
+  },
+  "generation": {
+    "tool": "built-in image_gen",
+    "prompt": "Use case: photorealistic-natural. Asset type: base rock image for an interactive bouldering guide. Create an original, very ordinary candid field photograph of the described Red Rock Canyon sandstone boulder. This is a new camera composition derived solely from general factual landform descriptions, no input photo and no imitation of a specific photographer. Landscape roughly 4:3, high resolution. Rock face occupies about 85% of frame, complete base and lip visible, small natural margins. Eye-level hiker's compact-camera view, close and nearly frontal with enough perspective to distinguish edges. Modest midday desert light, realistic shadows, honest natural color and slightly uneven exposure, real granular sandstone with random weathering and fissures. A little rocky sandy desert ground at bottom and incidental distant scrub and neighboring sandstone at sides, narrow unremarkable sky margin. No humans, no gear, no lettering, no logos, no chalk route patterns, no colored marks, no route artwork, no arrows, no graphic treatment. Avoid epic scenic composition, wide landscapes, dramatic sunset, glowing rock, immaculate symmetrical boulders, smooth CGI surfaces, vector graphics, poster illustration, staged hero photography.\nSubject: the main overhanging and arete planes of Venom Boulder. A tall freestanding red-orange sandstone block about a dozen feet high with a broad squat crown and prominent layered horizontal bedding around its upper half. The lower half bulges outward above a narrowed undercut foot. Show a sharply rounded vertical prow/arete left of center; on its left a narrower shadowed overhanging plane and slight dihedral, on its right a wider reddish convex face with many irregular thin horizontal ledges toward the upper rim. The crown slopes slightly down to the right. The entire lower base and lip visible, modest neighboring rocks behind left and a small distant rock slope behind right. Stand directly in front of the prow from an original slightly lower eye-level viewpoint, close enough that the boulder dominates.",
+    "pixelInputs": [],
+    "factualReferenceUse": "Mountain Project photographs inspected only for broad landform and named route-region facts. No third-party pixels were generator inputs or shipped; original camera composition and corridors are authored separately.",
+    "factualReferences": [
+      {
+        "sourceId": "mp-visible-photo-116355905",
+        "photoId": "116355905",
+        "url": "https://www.mountainproject.com/photo/116355905",
+        "title": "Facing the Venom boulder head-on. Trail is a bit to the left.",
+        "sha256": "c71e81d945df7dcac920dc760fb264e5da78676ce290d9103967d08c8d89dd44",
+        "width": 450,
+        "height": 600,
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      },
+      {
+        "sourceId": "mp-visible-photo-116572811",
+        "photoId": "116572811",
+        "url": "https://www.mountainproject.com/photo/116572811",
+        "title": "Topping out on Spitting Venom",
+        "sha256": "90e937569771c023575a48384bed0f7ed6e2dd1b30217d2ef1ed52e2622d1316",
+        "width": 800,
+        "height": 454,
+        "generatorPixelInput": false,
+        "shippedPixels": false
+      }
+    ],
+    "originalPng": {
+      "width": 1448,
+      "height": 1086,
+      "bytes": 3288635,
+      "sha256": "2124f89499ca33318ed9608938513b16efb7bf6a2331cd2c513dc83f23883a91"
+    }
+  },
+  "shippedAsset": {
+    "src": "/kraft/venom-prow-visible-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 607308,
+    "sha256": "76d1fe173746f8d4cf384b90496447a1571d51d23867ec8d462991c14548a374",
+    "conversion": "Pillow WebP quality 92, method 6; native dimensions preserved, no crop"
+  },
+  "faceGeometry": {
+    "mpParentId": "114200315",
+    "faceId": "mtn-visible-venom-prow",
+    "mpRouteIds": [
+      "120119454",
+      "114200319",
+      "116355888",
+      "120119572"
+    ],
+    "scope": "Source-observed broad visible plane/arete regions; unseen faces and exact holds excluded.",
+    "sourceBearing": "unknown; relative source relationships do not establish a compass bearing",
+    "fieldVerification": "not performed"
+  },
+  "corridorAuthoring": {
+    "reviewer": "MTN Club corridor author (agent)",
+    "reviewedAt": "2026-10-01",
+    "confidenceLevel": "moderate",
+    "method": "Independent broad native-image SVG paths from primary route descriptions and macro photo landmarks; source topo artwork is not copied.",
+    "handPlacement": "Reviewed start zones only when primary route facts document a start. No individual hand coordinates or left/right offsets inferred from generated texture.",
+    "review": "Awaiting fresh integrated batch critic; no independent route approval asserted."
+  }
+}

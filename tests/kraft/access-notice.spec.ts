@@ -24,9 +24,19 @@ test('Caliman closure stays visible while its four historical routes remain brow
     name: 'Caliman Boulder boulder guide',
     exact: true,
   })
-  const notice = dialog
-    .getByRole('complementary', { name: 'Climbing access notice', exact: true })
-    .first()
+  const dock = dialog.getByRole('complementary', { name: 'Boulder climbs' })
+  await expect(dock).toContainText('Climbing closed · historical records')
+  await dialog
+    .getByRole('button', { name: 'Boulder details', exact: true })
+    .click()
+  const boulderDetails = dialog.getByRole('region', {
+    name: 'Boulder details',
+    exact: true,
+  })
+  const notice = boulderDetails.getByRole('complementary', {
+    name: 'Climbing access notice',
+    exact: true,
+  })
   await expect(notice).toContainText('within 50 feet of cultural sites')
   await expect(notice).toContainText('Source checked October 1, 2026')
   await expect(notice.getByRole('link')).toHaveAttribute(
@@ -49,18 +59,41 @@ test('Caliman closure stays visible while its four historical routes remain brow
   })
   await page.keyboard.press('Enter')
 
-  const climbs = dialog.getByRole('region', { name: 'Climbs sorted by grade' })
+  await boulderDetails
+    .getByRole('button', { name: 'Close boulder details', exact: true })
+    .click()
+  const browse = dock.getByRole('button', {
+    name: 'Browse climbs',
+    exact: true,
+  })
+  const picker = dialog.getByRole('region', {
+    name: 'Climb picker',
+    exact: true,
+  })
+  const climbs = picker.getByRole('region', { name: 'Climbs sorted by grade' })
+  await browse.click()
   await expect(climbs.locator('[data-climb-id]')).toHaveCount(4)
+  await picker
+    .getByRole('button', { name: 'Close climb picker', exact: true })
+    .click()
   for (const [id, name, grade] of [
     ['106802769', 'Bread Box', 'V4'],
     ['106800770', 'Caliman', 'V7'],
     ['106800785', 'Toadstool', 'V4'],
     ['106800777', 'Unnamed', 'V5'],
   ]) {
+    await browse.click()
     const route = climbs.locator(`[data-climb-id="mp-route-${id}"] button`)
     await route.focus()
     await page.keyboard.press('Enter')
+    await expect(picker).toBeHidden()
+    await expect(browse).toBeFocused()
+    await expect(page).toHaveURL(new RegExp(`climb=mp-route-${id}(?:&|$)`))
+    await browse.click()
     await expect(route).toHaveAttribute('aria-pressed', 'true')
+    await picker
+      .getByRole('button', { name: 'Close climb picker', exact: true })
+      .click()
     const selected = dialog.getByRole('region', {
       name: 'Selected climb',
       exact: true,
@@ -70,7 +103,35 @@ test('Caliman closure stays visible while its four historical routes remain brow
     await expect(selected).toContainText(
       'Climbing closed · historical route record',
     )
-    await expect(selected).toContainText('Source checked October 1, 2026')
+    await expect(selected).toBeInViewport({ ratio: 1 })
+    await dock
+      .getByRole('button', {
+        name: `Open ${name} full climb record`,
+        exact: true,
+      })
+      .click()
+    const climbDetails = dialog.getByRole('region', {
+      name: 'Climb details',
+      exact: true,
+    })
+    await expect(
+      climbDetails.getByRole('article', {
+        name: `${name} details`,
+        exact: true,
+      }),
+    ).toBeVisible()
+    await expect(
+      climbDetails.getByRole('complementary', {
+        name: 'Climbing access notice',
+        exact: true,
+      }),
+    ).toContainText('Source checked October 1, 2026')
+    await climbDetails
+      .getByRole('button', { name: 'Close climb details', exact: true })
+      .click()
+    await expect(selected).toContainText(
+      'Climbing closed · historical route record',
+    )
   }
   expect(
     await dialog.evaluate(

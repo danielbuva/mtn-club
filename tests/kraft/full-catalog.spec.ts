@@ -24,13 +24,40 @@ test('every imported catalog remains reachable, including unresolved membership-
     })
     await expect(dialog.locator('#kraft-boulder-title')).toHaveText(unit.name)
     await expect(dialog.locator('#kraft-boulder-title')).toBeFocused()
-    await expect(dialog.locator('[data-climb-id]')).toHaveCount(
+    await dialog
+      .getByRole('button', { name: 'Browse climbs', exact: true })
+      .click()
+    const picker = dialog.getByRole('region', {
+      name: 'Climb picker',
+      exact: true,
+    })
+    await expect(picker.locator('[data-climb-id]')).toHaveCount(
       unit.climbs.length,
     )
     if (!unit.climbs.length)
+      await expect(picker).toContainText(
+        'No climb records are available for this boulder yet.',
+      )
+    await picker
+      .getByRole('button', { name: 'Close climb picker', exact: true })
+      .click()
+    if (!unit.climbs.length) {
+      await dialog
+        .getByRole('button', { name: 'Boulder details', exact: true })
+        .click()
+      const boulderDetails = dialog.getByRole('region', {
+        name: 'Boulder details',
+        exact: true,
+      })
       await expect(
-        dialog.getByRole('region', { name: 'Other source memberships' }),
+        boulderDetails.getByRole('region', {
+          name: 'Other source memberships',
+        }),
       ).toBeVisible()
+      await boulderDetails
+        .getByRole('button', { name: 'Close boulder details', exact: true })
+        .click()
+    }
     await dialog
       .getByRole('button', { name: 'Back to Kraft', exact: true })
       .click()
@@ -63,9 +90,16 @@ test('every canonical route opens its local facts without needing a photograph o
         dialog.getByRole('region', { name: 'Selected climb', exact: true }),
       ).toContainText(climb.name)
       await dialog
-        .getByLabel(`View ${climb.name} climb details`, { exact: true })
+        .getByRole('button', {
+          name: `Open ${climb.name} full climb record`,
+          exact: true,
+        })
         .click()
-      const record = dialog.getByRole('article', {
+      const climbDetails = dialog.getByRole('region', {
+        name: 'Climb details',
+        exact: true,
+      })
+      const record = climbDetails.getByRole('article', {
         name: `${climb.name} details`,
         exact: true,
       })
@@ -91,6 +125,9 @@ test('every canonical route opens its local facts without needing a photograph o
           ? 'Published descriptions do not establish a reviewed line on the guide image.'
           : 'The available corridor combines source facts with independently reviewed image correspondence. Exact holds and field verification remain separate.',
       )
+      await climbDetails
+        .getByRole('button', { name: 'Close climb details', exact: true })
+        .click()
       await dialog
         .getByRole('button', { name: 'Back to Kraft', exact: true })
         .click()

@@ -58,9 +58,22 @@ isolated-object presentation fail even when the image is nominally realistic.
 Critics must judge this character in the actual raster alongside recognizable
 physical geometry. Added texture cannot repair incorrect geometry.
 
+Aim for an ordinary field photograph, as if a climber casually recorded the
+actual boulder in normal crag conditions. Use believable, undramatic daylight
+and slight compositional imperfection while preserving clear topo framing.
+Flawless hero lighting, glossy commercial texture, sterile symmetry and an
+isolated studio-object look fail. Weathering must remain local and varied;
+surface noise alone does not make an inaccurate rock authentic.
+
 Route annotation remains subordinate to the rock: one thin solid path, small
 markers, no broad highlight band or dashed treatment. Stroke width stays fixed
-while zoom reveals more rock; route numbers shrink and fade, then disappear.
+while zoom reveals more rock; start nodes and route numbers shrink and fade,
+then disappear. Documented two-hand starts use distinct hand nodes, including
+unmatched left/right starts. Matched starts share a documented hold; a looser
+secondary hand is permitted only when the source establishes that freedom.
+Keep same-line dyno/static alternatives on the same climb, with separately
+reviewed start/target correspondence. Documentary rules can appear before
+image-space placement is sufficiently supported.
 
 A mirrored face, invented major feature, wrong rock, hidden critical finish or uncorroborated climb-bearing geometry fails. Lighting/texture cannot hide uncertainty. The fresh critic must explicitly compare framing, lighting, crop, foreground/background layout and viewpoint against each source; agreement with physical features alone does not establish compositional independence.
 
@@ -84,9 +97,9 @@ Exact blockers are full cave/roof cross-section and left-start coverage; continu
 | Pearl northeast | Own field photograph first | Missing exact legal view; do not label an unseen BLM side as northeast. Reconstruction needs adequate multi-view coverage. |
 | Monkey Bar | High-priority reconstruction research plus field-photo comparison | Multiple surfaces and wraps benefit from cameras, but hidden geometry/condition remain the main risk. |
 | Cube north/west/south | Field photography first; secondary reconstruction candidate | Full highball face/top-out and arête views need trustworthy geometry and identity. |
-| Split north/uphill | Bounded chimney raster study; field-photo fallback | Second raster passed qualitative geometry and natural field character; guide/route review pending. Other uphill climbs are outside this image's supported scope. South and identity/coordinate conflicts remain separate. |
-| Potato Chip north/front | Multi-reference raster candidate | Three views support the half-moon face, overhang and flaked lip; rear-side geometry remains separate. |
-| Warm-up Main south/southwest | Multi-reference raster candidate | Three views support the main plane; companion rock and complete east-side geometry remain outside scope. |
+| Split north/uphill | Scoped original chimney raster; field-photo fallback | Third raster passed qualitative geometry and casual field-photo style; guide/route review pending. Other uphill climbs are outside this image's supported scope. South and identity/coordinate conflicts remain separate. |
+| Potato Chip north/front | Field photography preferred after failed rasters | Two raster attempts failed the flattened tilted slab, producing an inflated body. Thin lip correction and realistic texture did not repair geometry. Rear-side geometry remains separate; rejected pixels stay unshipped. |
+| Warm-up Main south/southwest | Scoped original main-plane raster | Second raster passed qualitative geometry and casual field-photo style. Seven source-qualified memberships receive image context; companion rock and complete east-side geometry remain outside scope. |
 | Adjacent rocks / every remaining Kraft unit | Inventory assessment pending | Allocate every reconciled unit; no automatic reconstruction of unreviewed full-guide candidates. Track why legal image, evidence-supported reconstruction or field photo is selected. |
 
 Next tasks: obtain the recorded missing unobstructed scale/corner/start/finish observations; decide the bounded face set and actual photo comparison; author a movable proxy only from supported facts; render original candidate cameras; obtain fresh asset critique/human approval; verify SVGs separately; run the full real offline control-versus-pilot comparison. Full-Kraft work continues throughout these gates.

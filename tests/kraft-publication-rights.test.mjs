@@ -4,6 +4,12 @@ import { kraftGuide } from '../lib/kraft/data.ts'
 import { validateGuide } from '../lib/kraft/validate.ts'
 import { syntheticReviewedGuide } from './fixtures/kraft-reviewed-fixture.mjs'
 
+function pearlAsset(guide) {
+  const asset = guide.assets.find(item => item.id === 'pearl-southeast-guide')
+  assert.ok(asset)
+  return asset
+}
+
 test('documented production rights and the synthetic complete-release control pass', () => {
   assert.deepEqual(validateGuide(kraftGuide), [])
   assert.deepEqual(validateGuide(syntheticReviewedGuide()), [])
@@ -12,7 +18,7 @@ test('documented production rights and the synthetic complete-release control pa
 test('redistribution prohibition cannot pass a pilot or a synthetic field release', () => {
   for (const original of [kraftGuide, syntheticReviewedGuide()]) {
     const guide = structuredClone(original)
-    guide.assets[0].license = 'All rights reserved; redistribution prohibited'
+    pearlAsset(guide).license = 'All rights reserved; redistribution prohibited'
     assert.match(
       validateGuide(guide).join('\n'),
       /pearl-southeast-guide: supported asset distribution rights missing/,
@@ -22,24 +28,24 @@ test('redistribution prohibition cannot pass a pilot or a synthetic field releas
 
 test('a rights label without an explicit supported grant cannot authorize publication', () => {
   const guide = structuredClone(kraftGuide)
-  delete guide.assets[0].distribution
+  delete pearlAsset(guide).distribution
   assert.match(
     validateGuide(guide).join('\n'),
     /supported asset distribution rights missing/,
   )
   const invalid = structuredClone(kraftGuide)
-  invalid.assets[0].distribution.licenseIds = ['arbitrary-permission']
+  pearlAsset(invalid).distribution.licenseIds = ['arbitrary-permission']
   assert.match(
     validateGuide(invalid).join('\n'),
     /supported asset distribution rights missing/,
   )
-  invalid.assets[0].distribution.licenseIds = ['PD-USGov-BLM', 'CC-BY-2.0']
-  invalid.assets[0].distribution.evidenceUrl = 'javascript:unsupported'
+  pearlAsset(invalid).distribution.licenseIds = ['PD-USGov-BLM', 'CC-BY-2.0']
+  pearlAsset(invalid).distribution.evidenceUrl = 'javascript:unsupported'
   assert.match(
     validateGuide(invalid).join('\n'),
     /supported asset distribution rights missing/,
   )
-  invalid.assets[0].distribution.licenseIds = 'CC-BY-2.0'
+  pearlAsset(invalid).distribution.licenseIds = 'CC-BY-2.0'
   assert.match(
     validateGuide(invalid).join('\n'),
     /supported asset distribution rights missing/,
@@ -79,7 +85,7 @@ test('map rights require the actual open-data grants and photo rights cannot use
     /cannot authorize map distribution/,
   )
   const guide = structuredClone(kraftGuide)
-  const photograph = guide.assets[0]
+  const photograph = pearlAsset(guide)
   const mediaSource = guide.sources.find(
     item => item.id === 'mtn-club-pearl-southeast-guide',
   )

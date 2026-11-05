@@ -15,66 +15,89 @@ for (const screen of screens) {
     await page.goto('/guide/kraft')
     await openMapCatalog(page, 'pearl')
     const dialog = page.getByRole('dialog', { name: 'The Pearl boulder guide' })
-    const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
-    const photograph = dialog.getByRole('img')
-    const photographViewport = dialog.getByRole('region', {
+    const dock = dialog.getByRole('complementary', { name: 'Boulder climbs' })
+    const browse = dock.getByRole('button', {
+      name: 'Browse climbs',
+      exact: true,
+    })
+    const picker = dialog.getByRole('region', {
+      name: 'Climb picker',
+      exact: true,
+    })
+    const climbs = picker.getByRole('region', {
+      name: 'Climbs sorted by grade',
+    })
+    const viewport = dialog.getByRole('region', {
       name: 'Scrollable face image',
     })
-    const climbs = panel.getByRole('region', { name: 'Climbs sorted by grade' })
-    const first = climbs.getByRole('button', { name: /Clam Bumper Right/ })
-    const last = climbs.getByRole('button', { name: /Pearl Necklace/ })
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    await expect(first).toBeInViewport({ ratio: 1 })
-    const photoBounds = await photograph.boundingBox()
-    const dialogScroll = await dialog.evaluate(element => element.scrollTop)
-    const frame = await photographViewport.evaluate(element => ({
-      height: element.clientHeight,
-      contentHeight: element.scrollHeight,
-    }))
-    expect(frame.contentHeight).toBeLessThanOrEqual(frame.height + 1)
-    expect((await panel.boundingBox())?.height).toBeGreaterThanOrEqual(120)
-    expect((await first.boundingBox())?.height).toBeGreaterThanOrEqual(44)
+    const back = dialog.getByRole('button', {
+      name: 'Back to Kraft',
+      exact: true,
+    })
+    await expect(viewport).toBeInViewport({ ratio: 1 })
+    await expect(browse).toBeInViewport({ ratio: 1 })
+    await expect(browse).toHaveAttribute('aria-expanded', 'false')
+    await expect(picker).toBeHidden()
+    const dockBounds = await dock.boundingBox()
+    expect(dockBounds?.height).toBeLessThan(screen.height * 0.35)
+    const initialScroll = await dialog.evaluate(element => element.scrollTop)
 
+    await browse.tap()
+    await expect(browse).toHaveAttribute('aria-expanded', 'true')
+    const first = climbs.getByRole('button', { name: /Clam Bumper Right/ })
+    await expect(first).toBeInViewport({ ratio: 1 })
+    expect((await first.boundingBox())?.height).toBeGreaterThanOrEqual(44)
     await first.tap()
+    await expect(picker).toBeHidden()
+    await expect(browse).toBeFocused()
+    await expect(
+      dock.getByRole('region', { name: 'Selected climb' }),
+    ).toContainText('Clam Bumper Right')
+    await expect(page).toHaveURL(/climb=pearl-clam-bumper-right/)
+
+    await browse.tap()
     await expect(first).toHaveAttribute('aria-pressed', 'true')
-    await expect(photograph).toBeInViewport({ ratio: 1 })
     await climbs.getByRole('button', { name: /Northeast Face Center/ }).tap()
+    await expect(picker).toBeHidden()
+    await expect(browse).toBeFocused()
     await expect(
       dialog.getByRole('heading', { name: 'Photograph not yet in the guide' }),
     ).toBeVisible()
-    // The unavailable-image presentation must leave real room for the list.
-    expect((await panel.boundingBox())?.height).toBeGreaterThanOrEqual(120)
-    // A climb on an unpublished face must still leave the next climb reachable.
+    await expect(page).toHaveURL(/climb=northeast-face-center/)
+    await expect(page).toHaveURL(/face=pearl-northeast/)
+    await expect(browse).toBeInViewport({ ratio: 1 })
+    await expect(back).toBeInViewport({ ratio: 1 })
+
+    await browse.tap()
+    const last = climbs.getByRole('button', { name: /Pearl Necklace/ })
+    await last.scrollIntoViewIfNeeded()
+    await expect(last).toBeInViewport({ ratio: 1 })
     await last.tap()
-    await expect(last).toHaveAttribute('aria-pressed', 'true')
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    expect(await photograph.boundingBox()).toEqual(photoBounds)
+    await expect(picker).toBeHidden()
+    await expect(browse).toBeFocused()
+    await expect(page).toHaveURL(/climb=pearl-pearl-necklace/)
+    await expect(page).toHaveURL(/face=pearl-southeast/)
+    await expect(viewport).toBeInViewport({ ratio: 1 })
+    await expect(viewport.getByRole('img')).toBeVisible()
     expect(await dialog.evaluate(element => element.scrollTop)).toBe(
-      dialogScroll,
+      initialScroll,
     )
 
-    await panel.focus()
-    await page.keyboard.press('Home')
-    await expect
-      .poll(() => panel.evaluate(element => element.scrollTop))
-      .toBe(0)
-    await panel
-      .getByRole('button', { name: 'Open Pearl Necklace full climb record' })
-      .tap()
-    const summary = panel.getByLabel('View Pearl Necklace climb details', {
+    const openRecord = dock.getByRole('button', {
+      name: 'Open Pearl Necklace full climb record',
+    })
+    await expect(openRecord).toBeInViewport({ ratio: 1 })
+    await openRecord.tap()
+    const details = dialog.getByRole('region', {
+      name: 'Climb details',
       exact: true,
     })
-    const fullRecord = panel.getByRole('article', {
+    const fullRecord = details.getByRole('article', {
       name: 'Pearl Necklace details',
     })
-    await expect(summary).toBeFocused()
     await expect(fullRecord).toBeVisible()
     await expect(fullRecord).toContainText(
       'A lower seated entry into The Pearl’s standing start.',
-    )
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    expect(await dialog.evaluate(element => element.scrollTop)).toBe(
-      dialogScroll,
     )
     const sources = fullRecord.getByText('Climb sources & grade records', {
       exact: true,
@@ -85,24 +108,24 @@ for (const screen of screens) {
     const lastSource = fullRecord.getByRole('link').last()
     await lastSource.focus()
     await expect(lastSource).toBeInViewport({ ratio: 1 })
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    await summary.focus()
-    await page.keyboard.press('Enter')
-    await expect(fullRecord).toBeHidden()
-    await last.focus()
-    await page.keyboard.press('Enter')
+    await details.getByRole('button', { name: 'Close climb details' }).tap()
+    await expect(details).toBeHidden()
+    await expect(openRecord).toBeFocused()
+    await expect(dialog).toBeVisible()
+    await expect(viewport).toBeInViewport({ ratio: 1 })
+
+    await browse.tap()
     await expect(last).toHaveAttribute('aria-pressed', 'true')
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    await first.tap()
-    await expect(first).toHaveAttribute('aria-pressed', 'true')
-    await expect(photograph).toBeInViewport({ ratio: 1 })
+    await picker.getByRole('button', { name: 'Close climb picker' }).tap()
+    await expect(browse).toBeFocused()
+    await expect(picker).toBeHidden()
     await testInfo.attach(`short-screen-${screen.width}-reachable-climbs`, {
       body: await page.screenshot({ scale: 'css' }),
       contentType: 'image/png',
     })
   })
 
-  test(`short ${screen.width}×${screen.height} direct climb links keep the complete photograph and zoom controls usable`, async ({
+  test(`short ${screen.width}×${screen.height} direct links keep floating controls usable through zoom and sheets`, async ({
     page,
   }, testInfo) => {
     test.skip(testInfo.project.name !== screen.project, 'Matching mobile size')
@@ -111,29 +134,70 @@ for (const screen of screens) {
       '/guide/kraft#boulder=pearl&climb=the-pearl&face=pearl-southeast',
     )
     const dialog = page.getByRole('dialog', { name: 'The Pearl boulder guide' })
-    const panel = dialog.getByRole('complementary', { name: 'Boulder climbs' })
-    const photograph = dialog.getByRole('img')
+    const dock = dialog.getByRole('complementary', { name: 'Boulder climbs' })
     const viewport = dialog.getByRole('region', {
       name: 'Scrollable face image',
     })
+    const browse = dock.getByRole('button', {
+      name: 'Browse climbs',
+      exact: true,
+    })
+    const openRecord = dock.getByRole('button', {
+      name: 'Open The Pearl full climb record',
+    })
     await expect(
-      dialog.getByRole('heading', { name: 'The Pearl' }).first(),
+      dialog.getByRole('heading', { name: 'The Pearl', exact: true, level: 2 }),
     ).toBeFocused()
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    await expect(
-      panel.getByRole('button', { name: 'Open The Pearl full climb record' }),
-    ).toBeInViewport({ ratio: 1 })
-    await dialog.getByRole('button', { name: 'Zoom in image' }).tap()
     await expect(viewport).toBeInViewport({ ratio: 1 })
-    await dialog.getByRole('button', { name: 'Reset image zoom' }).tap()
-    await expect(photograph).toBeInViewport({ ratio: 1 })
-    const last = panel
-      .getByRole('region', { name: 'Climbs sorted by grade' })
-      .getByRole('button', { name: /Pearl Necklace/ })
+    await expect(openRecord).toBeInViewport({ ratio: 1 })
+    await expect(browse).toHaveAttribute('aria-expanded', 'false')
+    const zoomIn = dialog.getByRole('button', {
+      name: 'Zoom in image',
+      exact: true,
+    })
+    const reset = dialog.getByRole('button', {
+      name: 'Reset image zoom',
+      exact: true,
+    })
+    await expect(zoomIn).toBeInViewport({ ratio: 1 })
+    await zoomIn.tap()
+    await expect(reset).toBeEnabled()
+    await expect(reset).toBeInViewport({ ratio: 1 })
+    const zoomedPhoto = await viewport.getByRole('img').boundingBox()
+    await openRecord.tap()
+    const details = dialog.getByRole('region', {
+      name: 'Climb details',
+      exact: true,
+    })
+    await expect(
+      details.getByRole('article', { name: 'The Pearl details' }),
+    ).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(details).toBeHidden()
+    await expect(dialog).toBeVisible()
+    await expect(openRecord).toBeFocused()
+    expect(await viewport.getByRole('img').boundingBox()).toEqual(zoomedPhoto)
+    await reset.tap()
+    await expect(reset).toBeEnabled()
+    await expect(
+      dialog.getByRole('button', { name: 'Zoom out image', exact: true }),
+    ).toBeDisabled()
+
+    await browse.tap()
+    const picker = dialog.getByRole('region', {
+      name: 'Climb picker',
+      exact: true,
+    })
+    const last = picker.getByRole('button', { name: /Pearl Necklace/ })
     await last.focus()
     await page.keyboard.press('Enter')
-    await expect(last).toHaveAttribute('aria-pressed', 'true')
-    await expect(photograph).toBeInViewport({ ratio: 1 })
+    await expect(picker).toBeHidden()
+    await expect(browse).toBeFocused()
+    await expect(page).toHaveURL(/climb=pearl-pearl-necklace/)
+    await expect(
+      dock.getByRole('region', { name: 'Selected climb' }),
+    ).toContainText('Pearl Necklace')
+    await expect(viewport).toBeInViewport({ ratio: 1 })
     await testInfo.attach(`short-screen-${screen.width}-direct-climb`, {
       body: await page.screenshot({ scale: 'css' }),
       contentType: 'image/png',

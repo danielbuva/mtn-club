@@ -17,12 +17,29 @@ does not establish exact holds.
 The next bounded batch includes Split north/uphill, Potato Chip north/front and
 Warm-up Main south/southwest. Three independent photographs support each
 candidate's observed region. Split's first raster failed chimney width, base-rock
-position and relative summit height. Its second actual raster passed separate
-geometry and natural field-character review after those corrections. It remains
-scratch-only pending rendered guide and independent route review. Potato and
-Warm-up Main have factual briefs; their images are not yet produced. All retain
-the Pearl direction: irregular weathering, patchy tones, worn edges, natural
-light and ground context. Sterile or uniform rock surfaces fail.
+position and relative summit height. Its third raster preserves the corrected
+macro geometry in ordinary cloud-filtered daylight. Warm-up Main’s second
+raster retains its crown, oblique lower break, curved right corner and rocky foot
+with subdued, uneven field light. A different critic inspected the actual latest
+rasters against three real captures each and accepted scoped geometry and casual
+field-photo character. Both are now in catalog 8; rendered-guide acceptance is
+separate. Neither has an authored route line or reviewed hand placement.
+
+Split’s image is limited to the Front Side Crack chimney context. The Mole and
+Slice N Dice retain missing imagery. Warm-up’s shared main-plane image supports
+seven source-qualified memberships in three views; four remain relative and
+provisional. The complete east face, back and companion rock are outside scope.
+All fine surface detail remains illustrative rather than surveyed holds.
+
+Both Potato Chip attempts were rejected. The second improved the thin parallel
+flaked lip and everyday light, but still inflated the distinctive tilted slab
+into a rounded loaf. Realistic texture did not fix the physical form. The face
+stays image-missing and field photography is preferable to forcing this method.
+
+The latest standard is a useful casually observed crag photograph, with ordinary
+conditions and slight imperfection: natural weathering, patchy tones, worn edges,
+matte sandstone, restrained daylight and believable ground context. Commercial
+hero lighting, sterile symmetry, uniform texture and isolated-object polish fail.
 
 Monkey Bar remains blocked: six factual capture groups and 18 feature claims
 support exterior research, but do not establish the required cave/roof depth,

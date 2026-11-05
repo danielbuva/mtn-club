@@ -23,6 +23,7 @@ const {
   runtimeSourceUrls,
   runtimeCanonicalIds,
   runtimeRouteStates,
+  runtimeUnitAssets,
   runtimeRouteCount,
 } = runtimeWorkbench(kraftGuide)
 const markdown = (value: string) =>
@@ -207,9 +208,11 @@ const unitLines = unitRecords.map(record => {
   const source = record.observations[0]
   const allocation = record.name.includes('Monkey Bar')
     ? 'Reconstruction research; geometry blocked; compare field photo'
-    : record.name === 'The Pearl'
-      ? 'Original near-frontal southeast guide control; human/field review pending; other views need independent images'
-      : 'Lawful photo search / field photograph first; assess multi-view evidence before reconstruction'
+    : runtimeUnitAssets.get(record.id)?.length
+      ? 'Original scoped guide raster; human/field review pending; other views need independent images'
+      : record.name.includes('Potato')
+        ? 'Field photograph preferred after two raster geometry rejections; reconstruction remains blocked'
+        : 'Lawful photo search / field photograph first; assess multi-view evidence before reconstruction'
   return `| [${markdown(record.name)}](${source.url}) | ${record.id} | ${record.state} | ${allocation} |`
 })
 await save(
@@ -265,23 +268,30 @@ const imageRows = [
     'evidence',
   ],
 ]
-for (const record of unitRecords)
+for (const record of unitRecords) {
+  const assets = runtimeUnitAssets.get(record.id) ?? []
   imageRows.push([
     record.id,
-    record.name === 'The Pearl' ? '/kraft/pearl-southeast-guide.webp' : '',
-    record.name === 'The Pearl'
-      ? 'MTN-Club-original / Original MTN Club guide asset'
+    assets.map(asset => asset.src).join(' '),
+    assets.length
+      ? assets.map(asset => asset.license).join(' ')
       : 'no production face asset approved',
-    record.name === 'The Pearl'
-      ? 'original near-frontal southeast reconstruction; human/field review pending'
+    assets.length
+      ? 'original scoped guide reconstruction; human/field review pending'
       : 'BLOCKED lawful image',
-    record.name === 'The Pearl'
-      ? 'original reconstruction quality control; human/field review pending'
+    assets.length
+      ? 'original reconstruction; other faces remain independently assessed'
       : record.name.includes('Monkey Bar')
         ? 'independent reconstruction research + field-photo comparison'
         : 'lawful photo / field photography first',
-    record.observations.map(observation => observation.url).join(' '),
+    [
+      ...record.observations.map(observation => observation.url),
+      ...assets.map(
+        asset => asset.distribution?.evidenceUrl ?? asset.attributionUrl ?? '',
+      ),
+    ].join(' '),
   ])
+}
 for (const view of topo.views)
   imageRows.push([
     view.sourceId,

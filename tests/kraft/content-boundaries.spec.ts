@@ -44,13 +44,20 @@ test('available face images load with honest attribution and independent corrido
           ),
         )
         .toBe(true)
-      const photoCredit = viewer.getByRole('link', {
+      const boulderDetails = dialog.getByRole('region', {
+        name: 'Boulder details',
+        exact: true,
+      })
+      const photoCredit = boulderDetails.getByRole('link', {
         name: asset.attribution,
         exact: true,
         includeHidden: true,
       })
       await expect(photoCredit).toBeHidden()
-      await viewer
+      await dialog
+        .getByRole('button', { name: 'Boulder details', exact: true })
+        .click()
+      await boulderDetails
         .getByText(`${reconstructed ? 'Image' : 'Photo'} notes & credit`, {
           exact: true,
         })
@@ -58,10 +65,13 @@ test('available face images load with honest attribution and independent corrido
       await expect(photoCredit).toBeVisible()
       if (face.photographNote)
         await expect(
-          viewer.getByText(face.photographNote, { exact: true }),
+          boulderDetails.getByText(face.photographNote, { exact: true }),
         ).toBeVisible()
       if (reconstructed)
         await expect(viewer).toContainText('Reconstructed view')
+      await boulderDetails
+        .getByRole('button', { name: 'Close boulder details', exact: true })
+        .click()
       const moderateCorridors = boulder.climbs.flatMap(climb =>
         climb.geometry.filter(
           geometry =>
@@ -136,7 +146,14 @@ test('catalog missing faces remain explicit without fabricated topo routes', asy
         contentType: 'image/png',
       })
     }
-    const climbList = dialog
+    await dialog
+      .getByRole('button', { name: 'Browse climbs', exact: true })
+      .click()
+    const picker = dialog.getByRole('region', {
+      name: 'Climb picker',
+      exact: true,
+    })
+    const climbList = picker
       .getByRole('region', { name: 'Climbs sorted by grade', exact: true })
       .getByRole('list')
     await expect(climbList).toHaveCount(boulder.climbs.length ? 1 : 0)
@@ -157,6 +174,9 @@ test('catalog missing faces remain explicit without fabricated topo routes', asy
         }),
       ).toContainText('Face assignment pending')
     }
+    await picker
+      .getByRole('button', { name: 'Close climb picker', exact: true })
+      .click()
     await dialog
       .getByRole('button', { name: 'Back to Kraft', exact: true })
       .click()

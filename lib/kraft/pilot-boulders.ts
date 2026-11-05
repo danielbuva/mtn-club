@@ -108,6 +108,33 @@ export const pilotBoulders: Boulder[] = [
     sourceIds: ['mp-split', 'thetopo-split'],
     climbs: splitClimbs,
     faces: [
+      {
+        ...face(
+          'split-north-chimney',
+          'North · chimney view',
+          'N',
+          [
+            'mp-front-crack',
+            'mp-split',
+            'mp-split-photo-112791386',
+            'mp-split-photo-106617801',
+            'mp-split-photo-111794980',
+            'mtn-club-split-north-chimney-guide',
+          ],
+          splitClimbs,
+        ),
+        image: {
+          status: 'available',
+          src: '/kraft/split-north-chimney-guide.webp',
+          width: 1448,
+          height: 1086,
+          alt: 'Original near-frontal reconstruction of Split Boulder’s north chimney, showing the slender left slab, broad descending right slab and overlapping base rock.',
+          assetId: 'split-north-chimney-guide',
+          representation: 'reconstruction',
+        },
+        photographNote:
+          'Original MTN Club reconstruction of the north/uphill chimney for Front Side Crack only, revised to ordinary field-photo lighting and material. Mole and Slice N Dice remain in the separate north source group without image correspondence. Fresh raster review covers macro geometry and casual field character; generated surface details, route correspondence, rendered guide, human review and field conditions remain unverified.',
+      },
       face(
         'split-north',
         'North · uphill',

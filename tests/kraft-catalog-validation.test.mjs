@@ -145,3 +145,25 @@ test('literal easy and non-V grades never acquire guessed V filter bounds', () =
     /non-V grade cannot have numeric V filter bounds/,
   )
 })
+
+test('guide publication rejects future or stale-image hand annotations', () => {
+  const guide = structuredClone(kraftGuide)
+  const pearl = guide.boulders.find(boulder => boulder.id === 'pearl')
+  const climb = pearl.climbs.find(route => route.id === 'the-pearl')
+  const geometry = climb.geometry.find(item => item.status === 'authored')
+  assert.deepEqual(validateGuide(guide), [])
+  geometry.annotations.start.placement.review.reviewedAt = '2099-01-01'
+  assert.match(
+    validateGuide(guide).join('\n'),
+    /Annotation placement review missing or invalid/,
+  )
+  geometry.annotations.start.placement.review.reviewedAt = guide.reviewedAt
+  geometry.annotations.start.placement.image.assetId = 'obsolete-guide-image'
+  assert.match(validateGuide(guide).join('\n'), /displayed native image/)
+  geometry.annotations.start.placement.image.assetId = 'pearl-southeast-guide'
+  climb.routeAnnotations.start.review.reviewedAt = '2099-01-01'
+  assert.match(
+    validateGuide(guide).join('\n'),
+    /Documented annotation review missing or invalid/,
+  )
+})

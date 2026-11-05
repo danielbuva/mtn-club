@@ -19,6 +19,8 @@ import { applySourceFaceAssignments } from './source-face-assignments.ts'
 import { applySourceViewAssignments } from './source-view-assignments.ts'
 import { splitCatalog } from './split-catalog.ts'
 import type { Boulder, Climb, EvidenceSource, KraftArea } from './types'
+import { applyVisibleProductionBatch } from './visible-production-batch.ts'
+import { applyWarmMainImage } from './warm-main-image.ts'
 
 export function runtimeAreas(sources: EvidenceSource[]): KraftArea[] {
   return [
@@ -190,7 +192,9 @@ export function buildRuntimeCatalog(
     )
   applySourceFaceAssignments(boulders)
   applySourceViewAssignments(boulders)
+  applyWarmMainImage(boulders)
   applyAuthoredRouteCorridors(boulders)
+  applyVisibleProductionBatch(boulders)
   for (const unit of boulders)
     for (const climb of unit.climbs)
       Object.assign(climb, deriveRouteContent(climb, unit.faces))

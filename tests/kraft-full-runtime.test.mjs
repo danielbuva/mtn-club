@@ -9,6 +9,9 @@ import {
   runtimeUnits,
 } from '../lib/kraft/runtime-records.ts'
 import { validateGuide } from '../lib/kraft/validate.ts'
+import { visibleEastFaces } from '../lib/kraft/visible-east-records.ts'
+import { visibleExistingCorridorFaces } from '../lib/kraft/visible-existing-corridors.ts'
+import { visibleWestMainFaces } from '../lib/kraft/visible-west-main-records.ts'
 
 const mp = JSON.parse(
   await readFile(
@@ -30,11 +33,34 @@ const byMp = new Map(
     .filter(climb => climb.sourceIdentity.mpId)
     .map(climb => [climb.sourceIdentity.mpId, climb]),
 )
-const corridorIds = ['the-pearl', 'pearl-pearl-necklace']
+const pearlCorridorIds = ['the-pearl', 'pearl-pearl-necklace']
 const photographSourceIds = [
   'mp-pearl-view-reference',
   'mp-pearl-finish-reference',
 ]
+const visibleFaces = [
+  ...visibleWestMainFaces,
+  ...visibleEastFaces,
+  ...visibleExistingCorridorFaces,
+]
+const withheldMpIds = new Set(['120119519', '120119454', '120119572'])
+const candidateByMp = new Map(
+  visibleFaces.flatMap(face =>
+    face.corridors.map(corridor => [corridor.mpRouteId, { face, corridor }]),
+  ),
+)
+const corridorIds = [
+  ...pearlCorridorIds,
+  ...[...candidateByMp.keys()]
+    .filter(id => !withheldMpIds.has(id))
+    .map(id => byMp.get(id).id),
+]
+const warmContextFaceIds = [
+  'mp-view-106657477-main-south',
+  'mp-view-106657477-main-southwest',
+  'mp-view-106657477-fluffer-donkey-relative-region',
+]
+const visibleFaceById = new Map(visibleFaces.map(face => [face.faceId, face]))
 const sourceViewRouteIds = new Set(
   kraftGuide.boulders.flatMap(unit =>
     unit.faces.flatMap(face =>
@@ -44,6 +70,21 @@ const sourceViewRouteIds = new Set(
     ),
   ),
 )
+
+function assertProductionImage(face, spec) {
+  assert.deepEqual(face.image, {
+    status: 'available',
+    src: `/kraft/${spec.assetId}.webp`,
+    width: 1448,
+    height: 1086,
+    alt: spec.alt,
+    assetId: spec.assetId,
+    representation: 'reconstruction',
+  })
+  assert.match(face.photographNote, /Original MTN Club raster reconstruction/)
+  assert.match(face.photographNote, /individual hand holds are not mapped/)
+  assert.match(face.photographNote, /field verification remain unconfirmed/)
+}
 
 test('actual runtime contains every exact MP route once and 13 distinct unresolved OB entries', () => {
   assert.equal(kraftGuide.status, 'catalog')
@@ -126,9 +167,15 @@ test('full approved dossiers, verbatim grades and retrieval timestamps reach the
     const added = climb.routeFacts.observations.slice(
       dossier.observations.length,
     )
+    const finishEvidence = candidateByMp.get(dossier.mpRouteId)?.corridor
+      .finishEvidence
     assert.deepEqual(
       added.map(observation => observation.sourceId),
-      corridorIds.includes(climb.id) ? photographSourceIds : [],
+      pearlCorridorIds.includes(climb.id)
+        ? photographSourceIds
+        : finishEvidence
+          ? [`mp-visible-photo-${finishEvidence.photoId}`]
+          : [],
       climb.id,
     )
     for (const observation of added) {
@@ -143,15 +190,29 @@ test('full approved dossiers, verbatim grades and retrieval timestamps reach the
         description: 'present',
         location: 'absent',
       })
-      for (const field of ['face', 'start', 'constraints', 'approach'])
+      for (const field of ['face', 'constraints', 'approach'])
         assert.deepEqual(observation.facts[field], [])
-      const field =
-        observation.sourceId === 'mp-pearl-view-reference' ? 'path' : 'finish'
-      assert.equal(observation.facts[field].length, 1)
-      assert.deepEqual(
-        observation.facts[field === 'path' ? 'finish' : 'path'],
-        [],
-      )
+      if (finishEvidence) {
+        assert.deepEqual(
+          observation.facts.start,
+          finishEvidence.startFact ? [finishEvidence.startFact] : [],
+        )
+        assert.deepEqual(observation.facts.path, [])
+        assert.deepEqual(observation.facts.finish, [finishEvidence.fact])
+        assert.match(
+          observation.synopsis,
+          /Authored raster\/SVG correspondence remains separate/,
+        )
+      } else {
+        assert.deepEqual(observation.facts.start, [])
+        const field =
+          observation.sourceId === 'mp-pearl-view-reference' ? 'path' : 'finish'
+        assert.equal(observation.facts[field].length, 1)
+        assert.deepEqual(
+          observation.facts[field === 'path' ? 'finish' : 'path'],
+          [],
+        )
+      }
       assert.ok(observation.synopsis.length)
       assert.ok(observation.unresolved.length)
     }
@@ -189,11 +250,33 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
     const unit = kraftGuide.boulders.find(item => item.id === pilot.id)
     assert.ok(unit, pilot.id)
     assert.equal(unit.name, pilot.name)
-    for (const face of pilot.faces)
-      assert.deepEqual(
-        unit.faces.find(item => item.id === face.id),
-        face,
-      )
+    for (const original of pilot.faces) {
+      const face = unit.faces.find(item => item.id === original.id)
+      const spec = visibleFaceById.get(original.id)
+      if (!spec) {
+        assert.deepEqual(face, original)
+        continue
+      }
+      const { image, sourceIds, photographNote, ...structure } = face
+      const {
+        image: originalImage,
+        sourceIds: originalSources,
+        photographNote: originalNote,
+        ...originalStructure
+      } = original
+      assert.deepEqual(structure, originalStructure)
+      assert.equal(image.assetId, originalImage.assetId)
+      assert.ok(originalNote.length)
+      assert.deepEqual(sourceIds, [
+        ...new Set([
+          ...originalSources,
+          `mtn-club-${spec.assetId}`,
+          ...spec.photoIds.map(id => `mp-visible-photo-${id}`),
+        ]),
+      ])
+      assert.ok(photographNote.length)
+      assertProductionImage(face, spec)
+    }
     for (const face of unit.faces.filter(
       item => !pilot.faces.some(original => original.id === item.id),
     ))
@@ -253,7 +336,7 @@ test('pilot public IDs, curated beta, face memberships, assets and qualified pro
   )
 })
 
-test('only the two Pearl routes gain moderate source-closed corridors on their original face', () => {
+test('only the 24 admitted routes gain moderate source-qualified native corridors', () => {
   const authored = climbs.filter(climb =>
     climb.geometry.some(geometry => geometry.status === 'authored'),
   )
@@ -261,26 +344,98 @@ test('only the two Pearl routes gain moderate source-closed corridors on their o
     authored.map(climb => climb.id).sort(),
     [...corridorIds].sort(),
   )
+  assert.equal(authored.length, 24)
+  assert.deepEqual(
+    [
+      ...new Set(
+        kraftGuide.boulders
+          .flatMap(unit => unit.faces)
+          .filter(face => face.image.status === 'available')
+          .map(face => face.image.assetId),
+      ),
+    ].sort(),
+    [
+      ...new Set([
+        'pearl-southeast-guide',
+        ...visibleFaces.map(face => face.assetId),
+      ]),
+    ].sort(),
+  )
+  assert.equal(
+    new Set([
+      'pearl-southeast-guide',
+      ...visibleFaces.map(face => face.assetId),
+    ]).size,
+    9,
+  )
   for (const climb of authored) {
-    assert.equal(climb.geometry.length, 1)
-    const geometry = climb.geometry[0]
-    assert.equal(geometry.faceId, 'pearl-southeast')
-    assert.deepEqual(climb.faceIds, [geometry.faceId])
+    const drawn = climb.geometry.filter(item => item.status === 'authored')
+    assert.equal(drawn.length, 1)
+    const geometry = drawn[0]
+    const candidate = candidateByMp.get(climb.sourceIdentity.mpId)
+    assert.equal(geometry.faceId, candidate?.face.faceId ?? 'pearl-southeast')
+    assert.ok(climb.faceIds.includes(geometry.faceId))
+    if (candidate) {
+      const unit = kraftGuide.boulders.find(item => item.climbs.includes(climb))
+      assert.equal(unit.sourceIdentity.mpId, candidate.face.mpParentId)
+      const face = unit.faces.find(item => item.id === geometry.faceId)
+      assert.ok(face.climbIds.includes(climb.id))
+      assertProductionImage(face, candidate.face)
+      assert.equal(geometry.path, candidate.corridor.path)
+      assert.deepEqual(geometry.labelPoint, candidate.corridor.entry)
+      assert.ok(geometry.labelPoint.x >= 0 && geometry.labelPoint.x <= 1448)
+      assert.ok(geometry.labelPoint.y >= 0 && geometry.labelPoint.y <= 1086)
+      const primary = climb.routeFacts.observations.find(
+        item =>
+          item.publisher === 'Mountain Project' &&
+          item.sourceDependency === 'primary-source-page',
+      )
+      assert.deepEqual(geometry.sourceIds, [
+        primary.sourceId,
+        ...candidate.face.photoIds.map(id => `mp-visible-photo-${id}`),
+      ])
+      if (primary.facts.start.length) {
+        assert.equal(geometry.annotations.start.kind, 'start-zone')
+        assert.equal(
+          geometry.annotations.start.rule,
+          primary.facts.start.join(' '),
+        )
+        assert.deepEqual(geometry.annotations.start.sourceIds, [
+          primary.sourceId,
+        ])
+        assert.equal(
+          geometry.annotations.start.placement.status,
+          'reviewed-region',
+        )
+        assert.deepEqual(
+          geometry.annotations.start.placement.region,
+          candidate.corridor.entry,
+        )
+        assert.equal(geometry.annotations.start.hands, undefined)
+        assert.equal(geometry.annotations.start.holds, undefined)
+      } else assert.equal(geometry.annotations, undefined)
+    } else {
+      assert.deepEqual(climb.faceIds, [geometry.faceId])
+      assert.deepEqual(geometry.sourceIds, [
+        climb.id === 'the-pearl' ? 'mp-pearl-route' : 'mp-route-107444907',
+        ...photographSourceIds,
+      ])
+    }
     assert.equal(geometry.confidenceLevel, 'moderate')
     assert.equal(geometry.reviewedAt, '2026-10-01')
     assert.ok(Number.isFinite(geometry.corridorWidth))
     assert.ok(geometry.corridorWidth > 0)
-    assert.deepEqual(geometry.sourceIds, [
-      climb.id === 'the-pearl' ? 'mp-pearl-route' : 'mp-route-107444907',
-      ...photographSourceIds,
-    ])
     for (const sourceId of geometry.sourceIds) {
       assert.ok(sources.has(sourceId), sourceId)
       assert.ok(climb.sourceIds.includes(sourceId), sourceId)
-      assert.ok(
-        climb.routeFacts.observations.some(item => item.sourceId === sourceId),
-        sourceId,
-      )
+      if (!sourceId.startsWith('mp-visible-photo-'))
+        assert.ok(
+          climb.routeFacts.observations.some(
+            item => item.sourceId === sourceId,
+          ),
+          sourceId,
+        )
+      else assert.equal(sources.get(sourceId).usage, 'factual-reference')
     }
     assert.equal(climb.contentDimensions.topo, 'corridor')
     assert.equal(climb.topoEvidence.confidenceLevel, 'moderate')
@@ -288,6 +443,19 @@ test('only the two Pearl routes gain moderate source-closed corridors on their o
     assert.equal(geometry.routePathReview, undefined)
     assert.equal(climb.routePathReview, undefined)
     assert.equal(climb.status, 'source-observation')
+  }
+  for (const mpId of withheldMpIds) {
+    const climb = byMp.get(mpId)
+    const candidate = candidateByMp.get(mpId)
+    assert.ok(climb.faceIds.includes(candidate.face.faceId), mpId)
+    assert.equal(climb.contentDimensions.image, 'reconstruction')
+    assert.equal(climb.contentDimensions.topo, 'unavailable')
+    assert.equal(climb.topoEvidence.drawingPolicy, 'face-only')
+    assert.ok(
+      climb.geometry.every(item => item.status === 'missing'),
+      mpId,
+    )
+    assert.deepEqual(climb.routeFacts.finish, [], mpId)
   }
   const standing = climbById.get('the-pearl').geometry[0]
   const seated = climbById.get('pearl-pearl-necklace').geometry[0]
@@ -321,7 +489,29 @@ test('source-unit memberships retain exact linked references without duplicating
       assert.equal(unit.unitKind, 'source-unit')
       assert.equal(unit.location.scope, 'catalog-centroid')
       for (const face of unit.faces) {
-        assert.equal(face.image.status, 'missing')
+        const spec = visibleFaceById.get(face.id)
+        const hasImage = Boolean(spec) || warmContextFaceIds.includes(face.id)
+        assert.equal(face.image.status, hasImage ? 'available' : 'missing')
+        if (hasImage) assert.equal(face.image.representation, 'reconstruction')
+        if (spec) {
+          assertProductionImage(face, spec)
+          assert.equal(spec.mpParentId, record.id)
+          const sourceMemberships = [
+            ...(face.sourceViewObservations ?? []),
+            ...(face.sourceFaceObservations ?? []),
+          ].map(observation => byMp.get(observation.mpRouteId).id)
+          assert.deepEqual(
+            [...face.climbIds].sort(),
+            [
+              ...new Set([
+                ...sourceMemberships,
+                ...spec.corridors.map(
+                  corridor => byMp.get(corridor.mpRouteId).id,
+                ),
+              ]),
+            ].sort(),
+          )
+        }
         if (face.sourceViewObservations?.length) {
           assert.equal(
             face.orientationStatus,
@@ -329,9 +519,23 @@ test('source-unit memberships retain exact linked references without duplicating
           )
           for (const observation of face.sourceViewObservations)
             assert.equal(observation.mpParentId, record.id)
-        } else {
+        } else if (face.sourceFaceObservations?.length) {
           assert.equal(face.orientationStatus, 'source-observation')
-          assert.ok(face.sourceFaceObservations.length)
+          for (const observation of face.sourceFaceObservations)
+            assert.equal(observation.mpParentId, record.id)
+        } else {
+          assert.ok(spec, face.id)
+          assert.equal(face.orientation, spec.orientation)
+          assert.equal(
+            face.orientationStatus,
+            spec.orientation === 'unknown' ? 'unknown' : 'source-observation',
+          )
+          assert.equal(face.groupingStatus, 'source-backed')
+          assert.ok(
+            spec.photoIds.every(id =>
+              face.sourceIds.includes(`mp-visible-photo-${id}`),
+            ),
+          )
         }
       }
     }

@@ -1,4 +1,4 @@
-import type { Climb, KraftGuide } from '../lib/kraft/types.ts'
+import type { Climb, GuideAsset, KraftGuide } from '../lib/kraft/types.ts'
 
 export const routeDimensionKeys = [
   'identity',
@@ -13,6 +13,7 @@ type RuntimeWorkbench = {
   runtimeSourceUrls: Set<string>
   runtimeCanonicalIds: Set<string>
   runtimeRouteStates: Map<string, Climb>
+  runtimeUnitAssets: Map<string, GuideAsset[]>
   runtimeRouteCount: number
 }
 
@@ -43,12 +44,22 @@ export function runtimeWorkbench(guide: KraftGuide): RuntimeWorkbench {
     ),
   )
   const runtimeRouteStates = new Map<string, Climb>()
+  const runtimeUnitAssets = new Map<string, GuideAsset[]>()
   for (const boulder of guide.boulders) {
     const identity = boulder.sourceIdentity
     const unitKeys = identity?.mpId
       ? [`mp-area-${identity.mpId}`]
       : (identity?.openBetaIds.map(id => `ob-area-${id}`) ?? [])
-    for (const key of unitKeys) runtimeCanonicalIds.add(key)
+    const imageIds = new Set(
+      boulder.faces.flatMap(face =>
+        face.image.status === 'available' ? [face.image.assetId] : [],
+      ),
+    )
+    const faceAssets = guide.assets.filter(asset => imageIds.has(asset.id))
+    for (const key of unitKeys) {
+      runtimeCanonicalIds.add(key)
+      runtimeUnitAssets.set(key, faceAssets)
+    }
     for (const climb of boulder.climbs) {
       const routeIdentity = climb.sourceIdentity
       const keys = routeIdentity?.mpId
@@ -64,6 +75,7 @@ export function runtimeWorkbench(guide: KraftGuide): RuntimeWorkbench {
     runtimeSourceUrls,
     runtimeCanonicalIds,
     runtimeRouteStates,
+    runtimeUnitAssets,
     runtimeRouteCount: guide.boulders.reduce(
       (count, boulder) => count + boulder.climbs.length,
       0,

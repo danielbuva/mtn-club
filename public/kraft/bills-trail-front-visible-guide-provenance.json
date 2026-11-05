@@ -1,0 +1,75 @@
+{
+  "assetId": "bills-trail-front-visible-guide",
+  "sourceId": "mtn-club-bills-trail-front-visible-guide",
+  "generatedAt": "2026-10-01",
+  "tool": "built-in image_gen",
+  "generatedPng": "/Users/dani/.codex/generated_images/01a0f5ef-17bf-7ab2-9484-75daf8891ce7/exec-becc9586-6088-4dcb-bb1a-ca2e7ce7d0e8.png",
+  "pngSha256": "c0e3e178ef57c5dd7c41a34e639eb0cdfb538b91fe448540c01e9bea065a25fd",
+  "actualPrompt": "Use case: photorealistic-natural. Asset: original MTN Club Kraft climbing guide raster image. Create a believable ordinary field photograph of the actual described sandstone boulder, NOT a hero photo, commercial shoot, illustration, diagram, vector or low-poly render. Use the factual geometry below as constraints; compose a NEW guide camera rather than reproduce any source photograph. No reference-image pixels are supplied. Center the climb-bearing plane with the rock occupying most of a landscape 4:3 frame; preserve crown, ground and starts, with modest context and no foreground obstruction. Near frontal ordinary standing-eye-level camera, neutral perspective, slightly imperfect level. Everyday desert light through thin cloud, uneven real sandstone coloration, tiny irregular granular texture, natural eroded edges, mottled varnish, incidental diffuse chalk/staining, no art-directed repeated texture. Ground is rough reddish gravel with ordinary stones and sparse scrub, subdued distant desert context. No people, pads, route lines, symbols, text or watermark. Do not invent prominent holes, cracks, planes, ledges or boulder appendages. Do not make rock symmetrical, pristine, uniformly textured, isolated, shiny, flat or dramatically lit. Output a high-resolution realistic raster clear enough to zoom, retaining imperfections.\nSubject: Bill's Boulder at Kraft, the trail-facing I Disagree / Joy Jug climbing plane, not its neighboring My Tan overhang. Geometry synthesized from trail-face photographs and a second oblique view of the same block: naturally thick irregular layered sandstone mass, a broad orange-red climbing wall, rounded strongly bedded crown stepping unevenly upward toward the right. The right-center of the trail face contains stacked thick, bulging horizontal sandstone ledges and rounded block-like shelves, not a clean flat slab. Thin irregular near-vertical/diagonal fracture toward center-left. Small worn shallow hollows in the right section, NOT a huge deep cave on this plane. Patchy dark varnish covers some older upper planes with orange exposed bed edges. Lower wall is modestly undercut, rough reddish ground at base; blunt corners and irregular eroded shoulders. The neighboring roof face recedes away around the left edge and must not be flattened onto this frontal plane. Choose an original slightly oblique trail-facing camera to show the central line and left blocky corner; enough crown for topout and entire rough foot in frame. Ordinary muted desert daylight, no posed climbing-photo scene.",
+  "generatorPixelInputs": [],
+  "references": [
+    {
+      "unit": "bills",
+      "photoId": "120305088",
+      "photoUrl": "https://www.mountainproject.com/photo/120305088/what-a-good-lookin-boulder",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/120305088_medium_1613722673.jpg?cache=1738030779",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/bills-120305088-reference-only.jpg",
+      "sha256": "371774fbf75dfee7000ce3c4244071cd3e6671475f5e4c5b9bc23ad89c0233c0",
+      "bytes": 110933,
+      "title": "What a good lookin Boulder",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "bills",
+      "photoId": "106688214",
+      "photoUrl": "https://www.mountainproject.com/photo/106688214/the-line-is-directly-below-where-i-am-standing",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/106688214_medium_1494132288.jpg?cache=1701316203",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/bills-106688214-reference-only.jpg",
+      "sha256": "14cf9b28ee5734f7553495ca4659a935185b3af3ae704c9fd56e4321c79342cb",
+      "bytes": 80831,
+      "title": "The line is directly below where I am standing.",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "bills",
+      "photoId": "200973093",
+      "photoUrl": "https://www.mountainproject.com/photo/200973093/on-the-start-holds",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/200973093_medium_1747437806_topo.jpg?cache=1786001641",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/bills-200973093-reference-only.jpg",
+      "sha256": "3ed5c25c1bbff88402b44d9672a8434053c01fd656c9a6de38cdb4f0c498b84d",
+      "usage": "reference-only factual inspection; never model pixel input; not distributed",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    }
+  ],
+  "camera": "Original near-frontal guide viewpoint chosen independently, rather than reproducing a reference composition.",
+  "scope": "Trail/front I Disagree/Joy Jug plane only; separate My Tan roof and east Venom plane excluded.",
+  "unresolved": [
+    "Fine surface detail is illustrative; individual holds are not calibrated.",
+    "Field conditions and human field verification pending."
+  ],
+  "review": {
+    "status": "geometry review",
+    "critic": "Independent batch output critic",
+    "date": "2026-10-01",
+    "receipt": ".tmp/kraft-gauntlet/immersive-visible-batch-critic/initial-raster-receipt.json",
+    "decision": "Macro geometry accepted; rendered guide and corridor batch review pending."
+  },
+  "shippedAsset": {
+    "src": "/kraft/bills-trail-front-visible-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 446884,
+    "sha256": "e49df17872a3532b3fe585af4a29084e72c4d2f45408c8a9b5198187332ce2a8",
+    "conversion": "Sharp WebP quality88 effort6; native dimensions, no crop"
+  },
+  "productionRights": {
+    "licenseId": "MTN-Club-original",
+    "owner": "MTN Club",
+    "note": "User-directed original raster creation. Reference-only third-party photographs are not input pixels or distributable assets."
+  }
+}

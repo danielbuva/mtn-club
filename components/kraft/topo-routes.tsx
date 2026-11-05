@@ -1,8 +1,19 @@
 'use client'
 
 import { useId } from 'react'
+import {
+  resolveRouteAnnotations,
+  validRouteAnnotations,
+} from '@/lib/kraft/resolve-route-annotations'
+import { routeAnnotationSummaries } from '@/lib/kraft/route-annotations'
 import type { Climb, RouteGeometry } from '@/lib/kraft/types'
 import styles from './topo.module.css'
+import { topoMarkerClearancePath } from './topo-marker-clearance'
+import {
+  TopoMovementAnnotationGlyphs,
+  TopoMovementAnnotationLines,
+} from './topo-movement-annotation'
+import { TopoStartAnnotationGlyph } from './topo-start-annotation'
 
 type AuthoredGeometry = Extract<RouteGeometry, { status: 'authored' }>
 
@@ -15,6 +26,7 @@ export type TopoRoute = {
 type TopoRoutesProps = {
   width: number
   height: number
+  assetId: string
   zoom?: number
   routes: TopoRoute[]
   selectedClimbId: string | null
@@ -27,6 +39,7 @@ type TopoRoutesProps = {
 export function TopoRoutes({
   width,
   height,
+  assetId,
   zoom = 1,
   routes,
   selectedClimbId,
@@ -41,18 +54,36 @@ export function TopoRoutes({
         Number(a.climb.id === selectedClimbId) -
         Number(b.climb.id === selectedClimbId),
     )
+    .map(route => {
+      const context = {
+        sourceIds: route.climb.sourceIds,
+        image: { assetId, width, height },
+      }
+      const annotations = validRouteAnnotations(
+        route.geometry.annotations,
+        context,
+      )
+      const documentedRules = resolveRouteAnnotations(
+        route.climb.routeAnnotations,
+        route.geometry.annotations,
+        context,
+      )
+      return {
+        ...route,
+        annotations,
+        documentedRules,
+        hasStartAnnotation: Boolean(documentedRules?.start),
+      }
+    })
   const showMarkers = zoom < 2
   const labelRadius = Math.max(width / 55, 18) / zoom ** 1.5
   const markerOpacity = Math.max(0, 1 - (zoom - 1) * 1.4)
   const clipId = useId()
   // Every route's hit area leaves all badges clear, including shared corridors.
-  const badgeHoles = (showMarkers ? visibleRoutes : [])
-    .map(({ geometry }) => {
-      const { x, y } = geometry.labelPoint
-      const radius = labelRadius + 3
-      return `M${x - radius} ${y}a${radius} ${radius} 0 1 0 ${radius * 2} 0a${radius} ${radius} 0 1 0 ${-radius * 2} 0Z`
-    })
-    .join(' ')
+  const badgeHoles = topoMarkerClearancePath(
+    showMarkers ? visibleRoutes : [],
+    labelRadius,
+  )
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: SVG routes form a keyboard-accessible group; HTML fieldsets cannot contain native SVG paths.
@@ -71,64 +102,84 @@ export function TopoRoutes({
           />
         </clipPath>
       </defs>
-      {visibleRoutes.map(({ climb, geometry, number }) => {
-        const selected = climb.id === selectedClimbId
-        return (
-          // biome-ignore lint/a11y/useSemanticElements: An SVG group preserves authored path coordinates while exposing Enter/Space selection and matching HTML climb buttons.
-          <g
-            key={climb.id}
-            className={styles.route}
-            data-selected={selected}
-            data-muted={selectedClimbId !== null && !selected}
-            data-confidence={geometry.confidenceLevel ?? 'high'}
-            role="button"
-            tabIndex={0}
-            aria-label={`Route ${number}: ${climb.name}, ${climb.grade}`}
-            aria-pressed={selected}
-            onClick={() => onClimbSelect(climb.id)}
-            onKeyDown={event => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault()
-                onClimbSelect(climb.id)
-              }
-            }}
-          >
-            <g clipPath={`url(#${clipId})`}>
-              <path
-                d={geometry.path}
-                className={styles.routeLine}
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                d={geometry.path}
-                className={styles.routeHitTarget}
-                vectorEffect="non-scaling-stroke"
-              />
-            </g>
-            {showMarkers && (
-              <g opacity={markerOpacity}>
-                <circle
-                  cx={geometry.labelPoint.x}
-                  cy={geometry.labelPoint.y}
-                  r={labelRadius}
-                  className={styles.routeNumberCircle}
-                  vectorEffect="non-scaling-stroke"
-                />
-                <text
-                  x={geometry.labelPoint.x}
-                  y={geometry.labelPoint.y}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize={labelRadius * 1.25}
-                  className={styles.routeNumber}
-                >
-                  {number}
-                </text>
+      {visibleRoutes.map(
+        ({ climb, geometry, number, annotations, documentedRules }) => {
+          const selected = climb.id === selectedClimbId
+          const movement = annotations?.movement
+          const movementPlaced = movement?.placement.status === 'reviewed'
+          const summary = documentedRules
+            ? routeAnnotationSummaries(documentedRules).join(' ')
+            : ''
+          return (
+            // biome-ignore lint/a11y/useSemanticElements: An SVG group preserves authored path coordinates while exposing Enter/Space selection and matching HTML climb buttons.
+            <g
+              key={climb.id}
+              className={styles.route}
+              data-selected={selected}
+              data-muted={selectedClimbId !== null && !selected}
+              data-confidence={geometry.confidenceLevel ?? 'high'}
+              role="button"
+              tabIndex={0}
+              aria-label={`Route ${number}: ${climb.name}, ${climb.grade}${summary ? `. ${summary}` : ''}`}
+              aria-pressed={selected}
+              onClick={() => onClimbSelect(climb.id)}
+              onKeyDown={event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  onClimbSelect(climb.id)
+                }
+              }}
+            >
+              <g>
+                {!(
+                  movementPlaced &&
+                  movement?.placement.status === 'reviewed' &&
+                  movement.placement.staticPath
+                ) && (
+                  <>
+                    <path
+                      d={geometry.path}
+                      data-guide-selected-path={selected ? 'true' : undefined}
+                      className={styles.routeLine}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                    <path
+                      d={geometry.path}
+                      className={styles.routeHitTarget}
+                      clipPath={`url(#${clipId})`}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  </>
+                )}
+                {movementPlaced && movement && (
+                  <TopoMovementAnnotationLines
+                    movement={movement}
+                    hitClipPath={`url(#${clipId})`}
+                  />
+                )}
               </g>
-            )}
-          </g>
-        )
-      })}
+              {showMarkers && (
+                <g opacity={markerOpacity}>
+                  {annotations?.start &&
+                  annotations.start.placement.status !== 'unlocated' ? (
+                    <TopoStartAnnotationGlyph
+                      start={annotations.start}
+                      labelPoint={geometry.labelPoint}
+                      size={labelRadius}
+                    />
+                  ) : null}
+                  {movement && (
+                    <TopoMovementAnnotationGlyphs
+                      movement={movement}
+                      size={labelRadius}
+                    />
+                  )}
+                </g>
+              )}
+            </g>
+          )
+        },
+      )}
     </svg>
   )
 }

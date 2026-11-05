@@ -80,6 +80,7 @@ const { z } = await import('zod')
 const activityTags = await import('../lib/events/activity-tags.ts')
 function actionFixture({ allowed = true, saved = true } = {}) {
   const writes = []
+  const revalidated = []
   const client = {
     auth: { getUser: async () => ({ data: { user: { id: 'admin' } } }) },
     rpc: async () => ({ data: allowed }),
@@ -112,7 +113,7 @@ function actionFixture({ allowed = true, saved = true } = {}) {
     },
   }
   const actions = compile('../app/(reader)/trips/actions.ts', {
-    'next/cache': { revalidatePath() {} },
+    'next/cache': { revalidatePath: path => revalidated.push(path) },
     'next/navigation': {
       redirect() {
         throw new Error('Unexpected redirect')
@@ -131,6 +132,7 @@ function actionFixture({ allowed = true, saved = true } = {}) {
     save: () => actions.saveTripDetailEditsAction(values),
     values,
     writes,
+    revalidated,
   }
 }
 test('full save action sends timezone-correct instants without querying membership', async () => {
@@ -139,6 +141,13 @@ test('full save action sends timezone-correct instants without querying membersh
   assert.equal(f.writes[0].payload.starts_at, trip.starts_at)
   assert.equal(f.writes[0].payload.ends_at, trip.ends_at)
   assert.equal(f.writes[1].table, 'trip_private')
+})
+test('saving an event refreshes the official schedule, calendar, and event pages', async () => {
+  const f = actionFixture()
+  assert.equal((await f.save()).ok, true)
+  for (const path of ['/schedule', '/calendar', '/trips']) {
+    assert.ok(f.revalidated.includes(path), `${path} was not refreshed`)
+  }
 })
 test('date conflicts and permission failures cause no partial writes', async () => {
   const conflict = actionFixture()

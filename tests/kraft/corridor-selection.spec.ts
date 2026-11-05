@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test('shared corridors leave both numbered badges independently tappable', async ({
+test('reviewed start zones remain selectable without invented hand coordinates', async ({
   page,
 }) => {
   await page.goto(
@@ -12,27 +12,51 @@ test('shared corridors leave both numbered badges independently tappable', async
   })
   const selected = dialog.getByRole('region', { name: 'Selected climb' })
   await expect(selected).toContainText('The Pearl')
-  for (const name of ['Pearl Necklace', 'The Pearl', 'Pearl Necklace']) {
+  for (const [name, kind] of [
+    ['The Pearl', 'two-required-holds'],
+    ['Pearl Necklace', 'seated-hands-low'],
+  ]) {
     const route = dialog.getByRole('button', {
       name: new RegExp(`^Route \\d+: ${name}, `),
     })
-    const badge = route.locator('circle')
-    await expect(badge).toBeVisible()
-    const bounds = await badge.boundingBox()
-    expect(bounds).not.toBeNull()
-    if (!bounds) throw new Error(`Missing ${name} route badge`)
-    // Physical coordinates exercise SVG stacking; a forced locator click would
-    // bypass the overlapping hit target that previously selected the wrong route.
+    await expect(route.locator('[data-start-kind]')).toHaveAttribute(
+      'data-start-kind',
+      kind,
+    )
+    await expect(route.locator('[data-start-kind]')).toHaveAttribute(
+      'data-precision',
+      'region',
+    )
+    await expect(
+      route.locator('[data-hand-node], [data-hand-label]'),
+    ).toHaveCount(0)
+    await expect(route.locator('[data-start-zone]')).toHaveCount(1)
+    await expect(route.locator('[data-start-kind] > text')).toHaveText(
+      '~ start zone',
+    )
+    await expect(
+      route.locator('[data-movement-kind], [data-dyno-node]'),
+    ).toHaveCount(0)
+  }
+  for (const name of ['Pearl Necklace', 'The Pearl']) {
+    const route = dialog.getByRole('button', {
+      name: new RegExp(`^Route \\d+: ${name}, `),
+    })
+    const zone = route.locator('[data-start-zone]')
+    const bounds = await zone.boundingBox()
+    if (!bounds) throw new Error(`Missing ${name} reviewed start zone`)
     await page.mouse.click(
       bounds.x + bounds.width / 2,
       bounds.y + bounds.height / 2,
     )
     await expect(route).toHaveAttribute('aria-pressed', 'true')
     await expect(selected).toContainText(name)
-    await expect(selected).toContainText('Approximate corridor available')
   }
   await dialog.getByRole('button', { name: 'Clean image', exact: true }).click()
   await expect(dialog.locator('g[data-confidence="moderate"]')).toHaveCount(0)
+  await expect(
+    dialog.locator('[data-hand-node], [data-hand-label]'),
+  ).toHaveCount(0)
   await expect(selected).toContainText('Approximate corridor available')
   await expect(selected).not.toContainText('highlighted')
   await dialog.getByRole('button', { name: 'All lines', exact: true }).click()
@@ -53,7 +77,7 @@ test('zoom reveals rock detail while route annotations stay restrained', async (
   const route = viewport.getByRole('button', {
     name: /^Route \d+: The Pearl, /,
   })
-  const marker = route.locator('circle')
+  const marker = route.locator('[data-start-zone]')
   await expect(marker).toBeVisible()
   const initialMarker = await marker.boundingBox()
   const initialRock = await viewport.locator('img').boundingBox()
@@ -133,7 +157,9 @@ test('zoom reveals rock detail while route annotations stay restrained', async (
   expect(
     await marker.evaluate(circle =>
       Number.parseFloat(
-        getComputedStyle(circle.parentElement ?? circle).opacity,
+        getComputedStyle(
+          circle.closest('[data-start-kind]')?.parentElement ?? circle,
+        ).opacity,
       ),
     ),
   ).toBeLessThan(0.4)
@@ -142,6 +168,11 @@ test('zoom reveals rock detail while route annotations stay restrained', async (
   await zoomIn.click()
   await expectCenter(initialCenter)
   await expect(route.locator('circle, text')).toHaveCount(0)
+  await expect(
+    viewport.locator(
+      '[data-hand-node], [data-start-zone], [data-hand-label], [data-start-kind]',
+    ),
+  ).toHaveCount(0)
   await zoomIn.click()
   await zoomIn.click()
   await expect(zoomIn).toBeDisabled()

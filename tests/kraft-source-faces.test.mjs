@@ -10,6 +10,9 @@ import {
 import { sourceFaceRules } from '../lib/kraft/source-face-rules.ts'
 import { validateGuide } from '../lib/kraft/validate.ts'
 import { validateSourceFaces } from '../lib/kraft/validate-source-faces.ts'
+import { visibleEastFaces } from '../lib/kraft/visible-east-records.ts'
+import { visibleExistingCorridorFaces } from '../lib/kraft/visible-existing-corridors.ts'
+import { visibleWestMainFaces } from '../lib/kraft/visible-west-main-records.ts'
 
 const ledger = sourceFaceLedger(kraftGuide.boulders)
 const byMp = new Map(
@@ -17,6 +20,18 @@ const byMp = new Map(
     unit.climbs.map(climb => [climb.sourceIdentity.mpId, { unit, climb }]),
   ),
 )
+const visibleFaces = [
+  ...visibleWestMainFaces,
+  ...visibleEastFaces,
+  ...visibleExistingCorridorFaces,
+]
+const visibleFaceById = new Map(visibleFaces.map(face => [face.faceId, face]))
+const candidateByMp = new Map(
+  visibleFaces.flatMap(face =>
+    face.corridors.map(corridor => [corridor.mpRouteId, { face, corridor }]),
+  ),
+)
+const withheldMpIds = new Set(['120119519', '120119454', '120119572'])
 
 test('controlled face batch spans all five clusters without changing runtime inclusion', () => {
   assert.equal(ledger.length, 64)
@@ -57,24 +72,73 @@ test('every face assignment exposes exact source-parent facts and dated source s
     assert.equal(row.scope, 'source-catalog-face')
     assert.equal(explicitFaceOrientation(row.sourceFact), row.orientation)
     assert.equal(climb.contentDimensions.face, 'known')
-    assert.equal(climb.contentDimensions.topo, 'unavailable')
-    assert.equal(climb.contentDimensions.image, 'missing')
+    const candidate = candidateByMp.get(row.mpRouteId)
+    const admitted = Boolean(candidate) && !withheldMpIds.has(row.mpRouteId)
+    assert.equal(
+      climb.contentDimensions.topo,
+      admitted ? 'corridor' : 'unavailable',
+    )
+    assert.equal(
+      climb.contentDimensions.image,
+      candidate ? 'reconstruction' : 'missing',
+    )
     assert.equal(face.orientationStatus, 'source-observation')
-    assert.equal(face.image.status, 'missing')
+    assert.equal(
+      face.image.status,
+      visibleFaceById.has(face.id) ? 'available' : 'missing',
+    )
     assert.equal(face.review, undefined)
-    assert.ok(climb.geometry.every(item => item.status === 'missing'))
+    if (admitted) {
+      const drawn = climb.geometry.filter(item => item.status === 'authored')
+      assert.equal(drawn.length, 1)
+      assert.equal(drawn[0].faceId, candidate.face.faceId)
+      assert.equal(drawn[0].path, candidate.corridor.path)
+      assert.equal(drawn[0].confidenceLevel, 'moderate')
+      assert.equal(unit.sourceIdentity.mpId, candidate.face.mpParentId)
+      if (candidate.face.faceId !== face.id)
+        assert.equal(
+          climb.geometry.find(item => item.faceId === face.id).status,
+          'missing',
+        )
+    } else assert.ok(climb.geometry.every(item => item.status === 'missing'))
     assert.ok(climb.topoEvidence.sourceIds.includes(row.sourceId))
   }
 })
 
-test('pilot faces, IDs, reciprocal memberships and image provenance remain exact', () => {
+test('pilot source groups, IDs and reciprocal memberships survive the admitted image/corridor updates', () => {
   for (const pilot of pilotBoulders) {
     const unit = kraftGuide.boulders.find(item => item.id === pilot.id)
-    for (const face of pilot.faces)
-      assert.deepEqual(
-        unit.faces.find(item => item.id === face.id),
-        face,
-      )
+    for (const original of pilot.faces) {
+      const current = unit.faces.find(item => item.id === original.id)
+      const spec = visibleFaceById.get(original.id)
+      if (!spec) {
+        assert.deepEqual(current, original)
+        continue
+      }
+      const { image, sourceIds, photographNote, ...structure } = current
+      const {
+        image: originalImage,
+        sourceIds: originalSources,
+        photographNote: originalNote,
+        ...originalStructure
+      } = original
+      assert.deepEqual(structure, originalStructure)
+      assert.equal(image.assetId, originalImage.assetId)
+      assert.equal(image.representation, 'reconstruction')
+      assert.equal(image.alt, spec.alt)
+      assert.equal(image.width, 1448)
+      assert.equal(image.height, 1086)
+      assert.deepEqual(sourceIds, [
+        ...new Set([
+          ...originalSources,
+          `mtn-club-${spec.assetId}`,
+          ...spec.photoIds.map(id => `mp-visible-photo-${id}`),
+        ]),
+      ])
+      assert.ok(originalNote.length)
+      assert.match(photographNote, /individual hand holds are not mapped/)
+      assert.match(photographNote, /field verification remain unconfirmed/)
+    }
     const newViews = unit.faces.filter(
       face => !pilot.faces.some(original => original.id === face.id),
     )
@@ -93,7 +157,11 @@ test('pilot faces, IDs, reciprocal memberships and image provenance remain exact
         assert.equal(current.geometry[0].status, 'missing')
         assert.equal(current.geometry[0].faceId, addedView.id)
       } else assert.deepEqual(current.faceIds, climb.faceIds)
-      if (['the-pearl', 'pearl-pearl-necklace'].includes(climb.id)) {
+      if (
+        ['the-pearl', 'pearl-pearl-necklace', 'front-side-crack'].includes(
+          climb.id,
+        )
+      ) {
         assert.ok(climb.geometry.every(item => item.status === 'missing'))
         assert.deepEqual(
           current.geometry.map(item => item.faceId),
@@ -123,8 +191,18 @@ test('neighboring, historical and conflicted facts do not acquire faces while gr
     assert.ok(!ledger.some(row => row.mpRouteId === id), id)
   }
   for (const unit of kraftGuide.boulders) {
-    if (['125752769', '106657477'].includes(unit.sourceIdentity.mpId))
+    if (unit.sourceIdentity.mpId === '125752769')
       assert.deepEqual(unit.faces, [], unit.id)
+    if (unit.sourceIdentity.mpId === '106657477')
+      for (const face of unit.faces) {
+        assert.equal(face.sourceFaceObservations, undefined)
+        assert.ok(face.sourceViewObservations.length)
+        assert.ok(
+          face.sourceViewObservations.every(
+            observation => observation.scope === 'source-catalog-view',
+          ),
+        )
+      }
     if (['123856651', '123856648'].includes(unit.sourceIdentity.mpId))
       for (const face of unit.faces) {
         assert.equal(face.orientation, 'unknown')

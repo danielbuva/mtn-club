@@ -90,17 +90,27 @@ const studiedCubeClimbs = [
 ]
 
 const studiedSplitClimbs = [
-  climb({
-    id: 'front-side-crack',
-    name: 'Front Side Crack',
-    grade: 'V0',
-    gradeValue: 0,
-    sourceId: 'mp-front-crack',
-    description:
-      'The chimney on the north, uphill side. The source also lists a 5.8 YDS grade.',
-    faceIds: ['split-north'],
-    risk: 'R · highball',
-  }),
+  {
+    ...climb({
+      id: 'front-side-crack',
+      name: 'Front Side Crack',
+      grade: 'V0',
+      gradeValue: 0,
+      sourceId: 'mp-front-crack',
+      description:
+        'The chimney on the north, uphill side. The source also lists a 5.8 YDS grade.',
+      faceIds: ['split-north-chimney'],
+      risk: 'R · highball',
+    }),
+    geometry: [
+      {
+        status: 'missing',
+        faceId: 'split-north-chimney',
+        reason:
+          'The chimney reconstruction is available; image-space route correspondence and corridor review are pending.',
+      },
+    ],
+  } satisfies Climb,
   climb({
     id: 'plumbers-crack',
     name: "Plumber's Crack",

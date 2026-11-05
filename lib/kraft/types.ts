@@ -5,7 +5,7 @@ import type {
   SourceIdentity,
   StructuredRouteFacts,
 } from './catalog-types'
-
+import type { RouteAnnotations } from './route-annotation-types'
 import type {
   RouteContentDimensions,
   TopoEvidence,
@@ -153,6 +153,8 @@ export type RouteGeometry =
       /** Approximate corridor width in the base image's native coordinates. */
       corridorWidth?: number
       routePathReview?: TopoPathReview
+      /** Source rules and separately reviewed native-image annotation placement. */
+      annotations?: RouteAnnotations
       continuation?: { faceId: string; description: string }
     }
 
@@ -198,6 +200,8 @@ export type Climb = {
   contentDimensions?: RouteContentDimensions
   topoEvidence?: TopoEvidence
   routePathReview?: TopoPathReview
+  /** Documented source rules can exist before image-space placement is reviewed. */
+  routeAnnotations?: RouteAnnotations
   sourceIdentity?: SourceIdentity
   routeFacts?: StructuredRouteFacts
   parentObservations?: ParentObservation[]

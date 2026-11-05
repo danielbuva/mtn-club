@@ -22,15 +22,11 @@ export const LEGACY_PLACEHOLDER_TRIP_IDS = [
 
 const legacyPlaceholderFilter = `(${LEGACY_PLACEHOLDER_TRIP_IDS.join(',')})`
 
-const buildTripsRangeQuery = (
+const buildTripsQuery = (
   client: SupabaseClient<Database>,
-  range: DateRange,
-  includeArchived: boolean,
-) => {
-  const startIso = range.start.toISOString()
-  const endIso = range.end.toISOString()
-
-  return client
+  includeArchived = false,
+) =>
+  client
     .from('trips')
     .select('*')
     .not('id', 'in', legacyPlaceholderFilter)
@@ -40,11 +36,40 @@ const buildTripsRangeQuery = (
         ? ['published', 'canceled', 'archived']
         : ['published', 'canceled'],
     )
+    .order('starts_at', { ascending: true })
+    .order('id', { ascending: true })
+
+export async function fetchVisibleTrips(
+  client: SupabaseClient<Database>,
+): Promise<EventRow[]> {
+  const { data, error } = await buildTripsQuery(client)
+  if (error) throw error
+  return data ?? []
+}
+
+export async function fetchOfficialTrips(
+  client: SupabaseClient<Database>,
+): Promise<EventRow[]> {
+  const { data, error } = await buildTripsQuery(client)
+    .eq('is_official', true)
+    .in('visibility', ['public', 'minimal'])
+  if (error) throw error
+  return data ?? []
+}
+
+const buildTripsRangeQuery = (
+  client: SupabaseClient<Database>,
+  range: DateRange,
+  includeArchived: boolean,
+) => {
+  const startIso = range.start.toISOString()
+  const endIso = range.end.toISOString()
+
+  return buildTripsQuery(client, includeArchived)
     .lte('starts_at', endIso)
     .or(
       `and(ends_at.is.null,starts_at.gte.${startIso}),ends_at.gte.${startIso}`,
     )
-    .order('starts_at', { ascending: true })
 }
 
 export async function fetchTripsInRange(

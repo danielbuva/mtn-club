@@ -1,6 +1,7 @@
 import { ArrowUpRight, CornerUpRight } from 'lucide-react'
 import type { Ref } from 'react'
 import type { Climb, EvidenceSource, Face } from '@/lib/kraft/types'
+import { RouteAnnotationSummary } from './route-annotation-summary'
 import { RouteContentState } from './route-content-state'
 import { RouteFactNotes } from './route-fact-notes'
 import { SourceNotes } from './source-notes'
@@ -54,6 +55,12 @@ export function ClimbDetail({
         <span className={styles.detailGrade}>{climb.grade}</span>
       </div>
       <p className={styles.climbDescription}>{climb.description}</p>
+      <RouteAnnotationSummary
+        climb={climb}
+        face={face}
+        sources={sources}
+        citeSources
+      />
       <RouteContentState climb={climb} />
       <RouteFactNotes climb={climb} sources={sources} />
       {climb.boulderAssignmentStatus === 'editorial-provisional' && (

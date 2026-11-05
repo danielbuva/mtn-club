@@ -418,6 +418,8 @@ export async function publishTripFormAction(payload: {
     }
   }
 
+  revalidatePath('/schedule')
+  revalidatePath('/calendar')
   revalidatePath('/trips')
   revalidatePath('/trips/new')
   revalidatePath('/trips/drafts')

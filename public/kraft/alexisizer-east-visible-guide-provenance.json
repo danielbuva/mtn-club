@@ -1,0 +1,99 @@
+{
+  "assetId": "alexisizer-east-visible-guide",
+  "sourceId": "mtn-club-alexisizer-east-visible-guide",
+  "generatedAt": "2026-10-01",
+  "tool": "built-in image_gen",
+  "generatedPng": "/Users/dani/.codex/generated_images/01a0f5ef-17bf-7ab2-9484-75daf8891ce7/exec-ec9e108e-b001-42d7-8aaf-ec37dbd539b3.png",
+  "pngSha256": "d39dde1c99ff63d7797c81c3df26c27b50aadbe9857caa64c55a7bd9d7d968bc",
+  "actualPrompt": "Use case: photorealistic-natural. ORIGINAL realistic outdoor field-guide raster, aspect4:3. The actual named Kraft sandstone boulder below, reconstructed from a factual synthesis of several independently inspected photographs. NO input source photograph, no imitation of photographic framing. Choose our own near-frontal slightly oblique standing-eye-level guide camera showing major depth. Full relevant climbing plane, entire crown and starts visible, rock dominant with modest breathing space. Ordinary everyday desert light, slight exposure imperfection, incidental rocky sandy ground and sparse scrub. Rough granular sandstone, irregular bedding, mottled purple-brown varnish, eroded corners, chalk smudges, not polished or uniform. No people, pads, arrows, route art, lettering, watermark. NOT an illustration, studio render, low-poly model, generic rounded rock or hero shot. Maintain substantial true three-dimensional thickness and depth; do not flatten the actual protrusions into one sloping slab. No new prominent features beyond the supplied observed facts.\nALEXISIZER east traverse: a TALL nearly UPRIGHT broad front plane with a blunt rounded irregular upper crown. Seen from the chosen nearly frontal camera, the principal traverse lip below this upright plane is roughly horizontal with only a modest rise toward the right; it must NOT climb diagonally from the ground to the crown. Under that raised overhanging lip is a thick DEEP dark LOW ROOF, set back toward a narrow grounded foot. Upper front plane looms mostly vertical above lip, with substantial height from lip to rounded crown, patchy dark varnish over pale orange sandstone and scattered vertical fracture traces. Blunt left end lower than main right crown but not a narrow sloping slab; rounded steep right ARETE/corner prominent. The large diagonal seam/crack defines the right exit region and leads into right corner near the traverse lip. Deeply worn low left end and attached smaller support stone behind it. Preserve three-dimensional overhanging thickness, upright front wall and steep right edge. Not a tilted triangular slab/longwedge, not a giant smooth ramp. Full front wall, low roof, crown and ground in frame.",
+  "generatorPixelInputs": [],
+  "references": [
+    {
+      "unit": "alexisizer",
+      "photoId": "116534427",
+      "photoUrl": "https://www.mountainproject.com/photo/116534427/danny-on-the-traverse",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/108013972_medium_1494257281.jpg?cache=1701317926",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/alexisizer-116534427-reference-only.jpg",
+      "sha256": "e92a5b6c87cd2a773216fc24ac84bbd60b3064b9d919476241229e2a5d0927cc",
+      "bytes": 142233,
+      "title": "Danny on the traverse.",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "alexisizer",
+      "photoId": "111606091",
+      "photoUrl": "https://www.mountainproject.com/photo/111606091/will-finds-a-way-to-crimp-and-send-on-the-this-classic-line",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/111606091_medium_1494296748.jpg?cache=1720209411",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/alexisizer-111606091-reference-only.jpg",
+      "sha256": "6a27b04fca620b5263d729cb67427f7ca8eb1be43d695fbb019a375fae0f261c",
+      "bytes": 119261,
+      "title": "Will finds a way to crimp and send on the this classic line.",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "alexisizer",
+      "photoId": "200358673",
+      "photoUrl": "https://www.mountainproject.com/photo/200358673/jason-blanks-on-an-alexisizer-sunset-sesh-march-2024",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/200358673_medium_1736123414.jpg?cache=1786033770",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/alexisizer-200358673-reference-only.jpg",
+      "sha256": "40b4fce430c0c49bbe336b4b55d8c8ef8c5f431bc4593a3e03d273df3cfa0d64",
+      "bytes": 60755,
+      "title": "Jason Blanks on an Alexisizer sunset sesh - March 2024",
+      "usage": "factual-only, unshipped, never model pixel input",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "alexisizer",
+      "photoId": "107409033",
+      "photoUrl": "https://www.mountainproject.com/photo/107409033/john-starr-on-alexisizer-dec-2011-wwwmattkuehlphotocom",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/107409033_medium_1494187083.jpg?cache=1701317231",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/alexisizer-107409033-reference-only.jpg",
+      "sha256": "57e3384c52e82ebc151de171dbea4e2cad62866b30f7142711b6e6a5a2a247fc",
+      "usage": "reference-only factual inspection; never model pixel input; not distributed",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    },
+    {
+      "unit": "alexisizer",
+      "photoId": "108303675",
+      "photoUrl": "https://www.mountainproject.com/photo/108303675/the-topout-of-alexisizer-slopey-traverse",
+      "imageUrl": "https://mountainproject.com/assets/photos/climb/108303675_medium_1494275021.jpg?cache=1701318183",
+      "path": ".tmp/kraft-gauntlet/visible-batch-03/alexisizer-108303675-reference-only.jpg",
+      "sha256": "7f4e1fddf7a70e909ff8fe326fd4afcf45e559f57588f9356eeee32a08401fdf",
+      "usage": "reference-only factual inspection; never model pixel input; not distributed",
+      "generatorPixelInput": false,
+      "shippedPixels": false
+    }
+  ],
+  "camera": "Original near-frontal guide viewpoint chosen independently, rather than reproducing a reference composition.",
+  "scope": "Only the pictured plane and source-supported general line regions; alternate sides are excluded.",
+  "unresolved": [
+    "Fine surface detail is illustrative; individual holds are not calibrated.",
+    "Field conditions and human field verification pending."
+  ],
+  "review": {
+    "status": "geometry review",
+    "critic": "Independent batch output critic",
+    "date": "2026-10-01",
+    "receipt": ".tmp/kraft-gauntlet/immersive-visible-batch-critic/initial-raster-receipt.json",
+    "decision": "Macro geometry accepted; rendered guide and corridor batch review pending."
+  },
+  "shippedAsset": {
+    "src": "/kraft/alexisizer-east-visible-guide.webp",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 464500,
+    "sha256": "786b1ff1236c809f0894efc078a07149dc719b208eea3d49c31302ee6fdc16d2",
+    "conversion": "Sharp WebP quality88 effort6; native dimensions, no crop"
+  },
+  "productionRights": {
+    "licenseId": "MTN-Club-original",
+    "owner": "MTN Club",
+    "note": "User-directed original raster creation. Reference-only third-party photographs are not input pixels or distributable assets."
+  }
+}

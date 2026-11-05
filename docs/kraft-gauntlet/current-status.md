@@ -5,7 +5,7 @@ Updated 2026-10-01. The existing goal continues on
 image-direction correction uses Pearl to establish the realistic, independently
 composed face-image standard before applying it across Kraft.
 
-Counts below describe the `2026-10-01-catalog-7` edition. Source-unit
+Counts below describe the `2026-10-01-catalog-8` edition. Source-unit
 identities are not a verified physical-rock
 count. TheTopo records remain separately tracked pending identity/source-use
 review and cannot simply be added as unique rocks or problems.
@@ -17,8 +17,8 @@ review and cannot simply be added as unique rocks or problems.
 | Known MP/OpenBeta route identities | 383 (370 MP + 13 unresolved OpenBeta); 198 TheTopo research records remain unmerged |
 | Imported runtime routes | 383: 370 exact MP IDs and 13 distinct native OpenBeta IDs |
 | Mapped runtime boulders | All 78 selected source points/centroids; 10 low-confidence partial aerial surface candidates, no verified complete footprints |
-| Boulders with face assets | 1 |
-| Routes with face assignments | 121: 113 source-backed, 8 provisional; 75 face/view groups on 36 catalogs |
+| Boulders with face assets | 3: Pearl, Split’s central chimney and the observed Warm-up Main plane; 10 routes have image context |
+| Routes with face assignments | 136: 116 source-backed, 20 provisional; 80 face/view groups on 38 catalogs |
 | Routes with authored overlays | 2 independently reviewed moderate corridors: The Pearl and Pearl Necklace |
 | Routes without an authored topo | 381; source evidence: 189 moderate, 65 face-only, 129 unresolved; most imagery and image-space corridors remain unfinished |
 | Routes hidden because of missing images, faces, lines or field verification | 0 |
@@ -37,8 +37,10 @@ route records. The expanded map passed the 78-record source/extent audit; render
 touch-center correction and regression results are recorded in the map review.
 
 Every route exposes identity, grade, parent, face, topo and image independently.
-The latest batch adds 40 qualified face/view memberships, preserving all original
-route and parent facts; five relative Monkey memberships remain provisional.
+The current batch adds 15 qualified face/view memberships and two scoped raster
+assets. Three Warm-up memberships establish source bearings; eight Potato Chip
+and four relative Warm-up memberships remain provisional. All original route and
+parent facts remain intact. The preceding batch added 40 qualified memberships.
 The previous batch added 64 explicit source-backed face assignments and ten candidate
 surface outlines with low spatial confidence. Corroborated paths support precise corridors;
 documented starts, general direction/features and finishes support broader
@@ -58,10 +60,19 @@ BLM reference and factual observations from five independently photographed view
 A fresh raster critic accepted recognizable major geometry and a better guide
 camera. The two moderate route corridors are authored in the new image coordinates;
 The rendered phone/desktop topo review and final real offline package passed.
-One thin solid route path stays fixed in width while numbers shrink, fade and
-disappear during zoom; button zoom retains the current rock detail. Exact
+The two Pearl routes now use distinct left/right start nodes, retaining their
+non-matched rules. Regional placement is approximate, especially Necklace’s
+unidentified low holds. One thin solid route path stays fixed in width while
+nodes shrink, fade and disappear during zoom; button zoom retains the current rock detail. Exact
 holds, current conditions and human/field verification remain unclaimed. Reference-only
 photographs are absent from the runtime and download.
+
+Automated exact-source reconciliation classified 97 documentary starts and two
+same-climb dyno/static alternatives (Jenna’s Jewelry and Caliman). The latter
+remain unlocated, and Caliman retains its source-reported access prohibition.
+Missing image-space correspondence does not suppress the sourced rules or
+invent hand/target positions. Separate output and offline reviews are required
+for this changed edition; earlier catalog-7 receipts remain historical.
 
 Execution order:
 

@@ -28,16 +28,16 @@ export function TripAttendeesPreview({
   return (
     <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 md:p-5">
       <h2 className="text-lg font-semibold">Attendees</h2>
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="relative flex items-center gap-2 text-sm text-muted-foreground">
         <p>{totalCount} confirmed.</p>
-        <details className="relative">
+        <details className="shrink-0">
           <summary
             aria-label="About attendee visibility"
             className="flex size-9 cursor-pointer list-none items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 [&::-webkit-details-marker]:hidden"
           >
             <Info className="size-4" aria-hidden="true" />
           </summary>
-          <p className="absolute right-0 top-full z-10 w-56 rounded-lg border bg-popover p-3 text-popover-foreground shadow-md">
+          <p className="absolute left-0 top-full z-10 w-56 max-w-full rounded-lg border bg-popover p-3 text-popover-foreground shadow-md">
             Only people who opted in are shown.
             {!canView &&
               ' Participant names are visible to confirmed participants and organizers.'}

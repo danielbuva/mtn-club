@@ -29,18 +29,18 @@ test('treats duplicate schedule records as one event', () => {
   const published = makeTrip({
     id: 'published',
     title: 'Camp and Climb in Joshua Tree National Park',
-    dateStart: '2026-10-16',
-    dateEnd: '2026-10-18',
+    dateStart: '2026-10-23',
+    dateEnd: '2026-10-25',
   })
   const database = makeTrip({
     id: 'database',
     title: 'Camp and Climb in Joshua Tree National Park',
-    dateStart: '2026-10-16',
-    dateEnd: '2026-10-19',
+    dateStart: '2026-10-23',
+    dateEnd: '2026-10-26',
   })
 
   assert.equal(
-    getSingleTripForDay('2026-10-16', [published, database]),
+    getSingleTripForDay('2026-10-23', [published, database]),
     database,
   )
 })

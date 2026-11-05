@@ -31,12 +31,25 @@ preserves the current image center after panning, so 3× reveals central sandsto
 detail rather than sky. Mouse/touch and keyboard selection, display modes and
 reset passed; the final real offline package also passed those behaviors.
 
-There are 121 assigned routes in 75 face/view groups. The remaining 381 routes
+Catalog 8 has 136 assigned routes in 80 face/view groups. The remaining 381 routes
 have no authored line and remain fully visible. The 1448 × 1086 original Pearl
 WebP is 531,292 bytes; its provenance preserves the exact prompt, lawful pixel
 inputs, five factual-only photo references, independently chosen camera and hashes.
-This remains the only available face asset. Its southeast view does not verify
-other sides or supply route evidence for unrelated climbs.
+Its southeast view does not verify other sides or supply route evidence for
+unrelated climbs. Split’s chimney and the observed Warm-up Main plane now have
+scoped original field-style raster context. No route line or hand placement is
+inferred from either generated image.
+
+The current start-rule batch records 97 starts from exact primary-source facts
+and two documented same-climb dyno/static alternatives. Missing correspondence
+keeps those alternatives unlocated. Historical matched-start comments do not
+override the current unmatched Pearl/Necklace rules. Both Pearl SVGs now show
+distinct L/R hand nodes and a small “~ start” label instead of a route number.
+Standing placement preserves the sourced left-above-right setup; Necklace’s two
+nodes illustrate the documented lower start region, with individual low holds
+and horizontal spacing unverified. Native image binding, source identity and
+reviewed precision remain separate from the route path. Fresh production output
+and offline checks for these changed nodes are pending.
 
 Cube's vector study and first realistic raster failed independent geometry
 criticism. The raster looked photographic but had squat proportions, a deep

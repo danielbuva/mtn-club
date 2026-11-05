@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { kraftGuide } from '../lib/kraft/data.ts'
 import { applySourceViewAssignments } from '../lib/kraft/source-view-assignments.ts'
+import { visibleExistingCorridorFaces } from '../lib/kraft/visible-existing-corridors.ts'
 
 const expectedRouteIds = [
   '124045669',
@@ -44,6 +45,21 @@ const expectedRouteIds = [
   '107430960',
   '125692296',
   '200632114',
+  '106650925',
+  '106650919',
+  '113679909',
+  '116680131',
+  '114236573',
+  '106650933',
+  '108439752',
+  '118057327',
+  '106657480',
+  '107430241',
+  '107396283',
+  '107116919',
+  '107432448',
+  '122054608',
+  '125574115',
 ]
 const provisionalRouteIds = new Set([
   '114126068',
@@ -51,6 +67,18 @@ const provisionalRouteIds = new Set([
   '114126042',
   '108731202',
   '121742287',
+  '106650925',
+  '106650919',
+  '113679909',
+  '116680131',
+  '114236573',
+  '106650933',
+  '108439752',
+  '118057327',
+  '107116919',
+  '107432448',
+  '122054608',
+  '125574115',
 ])
 const views = kraftGuide.boulders.flatMap(unit =>
   unit.faces
@@ -61,6 +89,17 @@ const records = views.flatMap(({ unit, face }) =>
   face.sourceViewObservations.map(observation => ({ unit, face, observation })),
 )
 const sources = new Map(kraftGuide.sources.map(source => [source.id, source]))
+const warmImageViews = new Set([
+  'mp-view-106657477-main-south',
+  'mp-view-106657477-main-southwest',
+  'mp-view-106657477-fluffer-donkey-relative-region',
+])
+const donkeyFace = visibleExistingCorridorFaces.find(
+  face => face.mpParentId === '106657477',
+)
+const donkeyCorridor = donkeyFace.corridors.find(
+  corridor => corridor.mpRouteId === '107396283',
+)
 
 function assertExactEvidence(unit, face, climb, evidence) {
   const owner = unit.climbs.find(
@@ -85,10 +124,10 @@ function assertExactEvidence(unit, face, climb, evidence) {
   assert.ok(climb.topoEvidence.sourceIds.includes(evidence.sourceId))
 }
 
-test('the actual source-view batch retains exactly 40 routes in 21 qualified views', () => {
-  assert.equal(views.length, 21)
-  assert.equal(records.length, 40)
-  assert.equal(new Set(records.map(row => row.observation.mpRouteId)).size, 40)
+test('the actual source-view batches retain exactly 55 routes in 25 qualified views', () => {
+  assert.equal(views.length, 25)
+  assert.equal(records.length, 55)
+  assert.equal(new Set(records.map(row => row.observation.mpRouteId)).size, 55)
   assert.deepEqual(
     records.map(row => row.observation.mpRouteId).sort(),
     [...expectedRouteIds].sort(),
@@ -136,25 +175,56 @@ test('the actual source-view batch retains exactly 40 routes in 21 qualified vie
         assert.equal(parent.parentUnitId, unit.id)
     assert.equal(climb.contentDimensions.parent, 'verified')
     assert.equal(climb.status, 'source-observation')
-    assert.equal(face.image.status, 'missing')
+    const hasContextImage = warmImageViews.has(face.id)
+    assert.equal(face.image.status, hasContextImage ? 'available' : 'missing')
     assert.equal(face.review, undefined)
-    assert.equal(climb.contentDimensions.image, 'missing')
-    assert.equal(climb.contentDimensions.topo, 'unavailable')
+    assert.equal(
+      climb.contentDimensions.image,
+      hasContextImage ? 'reconstruction' : 'missing',
+    )
+    const hasCorridor = observation.mpRouteId === donkeyCorridor.mpRouteId
+    assert.equal(
+      climb.contentDimensions.topo,
+      hasCorridor ? 'corridor' : 'unavailable',
+    )
     assert.notEqual(climb.topoEvidence.confidenceLevel, 'high')
     assert.deepEqual(
       climb.geometry.map(({ status, faceId }) => ({ status, faceId })),
-      [{ status: 'missing', faceId: face.id }],
+      [{ status: hasCorridor ? 'authored' : 'missing', faceId: face.id }],
     )
-    assert.ok(climb.geometry[0].reason.trim())
-    assert.ok(face.photographNote.includes(observation.sourceFact))
-    assert.ok(face.photographNote.includes(observation.sourceId))
+    if (hasCorridor) {
+      const geometry = climb.geometry[0]
+      assert.equal(face.id, donkeyFace.faceId)
+      assert.equal(geometry.path, donkeyCorridor.path)
+      assert.deepEqual(geometry.labelPoint, donkeyCorridor.entry)
+      assert.equal(geometry.confidenceLevel, 'moderate')
+      assert.equal(climb.topoEvidence.drawingPolicy, 'general-corridor')
+      assert.deepEqual(geometry.sourceIds, [
+        observation.sourceId,
+        ...donkeyFace.photoIds.map(id => `mp-visible-photo-${id}`),
+      ])
+      assert.equal(geometry.routePathReview, undefined)
+    } else assert.ok(climb.geometry[0].reason.trim())
+    if (face.id === donkeyFace.faceId) {
+      assert.match(
+        face.photographNote,
+        /independently authored broad route corridors/,
+      )
+      assert.match(face.photographNote, /individual hand holds are not mapped/)
+    } else {
+      assert.ok(face.photographNote.includes(observation.sourceFact))
+      assert.ok(face.photographNote.includes(observation.sourceId))
+    }
     assert.match(observation.note, /source-qualified catalog view/)
   }
 })
 
 test('relative Monkey regions and Black Warm-up rear views preserve compass and parent uncertainty', () => {
   for (const { unit, face, observation } of records) {
-    if (provisionalRouteIds.has(observation.mpRouteId)) {
+    if (
+      observation.mpParentId === '105937674' &&
+      provisionalRouteIds.has(observation.mpRouteId)
+    ) {
       assert.equal(face.orientation, 'unknown')
       assert.equal(face.groupingStatus, 'editorial-provisional')
       assert.equal(observation.relationEvidence.length, 2)

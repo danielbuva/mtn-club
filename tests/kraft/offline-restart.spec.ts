@@ -83,7 +83,10 @@ test('the saved package survives a complete browser process restart while offlin
     await expect(climbDetails).toHaveCount(1)
     await expect(climbDetails).toBeHidden()
     await dialog
-      .getByLabel('View Monkey Bars climb details', { exact: true })
+      .getByRole('button', {
+        name: 'Open Monkey Bars full climb record',
+        exact: true,
+      })
       .click()
     await expect(climbDetails).toBeVisible()
     await expect(climbDetails).toContainText(

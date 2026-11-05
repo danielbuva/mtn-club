@@ -36,8 +36,17 @@ function exactEvidence(
   )
   if (
     !climb ||
+    climb.sourceIdentity?.identityStatus !== 'source-linked' ||
     climb.boulderAssignmentStatus !== 'source-backed' ||
     !parents.length ||
+    !parents.some(
+      parent =>
+        parent.identityStatus === 'source-linked' &&
+        parent.sourceDependency === 'primary-source-page' &&
+        parent.sourceId === observation?.sourceId &&
+        parent.parentSourceId === unit.coverage?.sourceId &&
+        parent.parentUnitId === unit.id,
+    ) ||
     parents.some(
       parent =>
         parent.identityStatus === 'source-linked' &&
