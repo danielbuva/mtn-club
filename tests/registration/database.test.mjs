@@ -23,6 +23,16 @@ function sql(query) {
 }
 before(() => {
   database = createLocalDatabase((name, db) => {
+    if (name === '20261105040001_atomic_account_merge.sql') {
+      // This fixed container runs Auth without Storage. Minimal metadata tables
+      // exercise the account merge's Storage ownership and stale-session guards.
+      databaseSql(
+        `create schema if not exists storage;
+        create table if not exists storage.buckets(id text primary key,name text not null,owner uuid,owner_id text);
+        create table if not exists storage.objects(id uuid primary key,bucket_id text references storage.buckets(id),name text,owner uuid,owner_id text);`,
+        db,
+      )
+    }
     if (name !== '20261105010002_restrict_leaders_trip_reads.sql') return
     databaseSql(
       `insert into auth.users(id,email) values('${legacyVisibilityOwner}','${legacyVisibilityOwner}@example.test');
@@ -65,6 +75,25 @@ const register = (trip, user, id = randomUUID()) =>
     user,
     `select public.registration_command('${trip}','register','${id}',0,'{"formVersion":2,"answers":{}}')`,
   )
+
+for (const [name, fixtureName] of [
+  [
+    'private accounts and membership access require their own capabilities',
+    'admin-rls-capabilities.sql',
+  ],
+  [
+    'legacy content writes and comment moderation honor resource scopes',
+    'admin-rls-resource-scopes.sql',
+  ],
+  [
+    'legacy payment RPC requires configured payment review capability',
+    'admin-rls-legacy-payment.sql',
+  ],
+]) {
+  test(name, () =>
+    sql(readFileSync(new URL(`../${fixtureName}`, import.meta.url), 'utf8')),
+  )
+}
 
 for (const [name, fixtureName] of [
   [
