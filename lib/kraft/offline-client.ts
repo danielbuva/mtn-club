@@ -7,7 +7,7 @@ import {
 } from './offline-types'
 
 const RECEIPT_KEY = 'mtn-kraft-offline-receipt-v1'
-let workerPromise: Promise<ServiceWorker> | undefined
+let registrationPromise: Promise<void> | undefined
 
 export function offlineSupported(): boolean {
   return (
@@ -15,7 +15,7 @@ export function offlineSupported(): boolean {
   )
 }
 
-async function registerWorker(): Promise<ServiceWorker> {
+async function registerWorker(): Promise<void> {
   const registration = await navigator.serviceWorker.register(
     '/guide/kraft-sw.js',
     { scope: '/guide/', updateViaCache: 'none' },
@@ -24,7 +24,7 @@ async function registerWorker(): Promise<ServiceWorker> {
     registration.installing ?? registration.waiting ?? registration.active
   if (!worker)
     throw new Error('Offline storage could not start. Refresh and retry.')
-  if (worker.state === 'activated') return worker
+  if (worker.state === 'activated') return
   return new Promise((resolve, reject) => {
     const timeout = window.setTimeout(() => {
       worker.removeEventListener('statechange', onState)
@@ -36,7 +36,7 @@ async function registerWorker(): Promise<ServiceWorker> {
       if (worker?.state === 'activated') {
         window.clearTimeout(timeout)
         worker.removeEventListener('statechange', onState)
-        resolve(worker)
+        resolve()
       } else if (worker?.state === 'redundant') {
         window.clearTimeout(timeout)
         worker.removeEventListener('statechange', onState)
@@ -49,11 +49,18 @@ async function registerWorker(): Promise<ServiceWorker> {
 }
 
 async function getWorker(): Promise<ServiceWorker> {
-  workerPromise ??= registerWorker().catch(error => {
-    workerPromise = undefined
+  registrationPromise ??= registerWorker().catch(error => {
+    registrationPromise = undefined
     throw error
   })
-  return workerPromise
+  await registrationPromise
+  // Updates claim open tabs immediately, so never retain a particular worker.
+  const worker =
+    navigator.serviceWorker.controller ??
+    (await navigator.serviceWorker.ready).active
+  if (!worker)
+    throw new Error('Offline storage could not start. Refresh and retry.')
+  return worker
 }
 
 export async function sendOfflineCommand(
@@ -66,7 +73,9 @@ export async function sendOfflineCommand(
     let timeout: number
     function close() {
       window.clearTimeout(timeout)
+      channel.port1.onmessage = null
       channel.port1.close()
+      channel.port2.close()
     }
     function resetTimeout() {
       window.clearTimeout(timeout)
@@ -90,7 +99,12 @@ export async function sendOfflineCommand(
       }
     }
     resetTimeout()
-    worker.postMessage(command, [channel.port2])
+    try {
+      worker.postMessage(command, [channel.port2])
+    } catch (error) {
+      close()
+      reject(error)
+    }
   })
 }
 
