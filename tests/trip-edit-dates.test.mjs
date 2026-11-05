@@ -85,7 +85,13 @@ function actionFixture({ allowed = true, saved = true } = {}) {
   const client = {
     auth: { getUser: async () => ({ data: { user: { id: 'admin' } } }) },
     async rpc(name, payload) {
-      if (name === 'has_trip_admin_capability') return { data: allowed }
+      if (name === 'can_manage_trip') {
+        assert.deepEqual(payload, {
+          p_trip_id: '771c7bce-afc2-44de-acf5-5b5268ff1bbb',
+          p_uid: 'admin',
+        })
+        return { data: allowed }
+      }
       assert.equal(name, 'save_trip_detail_edits')
       writes.push({
         command: name,
