@@ -14,9 +14,10 @@ import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { ActivityHistoryLoading } from '@/components/admin/loading/activity-history'
 import { Badge } from '@/components/ui/badge'
 import type { ActivitySearchParams } from '@/lib/admin/activity-filters'
+import { analyticsTotalsSchema } from '@/lib/admin/aggregate-schemas'
 import { requireAdminCapability } from '@/lib/admin/auth'
-import { buildMembershipAccessSnapshot } from '@/lib/admin/membership-access'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 
 const ranges = ['term', '30', '90', 'all'] as const
 type AnalyticsRange = (typeof ranges)[number]
@@ -44,133 +45,44 @@ async function AdminAnalyticsPageContent({
   const params = await searchParams
   const rawRange = typeof params.range === 'string' ? params.range : undefined
   const range = isRange(rawRange) ? rawRange : 'term'
-  const admin = createAdminClient()
-  const activeTerm = await admin
+  const supabase = await createClient()
+  const activeTerm = await createAdminClient()
     .from('club_terms')
     .select('name, starts_on, ends_on')
     .eq('is_active', true)
     .maybeSingle()
+  if (activeTerm.error) throw activeTerm.error
   const rangeStart = getRangeStart(range, activeTerm.data?.starts_on ?? null)
 
-  let applicationsQuery = admin
-    .from('membership_applications')
-    .select('created_at', { count: 'exact' })
-  let paymentsQuery = admin
-    .from('membership_zelle_payments')
-    .select('amount_cents, reviewed_at')
-    .eq('status', 'confirmed')
-  let tripsQuery = admin
-    .from('trips')
-    .select('lifecycle_status, activity_tags, starts_at')
-  let mailingQuery = admin
-    .from('mailing_list_subscriptions')
-    .select('subscribed, subscribed_at, unsubscribed_at')
-
-  if (rangeStart) {
-    applicationsQuery = applicationsQuery.gte('created_at', rangeStart)
-    paymentsQuery = paymentsQuery.gte('reviewed_at', rangeStart)
-    tripsQuery = tripsQuery.gte('starts_at', rangeStart)
-    mailingQuery = mailingQuery.or(
-      `subscribed_at.gte.${rangeStart},unsubscribed_at.gte.${rangeStart}`,
-    )
-  }
-
-  const [
-    authUsers,
-    applications,
-    payments,
-    entitlements,
-    overrides,
-    restrictions,
-    trips,
-    mailing,
-  ] = await Promise.all([
-    admin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
-    applicationsQuery,
-    paymentsQuery,
-    admin
-      .from('membership_entitlements')
-      .select(
-        'user_id, zelle_payment_id, payment_id, starts_at, ends_at, revoked_at',
-      ),
-    admin
-      .from('membership_access_overrides')
-      .select('user_id, starts_at, ends_at, revoked_at'),
-    admin
-      .from('membership_account_restrictions')
-      .select('user_id, restriction'),
-    tripsQuery,
-    mailingQuery,
-  ])
-
-  if (authUsers.error) throw authUsers.error
-  if (applications.error) throw applications.error
-  if (payments.error) throw payments.error
-  if (entitlements.error) throw entitlements.error
-  if (overrides.error) throw overrides.error
-  if (restrictions.error) throw restrictions.error
-  if (trips.error) throw trips.error
-  if (mailing.error) throw mailing.error
-
-  const confirmedRevenue = (payments.data ?? []).reduce(
-    (total, payment) => total + payment.amount_cents,
-    0,
-  )
-  const access = buildMembershipAccessSnapshot({
-    entitlements: entitlements.data ?? [],
-    overrides: overrides.data ?? [],
-    restrictions: restrictions.data ?? [],
-    now: new Date().toISOString(),
+  const { data, error } = await supabase.rpc('get_admin_analytics_totals', {
+    p_range_start: rangeStart ?? undefined,
   })
-  const publishedTrips = (trips.data ?? []).filter(
-    trip => trip.lifecycle_status === 'published',
-  )
+  if (error) throw error
+  const totals = analyticsTotalsSchema.parse(data)
   const tripStates = [
-    ['Published', publishedTrips.length],
-    [
-      'Canceled',
-      (trips.data ?? []).filter(trip => trip.lifecycle_status === 'canceled')
-        .length,
-    ],
-    [
-      'Archived',
-      (trips.data ?? []).filter(trip => trip.lifecycle_status === 'archived')
-        .length,
-    ],
+    ['Published', totals.publishedTrips],
+    ['Canceled', totals.canceledTrips],
+    ['Archived', totals.archivedTrips],
   ] as const
-  const tripActivities = Array.from(
-    new Set((trips.data ?? []).flatMap(trip => trip.activity_tags)),
-  )
-    .map(activity => ({
-      activity,
-      count: (trips.data ?? []).filter(trip =>
-        trip.activity_tags.includes(activity),
-      ).length,
-    }))
-    .sort((left, right) => right.count - left.count)
-  const mailingOptIns = (mailing.data ?? []).filter(
-    item => item.subscribed,
-  ).length
-  const mailingOptOuts = (mailing.data ?? []).filter(
-    item => !item.subscribed,
-  ).length
+  const tripActivities = totals.tripActivities
+  const mailingOptOuts = totals.mailingOptOuts
   const stats = [
     {
       label: 'Accounts',
-      value: authUsers.data.users.length,
+      value: totals.accounts,
       note: 'Current login identities',
       icon: Users,
     },
     {
       label: 'Applications',
-      value: applications.count ?? 0,
+      value: totals.applications,
       note: 'Submitted in this range',
       icon: UserRoundPlus,
     },
     {
       label: 'Confirmed dues',
-      value: (payments.data ?? []).length,
-      note: (confirmedRevenue / 100).toLocaleString('en-US', {
+      value: totals.confirmedDues,
+      note: (totals.confirmedRevenue / 100).toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
       }),
@@ -178,19 +90,19 @@ async function AdminAnalyticsPageContent({
     },
     {
       label: 'Active members',
-      value: access.activeUserIds.size,
-      note: `${access.paidUserIds.size} payment-backed`,
+      value: totals.activeMembers,
+      note: `${totals.paidMembers} payment-backed`,
       icon: Users,
     },
     {
       label: 'Trips',
-      value: (trips.data ?? []).length,
-      note: `${publishedTrips.length} published`,
+      value: totals.trips,
+      note: `${totals.publishedTrips} published`,
       icon: Mountain,
     },
     {
       label: 'Mailing opt-ins',
-      value: mailingOptIns,
+      value: totals.mailingOptIns,
       note: `${mailingOptOuts} opt-out${mailingOptOuts === 1 ? '' : 's'} in range`,
       icon: MailCheck,
     },

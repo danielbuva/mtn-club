@@ -154,6 +154,9 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
 })
+test('admin aggregates count beyond API row limits and enforce capabilities', () => {
+  sql(readFileSync(new URL('../admin-aggregates.sql', import.meta.url), 'utf8'))
+})
 test('draft publication is idempotent and rolls back every write on a late failure', () => {
   sql(readFileSync(new URL('../trip-publication.sql', import.meta.url), 'utf8'))
 })

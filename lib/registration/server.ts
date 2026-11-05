@@ -1,6 +1,7 @@
 import 'server-only'
 import { z } from 'zod'
 import { rosterSchema, snapshotSchema } from '@/lib/registration/schema'
+import { fetchRegistrationSummaryBatches } from '@/lib/registration/summary-batches'
 import { createClient } from '@/lib/supabase/server'
 
 export async function getRegistration(tripId: string) {
@@ -37,23 +38,24 @@ export async function getMyRegistrations() {
 export async function getRegistrationSummaries(tripIds: string[]) {
   if (!tripIds.length) return []
   const db = await createClient()
-  const { data, error } = await db.rpc('get_registration_summaries', {
-    p_trip_ids: tripIds,
+  const summariesSchema = z.array(
+    snapshotSchema.pick({
+      tripId: true,
+      confirmedCount: true,
+      reservedCount: true,
+      availability: true,
+      state: true,
+      requirements: true,
+    }),
+  )
+  return fetchRegistrationSummaryBatches(tripIds, async ids => {
+    const { data, error } = await db.rpc('get_registration_summaries', {
+      p_trip_ids: ids,
+    })
+    if (error)
+      throw new Error(
+        'Registration counts are temporarily unavailable. Please refresh.',
+      )
+    return summariesSchema.parse(data)
   })
-  if (error)
-    throw new Error(
-      'Registration counts are temporarily unavailable. Please refresh.',
-    )
-  return z
-    .array(
-      snapshotSchema.pick({
-        tripId: true,
-        confirmedCount: true,
-        reservedCount: true,
-        availability: true,
-        state: true,
-        requirements: true,
-      }),
-    )
-    .parse(data)
 }
