@@ -141,6 +141,51 @@ test('transactional workflow, requirements, waiver evidence, and merge SQL', () 
   ])
     sql(readFileSync(new URL(`../${name}`, import.meta.url), 'utf8'))
 })
+test('draft publication is idempotent and rolls back every write on a late failure', () => {
+  sql(readFileSync(new URL('../trip-publication.sql', import.meta.url), 'utf8'))
+})
+test('simultaneous publication of one draft creates one fully configured trip', async () => {
+  const f = fixture(20)
+  const draft = randomUUID()
+  const title = `Publication race ${draft}`
+  sql(`insert into public.profiles(user_id,display_name) values('${f.owner}','Publisher') on conflict do nothing;
+    insert into public.trip_drafts(id,created_by,title) values('${draft}','${f.owner}',${literal(title)})`)
+  const payload =
+    sql(`select jsonb_build_object('title',${literal(title)},'starts_at',now()+interval '2 days',
+    'ends_at',now()+interval '3 days','location_public','Trailhead','visibility','members')`)
+  const command = `select to_jsonb(public.publish_trip_draft('${draft}',${literal(payload)}::jsonb,
+    'Private meetup','{}','{}',array['Uneven ground.'],array['hiking'],false,true))`
+  const ids = await Promise.all(
+    Array.from({ length: 5 }, () => asUser(f.owner, command)),
+  )
+  assert.equal(new Set(ids).size, 1)
+  assert.equal(
+    sql(`select count(*) from public.trips where title=${literal(title)}`),
+    '1',
+  )
+  assert.equal(
+    sql(`select count(*) from public.trip_drafts where id='${draft}'`),
+    '0',
+  )
+  assert.equal(
+    sql(
+      `select count(*) from public.registration_risk_disclosures where trip_id='${ids[0]}'`,
+    ),
+    '1',
+  )
+  assert.equal(
+    sql(
+      `select collect_transportation from public.trip_registration_settings where trip_id='${ids[0]}'`,
+    ),
+    't',
+  )
+})
+test('trip edits validate first and replace assignments atomically', () => {
+  sql(readFileSync(new URL('../trip-write-edits.sql', import.meta.url), 'utf8'))
+})
+test('trip authorization follows the current actor and preserves system writes', () => {
+  sql(readFileSync(new URL('../trip-write-actor.sql', import.meta.url), 'utf8'))
+})
 test('twelve simultaneous registrations reserve exactly one seat and expose only scoped reads', async () => {
   const f = fixture()
   const results = await Promise.all(f.users.map(user => register(f.trip, user)))

@@ -83,9 +83,23 @@ function actionFixture({ allowed = true, saved = true } = {}) {
   const revalidated = []
   const client = {
     auth: { getUser: async () => ({ data: { user: { id: 'admin' } } }) },
-    rpc: async () => ({ data: allowed }),
+    async rpc(name, payload) {
+      if (name === 'has_trip_admin_capability') return { data: allowed }
+      assert.equal(name, 'save_trip_detail_edits')
+      writes.push({
+        command: name,
+        payload: payload.p_data,
+        meetup: payload.p_meetup_point,
+      })
+      return saved
+        ? { data: payload.p_trip_id, error: null }
+        : {
+            data: null,
+            error: new Error('Trip not found. Refresh and try again.'),
+          }
+    },
     from(table) {
-      let updating = false
+      assert.equal(table, 'trips')
       const builder = {
         select() {
           return builder
@@ -93,20 +107,8 @@ function actionFixture({ allowed = true, saved = true } = {}) {
         eq() {
           return builder
         },
-        update(payload) {
-          updating = true
-          writes.push({ table, payload })
-          return builder
-        },
         async single() {
           return { data: trip }
-        },
-        async maybeSingle() {
-          return { data: updating && saved ? { id: 'trip' } : null }
-        },
-        async upsert(payload) {
-          writes.push({ table, payload })
-          return { error: null }
         },
       }
       return builder
@@ -121,7 +123,6 @@ function actionFixture({ allowed = true, saved = true } = {}) {
     },
     zod: { z },
     '@/lib/events/activity-tags': activityTags,
-    '@/lib/events/host-assignments': {},
     '@/lib/events/trip-edit-dates': { resolveTripEditDates },
     '@/lib/supabase/server': { createClient: async () => client },
   })
@@ -140,7 +141,9 @@ test('full save action sends timezone-correct instants without querying membersh
   assert.equal((await f.save()).ok, true)
   assert.equal(f.writes[0].payload.starts_at, trip.starts_at)
   assert.equal(f.writes[0].payload.ends_at, trip.ends_at)
-  assert.equal(f.writes[1].table, 'trip_private')
+  assert.equal(f.writes[0].command, 'save_trip_detail_edits')
+  assert.equal(f.writes[0].meetup, null)
+  assert.equal(f.writes.length, 1)
 })
 test('saving an event refreshes the official schedule, calendar, and event pages', async () => {
   const f = actionFixture()
@@ -158,10 +161,18 @@ test('date conflicts and permission failures cause no partial writes', async () 
   assert.equal((await denied.save()).ok, false)
   assert.deepEqual(denied.writes, [])
 })
+test('invalid assignment payloads are rejected before the write command', async () => {
+  const f = actionFixture()
+  f.values.set('publicHostIds', '["not-a-uuid"]')
+  await assert.rejects(f.save())
+  assert.deepEqual(f.writes, [])
+  assert.deepEqual(f.revalidated, [])
+})
 test('a row hidden by access rules is not reported as saved', async () => {
   const f = actionFixture({ saved: false })
-  assert.equal((await f.save()).ok, false)
+  await assert.rejects(f.save(), /Trip not found/)
   assert.equal(f.writes.length, 1)
+  assert.deepEqual(f.revalidated, [])
 })
 
 test('setting a start time clears TBA while unrelated edits preserve it', () => {

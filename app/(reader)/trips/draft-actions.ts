@@ -8,10 +8,8 @@ import {
   toDraftRowInput,
   toEventFormValuesFromDraft,
 } from '@/lib/events/drafts'
-import { buildHostAssignments } from '@/lib/events/host-assignments'
 import { type EventFormValues, eventFormSchema } from '@/lib/events/schema'
 import { riskStatements } from '@/lib/registration/risk-activities'
-import { rosterSchema } from '@/lib/registration/schema'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
 
@@ -234,12 +232,25 @@ export async function deleteTripDraftAction(draftId: string) {
 export async function publishTripFormAction(payload: {
   values: EventFormValues
   isNoLimitEnabled: boolean
-  sourceDraftId?: string | null
+  sourceDraftId: string
   publicHostIds?: string[]
   leaderUserIds?: string[]
 }) {
-  const { supabase, userId, canChooseOfficial, canManageTags } =
+  const { supabase, canChooseOfficial, canManageTags } =
     await getViewerContext()
+  const sourceDraftId = tripDraftIdSchema.parse(payload.sourceDraftId)
+  const { data: publishedTripId, error: publicationError } = await supabase.rpc(
+    'get_published_trip_for_draft',
+    { p_draft_id: sourceDraftId },
+  )
+  if (publicationError) throw publicationError
+  if (publishedTripId) {
+    return {
+      tripId: publishedTripId,
+      configurationPending: false,
+      informedRisksPending: false,
+    }
+  }
 
   const parsed = eventFormSchema.safeParse(payload.values)
   if (!parsed.success) {
@@ -298,17 +309,7 @@ export async function publishTripFormAction(payload: {
   if (!startsAt || (!parsed.data.noEndTime && !endsAt))
     throw new Error('Enter valid trip dates.')
 
-  // Avoid INSERT ... RETURNING: row-based visibility helpers cannot see the
-  // new trip during the insertion statement. Authorization still uses INSERT RLS.
-  const createdTrip = { id: crypto.randomUUID() }
-  const hostAssignments = await buildHostAssignments(
-    supabase,
-    createdTrip.id,
-    publicHostIds,
-  )
-  const tripInsert: Database['public']['Tables']['trips']['Insert'] = {
-    id: createdTrip.id,
-    created_by: userId,
+  const tripInsert = {
     title: parsed.data.title.trim(),
     event_kind: parsed.data.kind,
     registration_opens_at: eventDateTimeToIso(
@@ -348,130 +349,34 @@ export async function publishTripFormAction(payload: {
     capacity: maxParticipants,
     is_official: isOfficial,
     is_all_day: false,
-    updated_at: new Date().toISOString(),
-  }
+  } satisfies Database['public']['Tables']['trips']['Insert']
 
-  const { error: tripError } = await supabase.from('trips').insert(tripInsert)
-
-  if (tripError) {
-    throw tripError
-  }
-
-  if (canManageTags && normalizedTags.length) {
-    const { error: tagOptionsError } = await supabase
-      .from('trip_tag_options')
-      .upsert(
-        normalizedTags.map(tag => ({ tag })),
-        { onConflict: 'tag' },
-      )
-
-    if (tagOptionsError) {
-      throw tagOptionsError
-    }
-  }
-
-  const meetupPoint = parsed.data.locationNotes?.trim() || null
-  if (meetupPoint) {
-    const { error: privateError } = await supabase.from('trip_private').upsert(
-      {
-        trip_id: createdTrip.id,
-        meetup_point: meetupPoint,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'trip_id' },
-    )
-
-    if (privateError) {
-      throw privateError
-    }
-  }
-
-  const assignmentResults = await Promise.all([
-    publicHostIds.length
-      ? supabase.from('trip_hosts').insert(hostAssignments)
-      : Promise.resolve({ error: null }),
-    leaderUserIds.length
-      ? supabase.from('trip_leaders').insert(
-          leaderUserIds.map(leaderUserId => ({
-            trip_id: createdTrip.id,
-            user_id: leaderUserId,
-          })),
-        )
-      : Promise.resolve({ error: null }),
-  ])
-  const assignmentError = assignmentResults.find(result => result.error)?.error
-  if (assignmentError) throw assignmentError
-
-  if (payload.sourceDraftId) {
-    const parsedDraftId = tripDraftIdSchema.safeParse(payload.sourceDraftId)
-    if (!parsedDraftId.success) {
-      throw new Error('Invalid draft id.')
-    }
-
-    const { error: deleteError } = await supabase
-      .from('trip_drafts')
-      .delete()
-      .eq('id', parsedDraftId.data)
-
-    if (deleteError) {
-      throw deleteError
-    }
-  }
+  const { data: tripId, error: publishError } = await supabase.rpc(
+    'publish_trip_draft',
+    {
+      p_draft_id: sourceDraftId,
+      p_data: tripInsert,
+      p_meetup_point: parsed.data.locationNotes?.trim() || null,
+      p_public_host_ids: publicHostIds,
+      p_leader_user_ids: leaderUserIds,
+      p_risk_statements: riskStatements(
+        parsed.data.waiverActivities ?? [],
+        parsed.data.informedRisks,
+      ),
+      p_waiver_activities: parsed.data.waiverActivities ?? [],
+      p_registration_enabled: parsed.data.registrationEnabled ?? false,
+      p_collect_transportation: parsed.data.collectTransportation,
+    },
+  )
+  if (publishError) throw publishError
 
   revalidatePath('/schedule')
   revalidatePath('/calendar')
   revalidatePath('/trips')
   revalidatePath('/trips/new')
   revalidatePath('/trips/drafts')
-  revalidatePath(`/trips/${createdTrip.id}`)
-
-  let configurationPending = false
-  let informedRisksPending = false
-  if (parsed.data.collectTransportation) {
-    const { error } = await supabase.rpc('set_trip_transportation_collection', {
-      p_trip_id: createdTrip.id,
-      p_enabled: true,
-    })
-    configurationPending = Boolean(error)
-  }
-  const { error: riskError } = await supabase.rpc('save_trip_informed_risks', {
-    p_trip: createdTrip.id,
-    p_revision: 0,
-    p_statements: riskStatements(
-      parsed.data.waiverActivities ?? [],
-      parsed.data.informedRisks,
-    ),
-    p_activities: parsed.data.waiverActivities ?? [],
-  })
-  if (parsed.data.registrationEnabled && !riskError) {
-    const { data: current } = await supabase.rpc('get_registration_roster', {
-      p_trip_id: createdTrip.id,
-    })
-    const roster = rosterSchema.safeParse(current)
-    if (roster.success) {
-      const { settings, trip } = roster.data
-      const { error } = await supabase.rpc('save_registration_settings', {
-        p_trip_id: createdTrip.id,
-        p_revision: settings.revision,
-        p_data: {
-          enabled: true,
-          eligibility: settings.eligibility,
-          emergencyRequired: settings.emergency_required,
-          waiverRequired: settings.waiver_required,
-          questions: settings.questions,
-          capacity: trip.capacity,
-          waitlistEnabled: trip.waitlistEnabled,
-          deadline: trip.deadline,
-          opensAt: trip.opensAt ?? null,
-          offerHours: settings.offer_hours,
-          collectTransportation: parsed.data.collectTransportation,
-        },
-      })
-      configurationPending ||= Boolean(error)
-    } else configurationPending = true
-  }
-  informedRisksPending = Boolean(riskError)
-  return { tripId: createdTrip.id, configurationPending, informedRisksPending }
+  revalidatePath(`/trips/${tripId}`)
+  return { tripId, configurationPending: false, informedRisksPending: false }
 }
 
 export async function publishTripDraftAction(draftId: string) {
@@ -481,6 +386,19 @@ export async function publishTripDraftAction(draftId: string) {
     throw new Error('Invalid draft id.')
   }
 
+  const { data: publishedTripId, error: publicationError } = await supabase.rpc(
+    'get_published_trip_for_draft',
+    { p_draft_id: parsedDraftId.data },
+  )
+  if (publicationError) throw publicationError
+  if (publishedTripId) {
+    return {
+      tripId: publishedTripId,
+      configurationPending: false,
+      informedRisksPending: false,
+    }
+  }
+
   const { data: draft, error: draftError } = await supabase
     .from('trip_drafts')
     .select('*')
@@ -488,6 +406,19 @@ export async function publishTripDraftAction(draftId: string) {
     .single()
 
   if (draftError) {
+    // A simultaneous publisher may have consumed the draft after our first read.
+    const { data: tripId, error } = await supabase.rpc(
+      'get_published_trip_for_draft',
+      { p_draft_id: parsedDraftId.data },
+    )
+    if (error) throw error
+    if (tripId) {
+      return {
+        tripId,
+        configurationPending: false,
+        informedRisksPending: false,
+      }
+    }
     throw draftError
   }
 
