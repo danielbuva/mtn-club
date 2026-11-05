@@ -1,4 +1,16 @@
 import { z } from 'zod'
+import { DISCORD_INVITE_URL } from '../constants.ts'
+import {
+  button,
+  callout,
+  details,
+  escapeHtml,
+  finePrint,
+  paragraph,
+  renderEmail,
+  statusTag,
+} from '../email/layout.ts'
+import { fallbackCopy, notificationCopy } from './email-copy.ts'
 
 export const notificationSchema = z.object({
   id: z.string().uuid(),
@@ -11,39 +23,20 @@ export const notificationSchema = z.object({
   offerExpiresAt: z.string().nullable(),
 })
 export type RegistrationNotification = z.infer<typeof notificationSchema>
-const messages: Record<string, string> = {
-  registration_opened:
-    'Registration is now open for this trip. View the trip and sign up while places are available.',
-  confirmed: 'Your place on this trip is confirmed.',
-  waitlisted:
-    'You are on the waitlist. An organizer will choose participants when seats become available.',
-  offered:
-    'An organizer has offered you a reserved seat. Open your registration to accept before the offer expires.',
-  offer_expired:
-    'Your seat offer expired. You are back on the waitlist for organizer review.',
-  cancelled:
-    'Your registration has been canceled and any reserved seat released.',
-  removed_by_organizer:
-    'An organizer has removed your registration. Contact the trip organizer for details.',
-  offer_revoked:
-    'An organizer revoked your seat offer. Check your registration for the current status.',
-  trip_canceled:
-    'This trip has been canceled. Check the trip page for updates.',
-  trip_changed:
-    'The trip time or location has changed. Review the latest trip details before traveling.',
-  incomplete_reminder:
-    'Your trip starts within 24 hours, but your signup is incomplete. Finish your registration before it closes. Your place is not confirmed until setup is complete.',
-  reminder:
-    'Your trip starts within 24 hours. Review the latest arrangements and your registration details.',
-}
-const escapeHtml = (value: string) =>
-  value.replace(
-    /[&<>"']/g,
-    character =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[
-        character
-      ] ?? character,
-  )
+// Non-breaking spaces keep "7:00 AM PST" together on narrow screens.
+const formatTime = (iso: string, timeZone: string) =>
+  new Date(iso)
+    .toLocaleString('en-US', {
+      timeZone,
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    })
+    .replace(/\s+(?=(?:AM|PM|[A-Z]{2,5})\b|\d{1,2},)/g, '\u00a0')
+const footerLink = 'color:#6A5146;text-decoration:underline'
 export function registrationEmail(
   notification: RegistrationNotification,
   siteUrl: string,
@@ -52,24 +45,53 @@ export function registrationEmail(
   if (origin.protocol !== 'https:' && origin.hostname !== 'localhost')
     throw new Error('Invalid registration site URL')
   const opening = notification.kind === 'registration_opened'
-  const action = opening
-    ? 'View trip and register'
-    : notification.kind === 'incomplete_reminder'
-      ? 'Finish signup'
-      : 'Review registration'
-  const link = new URL(
-    `/trips/${notification.tripId}${opening ? '' : '/rsvp'}`,
-    origin,
-  ).href
+  const copy = notificationCopy[notification.kind] ?? fallbackCopy
+  const paths = {
+    trip: `/trips/${notification.tripId}`,
+    registration: `/trips/${notification.tripId}/rsvp`,
+    trips: '/trips',
+  } as const
+  const link = new URL(paths[copy.target], origin).href
   const preferencesLink = new URL('/profile/user/privacy', origin).href
-  const message =
-    messages[notification.kind] ??
-    'Your registration has been updated. Check the app for details.'
+  const when = formatTime(notification.startAt, notification.timeZone)
   const deadline = notification.offerExpiresAt
-    ? `Offer expires: ${new Date(notification.offerExpiresAt).toLocaleString('en-US', { timeZone: notification.timeZone })} (${notification.timeZone}).`
-    : ''
-  const text = `UNLV Mountain Club\n\n${notification.title}\n\n${message}\n${deadline}\n\n${action}: ${link}\n\nManage email preferences: ${preferencesLink}`
-  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff9eb;color:#211d18;font-family:Arial,sans-serif"><tr><td style="padding:32px"><p>UNLV Mountain Club</p><h1 style="font-size:24px">${escapeHtml(notification.title)}</h1><p>${escapeHtml(message)}</p><p>${escapeHtml(deadline)}</p><p><a href="${escapeHtml(link)}">${action}</a></p><p style="font-size:12px"><a href="${escapeHtml(preferencesLink)}">Manage email preferences</a>.</p></td></tr></table>`
+    ? formatTime(notification.offerExpiresAt, notification.timeZone)
+    : null
+  const text = `UNLV Mountain Club\n\n${copy.heading}\n${notification.title}\nWhen: ${when}\nStatus: ${copy.status}${deadline ? `\nClaim by: ${deadline}` : ''}\nTime zone: ${notification.timeZone}\n\n${copy.message}\n\n${copy.action}: ${link}\n\nManage email preferences: ${preferencesLink}`
+  const title = escapeHtml(notification.title)
+  const discord = DISCORD_INVITE_URL
+    ? `<a href="${escapeHtml(DISCORD_INVITE_URL)}" style="color:#211D18;text-decoration:underline">club Discord</a>`
+    : 'club Discord'
+  const html = renderEmail({
+    title: copy.heading,
+    preheader: deadline
+      ? `Claim by ${escapeHtml(deadline)} · ${title}`
+      : `${title} · ${escapeHtml(when)} · ${escapeHtml(copy.status)}`,
+    eyebrow: opening ? 'Trip sign-ups' : 'Your trip registration',
+    heading: copy.heading,
+    content: [
+      paragraph(escapeHtml(copy.message)),
+      deadline ? callout('Claim by', escapeHtml(deadline)) : '',
+      details([
+        { label: 'Trip', value: title, emphasis: true },
+        { label: 'When', value: escapeHtml(when) },
+        { label: 'Status', value: statusTag(copy.status, copy.tone) },
+      ]),
+      button(escapeHtml(link), copy.action),
+      finePrint(
+        copy.target === 'trips'
+          ? `Questions? Ask in the ${discord}.`
+          : `Questions about the trip? Ask in the ${discord} or message your trip leader.`,
+      ),
+    ]
+      .filter(Boolean)
+      .join('\n'),
+    reason: opening
+      ? 'You’re getting this because you asked to hear when sign-ups open for club trips.'
+      : 'You’re getting this because you registered for this trip.',
+    footerLinks: `<a href="${escapeHtml(preferencesLink)}" style="${footerLink}">Manage email preferences</a> &middot; <a href="${escapeHtml(origin.origin)}" style="${footerLink}">unlvmountainclub.com</a> &middot; <a href="mailto:unlvmountainclub@gmail.com" style="${footerLink}">Email us</a>`,
+    siteUrl: origin.origin,
+  })
   return {
     subject: `${opening ? 'Registration open' : notification.kind === 'offered' ? 'Seat offer' : 'Trip update'}: ${notification.title.replace(/[\r\n]/g, ' ').slice(0, 150)}`,
     text,

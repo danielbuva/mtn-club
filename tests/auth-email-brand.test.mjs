@@ -14,7 +14,14 @@ test('email PNG stays in sync with the landing-page wordmark', () => {
   )
 })
 
-test('all auth templates use the public, responsive wordmark with fallback text', () => {
+test('auth templates are generated from lib/email/auth-templates.ts', () => {
+  execFileSync(process.execPath, ['scripts/build-auth-emails.ts', '--check'], {
+    cwd: new URL('../', import.meta.url),
+    stdio: 'pipe',
+  })
+})
+
+test('all auth templates use the public club badge with fallback text', () => {
   for (const name of [
     'confirmation',
     'recovery',
@@ -25,12 +32,12 @@ test('all auth templates use the public, responsive wordmark with fallback text'
       new URL(`../supabase/templates/${name}.html`, import.meta.url),
       'utf8',
     )
+    assert.match(html, /src="\{\{ \.SiteURL \}\}\/email\/club-badge-v1\.png"/)
+    assert.match(html, /alt="UNLV Mountain Club"/)
     assert.match(
       html,
-      /src="\{\{ \.SiteURL \}\}\/email\/club-wordmark-v2\.png"/,
+      /width="168"[^>]*style="display:block;width:168px;height:auto/,
     )
-    assert.match(html, /alt="UNLV Mountain Club"/)
-    assert.match(html, /max-width:100%;height:auto/)
     assert.doesNotMatch(html, /<svg|data:image/)
   }
 })
@@ -51,11 +58,12 @@ test('auth email layout survives removal of document-level email styles', () => 
     assert.ok(body)
     assert.doesNotMatch(body, /<main\b/)
     assert.match(body, /<table[^>]*width="100%"[^>]*bgcolor="#F8F1DF"/)
-    assert.match(body, /<table[^>]*style="[^"]*max-width:568px/)
+    assert.match(body, /<table[^>]*style="[^"]*max-width:600px/)
     assert.match(
       body,
-      /<td[^>]*bgcolor="#F8F1DF"[^>]*style="padding:32px 24px;[^"]*font-size:16px/,
+      /<td[^>]*class="em-card"[^>]*bgcolor="#FFFCF4"[^>]*style="padding:/,
     )
+    assert.match(body, /<p[^>]*font-size:16px;line-height:26px/)
     const tables = body.match(/<table\b[^>]*>/g) ?? []
     assert.ok(tables.length >= 2)
     assert.ok(tables.every(table => table.includes('role="presentation"')))
