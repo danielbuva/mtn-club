@@ -96,5 +96,19 @@
     "clientKind": "git",
     "enabled": true,
     "useIgnoreFile": true
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "supabase/templates/**"
+      ],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noImportantStyles": "off"
+          }
+        }
+      }
+    }
+  ]
 }
