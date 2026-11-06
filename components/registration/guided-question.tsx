@@ -1,7 +1,7 @@
 'use client'
 
 import { ChoiceCards } from '@/components/forms/choice-cards'
-import { TextAreaField } from '@/components/forms/fields'
+import { TextAreaField, TextField } from '@/components/forms/fields'
 import type {
   RegistrationAnswers,
   RegistrationQuestion,
@@ -18,6 +18,22 @@ export function GuidedQuestion({
   onChange: (value: RegistrationAnswers[string]) => void
   error?: string
 }) {
+  if (
+    question.id === 'participant_email' ||
+    question.id === 'participant_phone'
+  )
+    return (
+      <TextField
+        label={question.label}
+        required
+        type={question.id === 'participant_email' ? 'email' : 'tel'}
+        autoComplete={question.id === 'participant_email' ? 'email' : 'tel'}
+        maxLength={question.id === 'participant_email' ? 320 : 50}
+        value={typeof value === 'string' ? value : ''}
+        error={error}
+        onChange={event => onChange(event.target.value)}
+      />
+    )
   if (question.type === 'text')
     return (
       <TextAreaField

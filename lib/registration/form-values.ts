@@ -81,8 +81,7 @@ export function normalizeRegistrationValues(
       expectedEmailUpdates: snapshot.emailUpdates,
       expectedAttendeeDefault: snapshot.defaultShowInAttendeeList,
     }
-    if (snapshot.emergencyRequired)
-      data.emergencyConfirmed = values.emergencyConfirmed
+    data.emergencyConfirmed = values.emergencyConfirmed
     if (
       snapshot.waiverRequired &&
       !snapshot.waiverSigned &&

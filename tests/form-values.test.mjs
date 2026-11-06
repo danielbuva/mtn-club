@@ -238,3 +238,70 @@ test('explicit no-risk skips acknowledgement without skipping the waiver', () =>
     validateRegistrationValues(values, legacy, 'risks').riskAcknowledgedId,
   )
 })
+
+test('trip contact questions require valid email and phone, including when the waiver is already signed', async () => {
+  const { participantContactQuestions } = await import(
+    '../lib/registration/contact-requirements.ts'
+  )
+  const current = {
+    ...snapshot,
+    waiverSigned: true,
+    questions: participantContactQuestions,
+  }
+  const values = initialRegistrationValues(current)
+  for (const question of current.questions) {
+    assert.ok(
+      validateRegistrationValues(values, current, `question:${question.id}`)[
+        `answers.${question.id}`
+      ],
+    )
+  }
+  values.answers = { participant_email: 'invalid', participant_phone: '123' }
+  assert.ok(
+    validateRegistrationValues(values, current, 'question:participant_email')[
+      'answers.participant_email'
+    ],
+  )
+  assert.ok(
+    validateRegistrationValues(values, current, 'question:participant_phone')[
+      'answers.participant_phone'
+    ],
+  )
+  values.answers = {
+    participant_email: 'person@example.test',
+    participant_phone: '+1 (702) 555-0123',
+  }
+  for (const question of current.questions) {
+    assert.deepEqual(
+      validateRegistrationValues(values, current, `question:${question.id}`),
+      {},
+    )
+  }
+})
+
+test('emergency contact cannot be skipped even with an older optional snapshot', () => {
+  const values = initialRegistrationValues(snapshot)
+  const errors = validateRegistrationValues(values, snapshot, 'emergency')
+  for (const field of ['name', 'relationship', 'phone'])
+    assert.ok(errors[`emergencyContact.${field}`])
+  assert.ok(errors.emergencyConfirmed)
+  values.emergencyContact = {
+    name: 'Test Contact',
+    relationship: 'Friend',
+    phone: '702-555-0123',
+    notes: '',
+  }
+  values.emergencyConfirmed = true
+  assert.deepEqual(
+    validateRegistrationValues(values, snapshot, 'emergency'),
+    {},
+  )
+  assert.equal(
+    normalizeRegistrationValues(values, snapshot, 'submit').emergencyConfirmed,
+    true,
+  )
+  assert.equal(
+    normalizeRegistrationValues(values, snapshot, 'draft').emergencyConfirmed,
+    undefined,
+  )
+})

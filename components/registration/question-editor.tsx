@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { isParticipantContactQuestion } from '@/lib/registration/contact-requirements'
 import type { RegistrationQuestion } from '@/lib/registration/schema'
 
 export function QuestionEditor({
@@ -26,7 +27,11 @@ export function QuestionEditor({
     <fieldset disabled={disabled} className="space-y-4">
       <legend className="font-semibold">Registration questions</legend>
       {questions.map((question, index) => (
-        <div key={question.id} className="space-y-2 rounded border p-3">
+        <fieldset
+          disabled={isParticipantContactQuestion(question.id)}
+          key={question.id}
+          className="space-y-2 rounded border p-3"
+        >
           <Label htmlFor={`label-${question.id}`}>Question {index + 1}</Label>
           <Input
             id={`label-${question.id}`}
@@ -88,7 +93,7 @@ export function QuestionEditor({
           >
             Remove question {index + 1}
           </Button>
-        </div>
+        </fieldset>
       ))}
       <Button
         type="button"

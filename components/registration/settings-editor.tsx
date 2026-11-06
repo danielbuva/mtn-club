@@ -31,7 +31,7 @@ export function SettingsEditor({
     enabled: settings.enabled,
     collectTransportation: settings.collect_transportation,
     eligibility: settings.eligibility,
-    emergencyRequired: settings.emergency_required,
+    emergencyRequired: true,
     waiverRequired: settings.waiver_required,
     questions: settings.questions,
     capacity: trip.capacity,
@@ -261,16 +261,10 @@ export function SettingsEditor({
                 <option value="members">Active members</option>
                 <option value="account">Any signed-in account</option>
               </select>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={values.emergencyRequired}
-                  onChange={event =>
-                    update({ emergencyRequired: event.target.checked })
-                  }
-                />
-                Require emergency contact
-              </label>
+              <p className="text-sm text-muted-foreground">
+                Participant email, phone number, and emergency contact are
+                required for every trip.
+              </p>
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
