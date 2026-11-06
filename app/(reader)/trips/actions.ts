@@ -94,13 +94,10 @@ export async function saveTripDetailEditsAction(formData: FormData) {
     )
   }
 
+  // Trip admins, or the member who created this unofficial trip.
   const { data: canEdit, error: permissionError } = await supabase.rpc(
-    'has_trip_admin_capability',
-    {
-      p_uid: user.id,
-      p_capability_key: 'trips.update',
-      p_trip_id: tripId,
-    },
+    'can_manage_trip',
+    { p_trip_id: tripId, p_uid: user.id },
   )
   if (permissionError || !canEdit) {
     return {

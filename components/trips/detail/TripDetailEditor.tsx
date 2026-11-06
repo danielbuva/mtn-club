@@ -33,6 +33,7 @@ import type { TripDetail, TripDifficulty } from '@/lib/trips/types'
 type TripDetailEditorProps = {
   registrationRoster?: RegistrationRoster
   canManageLifecycle?: boolean
+  canCreateTags?: boolean
   trip: TripDetail
   returnTo?: string
   availableActivityTags: string[]
@@ -93,6 +94,7 @@ export function TripDetailEditor({
   returnTo,
   registrationRoster,
   canManageLifecycle = false,
+  canCreateTags = false,
   trip,
   availableActivityTags,
   publicHostOptions = [],
@@ -314,23 +316,26 @@ export function TripDetailEditor({
                       </button>
                     ))}
                   </div>
-                  <div className="flex gap-2">
-                    <Input
-                      value={newTag}
-                      onChange={event => setNewTag(event.target.value)}
-                      placeholder="Add tag"
-                      className="h-8 border-white/30 bg-black/20 text-xs text-white placeholder:text-white/60"
-                    />
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className="h-8 border-white/30 bg-black/20 text-white"
-                      onClick={addCustomTag}
-                    >
-                      Add
-                    </Button>
-                  </div>
+                  {canCreateTags && (
+                    <div className="flex gap-2">
+                      <Input
+                        aria-label="New activity tag"
+                        value={newTag}
+                        onChange={event => setNewTag(event.target.value)}
+                        placeholder="Add tag"
+                        className="h-8 border-white/30 bg-black/20 text-xs text-white placeholder:text-white/60"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-8 border-white/30 bg-black/20 text-white"
+                        onClick={addCustomTag}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ) : null}
             </div>
@@ -374,6 +379,7 @@ export function TripDetailEditor({
 
             <div className="absolute inset-x-0 bottom-0 p-4 md:p-6">
               <Input
+                aria-label="Trip title"
                 value={draft.title}
                 onChange={event =>
                   setDraft(current => ({
@@ -450,27 +456,31 @@ export function TripDetailEditor({
                     </button>
                   ))}
                 </div>
-                <div className="flex gap-2">
-                  <Input
-                    value={newTag}
-                    onChange={event => setNewTag(event.target.value)}
-                    placeholder="Add tag"
-                    className="h-8 text-xs"
-                  />
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    className="h-8"
-                    onClick={addCustomTag}
-                  >
-                    Add
-                  </Button>
-                </div>
+                {canCreateTags && (
+                  <div className="flex gap-2">
+                    <Input
+                      aria-label="New activity tag"
+                      value={newTag}
+                      onChange={event => setNewTag(event.target.value)}
+                      placeholder="Add tag"
+                      className="h-8 text-xs"
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="h-8"
+                      onClick={addCustomTag}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                )}
               </div>
             ) : null}
 
             <Input
+              aria-label="Trip title"
               value={draft.title}
               onChange={event =>
                 setDraft(current => ({ ...current, title: event.target.value }))

@@ -240,10 +240,10 @@ export default async function TripDetailPage({
   const [membership, editPermission, lifecyclePermission] = user
     ? await Promise.all([
         supabase.rpc('is_active_member', { p_uid: user.id }),
-        supabase.rpc('has_trip_admin_capability', {
-          p_uid: user.id,
-          p_capability_key: 'trips.update',
+        // Trip admins, or the member who created this unofficial trip.
+        supabase.rpc('can_manage_trip', {
           p_trip_id: trip.id,
+          p_uid: user.id,
         }),
         supabase.rpc('has_trip_admin_capability', {
           p_uid: user.id,
@@ -291,6 +291,7 @@ export default async function TripDetailPage({
           trip.canManageRegistration ? await getRoster(trip.id) : undefined
         }
         canManageLifecycle={lifecyclePermission.data ?? false}
+        canCreateTags={assignmentScope.data != null}
         returnTo={returnTo}
         availableActivityTags={availableActivityTags}
         publicHostOptions={assignmentData?.publicHostOptions}

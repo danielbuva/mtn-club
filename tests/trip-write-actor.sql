@@ -34,15 +34,11 @@ begin
   set local role authenticated;
   insert into public.trips(id, title, starts_at, created_by)
   values(community_trip, 'Community promotion regression', now()+interval '2 days', member_actor);
-  -- The UI/admin edit RPC intentionally still requires trips.update even for an owner.
-  begin
-    perform public.save_trip_detail_edits(community_trip, '{"title":"Owner edit"}', null);
-  exception when raise_exception then
-    if sqlerrm <> 'Trip management permission required.' then raise; end if;
-    denied := true;
-  end;
-  if not denied then raise exception 'Owner unexpectedly gained admin edit RPC access'; end if;
-  denied := false;
+  -- An active member may edit their own unofficial trip through the edit RPC.
+  perform public.save_trip_detail_edits(community_trip, '{"title":"Owner edit"}', null);
+  if (select title from public.trips where id = community_trip) <> 'Owner edit' then
+    raise exception 'Owner edit of an unofficial trip was not saved';
+  end if;
   begin
     update public.trips set is_official = true where id = community_trip;
   exception when raise_exception then
