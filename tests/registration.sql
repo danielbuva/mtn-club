@@ -5,6 +5,8 @@ do $$
 declare owner_id uuid:=gen_random_uuid(); first_id uuid:=gen_random_uuid(); second_id uuid:=gen_random_uuid();
  third_id uuid:=gen_random_uuid(); minor_id uuid:=gen_random_uuid(); role_id uuid:=gen_random_uuid(); trip_id uuid:=gen_random_uuid();
  request_id uuid:=gen_random_uuid(); offer_id uuid; result jsonb; settings jsonb;
+ -- Every trip requires participant contact answers and a confirmed emergency contact.
+ contact jsonb:='{"formVersion":2,"emergencyConfirmed":true,"answers":{"participant_email":"participant@example.test","participant_phone":"+1 (702) 555-0123"},"emergencyContact":{"name":"Test Contact","relationship":"Friend","phone":"702-555-0124"}}';
 begin
  insert into auth.users(id,email,email_confirmed_at) values
  (owner_id,owner_id||'@example.test',now()),(first_id,first_id||'@example.test',now()),
@@ -25,9 +27,9 @@ begin
 
  perform set_config('request.jwt.claim.sub',first_id::text,true);
  perform public.declare_registration_age(true);
- result:=public.registration_command(trip_id,'register',request_id,0,'{"answers":{},"formVersion":2}');
+ result:=public.registration_command(trip_id,'register',request_id,0,contact);
  if result->>'state'<>'confirmed' or result->>'confirmedCount'<>'1' then raise exception 'First member not confirmed: %',result; end if;
- result:=public.registration_command(trip_id,'register',request_id,0,'{"answers":{},"formVersion":2}');
+ result:=public.registration_command(trip_id,'register',request_id,0,contact);
  if result->>'state'<>'confirmed' or result->>'revision'<>'1' then raise exception 'Retry changed state'; end if;
  begin
  perform public.registration_command(trip_id,'cancel',request_id,1);
@@ -36,7 +38,7 @@ begin
 
  perform set_config('request.jwt.claim.sub',second_id::text,true);
  perform public.declare_registration_age(true);
- result:=public.registration_command(trip_id,'register',gen_random_uuid(),0,'{"answers":{},"formVersion":2}');
+ result:=public.registration_command(trip_id,'register',gen_random_uuid(),0,contact);
  if result->>'state'<>'waitlisted' or result->>'confirmedCount'<>'1' then raise exception 'Waitlist/count incorrect'; end if;
  if jsonb_array_length(result->'attendees')<>0 then raise exception 'Waitlisted person sees attendee identities'; end if;
  begin perform public.get_registration_roster(trip_id); raise exception 'Roster leaked';
@@ -46,7 +48,7 @@ begin
  perform public.registration_command(trip_id,'cancel',gen_random_uuid(),1);
  perform set_config('request.jwt.claim.sub',third_id::text,true);
  perform public.declare_registration_age(true);
- result:=public.registration_command(trip_id,'register',gen_random_uuid(),0,'{"answers":{},"formVersion":2}');
+ result:=public.registration_command(trip_id,'register',gen_random_uuid(),0,contact);
  if result->>'state'<>'waitlisted' then raise exception 'New arrival bypassed queue'; end if;
 
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
@@ -71,17 +73,17 @@ begin
  if not exists(select 1 from public.trip_rsvps where user_id=third_id and registration_state='waitlisted' and revision=3) then raise exception 'Offer did not expire'; end if;
  perform public.registration_command(trip_id,'remove',gen_random_uuid(),3,'{"reason":"Test removal"}',third_id);
  perform set_config('request.jwt.claim.sub',third_id::text,true);
- begin perform public.registration_command(trip_id,'register',gen_random_uuid(),4,'{"answers":{},"formVersion":2}'); raise exception 'Removed person rejoined';
+ begin perform public.registration_command(trip_id,'register',gen_random_uuid(),4,contact); raise exception 'Removed person rejoined';
  exception when others then if sqlerrm<>'An organizer must restore your registration access.' then raise; end if; end;
 
  perform set_config('request.jwt.claim.sub',minor_id::text,true);
  perform public.declare_registration_age(false);
- begin perform public.registration_command(trip_id,'register',gen_random_uuid(),0,'{"answers":{},"formVersion":2}'); raise exception 'Minor bypassed review';
+ begin perform public.registration_command(trip_id,'register',gen_random_uuid(),0,contact); raise exception 'Minor bypassed review';
  exception when others then if sqlerrm<>'An officer must confirm guardian consent for this trip.' then raise; end if; end;
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
  perform public.registration_command(trip_id,'guardian_review',gen_random_uuid(),0,'{"evidence":"Consent verified in test"}',minor_id);
  perform set_config('request.jwt.claim.sub',minor_id::text,true);
- result:=public.registration_command(trip_id,'register',gen_random_uuid(),0,'{"answers":{},"formVersion":2}');
+ result:=public.registration_command(trip_id,'register',gen_random_uuid(),0,contact);
  if result->>'state'<>'confirmed' then raise exception 'Reviewed minor not accepted'; end if;
 
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
