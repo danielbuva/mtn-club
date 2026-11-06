@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { Button } from '@/components/ui/button'
@@ -47,7 +48,29 @@ export function AnnualProfile({ state }: { state: AnnualState }) {
             'Your previous document and signature remain in your history.'}
         </p>
       )}
-      {!valid && !signing && (
+      {!valid && !signing && state.ageAdult === false && (
+        <div className="space-y-2">
+          <p>
+            You’re under 18, so a parent or legal guardian signs for you. They
+            can sign on your phone or their own, no account needed.
+          </p>
+          <Link
+            className="inline-flex min-h-11 items-center underline underline-offset-4"
+            href="/profile/events/guardian"
+          >
+            Get your guardian’s signature
+          </Link>
+          <a
+            className="block text-sm underline underline-offset-4"
+            href={
+              state.current ? `/api/waivers/${state.current.id}/document` : '#'
+            }
+          >
+            Can’t sign online? Download the paper waiver
+          </a>
+        </div>
+      )}
+      {!valid && !signing && state.ageAdult !== false && (
         <Button onClick={() => setSigning(true)}>
           {latest ? 'Sign current waiver' : 'Review & sign waiver'}
         </Button>
@@ -67,7 +90,9 @@ export function AnnualProfile({ state }: { state: AnnualState }) {
           <div className="mt-4 space-y-3">
             <p>
               {record.signerKind === 'guardian'
-                ? 'Guardian signature verified by an officer'
+                ? record.details?.method === 'email_code'
+                  ? 'Guardian e-signature (email confirmed by code)'
+                  : 'Guardian signature verified by an officer'
                 : 'Electronic signature'}
               : {record.signatureName}
             </p>

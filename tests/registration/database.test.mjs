@@ -1882,6 +1882,9 @@ test('annual guardian verification, immutable merge evidence, duplicate signing 
   )
 })
 
+test('guardian e-signing: email code, officer gate, reuse, withdrawal and guardian change', () => {
+  sql(readFileSync(new URL('../guardian-consent.sql', import.meta.url), 'utf8'))
+})
 test('trip contacts sync to the profile without rewriting previous trip records', async () => {
   const f = fixture()
   const contact = {

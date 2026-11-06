@@ -151,7 +151,7 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
                         value: 'minor',
                         label: 'I am under 18',
                         description:
-                          'An officer will need to verify guardian consent.',
+                          'A parent or legal guardian will sign for you.',
                       },
                     ]}
                   />
