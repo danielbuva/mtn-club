@@ -10,7 +10,8 @@ export async function GET(
     const rows = [
       [
         'name',
-        'discord_username',
+        'first_name',
+        'last_name',
         'status',
         'registered_at',
         'queued_at',
@@ -25,7 +26,8 @@ export async function GET(
       ],
       ...roster.rows.map(row => [
         row.name,
-        row.discord?.username ?? '',
+        row.firstName ?? '',
+        row.lastName ?? '',
         row.state,
         row.registeredAt ?? '',
         row.queuedAt ?? '',

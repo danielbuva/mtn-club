@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import { setAuthFlow } from '@/lib/auth/flow-cookies'
 import { completeIdentityLink } from '@/lib/auth/link-callback'
 import { maybeHydrateProfileFromOAuth } from '@/lib/auth/oauth-profile'
+import { completeProfileHref, needsProfileName } from '@/lib/auth/profile-name'
 import { grantPasswordReset } from '@/lib/auth/recovery-session'
 import { authHref, getReturnToFromSearchParams } from '@/lib/auth/return-to'
 import { parseOAuthProvider } from '@/lib/auth/sign-in-methods'
@@ -63,5 +64,11 @@ export async function GET(request: NextRequest) {
   }
   if (flow === 'recovery') redirect(authHref('/auth/update-password', returnTo))
   await maybeHydrateProfileFromOAuth()
+  const db = await createClient()
+  const {
+    data: { user },
+  } = await db.auth.getUser()
+  if (user && (await needsProfileName(db, user)))
+    redirect(completeProfileHref(returnTo))
   redirect(returnTo)
 }

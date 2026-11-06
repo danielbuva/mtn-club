@@ -12,10 +12,13 @@ export function AuthShell({
   title,
   description,
   children,
+  showClose = true,
 }: {
   title: string
   description: string
   children: React.ReactNode
+  /** Required steps hide the close button and offer their own way out. */
+  showClose?: boolean
 }) {
   return (
     <main className="min-h-svh bg-background text-foreground lg:grid lg:grid-cols-2">
@@ -81,9 +84,11 @@ export function AuthShell({
               focusable="false"
             />
           </Link>
-          <Suspense fallback={<AuthCloseFallback />}>
-            <AuthCloseButton />
-          </Suspense>
+          {showClose ? (
+            <Suspense fallback={<AuthCloseFallback />}>
+              <AuthCloseButton />
+            </Suspense>
+          ) : null}
         </nav>
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8 sm:py-12">
           <header className="mb-7">

@@ -88,7 +88,7 @@ export function RosterList({
           ))}
         </fieldset>
         <label className="relative block">
-          <span className="sr-only">Search by name, Discord, or email</span>
+          <span className="sr-only">Search by name or email</span>
           <Search
             aria-hidden="true"
             className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
@@ -97,7 +97,7 @@ export function RosterList({
             type="search"
             value={query}
             onChange={event => setQuery(event.target.value)}
-            placeholder="Search name, Discord, or email"
+            placeholder="Search name or email"
             className="h-10 w-full border border-input bg-background pr-3 pl-9 text-[15px] placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-foreground"
           />
         </label>

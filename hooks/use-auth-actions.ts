@@ -4,7 +4,7 @@ import { captchaRequestError } from '@/lib/auth/captcha'
 import { authErrorMessage } from '@/lib/auth/errors'
 import { finishAuthentication } from '@/lib/auth/notices'
 import type { CredentialValues } from '@/lib/auth/password'
-import { emailConfirmationRedirect } from '@/lib/auth/return-to'
+import { authHref, emailConfirmationRedirect } from '@/lib/auth/return-to'
 import { createClient } from '@/lib/supabase/client'
 
 export function useAuthActions(
@@ -56,8 +56,9 @@ export function useAuthActions(
       if (!result.data.session) {
         setNeedsConfirmation(true)
       } else {
+        // The name step forwards straight to returnTo when nothing is missing.
         finishAuthentication(
-          returnTo,
+          authHref('/auth/complete-profile', returnTo),
           mode === 'signup' ? 'created' : 'signed-in',
         )
         return

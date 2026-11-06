@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { DashList } from '@/components/trips/detail/dash-list'
-import type { RosterRow } from '@/lib/registration/roster-status'
+import { fullName, type RosterRow } from '@/lib/registration/roster-status'
 import type { RegistrationRoster } from '@/lib/registration/schema'
 import { transportationLabel } from '@/lib/registration/transportation'
 
@@ -61,24 +61,9 @@ export function RosterDetails({
   const signedUp = formatMoment(row.registeredAt, snapshot.timeZone)
   return (
     <dl className="space-y-2.5">
-      <Detail label="Discord">
-        {row.discord?.username ? (
-          <>
-            <span className="select-all font-medium">
-              @{row.discord.username}
-            </span>
-            {row.discord.globalName &&
-            row.discord.globalName !== row.discord.username ? (
-              <span className="text-muted-foreground">
-                {' '}
-                · shows as {row.discord.globalName}
-              </span>
-            ) : null}
-          </>
-        ) : (
-          <span className="text-muted-foreground">
-            No Discord account linked
-          </span>
+      <Detail label="Full name">
+        {fullName(row) ?? (
+          <span className="text-muted-foreground">Not provided</span>
         )}
       </Detail>
       <Detail label="Contact">

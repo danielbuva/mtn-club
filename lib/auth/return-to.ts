@@ -74,6 +74,7 @@ export type AuthPath =
   | '/auth/sign-up'
   | '/auth/forgot-password'
   | '/auth/update-password'
+  | '/auth/complete-profile'
 export function authHref(path: AuthPath, returnTo: string | null = '/') {
   return `${path}?${new URLSearchParams({ returnTo: sanitizeReturnTo(returnTo) ?? '/' })}`
 }
