@@ -1,5 +1,9 @@
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
+import {
+  GuardianPanelSkeleton,
+  GuardianTripPanel,
+} from '@/components/guardian/guardian-trip-panel'
 import { RegistrationSkeleton } from '@/components/registration/page-shell'
 import { RegistrationForm } from '@/components/registration/registration-form'
 import { completeProfileHref, needsProfileName } from '@/lib/auth/profile-name'
@@ -23,7 +27,18 @@ async function RegistrationContent({
   if (await needsProfileName(db, user))
     redirect(completeProfileHref(`/trips/${tripId}/rsvp`))
   const snapshot = await getRegistration(tripId)
-  return <RegistrationForm key={snapshot.tripId} snapshot={snapshot} />
+  return (
+    <div className="space-y-10">
+      {snapshot.ageAdult === false &&
+      snapshot.annualWaiver &&
+      snapshot.waiverRequired ? (
+        <Suspense fallback={<GuardianPanelSkeleton />}>
+          <GuardianTripPanel tripId={tripId} />
+        </Suspense>
+      ) : null}
+      <RegistrationForm key={snapshot.tripId} snapshot={snapshot} />
+    </div>
+  )
 }
 export default function RegistrationPage({
   params,

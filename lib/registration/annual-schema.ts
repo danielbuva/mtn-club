@@ -24,6 +24,10 @@ export const annualStateSchema = z.object({
       withdrawnAt: z.string().nullable(),
       validFrom: z.string(),
       validUntil: z.string(),
+      details: z
+        .object({ method: z.string().optional() })
+        .passthrough()
+        .optional(),
     }),
   ),
   upcomingRegistrations: z.number(),

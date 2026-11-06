@@ -22,12 +22,22 @@ New trips use the annual model. Existing trips retain their legacy waiver assign
 
 ## Guardian process
 
-A minor can request annual review from Profile → Liability waiver without an RSVP. Download the exact annual document from that screen, have the parent/legal guardian complete and sign it, and retain the actual signed document in restricted club storage. An officer with `membership.confirm_guardian` verifies identity, legal authority, exact version, signature, date, and completed participant/emergency fields in the guardian review queue. The app archives the document reference and verification evidence; it does not replace restricted document storage. A verified annual guardian record is reusable for covered trips, with the same expiration, withdrawal and version rules.
+Migration `20261107010001_guardian_consent.sql` adds electronic guardian consent. Apply it before deploying the matching app.
+
+- **Who signs:** a minor opens Guardian permission (trip RSVP page or Profile → Guardian permission) and either hands over their device ("They're with me", a 2-hour link) or emails their guardian a 14-day link. Guardians never create an account.
+- **Verification:** the guardian confirms their email with a 6-digit code (10-minute expiry, 5 tries, 45-second resend cooldown, 5 codes per hour). This proves inbox access only and is labeled that way everywhere; it is not an identity check. The guardian's email cannot be the participant's.
+- **What is signed:** membership permission (frozen text, `guardian_consents`) and/or the current annual waiver (`registration_signatures`, `signer_kind='guardian'`) with seven initials, participant birth date and address, emergency contact, an authority declaration, and an optional shared/limited/court-ordered flag. Coverage ends at the waiver's June 30 or the day before the participant turns 18, whichever is first.
+- **Approval gate:** an electronic guardian signature counts only after an officer approves it in Admin → Membership → Guardian consent. If an officer previously checked the same, unchanged guardian's identity and authority ("I also checked…"), later signatures are accepted automatically unless the guardian flags a special arrangement. Changing the guardian's name, email, or relationship creates a new guardian record that needs its own review. Approving a membership permission confirms `membership_applications.guardian_consent` and runs the existing activation rules.
+- **Reuse:** an approved, unwithdrawn signature for the published annual version covers every in-scope trip in its period. No new request is created for covered trips.
+- **Records:** consents, reviews and signatures are append-only; guardian identity fields are immutable; tokens, codes and sessions are stored only as SHA-256 hashes. Guardians get a long-lived record link to download a copy or withdraw (each behind a fresh code). Withdrawal stops the waiver counting immediately and appears in the officer queue.
+- **Paper/assisted path:** the earlier officer verification of a guardian-signed paper document remains available on the same admin page and keeps counting.
+- **Email:** guardian codes and invitations are sent immediately through Resend using `REGISTRATION_RESEND_API_KEY` and `REGISTRATION_EMAIL_FROM` (independent of `REGISTRATION_EMAIL_ENABLED`), with links built from `NEXT_PUBLIC_SITE_URL`. Without them, guardians see an actionable error; in local development, messages are logged to the server console.
+- **Release dependency:** confirm the custom guardian e-signing and verification process with UNLV RSO administration or risk management before describing it as UNLV-approved.
 
 ## Verification
 
 - `pnpm test`: existing unit and form-normalization checks.
-- `pnpm test:registration:db`: disposable PostgreSQL reconstruction, legacy migrations, permission boundaries, first/returning adult trips, proactive signing, concurrent devices, duplicate requests, withdrawal and re-signing, replacement, risk revisions, scope, future academic-year expiry, guardian reuse, account merge and historical record integrity.
+- `pnpm test:registration:db`: disposable PostgreSQL reconstruction, guardian e-signing (`tests/guardian-consent.sql`), legacy migrations, permission boundaries, first/returning adult trips, proactive signing, concurrent devices, duplicate requests, withdrawal and re-signing, replacement, risk revisions, scope, future academic-year expiry, guardian reuse, account merge and historical record integrity.
 - `pnpm test:forms:browser`: mobile and desktop signing/reader, first annual trip, returning participant skipping signature, deliberately unchecked risk acknowledgement, creation steps and error recovery.
 - `pnpm build` and `pnpm check`: production compilation/types and formatting/lint.
 
