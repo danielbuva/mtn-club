@@ -57,10 +57,17 @@ export function RosterList({
         className={cn(
           'space-y-2.5',
           stickyControls &&
-            'sticky top-0 z-10 -mx-4 border-b border-border bg-background px-4 pt-4 pb-3 sm:-mx-5 sm:px-5',
+            'sticky top-0 z-10 -mx-4 border-b border-border bg-background px-4 pt-3 pb-3 sm:-mx-5 sm:px-5',
         )}
       >
-        <fieldset className="flex min-w-0 flex-wrap gap-1.5">
+        <fieldset
+          className={cn(
+            'flex min-w-0 gap-1.5',
+            stickyControls
+              ? 'mr-9 overflow-x-auto [mask-image:linear-gradient(to_right,#000_85%,transparent)] pr-6 [scrollbar-width:none]'
+              : 'flex-wrap',
+          )}
+        >
           <legend className="sr-only">Filter by status</legend>
           {filters.map(item => (
             <button
@@ -94,13 +101,13 @@ export function RosterList({
             className="h-10 w-full border border-input bg-background pr-3 pl-9 text-[15px] placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-foreground"
           />
         </label>
-        {hiddenCount ? (
-          <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
-            <EyeOff aria-hidden="true" className="size-3.5" />
-            Hidden from the member attendee list ({hiddenCount})
-          </p>
-        ) : null}
       </div>
+      {hiddenCount ? (
+        <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
+          <EyeOff aria-hidden="true" className="size-3.5" />
+          Hidden from the member attendee list ({hiddenCount})
+        </p>
+      ) : null}
       {rows.length ? (
         <ul className="border border-border bg-card">
           {rows.map(row => (

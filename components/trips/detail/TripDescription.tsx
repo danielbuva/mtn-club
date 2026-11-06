@@ -1,4 +1,5 @@
 import type { TripDetail } from '@/lib/trips/types'
+import { DashList } from './dash-list'
 import { FieldLabel, TripSection } from './trip-section'
 
 type TripDescriptionProps = {
@@ -51,11 +52,7 @@ export function TripDescription({ trip }: TripDescriptionProps) {
               </dt>
               <dd className="text-base leading-7">
                 {row.list ? (
-                  <ul className="list-disc space-y-1 pl-5 marker:text-muted-foreground">
-                    {listItems(row.value ?? '').map(item => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+                  <DashList items={listItems(row.value ?? '')} />
                 ) : (
                   <p className="whitespace-pre-line">{row.value}</p>
                 )}

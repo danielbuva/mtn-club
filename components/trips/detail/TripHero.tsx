@@ -45,13 +45,13 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
   return (
     <header className="space-y-5">
       <div className="flex items-start justify-between gap-3">
-        <p className="min-w-0 pt-1.5 font-brand text-[13px] font-semibold uppercase leading-5 tracking-[0.14em] text-muted-foreground [word-spacing:0.25rem]">
+        <p className="min-w-0 pt-1.5 font-brand text-[13px] font-semibold uppercase leading-5 tracking-[0.14em] text-muted-foreground">
           {eyebrow.map((item, index) => (
             <Fragment key={item}>
               <span className="whitespace-nowrap">
                 {item}
                 {index < eyebrow.length - 1 ? (
-                  <span aria-hidden="true" className="pl-2">
+                  <span aria-hidden="true" className="pl-[0.5em]">
                     ·
                   </span>
                 ) : null}

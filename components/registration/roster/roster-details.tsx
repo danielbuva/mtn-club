@@ -1,11 +1,19 @@
 import type { ReactNode } from 'react'
+import { DashList } from '@/components/trips/detail/dash-list'
 import type { RosterRow } from '@/lib/registration/roster-status'
 import type { RegistrationRoster } from '@/lib/registration/schema'
 import { transportationLabel } from '@/lib/registration/transportation'
 
 function Detail({ label, children }: { label: string; children: ReactNode }) {
+  const stacked = label.length > 18
   return (
-    <div className="grid gap-0.5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3">
+    <div
+      className={
+        stacked
+          ? 'grid gap-0.5'
+          : 'grid gap-0.5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3'
+      }
+    >
       <dt className="text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
         {label}
       </dt>
@@ -86,11 +94,7 @@ export function RosterDetails({
       ) : null}
       {row.requirements.length ? (
         <Detail label="Still needs">
-          <ul className="list-disc space-y-0.5 pl-4">
-            {row.requirements.map(item => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          <DashList items={row.requirements} />
         </Detail>
       ) : null}
       {snapshot.collectTransportation ? (

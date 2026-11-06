@@ -39,23 +39,24 @@ export function AttendeeRosterSheet({
       <SheetContent
         side="right"
         data-trip-surface
-        className="w-full gap-0 rounded-none bg-background sm:max-w-xl [&_*]:rounded-none"
+        className="w-full gap-0 rounded-none bg-background sm:max-w-xl [&_*]:rounded-none [&>button:last-child]:z-20 [&>button:last-child]:bg-background [&>button:last-child]:p-1"
       >
-        <SheetHeader className="space-y-1 border-b border-border px-4 pt-5 pb-4 pr-12 sm:px-5">
-          <p className="font-brand text-[13px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-            Organizer view
-          </p>
-          <SheetTitle className="font-brand text-2xl font-bold uppercase leading-none tracking-wide">
-            All signups
-          </SheetTitle>
-          <SheetDescription className="text-sm">
-            {roster.snapshot.title} · {roster.snapshot.confirmedCount} going
-            {roster.snapshot.waitlistCount
-              ? ` · ${roster.snapshot.waitlistCount} waiting`
-              : ''}
-          </SheetDescription>
-        </SheetHeader>
         <div className="flex-1 overflow-y-auto px-4 pb-4 sm:px-5">
+          <SheetHeader className="space-y-1 px-0 pt-5 pb-1 pr-10">
+            <p className="font-brand text-[13px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              Organizer view
+            </p>
+            <SheetTitle className="font-brand text-2xl font-bold uppercase leading-none tracking-wide">
+              All signups
+            </SheetTitle>
+            <SheetDescription className="text-sm">
+              {roster.snapshot.confirmedCount} going
+              {roster.snapshot.waitlistCount
+                ? ` · ${roster.snapshot.waitlistCount} waiting`
+                : ''}
+              <span className="sr-only"> for {roster.snapshot.title}</span>
+            </SheetDescription>
+          </SheetHeader>
           <RosterList roster={roster} stickyControls />
         </div>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border px-4 py-3 text-sm sm:px-5">

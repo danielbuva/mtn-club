@@ -121,7 +121,7 @@ export function RosterActions({
         </div>
       ) : null}
 
-      <details className="group space-y-3">
+      <details className="group space-y-3 [&:not([open])]:-mb-2">
         <summary className="inline-flex min-h-9 cursor-pointer items-center text-sm underline underline-offset-4">
           More actions
         </summary>

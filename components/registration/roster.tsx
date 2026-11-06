@@ -3,7 +3,7 @@
 import { RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { RegistrationRoster } from '@/lib/registration/schema'
@@ -31,6 +31,7 @@ export function RegistrationRosterView({
 }) {
   const router = useRouter()
   const [refreshing, startRefresh] = useTransition()
+  const [refreshed, setRefreshed] = useState(false)
   const { snapshot } = roster
   const unfinished = roster.rows.filter(
     row => row.state === 'incomplete',
@@ -83,7 +84,12 @@ export function RegistrationRosterView({
               size="sm"
               className="shadow-none"
               disabled={refreshing}
-              onClick={() => startRefresh(() => router.refresh())}
+              onClick={() =>
+                startRefresh(() => {
+                  router.refresh()
+                  setRefreshed(true)
+                })
+              }
             >
               <RefreshCw
                 aria-hidden="true"
@@ -91,6 +97,12 @@ export function RegistrationRosterView({
               />
               {refreshing ? 'Refreshing…' : 'Refresh'}
             </Button>
+            <output
+              className="text-xs text-muted-foreground empty:hidden"
+              aria-live="polite"
+            >
+              {refreshed && !refreshing ? 'Up to date' : ''}
+            </output>
             <Button asChild variant="outline" size="sm" className="shadow-none">
               <a href={`/trips/${snapshot.tripId}/registrations/export`}>
                 Download CSV

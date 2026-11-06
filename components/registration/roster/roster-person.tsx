@@ -85,7 +85,7 @@ export function RosterPerson({
       <div
         id={panelId}
         hidden={!open}
-        className="space-y-4 pt-1 pr-3 pb-4 pl-14 sm:pr-4 sm:pl-[3.75rem]"
+        className="space-y-4 pt-1 pr-3 pb-3 pl-14 sm:pr-4 sm:pl-[3.75rem]"
       >
         {open ? children : null}
       </div>

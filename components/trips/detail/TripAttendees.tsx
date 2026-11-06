@@ -100,7 +100,7 @@ export function TripAttendees({
         <p className="text-[15px] leading-6 text-muted-foreground">
           {canceled
             ? 'No one had signed up.'
-            : 'No one has signed up yet. Be the first.'}
+            : 'No one has signed up yet. Be the first — RSVP below.'}
         </p>
       ) : (
         <div className="space-y-3">
