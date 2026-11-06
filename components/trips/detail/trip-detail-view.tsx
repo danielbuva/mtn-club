@@ -24,6 +24,8 @@ type TripDetailViewProps = {
   editHref: string
   /** Organizer entry point to the full attendee list (already Suspense-wrapped). */
   organizerRoster?: ReactNode
+  /** Guardian status for members under 18 (already Suspense-wrapped). */
+  guardianNotice?: ReactNode
 }
 
 function FollowFallback() {
@@ -41,6 +43,7 @@ export function TripDetailView({
   canEdit,
   editHref,
   organizerRoster,
+  guardianNotice,
 }: TripDetailViewProps) {
   const registered = [
     'confirmed',
@@ -69,8 +72,9 @@ export function TripDetailView({
       ) : null}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_auto_1fr] lg:gap-x-12">
-        <div className="lg:col-start-2 lg:row-start-1">
+        <div className="space-y-8 lg:col-start-2 lg:row-start-1">
           <TripQuickFacts trip={trip} />
+          {guardianNotice}
         </div>
 
         <div className="space-y-10 lg:col-start-1 lg:row-span-3 lg:row-start-1">

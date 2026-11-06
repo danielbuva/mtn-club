@@ -55,7 +55,9 @@ export function RegistrationReview({
             answer: snapshot.waiverSigned
               ? 'Already signed'
               : snapshot.ageAdult === false
-                ? 'Guardian verification required'
+                ? snapshot.annualWaiver
+                  ? 'Your parent or guardian signs this'
+                  : 'Guardian verification required'
                 : values.waiverAgreed
                   ? `Ready to sign as ${values.signatureName}`
                   : 'Review required',

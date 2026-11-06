@@ -90,7 +90,7 @@ export function RegistrationForm({
               Review membership
             </Link>
           ) : null}
-          {snapshot.ageAdult === false ? (
+          {snapshot.ageAdult === false && !snapshot.annualWaiver ? (
             <Button
               type="button"
               variant="outline"

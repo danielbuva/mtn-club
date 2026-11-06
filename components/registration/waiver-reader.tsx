@@ -10,7 +10,10 @@ export function WaiverReader({
   hasRead,
   onRead,
   error,
+  editorial = false,
 }: {
+  /** Square brand button with no reserved error space (guardian signing). */
+  editorial?: boolean
   title: string
   body: string
   version: number
@@ -50,24 +53,37 @@ export function WaiverReader({
   }, [open])
   return (
     <>
-      <Button
-        ref={opener}
-        type="button"
-        variant="outline"
-        className="min-h-12 w-full"
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? helpId : undefined}
-        onClick={() => setOpen(true)}
-      >
-        {hasRead ? 'Read waiver again' : 'Read full waiver'}
-      </Button>
-      <p
-        id={helpId}
-        className="min-h-10 text-sm text-destructive"
-        role={error ? 'alert' : undefined}
-      >
-        {error}
-      </p>
+      {editorial ? (
+        <button
+          ref={opener}
+          type="button"
+          className="inline-flex min-h-12 w-full items-center justify-center border border-foreground px-5 font-brand text-base font-bold uppercase tracking-[0.06em] text-foreground transition-colors hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          onClick={() => setOpen(true)}
+        >
+          {hasRead ? 'Read waiver again' : 'Read the full waiver'}
+        </button>
+      ) : (
+        <Button
+          ref={opener}
+          type="button"
+          variant="outline"
+          className="min-h-12 w-full"
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? helpId : undefined}
+          onClick={() => setOpen(true)}
+        >
+          {hasRead ? 'Read waiver again' : 'Read full waiver'}
+        </Button>
+      )}
+      {!editorial && (
+        <p
+          id={helpId}
+          className="min-h-10 text-sm text-destructive"
+          role={error ? 'alert' : undefined}
+        >
+          {error}
+        </p>
+      )}
       <dialog
         ref={dialog}
         aria-labelledby={titleId}

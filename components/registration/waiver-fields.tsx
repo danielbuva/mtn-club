@@ -19,7 +19,7 @@ export const emptySignerDetails: SignerDetails = {
   birthDate: '',
   initials: Array.from({ length: 7 }, () => ''),
 }
-const provisions = [
+export const waiverProvisions = [
   'Medical treatment and responsibility for costs',
   'Personal insurance',
   'Activity risks and possible injuries',
@@ -110,11 +110,17 @@ export function WaiverFields({
             : 'You have signed'}{' '}
           version {snapshot.waiver?.version}.
         </p>
+      ) : snapshot.ageAdult === false && snapshot.annualWaiver ? (
+        <p>
+          Your parent or legal guardian signs this waiver, not you. Use Guardian
+          permission at the top of this page to hand them your phone or email
+          them a link. Your answers here are saved as you go.
+        </p>
       ) : snapshot.ageAdult === false ? (
         <p>
           Have your parent or legal guardian complete and sign the displayed
-          annual waiver, then contact a club officer to verify it before
-          registration. You cannot sign the adult agreement yourself.
+          waiver, then contact a club officer to verify it before registration.
+          You cannot sign the adult agreement yourself.
         </p>
       ) : !hasRead ? (
         <p className="text-sm text-muted-foreground">
@@ -131,7 +137,7 @@ export function WaiverFields({
                 restricted to you and authorized trip managers. Initial each
                 provision after reading the full waiver.
               </p>
-              {provisions.map((provision, index) => (
+              {waiverProvisions.map((provision, index) => (
                 <label
                   className="block text-sm"
                   key={provision}

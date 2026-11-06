@@ -2352,6 +2352,43 @@ export type Database = {
       get_my_registrations: { Args: never; Returns: Json }
       get_my_registration_signatures: { Args: never; Returns: Json }
       get_trip_guardian_requests: { Args: never; Returns: Json }
+      guardian_get_request: {
+        Args: { p_token_hash: string; p_session_hash?: string }
+        Returns: Json
+      }
+      guardian_start_verification: {
+        Args: { p_token_hash: string; p_email: string; p_code_hash: string }
+        Returns: Json
+      }
+      guardian_verify_code: {
+        Args: {
+          p_token_hash: string
+          p_code_hash: string
+          p_session_hash: string
+        }
+        Returns: Json
+      }
+      guardian_sign: {
+        Args: {
+          p_token_hash: string
+          p_session_hash: string
+          p_record_token_hash: string
+          p_data: Json
+        }
+        Returns: Json
+      }
+      guardian_decline: {
+        Args: { p_token_hash: string; p_reason: string }
+        Returns: Json
+      }
+      guardian_withdraw: {
+        Args: { p_token_hash: string; p_session_hash: string; p_note: string }
+        Returns: Json
+      }
+      guardian_signed_copy: {
+        Args: { p_token_hash: string; p_session_hash: string }
+        Returns: Json
+      }
 
       merge_trip_registrations: {
         Args: { p_primary: string; p_secondary: string }

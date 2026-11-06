@@ -142,7 +142,7 @@ async function AdminMembershipPageContent({
           className="mb-4 inline-block underline"
           href="/admin/membership/trip-guardian-reviews"
         >
-          Review trip guardian consent
+          Review guardian consent
         </Link>
       ) : null}
       <MembershipTabs
