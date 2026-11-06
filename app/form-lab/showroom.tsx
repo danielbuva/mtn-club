@@ -29,6 +29,7 @@ export function FormShowroom() {
   const [annual, setAnnual] = useState(false)
   const [missingRisks, setMissingRisks] = useState(false)
   const [signed, setSigned] = useState(false)
+  const [savedContacts, setSavedContacts] = useState(false)
   const [longContent, setLongContent] = useState(false)
   const [fail, setFail] = useState(false)
   async function simulate() {
@@ -91,6 +92,25 @@ export function FormShowroom() {
           ],
         }
       : {}),
+    ...(savedContacts
+      ? {
+          ageAdult: true,
+          waiverSigned: true,
+          questions: [],
+          collectTransportation: false,
+          emergencyOnFile: true,
+          answers: {
+            participant_email: 'member@example.test',
+            participant_phone: '7025550123',
+          },
+          emergencyContact: {
+            name: 'Known Friend',
+            relationship: 'Friend',
+            phone: '7025550124',
+            notes: '',
+          },
+        }
+      : {}),
   }
   return (
     <main
@@ -148,7 +168,7 @@ export function FormShowroom() {
         }
       >
         <div
-          key={`${example}-${revision}-${transportation}-${longContent}-${annual}-${signed}`}
+          key={`${example}-${revision}-${transportation}-${longContent}-${annual}-${signed}-${savedContacts}`}
         >
           {example === 'creation' && (
             <TripCreationFlow
@@ -259,6 +279,11 @@ export function FormShowroom() {
                 label="Annual waiver example"
                 checked={annual}
                 onChange={setAnnual}
+              />
+              <ToggleField
+                label="Saved account contacts"
+                checked={savedContacts}
+                onChange={setSavedContacts}
               />
               <ToggleField
                 label="Annual waiver already signed"

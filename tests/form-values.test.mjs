@@ -305,3 +305,29 @@ test('emergency contact cannot be skipped even with an older optional snapshot',
     undefined,
   )
 })
+
+test('saved account contacts stay in submissions without repeating contact questions', () => {
+  const current = {
+    ...snapshot,
+    questions: [],
+    emergencyOnFile: true,
+    answers: {
+      participant_email: 'member@example.test',
+      participant_phone: '7025550123',
+    },
+    emergencyContact: {
+      name: 'Known Contact',
+      relationship: 'Friend',
+      phone: '7025550124',
+      notes: '',
+    },
+  }
+  const values = initialRegistrationValues(current)
+  assert.equal(values.emergencyConfirmed, true)
+  assert.equal(registrationSteps(current, values).includes('emergency'), false)
+  assert.deepEqual(
+    normalizeRegistrationValues(values, current, 'submit').answers,
+    current.answers,
+  )
+  assert.deepEqual(validateRegistrationValues(values, current, 'emergency'), {})
+})

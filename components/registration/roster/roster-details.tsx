@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { DashList } from '@/components/trips/detail/dash-list'
+import { participantContactQuestions } from '@/lib/registration/contact-requirements'
 import { fullName, type RosterRow } from '@/lib/registration/roster-status'
 import type { RegistrationRoster } from '@/lib/registration/schema'
 import { transportationLabel } from '@/lib/registration/transportation'
@@ -92,6 +93,8 @@ export function RosterDetails({
           key={key}
           label={
             snapshot.questions.find(question => question.id === key)?.label ??
+            participantContactQuestions.find(question => question.id === key)
+              ?.label ??
             key
           }
         >

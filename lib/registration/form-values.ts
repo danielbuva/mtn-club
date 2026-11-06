@@ -1,3 +1,4 @@
+import { isParticipantContactQuestion } from './contact-requirements.ts'
 import { requiresRiskAcknowledgement } from './risk-activities.ts'
 import type { RegistrationInput, TripRegistrationSnapshot } from './schema'
 import type { TransportationResponse } from './transportation'
@@ -24,7 +25,7 @@ export function initialRegistrationValues(
     emergencyContact: snapshot.emergencyContact,
     showInAttendeeList: snapshot.showInAttendeeList,
     emailUpdates: snapshot.emailUpdates,
-    emergencyConfirmed: false,
+    emergencyConfirmed: Boolean(snapshot.emergencyOnFile),
     transportationMode: snapshot.transportation?.mode ?? null,
     seatsOffered:
       snapshot.transportation?.mode === 'driver'
@@ -58,12 +59,15 @@ export function normalizeRegistrationValues(
         : null
   const data: RegistrationInput['data'] = {
     formVersion: snapshot.formVersion,
-    answers: Object.fromEntries(
-      snapshot.questions.flatMap(question => {
+    answers: Object.fromEntries([
+      ...Object.entries(values.answers).filter(([id]) =>
+        isParticipantContactQuestion(id),
+      ),
+      ...snapshot.questions.flatMap(question => {
         const answer = values.answers[question.id]
         return answer === undefined ? [] : [[question.id, answer]]
       }),
-    ),
+    ]),
     emergencyContact: values.emergencyContact,
     ...(snapshot.collectTransportation ? { transportation } : {}),
   }
@@ -103,6 +107,7 @@ export function normalizeRegistrationValues(
 export function registrationSteps(
   snapshot: TripRegistrationSnapshot,
   values: RegistrationValues,
+  editingEmergency = false,
 ): string[] {
   return [
     ...(snapshot.ageAdult === null ? ['age'] : []),
@@ -113,7 +118,11 @@ export function registrationSteps(
           ...(values.transportationMode === 'driver' ? ['seats'] : []),
         ]
       : []),
-    'emergency',
+    ...(snapshot.emergencyOnFile &&
+    values.emergencyConfirmed &&
+    !editingEmergency
+      ? []
+      : ['emergency']),
     ...(snapshot.waiverRequired && !snapshot.waiverSigned ? ['waiver'] : []),
     ...(requiresRiskAcknowledgement(snapshot) ? ['risks'] : []),
     'preferences',

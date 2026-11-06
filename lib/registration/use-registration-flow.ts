@@ -52,11 +52,26 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
   const [failed, setFailed] = useState(false)
   const [pending, setPending] = useState(false)
   const [complete, setComplete] = useState(false)
+  const [editingEmergency, setEditingEmergency] = useState(false)
+  const requestedEmergencyEdit = useRef(false)
   const busy = useRef(false)
   const root = useRef<HTMLFormElement>(null)
   const previous = useRef(props.snapshot)
   const accepted = useRef(props.snapshot)
-  const nav = useFormNavigation(registrationSteps(snapshot, values))
+  const nav = useFormNavigation(
+    registrationSteps(snapshot, values, editingEmergency),
+  )
+  useEffect(() => {
+    if (!requestedEmergencyEdit.current) return
+    requestedEmergencyEdit.current = false
+    nav.goTo('emergency')
+  }, [nav])
+  function editStep(id: string) {
+    if (id === 'emergency' && !editingEmergency && snapshot.emergencyOnFile) {
+      requestedEmergencyEdit.current = true
+      setEditingEmergency(true)
+    } else nav.goTo(id)
+  }
   // Subscribe to dirty fields so RHF's keepDirtyValues merges only untouched defaults.
   const dirty = Object.keys(dirtyFields).length > 0
   const receiveSnapshot = useCallback(
@@ -201,7 +216,7 @@ export function useRegistrationFlow(props: RegistrationFlowProps) {
   return {
     data: { snapshot, values, age, errors },
     feedback: { message, failed, pending, complete },
-    actions: { update, setAge, setComplete, persist, advance },
+    actions: { update, setAge, setComplete, persist, advance, editStep },
     navigation: nav,
     root,
   }
