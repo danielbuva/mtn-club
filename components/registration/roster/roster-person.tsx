@@ -3,7 +3,7 @@
 import { ChevronDown, EyeOff } from 'lucide-react'
 import { type ReactNode, useEffect, useId, useRef, useState } from 'react'
 import { PersonAvatar } from '@/components/trips/detail/person-avatar'
-import type { RosterRow } from '@/lib/registration/roster-status'
+import { type RosterRow, rosterNames } from '@/lib/registration/roster-status'
 import { cn } from '@/lib/utils'
 import { RosterStatusTag } from './roster-status-tag'
 
@@ -23,6 +23,8 @@ export function RosterPerson({
       itemRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
   }, [open])
   const todo = row.requirements.length
+  const names = rosterNames(row)
+  const subtitle = names.secondary
   return (
     <li
       ref={itemRef}
@@ -38,11 +40,11 @@ export function RosterPerson({
           open && 'bg-secondary/30',
         )}
       >
-        <PersonAvatar name={row.name} src={row.avatarUrl} />
+        <PersonAvatar name={names.primary} src={row.avatarUrl} />
         <span className="min-w-0">
           <span className="flex min-w-0 items-center gap-1.5">
             <span className="truncate text-[15px] font-medium leading-5">
-              {row.name}
+              {names.primary}
             </span>
             {row.showInAttendeeList ? null : (
               <span
@@ -59,17 +61,17 @@ export function RosterPerson({
               </span>
             )}
           </span>
-          <span className="block truncate text-[13px] leading-5 text-muted-foreground">
-            {row.discord?.username
-              ? `@${row.discord.username}`
-              : 'No Discord linked'}
-            {todo ? (
-              <span className="font-medium text-foreground">
-                {' · '}
-                {todo} to-do{todo === 1 ? '' : 's'}
-              </span>
-            ) : null}
-          </span>
+          {subtitle || todo ? (
+            <span className="block truncate text-[13px] leading-5 text-muted-foreground">
+              {subtitle}
+              {todo ? (
+                <span className="font-medium text-foreground">
+                  {subtitle ? ' · ' : ''}
+                  {todo} to-do{todo === 1 ? '' : 's'}
+                </span>
+              ) : null}
+            </span>
+          ) : null}
         </span>
         <span className="flex items-center gap-2">
           <RosterStatusTag state={row.state} />

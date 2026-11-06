@@ -81,14 +81,30 @@ export function sortRoster(rows: RosterRow[]): RosterRow[] {
   })
 }
 
-export function discordHandle(row: Pick<RosterRow, 'discord'>) {
-  return row.discord?.username ?? null
+/** "First Last", or null when either part is missing. */
+export function fullName(row: Pick<RosterRow, 'firstName' | 'lastName'>) {
+  const first = row.firstName?.trim()
+  const last = row.lastName?.trim()
+  return first && last ? `${first} ${last}` : null
+}
+
+/** Organizers scan for real people: full name first, display name as a fallback. */
+export function rosterNames(
+  row: Pick<RosterRow, 'name' | 'firstName' | 'lastName'>,
+) {
+  const full = fullName(row)
+  if (!full) return { primary: row.name, secondary: null }
+  return {
+    primary: full,
+    secondary:
+      full.toLowerCase() === row.name.trim().toLowerCase() ? null : row.name,
+  }
 }
 
 export function matchesRosterSearch(row: RosterRow, query: string) {
   const needle = query.trim().toLowerCase()
   if (!needle) return true
-  return [row.name, row.discord?.username, row.discord?.globalName, row.email]
+  return [row.name, row.firstName, row.lastName, fullName(row), row.email]
     .filter((value): value is string => Boolean(value))
     .some(value => value.toLowerCase().includes(needle))
 }

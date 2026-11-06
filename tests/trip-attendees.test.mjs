@@ -2,7 +2,9 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import {
+  fullName,
   matchesRosterSearch,
+  rosterNames,
   rosterState,
   sortRoster,
 } from '../lib/registration/roster-status.ts'
@@ -17,7 +19,8 @@ const row = (overrides = {}) => ({
   name: 'Maya Chen',
   state: 'confirmed',
   queuedAt: null,
-  discord: null,
+  firstName: null,
+  lastName: null,
   email: null,
   ...overrides,
 })
@@ -34,7 +37,6 @@ test('members can see opted-in attendees and organizers get Discord names', () =
   assert.match(sql, /attendeesVisible/)
   // The opt-in filter must survive: the migration only widens who may look.
   assert.doesNotMatch(sql, /show_in_attendee_list\)/)
-  assert.match(sql, /provider=''discord''/)
   assert.match(sql, /raise exception 'Roster row marker missing'/)
 })
 
@@ -81,12 +83,14 @@ test('roster sorts by status, then waitlist queue, then name', () => {
   )
 })
 
-test('organizers can search by Discord username or display name', () => {
+test('organizers can search by display name or real name', () => {
   const person = row({
-    discord: { username: 'mayaclimbs', globalName: 'Maya' },
+    name: 'mayaclimbs',
+    firstName: 'Maya',
+    lastName: 'Chen',
   })
   assert.equal(matchesRosterSearch(person, 'CLIMBS'), true)
-  assert.equal(matchesRosterSearch(person, 'chen'), true)
+  assert.equal(matchesRosterSearch(person, 'maya chen'), true)
   assert.equal(matchesRosterSearch(person, 'nobody'), false)
   assert.equal(matchesRosterSearch(row(), '  '), true)
 })
@@ -118,4 +122,54 @@ test('trip facts read as plain sentences', () => {
     { label: 'Closed', value: 'Signups are closed' },
   )
   assert.equal(signupLine({ status: 'cancelled' }), null)
+})
+
+test('roster shows first and last name, or nothing when either is missing', () => {
+  const sql = readFileSync(
+    new URL(
+      '../supabase/migrations/20261106030001_roster_real_names.sql',
+      import.meta.url,
+    ),
+    'utf8',
+  )
+  assert.match(sql, /'firstName'/)
+  assert.match(sql, /raise exception 'Roster Discord marker missing'/)
+  assert.equal(
+    fullName(row({ firstName: ' Maya ', lastName: 'Chen' })),
+    'Maya Chen',
+  )
+  assert.equal(fullName(row({ firstName: 'Maya' })), null)
+  assert.deepEqual(
+    rosterNames(row({ name: 'dax0', firstName: 'Dax', lastName: 'Whitaker' })),
+    { primary: 'Dax Whitaker', secondary: 'dax0' },
+  )
+  assert.deepEqual(
+    rosterNames(
+      row({ name: 'Maya Chen', firstName: 'maya', lastName: 'chen' }),
+    ),
+    { primary: 'maya chen', secondary: null },
+  )
+  assert.deepEqual(rosterNames(row({ name: 'Riley' })), {
+    primary: 'Riley',
+    secondary: null,
+  })
+})
+
+test('new accounts are asked for a first and last name after every sign-in path', () => {
+  const read = path =>
+    readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
+  assert.match(
+    read('lib/auth/name-policy.ts'),
+    /NAME_REQUIRED_SINCE = '2026-11-06T04:00:00Z'/,
+  )
+  for (const path of [
+    'app/auth/callback/route.ts',
+    'app/auth/confirm/actions.ts',
+    'app/(reader)/trips/[tripId]/rsvp/page.tsx',
+  ])
+    assert.match(read(path), /needsProfileName/, path)
+  assert.match(read('hooks/use-auth-actions.ts'), /nameRequiredFor\(user\)/)
+  const action = read('app/auth/complete-profile/actions.ts')
+  assert.match(action, /Enter your first name\./)
+  assert.match(action, /Enter your last name\./)
 })

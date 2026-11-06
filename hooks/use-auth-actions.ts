@@ -2,9 +2,10 @@
 import { useRef, useState } from 'react'
 import { captchaRequestError } from '@/lib/auth/captcha'
 import { authErrorMessage } from '@/lib/auth/errors'
+import { hasFullName, nameRequiredFor } from '@/lib/auth/name-policy'
 import { finishAuthentication } from '@/lib/auth/notices'
 import type { CredentialValues } from '@/lib/auth/password'
-import { emailConfirmationRedirect } from '@/lib/auth/return-to'
+import { authHref, emailConfirmationRedirect } from '@/lib/auth/return-to'
 import { createClient } from '@/lib/supabase/client'
 
 export function useAuthActions(
@@ -56,8 +57,18 @@ export function useAuthActions(
       if (!result.data.session) {
         setNeedsConfirmation(true)
       } else {
+        const user = result.data.user
+        let askForName = false
+        if (user && nameRequiredFor(user)) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('first_name,last_name')
+            .eq('user_id', user.id)
+            .maybeSingle()
+          askForName = !hasFullName(profile)
+        }
         finishAuthentication(
-          returnTo,
+          askForName ? authHref('/auth/complete-profile', returnTo) : returnTo,
           mode === 'signup' ? 'created' : 'signed-in',
         )
         return

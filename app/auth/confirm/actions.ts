@@ -4,6 +4,8 @@ import { parseEmailOtpType } from '@/lib/auth/confirmation'
 import { recordConfirmedEmail } from '@/lib/auth/confirmed-email-proof'
 import { authErrorMessage } from '@/lib/auth/errors'
 import { setAuthFlow } from '@/lib/auth/flow-cookies'
+import { maybeHydrateProfileFromOAuth } from '@/lib/auth/oauth-profile'
+import { completeProfileHref, needsProfileName } from '@/lib/auth/profile-name'
 import { verifyRecoveryLink } from '@/lib/auth/recovery-policy'
 import { authHref, sanitizeReturnTo } from '@/lib/auth/return-to'
 import { createClient } from '@/lib/supabase/server'
@@ -18,6 +20,7 @@ export async function confirmEmailAction(
     sanitizeReturnTo(String(formData.get('returnTo') ?? '/')) ?? '/'
   if (!tokenHash || !type)
     return { error: 'This link is incomplete. Please request a new email.' }
+  let askForName = false
   try {
     const supabase = await createClient()
     const recovery = type === 'recovery' || type === 'invite'
@@ -26,6 +29,10 @@ export async function confirmEmailAction(
       : await supabase.auth.verifyOtp({ type, token_hash: tokenHash })
     const { data, error } = result
     if (error) return { error: authErrorMessage(error) }
+    if (!recovery && type !== 'email_change' && data.user) {
+      await maybeHydrateProfileFromOAuth()
+      askForName = await needsProfileName(supabase, data.user)
+    }
     if (data.user && type !== 'email_change')
       await recordConfirmedEmail(data.user)
     if (recovery) {
@@ -50,6 +57,8 @@ export async function confirmEmailAction(
   redirect(
     type === 'recovery' || type === 'invite'
       ? authHref('/auth/update-password', returnTo)
-      : returnTo,
+      : askForName
+        ? completeProfileHref(returnTo)
+        : returnTo,
   )
 }

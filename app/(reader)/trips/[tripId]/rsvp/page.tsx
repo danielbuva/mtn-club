@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { RegistrationSkeleton } from '@/components/registration/page-shell'
 import { RegistrationForm } from '@/components/registration/registration-form'
+import { completeProfileHref, needsProfileName } from '@/lib/auth/profile-name'
 import { getRegistration } from '@/lib/registration/server'
 import { createClient } from '@/lib/supabase/server'
 
@@ -19,6 +20,8 @@ async function RegistrationContent({
     redirect(
       `/auth/login?returnTo=${encodeURIComponent(`/trips/${tripId}/rsvp`)}`,
     )
+  if (await needsProfileName(db, user))
+    redirect(completeProfileHref(`/trips/${tripId}/rsvp`))
   const snapshot = await getRegistration(tripId)
   return <RegistrationForm key={snapshot.tripId} snapshot={snapshot} />
 }
