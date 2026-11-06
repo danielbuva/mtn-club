@@ -40,7 +40,7 @@ for (const suffix of ['60', '61']) {
   }) => {
     const path = `/trips/${tripId(suffix)}`
     await page.goto(path)
-    await page.getByRole('link', { name: 'Edit', exact: true }).click()
+    await page.getByRole('link', { name: 'Edit trip', exact: true }).click()
     await expect(page).toHaveURL(`${path}?edit=1`)
     await expect(
       page.getByRole('button', { name: 'Save trip details' }),
@@ -83,7 +83,7 @@ test('ordinary member cannot enter the editor for an official trip or another cr
       page.getByRole('heading', { name: 'Community edit fixture' }),
     ).toBeVisible()
     await expect(
-      page.getByRole('link', { name: 'Edit', exact: true }),
+      page.getByRole('link', { name: 'Edit trip', exact: true }),
     ).toHaveCount(0)
     await expect(
       page.getByRole('button', { name: 'Save trip details' }),
