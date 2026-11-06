@@ -3,6 +3,8 @@ do $$
 #variable_conflict use_variable
 declare owner_id uuid:=gen_random_uuid(); uid uuid:=gen_random_uuid(); leader uuid:=gen_random_uuid(); role_id uuid:=gen_random_uuid(); assigned_role uuid:=gen_random_uuid();
  tid uuid:=gen_random_uuid(); other_trip uuid:=gen_random_uuid(); minor_id uuid:=gen_random_uuid(); settings jsonb; snapshot jsonb;
+ -- Every trip requires participant contact answers and a confirmed emergency contact.
+ contact jsonb:='{"formVersion":2,"emergencyConfirmed":true,"answers":{"participant_email":"participant@example.test","participant_phone":"+1 (702) 555-0123"},"emergencyContact":{"name":"Test Contact","relationship":"Friend","phone":"702-555-0124"}}';
 begin
  insert into auth.users(id,email) values(owner_id,owner_id||'@example.test'),(uid,uid||'@example.test'),(leader,leader||'@example.test');
  select id into role_id from public.admin_roles where is_super_admin;
@@ -16,16 +18,17 @@ begin
  settings:='{"enabled":true,"eligibility":"members","emergencyRequired":false,"waiverRequired":false,"questions":[],"capacity":2,"waitlistEnabled":false,"deadline":null,"offerHours":24}';
  perform public.save_registration_settings(tid,0,settings);
  perform public.set_registration_enabled(true);
+ contact:=contact||jsonb_build_object('formVersion',(select form_version from public.trip_registration_settings where trip_id=tid));
  perform set_config('request.jwt.claim.sub',uid::text,true);
- begin perform public.registration_command(tid,'register',gen_random_uuid(),0,'{"formVersion":1,"answers":{}}'); raise exception 'Nonmember joined member trip';
+ begin perform public.registration_command(tid,'register',gen_random_uuid(),0,contact); raise exception 'Nonmember joined member trip';
  exception when others then if sqlerrm<>'An active membership is required.' then raise; end if; end;
  insert into public.membership_applications(user_id,full_name,contact_email,age_status,guardian_consent,dues_payment_claimed,dues_claimed_at,primary_interest)
  values(uid,'Test Member',uid||'@example.test','adult','not_required',true,now(),'Hiking');
- begin perform public.registration_command(tid,'register',gen_random_uuid(),0,'{"formVersion":1,"answers":{}}'); raise exception 'Provisional member joined';
+ begin perform public.registration_command(tid,'register',gen_random_uuid(),0,contact); raise exception 'Provisional member joined';
  exception when others then if sqlerrm<>'An active membership is required.' then raise; end if; end;
  insert into public.membership_access_overrides(user_id,starts_at,ends_at,reason,granted_by)
  values(uid,now()-interval '1 day',now()+interval '1 day','Synthetic test access',owner_id);
- snapshot:=public.registration_command(tid,'register',gen_random_uuid(),0,'{"formVersion":1,"answers":{}}');
+ snapshot:=public.registration_command(tid,'register',gen_random_uuid(),0,contact);
  if snapshot->>'state'<>'confirmed' then raise exception 'Active member not confirmed'; end if;
  update public.membership_access_overrides set ends_at=now()-interval '1 hour' where user_id=uid;
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
@@ -39,13 +42,13 @@ begin
  perform public.save_registration_settings(other_trip,0,settings||'{"eligibility":"account"}');
  insert into public.membership_account_restrictions(user_id,restriction,restricted_at) values(uid,'banned',now());
  perform set_config('request.jwt.claim.sub',uid::text,true);
- begin perform public.registration_command(other_trip,'register',gen_random_uuid(),0,'{"formVersion":2,"answers":{}}'); raise exception 'Banned account joined open trip';
+ begin perform public.registration_command(other_trip,'register',gen_random_uuid(),0,contact||'{"formVersion":2}'); raise exception 'Banned account joined open trip';
  exception when others then if sqlerrm<>'Your account cannot register. Contact the club.' then raise; end if; end;
  delete from public.membership_account_restrictions where user_id=uid;
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
  update public.trips set rsvp_deadline=now()-interval '1 second' where id=other_trip;
  perform set_config('request.jwt.claim.sub',uid::text,true);
- begin perform public.registration_command(other_trip,'register',gen_random_uuid(),0,'{"formVersion":2,"answers":{}}'); raise exception 'Closed trip accepted RSVP';
+ begin perform public.registration_command(other_trip,'register',gen_random_uuid(),0,contact||'{"formVersion":2}'); raise exception 'Closed trip accepted RSVP';
  exception when others then if sqlerrm<>'Registration is closed.' then raise; end if; end;
 
  insert into public.admin_capabilities(key,resource,action,label,supports_assigned_scope)

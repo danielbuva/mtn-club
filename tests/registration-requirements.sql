@@ -17,7 +17,7 @@ begin
  'questions','[{"id":"experience","label":"Experience","type":"boolean","required":true}]'::jsonb,
  'capacity',2,'waitlistEnabled',true,'deadline',null,'offerHours',24));
  select waiver_id into doc from public.trip_registration_settings where trip_id=tid;
- payload:=jsonb_build_object('formVersion',2,'emergencyConfirmed',true,'answers','{"experience":false}'::jsonb,'waiverAgreed',true,'waiverId',doc,'signatureName','Synthetic participant',
+ payload:=jsonb_build_object('formVersion',2,'emergencyConfirmed',true,'answers','{"experience":false,"participant_email":"participant@example.test","participant_phone":"+1 (702) 555-0123"}'::jsonb,'waiverAgreed',true,'waiverId',doc,'signatureName','Synthetic participant',
  'emergencyContact','{"name":"Test Contact","relationship":"Friend","phone":"555-010-1234"}'::jsonb);
  perform set_config('request.jwt.claim.sub',user1::text,true); perform public.declare_registration_age(true);
  begin perform public.registration_command(tid,'register',gen_random_uuid(),0,payload||'{"answers":{"unknown":"tampered"}}');

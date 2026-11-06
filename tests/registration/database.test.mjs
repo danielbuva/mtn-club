@@ -22,6 +22,36 @@ const legacyReceiptSecondary = randomUUID()
 const legacyReceiptTrip = randomUUID()
 const legacyReceiptDraft = randomUUID()
 const literal = value => `'${String(value).replaceAll("'", "''")}'`
+// Every trip requires participant contact answers and a confirmed emergency contact.
+const contactAnswers = {
+  participant_email: 'participant@example.test',
+  participant_phone: '+1 (702) 555-0123',
+}
+const emergencyContact = {
+  name: 'Test Contact',
+  relationship: 'Friend',
+  phone: '702-555-0124',
+}
+const contactFields = {
+  answers: contactAnswers,
+  emergencyContact,
+  emergencyConfirmed: true,
+}
+const contactPayload = { formVersion: 2, ...contactFields }
+const contactQuestions = [
+  {
+    id: 'participant_email',
+    label: 'Your email address',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'participant_phone',
+    label: 'Your phone number',
+    type: 'text',
+    required: true,
+  },
+]
 function sql(query) {
   return databaseSql(query, database)
 }
@@ -99,7 +129,7 @@ function fixture(capacity = 1) {
 const register = (trip, user, id = randomUUID()) =>
   asUser(
     user,
-    `select public.registration_command('${trip}','register','${id}',0,'{"formVersion":2,"answers":{}}')`,
+    `select public.registration_command('${trip}','register','${id}',0,${literal(JSON.stringify(contactPayload))})`,
   )
 
 for (const [name, fixtureName] of [
@@ -1072,7 +1102,14 @@ test('incomplete signups stay private, hold no seat, survive drafts, and confirm
     emergencyContact: { name: 'Draft contact' },
   })
   assert.equal(snapshot.state, 'incomplete')
-  assert.equal(snapshot.emergencyContact.name, 'Draft contact')
+  assert.deepEqual(
+    JSON.parse(
+      sql(
+        `select emergency_contact from public.registration_responses where trip_id='${f.trip}' and user_id='${user}'`,
+      ),
+    ),
+    { name: 'Draft contact' },
+  )
   assert.equal(
     snapshot.requirements.includes('Complete the current registration form.'),
     true,
@@ -1087,10 +1124,7 @@ test('incomplete signups stay private, hold no seat, survive drafts, and confirm
     false,
   )
   assert.equal(peerView.confirmedCount, 1)
-  snapshot = await command('register', snapshot.revision, {
-    formVersion: 2,
-    answers: {},
-  })
+  snapshot = await command('register', snapshot.revision, contactPayload)
   assert.equal(snapshot.state, 'confirmed')
   assert.equal(snapshot.confirmedCount, 2)
   assert.equal(
@@ -1119,7 +1153,9 @@ test('trip creators can open and close registration and inspect incomplete signu
     eligibility: 'account',
     emergencyRequired: true,
     waiverRequired: false,
+    // The settings editor round-trips the locked contact questions.
     questions: [
+      ...contactQuestions,
       { id: 'gear', label: 'Gear needed', type: 'text', required: true },
     ],
     capacity: 2,
@@ -1146,8 +1182,11 @@ test('trip creators can open and close registration and inspect incomplete signu
     emergencyContact: { name: 'Partial' },
   })
   await assert.rejects(
-    run('register', state.revision, { formVersion: 2, answers: {} }),
-    /required question/,
+    run('register', state.revision, {
+      ...contactPayload,
+      answers: contactAnswers,
+    }),
+    /required question: Gear needed/,
   )
   await save(creator, 1, false)
   const roster = await asUser(
@@ -1179,7 +1218,7 @@ test('trip creators can open and close registration and inspect incomplete signu
   await save(creator, 2, true)
   state = await run('register', state.revision, {
     formVersion: 2,
-    answers: { gear: 'Tent' },
+    answers: { ...contactAnswers, gear: 'Tent' },
     emergencyContact: {
       name: 'Test contact',
       relationship: 'Friend',
@@ -1246,10 +1285,9 @@ test('transportation preferences normalize, persist through drafts, and remain p
   const command = (name, data) =>
     asUser(
       user,
-      `select public.registration_command('${f.trip}','${name}','${randomUUID()}',${current.revision},${literal(JSON.stringify({ formVersion: current.formVersion, ...data }))})`,
+      `select public.registration_command('${f.trip}','${name}','${randomUUID()}',${current.revision},${literal(JSON.stringify({ formVersion: current.formVersion, ...contactFields, ...data }))})`,
     )
   current = await command('save_draft', {
-    answers: {},
     transportation: { mode: 'driver', seatsOffered: 4 },
   })
   assert.equal(current.state, 'incomplete')
@@ -1262,16 +1300,15 @@ test('transportation preferences normalize, persist through drafts, and remain p
     { mode: 'covered' },
   ]) {
     await assert.rejects(
-      command('save_draft', { answers: {}, transportation: invalid }),
+      command('save_draft', { transportation: invalid }),
       /valid transportation/,
     )
   }
   current = await command('register', {
-    answers: {},
     transportation: { mode: 'needs_ride' },
   })
   assert.deepEqual(current.transportation, { mode: 'needs_ride' })
-  current = await command('update_response', { answers: {} })
+  current = await command('update_response', {})
   assert.deepEqual(current.transportation, { mode: 'needs_ride' })
   const other = await asUser(
     f.users[1],
@@ -1296,15 +1333,13 @@ test('transportation preferences normalize, persist through drafts, and remain p
   )
   await assert.rejects(
     command('update_response', {
-      answers: {},
       transportation: { mode: 'driver', seatsOffered: 3 },
     }),
     /disabled/,
   )
-  current = await command('update_response', { answers: {} })
+  current = await command('update_response', {})
   assert.deepEqual(current.transportation, { mode: 'needs_ride' })
   current = await command('update_response', {
-    answers: {},
     transportation: null,
   })
   assert.equal(current.transportation, null)
@@ -1342,7 +1377,7 @@ test('joining visibility is opt-in, counted privately, remembered, and independe
   ) =>
     asUser(
       user,
-      `select public.registration_command('${trip}','${kind}','${request}',${revision},${literal(JSON.stringify({ formVersion: Number(sql(`select form_version from public.trip_registration_settings where trip_id='${trip}'`)), answers: {}, joiningPreferences: prefs }))})`,
+      `select public.registration_command('${trip}','${kind}','${request}',${revision},${literal(JSON.stringify({ formVersion: Number(sql(`select form_version from public.trip_registration_settings where trip_id='${trip}'`)), ...contactFields, joiningPreferences: prefs }))})`,
     )
   await command(hidden, 'register', 0, preferences(false, false))
   const request = randomUUID()
@@ -1514,7 +1549,8 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
     ...signatureData,
     waiverId: waiver,
     formVersion: 2,
-    answers: {},
+    answers: contactAnswers,
+    emergencyConfirmed: true,
     riskDisclosureId: risk,
     riskAcknowledged: true,
   }
@@ -1552,7 +1588,7 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
   assert.equal(new Set(signatures).size, 1)
   const returning = await asUser(
     f.users[1],
-    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ formVersion: 2, answers: {}, riskDisclosureId: risk, riskAcknowledged: true }))})`,
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ formVersion: 2, answers: {}, emergencyConfirmed: true, riskDisclosureId: risk, riskAcknowledged: true }))})`,
   )
   assert.equal(returning.waiverSigned, true)
   assert.equal(returning.state, 'confirmed')
@@ -1571,7 +1607,7 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
   )
   const longRegistration = await asUser(
     f.users[3],
-    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ ...commandData, answers: longAnswers }))})`,
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ ...commandData, answers: { ...contactAnswers, ...longAnswers } }))})`,
   )
   assert.equal(longRegistration.waiverSigned, true)
   assert.equal(longRegistration.state, 'confirmed')
@@ -1596,13 +1632,13 @@ test('annual adult journeys: exact template, profile signing, trip risks, withdr
   await assert.rejects(
     asUser(
       f.users[0],
-      `select public.registration_command('${f.trip}','update_response','${randomUUID()}',1,${literal(JSON.stringify({ formVersion: 2, answers: {}, riskDisclosureId: risk, riskAcknowledged: true }))})`,
+      `select public.registration_command('${f.trip}','update_response','${randomUUID()}',1,${literal(JSON.stringify({ ...contactPayload, riskDisclosureId: risk, riskAcknowledged: true }))})`,
     ),
     /risks changed/,
   )
   await asUser(
     f.users[0],
-    `select public.registration_command('${f.trip}','update_response','${randomUUID()}',1,${literal(JSON.stringify({ formVersion: 2, answers: {}, riskDisclosureId: newRisk, riskAcknowledged: true }))})`,
+    `select public.registration_command('${f.trip}','update_response','${randomUUID()}',1,${literal(JSON.stringify({ ...contactPayload, riskDisclosureId: newRisk, riskAcknowledged: true }))})`,
   )
   await asUser(
     f.users[0],
@@ -1723,7 +1759,8 @@ test('annual guardian verification, immutable merge evidence, duplicate signing 
   const guardianData = {
     guardianDocument: {
       guardianName: 'Test Parent',
-      signedOn: new Date().toISOString().slice(0, 10),
+      // Annual waivers use the club's business date, not the UTC date.
+      signedOn: sql('select registration_private.waiver_today()'),
       reference: 'Restricted signed document fixture',
       verified: true,
     },
@@ -1755,8 +1792,7 @@ test('annual guardian verification, immutable merge evidence, duplicate signing 
   assert.deepEqual(snapshot.eligibilityReasons, [])
   const request = randomUUID()
   const data = {
-    formVersion: 2,
-    answers: {},
+    ...contactPayload,
     riskAcknowledged: true,
     riskDisclosureId: risk,
   }
@@ -1843,7 +1879,7 @@ test('trip contacts sync to the profile without rewriting previous trip records'
   }
   const snapshot = await asUser(
     f.users[0],
-    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ formVersion: 2, answers: {}, emergencyContact: contact }))})`,
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',0,${literal(JSON.stringify({ ...contactPayload, emergencyContact: contact }))})`,
   )
   assert.deepEqual(
     JSON.parse(
@@ -1856,7 +1892,7 @@ test('trip contacts sync to the profile without rewriting previous trip records'
   const changed = { ...contact, phone: '7025550101' }
   await asUser(
     f.users[0],
-    `select public.registration_command('${f.trip}','update_response','${randomUUID()}',${snapshot.revision},${literal(JSON.stringify({ formVersion: 2, answers: {}, emergencyContact: changed }))})`,
+    `select public.registration_command('${f.trip}','update_response','${randomUUID()}',${snapshot.revision},${literal(JSON.stringify({ ...contactPayload, emergencyContact: changed }))})`,
   )
   assert.deepEqual(
     JSON.parse(
@@ -1994,7 +2030,7 @@ test('incomplete reminders respect cooldown, preferences, completion, and dedupl
   )
   await asUser(
     f.users[0],
-    `select public.registration_command('${f.trip}','register','${randomUUID()}',1,'{"formVersion":2,"answers":{}}')`,
+    `select public.registration_command('${f.trip}','register','${randomUUID()}',1,${literal(JSON.stringify(contactPayload))})`,
   )
   assert.equal(
     sql(
