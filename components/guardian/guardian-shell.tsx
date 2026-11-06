@@ -1,5 +1,5 @@
-import { Mountain } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { ClubBadge } from '@/components/brand/club-badge'
 import { CLUB_EMAIL } from '@/lib/constants'
 
 /** Standalone frame for guardians: no account, no site navigation. */
@@ -8,10 +8,7 @@ export function GuardianShell({ children }: { children: ReactNode }) {
     <div data-trip-surface className="min-h-svh bg-background text-foreground">
       <header className="border-b border-foreground/80">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <p className="flex items-center gap-2 font-brand text-base font-bold uppercase tracking-[0.08em]">
-            <Mountain aria-hidden="true" className="size-5" />
-            UNLV Mountain Club
-          </p>
+          <ClubBadge title="UNLV Mountain Club" className="h-10 w-auto" />
           <p className="font-brand text-[13px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
             Guardians
           </p>

@@ -1,6 +1,7 @@
-import { ExternalLink, Mountain } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { Suspense } from 'react'
 import { ADMIN_NAV_ITEMS } from '@/lib/admin/constants'
+import { AdminBrand } from './admin-brand'
 import { AdminRouteFallback } from './admin-route-fallback'
 import { LoadingValue } from './loading/primitives'
 import { adminNavigationIcons } from './navigation-icons'
@@ -13,17 +14,7 @@ export function AdminShellFallback() {
         className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-[#211D18]/15 bg-[#F3E8D0] p-5 dark:border-border dark:bg-card lg:flex"
       >
         <div className="flex items-center gap-3">
-          <span className="flex size-10 items-center justify-center bg-[#211D18] text-[#FFECA2]">
-            <Mountain className="size-5" />
-          </span>
-          <span>
-            <span className="block font-brand text-lg uppercase leading-none">
-              Mountain Club
-            </span>
-            <span className="text-xs text-[#6A5146] dark:text-muted-foreground">
-              Leadership admin
-            </span>
-          </span>
+          <AdminBrand />
         </div>
         <div className="mt-8 flex-1 space-y-1">
           {ADMIN_NAV_ITEMS.map(item => {

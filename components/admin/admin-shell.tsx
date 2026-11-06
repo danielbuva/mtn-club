@@ -1,9 +1,10 @@
 'use client'
 
-import { ExternalLink, LayoutDashboard, Mountain } from 'lucide-react'
+import { ExternalLink, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type ReactNode, useState } from 'react'
+import { AdminBrand } from '@/components/admin/admin-brand'
 import { AdminMobileNavigation } from '@/components/admin/admin-mobile-navigation'
 import { AdminMobileMenuContext } from '@/components/admin/mobile-menu-context'
 import { cn } from '@/lib/utils'
@@ -56,18 +57,12 @@ export function AdminShell({
     <AdminMobileMenuContext value={mobileMenuOpen}>
       <div className="min-h-screen bg-[#F8F1DF] text-[#211D18] dark:bg-background dark:text-foreground">
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#211D18]/15 bg-[#F3E8D0] p-5 dark:border-border dark:bg-card lg:flex lg:flex-col">
-          <Link href="/admin" className="flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center bg-[#211D18] text-[#FFECA2]">
-              <Mountain className="size-5" aria-hidden="true" />
-            </span>
-            <span>
-              <span className="block font-brand text-lg uppercase leading-none">
-                Mountain Club
-              </span>
-              <span className="text-xs text-[#6A5146] dark:text-muted-foreground">
-                Leadership admin
-              </span>
-            </span>
+          <Link
+            href="/admin"
+            aria-label="UNLV Mountain Club admin home"
+            className="-m-1 flex items-center gap-3 p-1 outline-none focus-visible:ring-2 focus-visible:ring-[#211D18] dark:focus-visible:ring-ring"
+          >
+            <AdminBrand />
           </Link>
           <div className="mt-8 flex-1">
             <AdminNavigation items={items} />

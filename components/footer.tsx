@@ -1,5 +1,6 @@
-import { Instagram, Mail, Mountain } from 'lucide-react'
+import { Instagram, Mail } from 'lucide-react'
 import Link from 'next/link'
+import { ClubBadge } from '@/components/brand/club-badge'
 import { ClubDisclaimer } from '@/components/landing/club-disclaimer'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,13 +17,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground">
-                <Mountain className="w-5 h-5" />
-              </div>
-              <span className="font-semibold text-lg tracking-tight">
-                UNLV Mountain Club
-              </span>
+            <Link
+              href="/"
+              aria-label="UNLV Mountain Club home"
+              className="mb-4 inline-flex outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <ClubBadge className="h-14 w-auto md:h-10" />
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Building community through outdoor adventure. Join us on the

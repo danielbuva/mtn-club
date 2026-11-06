@@ -21,7 +21,7 @@ description: Brand and design rules for UNLV Mountain Club UI and email. Load be
 - Body type: Geist on the site; `Helvetica, Arial, sans-serif` in email. 16px/26px.
 - Shape: square corners, hairline borders, editorial grids. No soft shadows, no gradients, no pill buttons.
 - Voice: short, warm, outdoorsy, plain. Headline states the outcome ("You're going."), body says what to do next. No exclamation marks in security mail.
-- Marks: the red badge (`public/email/club-badge-v1.png`, email only) is the official logo; the outlined arched wordmark (`components/unlv-mountain-club.tsx`) is the site's editorial mark; Lucide `Mountain` is the small UI glyph. Don't combine more than one in a view.
+- Marks: the red badge is the official logo — `ClubBadge` (`components/brand/club-badge.tsx`, traced SVG) on the site, `public/email/club-badge-v1.png` in email. On the site it's the brand mark in chrome: desktop navbar, footers, guardian header, admin sidebar. Its plate is fixed red/white in both themes, and it counts as the view's one red accent. The outlined arched wordmark (`components/unlv-mountain-club.tsx`) stays the editorial mark on the home cover and auth pages; the badge is not on the home page yet. Lucide `Mountain` is the small UI glyph. Don't combine more than one mark in a view.
 
 ## Email craft (from Litmus, caniemail, Gmail CSS docs, goodemailcode)
 

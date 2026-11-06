@@ -1,9 +1,10 @@
 'use client'
 
-import { Menu, Mountain } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useId } from 'react'
+import { ClubBadge } from '@/components/brand/club-badge'
 import { MoreNavigation } from '@/components/navigation/more-navigation'
 import { usePublicNavigationState } from '@/components/navigation/public-navigation-state'
 import { ThemeCycleButton } from '@/components/navigation/theme-cycle-button'
@@ -45,12 +46,10 @@ export function PublicThumbNavigation({
         <div className="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-6 lg:px-8">
           <Link
             href="/"
-            className="flex h-16 items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+            aria-label="UNLV Mountain Club home"
+            className="-ml-2 flex h-16 items-center px-2 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
           >
-            <Mountain className="size-5" aria-hidden="true" />
-            <span className="font-brand text-lg uppercase tracking-wide">
-              UNLV Mountain Club
-            </span>
+            <ClubBadge className="h-11 w-auto" />
           </Link>
 
           <nav
