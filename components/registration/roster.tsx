@@ -1,103 +1,115 @@
 'use client'
 
+import { RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { useTransition } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { RegistrationRoster } from '@/lib/registration/schema'
-import { RosterRow } from './roster-row'
+import { RosterActions } from './roster/roster-actions'
+import { RosterList } from './roster/roster-list'
 import { SettingsEditor } from './settings-editor'
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="px-4 py-3">
+      <p className="font-brand text-2xl font-bold leading-none tabular-nums">
+        {value}
+      </p>
+      <p className="mt-1 text-xs uppercase tracking-[0.08em] text-muted-foreground">
+        {label}
+      </p>
+    </div>
+  )
+}
 
 export function RegistrationRosterView({
   roster,
 }: {
   roster: RegistrationRoster
 }) {
-  const [search, setSearch] = useState('')
   const router = useRouter()
   const [refreshing, startRefresh] = useTransition()
-  const [filter, setFilter] = useState('all')
-  const rows = roster.rows.filter(
-    row =>
-      (filter === 'all' || row.state === filter) &&
-      row.name.toLowerCase().includes(search.toLowerCase()),
-  )
+  const { snapshot } = roster
+  const unfinished = roster.rows.filter(
+    row => row.state === 'incomplete',
+  ).length
+  const capacity = roster.trip.capacity
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">{roster.snapshot.title}</h2>
-      <Button
-        variant="outline"
-        disabled={refreshing}
-        onClick={() => startRefresh(() => router.refresh())}
-      >
-        {refreshing ? 'Refreshing…' : 'Refresh roster'}
-      </Button>
-      <p>
-        {roster.snapshot.confirmedCount} confirmed ·{' '}
-        {roster.snapshot.reservedCount} reserved ·{' '}
-        {roster.snapshot.waitlistCount} waitlisted
-        {' · '}
-        {roster.rows.filter(row => row.state === 'incomplete').length}{' '}
-        incomplete signups
-      </p>
-      <SettingsEditor key={roster.settings.revision} roster={roster} />
-      <Link
-        className="inline-block underline"
-        href={`/trips/${roster.snapshot.tripId}/registrations/export`}
-      >
-        Export roster CSV
-      </Link>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="roster-search">Search participants</Label>
-          <Input
-            id="roster-search"
-            value={search}
-            onChange={event => setSearch(event.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="roster-filter">Registration status</Label>
-          <select
-            id="roster-filter"
-            className="w-full rounded border bg-background p-2"
-            value={filter}
-            onChange={event => setFilter(event.target.value)}
-          >
-            {[
-              'all',
-              'confirmed',
-              'incomplete',
-              'maybe',
-              'waitlisted',
-              'offered',
-              'cancelled',
-              'removed_by_organizer',
-              'legacy_review',
-              'none',
-            ].map(state => (
-              <option key={state} value={state}>
-                {state === 'none'
-                  ? 'Guardian review / not submitted'
-                  : state.replaceAll('_', ' ')}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div data-trip-surface className="space-y-6">
+      <div className="space-y-3">
+        <Link
+          href={`/trips/${snapshot.tripId}`}
+          className="inline-flex min-h-9 items-center text-sm underline underline-offset-4"
+        >
+          ← Back to trip page
+        </Link>
+        <p className="font-brand text-[13px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          Manage registration
+        </p>
+        <h1 className="text-balance font-brand text-4xl font-bold uppercase leading-[0.95] tracking-tight md:text-5xl">
+          {snapshot.title}
+        </h1>
       </div>
-      {rows.length ? (
-        rows.map(row => (
-          <RosterRow
-            key={`${row.userId}-${row.revision}`}
-            row={row}
-            snapshot={roster.snapshot}
+      <div className="grid grid-cols-2 divide-x divide-y divide-border border-2 border-foreground sm:grid-cols-4 sm:divide-y-0">
+        <Stat
+          label={capacity ? `Going of ${capacity}` : 'Going'}
+          value={String(snapshot.confirmedCount)}
+        />
+        <Stat label="Seats offered" value={String(snapshot.reservedCount)} />
+        <Stat label="Waitlist" value={String(snapshot.waitlistCount)} />
+        <Stat label="Unfinished" value={String(unfinished)} />
+      </div>
+      <Tabs defaultValue="attendees" className="gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <TabsList className="h-10 gap-5 rounded-none border-b border-border bg-transparent p-0">
+            <TabsTrigger
+              value="attendees"
+              className="-mb-px h-10 flex-none rounded-none border-0 border-b-2 border-transparent bg-transparent px-0 text-[15px] data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
+            >
+              Attendees · {roster.rows.length}
+            </TabsTrigger>
+            <TabsTrigger
+              value="settings"
+              className="-mb-px h-10 flex-none rounded-none border-0 border-b-2 border-transparent bg-transparent px-0 text-[15px] data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
+            >
+              Settings
+            </TabsTrigger>
+          </TabsList>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="shadow-none"
+              disabled={refreshing}
+              onClick={() => startRefresh(() => router.refresh())}
+            >
+              <RefreshCw
+                aria-hidden="true"
+                className={refreshing ? 'animate-spin' : undefined}
+              />
+              {refreshing ? 'Refreshing…' : 'Refresh'}
+            </Button>
+            <Button asChild variant="outline" size="sm" className="shadow-none">
+              <a href={`/trips/${snapshot.tripId}/registrations/export`}>
+                Download CSV
+              </a>
+            </Button>
+          </div>
+        </div>
+        <TabsContent value="attendees">
+          <RosterList
+            roster={roster}
+            renderActions={row => (
+              <RosterActions row={row} snapshot={snapshot} />
+            )}
           />
-        ))
-      ) : (
-        <p>No registrations match these filters.</p>
-      )}
+        </TabsContent>
+        <TabsContent value="settings">
+          <SettingsEditor key={roster.settings.revision} roster={roster} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

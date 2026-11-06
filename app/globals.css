@@ -298,6 +298,25 @@
   }
 }
 
+/* Trip pages and the organizer roster: brand card, warm muted tones. */
+[data-trip-surface] {
+  --card: #fffcf4;
+  --muted: var(--editorial-panel);
+  --muted-foreground: var(--editorial-muted);
+  --secondary: var(--editorial-panel);
+  --secondary-foreground: var(--editorial-ink);
+  --accent: var(--editorial-panel);
+  --accent-foreground: var(--editorial-ink);
+  --border: color-mix(in srgb, var(--editorial-ink) 18%, transparent);
+  --input: color-mix(in srgb, var(--editorial-ink) 28%, transparent);
+  --ring: var(--editorial-ink);
+}
+
+.dark [data-trip-surface],
+.dark[data-trip-surface] {
+  --card: color-mix(in srgb, var(--editorial-ink) 5%, var(--editorial-page));
+}
+
 [data-calendar-page] {
   --background: var(--editorial-page);
   --foreground: var(--editorial-ink);

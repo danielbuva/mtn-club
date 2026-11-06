@@ -1,13 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Fragment } from 'react'
 import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
-import { ActivityTag, DifficultyTag } from '@/components/trips/TripTags'
-import { TripTitleText } from '@/components/trips/trip-title-text'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import type { TripDetail } from '@/lib/trips/types'
+import type {
+  TripActivityType,
+  TripDetail,
+  TripDifficulty,
+} from '@/lib/trips/types'
+import { PersonAvatar } from './person-avatar'
 
 type TripHeroProps = {
   trip: TripDetail
@@ -15,142 +17,94 @@ type TripHeroProps = {
   editHref?: string
 }
 
-function initials(name?: string) {
-  if (!name) return 'MC'
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(part => part[0]?.toUpperCase() ?? '')
-    .join('')
+const activityLabel: Record<TripActivityType, string> = {
+  climbing: 'Climbing',
+  hiking: 'Hiking',
+  camping: 'Camping',
+  backpacking: 'Backpacking',
+  other: 'Outdoor',
+}
+
+const difficultyLabel: Record<TripDifficulty, string> = {
+  beginner: 'Beginner friendly',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
+  expert: 'Expert',
 }
 
 export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
-  if (!trip.heroImageUrl) {
-    return (
-      <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 md:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-            <Badge
-              variant={trip.isOfficial === false ? 'secondary' : 'outline'}
-            >
-              {trip.isOfficial === false
-                ? 'Community-created trip'
-                : 'Official club trip'}
-            </Badge>
-            <ActivityTag activityType={trip.activityType} uppercase />
-            {trip.difficulty ? (
-              <DifficultyTag difficulty={trip.difficulty} />
-            ) : null}
-            {trip.status !== 'open' ? (
-              <TripStatusBadge status={trip.status} />
-            ) : null}
-          </div>
-          {canEdit && editHref ? (
-            <Button
-              asChild
-              size="sm"
-              variant="outline"
-              className="shrink-0 bg-transparent"
-            >
-              <Link href={editHref}>Edit</Link>
-            </Button>
-          ) : null}
-        </div>
-        <div className="flex items-start gap-2">
-          <h1 className="min-w-0 flex-1 text-2xl font-semibold leading-tight md:text-4xl">
-            <TripTitleText
-              title={trip.title}
-              canceled={trip.status === 'cancelled'}
-            />
-          </h1>
-          <CopyTripLinkButton tripId={trip.id} />
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Avatar className="h-7 w-7 border border-border/70">
-            {trip.leaderAvatarUrl ? (
-              <AvatarImage
-                src={trip.leaderAvatarUrl}
-                alt={trip.leaderName ?? 'Host'}
-              />
-            ) : null}
-            <AvatarFallback>{initials(trip.leaderName)}</AvatarFallback>
-          </Avatar>
-          <span>Led by {trip.leaderName ?? 'UNLV Mountain Club'}</span>
-        </div>
-      </section>
-    )
-  }
+  const eyebrow = [
+    trip.isOfficial === false ? 'Community trip' : 'Official club trip',
+    activityLabel[trip.activityType],
+    trip.difficulty ? difficultyLabel[trip.difficulty] : null,
+  ].filter((item): item is string => Boolean(item))
+  const canceled = trip.status === 'cancelled'
+  const singleLeader =
+    Boolean(trip.leaderName) && !trip.leaderName?.includes(',')
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-border/70">
-      <div className="relative flex min-h-72 flex-col justify-between gap-8 bg-muted p-4 md:aspect-[16/9] md:p-6">
-        <Image
-          src={trip.heroImageUrl}
-          alt={trip.title}
-          fill
-          sizes="(min-width: 1280px) 1280px, 100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-        <div className="relative flex flex-wrap items-start justify-between gap-3">
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <Badge
-              variant="secondary"
-              className="border border-white/20 bg-black/50 text-white"
-            >
-              {trip.isOfficial === false
-                ? 'Community-created trip'
-                : 'Official club trip'}
-            </Badge>
-            <ActivityTag activityType={trip.activityType} uppercase onImage />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            {trip.difficulty ? (
-              <DifficultyTag difficulty={trip.difficulty} onImage />
-            ) : null}
-            {trip.status !== 'open' ? (
-              <TripStatusBadge status={trip.status} />
-            ) : null}
-            {canEdit && editHref ? (
-              <Button
-                asChild
-                size="sm"
-                variant="secondary"
-                className="shrink-0 border border-white/30 bg-black/50 text-white hover:bg-black/60"
-              >
-                <Link href={editHref}>Edit</Link>
-              </Button>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="relative text-white">
-          <div className="flex items-start gap-2">
-            <h1 className="min-w-0 flex-1 text-2xl font-semibold leading-tight md:text-4xl">
-              <TripTitleText
-                title={trip.title}
-                canceled={trip.status === 'cancelled'}
-              />
-            </h1>
-            <CopyTripLinkButton tripId={trip.id} />
-          </div>
-          <div className="mt-4 flex items-center gap-2 text-sm text-white/90">
-            <Avatar className="h-7 w-7 border border-white/20">
-              {trip.leaderAvatarUrl ? (
-                <AvatarImage
-                  src={trip.leaderAvatarUrl}
-                  alt={trip.leaderName ?? 'Host'}
-                />
-              ) : null}
-              <AvatarFallback>{initials(trip.leaderName)}</AvatarFallback>
-            </Avatar>
-            <span>Led by {trip.leaderName ?? 'UNLV Mountain Club'}</span>
-          </div>
+    <header className="space-y-5">
+      <div className="flex items-start justify-between gap-3">
+        <p className="min-w-0 pt-1.5 font-brand text-[13px] font-semibold uppercase leading-5 tracking-[0.14em] text-muted-foreground [word-spacing:0.25rem]">
+          {eyebrow.map((item, index) => (
+            <Fragment key={item}>
+              <span className="whitespace-nowrap">
+                {item}
+                {index < eyebrow.length - 1 ? (
+                  <span aria-hidden="true" className="pl-2">
+                    ·
+                  </span>
+                ) : null}
+              </span>{' '}
+            </Fragment>
+          ))}
+        </p>
+        <div className="flex shrink-0 items-center gap-2">
+          {canEdit && editHref ? (
+            <Button asChild size="sm" variant="outline" className="shadow-none">
+              <Link href={editHref}>Edit trip</Link>
+            </Button>
+          ) : null}
+          <CopyTripLinkButton tripId={trip.id} />
         </div>
       </div>
-    </section>
+
+      {canceled ? (
+        <p className="inline-flex h-7 items-center border-2 border-foreground px-2 font-brand text-sm font-bold uppercase tracking-[0.1em]">
+          Canceled
+        </p>
+      ) : trip.status !== 'open' ? (
+        <TripStatusBadge status={trip.status} />
+      ) : null}
+
+      <h1 className="max-w-4xl text-balance font-brand text-[2.5rem] font-bold uppercase leading-[0.95] tracking-tight md:text-6xl">
+        {trip.title}
+      </h1>
+
+      <div className="flex items-center gap-3 text-sm">
+        {singleLeader ? (
+          <PersonAvatar name={trip.leaderName} src={trip.leaderAvatarUrl} />
+        ) : null}
+        <p>
+          <span className="text-muted-foreground">Led by </span>
+          <span className="font-medium">
+            {trip.leaderName ?? 'UNLV Mountain Club'}
+          </span>
+        </p>
+      </div>
+
+      {trip.heroImageUrl ? (
+        <div className="relative aspect-[16/9] overflow-hidden border border-border bg-muted md:aspect-[21/9]">
+          <Image
+            src={trip.heroImageUrl}
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 1152px) 1152px, 100vw"
+            className="object-cover"
+          />
+        </div>
+      ) : null}
+    </header>
   )
 }
