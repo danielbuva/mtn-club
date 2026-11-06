@@ -1,67 +1,72 @@
 import type { TripDetail } from '@/lib/trips/types'
+import { DashList } from './dash-list'
+import { FieldLabel, TripSection } from './trip-section'
 
 type TripDescriptionProps = {
   trip: TripDetail
 }
 
+function listItems(value: string) {
+  return value
+    .split(/[\n;]+/)
+    .map(item => item.trim().replace(/^[-•*]\s*/, ''))
+    .filter(Boolean)
+}
+
 export function TripDescription({ trip }: TripDescriptionProps) {
   const description = trip.description?.trim()
-  const sectionRows = [
-    { label: 'What', value: trip.overviewWhat?.trim() },
-    { label: 'Where', value: trip.overviewWhere?.trim() },
-    { label: 'Weather', value: trip.overviewWeather?.trim() },
-    { label: 'Equipment', value: trip.overviewEquipment?.trim() },
+  const rows = [
+    { label: 'What', value: trip.overviewWhat?.trim(), list: false },
+    { label: 'Where', value: trip.overviewWhere?.trim(), list: false },
+    { label: 'Weather', value: trip.overviewWeather?.trim(), list: false },
     {
-      label: 'Carpool/Need Gear',
+      label: 'What to bring',
+      value: trip.overviewEquipment?.trim(),
+      list: true,
+    },
+    {
+      label: 'Carpools & borrowing gear',
       value: trip.overviewCarpoolNeedGear?.trim(),
+      list: false,
     },
   ].filter(row => Boolean(row.value))
 
   return (
-    <section className="space-y-2 rounded-2xl border border-border/70 bg-card p-4 md:p-5">
-      <h2 className="text-lg font-semibold">Overview</h2>
-      {trip.eventKind && (
-        <p className="text-xs capitalize text-muted-foreground">
-          {trip.eventKind}
-        </p>
-      )}
-      {sectionRows.length ? (
-        <div className="space-y-3 text-sm text-muted-foreground">
-          {description ? (
-            <p className="whitespace-pre-line">{description}</p>
-          ) : null}
-          {sectionRows.map(row => (
-            <div key={row.label} className="space-y-1">
-              <p className="font-semibold text-foreground">{row.label}:</p>
-              {row.label === 'Equipment' ? (
-                <div className="whitespace-pre-line">
-                  {(row.value ?? '')
-                    .split(/[\n;]+/)
-                    .map(item => item.trim())
-                    .filter(Boolean)
-                    .map(item => (item.startsWith('-') ? item : `- ${item}`))
-                    .join('\n')}
-                </div>
-              ) : (
-                <p className="whitespace-pre-line">{row.value}</p>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : description ? (
-        <div className="space-y-3 text-sm text-muted-foreground">
+    <TripSection id="trip-overview" title="Overview">
+      {description ? (
+        <div className="max-w-prose space-y-3 text-base leading-7">
           {description
-            .split('\n')
+            .split(/\n{2,}|\n/)
             .filter(Boolean)
-            .map(line => (
-              <p key={line}>{line}</p>
+            .map((line, index) => (
+              <p key={`${index}-${line.slice(0, 24)}`}>{line}</p>
             ))}
         </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">
-          Full details will be posted soon.
+      ) : null}
+      {rows.length ? (
+        <dl className="grid max-w-prose gap-5">
+          {rows.map(row => (
+            <div key={row.label} className="space-y-1.5">
+              <dt>
+                <FieldLabel>{row.label}</FieldLabel>
+              </dt>
+              <dd className="text-base leading-7">
+                {row.list ? (
+                  <DashList items={listItems(row.value ?? '')} />
+                ) : (
+                  <p className="whitespace-pre-line">{row.value}</p>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+      {!description && !rows.length ? (
+        <p className="text-base text-muted-foreground">
+          The trip leader hasn’t posted full details yet. Check back closer to
+          the trip, or ask in the club Discord.
         </p>
-      )}
-    </section>
+      ) : null}
+    </TripSection>
   )
 }

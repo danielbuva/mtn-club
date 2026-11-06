@@ -1,18 +1,11 @@
-import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import { TripAttendeesPreview } from '@/components/trips/detail/TripAttendeesPreview'
-import { TripDescription } from '@/components/trips/detail/TripDescription'
 import { TripDetailEditor } from '@/components/trips/detail/TripDetailEditor'
-import { TripHero } from '@/components/trips/detail/TripHero'
-import { TripLogistics } from '@/components/trips/detail/TripLogistics'
-import { TripQuickFacts } from '@/components/trips/detail/TripQuickFacts'
-import { TripRequirements } from '@/components/trips/detail/TripRequirements'
-import { TripStats } from '@/components/trips/detail/TripStats'
-import { TripStickyRsvpBar } from '@/components/trips/detail/TripStickyRsvpBar'
-import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
-import { TripFollowControl } from '@/components/trips/trip-follow-control'
-import { Card, CardContent } from '@/components/ui/card'
+import { TripDetailView } from '@/components/trips/detail/trip-detail-view'
+import {
+  TripOrganizerRoster,
+  TripOrganizerRosterFallback,
+} from '@/components/trips/detail/trip-organizer-roster'
 import { fetchPublicHostsByTrip } from '@/lib/events/queries'
 import {
   legacyRsvpChoice,
@@ -141,6 +134,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
     status,
     capacity: trip.capacity ?? undefined,
     rsvpCount,
+    waitlistCount: registration.waitlistCount,
     leaderName:
       publicHostName ?? leaderProfileRes.data?.display_name ?? undefined,
     leaderAvatarUrl: leaderProfileRes.data?.avatar_url ?? undefined,
@@ -163,8 +157,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
         : 'Open to signed-in accounts',
     ].slice(0, 3),
     attendees,
-    canViewAttendees:
-      registration.canManage || registration.state === 'confirmed',
+    canViewAttendees: registration.attendeesVisible,
     viewerRsvpStatus,
     registrationState: registration.state,
     registrationReadOnly: new Date(trip.starts_at).getTime() <= Date.now(),
@@ -309,54 +302,18 @@ export default async function TripDetailPage({
   }
 
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 pb-32 md:space-y-5">
-      <TripHero trip={trip} canEdit={canEditTrip} editHref={editHref} />
-      {trip.canManageRegistration ? (
-        <Link
-          href={`/trips/${trip.id}/registrations`}
-          className="inline-flex min-h-10 items-center text-sm font-medium underline underline-offset-4"
-        >
-          Manage registration · View incomplete signups and roster
-        </Link>
-      ) : null}
-      {trip.status === 'cancelled' && (
-        <TripCancellationNotice reason={trip.cancellationReason} />
-      )}
-      <TripQuickFacts trip={trip} />
-      {trip.lifecycleStatus === 'published' && trip.startAt > new Date() ? (
-        <Suspense
-          fallback={
-            <output
-              className="block h-28 animate-pulse rounded-2xl border border-border/70 bg-card p-4"
-              aria-label="Loading trip email preferences"
-            />
-          }
-        >
-          <TripFollowControl tripId={trip.id} />
-        </Suspense>
-      ) : null}
-
-      <div className="space-y-4">
-        <div className="space-y-4">
-          <TripDescription trip={trip} />
-          <TripStats trip={trip} />
-          <TripLogistics trip={trip} />
-          <TripRequirements trip={trip} />
-          <TripAttendeesPreview
-            attendees={trip.attendees ?? []}
-            totalCount={trip.rsvpCount ?? 0}
-            canView={trip.canViewAttendees ?? false}
-          />
-
-          <Card className="border-border/70">
-            <CardContent className="p-4 text-sm text-muted-foreground md:p-5">
-              Comments & Q&A coming soon.
-            </CardContent>
-          </Card>
-        </div>
-
-        <TripStickyRsvpBar trip={trip} viewer={viewer} />
-      </div>
-    </main>
+    <TripDetailView
+      trip={trip}
+      viewer={viewer}
+      canEdit={canEditTrip}
+      editHref={editHref}
+      organizerRoster={
+        trip.canManageRegistration ? (
+          <Suspense fallback={<TripOrganizerRosterFallback />}>
+            <TripOrganizerRoster tripId={trip.id} />
+          </Suspense>
+        ) : undefined
+      }
+    />
   )
 }

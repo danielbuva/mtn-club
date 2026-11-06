@@ -82,6 +82,7 @@ export type TripDetail = {
   status: TripStatus
   capacity?: number
   rsvpCount?: number
+  waitlistCount?: number
   leaderName?: string
   leaderAvatarUrl?: string
   leaderContact?: string

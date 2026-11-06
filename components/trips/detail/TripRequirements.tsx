@@ -1,46 +1,43 @@
 import type { TripDetail } from '@/lib/trips/types'
+import { FieldLabel, TripSection } from './trip-section'
 
 type TripRequirementsProps = {
   trip: TripDetail
 }
 
-export function TripRequirements({ trip }: TripRequirementsProps) {
-  const hasRequirements = Boolean(trip.requirements?.length)
-  const hasGear = Boolean(trip.gearList?.length)
+function Checklist({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div className="space-y-2">
+      <FieldLabel>{label}</FieldLabel>
+      <ul className="divide-y divide-border border-y border-border">
+        {items.map(item => (
+          <li key={item} className="flex gap-3 py-2 text-base leading-6">
+            <span aria-hidden="true" className="shrink-0 text-muted-foreground">
+              –
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
-  if (!hasRequirements && !hasGear) {
-    return null
-  }
+export function TripRequirements({ trip }: TripRequirementsProps) {
+  const requirements = trip.requirements ?? []
+  const gear = trip.gearList ?? []
+  if (!requirements.length && !gear.length) return null
 
   return (
-    <section className="space-y-4 rounded-2xl border border-border/70 bg-card p-4 md:p-5">
-      <h2 className="text-lg font-semibold">Requirements & Gear</h2>
-
-      {hasRequirements ? (
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Requirements
-          </p>
-          <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-            {trip.requirements?.map(item => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {hasGear ? (
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Gear checklist
-          </p>
-          <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-            {trip.gearList?.map(item => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </section>
+    <TripSection id="trip-gear" title="Requirements & gear">
+      <div className="grid gap-6 md:grid-cols-2">
+        {requirements.length ? (
+          <Checklist label="Required" items={requirements} />
+        ) : null}
+        {gear.length ? (
+          <Checklist label="Recommended gear" items={gear} />
+        ) : null}
+      </div>
+    </TripSection>
   )
 }
