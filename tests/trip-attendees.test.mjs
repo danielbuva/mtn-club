@@ -159,7 +159,7 @@ test('new accounts are asked for a first and last name after every sign-in path'
   const read = path =>
     readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
   assert.match(
-    read('lib/auth/profile-name.ts'),
+    read('lib/auth/name-policy.ts'),
     /NAME_REQUIRED_SINCE = '2026-11-06T04:00:00Z'/,
   )
   for (const path of [
@@ -168,7 +168,7 @@ test('new accounts are asked for a first and last name after every sign-in path'
     'app/(reader)/trips/[tripId]/rsvp/page.tsx',
   ])
     assert.match(read(path), /needsProfileName/, path)
-  assert.match(read('hooks/use-auth-actions.ts'), /'\/auth\/complete-profile'/)
+  assert.match(read('hooks/use-auth-actions.ts'), /nameRequiredFor\(user\)/)
   const action = read('app/auth/complete-profile/actions.ts')
   assert.match(action, /Enter your first name\./)
   assert.match(action, /Enter your last name\./)
