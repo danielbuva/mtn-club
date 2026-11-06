@@ -158,6 +158,7 @@ export const snapshotSchema = z.object({
     })
     .nullable(),
   events: z.array(z.object({ kind: z.string(), createdAt: z.string() })),
+  attendeesVisible: z.boolean().default(false),
   attendees: z.array(
     z.object({
       userId: z.string().uuid(),
@@ -260,6 +261,15 @@ export const rosterSchema = z.object({
     z.object({
       userId: z.string().uuid(),
       name: z.string(),
+      avatarUrl: z.string().nullable().default(null),
+      showInAttendeeList: z.boolean().default(false),
+      discord: z
+        .object({
+          username: z.string().nullable(),
+          globalName: z.string().nullable(),
+        })
+        .nullable()
+        .default(null),
       state: registrationStateSchema,
       revision: z.number(),
       registeredAt: z.string().nullable(),

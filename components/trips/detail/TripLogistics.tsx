@@ -1,50 +1,32 @@
 import type { TripDetail } from '@/lib/trips/types'
+import { FieldLabel, TripSection } from './trip-section'
 
 type TripLogisticsProps = {
   trip: TripDetail
 }
 
 export function TripLogistics({ trip }: TripLogisticsProps) {
-  if (!trip.locationNotes && !trip.itinerary && !trip.leaderContact) {
-    return null
-  }
+  const rows = [
+    { label: 'Meetup', value: trip.locationNotes },
+    { label: 'Itinerary', value: trip.itinerary },
+    { label: 'Leader contact', value: trip.leaderContact },
+  ].filter(row => Boolean(row.value?.trim()))
+  if (!rows.length) return null
 
   return (
-    <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 md:p-5">
-      <h2 className="text-lg font-semibold">Logistics</h2>
-
-      {trip.locationNotes ? (
-        <div>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Meetup details
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {trip.locationNotes}
-          </p>
-        </div>
-      ) : null}
-
-      {trip.itinerary ? (
-        <div>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Itinerary
-          </p>
-          <p className="mt-1 whitespace-pre-line text-sm text-muted-foreground">
-            {trip.itinerary}
-          </p>
-        </div>
-      ) : null}
-
-      {trip.leaderContact ? (
-        <div>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Leader contact
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {trip.leaderContact}
-          </p>
-        </div>
-      ) : null}
-    </section>
+    <TripSection id="trip-logistics" title="Logistics">
+      <dl className="grid max-w-prose gap-5">
+        {rows.map(row => (
+          <div key={row.label} className="space-y-1.5">
+            <dt>
+              <FieldLabel>{row.label}</FieldLabel>
+            </dt>
+            <dd className="whitespace-pre-line text-base leading-7">
+              {row.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </TripSection>
   )
 }

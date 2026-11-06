@@ -592,26 +592,18 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     )
     .toBe('cancelled')
   await organizer.goto(`/admin/trips/${tripId}/registrations`)
-  await expect(
-    organizer.getByRole('heading', {
-      name: 'Waitlisted Participant',
-      exact: true,
-    }),
-  ).toBeVisible()
+  const waitlistedRow = organizer.getByRole('button', {
+    name: /Waitlisted Participant/,
+  })
+  await expect(waitlistedRow).toBeVisible()
+  await waitlistedRow.click()
   await organizer
     .getByRole('button', { name: 'Offer a seat', exact: true })
     .click()
   await expect(
     organizer
-      .locator('article')
-      .filter({
-        has: organizer.getByRole('heading', {
-          name: 'Waitlisted Participant',
-          exact: true,
-        }),
-      })
-      .getByText('offered', { exact: true })
-      .first(),
+      .getByRole('button', { name: /Waitlisted Participant/ })
+      .getByText('Seat offered', { exact: true }),
   ).toBeVisible()
   await waiting.reload()
   sql(
@@ -622,14 +614,17 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     'data-registration-state',
     'waitlisted',
   )
-  await organizer
-    .getByRole('button', { name: 'Refresh roster', exact: true })
-    .click()
+  await organizer.getByRole('button', { name: 'Refresh', exact: true }).click()
+  const requeuedRow = organizer.getByRole('button', {
+    name: /Waitlisted Participant/,
+  })
+  if ((await requeuedRow.getAttribute('aria-expanded')) !== 'true')
+    await requeuedRow.click()
   await organizer
     .getByRole('button', { name: 'Offer a seat', exact: true })
     .click()
   await expect(
-    organizer.getByRole('button', { name: 'Revoke offer', exact: true }),
+    organizer.getByRole('button', { name: 'Withdraw offer', exact: true }),
   ).toBeVisible()
   await waiting.reload()
   await waiting
