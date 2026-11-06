@@ -30,7 +30,7 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
   const {
     data: { snapshot, values, age, errors },
     feedback: { message, failed, pending, complete },
-    actions: { update, setAge, setComplete, persist, advance },
+    actions: { update, setAge, setComplete, persist, advance, editStep },
     navigation: nav,
     root,
   } = useRegistrationFlow(props)
@@ -283,7 +283,7 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
                   <RegistrationReview
                     snapshot={snapshot}
                     values={values}
-                    onEdit={nav.goTo}
+                    onEdit={editStep}
                   />
                 )}
               </FormStep>

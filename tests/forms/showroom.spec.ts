@@ -524,3 +524,33 @@ test('past confirmed registrations are read only', async ({ page }) => {
   await expect(past.getByRole('button')).toHaveCount(0)
   await expect(past.getByRole('link')).toHaveCount(0)
 })
+
+test('saved account contacts skip repeat questions and remain editable on review', async ({
+  page,
+}) => {
+  await page.goto('/form-lab')
+  await page.getByText('Try a different situation', { exact: true }).click()
+  await page.getByRole('switch', { name: 'Saved account contacts' }).check()
+  const form = page.locator('form[data-guided-form]').first()
+  await expect(form).toHaveAttribute('data-ready', 'true')
+  await expect(
+    form.getByRole('heading', { name: 'Make yourself comfortable.' }),
+  ).toBeVisible()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await expect(
+    form.getByRole('heading', { name: 'Everything look right?' }),
+  ).toBeVisible()
+  await expect(
+    form.getByText('Known Friend · Friend · 7025550124'),
+  ).toBeVisible()
+  await form.getByRole('button', { name: 'Edit Emergency contact' }).click()
+  await expect(
+    form.getByRole('heading', { name: 'Emergency Contact', exact: true }),
+  ).toBeVisible()
+  await form.getByLabel('Phone', { exact: true }).fill('7025550199')
+  await form.getByLabel('I confirm this emergency contact').check()
+  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  await expect(
+    form.getByRole('heading', { name: 'Make yourself comfortable.' }),
+  ).toBeVisible()
+})

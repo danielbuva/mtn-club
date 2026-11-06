@@ -114,6 +114,7 @@ export const snapshotSchema = z.object({
   formVersion: z.number(),
   questions: questionsSchema,
   collectTransportation: z.boolean().default(false),
+  emergencyOnFile: z.boolean().default(false),
   emergencyRequired: z.boolean(),
   annualWaiver: z.boolean().optional(),
   waiverApplicable: z.boolean().optional(),
