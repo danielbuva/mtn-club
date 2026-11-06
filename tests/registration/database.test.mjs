@@ -1096,19 +1096,32 @@ test('incomplete signups stay private, hold no seat, survive drafts, and confirm
     ),
     /own signup/,
   )
+  // A complete saved profile contact must not hide this trip's own unfinished draft.
+  sql(
+    `insert into public.profile_private(user_id,emergency_contact) values('${user}',${literal(JSON.stringify(emergencyContact))}) on conflict(user_id) do update set emergency_contact=excluded.emergency_contact`,
+  )
   snapshot = await command('save_draft', snapshot.revision, {
     formVersion: 2,
     answers: {},
     emergencyContact: { name: 'Draft contact' },
   })
   assert.equal(snapshot.state, 'incomplete')
-  assert.deepEqual(
-    JSON.parse(
-      sql(
-        `select emergency_contact from public.registration_responses where trip_id='${f.trip}' and user_id='${user}'`,
-      ),
-    ),
-    { name: 'Draft contact' },
+  assert.equal(snapshot.emergencyContact.name, 'Draft contact')
+  assert.equal(snapshot.emergencyOnFile, false)
+  const reopened = await asUser(
+    user,
+    `select public.get_trip_registration('${f.trip}')`,
+  )
+  assert.equal(reopened.emergencyContact.name, 'Draft contact')
+  assert.equal(reopened.emergencyOnFile, false)
+  // Omitting the contact submits the draft the member saw, not a fallback.
+  await assert.rejects(
+    command('register', snapshot.revision, {
+      formVersion: 2,
+      answers: contactAnswers,
+      emergencyConfirmed: true,
+    }),
+    /Confirm an emergency contact/,
   )
   assert.equal(
     snapshot.requirements.includes('Complete the current registration form.'),
