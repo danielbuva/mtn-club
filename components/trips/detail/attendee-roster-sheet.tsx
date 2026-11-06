@@ -39,7 +39,7 @@ export function AttendeeRosterSheet({
       <SheetContent
         side="right"
         data-trip-surface
-        className="w-full gap-0 rounded-none bg-background sm:max-w-xl [&_*]:rounded-none [&>button:last-child]:z-20 [&>button:last-child]:bg-background [&>button:last-child]:p-1"
+        className="w-full gap-0 rounded-none bg-background sm:max-w-[38rem] [&_*]:rounded-none [&>button:last-child]:z-20 [&>button:last-child]:bg-background [&>button:last-child]:p-1"
       >
         <div className="flex-1 overflow-y-auto px-4 pb-4 sm:px-5">
           <SheetHeader className="space-y-1 px-0 pt-5 pb-1 pr-10">
