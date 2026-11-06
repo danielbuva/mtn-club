@@ -189,9 +189,8 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
                       <TextField
                         key={field}
                         label={field.charAt(0).toUpperCase() + field.slice(1)}
-                        optional={
-                          !snapshot.emergencyRequired || field === 'notes'
-                        }
+                        optional={field === 'notes'}
+                        required={field !== 'notes'}
                         type={field === 'phone' ? 'tel' : 'text'}
                         inputMode={field === 'phone' ? 'tel' : undefined}
                         autoComplete="off"
@@ -213,31 +212,29 @@ export function RegistrationFlow(props: RegistrationFlowProps) {
                         }}
                       />
                     ))}
-                    {snapshot.emergencyRequired && (
-                      <div className="min-h-20">
-                        <label className="flex min-h-12 items-center gap-3">
-                          <input
-                            type="checkbox"
-                            className="size-6"
-                            checked={values.emergencyConfirmed}
-                            aria-invalid={Boolean(errors.emergencyConfirmed)}
-                            aria-describedby="emergency-confirmed-error"
-                            onChange={event =>
-                              update('emergencyConfirmed', event.target.checked)
-                            }
-                          />
-                          I confirm this emergency contact is current for this
-                          trip.
-                        </label>
-                        <p
-                          id="emergency-confirmed-error"
-                          role={errors.emergencyConfirmed ? 'alert' : undefined}
-                          className="min-h-5 text-sm text-destructive"
-                        >
-                          {errors.emergencyConfirmed}
-                        </p>
-                      </div>
-                    )}
+                    <div className="min-h-20">
+                      <label className="flex min-h-12 items-center gap-3">
+                        <input
+                          type="checkbox"
+                          className="size-6"
+                          checked={values.emergencyConfirmed}
+                          aria-invalid={Boolean(errors.emergencyConfirmed)}
+                          aria-describedby="emergency-confirmed-error"
+                          onChange={event =>
+                            update('emergencyConfirmed', event.target.checked)
+                          }
+                        />
+                        I confirm this emergency contact is current for this
+                        trip.
+                      </label>
+                      <p
+                        id="emergency-confirmed-error"
+                        role={errors.emergencyConfirmed ? 'alert' : undefined}
+                        className="min-h-5 text-sm text-destructive"
+                      >
+                        {errors.emergencyConfirmed}
+                      </p>
+                    </div>
                   </div>
                 )}
                 {nav.current === 'waiver' && (

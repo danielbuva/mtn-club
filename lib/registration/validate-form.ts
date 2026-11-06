@@ -1,3 +1,4 @@
+import { validContactEmail, validContactPhone } from './contact-requirements.ts'
 import type { RegistrationValues } from './form-values'
 import { requiresRiskAcknowledgement } from './risk-activities.ts'
 import type { TripRegistrationSnapshot } from './schema'
@@ -42,6 +43,17 @@ export function validateRegistrationValues(
             ? typeof value === 'string' && question.options?.includes(value)
             : Array.isArray(value) &&
               value.every(item => question.options?.includes(item))
+    if (
+      question.id === 'participant_email' &&
+      (typeof value !== 'string' || !validContactEmail(value))
+    )
+      errors[`answers.${question.id}`] = 'Enter a valid email address.'
+    if (
+      question.id === 'participant_phone' &&
+      (typeof value !== 'string' || !validContactPhone(value))
+    )
+      errors[`answers.${question.id}`] =
+        'Enter a phone number with 10–15 digits.'
     if (!valid) errors[`answers.${question.id}`] = 'Choose a valid answer.'
   }
   if (
@@ -59,16 +71,16 @@ export function validateRegistrationValues(
   if (active('emergency')) {
     for (const field of ['name', 'relationship', 'phone', 'notes'] as const) {
       const value = values.emergencyContact[field].trim()
-      if (snapshot.emergencyRequired && field !== 'notes' && !value)
+      if (field !== 'notes' && value.length < (field === 'name' ? 2 : 1))
         errors[`emergencyContact.${field}`] = 'Please complete this field.'
       if (
         value.length > (field === 'notes' ? 1000 : field === 'phone' ? 50 : 200)
       )
         errors[`emergencyContact.${field}`] = 'This entry is too long.'
-      if (field === 'phone' && value && value.replace(/\D/g, '').length < 10)
-        errors[`emergencyContact.${field}`] = 'Use at least 10 digits.'
+      if (field === 'phone' && value && !validContactPhone(value))
+        errors[`emergencyContact.${field}`] = 'Use 10–15 digits.'
     }
-    if (snapshot.emergencyRequired && !values.emergencyConfirmed)
+    if (!values.emergencyConfirmed)
       errors.emergencyConfirmed = 'Confirm that these details are current.'
   }
   if (
