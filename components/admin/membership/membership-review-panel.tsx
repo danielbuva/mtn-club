@@ -217,9 +217,18 @@ export function MembershipReviewPanel({
                       value={application.user_id}
                     />
                     <Button size="sm" variant="outline">
-                      Confirm guardian consent
+                      Confirm paper guardian consent
                     </Button>
                   </form>
+                ) : null}
+                {application.guardian_consent === 'pending' &&
+                canConfirmGuardian ? (
+                  <a
+                    className="inline-flex min-h-8 items-center text-sm underline underline-offset-4"
+                    href="/admin/membership/trip-guardian-reviews"
+                  >
+                    Review guardian e-signatures
+                  </a>
                 ) : null}
 
                 {canReviewPayment || canGrantComplimentary ? (

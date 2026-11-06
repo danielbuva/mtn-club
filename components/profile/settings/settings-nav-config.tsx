@@ -89,6 +89,11 @@ export const settingsNavSections: SettingsNavSection[] = [
         description: 'Signatures',
       },
       {
+        label: 'Guardian permission',
+        href: '/profile/events/guardian',
+        description: 'Under 18',
+      },
+      {
         label: 'Travel prefs',
         href: '/profile/events/travel-prefs',
         description: 'Carpool details',

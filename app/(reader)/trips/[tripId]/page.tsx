@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { Suspense } from 'react'
+import { GuardianTripNotice } from '@/components/guardian/guardian-trip-notice'
 import { TripDetailEditor } from '@/components/trips/detail/TripDetailEditor'
 import { TripDetailView } from '@/components/trips/detail/trip-detail-view'
 import {
@@ -308,6 +309,16 @@ export default async function TripDetailPage({
       viewer={viewer}
       canEdit={canEditTrip}
       editHref={editHref}
+      guardianNotice={
+        user &&
+        trip.lifecycleStatus === 'published' &&
+        trip.startAt > new Date() ? (
+          // Most viewers are adults and see nothing here, so the fallback is empty.
+          <Suspense fallback={null}>
+            <GuardianTripNotice tripId={trip.id} />
+          </Suspense>
+        ) : undefined
+      }
       organizerRoster={
         trip.canManageRegistration ? (
           <Suspense fallback={<TripOrganizerRosterFallback />}>
