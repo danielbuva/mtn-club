@@ -902,6 +902,93 @@ test('registration merge immediately preserves category and mailing-list opt-out
   )
 })
 
+test('members can edit their own unofficial trips but not others, official trips, or assignments', async () => {
+  const { owner, users } = fixture()
+  const [creator, other] = users
+  const trip = randomUUID()
+  const official = randomUUID()
+  sql(`insert into public.membership_access_overrides(user_id,reason,granted_by)
+    values('${creator}','Community edit test','${owner}'),('${other}','Community edit test','${owner}');
+    insert into public.trips(id,title,starts_at,ends_at,created_by,is_official) values
+      ('${official}','Official trip',now()+interval '5 days',now()+interval '6 days','${creator}',true);`)
+  await asUser(
+    creator,
+    `insert into public.trips(id,title,starts_at,ends_at,created_by,is_official)
+      values('${trip}','Member community trip',now()+interval '5 days',now()+interval '6 days','${creator}',false) returning to_json(id)`,
+  )
+  const edit = (title, extra = '') =>
+    `select to_json(public.save_trip_detail_edits('${trip}','{"title":"${title}","activity_tags":["brand-new-tag"]}'::jsonb,'Trailhead lot'${extra}))`
+  assert.equal(
+    await asUser(
+      creator,
+      `select to_json(public.can_manage_trip('${trip}','${creator}'))`,
+    ),
+    true,
+  )
+  assert.equal(
+    sql(
+      "begin; revoke execute on function public.can_manage_trip(uuid, uuid) from public; select has_function_privilege('authenticated', 'public.can_manage_trip(uuid,uuid)', 'EXECUTE'); rollback;",
+    ),
+    't',
+  )
+  await asUser(creator, edit('Renamed by creator'))
+  assert.equal(
+    sql(
+      `select title||'|'||(select meetup_point from public.trip_private where trip_id='${trip}') from public.trips where id='${trip}'`,
+    ),
+    'Renamed by creator|Trailhead lot',
+  )
+  // Members do not extend the shared tag list, matching publication.
+  assert.equal(
+    sql(
+      `select count(*) from public.trip_tag_options where tag='brand-new-tag'`,
+    ),
+    '0',
+  )
+  await assert.rejects(
+    asUser(other, edit('Hijacked')),
+    /Trip management permission required/,
+  )
+  await assert.rejects(
+    asUser(
+      creator,
+      edit(
+        'Reassigned',
+        `,array['${other}']::uuid[],array['${other}']::uuid[]`,
+      ),
+    ),
+    /All-trip permission is required to reassign leaders/,
+  )
+  await assert.rejects(
+    asUser(
+      creator,
+      `select to_json(public.save_trip_detail_edits('${official}','{"title":"Edited official"}'::jsonb,null))`,
+    ),
+    /Trip management permission required|official trip permission required/,
+  )
+  sql(`insert into public.membership_account_restrictions(user_id,restriction,internal_reason,restricted_at,updated_by)
+    values('${creator}','banned','Community edit ban test',now(),'${owner}')`)
+  await assert.rejects(
+    asUser(creator, edit('After ban')),
+    /Trip management permission required/,
+  )
+  sql(
+    `delete from public.membership_account_restrictions where user_id='${creator}'`,
+  )
+  // Losing active membership removes the right to edit.
+  sql(
+    `update public.membership_access_overrides set revoked_at=now(),revoked_by='${owner}',revoke_reason='test' where user_id='${creator}'`,
+  )
+  await assert.rejects(
+    asUser(creator, edit('After membership ended')),
+    /Trip management permission required/,
+  )
+  assert.equal(
+    sql(`select title from public.trips where id='${trip}'`),
+    'Renamed by creator',
+  )
+})
+
 test('ordinary community creators become leaders without gaining assignment or official-trip permissions', async () => {
   const { owner, users } = fixture()
   const member = users[0]

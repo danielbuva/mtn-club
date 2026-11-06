@@ -1,4 +1,5 @@
 import { createServer } from 'node:http'
+import { handleTripEditRequest } from './trip-edit-fixture.mjs'
 
 // Deliberately incomplete, localhost-only fake for server-side recovery tests.
 // It has no database, upstream forwarding, mail transport, or real credentials.
@@ -53,6 +54,7 @@ const pastAnnouncement = {
 const server = createServer(async (request, response) => {
   response.setHeader('Content-Type', 'application/json')
   const url = new URL(request.url ?? '/', 'http://127.0.0.1:54399')
+  if (await handleTripEditRequest(request, response, url, user.id)) return
   if (url.pathname === '/test/announcement') {
     showAnnouncement = url.searchParams.get('active') !== 'false'
     response.end('{}')
