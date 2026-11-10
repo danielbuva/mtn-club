@@ -85,6 +85,7 @@ export function TripDetailView({
 
         <div className="lg:col-start-2 lg:row-start-2">
           <TripAttendees
+            trip={trip}
             tripId={trip.id}
             attendees={trip.attendees ?? []}
             goingCount={trip.rsvpCount ?? 0}

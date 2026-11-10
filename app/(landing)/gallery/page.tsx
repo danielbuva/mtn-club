@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import {
   GalleryPage,
   GalleryPhotoCollection,
+  GalleryUnavailable,
 } from '@/components/landing/gallery-page'
 import { involvementCenterGalleryPhotos } from '@/lib/gallery/involvement-center-photos'
 import { fetchPublishedGalleryPhotos } from '@/lib/gallery/queries'
@@ -21,8 +22,12 @@ export const viewport: Viewport = {
 
 async function PublishedGalleryPhotos() {
   await connection()
-  const photos = await fetchPublishedGalleryPhotos()
-  return <GalleryPhotoCollection photos={photos} />
+  const result = await fetchPublishedGalleryPhotos()
+  return result.status === 'ok' ? (
+    <GalleryPhotoCollection photos={result.photos} />
+  ) : (
+    <GalleryUnavailable />
+  )
 }
 
 export default function Page() {

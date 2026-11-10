@@ -1,148 +1,19 @@
 'use client'
 
-import { ChevronRightIcon, List } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import type { RefObject } from 'react'
+import { List } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { GuideSection } from '@/app/(reader)/guides/types'
 import { BackButton } from '@/components/back-button'
-import { ThumbNavigationBar } from '@/components/navigation/thumb-navigation'
-import { Button } from '@/components/ui/button'
+import { GuideContents } from '@/components/guides/GuideContents'
 
-const HEADER_OFFSET = 72
-type SectionsDrawerProps = {
-  sections: GuideSection[]
-}
+import {
+  prefersReducedMotion,
+  useDrawerFocusTrap,
+  useInitialHashScroll,
+  useScrollSpy,
+} from './use-guide-navigation'
 
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-const useInitialHashScroll = () => {
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (!window.location.hash) return
-
-    const id = window.location.hash.replace('#', '')
-    const target = document.getElementById(id)
-    if (!target) return
-
-    const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
-    window.setTimeout(() => {
-      target.scrollIntoView({ behavior, block: 'start' })
-    }, 50)
-  }, [])
-}
-
-const useScrollSpy = (ids: GuideSection['id'][]) => {
-  const [activeId, setActiveId] = useState<GuideSection['id']>(ids[0] ?? '')
-
-  useEffect(() => {
-    if (!ids.length || typeof window === 'undefined') return
-    setActiveId(current => (ids.includes(current) ? current : (ids[0] ?? '')))
-  }, [ids])
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || ids.length === 0) return
-
-    let rafId: number | null = null
-
-    const updateActive = () => {
-      rafId = null
-      if (
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight
-      ) {
-        const lastId = ids[ids.length - 1]
-        if (lastId) {
-          setActiveId(current => (current === lastId ? current : lastId))
-        }
-        return
-      }
-
-      let bestId: GuideSection['id'] | null = null
-      let bestDist = Number.POSITIVE_INFINITY
-
-      for (const id of ids) {
-        const element = document.getElementById(id)
-        if (!element) continue
-        const rect = element.getBoundingClientRect()
-        const dist = Math.abs(rect.top - HEADER_OFFSET)
-        if (dist < bestDist) {
-          bestDist = dist
-          bestId = id as GuideSection['id']
-        }
-      }
-
-      if (bestId) {
-        setActiveId(current => (current === bestId ? current : bestId))
-      }
-    }
-
-    const onScroll = () => {
-      if (rafId != null) return
-      rafId = window.requestAnimationFrame(updateActive)
-    }
-
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-
-    return () => {
-      if (rafId != null) window.cancelAnimationFrame(rafId)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [ids])
-
-  return activeId
-}
-
-const useDrawerFocusTrap = (
-  open: boolean,
-  panelRef: RefObject<HTMLDivElement | null>,
-  closeButtonRef: RefObject<HTMLButtonElement | null>,
-  openerRef: RefObject<HTMLElement | null>,
-  onClose: () => void,
-) => {
-  useEffect(() => {
-    if (!open) return
-    closeButtonRef.current?.focus()
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-        return
-      }
-      if (event.key !== 'Tab') return
-
-      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      )
-      if (!focusable || focusable.length === 0) return
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [closeButtonRef, onClose, open, panelRef])
-
-  useEffect(() => {
-    if (open) return
-    openerRef.current?.focus()
-  }, [open, openerRef])
-}
+type SectionsDrawerProps = { sections: GuideSection[] }
 
 export function SectionsDrawer({ sections }: SectionsDrawerProps) {
   const [open, setOpen] = useState(false)
@@ -156,7 +27,7 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
 
   const tocSections = sections.filter(section => {
     const label = (section.tocLabel ?? section.title).trim()
-    return label.length > 0
+    return !section.hideInToc && label.length > 0
   })
   const ids = tocSections.map(section => section.id)
   const activeId = useScrollSpy(ids)
@@ -234,14 +105,48 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
     }
   }, [])
 
+  // The drawer is hidden from md up; close it there so the scroll lock and
+  // focus trap don't outlive it after a rotation or resize.
+  useEffect(() => {
+    if (!open) return
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false)
+    }
+    closeOnDesktop()
+    desktop.addEventListener('change', closeOnDesktop)
+    return () => desktop.removeEventListener('change', closeOnDesktop)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [open])
+
+  const contents = (closeOnSelect = false) => (
+    <GuideContents
+      sections={tocSections}
+      activeId={activeId}
+      expandedIds={expandedIds}
+      onSectionClick={
+        closeOnSelect ? section => handleJump(section.id) : handleSectionClick
+      }
+      onToggle={toggleExpanded}
+      onJump={id => handleJump(id)}
+    />
+  )
+
   return (
     <>
-      <ThumbNavigationBar ariaLabel="Guide navigation" showTheme={false}>
-        <BackButton className="min-h-9 rounded-full px-4 py-2 text-xs text-foreground/70 whitespace-nowrap" />
-        <Button
-          variant="secondary"
-          size="sm"
-          className="rounded-full px-4 md:hidden"
+      <div className="fixed inset-x-0 bottom-0 z-40 flex justify-between border-t border-border bg-background px-4 pb-[env(safe-area-inset-bottom)] md:hidden">
+        <BackButton className="min-h-11 rounded-none px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2" />
+        <button
+          type="button"
+          className="inline-flex min-h-11 items-center gap-2 px-3 font-brand text-[13px] font-bold uppercase tracking-[0.14em] focus-visible:outline-2 focus-visible:outline-offset-2"
           aria-expanded={open}
           aria-controls="sections-drawer"
           onClick={event => {
@@ -249,210 +154,58 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
             setOpen(true)
           }}
         >
-          <List className="size-4" aria-hidden="true" />
-          Sections
-        </Button>
-      </ThumbNavigationBar>
-
-      <AnimatePresence initial={false} mode="wait">
-        {open ? (
+          <List aria-hidden="true" className="size-4" />
+          Contents
+        </button>
+      </div>
+      {open ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="sections-drawer-title"
+          id="sections-drawer"
+          className="fixed inset-0 z-50 bg-background/80 md:hidden"
+        >
+          <button
+            type="button"
+            aria-label="Close contents"
+            className="absolute inset-0"
+            onClick={handleClose}
+          />
           <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="sections-drawer-title"
-            id="sections-drawer"
-            className="fixed inset-0 z-50"
+            ref={panelRef}
+            className="absolute inset-y-0 right-0 flex w-[min(340px,90vw)] flex-col border-l border-border bg-background px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]"
           >
-            <motion.button
-              type="button"
-              aria-label="Close sections drawer"
-              className="absolute inset-0 border-0 bg-transparent p-0"
-              onClick={() => setOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
-            />
-            <motion.div
-              ref={panelRef}
-              className="absolute right-0 top-0 h-dvh w-[min(300px,77vw)] border-l border-border/50 bg-background shadow-2xl"
-              initial={{ x: '100%' }}
-              animate={{
-                x: 0,
-                transition: { type: 'spring', stiffness: 420, damping: 40 },
-              }}
-              exit={{
-                x: '100%',
-                transition: { duration: 0.18, ease: 'easeOut' },
-              }}
-            >
-              <div className="flex h-dvh flex-col px-5 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
-                <div className="flex items-center justify-between py-4">
-                  <div>
-                    <h2
-                      id="sections-drawer-title"
-                      className="text-lg font-semibold"
-                    >
-                      Sections
-                    </h2>
-                    <p className="text-xs text-muted-foreground">
-                      Jump to a section
-                    </p>
-                  </div>
-                </div>
-                <div className="h-36" aria-hidden="true" />
-                <nav
-                  className="toc-scroll max-h-[70vh] space-y-4 overflow-y-auto pb-42 pr-2 overscroll-contain"
-                  style={{ overflowAnchor: 'none' }}
-                >
-                  {tocSections.map(section => (
-                    <div key={section.id} className="space-y-2">
-                      <div className="flex items-start justify-between gap-3">
-                        <button
-                          type="button"
-                          className={`block flex-1 rounded-md text-left text-sm transition-colors ${
-                            activeId === section.id
-                              ? 'text-foreground'
-                              : 'text-muted-foreground'
-                          }`}
-                          onClick={() => handleSectionClick(section)}
-                        >
-                          <div className="font-semibold">
-                            {section.tocLabel ?? section.title}
-                          </div>
-                          {section.tocDescription ? (
-                            <div className="text-xs text-muted-foreground">
-                              {section.tocDescription}
-                            </div>
-                          ) : null}
-                        </button>
-                        {section.subsections?.length ? (
-                          <button
-                            type="button"
-                            className="flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground"
-                            aria-expanded={expandedIds.includes(section.id)}
-                            onClick={() => toggleExpanded(section.id)}
-                          >
-                            <ChevronRightIcon
-                              className={`h-3 w-3 transition-transform ${
-                                expandedIds.includes(section.id)
-                                  ? 'rotate-90'
-                                  : ''
-                              }`}
-                            />
-                            <span className="sr-only">
-                              {expandedIds.includes(section.id)
-                                ? 'Collapse'
-                                : 'Expand'}
-                            </span>
-                          </button>
-                        ) : null}
-                      </div>
-                      {section.subsections?.length &&
-                      expandedIds.includes(section.id) ? (
-                        <div className="space-y-1 border-l border-border/60 pl-4">
-                          {section.subsections.map(subsection => (
-                            <button
-                              key={subsection.id}
-                              type="button"
-                              className="block text-left text-xs text-muted-foreground"
-                              onClick={() => {
-                                triggerHighlight(subsection.id)
-                                lastClickRef.current = subsection.id
-                                handleJump(section.id, false)
-                              }}
-                            >
-                              {subsection.title}
-                            </button>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  ))}
-                </nav>
-              </div>
-            </motion.div>
-            <motion.div
-              className="fixed inset-x-0 bottom-4 z-50 flex justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
-            >
+            <div className="flex items-center justify-between gap-3 border-b border-border py-3">
+              <h2
+                id="sections-drawer-title"
+                className="font-brand text-xl font-bold uppercase"
+              >
+                Contents
+              </h2>
               <button
                 ref={closeButtonRef}
                 type="button"
-                className="px-10 py-4 text-sm text-muted-foreground"
-                onClick={() => setOpen(false)}
+                className="min-h-11 min-w-11 px-2 font-brand text-[13px] uppercase tracking-wide focus-visible:outline-2 focus-visible:outline-offset-2"
+                onClick={handleClose}
               >
                 Close
               </button>
-            </motion.div>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-4">
+              {contents(true)}
+            </div>
           </div>
-        ) : null}
-      </AnimatePresence>
-
-      <aside className="hidden md:block md:sticky md:top-20 md:self-start">
-        <div className="max-h-[calc(100vh-7rem)] overflow-y-auto border border-border/50 bg-background/70 p-4 text-sm text-muted-foreground backdrop-blur">
-          <p className="text-xs uppercase tracking-widest">Sections</p>
-          <nav className="mt-4 space-y-3">
-            {tocSections.map(section => (
-              <div key={section.id} className="space-y-1">
-                <div className="flex items-start justify-between gap-3">
-                  <button
-                    type="button"
-                    onClick={() => handleSectionClick(section)}
-                    className={`block rounded-md text-left transition-colors ${
-                      activeId === section.id
-                        ? 'text-foreground'
-                        : 'text-muted-foreground'
-                    }`}
-                  >
-                    {section.tocLabel ?? section.title}
-                  </button>
-                  {section.subsections?.length ? (
-                    <button
-                      type="button"
-                      className="flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground"
-                      aria-expanded={expandedIds.includes(section.id)}
-                      onClick={() => toggleExpanded(section.id)}
-                    >
-                      <ChevronRightIcon
-                        className={`h-3 w-3 transition-transform ${
-                          expandedIds.includes(section.id) ? 'rotate-90' : ''
-                        }`}
-                      />
-                      <span className="sr-only">
-                        {expandedIds.includes(section.id)
-                          ? 'Collapse'
-                          : 'Expand'}
-                      </span>
-                    </button>
-                  ) : null}
-                </div>
-                {section.subsections?.length &&
-                expandedIds.includes(section.id) ? (
-                  <div className="space-y-1 border-l border-border/60 pl-3">
-                    {section.subsections.map(subsection => (
-                      <button
-                        key={subsection.id}
-                        type="button"
-                        onClick={() => {
-                          triggerHighlight(subsection.id)
-                          lastClickRef.current = subsection.id
-                          handleJump(section.id, false)
-                        }}
-                        className="block text-left text-xs text-muted-foreground"
-                      >
-                        {subsection.title}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </nav>
         </div>
+      ) : null}
+      <aside
+        className="sticky top-20 hidden max-h-[calc(100dvh-6rem)] overflow-y-auto border border-border bg-background p-4 md:block"
+        aria-label="Field guide index"
+      >
+        <p className="mb-4 font-brand text-[13px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+          Contents
+        </p>
+        {contents()}
       </aside>
     </>
   )

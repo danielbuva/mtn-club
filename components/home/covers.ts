@@ -6,7 +6,8 @@ import hoawenLeadingCrack from '@/public/club-covers/hoawen-leading-a-crack.jpg'
 import leadClimbing from '@/public/club-covers/lead-climbing.jpg'
 import multiPitch from '@/public/club-covers/multi-pitch.jpg'
 
-type Cover = {
+export type Cover = {
+  alt: string
   src: StaticImageData
   posMobile: string
   posDesktop: string
@@ -18,6 +19,7 @@ type Cover = {
 
 export const covers: Cover[] = [
   {
+    alt: 'A climber leading a route on sandstone',
     src: leadClimbing,
     posMobile: '50% 35%',
     posDesktop: '45% 40%',
@@ -27,6 +29,7 @@ export const covers: Cover[] = [
     scaleDesktop: 1.05,
   },
   {
+    alt: 'Club members together on a desert hike',
     src: clubHike,
     posMobile: '40% 45%',
     posDesktop: '45% 50%',
@@ -36,6 +39,7 @@ export const covers: Cover[] = [
     scaleDesktop: 1.06,
   },
   {
+    alt: 'A climber working a boulder problem',
     src: bouldering,
     posMobile: '40% 35%',
     posDesktop: '45% 40%',
@@ -45,6 +49,7 @@ export const covers: Cover[] = [
     scaleDesktop: 1.08,
   },
   {
+    alt: 'A climber posing on a rock face',
     src: daxClimbingPose,
     posMobile: '48% 35%',
     posDesktop: '50% 40%',
@@ -54,6 +59,7 @@ export const covers: Cover[] = [
     scaleDesktop: 1.06,
   },
   {
+    alt: 'Climbers on a multi-pitch rock route',
     src: multiPitch,
     posMobile: '20% 90%',
     posDesktop: '20% 50%',
@@ -63,6 +69,7 @@ export const covers: Cover[] = [
     scaleDesktop: 1.12,
   },
   {
+    alt: 'A climber leading a crack in the rock',
     src: hoawenLeadingCrack,
     posMobile: '70% 45%',
     posDesktop: '55% 45%',

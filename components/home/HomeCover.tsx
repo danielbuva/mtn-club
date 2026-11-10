@@ -1,28 +1,17 @@
 import Link from 'next/link'
-import type { ReactNode } from 'react'
+import { type ReactNode, Suspense } from 'react'
+import './cover-layout.css'
+import { CoverEditionCard } from '@/components/home/cover-edition-card'
+import { coverFrameStyle } from '@/components/home/cover-frame'
 import { HomeCoverClient } from '@/components/home/HomeCoverClient'
 import { MoreNavigation } from '@/components/navigation/more-navigation'
 import UNLVMountainClub from '@/components/unlv-mountain-club'
-
-/*
-Tuning knobs:
-- Frame color/opacity: adjust the border color alpha in the frame overlay below.
-- Wordmark placement: update the left/top classes on the UNLVMountainClub wrapper.
-- CTA scrim size/placement: update the right/bottom classes and the scrim gradient size.
-- Per-cover focal points: edit covers[].pos/origin* and scale* for each image.
-*/
-
-const frameStyle = {
-  top: 'calc(var(--frame-padding) + env(safe-area-inset-top))',
-  right: 'calc(var(--frame-padding) + env(safe-area-inset-right))',
-  bottom: 'calc(var(--frame-padding) + env(safe-area-inset-bottom))',
-  left: 'calc(var(--frame-padding) + env(safe-area-inset-left))',
-} as const
+import { getCoverEditionsCached } from '@/lib/editorial/cover-editions'
 
 const primaryLinkClass =
-  'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75'
+  'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFECA2] motion-safe:transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFECA2]'
 const secondaryLinkClass =
-  'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75'
+  'block text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-[#FFF4C9] motion-safe:transition [text-shadow:0_1px_8px_rgba(0,0,0,0.35)] active:translate-x-0.5 active:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFECA2]'
 
 export function HomeCoverNavigation({
   isAuthenticated,
@@ -76,34 +65,47 @@ export function HomeCoverNavigation({
 export default function HomeCover({
   navigation,
   announcement,
+  initialIndex = 0,
 }: {
   navigation: ReactNode
   announcement?: ReactNode
+  initialIndex?: number
 }) {
   const transitionDurationMs = 500
 
   return (
-    <div className="home-cover relative min-h-svh bg-neutral-950 text-white overflow-hidden select-none [--frame-padding:16px] md:[--frame-padding:24px]">
-      <div className="absolute inset-0 bg-neutral-950" />
-      <HomeCoverClient transitionDurationMs={transitionDurationMs} />
+    <div className="home-cover relative min-h-svh bg-[#211D18] text-[#F8F1DF] overflow-hidden select-none [--frame-padding:16px] md:[--frame-padding:24px]">
+      <div className="absolute inset-0 bg-[#211D18]" />
+      <HomeCoverClient
+        transitionDurationMs={transitionDurationMs}
+        initialIndex={initialIndex}
+      />
+      <Suspense fallback={null}>
+        <HomeEditionCard />
+      </Suspense>
       {announcement}
-
       <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/20 via-black/30 to-black/55" />
 
-      <div className="pointer-events-none absolute z-20" style={frameStyle}>
+      <div
+        className="pointer-events-none absolute z-20"
+        style={coverFrameStyle}
+      >
         <div className="pointer-events-none absolute inset-0 border border-[#FEF1D0] opacity-60" />
         <div className="pointer-events-none absolute left-0 bottom-1 text-[10px] tracking-[0.2em] font-medium text-[#FEF1D0] opacity-40 [writing-mode:vertical-rl] rotate-180">
           Founded 2020
         </div>
       </div>
 
-      <div className="pointer-events-none absolute z-30" style={frameStyle}>
+      <div
+        className="pointer-events-none absolute z-30"
+        style={coverFrameStyle}
+      >
         <div
           data-home-wordmark
           className="pointer-events-none absolute left-1/2 top-[42%] -translate-x-[56%] -translate-y-1/2 w-[min(86vw,320px)] sm:w-[min(86vw,360px)] md:w-[min(520px,40vw)] lg:top-6 lg:left-6 lg:translate-x-0 lg:translate-y-0 lg:w-[min(520px,40vw)]"
         >
           <span className="sr-only">UNLV Mountain Club</span>
-          <UNLVMountainClub viewBox="0 0 355 196" />
+          <UNLVMountainClub viewBox="0 0 355 196" className="h-auto w-full" />
         </div>
 
         <div className="pointer-events-auto absolute right-1 bottom-5 md:right-6 md:bottom-6 font-brand select-auto">
@@ -120,4 +122,14 @@ export default function HomeCover({
       </div>
     </div>
   )
+}
+
+async function HomeEditionCard() {
+  const { editions } = await getCoverEditionsCached()
+  const edition = editions[0]
+  return edition ? (
+    <div className="pointer-events-none absolute z-30" style={coverFrameStyle}>
+      <CoverEditionCard cover={edition} />
+    </div>
+  ) : null
 }

@@ -3,11 +3,15 @@
 import { useState } from 'react'
 import { TripCTA } from '@/components/trips/TripCTA'
 import { TripBottomControls } from '@/components/trips/trip-bottom-controls'
+import { isTripPast } from '@/lib/trips/is-trip-past'
 import type { TripDetail } from '@/lib/trips/types'
 
 type TripStickyRsvpBarProps = {
   trip: Pick<
     TripDetail,
+    | 'startAt'
+    | 'endAt'
+    | 'lifecycleStatus'
     | 'id'
     | 'status'
     | 'registrationReadOnly'
@@ -22,7 +26,9 @@ type TripStickyRsvpBarProps = {
 
 export function TripStickyRsvpBar({ trip }: TripStickyRsvpBarProps) {
   const [expanded, setExpanded] = useState(false)
+  const past = isTripPast(trip, Date.now())
   const choicesExpanded =
+    !past &&
     expanded &&
     !['closed', 'full', 'cancelled'].includes(trip.status) &&
     (!trip.registrationState ||
@@ -35,6 +41,8 @@ export function TripStickyRsvpBar({ trip }: TripStickyRsvpBarProps) {
     >
       {trip.status === 'cancelled' ? (
         <span className="px-4 text-sm font-semibold">Trip canceled</span>
+      ) : past ? (
+        <span className="px-4 text-sm font-semibold">Past trip</span>
       ) : (
         <TripCTA
           trip={trip}

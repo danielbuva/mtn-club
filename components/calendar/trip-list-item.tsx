@@ -4,6 +4,10 @@ import { Lock } from 'lucide-react'
 import { getTripCategories } from '@/components/calendar/calendar-categories'
 import { CalendarCategoryPill } from '@/components/calendar/calendar-category-pill'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import {
+  getCalendarTripEdition,
+  TripEditionMark,
+} from '@/components/trips/trip-edition-mark'
 import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -29,11 +33,22 @@ interface TripListItemProps {
 
 export function TripListItem({ trip, onClick }: TripListItemProps) {
   const categories = getTripCategories(trip)
+  const edition = getCalendarTripEdition(trip)
 
   return (
     <Card
-      className="overflow-hidden rounded-none cursor-pointer hover:border-primary/20 hover:shadow-lg transition-all"
+      className="overflow-hidden rounded-none cursor-pointer hover:border-primary/20 hover:shadow-lg transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
       onClick={onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${trip.title}`}
+      onKeyDown={event => {
+        if (event.target !== event.currentTarget) return
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onClick()
+        }
+      }}
     >
       <CardContent className="p-0">
         <div className="flex flex-col sm:flex-row">
@@ -62,6 +77,11 @@ export function TripListItem({ trip, onClick }: TripListItemProps) {
           </div>
 
           <div className="flex-1 p-4">
+            {edition ? (
+              <div className="mb-2">
+                <TripEditionMark edition={edition} />
+              </div>
+            ) : null}
             <div className="flex items-start justify-between gap-4 mb-2">
               <div>
                 <div className="flex items-center gap-2 mb-1">

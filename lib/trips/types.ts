@@ -21,6 +21,7 @@ export type TripRsvpChoice = 'going' | 'waitlisted' | 'not_going' | null
 
 export type TripListItem = {
   id: string
+  scheduleKey?: string | null
   title: string
   activityType: TripActivityType
   activityTags: string[]
@@ -66,6 +67,7 @@ export type TripAttendee = {
 
 export type TripDetail = {
   id: string
+  scheduleKey?: string | null
   title: string
   activityType: TripActivityType
   activityTags: string[]

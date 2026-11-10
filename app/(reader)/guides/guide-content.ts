@@ -203,6 +203,7 @@ export const startHereSections: GuideSection[] = [
   },
   {
     id: 'next',
+    ctaStyle: 'guide-index',
     title: 'Where to go next',
     blocks: [],
     ctaLinks: [
@@ -233,6 +234,7 @@ export const gearSections: GuideSection[] = [
     blocks: [
       {
         kind: 'list',
+        columns: true,
         items: [
           'Tents',
           'Sleeping bags',
@@ -249,6 +251,8 @@ export const gearSections: GuideSection[] = [
     blocks: [
       {
         kind: 'list',
+        variant: 'checklist',
+        columns: true,
         items: [
           'Clothing appropriate for the activity',
           'Shoes (hiking shoes, climbing shoes if you have them)',
@@ -578,6 +582,7 @@ export const faqSections: GuideSection[] = [
           ],
         ],
       },
+      { kind: 'label', text: 'Activities you can join' },
       {
         kind: 'list',
         items: [...MEMBERSHIP_INTEREST_OPTIONS],
@@ -610,6 +615,7 @@ export const faqSections: GuideSection[] = [
   {
     id: 'cta',
     title: 'Keep Exploring',
+    ctaStyle: 'guide-index',
     blocks: [],
     ctaLinks: [
       { label: 'Join Discord →', href: DISCORD_INVITE_URL },

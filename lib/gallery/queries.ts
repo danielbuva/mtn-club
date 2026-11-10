@@ -16,9 +16,11 @@ export type PublicGalleryPhoto = Pick<
 const publicGallerySelect =
   'id, title, alt_text, caption, taken_on, trip_id, storage_path'
 
-export async function fetchPublishedGalleryPhotos(): Promise<
-  PublicGalleryPhoto[]
-> {
+export type PublishedGalleryResult =
+  | { status: 'ok'; photos: PublicGalleryPhoto[] }
+  | { status: 'error' }
+
+export async function fetchPublishedGalleryPhotos(): Promise<PublishedGalleryResult> {
   try {
     const supabase = createPublicClient()
     const { data, error } = await supabase
@@ -28,20 +30,23 @@ export async function fetchPublishedGalleryPhotos(): Promise<
       .order('sort_order', { ascending: true })
       .order('taken_on', { ascending: false, nullsFirst: false })
 
-    if (error) return []
+    if (error) return { status: 'error' }
 
-    return (data ?? []).map(photo => ({
-      id: photo.id,
-      title: photo.title,
-      alt_text: photo.alt_text,
-      caption: photo.caption,
-      taken_on: photo.taken_on,
-      trip_id: photo.trip_id,
-      imageUrl: getGalleryPublicUrl(supabase, photo.storage_path),
-      unoptimized: photo.storage_path.startsWith('https://'),
-    }))
+    return {
+      status: 'ok',
+      photos: (data ?? []).map(photo => ({
+        id: photo.id,
+        title: photo.title,
+        alt_text: photo.alt_text,
+        caption: photo.caption,
+        taken_on: photo.taken_on,
+        trip_id: photo.trip_id,
+        imageUrl: getGalleryPublicUrl(supabase, photo.storage_path),
+        unoptimized: photo.storage_path.startsWith('https://'),
+      })),
+    }
   } catch {
-    return []
+    return { status: 'error' }
   }
 }
 

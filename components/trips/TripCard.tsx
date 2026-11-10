@@ -5,6 +5,7 @@ import { CalendarDays, Clock3, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { EditionPhoto } from '@/components/editorial/edition-photo'
 import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { TripCTA } from '@/components/trips/TripCTA'
 import { TripMetaRow } from '@/components/trips/TripMetaRow'
@@ -12,11 +13,13 @@ import { TripStats } from '@/components/trips/TripStats'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { DifficultyTag } from '@/components/trips/TripTags'
 import { TripCancellationNotice } from '@/components/trips/trip-cancellation-notice'
+import { TripEditionMark } from '@/components/trips/trip-edition-mark'
 import { TripEventTag } from '@/components/trips/trip-event-tag'
 import { TripTitleText } from '@/components/trips/trip-title-text'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { getTripEdition } from '@/lib/editorial/editions'
 import type { TripListItem } from '@/lib/trips/types'
 
 const formatTripDate = (date: Date) =>
@@ -46,10 +49,18 @@ type TripCardProps = {
 
 export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
   const router = useRouter()
+  const edition = getTripEdition(trip)
   const detailHref = trip.detailHref ?? `/trips/${trip.id}`
   if (trip.status === 'cancelled') {
     return (
-      <Card className="border-border/70 transition-shadow hover:shadow-md">
+      <Card className="overflow-hidden rounded-none border-border shadow-none">
+        {viewMode === 'grid' && edition?.level === 'special' ? (
+          <EditionPhoto
+            edition={edition}
+            canceled
+            className="aspect-video border-b border-foreground/80"
+          />
+        ) : null}
         <CardContent className="space-y-2 p-4 md:p-5">
           <div className="flex items-start gap-2">
             <h2 className="min-w-0 flex-1 text-lg font-semibold leading-snug md:text-xl">
@@ -62,12 +73,16 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
             </h2>
             <CopyTripLinkButton tripId={trip.id} />
           </div>
+          <TripEditionMark edition={edition} />
           <TripCancellationNotice reason={trip.cancellationReason} />
         </CardContent>
       </Card>
     )
   }
-  const heroImageUrl = viewMode === 'grid' ? trip.heroImageUrl : undefined
+  const heroImageUrl =
+    viewMode === 'grid' && edition?.level !== 'special'
+      ? trip.heroImageUrl
+      : undefined
   const showImage = Boolean(heroImageUrl)
   const visibleTags = (trip.tags ?? trip.activityTags).filter(
     tag => !['outdoor', 'fall'].includes(tag.trim().toLowerCase()),
@@ -75,7 +90,7 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
 
   return (
     <Card
-      className="group cursor-pointer overflow-hidden border-border/70 transition-all hover:shadow-md"
+      className="group cursor-pointer overflow-hidden rounded-none border-border shadow-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
       onClick={event => {
         if (
           event.target instanceof Node &&
@@ -109,8 +124,6 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
             className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-
           {visibleTags.length || trip.status === 'members_only' ? (
             <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-2">
               {visibleTags.map(tag => (
@@ -128,9 +141,15 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
             </div>
           ) : null}
         </div>
+      ) : viewMode === 'grid' && edition?.level === 'special' ? (
+        <EditionPhoto
+          edition={edition}
+          className="aspect-video border-b border-foreground/80"
+        />
       ) : null}
 
       <CardContent className="space-y-3 p-4 md:p-5">
+        <TripEditionMark edition={edition} />
         <div className="space-y-2">
           <div className="flex items-start gap-2">
             <h2 className="min-w-0 flex-1 line-clamp-2 text-lg font-semibold leading-snug md:text-xl">
@@ -196,7 +215,9 @@ export function TripCard({ trip, viewMode = 'grid' }: TripCardProps) {
 
         <div className="space-y-3 border-t border-border/70 pt-3">
           <div className="flex flex-col items-stretch gap-2">
-            {!['members_only', 'closed', 'full'].includes(trip.status) ? (
+            {!['open', 'members_only', 'closed', 'full'].includes(
+              trip.status,
+            ) ? (
               <div className="w-fit">
                 <TripStatusBadge status={trip.status} />
               </div>

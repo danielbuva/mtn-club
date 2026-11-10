@@ -114,6 +114,7 @@ async function getTripDetail(tripId: string): Promise<TripDetail | null> {
 
   return {
     id: trip.id,
+    scheduleKey: trip.schedule_key,
     lifecycleStatus: trip.lifecycle_status,
     cancellationReason: trip.cancellation_reason,
     title: trip.title,
