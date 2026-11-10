@@ -105,6 +105,19 @@ export function SectionsDrawer({ sections }: SectionsDrawerProps) {
     }
   }, [])
 
+  // The drawer is hidden from md up; close it there so the scroll lock and
+  // focus trap don't outlive it after a rotation or resize.
+  useEffect(() => {
+    if (!open) return
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false)
+    }
+    closeOnDesktop()
+    desktop.addEventListener('change', closeOnDesktop)
+    return () => desktop.removeEventListener('change', closeOnDesktop)
+  }, [open])
+
   useEffect(() => {
     if (!open) return
     const previous = document.body.style.overflow
