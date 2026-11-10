@@ -4,12 +4,17 @@ import { Fragment } from 'react'
 import { CopyTripLinkButton } from '@/components/trips/copy-trip-link-button'
 import { TripStatusBadge } from '@/components/trips/TripStatusBadge'
 import { Button } from '@/components/ui/button'
+import { expeditionDateline, getTripEdition } from '@/lib/editorial/editions'
+import { formatDateOnly } from '@/lib/events/formatters'
+import { formatScheduleDate } from '@/lib/events/schedule'
+import { isTripPast } from '@/lib/trips/is-trip-past'
 import type {
   TripActivityType,
   TripDetail,
   TripDifficulty,
 } from '@/lib/trips/types'
 import { PersonAvatar } from './person-avatar'
+import { TripEditionHero } from './trip-edition-hero'
 
 type TripHeroProps = {
   trip: TripDetail
@@ -33,6 +38,9 @@ const difficultyLabel: Record<TripDifficulty, string> = {
 }
 
 export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
+  const edition = getTripEdition(trip)
+  const past = isTripPast(trip, Date.now())
+  const zone = trip.timeZone ?? 'America/Los_Angeles'
   const eyebrow = [
     trip.isOfficial === false ? 'Community trip' : 'Official club trip',
     activityLabel[trip.activityType],
@@ -69,7 +77,15 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
         </div>
       </div>
 
-      {canceled ? (
+      {canceled && edition?.level === 'special' ? null : past && !canceled ? (
+        <p className="font-brand text-sm font-bold uppercase tracking-wide">
+          Past trip ·{' '}
+          {formatScheduleDate(
+            formatDateOnly(trip.startAt, zone),
+            trip.endAt ? formatDateOnly(trip.endAt, zone) : undefined,
+          )}
+        </p>
+      ) : canceled ? (
         <p className="inline-flex h-7 items-center border-2 border-foreground px-2 font-brand text-sm font-bold uppercase tracking-[0.1em]">
           Canceled
         </p>
@@ -80,6 +96,12 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
       <h1 className="max-w-4xl text-balance font-brand text-[2.5rem] font-bold uppercase leading-[0.95] tracking-tight md:text-6xl">
         {trip.title}
       </h1>
+
+      {edition?.level === 'feature' && trip.endAt ? (
+        <p className="text-balance border-t border-border pt-3 font-brand text-base uppercase tracking-[0.1em] text-muted-foreground">
+          {expeditionDateline(trip.startAt, trip.endAt, zone)}
+        </p>
+      ) : null}
 
       <div className="flex items-center gap-3 text-sm">
         {singleLeader ? (
@@ -93,7 +115,9 @@ export function TripHero({ trip, canEdit = false, editHref }: TripHeroProps) {
         </p>
       </div>
 
-      {trip.heroImageUrl ? (
+      {edition?.level === 'special' ? (
+        <TripEditionHero trip={trip} edition={edition} />
+      ) : trip.heroImageUrl ? (
         <div className="relative aspect-[16/9] overflow-hidden border border-border bg-muted md:aspect-[21/9]">
           <Image
             src={trip.heroImageUrl}

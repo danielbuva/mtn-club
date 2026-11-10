@@ -1,28 +1,44 @@
 import Link from 'next/link'
+import {
+  type FieldGuideId,
+  fieldGuides,
+} from '@/app/(reader)/guides/field-guides'
 import type { GuideCtaLink } from '@/app/(reader)/guides/types'
 import { getViewer } from '@/lib/auth/viewer'
 import { cn } from '@/lib/utils'
 
+function guideLinkLabel(link: GuideCtaLink, style?: 'guide-index') {
+  if (style !== 'guide-index') return link.label
+  const id = link.href.split('#')[0].slice(1)
+  if (!Object.hasOwn(fieldGuides, id)) return link.label
+  const guide = fieldGuides[id as FieldGuideId] // Own-key check above narrows the registry lookup.
+  return `Field Guide No. ${guide.number} · ${guide.topic} →`
+}
+
 type GuideCtasProps = {
   links: GuideCtaLink[]
   className?: string
+  style?: 'guide-index'
 }
 
-export function GuideCtas({ links, className }: GuideCtasProps) {
+export function GuideCtas({ links, className, style }: GuideCtasProps) {
   const visibleLinks = links.filter(link => link.href)
   if (!visibleLinks.length) return null
 
   return (
     <div
-      className={cn('mt-6 md:mt-8 flex flex-col items-end gap-4', className)}
+      className={cn(
+        'mt-6 flex flex-col border-t border-border pt-3',
+        className,
+      )}
     >
       {visibleLinks.map(link => (
         <Link
           key={link.href}
           href={link.href}
-          className="text-base sm:text-xl md:text-2xl font-normal tracking-wide text-foreground/90 transition [text-shadow:0_1px_8px_rgba(0,0,0,0.12)] active:translate-x-0.5 active:opacity-75 text-right"
+          className="inline-flex min-h-11 items-center py-2 font-brand text-base font-bold uppercase tracking-wide text-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          {link.label}
+          {guideLinkLabel(link, style)}
         </Link>
       ))}
     </div>
@@ -32,15 +48,16 @@ export function GuideCtas({ links, className }: GuideCtasProps) {
 export function GuideCtasSkeleton({ className }: { className?: string }) {
   return (
     <div
-      className={cn('mt-6 md:mt-8 flex flex-col items-end gap-4', className)}
+      className={cn(
+        'mt-6 flex flex-col border-t border-border pt-3',
+        className,
+      )}
       aria-hidden="true"
       data-guide-ctas-loading
     >
-      <span className="inline-flex items-center gap-2">
-        <span className="h-6 w-44 animate-pulse bg-foreground/10 md:h-8" />
-        <span className="text-base text-foreground/90 sm:text-xl md:text-2xl">
-          →
-        </span>
+      <span className="inline-flex min-h-11 items-center gap-2">
+        <span className="h-5 w-64 max-w-full bg-foreground/10 motion-safe:animate-pulse" />
+        <span className="text-base text-foreground">→</span>
       </span>
     </div>
   )

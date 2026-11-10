@@ -7,6 +7,7 @@ import {
   tripStatsLine,
   tripTimeLine,
 } from '@/lib/trips/detail-format'
+import { isTripPast } from '@/lib/trips/is-trip-past'
 import type { TripDetail } from '@/lib/trips/types'
 
 type TripQuickFactsProps = {
@@ -36,6 +37,7 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export function TripQuickFacts({ trip }: TripQuickFactsProps) {
+  const past = isTripPast(trip, Date.now())
   const time = tripTimeLine(trip)
   const spots = spotsLine(trip)
   const signups = signupLine(trip)
@@ -50,7 +52,7 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
       aria-label="Trip details"
       className="border-2 border-foreground bg-card dark:border-foreground/60"
     >
-      {status && !canceled ? (
+      {status && !canceled && !past ? (
         <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b-2 border-foreground bg-[var(--editorial-highlight)] px-4 py-2.5 text-[#211d18] dark:border-foreground/60">
           <p className="font-brand text-base font-bold uppercase tracking-wide">
             {status}
@@ -70,28 +72,36 @@ export function TripQuickFacts({ trip }: TripQuickFactsProps) {
           <span className="block font-medium">
             <TripTitleText title={tripDateLine(trip)} canceled={canceled} />
           </span>
-          <span className="block text-muted-foreground">
-            {time ?? 'Time to be announced'}
-          </span>
+          {time || !past ? (
+            <span className="block text-muted-foreground">
+              {time ?? 'Time to be announced'}
+            </span>
+          ) : null}
         </Fact>
         <Fact label="Where">
           <span className="font-medium">{trip.locationName}</span>
         </Fact>
         {canceled ? null : (
-          <Fact label="Spots">
-            <span className="block font-medium tabular-nums">{spots.head}</span>
-            <span className="block text-muted-foreground">{spots.detail}</span>
+          <Fact label={past ? 'Attendance' : 'Spots'}>
+            <span className="block font-medium tabular-nums">
+              {past ? `${trip.rsvpCount ?? 0} went` : spots.head}
+            </span>
+            {!past ? (
+              <span className="block text-muted-foreground">
+                {spots.detail}
+              </span>
+            ) : null}
             {trip.canViewAttendees && (trip.attendees?.length ?? 0) > 0 ? (
               <a
                 href="#trip-attendees"
                 className="mt-1 inline-block text-sm underline underline-offset-4 lg:hidden"
               >
-                See who’s going
+                See {past ? 'who went' : 'who’s going'}
               </a>
             ) : null}
           </Fact>
         )}
-        {signups ? (
+        {signups && !past ? (
           <Fact label="Signups">
             <span className="block font-medium">{signups.label}</span>
             {signups.label === 'Closed' ? null : (

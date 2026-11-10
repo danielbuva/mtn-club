@@ -1,53 +1,19 @@
-import { Badge } from '@/components/ui/badge'
 import type { TripStatus } from '@/lib/trips/types'
 
-type TripStatusBadgeProps = {
-  status: TripStatus
+const labels: Record<TripStatus, string> = {
+  closed: 'Registration closed',
+  open: 'RSVP open',
+  waitlist: 'Waitlist',
+  full: 'Full',
+  members_only: 'Members only',
+  cancelled: 'Canceled',
 }
 
-const statusMap: Record<TripStatus, { label: string; className: string }> = {
-  closed: {
-    label: 'Registration closed',
-    className: 'border-border bg-muted text-muted-foreground',
-  },
-  open: {
-    label: 'RSVP Open',
-    className: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700',
-  },
-  waitlist: {
-    label: 'Waitlist',
-    className: 'border-amber-500/30 bg-amber-500/10 text-amber-700',
-  },
-  full: {
-    label: 'Full',
-    className: 'border-slate-500/30 bg-slate-500/10 text-slate-700',
-  },
-  members_only: {
-    label: 'Members only',
-    className: 'border-blue-500/30 bg-blue-500/10 text-blue-700',
-  },
-  cancelled: {
-    label: 'Canceled',
-    className: 'border-rose-500/30 bg-rose-500/10 text-rose-700',
-  },
-}
-
-export function TripStatusBadge({ status }: TripStatusBadgeProps) {
-  if (status === 'open') {
-    return null
-  }
-
-  if (status === 'cancelled')
-    return (
-      <span className="text-xs uppercase tracking-widest text-[#A1482D] dark:text-[#E99C73]">
-        Canceled
-      </span>
-    )
-
-  const meta = statusMap[status]
+export function TripStatusBadge({ status }: { status: TripStatus }) {
+  if (status === 'open') return null
   return (
-    <Badge variant="outline" className={meta.className}>
-      {meta.label}
-    </Badge>
+    <span className="inline-block border border-foreground bg-background px-2 py-1 font-brand text-[13px] uppercase tracking-[0.14em] text-foreground">
+      {labels[status]}
+    </span>
   )
 }

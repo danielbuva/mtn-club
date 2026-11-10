@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import type { TripAttendee } from '@/lib/trips/types'
+import { isTripPast } from '@/lib/trips/is-trip-past'
+import type { TripAttendee, TripDetail } from '@/lib/trips/types'
 import { PersonAvatar } from './person-avatar'
 
 const previewLimit = 12
@@ -12,6 +13,7 @@ type TripAttendeesProps = {
   canView: boolean
   viewer: { isAuthenticated: boolean; isMember: boolean }
   canceled?: boolean
+  trip?: Pick<TripDetail, 'lifecycleStatus' | 'startAt' | 'endAt'>
   /** Organizer-only entry point to the full attendee list. */
   organizerAction?: ReactNode
 }
@@ -36,11 +38,12 @@ function AttendeeGrid({ people }: { people: TripAttendee[] }) {
 function LockedMessage({
   tripId,
   viewer,
-}: Pick<TripAttendeesProps, 'tripId' | 'viewer'>) {
+  past,
+}: Pick<TripAttendeesProps, 'tripId' | 'viewer'> & { past: boolean }) {
   if (!viewer.isAuthenticated)
     return (
       <p className="text-[15px] leading-6 text-muted-foreground">
-        Club members can see who’s going.{' '}
+        Club members can see {past ? 'who went' : 'who’s going'}.{' '}
         <Link
           className="font-medium text-foreground underline underline-offset-4"
           href={`/auth/login?returnTo=${encodeURIComponent(`/trips/${tripId}`)}`}
@@ -52,7 +55,7 @@ function LockedMessage({
     )
   return (
     <p className="text-[15px] leading-6 text-muted-foreground">
-      The list of who’s going is for club members.{' '}
+      The list of {past ? 'who went' : 'who’s going'} is for club members.{' '}
       <Link
         className="font-medium text-foreground underline underline-offset-4"
         href="/membership"
@@ -72,7 +75,9 @@ export function TripAttendees({
   viewer,
   canceled = false,
   organizerAction,
+  trip,
 }: TripAttendeesProps) {
+  const past = trip ? isTripPast(trip, Date.now()) && !canceled : false
   const unlisted = Math.max(goingCount - attendees.length, 0)
   const preview = attendees.slice(0, previewLimit)
   const rest = attendees.slice(previewLimit)
@@ -87,20 +92,24 @@ export function TripAttendees({
           id="trip-attendees"
           className="font-brand text-2xl font-bold uppercase leading-none tracking-wide"
         >
-          {canceled ? 'Who was going' : 'Who’s going'}
+          {canceled ? 'Who was going' : past ? 'Who went' : 'Who’s going'}
         </h2>
         <p className="text-sm tabular-nums text-muted-foreground">
-          {canceled ? `${goingCount} signed up` : `${goingCount} going`}
+          {canceled
+            ? `${goingCount} signed up`
+            : `${goingCount} ${past ? 'went' : 'going'}`}
         </p>
       </div>
 
       {!canView ? (
-        <LockedMessage tripId={tripId} viewer={viewer} />
+        <LockedMessage tripId={tripId} viewer={viewer} past={past} />
       ) : goingCount === 0 ? (
         <p className="text-[15px] leading-6 text-muted-foreground">
           {canceled
             ? 'No one had signed up.'
-            : 'No one has signed up yet. Be the first — RSVP below.'}
+            : past
+              ? 'No attendees were recorded.'
+              : 'No one has signed up yet. Be the first — RSVP below.'}
         </p>
       ) : (
         <div className="space-y-3">
@@ -122,7 +131,7 @@ export function TripAttendees({
             <p className="text-sm leading-5 text-muted-foreground">
               {preview.length
                 ? `+ ${unlisted} more who chose not to be listed.`
-                : `${goingCount} going. Nobody has chosen to be listed yet.`}
+                : `${goingCount} ${past ? 'went' : 'going'}. Nobody has chosen to be listed${past ? '.' : ' yet.'}`}
             </p>
           ) : null}
         </div>

@@ -7,7 +7,7 @@ import type {
   TripStatus,
 } from '@/lib/trips/types'
 
-const resolveActivityType = (
+export const resolveActivityType = (
   activityTags: string[] | null,
 ): TripActivityType => {
   const normalizedTags = (activityTags ?? []).map(tag => tag.toLowerCase())
@@ -70,6 +70,7 @@ export const toTripListItem = (
 
   return {
     id: event.id,
+    scheduleKey: event.schedule_key,
     cancellationReason: event.cancellation_reason,
     lifecycleStatus: event.lifecycle_status,
     title: event.title,

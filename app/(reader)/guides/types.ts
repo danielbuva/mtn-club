@@ -11,8 +11,9 @@ export type GuideSubsection = {
 
 export type GuideBlock =
   | { kind: 'p'; text: string }
+  | { kind: 'label'; text: string }
   | { kind: 'pRich'; parts: GuideInlinePart[] }
-  | { kind: 'list'; items: string[] }
+  | { kind: 'list'; items: string[]; variant?: 'checklist'; columns?: boolean }
   | { kind: 'listRich'; items: GuideInlinePart[][] }
   | { kind: 'numbered'; items: string[] }
   | { kind: 'numberedRich'; items: GuideInlinePart[][] }
@@ -39,4 +40,5 @@ export type GuideSection = {
   subsections?: GuideSubsection[]
   blocks: GuideBlock[]
   ctaLinks?: GuideCtaLink[]
+  ctaStyle?: 'guide-index'
 }

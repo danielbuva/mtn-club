@@ -17,5 +17,5 @@ export const viewport: Viewport = {
 }
 
 export default function LearnMorePage() {
-  return <GuideShell sections={startHereSections} />
+  return <GuideShell guide="learn-more" sections={startHereSections} />
 }

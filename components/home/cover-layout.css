@@ -1,0 +1,13 @@
+/* Keep the original wordmark and announcement positions. When a notice is
+   present, the compact event link fits beside the lower-right navigation. */
+@media (max-width: 1023px) {
+  .home-cover:has([data-home-announcement]) .home-edition-card {
+    top: auto;
+    bottom: 64px;
+    width: 210px;
+  }
+
+  .home-cover:has([data-home-announcement]) .home-edition-card p:first-of-type {
+    font-size: 24px;
+  }
+}
