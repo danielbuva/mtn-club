@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Archivo_Narrow, Geist } from 'next/font/google'
 import { Suspense } from 'react'
+import { AdminPageBarSlot } from '@/components/admin/page-bar/admin-page-bar-slot'
 import { MoreNavigationFallback } from '@/components/navigation/more-navigation-fallback'
 import { MoreNavigationLinks } from '@/components/navigation/more-navigation-links'
 // MapLibre styles should be loaded once at the app root.
@@ -92,6 +93,10 @@ export default function RootLayout({
             </Suspense>
           }
         >
+          {/* Admins only. Everyone else gets nothing, so there is no fallback. */}
+          <Suspense fallback={null}>
+            <AdminPageBarSlot />
+          </Suspense>
           {children}
         </Providers>
       </body>

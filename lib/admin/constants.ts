@@ -29,6 +29,7 @@ export type AdminCapability = (typeof ADMIN_CAPABILITIES)[number]
 
 export const ADMIN_NAV_ITEMS = [
   { href: '/admin', label: 'Overview', capability: 'overview.read' },
+  { href: '/admin/pages', label: 'Pages', capability: 'overview.read' },
   {
     href: '/admin/announcements',
     label: 'Announcements',

@@ -2,15 +2,21 @@ export const ADMIN_VIEWS = {
   announcements: {
     title: 'Announcements',
     description: 'Write, schedule, and publish notices for the club.',
+    publicPage: { href: '/announcements', label: 'View noticeboard' },
   },
   overview: {
     title: 'Welcome back',
     description: 'Club operations at a glance.',
   },
+  pages: {
+    title: 'Pages',
+    description: 'Every public page, what feeds it, and where to change it.',
+  },
   trips: {
     title: 'Trips',
     description:
       'Create, review, and maintain the club schedule without losing canceled-trip history.',
+    publicPage: { href: '/schedule', label: 'View schedule' },
   },
   membership: {
     title: 'Membership',
@@ -36,18 +42,28 @@ export const ADMIN_VIEWS = {
     title: 'Club gallery',
     description:
       'Upload club photographs, write accessible descriptions, and publish the records ready for the public gallery.',
+    publicPage: { href: '/gallery', label: 'View gallery' },
   },
   leadership: {
     title: 'Leadership & access',
     description:
       'Maintain the public roster and control exactly what each leadership role can do.',
+    publicPage: { href: '/team', label: 'View team page' },
   },
   settings: {
     title: 'Settings',
     description:
       'The active club term and policies used by membership and community trips.',
   },
-} as const
+} as const satisfies Record<
+  string,
+  {
+    title: string
+    description: string
+    /** The public page this view feeds, linked from the view's header. */
+    publicPage?: { href: string; label: string }
+  }
+>
 
 export type AdminView = keyof typeof ADMIN_VIEWS
 

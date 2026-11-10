@@ -10,10 +10,12 @@ import {
   TripsLoading,
 } from './loading/lists'
 import { OverviewLoading } from './loading/overview'
+import { PagesLoading } from './loading/pages'
 
 const panels = {
   announcements: AnnouncementAdminLoading,
   overview: OverviewLoading,
+  pages: PagesLoading,
   trips: TripsLoading,
   membership: MembershipLoading,
   accounts: AccountsLoading,

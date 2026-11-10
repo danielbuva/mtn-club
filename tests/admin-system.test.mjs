@@ -12,6 +12,7 @@ test('part-one navigation contains only active admin workspaces', () => {
     ADMIN_NAV_ITEMS.map(item => item.label),
     [
       'Overview',
+      'Pages',
       'Announcements',
       'Trips',
       'Registration',

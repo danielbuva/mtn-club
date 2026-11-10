@@ -13,6 +13,7 @@ type AdminShellItem = { href: string; label: string }
 
 const shortLabels = {
   Overview: 'Overview',
+  Pages: 'Pages',
   Announcements: 'Notices',
   Trips: 'Trips',
   Registration: 'RSVP',

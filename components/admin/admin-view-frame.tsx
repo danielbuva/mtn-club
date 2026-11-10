@@ -4,6 +4,7 @@ import { CalendarPlus, Download, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import { createContext, type ReactNode, Suspense, useContext } from 'react'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { viewActionClass } from '@/components/admin/pages/styles'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { AdminContext } from '@/lib/admin/auth'
@@ -37,7 +38,9 @@ export function AdminViewFrame({
   children: ReactNode
 }) {
   const viewer = useAdminViewer()
-  const metadata = ADMIN_VIEWS[view]
+  const metadata: (typeof ADMIN_VIEWS)[AdminView] & {
+    publicPage?: { href: string; label: string }
+  } = ADMIN_VIEWS[view]
   const title =
     view === 'overview' && viewer
       ? `Welcome back, ${viewer.displayName.split(' ')[0]}`
@@ -85,7 +88,21 @@ export function AdminViewFrame({
       <AdminPageHeader
         title={title}
         description={metadata.description}
-        actions={actions}
+        actions={
+          metadata.publicPage || actions ? (
+            <div className="flex flex-wrap items-center gap-3">
+              {metadata.publicPage ? (
+                <Link
+                  href={metadata.publicPage.href}
+                  className={viewActionClass}
+                >
+                  {metadata.publicPage.label}
+                </Link>
+              ) : null}
+              {actions}
+            </div>
+          ) : null
+        }
       />
       {view === 'trips' ? (
         <Suspense fallback={<TripFilters disabled />}>

@@ -3,9 +3,10 @@
 import { ExternalLink, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, Suspense, useState } from 'react'
 import { AdminBrand } from '@/components/admin/admin-brand'
 import { AdminMobileNavigation } from '@/components/admin/admin-mobile-navigation'
+import { AdminReturnStrip } from '@/components/admin/admin-return-strip'
 import { AdminMobileMenuContext } from '@/components/admin/mobile-menu-context'
 import { cn } from '@/lib/utils'
 import { adminNavigationIcons as icons } from './navigation-icons'
@@ -83,6 +84,9 @@ export function AdminShell({
         </aside>
 
         <main className="min-h-screen min-w-0 max-w-full overflow-x-clip pb-24 lg:pb-0 lg:pl-64">
+          <Suspense fallback={null}>
+            <AdminReturnStrip />
+          </Suspense>
           {children}
         </main>
         <AdminMobileNavigation
