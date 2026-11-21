@@ -382,6 +382,14 @@ test('annual waiver signing at 23:30 Pacific covers a same-evening trip', () => 
     ),
   )
 })
+test('upcoming legacy trips adopt the published annual waiver and honor profile signatures', () => {
+  sql(
+    readFileSync(
+      new URL('../annual-waiver-legacy-trips.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+})
 test('legacy minimal trips and drafts migrate to leaders and reject future minimal writes', () => {
   assert.equal(
     sql(
