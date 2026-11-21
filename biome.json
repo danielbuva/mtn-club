@@ -30,6 +30,8 @@
   "files": {
     "includes": [
       "**",
+      "!!**/.claude",
+      "!!**/.tmp",
       "!!**/public/maplibre/maplibre-gl-worker-dev.js",
       "!!**/public/maplibre/maplibre-gl-worker.js",
       "!!**/public/maplibre/maplibre-gl-csp-worker.js"
