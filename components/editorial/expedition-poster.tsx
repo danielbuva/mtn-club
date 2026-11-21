@@ -33,7 +33,7 @@ export function ExpeditionPoster({
           ? 'bg-[#F8F1DF] text-[#211D18]'
           : ink
             ? 'bg-[#211D18] text-[#F8F1DF]'
-            : 'bg-[#FFECA2] text-[#211D18]',
+            : 'bg-(--editorial-highlight) text-(color:--editorial-highlight-foreground)',
       )}
     >
       <div className="md:grid md:min-h-80 md:grid-cols-[3fr_2fr]">
@@ -65,7 +65,11 @@ export function ExpeditionPoster({
         <div
           className={cn(
             'relative space-y-3 pt-5 md:flex md:flex-col md:justify-center md:py-6 md:pl-6',
-            canceled ? 'bg-[#F8F1DF]' : ink ? 'bg-[#211D18]' : 'bg-[#FFECA2]',
+            canceled
+              ? 'bg-[#F8F1DF]'
+              : ink
+                ? 'bg-[#211D18]'
+                : 'bg-(--editorial-highlight)',
           )}
         >
           <EditionLabel variant="outline">{edition.label}</EditionLabel>

@@ -12,6 +12,7 @@
   --editorial-inverse: #211d18;
   --editorial-inverse-foreground: #f8f1df;
   --editorial-highlight: #ffeca2;
+  --editorial-highlight-foreground: #211d18;
   --foreground: oklch(0.2435 0 0);
   --card: oklch(0.9911 0 0);
   --card-foreground: oklch(0.2435 0 0);
