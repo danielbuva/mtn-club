@@ -142,6 +142,9 @@ Frontend (run from `/`):
 - `pnpm format` formats code with Biome.
 
 Supabase utilities:
+- Run the CLI pinned in `package.json` with `pnpm exec supabase …`, not a global install. Homebrew's 2.105 misresolves the auth notification `content_path` values in `supabase/config.toml`, and 3.x rejects the config (`inbucket` → `local_smtp`).
+- Authenticate with `supabase login` (keychain). Don't set `SUPABASE_ACCESS_TOKEN` in an env file; a stale value silently overrides the login.
+- Production migrations: `pnpm exec supabase db push --linked --dry-run`, then without `--dry-run`. Read-only checks: `pnpm exec supabase db query --linked "<sql>"`.
 - Types: `npx supabase gen types typescript --project-id <id>` writes `lib/supabase/database.types.ts`.
 - Local schema replay: `pnpm test:db:replay` and `pnpm test:registration:db` use throwaway databases in `supabase_db_mtn-auth-integration`. See README's database reproduction instructions. Preserve the checkpoint in `supabase/baseline.json` and all applied migrations; add new migrations instead. A bare `supabase db reset` does not include the missing historical baseline.
 
