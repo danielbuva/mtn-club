@@ -179,7 +179,7 @@ test('recovery in another browser has genuine recovery claims, rejects reuse, ch
     'Your Mountain Club password was changed',
   )
   assert.match(notification.HTML, /alt="UNLV Mountain Club"/)
-  assert.match(notification.HTML, /\/email\/club-wordmark-v2\.png/)
+  assert.match(notification.HTML, /\/email\/club-badge-v1\.png/)
 })
 
 test('officer/admin-authorized recovery is exempt from CAPTCHA but still sends the branded link', async () => {
@@ -221,7 +221,7 @@ test('outstanding PKCE recovery codes require the original verifier and retain r
     'recovery',
   )
   // Simulate the Supabase-hosted link from the previous email template.
-  const legacy = new URL('http://127.0.0.1:55321/auth/v1/verify')
+  const legacy = new URL('http://127.0.0.1:55621/auth/v1/verify')
   legacy.search = new URLSearchParams({
     token: link.searchParams.get('token_hash'),
     type: 'recovery',

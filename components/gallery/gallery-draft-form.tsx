@@ -23,12 +23,20 @@ export function GalleryDraftForm({
         <div>
           <h2 className="text-xl font-semibold">Add a draft</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Save a direct HTTPS image link and its gallery details. New photos
-            stay unpublished until an officer chooses Publish.
+            Upload a private photo or link to an image that is already public.
+            An officer can publish the gallery entry when it is ready.
           </p>
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Field label="Direct image link" htmlFor="gallery-image-url">
+          <Field label="Upload a photo" htmlFor="gallery-file">
+            <Input
+              id="gallery-file"
+              name="imageFile"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/avif"
+            />
+          </Field>
+          <Field label="Or use a public image link" htmlFor="gallery-image-url">
             <Input
               id="gallery-image-url"
               name="imageUrl"
@@ -36,7 +44,6 @@ export function GalleryDraftForm({
               inputMode="url"
               maxLength={2048}
               placeholder="https://example.com/photo.jpg"
-              required
             />
           </Field>
           <Field label="Title" htmlFor="gallery-title">

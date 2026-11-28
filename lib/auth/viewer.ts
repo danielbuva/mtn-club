@@ -100,7 +100,7 @@ export async function getViewer(): Promise<Viewer> {
     (membershipResult.data as MembershipSummaryRow | null) ?? null
   const fullName = buildFullName(profile)
   const access = accessResult.data?.[0] ?? null
-  const isMember = access?.access_active ?? membership?.status === 'active'
+  const isMember = access?.access_active ?? false
   const isAdmin = adminResult.data ?? false
   const hasFullAccess = isMember || isAdmin
   const provisionalAccess = access?.provisional_access ?? false

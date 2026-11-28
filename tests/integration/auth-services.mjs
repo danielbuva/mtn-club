@@ -7,8 +7,8 @@ import { createClient } from '@supabase/supabase-js'
 // Deliberately no environment overrides: this suite must never reach production.
 export const origin = 'http://127.0.0.1:3130'
 export const captchaToken = 'XXXX.DUMMY.TOKEN.XXXX'
-const api = 'http://127.0.0.1:55321'
-const mail = 'http://127.0.0.1:55324'
+const api = 'http://127.0.0.1:55621'
+const mail = 'http://127.0.0.1:55624'
 export const status = JSON.parse(
   execFileSync(
     'pnpm',
@@ -33,7 +33,7 @@ assert.equal(
   'Only the dedicated localhost sandbox is allowed',
 )
 const settings = JSON.parse(
-  execFileSync('docker', ['inspect', 'supabase_auth_mtn-auth-integration'], {
+  execFileSync('docker', ['inspect', 'supabase_auth_mtn-handoff-integration'], {
     encoding: 'utf8',
   }),
 )[0].Config.Env
@@ -48,10 +48,14 @@ assert.ok(settings.includes('GOTRUE_MAILER_AUTOCONFIRM=false'))
 assert.ok(settings.includes('GOTRUE_PASSWORD_MIN_LENGTH=12'))
 assert.ok(
   settings.some(value =>
-    /^GOTRUE_SMTP_HOST=supabase_inbucket_mtn-auth-integration$/.test(value),
+    /^GOTRUE_SMTP_HOST=supabase_inbucket_mtn-handoff-integration$/.test(value),
   ),
   'Emails must stay in the sandbox mail capture',
 )
+
+execFileSync(process.execPath, ['scripts/check-integration-schema.mjs'], {
+  stdio: 'inherit',
+})
 
 const clientOptions = {
   auth: {
@@ -115,7 +119,7 @@ export async function messageFor(email, subject) {
 
 export function confirmationLink(message, type) {
   assert.match(message.HTML, /alt="UNLV Mountain Club"/)
-  assert.match(message.HTML, /\/email\/club-wordmark-v2\.png/)
+  assert.match(message.HTML, /\/email\/club-badge-v1\.png/)
   assert.doesNotMatch(
     message.HTML,
     /sendibt|click\.resend|\.ConfirmationURL|\{\{/,

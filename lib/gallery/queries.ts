@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { galleryImageUrl } from '@/lib/gallery/images'
 import { createPublicClient } from '@/lib/supabase/public'
 import type { Database } from '@/lib/supabase/types'
 
@@ -41,20 +41,11 @@ export async function fetchPublishedGalleryPhotos(): Promise<PublishedGalleryRes
         caption: photo.caption,
         taken_on: photo.taken_on,
         trip_id: photo.trip_id,
-        imageUrl: getGalleryPublicUrl(supabase, photo.storage_path),
-        unoptimized: photo.storage_path.startsWith('https://'),
+        imageUrl: galleryImageUrl(photo),
+        unoptimized: true,
       })),
     }
   } catch {
     return { status: 'error' }
   }
-}
-
-export function getGalleryPublicUrl(
-  client: SupabaseClient<Database>,
-  storagePath: string,
-): string {
-  if (storagePath.startsWith('https://')) return storagePath
-  return client.storage.from('club_gallery').getPublicUrl(storagePath).data
-    .publicUrl
 }

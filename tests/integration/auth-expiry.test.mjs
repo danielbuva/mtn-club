@@ -28,7 +28,7 @@ test('real expired recovery tokens never produce a password receipt', async () =
     'docker',
     [
       'exec',
-      'supabase_db_mtn-auth-integration',
+      'supabase_db_mtn-handoff-integration',
       'psql',
       '-U',
       'postgres',
@@ -58,7 +58,7 @@ test('legacy shorter passwords remain valid for login after the minimum increase
     'docker',
     [
       'exec',
-      'supabase_db_mtn-auth-integration',
+      'supabase_db_mtn-handoff-integration',
       'psql',
       '-U',
       'postgres',

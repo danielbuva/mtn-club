@@ -9,135 +9,28 @@ import {
 } from '@/components/admin/membership/membership-secondary-panels'
 import { MembershipTabs } from '@/components/admin/membership/membership-tabs'
 import { requireAdminCapability } from '@/lib/admin/auth'
-import { buildMembershipAccessSnapshot } from '@/lib/admin/membership-access'
-import {
-  buildMembershipReviewAccounts,
-  partitionMembershipReviewAccounts,
-} from '@/lib/admin/membership-review'
-import { listMembershipReviewAccounts } from '@/lib/admin/membership-review-accounts'
-import { createAdminClient } from '@/lib/supabase/admin'
-
-type MembershipTab = 'review' | 'members' | 'exceptions' | 'archive'
-
-const resolveDefaultTab = (tab: string | undefined): MembershipTab => {
-  if (tab === 'members' || tab === 'exceptions' || tab === 'archive') return tab
-  return 'review'
-}
+import { getMembershipQueue } from '@/lib/admin/membership-queue'
 
 async function AdminMembershipPageContent({
   searchParams,
 }: {
-  searchParams: Promise<{ tab?: string }>
+  searchParams: Promise<{ tab?: string; page?: string }>
 }) {
   const context = await requireAdminCapability('membership.read')
-  const { tab } = await searchParams
-  const admin = createAdminClient()
-
-  const [
-    applicationsResult,
-    paymentsResult,
-    membershipsResult,
-    entitlementsResult,
-    overridesResult,
-    restrictionsResult,
-    reviewsResult,
-    profilesResult,
-    accounts,
-  ] = await Promise.all([
-    admin
-      .from('membership_applications')
-      .select(
-        'user_id, full_name, contact_email, age_status, guardian_consent, dues_payment_claimed, dues_claimed_at, primary_interest, experience_notes, status, created_at',
-      )
-      .order('created_at', { ascending: false }),
-    admin
-      .from('membership_zelle_payments')
-      .select('*')
-      .order('created_at', { ascending: false }),
-    admin
-      .from('memberships')
-      .select('user_id, status, role, member_since, joined_on')
-      .order('member_since', { ascending: false }),
-    admin
-      .from('membership_entitlements')
-      .select(
-        'user_id, starts_at, ends_at, revoked_at, payment_id, zelle_payment_id',
-      ),
-    admin
-      .from('membership_access_overrides')
-      .select('user_id, starts_at, ends_at, revoked_at'),
-    admin
-      .from('membership_account_restrictions')
-      .select('user_id, restriction'),
-    admin
-      .from('membership_review_items')
-      .select('id, user_id, reason_code, reason_detail, status, created_at')
-      .in('status', ['pending', 'refund_requested'])
-      .order('created_at'),
-    admin.from('profiles').select('user_id, display_name'),
-    listMembershipReviewAccounts(),
-  ])
-
-  const queryError = [
-    applicationsResult,
-    paymentsResult,
-    membershipsResult,
-    entitlementsResult,
-    overridesResult,
-    restrictionsResult,
-    reviewsResult,
-    profilesResult,
-  ].find(result => result.error)?.error
-  if (queryError) throw queryError
-
-  const applications = applicationsResult.data ?? []
-  const payments = paymentsResult.data ?? []
-  const access = buildMembershipAccessSnapshot({
-    entitlements: entitlementsResult.data ?? [],
-    overrides: overridesResult.data ?? [],
-    restrictions: restrictionsResult.data ?? [],
-    now: new Date().toISOString(),
-  })
-  const memberships = (membershipsResult.data ?? [])
-    .filter(item => access.activeUserIds.has(item.user_id))
-    .map(item => ({
-      ...item,
-      member_since:
-        access.firstActivationByUser.get(item.user_id)?.slice(0, 10) ??
-        item.member_since,
-    }))
-  const reviews = reviewsResult.data ?? []
-  const profileNames = new Map(
-    (profilesResult.data ?? []).map(profile => [
-      profile.user_id,
-      profile.display_name,
-    ]),
-  )
-
-  const reviewQueues = partitionMembershipReviewAccounts(
-    buildMembershipReviewAccounts(
-      applications,
-      accounts,
-      profileNames,
-      access.activeUserIds,
-    ),
-    payments,
-  )
-
-  const reviewPanelPermissions = {
-    canConfirmGuardian: Boolean(
-      context.permissions['membership.confirm_guardian'],
-    ),
-    canReviewPayment: Boolean(
-      context.permissions['membership.confirm_payment'],
-    ),
-    canGrantComplimentary: Boolean(context.permissions['membership.update']),
-    isSuperAdmin: context.isSuperAdmin,
-  }
+  const requested = await searchParams
+  const queue = await getMembershipQueue(requested.tab, requested.page)
+  const pages = Math.max(1, Math.ceil(queue.counts[queue.tab] / queue.pageSize))
+  const profileNames =
+    queue.tab === 'members' || queue.tab === 'exceptions'
+      ? new Map(queue.rows.map(row => [row.user_id, row.display_name]))
+      : new Map<string, string | null>()
+  const pageHref = (page: number) =>
+    `/admin/membership?tab=${queue.tab}&page=${page}`
+  const permissions = context.permissions
 
   return (
     <>
-      {context.permissions['membership.confirm_guardian'] ? (
+      {permissions['membership.confirm_guardian'] ? (
         <Link
           className="mb-4 inline-block underline"
           href="/admin/membership/trip-guardian-reviews"
@@ -145,40 +38,57 @@ async function AdminMembershipPageContent({
           Review guardian consent
         </Link>
       ) : null}
-      <MembershipTabs
-        defaultTab={resolveDefaultTab(tab)}
-        reviewCount={reviewQueues.review.length}
-        memberCount={memberships.length}
-        exceptionCount={reviews.length}
-        archiveCount={reviewQueues.archived.length}
-        review={
-          <MembershipReviewPanel
-            applications={reviewQueues.review}
-            payments={payments}
-            {...reviewPanelPermissions}
-          />
-        }
-        members={
+      <MembershipTabs tab={queue.tab} counts={queue.counts} />
+      <div className="mt-6 min-w-0 max-w-full">
+        {queue.tab === 'members' ? (
           <ActiveMembersPanel
-            memberships={memberships}
+            memberships={queue.rows}
             profileNames={profileNames}
           />
-        }
-        exceptions={
+        ) : queue.tab === 'exceptions' ? (
           <MembershipExceptionsPanel
-            reviews={reviews}
+            reviews={queue.rows}
             profileNames={profileNames}
           />
-        }
-        archive={
+        ) : (
           <MembershipReviewPanel
-            applications={reviewQueues.archived}
-            payments={payments}
-            emptyMessage="No completed or rejected applications are archived."
-            {...reviewPanelPermissions}
+            applications={queue.rows}
+            canConfirmGuardian={Boolean(
+              permissions['membership.confirm_guardian'],
+            )}
+            canReviewPayment={Boolean(
+              permissions['membership.confirm_payment'],
+            )}
+            canGrantComplimentary={Boolean(permissions['membership.update'])}
+            isSuperAdmin={context.isSuperAdmin}
+            emptyMessage={
+              queue.tab === 'archive'
+                ? 'No completed or rejected applications are archived.'
+                : undefined
+            }
           />
-        }
-      />
+        )}
+      </div>
+      {pages > 1 ? (
+        <nav
+          aria-label="Membership pagination"
+          className="mt-6 flex flex-wrap items-center gap-4 text-sm"
+        >
+          {queue.page > 1 ? (
+            <Link className="underline" href={pageHref(queue.page - 1)}>
+              Previous
+            </Link>
+          ) : null}
+          <span>
+            Page {queue.page} of {pages}
+          </span>
+          {queue.page < pages ? (
+            <Link className="underline" href={pageHref(queue.page + 1)}>
+              Next
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
     </>
   )
 }

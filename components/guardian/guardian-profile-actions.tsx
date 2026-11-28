@@ -1,7 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { updateGuardianPhoneAction } from '@/lib/guardian/participant-actions'
+import {
+  queueGuardianRecordCopyAction,
+  updateGuardianPhoneAction,
+} from '@/lib/guardian/participant-actions'
 import type { GuardianStatus } from '@/lib/guardian/schema'
 import { InviteForm } from './invite-form'
 import { Field, InkButton, Notice, TextButton } from './ui'
@@ -96,6 +99,28 @@ export function ChangeGuardian({
         onCancel={() => setOpen(false)}
         submitLabel="Send link to this guardian"
       />
+    </div>
+  )
+}
+
+export function RequestGuardianRecordCopy() {
+  const [state, setState] = useState<{ ok: boolean; message: string }>()
+  const [pending, start] = useTransition()
+  return (
+    <div className="space-y-2">
+      <TextButton
+        disabled={pending}
+        onClick={() =>
+          start(async () => {
+            setState(await queueGuardianRecordCopyAction())
+          })
+        }
+      >
+        {pending ? 'Requesting…' : 'Send guardian a new signed-copy link'}
+      </TextButton>
+      {state ? (
+        <Notice tone={state.ok ? 'info' : 'error'}>{state.message}</Notice>
+      ) : null}
     </div>
   )
 }

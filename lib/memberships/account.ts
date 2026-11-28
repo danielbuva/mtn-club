@@ -87,6 +87,7 @@ async function loadMembershipAccount(
     application,
     zellePayment,
     history,
+    access,
   ] = await Promise.all([
     admin
       .from('membership_account_restrictions')
@@ -134,6 +135,7 @@ async function loadMembershipAccount(
       .limit(1)
       .maybeSingle(),
     supabase.rpc('get_my_membership_payment_history'),
+    supabase.rpc('get_my_membership_access'),
   ])
 
   if (
@@ -144,7 +146,9 @@ async function loadMembershipAccount(
     review.error ||
     application.error ||
     zellePayment.error ||
-    history.error
+    history.error ||
+    access.error ||
+    !access.data[0]
   ) {
     return unavailableMembershipAccount
   }
@@ -153,34 +157,22 @@ async function loadMembershipAccount(
   const validEntitlements = (entitlements.data ?? []).filter(
     entitlement => !entitlement.revoked_at,
   )
-  const currentEntitlement = validEntitlements.find(
-    entitlement => entitlement.starts_at <= now && entitlement.ends_at > now,
-  )
   const latestEntitlement = validEntitlements[0] ?? null
   const activeOverride = (overrides.data ?? []).find(
     override =>
       override.starts_at <= now &&
       (!override.ends_at || override.ends_at > now),
   )
-  const hasOverride = Boolean(activeOverride)
-  const accessActive =
-    restrictionState === 'normal' &&
-    (Boolean(currentEntitlement) || hasOverride)
-  const provisionalAccess = Boolean(
-    restrictionState === 'normal' &&
-      application.data?.status === 'submitted' &&
-      application.data.dues_payment_claimed &&
-      (application.data.guardian_consent === 'not_required' ||
-        application.data.guardian_consent === 'confirmed'),
-  )
+  const { access_active, provisional_access, expires_at } = access.data[0]
 
   return {
     schemaReady: true,
     restriction: restrictionState,
-    accessActive,
-    accessExpiresAt:
-      currentEntitlement?.ends_at ?? activeOverride?.ends_at ?? null,
-    provisionalAccess,
+    accessActive: access_active,
+    accessExpiresAt: access_active
+      ? (expires_at ?? activeOverride?.ends_at ?? null)
+      : null,
+    provisionalAccess: provisional_access,
     hasExpiredEntitlement: Boolean(
       (latestEntitlement && latestEntitlement.ends_at <= now) ||
         overrides.data?.some(

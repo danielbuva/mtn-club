@@ -166,3 +166,17 @@ export async function updateGuardianPhoneAction(
       }
     : { ok: true, message: 'Phone number saved.' }
 }
+
+export async function queueGuardianRecordCopyAction(): Promise<ActionResult> {
+  const db = await createClient()
+  const { data, error } = await db.rpc('guardian_queue_record_copy')
+  if (error || !data)
+    return {
+      ok: false,
+      message: 'Could not request a copy. Contact the club for help.',
+    }
+  return {
+    ok: true,
+    message: 'The guardian’s copy request is queued or was sent recently.',
+  }
+}

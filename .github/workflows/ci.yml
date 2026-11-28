@@ -32,3 +32,36 @@ jobs:
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:auth:browser
+
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    env:
+      NEXT_PUBLIC_DISCORD_INVITE_URL: https://discord.gg/Vz6aENDasV
+      NEXT_PUBLIC_INSTAGRAM_URL: https://www.instagram.com/unlvmountainclub/
+      MEMBERSHIP_CHECKOUT_ENABLED: "false"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm setup:integration
+      - run: pnpm db:types --check
+      - run: pnpm test:db:replay
+      - run: pnpm test:registration:db
+      - run: pnpm test:registration:contacts
+      - run: pnpm test:auth:services
+      - run: pnpm exec playwright install --with-deps chromium webkit
+      - run: pnpm test:auth:integration
+      - run: pnpm test:registration:browser
+      - run: pnpm test:forms:browser
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-browser-screenshots
+          path: test-results/**/*.png

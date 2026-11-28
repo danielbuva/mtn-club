@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { applyBaseline } from './database-baseline.mjs'
 
 // Deliberately no URL/credential overrides: only the shared local integration container.
-export const container = 'supabase_db_mtn-auth-integration'
+export const container = 'supabase_db_mtn-handoff-integration'
 const maxBuffer = 32 * 1024 * 1024
 const docker = (args, input) =>
   execFileSync(
@@ -53,6 +53,8 @@ export function createLocalDatabase(beforeMigration) {
       '--format=custom',
       '--exclude-schema=public',
       '--exclude-schema=registration_private',
+      '--exclude-schema=trip_write_private',
+      '--exclude-schema=mtn_integration',
       '--exclude-schema=supabase_migrations',
     ])
     const list = docker(['pg_restore', '--list'], archive).toString()
@@ -62,13 +64,15 @@ export function createLocalDatabase(beforeMigration) {
       from pg_trigger t join pg_class c on c.oid=t.tgrelid
       join pg_namespace n on n.oid=c.relnamespace
       join pg_proc p on p.oid=t.tgfoid join pg_namespace f on f.oid=p.pronamespace
-      where not t.tgisinternal and f.nspname in ('public','registration_private')`,
+      where not t.tgisinternal and n.nspname <> 'public'
+      and f.nspname in ('public','registration_private','trip_write_private')`,
       'postgres',
     ).split('\n')
     const platformList = list
       .split('\n')
       .filter(
         line =>
+          !line.match(/ (?:POLICY|COMMENT) storage objects club_gallery_/) &&
           !triggers.some(
             trigger => trigger && line.includes(` TRIGGER ${trigger} `),
           ),

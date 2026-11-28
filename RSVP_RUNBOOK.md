@@ -35,7 +35,7 @@ Registration ships closed globally and on every trip. This document describes th
 5. Configure one nonpublic test environment, then the production sender, worker, and webhook as below. Verify signed-in and anonymous access, cancellation with expired membership, opt-outs, and delivery using controlled accounts. Never send synthetic fixtures to real members.
 6. Supply the approved waiver and verify the guardian-review process. Enable only the configured pilot trip and then the global switch. Verify confirmation, waitlisting, manual seat selection, acceptance, expiry, cancellation, roster privacy, and delivery before enabling other trips.
 
-The application-schema test runner reconstructs a disposable database from the committed baseline and subsequent migrations. It excludes the environment-specific `202609040007` administrator bootstrap seed.
+The application-schema test runner reconstructs a disposable database from the checksummed baseline and applies every subsequent migration.
 
 ## Environment and delivery setup
 
@@ -101,16 +101,16 @@ Never log answers, emergency contacts, signature names/text, guardian evidence, 
 Start Docker and the isolated Supabase stack:
 
 ```sh
-SUPABASE_AUTH_CAPTCHA_SECRET=1x0000000000000000000000000000000AA pnpm exec supabase start --workdir tests/integration
+pnpm setup:integration
 pnpm test
 pnpm test:registration:db
 pnpm typecheck
 pnpm check
 ```
 
-The database suite creates/drops only a temporary database inside `supabase_db_mtn-auth-integration`; it never accepts a hosted URL. Tests cover competing seats/offers, retries, acceptance/cancellation, capacity races, expiry without the scheduler, requirements, permissions, merges, leases, opt-outs, and webhook reconciliation.
+The database suite creates/drops only a temporary database inside `supabase_db_mtn-handoff-integration`; it never accepts a hosted URL. Tests cover competing seats/offers, retries, acceptance/cancellation, capacity races, expiry without the scheduler, requirements, permissions, merges, leases, opt-outs, and webhook reconciliation.
 
-For browser tests, the local stack's `postgres` application schema must first have the committed baseline and subsequent migrations applied (use the authentication integration setup for the baseline). This is a disposable local setup only. Then run:
+The browser launcher verifies that the integration stack has the current schema. Then run:
 
 ```sh
 pnpm test:registration:browser

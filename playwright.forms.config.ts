@@ -16,7 +16,7 @@ export default defineConfig({
   webServer: {
     command: 'node tests/registration/start-app.mjs',
     url: 'http://127.0.0.1:3140/form-lab',
-    reuseExistingServer: true,
+    reuseExistingServer: false,
     timeout: 120000,
   },
 })

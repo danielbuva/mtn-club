@@ -90,13 +90,13 @@ The September 2026 feature migrations are applied in production. They add the pu
 
 The Fall 2026 schedule migration keeps public host credits separate from authenticated `trip_leaders`; public credit never grants application access. New service functions are revoked from anonymous and ordinary authenticated clients unless a migration explicitly exposes a safe, self-only RPC.
 
-Before future schema work, apply migrations in timestamp order to a separate Supabase test project, run application CI and SQL contract tests, then apply to production and re-run the Supabase security and performance advisors. A production backup is not required for this project by current club policy.
+Before future schema work, apply migrations in timestamp order to a separate Supabase test project, run application CI and SQL contract tests, then apply to production and re-run the Supabase security and performance advisors. Record the recovery point and verify that the database and media backups are available before applying a production schema change.
 
 Supabase leaked-password protection requires the Pro plan and is intentionally deferred. Enable and test it if the project upgrades.
 
 ## 6. Gallery operations
 
-The public `/gallery` reads only published metadata. Officers use `/admin/gallery` to upload, add required alt text, link an optional trip, order, publish, unpublish, or remove photos. The `club_gallery` bucket permits JPEG, PNG, WebP, and AVIF images up to 10 MB.
+The public `/gallery` reads only published metadata. Officers use `/admin/gallery` to upload, add required alt text, link an optional trip, order, publish, unpublish, or remove photos. The bucket is private. The app checks photo and trip visibility on every image request. An external link should point to media that is already approved for public access, since the upstream host controls its availability. The `club_gallery` bucket permits JPEG, PNG, WebP, and AVIF images up to 10 MB.
 
 Before publishing a photo, confirm that the club may publish it, that the alt text describes the image, and that its title/caption do not expose private trip logistics or personal information. Existing cover art is not automatically club history.
 
@@ -163,3 +163,14 @@ For reconciliation, compare Stripe Events and Payments with `stripe_webhook_even
 ## 10. Leadership transfer
 
 At officer turnover, promote replacements in GitHub, Vercel, Supabase, Stripe, the registrar, banking, and Bitwarden. Remove former officers, rotate shared credentials and API keys, verify payout ownership, test recovery, and update this runbook. The club must not depend on one person's account or device.
+
+
+## Migration-backed releases and recovery
+
+1. In the isolated test stack, run the full [integration suite](tests/integration/README.md). Apply new migrations first in staging and run the matching preview. Review database advisors and smoke-test sign-in, membership review, guardian signing and withdrawal, and gallery publication/unpublication.
+2. For production, verify the linked project and Vercel target, record the current deployment SHA and backup timestamp in the club vault, then run `pnpm exec supabase db push --linked --dry-run`. Compare the list with the PR before applying. The handoff app build checks for the corresponding schema RPC before production deploys. Trigger a new deployment after applying the migrations if a build was already blocked.
+3. Check the registration heartbeat, Resend sender and webhooks, and the guardian receipt queue after deploy. Guardians receive a fresh copy link from profile → Guardian permission. If the worker secret rotates while a receipt is in flight, reissue the link after the delivery state settles. Review access to historical guardian-path analytics and remove retained data where supported. Reissue exposed open links as needed. Check cached delivery of previously public Storage URLs with a controlled fixture.
+4. For an app regression, roll back to the most recent app version compatible with the applied schema. For data damage, stop the affected writes and restore first into an isolated, access-controlled Supabase project. Use the provider's backup/PITR or the club's encrypted database backup. Restore Storage files from the separate media backup, then reconcile object keys against gallery metadata. Recreate project-level Auth and redirect settings, OAuth credentials, Vercel environment variables, Resend and Stripe webhooks, and Vault/Cron from club-owned access. Compare row counts, waiver and membership evidence, and storage checksums before switching traffic. Keep a record of the rehearsal and time to restore.
+5. Rehearse these steps with the incoming maintainer in staging. The president or infrastructure owner assigns a named primary and backup for GitHub, Vercel, Supabase, Google and Discord OAuth, Resend, Turnstile, DNS, dues, and the vault. Record account recovery and rotation procedures in the private vault and verify that each maintainer can use their own account.
+
+[Supabase backup scope and restore](https://supabase.com/docs/guides/platform/backups)

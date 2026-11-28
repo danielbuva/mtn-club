@@ -145,8 +145,8 @@ Supabase utilities:
 - Run the CLI pinned in `package.json` with `pnpm exec supabase …`, not a global install. Homebrew's 2.105 misresolves the auth notification `content_path` values in `supabase/config.toml`, and 3.x rejects the config (`inbucket` → `local_smtp`).
 - Authenticate with `supabase login` (keychain). Don't set `SUPABASE_ACCESS_TOKEN` in an env file; a stale value silently overrides the login.
 - Production migrations: `pnpm exec supabase db push --linked --dry-run`, then without `--dry-run`. Read-only checks: `pnpm exec supabase db query --linked "<sql>"`.
-- Types: `npx supabase gen types typescript --project-id <id>` writes `lib/supabase/database.types.ts`.
-- Local schema replay: `pnpm test:db:replay` and `pnpm test:registration:db` use throwaway databases in `supabase_db_mtn-auth-integration`. See README's database reproduction instructions. Preserve the checkpoint in `supabase/baseline.json` and all applied migrations; add new migrations instead. A bare `supabase db reset` does not include the missing historical baseline.
+- Types: `pnpm setup:integration` then `pnpm db:types` writes `lib/supabase/database.generated.ts`. `lib/supabase/types.ts` adds RPC argument nullability that Postgres does not expose.
+- Local schema replay: `pnpm test:db:replay` and `pnpm test:registration:db` use throwaway databases in `supabase_db_mtn-handoff-integration`. See README's database reproduction instructions. Preserve the checkpoint in `supabase/baseline.json` and all applied migrations; add new migrations instead. A bare `supabase db reset` does not include the missing historical baseline.
 
 ## Coding Style & Naming Conventions
 - TypeScript/React uses strict TS settings and 2-space indentation.
@@ -155,8 +155,7 @@ Supabase utilities:
 - Use the `@/*` alias for imports under `/*`.
 
 ## Testing Guidelines
-- Automated tests are not wired up yet.
-- Placeholder: when tests are added, run `pnpm test` from `/`.
+- Run `pnpm test` from the repository root. See `tests/integration/README.md` for the SQL and browser suites CI runs.
 
 ## Commit & Pull Request Guidelines
 - Use Conventional Commits (e.g., `feat:`, `fix:`, `chore:`).
@@ -165,7 +164,7 @@ Supabase utilities:
 
 ## Security & Configuration Tips
 - Do not commit secrets. Use local `.env` files.
-- Frontend env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and server-only `SUPABASE_SECRET_KEY`.
+- Frontend env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and server-only `SUPABASE_SECRET_KEY`.
 - CV env vars: `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `CAMERA_SOURCE`, `ROOM_ZONE_MAP`, `YOLO_MODEL`.
 
 ---
@@ -179,3 +178,13 @@ Supabase utilities:
 - ❌ Don’t use `any` or `void` to bypass types.
 - ❌ Don’t sprinkle `useMemo` everywhere.
 - ❌ Don’t wrap whole pages in Suspense if only one child blocks.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

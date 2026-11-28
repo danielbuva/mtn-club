@@ -168,6 +168,7 @@ export function FormShowroom() {
         }
       >
         <div
+          data-testid="form-showroom-example"
           key={`${example}-${revision}-${transportation}-${longContent}-${annual}-${signed}-${savedContacts}`}
         >
           {example === 'creation' && (

@@ -9,19 +9,18 @@ import {
 import { confirmGuardianConsentAction } from '@/app/(admin)/admin/membership/actions'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  getApplicantClaimTimestamp,
-  type MembershipReviewAccount,
-} from '@/lib/admin/membership-review'
+import type {
+  MembershipQueueApplication,
+  MembershipQueuePayment,
+} from '@/lib/admin/membership-queue'
+import { getApplicantClaimTimestamp } from '@/lib/admin/membership-review'
 import { decodeMembershipInterests } from '@/lib/memberships/application-options'
-import type { Database } from '@/lib/supabase/types'
 import { MembershipStatusForm } from './membership-status-form'
 
-type Payment = Database['public']['Tables']['membership_zelle_payments']['Row']
+type Payment = MembershipQueuePayment
 
 type MembershipReviewPanelProps = {
-  applications: MembershipReviewAccount[]
-  payments: Payment[]
+  applications: MembershipQueueApplication[]
   canConfirmGuardian: boolean
   canReviewPayment: boolean
   canGrantComplimentary: boolean
@@ -53,20 +52,12 @@ const paymentSelectValue = (payment: Payment | undefined) => {
 
 export function MembershipReviewPanel({
   applications,
-  payments,
   canConfirmGuardian,
   canReviewPayment,
   canGrantComplimentary,
   isSuperAdmin,
   emptyMessage,
 }: MembershipReviewPanelProps) {
-  const paymentsByUser = new Map<string, Payment[]>()
-  for (const payment of payments) {
-    const existing = paymentsByUser.get(payment.user_id) ?? []
-    existing.push(payment)
-    paymentsByUser.set(payment.user_id, existing)
-  }
-
   if (!applications.length) {
     return <EmptyApplications message={emptyMessage} />
   }
@@ -74,14 +65,12 @@ export function MembershipReviewPanel({
   return (
     <section className="grid min-w-0 gap-4 overflow-hidden">
       {applications.map(application => {
-        const userPayments = paymentsByUser.get(application.user_id) ?? []
-        const currentPayment = userPayments[0]
-        const applicantClaim = userPayments.find(
-          payment =>
-            payment === currentPayment &&
-            payment.status === 'claimed' &&
-            payment.claim_source !== 'admin',
-        )
+        const currentPayment = application.payment ?? undefined
+        const applicantClaim =
+          currentPayment?.status === 'claimed' &&
+          currentPayment.claim_source !== 'admin'
+            ? currentPayment
+            : undefined
         const claimedAt = getApplicantClaimTimestamp(
           application,
           applicantClaim,
@@ -89,7 +78,7 @@ export function MembershipReviewPanel({
         const applicantReportedPayment = Boolean(
           (application.status !== 'confirmed' &&
             application.dues_payment_claimed &&
-            !userPayments.some(payment => payment.claim_source === 'admin')) ||
+            !application.has_officer_payment) ||
             applicantClaim,
         )
         const acceptedStatusLocked =
