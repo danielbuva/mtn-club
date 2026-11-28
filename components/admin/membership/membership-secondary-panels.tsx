@@ -17,8 +17,8 @@ export function ActiveMembersPanel({
   memberships,
   profileNames,
 }: {
-  memberships: Membership[]
-  profileNames: ReadonlyMap<string, string>
+  memberships: (Omit<Membership, 'joined_on'> & { joined_on: string | null })[]
+  profileNames: ReadonlyMap<string, string | null>
 }) {
   return (
     <section>
@@ -75,7 +75,7 @@ export function MembershipExceptionsPanel({
   profileNames,
 }: {
   reviews: ReviewItem[]
-  profileNames: ReadonlyMap<string, string>
+  profileNames: ReadonlyMap<string, string | null>
 }) {
   if (!reviews.length) {
     return (

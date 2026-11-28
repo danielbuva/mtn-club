@@ -9,6 +9,7 @@ import {
   status,
 } from '../../integration/auth-services.mjs'
 
+const origin = `http://127.0.0.1:${process.env.REGISTRATION_TEST_PORT ?? '3140'}`
 const tripId = randomUUID()
 let userId: string
 const email = `trip-lifecycle-${randomUUID()}@example.test`
@@ -18,7 +19,7 @@ function sql(query: string) {
     [
       'exec',
       '-i',
-      'supabase_db_mtn-auth-integration',
+      'supabase_db_mtn-handoff-integration',
       'psql',
       '-U',
       'supabase_admin',
@@ -45,7 +46,7 @@ async function signIn(context: BrowserContext) {
           cookies.map(cookie => ({
             name: cookie.name,
             value: cookie.value,
-            url: 'http://127.0.0.1:3140',
+            url: origin,
             sameSite: 'Lax',
           })),
         )
@@ -78,7 +79,7 @@ test.beforeAll(async () => {
     throw new Error('Unable to create local test account')
   userId = result.data.user.id
   sql(`insert into public.admin_user_roles(user_id,role_id) select '${userId}',id from public.admin_roles where is_super_admin;
-    insert into public.trips(id,title,starts_at,ends_at,created_by,visibility,is_official) values ('${tripId}','Lifecycle browser fixture','2026-09-06T12:00:00-07:00','2026-09-06T18:00:00-07:00','${userId}','public',true);`)
+    insert into public.trips(id,title,starts_at,ends_at,created_by,visibility,is_official) values ('${tripId}','Lifecycle browser fixture',now()+interval '2 days',now()+interval '2 days 6 hours','${userId}','public',true);`)
 })
 test.afterAll(async () => {
   sql(
@@ -96,23 +97,21 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   await page.goto('/admin/trips?q=Lifecycle%20browser%20fixture&timing=all')
   await page.getByRole('button', { name: 'Cancel trip', exact: true }).click()
   let dialog = page.getByRole('dialog')
-  await dialog.getByLabel('Reason (optional)').fill('Canceled due to rain.')
+  await dialog.getByLabel('Reason (optional)').fill('Due to rain.')
   await dialog.getByRole('button', { name: 'Cancel trip', exact: true }).click()
   await expect(dialog).toBeHidden()
   expect(
     sql(
       `select lifecycle_status||':'||cancellation_reason from public.trips where id='${tripId}'`,
     ),
-  ).toBe('canceled:Canceled due to rain.')
+  ).toBe('canceled:Due to rain.')
 
   const visitor = await browser.newPage({
     viewport: { width: 390, height: 844 },
   })
   await visitor.goto(`/trips/${tripId}`)
   await expect(
-    visitor
-      .getByRole('main')
-      .getByText('Canceled due to rain.', { exact: true }),
+    visitor.getByRole('main').getByText(/Due to rain\./),
   ).toBeVisible()
   await expect(
     visitor.getByRole('link', { name: 'RSVP', exact: true }),
@@ -137,9 +136,7 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   await expect(canceledCard.locator('a, button')).toHaveCount(0)
   await visitor.goto('/schedule')
   await expect(
-    visitor
-      .getByRole('main')
-      .getByText('Canceled due to rain.', { exact: true }),
+    visitor.getByRole('main').getByText(/Due to rain\./),
   ).toBeVisible()
   await visitor.screenshot({
     path: '/tmp/mtn-canceled-schedule.png',
@@ -160,9 +157,9 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   ).toBeVisible()
 
   sql(
-    `update public.trips set schedule_key='fall-2026-black-mountain-hike' where id='${tripId}'`,
+    `update public.trips set schedule_key='fixture-lifecycle-trip' where id='${tripId}'`,
   )
-  await visitor.goto('/trips/fall-2026-black-mountain-hike')
+  await visitor.goto('/trips/fixture-lifecycle-trip')
   await expect(visitor).toHaveURL(new RegExp(`/trips/${tripId}$`))
   await expect(
     visitor.getByRole('heading', {
@@ -209,7 +206,7 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   await expect(
     visitor.getByRole('link', { name: /Lifecycle browser fixture/ }),
   ).toHaveCount(0)
-  await visitor.goto('/trips/fall-2026-black-mountain-hike')
+  await visitor.goto('/trips/fixture-lifecycle-trip')
   await expect(
     visitor.getByRole('heading', { name: 'Trip not found', exact: true }),
   ).toBeVisible()

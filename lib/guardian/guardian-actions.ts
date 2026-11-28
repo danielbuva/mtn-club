@@ -4,11 +4,9 @@ import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   guardianCodeEmail,
-  guardianSignedEmail,
   type ParticipantNotice,
   participantNoticeEmail,
 } from './email'
-import { waiverDate } from './presentation'
 import { guardianSignInputSchema } from './schema'
 import {
   codeHash,
@@ -222,33 +220,6 @@ export async function signGuardianAction(
       ),
     }
   const signed = signResult.parse(data)
-  const origin = siteOrigin()
-  if (!signed.duplicate && origin && signed.guardianEmail) {
-    const first = view.participantName.split(' ')[0]
-    const until =
-      view.waiver && signed.validUntil
-        ? `${waiverDate(signed.validUntil)}${signed.validUntil < view.waiver.until ? ` (the day before ${first} turns 18)` : ''}`
-        : null
-    await Promise.all([
-      sendGuardianEmail(
-        signed.guardianEmail,
-        guardianSignedEmail({
-          siteUrl: origin,
-          recordLink: `${origin}/guardian/${record.secret}`,
-          participantName: signed.participantName ?? view.participantName,
-          guardianName: signed.guardianName ?? values.guardian.name,
-          membership: Boolean(view.membership),
-          waiver: Boolean(view.waiver),
-          validUntil: until,
-          approved: Boolean(signed.autoApproved),
-        }),
-      ),
-      notifyParticipant(
-        signed.participantEmail ?? null,
-        signed.autoApproved ? 'signed_accepted' : 'signed_review',
-      ),
-    ])
-  }
   return {
     ok: true,
     message: 'Signed.',

@@ -3,6 +3,7 @@ import 'server-only'
 import { redirect } from 'next/navigation'
 import { connection } from 'next/server'
 import { cache } from 'react'
+import { z } from 'zod'
 import { ADMIN_CAPABILITIES, type AdminCapability } from '@/lib/admin/constants'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/supabase/types'
@@ -56,34 +57,19 @@ const resolveAdminContext = cache(async (): Promise<AdminContextResult> => {
     return { status: 'unavailable' }
   }
 
-  const scopeResults = superResult.data
-    ? []
-    : await Promise.all(
-        ADMIN_CAPABILITIES.map(capability =>
-          supabase.rpc('admin_capability_scope', {
-            p_uid: user.id,
-            p_capability_key: capability,
-          }),
-        ),
-      )
-
-  const authorizationUnavailable = Boolean(
-    scopeResults.some(result => result.error),
-  )
-  if (authorizationUnavailable) return { status: 'unavailable' }
-
   const permissions: AdminPermissionMap = {}
   if (superResult.data) {
-    for (const capability of ADMIN_CAPABILITIES) {
-      permissions[capability] = 'all'
-    }
+    for (const capability of ADMIN_CAPABILITIES) permissions[capability] = 'all'
   } else {
-    ADMIN_CAPABILITIES.forEach((capability, index) => {
-      const scope = scopeResults[index]?.data
-      if (scope === 'all' || scope === 'assigned') {
-        permissions[capability] = scope
-      }
-    })
+    const result = await supabase.rpc('get_my_admin_capability_scopes')
+    const parsed = z
+      .record(z.string(), z.enum(['all', 'assigned']))
+      .safeParse(result.data)
+    if (result.error || !parsed.success) return { status: 'unavailable' }
+    for (const capability of ADMIN_CAPABILITIES) {
+      const scope = parsed.data[capability]
+      if (scope) permissions[capability] = scope
+    }
   }
 
   if (!permissions['overview.read']) return { status: 'forbidden' }

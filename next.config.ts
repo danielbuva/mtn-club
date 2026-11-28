@@ -1,5 +1,8 @@
+import { createClient } from '@supabase/supabase-js'
 import type { NextConfig } from 'next'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import { authReleaseErrors } from './lib/auth/release-config'
+import type { Database } from './lib/supabase/types'
 
 if (
   process.env.VERCEL_ENV === 'production' ||
@@ -73,4 +76,25 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+export default async function config(phase: string): Promise<NextConfig> {
+  if (
+    phase === PHASE_PRODUCTION_BUILD &&
+    process.env.VERCEL_ENV === 'production'
+  ) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SECRET_KEY
+    if (!url || !key)
+      throw new Error('Production database configuration is missing.')
+    const db = createClient<Database>(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const result = await db
+      .rpc('handoff_schema_ready')
+      .abortSignal(AbortSignal.timeout(8000))
+    if (result.error || result.data !== true)
+      throw new Error(
+        'Production release blocked pending the handoff database migration. See RUNBOOK.md.',
+      )
+  }
+  return nextConfig
+}

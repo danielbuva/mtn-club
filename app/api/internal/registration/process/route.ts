@@ -1,4 +1,5 @@
 import { timingSafeEqual } from 'node:crypto'
+import { processGuardianNotifications } from '@/lib/guardian/notification-worker'
 import { processRegistrationNotifications } from '@/lib/registration/worker'
 import { createAdminClient } from '@/lib/supabase/admin'
 export const maxDuration = 60
@@ -15,7 +16,16 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
   try {
-    return Response.json(await processRegistrationNotifications())
+    const [registration, guardian] = await Promise.allSettled([
+      processRegistrationNotifications(),
+      processGuardianNotifications(expected),
+    ])
+    if (registration.status === 'rejected' || guardian.status === 'rejected')
+      throw new Error('Notification processing failed')
+    return Response.json({
+      ...registration.value,
+      guardianProcessed: guardian.value,
+    })
   } catch {
     const db = createAdminClient()
     await db.rpc('registration_worker_result', { p_error: 'worker_failed' })

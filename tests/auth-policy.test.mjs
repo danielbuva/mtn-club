@@ -227,4 +227,10 @@ test('analytics excludes admin routes without excluding similarly named public r
     true,
   )
   assert.equal(isAuthSensitiveUrl('/administration-guide'), false)
+  assert.equal(isAuthSensitiveUrl('/guardian/example-token'), true)
+  assert.equal(
+    isAuthSensitiveUrl('https://example.test/guardian/example-token/copy'),
+    true,
+  )
+  assert.equal(isAuthSensitiveUrl('/guardians'), false)
 })

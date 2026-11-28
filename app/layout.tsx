@@ -4,8 +4,6 @@ import { Suspense } from 'react'
 import { AdminPageBarSlot } from '@/components/admin/page-bar/admin-page-bar-slot'
 import { MoreNavigationFallback } from '@/components/navigation/more-navigation-fallback'
 import { MoreNavigationLinks } from '@/components/navigation/more-navigation-links'
-// MapLibre styles should be loaded once at the app root.
-import 'maplibre-gl/dist/maplibre-gl.css'
 import './globals.css'
 import { Providers } from './providers'
 

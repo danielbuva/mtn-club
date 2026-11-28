@@ -1,58 +1,27 @@
-# Real Supabase auth acceptance
+# Local Supabase acceptance
 
-These tests use a dedicated Docker stack, Cloudflare's documented public test
-keypair, and local Mailpit. They cannot take a hosted target URL or credentials.
-They assert CAPTCHA, confirmation, password policy, and local-only SMTP settings
-before making requests. No production users or real mailboxes are used.
-
-From the repository root, with Docker running:
+The integration stack runs Docker, PostgreSQL, Supabase Auth and Storage, and local Mailpit. From a fresh clone, install the dependencies with `pnpm install --frozen-lockfile`, start Docker, and run:
 
 ```sh
-SUPABASE_AUTH_CAPTCHA_SECRET=1x0000000000000000000000000000000AA pnpm exec supabase start --workdir tests/integration
+pnpm setup:integration
+pnpm db:types --check
+pnpm exec playwright install chromium webkit
 pnpm test:auth:services
-```
-
-The environment override is essential: the CLI can load the root `.env.local`
-and override a literal config secret. The test checks the effective container
-setting, not just the TOML file. Never use this keypair in production.
-
-The API tests need no application tables. They cover real confirmation, resend
-throttling, password policy, cross-browser token-hash recovery, legacy PKCE,
-password-change notifications, admin CAPTCHA exemption, and transient OTP proof.
-Only users created by this test run are deleted during cleanup.
-
-## Full browser/membership smoke test
-
-This additional test requires the **application schema without member data** in
-the dedicated sandbox. The repository's incremental migrations do not include
-the original base schema and cannot currently bootstrap a fresh database.
-On September 3, 2026, the owner's existing `supabase/schema-only.sql`
-was inspected and loaded into `supabase_db_mtn-auth-integration` only. That file
-is now retained in the release branch as a schema-only test baseline. Do not load it into
-an existing database or run production migrations just to prepare this test.
-
-Once the local schema is available:
-
-```sh
 pnpm test:auth:integration
+pnpm test:registration:browser
+pnpm test:forms:browser
 ```
 
-The browser uses port 3130 and Supabase uses 55321–55324. The launcher overrides
-the app's Supabase settings with this local stack's credentials. The browser test
-uses the real managed test widget and real local SMTP/Auth; the reset test only
-stubs the unrelated final destination. GET/HEAD scanner visits must not consume
-reset links. Membership must remain attached to the confirmed account.
+Setup installs the checksummed application baseline and every subsequent migration in the dedicated `mtn-handoff-integration` stack. Its API, database, and Mailpit use ports 55621, 55622, and 55624. The launcher requires the current schema fingerprint and the local CAPTCHA and SMTP settings before it creates a synthetic account. Turnstile uses the public test keypair and all Auth mail stays in local capture. Real delivery and live provider settings have their own [release checks](../../AUTH_RUNBOOK.md).
 
-Do not run simultaneously with the mocked browser suite: both intentionally use
-the separate `.next-auth-browser` build folder. Captured messages and browser
-traces contain **local test** tokens; do not commit these artifacts.
+`pnpm test:db:replay`, `pnpm test:registration:db`, and `pnpm test:registration:contacts` create and remove independent replay databases inside the same container. The browser suites use the API-facing sandbox and should run sequentially.
 
-Stop this stack (retaining its local database backup) after testing:
+After changing migrations, rebuild the sandbox and regenerate the types. The following command drops only the dedicated integration stack and its synthetic fixtures. Leave other local or hosted projects alone.
 
 ```sh
-pnpm exec supabase stop --workdir tests/integration
+pnpm exec supabase stop --workdir tests/integration --no-backup
+pnpm setup:integration
+pnpm db:types
 ```
 
-This is not approval of production SMTP delivery, real Google/Discord providers,
-production Turnstile keys, or physical-device behavior. Those are separate
-release checks in `AUTH_RUNBOOK.md`.
+The integration checks are part of the PR workflow. Browser traces, if enabled locally, can contain synthetic tokens and should stay out of Git.

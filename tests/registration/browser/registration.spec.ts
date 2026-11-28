@@ -14,6 +14,7 @@ import {
   status,
 } from '../../integration/auth-services.mjs'
 
+const origin = `http://127.0.0.1:${process.env.REGISTRATION_TEST_PORT ?? '3140'}`
 const users: string[] = []
 const trips: string[] = []
 let owner: { id: string; email: string }
@@ -34,7 +35,7 @@ function sql(query: string) {
     [
       'exec',
       '-i',
-      'supabase_db_mtn-auth-integration',
+      'supabase_db_mtn-handoff-integration',
       'psql',
       '-U',
       'supabase_admin',
@@ -73,7 +74,7 @@ async function signIn(context: BrowserContext, user: { email: string }) {
           cookies.map(cookie => ({
             name: cookie.name,
             value: cookie.value,
-            url: 'http://127.0.0.1:3140',
+            url: origin,
             sameSite: 'Lax',
           })),
         )
@@ -112,7 +113,11 @@ test.beforeAll(async () => {
  insert into public.memberships(user_id,status) values('${owner.id}','active') on conflict(user_id) do update set status='active';
  insert into public.club_hosts(id,public_name,club_title,is_active) values('${parityHost}','Parity Host','Trip Leader',true);
  insert into public.trip_tag_options(tag) values('${parityTag}');
- insert into public.profiles(user_id,display_name) values('${owner.id}','Test Organizer'),('${participant.id}','Registration Participant'),('${waiter.id}','Waitlisted Participant') on conflict(user_id) do update set display_name=excluded.display_name;
+ insert into public.profiles(user_id,display_name,first_name,last_name) values
+ ('${owner.id}','Test Organizer','Test','Organizer'),
+ ('${participant.id}','Registration Participant','Registration','Participant'),
+ ('${waiter.id}','Waitlisted Participant','Waitlisted','Participant')
+ on conflict(user_id) do update set display_name=excluded.display_name,first_name=excluded.first_name,last_name=excluded.last_name;
  insert into public.account_age_declarations(user_id,is_18_or_older) values('${participant.id}',true),('${waiter.id}',true);
  begin; set local "request.jwt.claim.sub"='${owner.id}';
  insert into public.trips(id,title,starts_at,ends_at,capacity,created_by) values('${tripId}','RSVP browser acceptance',now()+interval '2 days',now()+interval '3 days',1,'${owner.id}');
@@ -174,7 +179,12 @@ test.afterAll(async () => {
   sql(
     `delete from public.club_hosts where id='${parityHost}'; delete from public.trip_tag_options where tag='${parityTag}';`,
   )
-  for (const id of users) await admin.auth.admin.deleteUser(id)
+  if (users.length) {
+    sql(
+      `delete from public.membership_access_overrides where user_id in (${users.map(sqlLiteral).join(',')});`,
+    )
+    for (const id of users) await admin.auth.admin.deleteUser(id)
+  }
 })
 async function completeForm(
   page: import('@playwright/test').Page,
@@ -408,9 +418,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     member.getByRole('link', { name: 'Finish setup', exact: true }),
   ).toBeVisible()
   await organizer.goto(`/trips/${tripId}/registrations`)
-  await expect(
-    organizer.getByText('Signup incomplete', { exact: true }),
-  ).toBeVisible()
+  await expect(organizer.getByText('Unfinished', { exact: true })).toBeVisible()
   await organizer
     .getByRole('main')
     .getByText('Registration settings', { exact: true })
@@ -688,7 +696,7 @@ test('a minor requests guardian review and registers only after an officer confi
   browser,
 }) => {
   const minor = await account()
-  sql(`insert into public.profiles(user_id,display_name) values('${minor.id}','Minor Participant') on conflict(user_id) do update set display_name=excluded.display_name;
+  sql(`insert into public.profiles(user_id,display_name,first_name,last_name) values('${minor.id}','Minor Participant','Minor','Participant') on conflict(user_id) do update set display_name=excluded.display_name,first_name=excluded.first_name,last_name=excluded.last_name;
   insert into public.account_age_declarations(user_id,is_18_or_older) values('${minor.id}',false);`)
   const memberContext = await browser.newContext()
   const officerContext = await browser.newContext()
@@ -968,13 +976,15 @@ test('members can use activity choices and resume community drafts through the c
   browser,
 }) => {
   sql(
-    `insert into public.memberships(user_id,status) values('${waiter.id}','active') on conflict(user_id) do update set status='active'`,
+    `insert into public.memberships(user_id,status) values('${waiter.id}','active') on conflict(user_id) do update set status='active';
+    insert into public.membership_access_overrides(user_id,starts_at,reason,granted_by)
+    values('${waiter.id}',now()-interval '1 day','Synthetic browser fixture','${owner.id}');`,
   )
   const context = await browser.newContext()
   await signIn(context, waiter)
   const page = await context.newPage()
   await page.goto('/calendar/new')
-  const form = page.locator('#trip-event-form')
+  const form = page.locator('#trip-event-form:not([inert])')
   await expect(form).toHaveAttribute('data-ready', 'true')
   await expect(
     form.getByRole('switch', { name: 'Official club trip' }),

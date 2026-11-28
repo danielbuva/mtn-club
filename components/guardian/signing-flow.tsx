@@ -369,12 +369,11 @@ function DoneView({
         title={`Thanks, ${details.name.split(' ')[0]}. It’s signed.`}
       >
         <p>
-          We emailed a copy to{' '}
+          Your copy will be sent to{' '}
           <strong className="font-semibold [overflow-wrap:anywhere]">
             {view.verifiedEmail ?? details.email}
           </strong>
-          . Use the link in that email anytime to download it or withdraw
-          permission.
+          . Use the link in that email to download it or withdraw permission.
         </p>
         <p>
           {approved

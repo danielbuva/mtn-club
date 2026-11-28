@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { galleryUploadExtension } from '@/lib/gallery/images'
 import type { GalleryPhotoRow } from '@/lib/gallery/queries'
 import { createClient } from '@/lib/supabase/client'
 import { GalleryDraftForm } from './gallery-draft-form'
@@ -48,19 +49,27 @@ export function GalleryAdminClient({
     const takenOn = String(formData.get('takenOn') ?? '').trim()
     const imageUrl = String(formData.get('imageUrl') ?? '').trim()
 
-    try {
-      const parsedUrl = new URL(imageUrl)
-      if (
-        parsedUrl.protocol !== 'https:' ||
-        parsedUrl.username ||
-        parsedUrl.password ||
-        imageUrl.length > 2048
-      ) {
-        throw new Error('Invalid image URL')
-      }
-    } catch {
-      setMessage('Enter a valid HTTPS image link.')
+    const selected = formData.get('imageFile')
+    const file = selected instanceof File && selected.size > 0 ? selected : null
+    const extension = file ? galleryUploadExtension(file) : undefined
+    if (file && (!extension || imageUrl)) {
+      setMessage('Choose one JPEG, PNG, WebP, or AVIF photo up to 10 MB.')
       return
+    }
+    if (!file) {
+      try {
+        const url = new URL(imageUrl)
+        if (
+          url.protocol !== 'https:' ||
+          url.username ||
+          url.password ||
+          imageUrl.length > 2048
+        )
+          throw new Error('Invalid image URL')
+      } catch {
+        setMessage('Upload a photo or enter a valid public HTTPS image link.')
+        return
+      }
     }
     if (!title || !altText) {
       setMessage('Title and alternative text are required.')
@@ -71,8 +80,22 @@ export function GalleryAdminClient({
     setMessage(null)
     const supabase = createClient()
 
+    const storagePath =
+      file && extension
+        ? `${userId}/${crypto.randomUUID()}.${extension}`
+        : imageUrl
+    if (file) {
+      const upload = await supabase.storage
+        .from('club_gallery')
+        .upload(storagePath, file)
+      if (upload.error) {
+        setMessage('Could not upload the photo. Try again.')
+        setIsBusy(false)
+        return
+      }
+    }
     const metadata = await supabase.from('gallery_photos').insert({
-      storage_path: imageUrl,
+      storage_path: storagePath,
       title,
       alt_text: altText,
       caption: caption || null,
@@ -84,13 +107,17 @@ export function GalleryAdminClient({
     })
 
     if (metadata.error) {
-      setMessage(metadata.error.message)
+      if (file)
+        await supabase.storage.from('club_gallery').remove([storagePath])
+      setMessage(
+        'Could not save the gallery draft. Check your entries and try again.',
+      )
       setIsBusy(false)
       return
     }
 
     form.reset()
-    setMessage('Image link saved as an unpublished draft.')
+    setMessage('Photo saved as an unpublished draft.')
     setIsBusy(false)
     router.refresh()
   }
@@ -298,7 +325,7 @@ function GalleryPhotoEditor({
             src={photo.imageUrl}
             alt=""
             fill
-            unoptimized={photo.storage_path.startsWith('https://')}
+            unoptimized
             sizes="(min-width: 1280px) 40vw, 90vw"
             className="object-cover"
           />

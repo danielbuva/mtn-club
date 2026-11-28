@@ -3,10 +3,8 @@ import { AdminPanelFallback } from '@/components/admin/admin-panel-fallback'
 import { AdminViewFrame } from '@/components/admin/admin-view-frame'
 import { GalleryAdminClient } from '@/components/gallery/gallery-admin-client'
 import { requireAdminCapability } from '@/lib/admin/auth'
-import {
-  type GalleryPhotoRow,
-  getGalleryPublicUrl,
-} from '@/lib/gallery/queries'
+import { galleryImageUrl } from '@/lib/gallery/images'
+import type { GalleryPhotoRow } from '@/lib/gallery/queries'
 import { createClient } from '@/lib/supabase/server'
 
 async function AdminGalleryPageContent() {
@@ -27,7 +25,7 @@ async function AdminGalleryPageContent() {
 
   const photos = (photosResult.data ?? []).map((photo: GalleryPhotoRow) => ({
     ...photo,
-    imageUrl: getGalleryPublicUrl(supabase, photo.storage_path),
+    imageUrl: galleryImageUrl(photo),
   }))
 
   return (

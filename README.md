@@ -11,7 +11,6 @@ UNLV Mountain Club.
 - Account-linked membership sign up at `/membership-sign-up`
 - Member profile, trip, and officer tools
 - Auth and data via Supabase
-- Maps and geo utilities for trips
 - Current dues through Zelle with officer confirmation
 - Disabled Stripe checkout skeleton for a possible future upgrade
 
@@ -21,7 +20,6 @@ UNLV Mountain Club.
 - React
 - Supabase (auth + database)
 - Tailwind CSS + shadcn/ui
-- MapLibre + react-map-gl
 - Stripe (disabled future checkout skeleton)
 - Vercel (hosting)
 
@@ -123,7 +121,9 @@ Production deploys are handled by Vercel. Pushing to `main` triggers a productio
 
 ## Operations
 
-See `RUNBOOK.md` for infra ownership, access, and incident response.
+See [RUNBOOK.md](RUNBOOK.md) for deployment, ownership, restore, and incident response. The [local integration guide](tests/integration/README.md) walks through the full test suite and schema type generation.
+
+Officers manage trips, notices, the gallery, and roster through **Admin → Pages**. A developer edits dues/contact values in `lib/constants.ts`, meetup copy in `lib/club-content.ts`, activity guides in `app/(reader)/guides/guide-content.ts`, and cover editions in `lib/editorial/editions.ts` and `lib/editorial/cover-editions.ts`. Have the relevant officer confirm dates, prices, and wording before deployment.
 
 Trip registration setup, notification delivery, pilot gates, local acceptance, and recovery are documented in [RSVP_RUNBOOK.md](RSVP_RUNBOOK.md). Annual waiver content review, migration, trip risk revisions, guardian signing, and record retention are documented in [ANNUAL_WAIVER_RUNBOOK.md](ANNUAL_WAIVER_RUNBOOK.md).
 
@@ -136,12 +136,13 @@ supported clean replay uses the committed checkpoint in
 [`supabase/baseline.json`](supabase/baseline.json):
 
 ```bash
+pnpm setup:integration
 pnpm test:db:replay
 pnpm test:registration:db
 ```
 
-Both commands require the already running local Docker container
-`supabase_db_mtn-auth-integration` (configured in `tests/integration/supabase/`).
+Run `pnpm setup:integration` with Docker running. Both commands use the local container
+`supabase_db_mtn-handoff-integration` (configured in `tests/integration/supabase/`).
 They create uniquely named `mtn_replay_*` databases from `template0`, copy only
 the local stack's platform schema definitions, then restore
 `supabase/schema-only.sql` and `supabase/baseline-reference.sql`. The reference
@@ -176,19 +177,18 @@ immutable and is not rewritten by the timezone migration.
 ### Supabase CLI ownership
 
 The GitHub identity used for this repository does not need a seat in the
-Supabase organization. Authenticate the CLI with a scoped personal access token
-created by the Supabase account that owns the project, then link this checkout
+Supabase organization. Authenticate the CLI with `pnpm exec supabase login` using a club-controlled account, then link this checkout
 to the project referenced by `NEXT_PUBLIC_SUPABASE_URL`.
 
 ```bash
-export SUPABASE_ACCESS_TOKEN="..."
+pnpm exec supabase login
 pnpm exec supabase unlink
 pnpm exec supabase link --project-ref "..."
 pnpm supabase:check-link
 pnpm exec supabase migration list
 ```
 
-Never commit the token. Before repairing or pushing migrations, confirm that
+Before repairing or pushing migrations, confirm that
 the linked project ref is the same ref at the beginning of the configured
 Supabase hostname. Only one operator should push database migrations at a time.
 If SQL was applied manually, use `migration repair --status applied` only after

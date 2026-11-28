@@ -38,6 +38,14 @@ declare owner_id uuid:=gen_random_uuid(); minor uuid:=gen_random_uuid(); member_
  -- Minor opens a same-device request from the trip.
  perform set_config('request.jwt.claim.sub',minor::text,true);
  perform public.declare_registration_age(false);
+ update public.trips set visibility='leaders' where id=tid2;
+ begin
+  perform public.guardian_open_request(repeat('a',64),'same_device',tid2);
+  raise exception 'RESTRICTED_TRIP_AVAILABLE';
+ exception when others then if sqlerrm <> 'Trip not found.' then raise; end if; end;
+ if public.get_my_guardian_status(tid2)->'trip' is distinct from 'null'::jsonb
+ then raise exception 'Restricted trip status exposed'; end if;
+ update public.trips set visibility='public' where id=tid2;
  reason:=registration_private.eligibility(tid,minor);
  if not 'A parent or legal guardian needs to sign before you can register.'=any(reason) then raise exception 'Expected guardian reason, got %',reason; end if;
  status:=public.get_my_guardian_status(tid);
@@ -87,7 +95,7 @@ declare owner_id uuid:=gen_random_uuid(); minor uuid:=gen_random_uuid(); member_
  if status->>'trip'<>'awaiting_review' or status->'guardian'->>'email'<>'parent@example.test' or status->'guardian'->>'emailVerifiedAt' is null then raise exception 'Bad pending status %',status; end if;
  begin perform public.guardian_open_request(encode(sha256('dup'::bytea),'hex'),'same_device',tid2); raise exception 'DUPLICATE_REQUEST';
  exception when others then if sqlerrm<>'Nothing needs a guardian signature right now.' then raise; end if; end;
- if (select emergency_contact->>'notes' from public.profile_private where user_id=minor)<>'Peanut allergy' then raise exception 'Emergency contact not saved'; end if;
+ if (select emergency_contact from public.profile_private where user_id=minor) is not null then raise exception 'Unapproved signer changed the emergency contact'; end if;
  begin perform public.get_guardian_review_queue(); raise exception 'MINOR_READ_QUEUE';
  exception when others then if sqlerrm<>'Guardian review permission required.' then raise; end if; end;
  perform set_config('request.jwt.claim.sub',owner_id::text,true);
@@ -103,6 +111,8 @@ declare owner_id uuid:=gen_random_uuid(); minor uuid:=gen_random_uuid(); member_
  begin perform public.review_guardian_request(request,'rejected','Too late now.',false); raise exception 'DOUBLE_DECISION';
  exception when others then if sqlerrm not like 'This request was already decided%' then raise; end if; end;
  if jsonb_array_length(public.get_guardian_review_queue()->'requests')<>0 then raise exception 'Approved request stayed queued'; end if;
+ if (select emergency_contact->>'notes' from public.profile_private where user_id=minor) is distinct from 'Peanut allergy'
+ then raise exception 'Approved emergency contact was not saved'; end if;
 
  -- Approved coverage applies to every covered trip without new guardian action.
  perform set_config('request.jwt.claim.sub',minor::text,true);
@@ -154,9 +164,15 @@ declare owner_id uuid:=gen_random_uuid(); minor uuid:=gen_random_uuid(); member_
  if public.get_my_guardian_status(tid)->>'trip'<>'waiting_for_guardian' then raise exception 'Waiting status wrong'; end if;
  if not 'Waiting for your guardian to sign.'=any(registration_private.eligibility(tid,minor)) then raise exception 'Waiting reason missing'; end if;
  perform set_config('request.jwt.claim.role','service_role',true);
+ begin
+  perform public.guardian_start_verification(tok,'wrong@example.test',repeat('e',64));
+  raise exception 'INVITE_EMAIL_NOT_BOUND';
+ exception when others then if sqlerrm <> 'Use the email address that received this invitation.' then raise; end if; end;
  perform public.guardian_start_verification(tok,'sam@example.test',encode(sha256('444444'::bytea),'hex'));
  ses:=encode(sha256('session-4'::bytea),'hex');
  perform public.guardian_verify_code(tok,encode(sha256('444444'::bytea),'hex'),ses);
+ if public.guardian_get_request(tok,ses)->'prefill' is distinct from 'null'::jsonb
+ then raise exception 'Unreviewed signer could see prior contact details'; end if;
  result:=public.guardian_sign(tok,ses,encode(sha256('record-3'::bytea),'hex'),payload||'{"signatureName":"Sam Guardian","guardian":{"name":"Sam Guardian","relationship":"Legal guardian","phone":"702-555-0111","authority":true,"special":true,"specialNote":"Court-appointed"}}');
  if (result->>'autoApproved')::boolean then raise exception 'New guardian auto-approved'; end if;
  perform set_config('request.jwt.claim.role','authenticated',true);
@@ -200,6 +216,23 @@ declare owner_id uuid:=gen_random_uuid(); minor uuid:=gen_random_uuid(); member_
  if (select count(*) from public.guardian_consents where request_id=request)<>1 or not exists(select 1 from public.registration_signatures s join public.guardian_requests q on q.signature_id=s.id where q.id=request)
  then raise exception 'Expected separate membership and waiver records'; end if;
  if (select officer_verified_at from public.guardian_contacts where participant_id=member_minor and superseded_at is null) is not null then raise exception 'Approval without identity check marked guardian verified'; end if;
+ insert into public.membership_access_overrides(user_id,starts_at,granted_by,reason)
+ values(member_minor,now()-interval '1 day',owner_id,'Synthetic paid-term access');
+ if not public.has_membership_access(member_minor) then raise exception 'Fixture account should have access'; end if;
+ if not exists(select 1 from registration_private.guardian_notifications where request_id=request and kind='receipt')
+ then raise exception 'Signature did not enqueue a receipt'; end if;
+ if not exists(select 1 from registration_private.guardian_notifications where request_id=request and kind='approved')
+ then raise exception 'Officer approval did not enqueue a notice'; end if;
+ perform set_config('request.jwt.claim.role','service_role',true);
+ update public.guardian_email_codes set created_at=created_at-interval '2 hours' where request_id=request;
+ rec:=encode(sha256('record-5'::bytea),'hex');
+ perform public.guardian_start_verification(rec,'casey@example.test',encode(sha256('555556'::bytea),'hex'));
+ ses:=encode(sha256('session-6'::bytea),'hex');
+ perform public.guardian_verify_code(rec,encode(sha256('555556'::bytea),'hex'),ses);
+ perform public.guardian_withdraw(rec,ses,'Withdrawing permission');
+ if public.has_membership_access(member_minor) then raise exception 'Withdrawn guardian consent still grants membership'; end if;
+ if not exists(select 1 from public.membership_access_overrides where user_id=member_minor and revoked_at is null)
+ then raise exception 'Withdrawal erased the underlying membership term'; end if;
  begin delete from public.guardian_reviews; raise exception 'REVIEW_DELETE';
  exception when others then if sqlerrm not like 'Signed documents%' then raise; end if; end;
  raise notice 'Guardian consent: verification, review gate, reuse, withdrawal, returning guardian and guardian change verified';

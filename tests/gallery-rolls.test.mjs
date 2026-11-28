@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import ts from 'typescript'
+import { galleryImageUrl } from '../lib/gallery/images.ts'
 import { groupIntoRolls } from '../lib/gallery/rolls.ts'
 
 const photo = (id, taken_on) => ({
@@ -129,6 +130,7 @@ function galleryQuery(result, throws = false) {
       },
     }).outputText,
   )(name => {
+    if (name === '@/lib/gallery/images') return { galleryImageUrl }
     assert.equal(name, '@/lib/supabase/public')
     return {
       createPublicClient: () => {
@@ -158,4 +160,10 @@ test('gallery reads distinguish empty, published photos, and failed requests', a
   assert.equal(result.status, 'ok')
   assert.equal(result.photos[0].id, 'published')
   assert.equal(result.photos[0].imageUrl, row.storage_path)
+  const managed = await galleryQuery({
+    data: [{ ...row, storage_path: 'managed.jpg' }],
+    error: null,
+  })
+  assert.equal(managed.photos[0].imageUrl, '/api/gallery/published')
+  assert.equal(managed.photos[0].unoptimized, true)
 })

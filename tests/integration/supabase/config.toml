@@ -1,14 +1,14 @@
-# Auth-only sandbox. No production credentials, migrations, or outbound email.
-project_id = "mtn-auth-integration"
+# Dedicated test sandbox. Outbound email goes to local Mailpit.
+project_id = "mtn-handoff-integration"
 
 [api]
 enabled = true
-port = 55321
+port = 55621
 schemas = ["public"]
 
 [db]
-port = 55322
-shadow_port = 55320
+port = 55622
+shadow_port = 55620
 major_version = 17
 
 [db.migrations]
@@ -22,10 +22,10 @@ enabled = false
 
 [inbucket]
 enabled = true
-port = 55324
+port = 55624
 
 [storage]
-enabled = false
+enabled = true
 
 [realtime]
 enabled = false

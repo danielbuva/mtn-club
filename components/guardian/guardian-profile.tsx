@@ -7,7 +7,11 @@ import {
   waiverGuardianPresentation,
 } from '@/lib/guardian/presentation'
 import type { GuardianStatus } from '@/lib/guardian/schema'
-import { ChangeGuardian, GuardianPhone } from './guardian-profile-actions'
+import {
+  ChangeGuardian,
+  GuardianPhone,
+  RequestGuardianRecordCopy,
+} from './guardian-profile-actions'
 import { GuardianRequestPanel } from './guardian-request-panel'
 import { FactRow, GuardianTag } from './ui'
 
@@ -90,6 +94,9 @@ export function GuardianProfile({ status }: { status: GuardianStatus }) {
         tripId={null}
         compact
       />
+      {status.lastOutcome?.status === 'signed' ? (
+        <RequestGuardianRecordCopy />
+      ) : null}
       <Section id="guardian-saved" title="Your guardian">
         {guardian ? (
           <>

@@ -1890,6 +1890,11 @@ test('annual guardian verification, immutable merge evidence, duplicate signing 
   )
 })
 
+test('handoff boundaries: gallery visibility, membership pagination, scope checks, and guardian merge', () => {
+  sql(
+    readFileSync(new URL('../handoff-boundaries.sql', import.meta.url), 'utf8'),
+  )
+})
 test('guardian e-signing: email code, officer gate, reuse, withdrawal and guardian change', () => {
   sql(readFileSync(new URL('../guardian-consent.sql', import.meta.url), 'utf8'))
 })

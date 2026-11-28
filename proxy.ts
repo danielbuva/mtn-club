@@ -20,7 +20,6 @@ const publicPrefixes = [
   '/gallery',
   '/announcements',
   '/coming-soon',
-  '/input-test',
   '/auth',
   '/api',
   '/_next',
@@ -35,6 +34,7 @@ const publicExact = new Set([
   '/terms',
   // Let the removed legacy route reach Next.js so it returns a real 404.
   '/start-here',
+  '/input-test',
   // The page itself restricts the showroom to development and preview.
   '/form-lab',
   '/favicon.ico',
