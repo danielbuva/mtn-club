@@ -60,7 +60,7 @@ jobs:
       - run: pnpm test:auth:integration
       - run: pnpm test:registration:browser
       - run: pnpm test:forms:browser
-      - if: failure()
+      - if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: integration-browser-screenshots

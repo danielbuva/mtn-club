@@ -233,6 +233,37 @@ declare owner_id uuid:=gen_random_uuid(); minor uuid:=gen_random_uuid(); member_
  if public.has_membership_access(member_minor) then raise exception 'Withdrawn guardian consent still grants membership'; end if;
  if not exists(select 1 from public.membership_access_overrides where user_id=member_minor and revoked_at is null)
  then raise exception 'Withdrawal erased the underlying membership term'; end if;
+ -- A later membership-only permission has no waiver to invalidate. It must still pause access.
+ perform set_config('request.jwt.claim.role','authenticated',true);
+ perform set_config('request.jwt.claim.sub',member_minor::text,true);
+ perform public.request_annual_guardian_review(waiver);
+ perform set_config('request.jwt.claim.sub',owner_id::text,true);
+ perform public.verify_annual_guardian(waiver,member_minor,jsonb_build_object('evidence','Verified replacement paper waiver.',
+  'guardianDocument',jsonb_build_object('guardianName','Casey Parent','signedOn',registration_private.waiver_today(),'reference','Synthetic record','verified',true)));
+ perform set_config('request.jwt.claim.sub',member_minor::text,true);
+ tok:=encode(sha256('membership-only-token'::bytea),'hex');
+ request:=(public.guardian_open_request(tok,'same_device',null)->>'requestId')::uuid;
+ perform set_config('request.jwt.claim.role','service_role',true);
+ result:=public.guardian_get_request(tok,null);
+ if result->'waiver' is distinct from 'null'::jsonb or result->'membership'='null'::jsonb
+ then raise exception 'Expected membership-only permission'; end if;
+ perform public.guardian_start_verification(tok,'casey@example.test',encode(sha256('555557'::bytea),'hex'));
+ ses:=encode(sha256('session-7'::bytea),'hex');
+ perform public.guardian_verify_code(tok,encode(sha256('555557'::bytea),'hex'),ses);
+ rec:=encode(sha256('record-7'::bytea),'hex');
+ perform public.guardian_sign(tok,ses,rec,'{"membershipAgreed":true,"signatureName":"Casey Parent","guardian":{"name":"Casey Parent","relationship":"Father","phone":"702-555-0122","authority":true}}');
+ perform set_config('request.jwt.claim.role','authenticated',true);
+ perform set_config('request.jwt.claim.sub',owner_id::text,true);
+ perform public.review_guardian_request(request,'approved',null,false);
+ if not public.has_membership_access(member_minor) then raise exception 'Approved replacement did not restore access'; end if;
+ perform set_config('request.jwt.claim.role','service_role',true);
+ update public.guardian_email_codes set created_at=created_at-interval '2 hours' where request_id=request;
+ perform public.guardian_start_verification(rec,'casey@example.test',encode(sha256('555558'::bytea),'hex'));
+ ses:=encode(sha256('session-8'::bytea),'hex');
+ perform public.guardian_verify_code(rec,encode(sha256('555558'::bytea),'hex'),ses);
+ perform public.guardian_withdraw(rec,ses,'Withdrawing permission only');
+ if public.has_membership_access(member_minor) or not registration_private.waiver_complete(tid,member_minor)
+ then raise exception 'Membership-only withdrawal changed the wrong access'; end if;
  begin delete from public.guardian_reviews; raise exception 'REVIEW_DELETE';
  exception when others then if sqlerrm not like 'Signed documents%' then raise; end if; end;
  raise notice 'Guardian consent: verification, review gate, reuse, withdrawal, returning guardian and guardian change verified';

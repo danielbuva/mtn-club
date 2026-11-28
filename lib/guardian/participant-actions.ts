@@ -177,6 +177,6 @@ export async function queueGuardianRecordCopyAction(): Promise<ActionResult> {
     }
   return {
     ok: true,
-    message: 'A new link is queued for the guardian who signed.',
+    message: 'The guardian’s copy request is queued or was sent recently.',
   }
 }

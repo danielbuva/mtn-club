@@ -7,40 +7,25 @@ values('club_gallery','club_gallery',false,10485760,
   array['image/jpeg','image/png','image/webp','image/avif'])
 on conflict(id) do update set public=false;
 
--- These policies also reconstruct Storage permissions for new databases whose
--- historical checkpoint contains the gallery table but no object policies.
+-- The app checks gallery metadata before reading with the service role. Direct
+-- client reads must stay blocked so a viewer cannot mint a durable signed URL.
 drop policy if exists club_gallery_read_published on storage.objects;
 drop policy if exists club_gallery_capability_read on storage.objects;
 drop policy if exists club_gallery_visible_photo on storage.objects;
-create policy club_gallery_visible_photo on storage.objects
-for select to anon,authenticated
-using (
-  bucket_id='club_gallery' and exists (
-    select 1 from public.gallery_photos photo
-    where photo.storage_path=storage.objects.name
-  )
-);
+drop policy if exists club_gallery_read_through_app on storage.objects;
+create policy club_gallery_read_through_app on storage.objects
+as restrictive for select to anon,authenticated using(bucket_id <> 'club_gallery');
 
 drop policy if exists club_gallery_capability_insert on storage.objects;
 create policy club_gallery_capability_insert on storage.objects
 for insert to authenticated with check (
   bucket_id='club_gallery' and lower(storage.extension(name)) in ('jpg','jpeg','png','webp','avif')
+  and storage.foldername(name)=array[(select auth.uid())::text]
   and public.has_admin_capability((select auth.uid()),'gallery.create')
 );
 
 drop policy if exists club_gallery_capability_update on storage.objects;
-create policy club_gallery_capability_update on storage.objects
-for update to authenticated
-using (bucket_id='club_gallery' and public.has_admin_capability((select auth.uid()),'gallery.update'))
-with check (
-  bucket_id='club_gallery' and lower(storage.extension(name)) in ('jpg','jpeg','png','webp','avif')
-  and public.has_admin_capability((select auth.uid()),'gallery.update')
-);
-
 drop policy if exists club_gallery_capability_delete on storage.objects;
-create policy club_gallery_capability_delete on storage.objects
-for delete to authenticated
-using (bucket_id='club_gallery' and public.has_admin_capability((select auth.uid()),'gallery.delete'));
 
 create function public.get_my_admin_capability_scopes()
 returns jsonb language sql stable security definer set search_path='' as $$

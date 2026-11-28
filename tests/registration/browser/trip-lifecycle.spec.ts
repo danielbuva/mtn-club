@@ -92,7 +92,7 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   page,
   context,
   browser,
-}) => {
+}, testInfo) => {
   await signIn(context)
   await page.goto('/admin/trips?q=Lifecycle%20browser%20fixture&timing=all')
   await page.getByRole('button', { name: 'Cancel trip', exact: true }).click()
@@ -122,24 +122,24 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   await visitor.goto('/trips')
   await expect(
     visitor.getByRole('link', {
-      name: 'Open details for Lifecycle browser fixture',
+      name: 'Lifecycle browser fixture',
       exact: true,
     }),
   ).toBeVisible()
   const canceledCard = visitor.getByRole('link', {
-    name: 'Open details for Lifecycle browser fixture',
+    name: 'Lifecycle browser fixture',
     exact: true,
   })
-  await expect(canceledCard.locator('h2 s')).toHaveText(
-    'Lifecycle browser fixture',
-  )
-  await expect(canceledCard.locator('a, button')).toHaveCount(0)
+  await expect(canceledCard).toHaveAttribute('href', `/trips/${tripId}`)
+  await expect(
+    visitor.getByRole('button', { name: 'RSVP', exact: true }),
+  ).toHaveCount(0)
   await visitor.goto('/schedule')
   await expect(
     visitor.getByRole('main').getByText(/Due to rain\./),
   ).toBeVisible()
   await visitor.screenshot({
-    path: '/tmp/mtn-canceled-schedule.png',
+    path: testInfo.outputPath('mtn-canceled-schedule.png'),
     fullPage: true,
   })
 
@@ -157,9 +157,9 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   ).toBeVisible()
 
   sql(
-    `update public.trips set schedule_key='fixture-lifecycle-trip' where id='${tripId}'`,
+    `update public.trips set schedule_key='fall-2026-fixture-lifecycle-trip' where id='${tripId}'`,
   )
-  await visitor.goto('/trips/fixture-lifecycle-trip')
+  await visitor.goto('/trips/fall-2026-fixture-lifecycle-trip')
   await expect(visitor).toHaveURL(new RegExp(`/trips/${tripId}$`))
   await expect(
     visitor.getByRole('heading', {
@@ -198,7 +198,7 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   await visitor.goto('/trips')
   await expect(
     visitor.getByRole('link', {
-      name: 'Open details for Lifecycle browser fixture',
+      name: 'Lifecycle browser fixture',
       exact: true,
     }),
   ).toHaveCount(0)
@@ -206,7 +206,7 @@ test('cancel with a reason from admin, edit the reason on trips, then delete wit
   await expect(
     visitor.getByRole('link', { name: /Lifecycle browser fixture/ }),
   ).toHaveCount(0)
-  await visitor.goto('/trips/fixture-lifecycle-trip')
+  await visitor.goto('/trips/fall-2026-fixture-lifecycle-trip')
   await expect(
     visitor.getByRole('heading', { name: 'Trip not found', exact: true }),
   ).toBeVisible()

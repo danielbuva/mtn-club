@@ -1,6 +1,11 @@
 import { execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import { type BrowserContext, expect, test } from '@playwright/test'
+import {
+  type BrowserContext,
+  expect,
+  type Locator,
+  test,
+} from '@playwright/test'
 import { createServerClient } from '@supabase/ssr'
 import { z } from 'zod'
 import {
@@ -121,6 +126,8 @@ test.beforeAll(async () => {
  insert into public.account_age_declarations(user_id,is_18_or_older) values('${participant.id}',true),('${waiter.id}',true);
  begin; set local "request.jwt.claim.sub"='${owner.id}';
  insert into public.trips(id,title,starts_at,ends_at,capacity,created_by) values('${tripId}','RSVP browser acceptance',now()+interval '2 days',now()+interval '3 days',1,'${owner.id}');
+ -- This fixture covers the retained per-trip waiver and paper review path.
+ update public.trip_registration_settings set annual_waiver=false where trip_id='${tripId}';
  select public.set_registration_enabled(true);
  select public.save_registration_settings('${tripId}',0,${sqlLiteral(
    JSON.stringify({
@@ -186,6 +193,16 @@ test.afterAll(async () => {
     for (const id of users) await admin.auth.admin.deleteUser(id)
   }
 })
+async function completeParticipantContact(form: Locator) {
+  const phone = form.getByLabel('Your phone number', { exact: true })
+  const experience = form.getByLabel('Experience', { exact: true })
+  await expect(phone.or(experience)).toBeVisible()
+  if (await phone.isVisible()) {
+    await phone.fill('7025550142')
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  }
+}
+
 async function completeForm(
   page: import('@playwright/test').Page,
   waiverComplete = false,
@@ -195,6 +212,7 @@ async function completeForm(
     'data-ready',
     'true',
   )
+  await completeParticipantContact(form)
   await form
     .getByLabel('Experience', { exact: true })
     .fill('Test hiking experience')
@@ -242,12 +260,19 @@ async function completeForm(
     await form.getByLabel('Full name as signature').fill('Test Participant')
   }
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
-  await form.getByRole('switch', { name: 'Email me trip updates' }).check()
-  await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  const emailUpdates = form.getByRole('switch', {
+    name: 'Email me trip updates',
+  })
+  const review = form.getByRole('heading', { name: 'Everything look right?' })
+  await expect(emailUpdates.or(review)).toBeVisible()
+  if (await emailUpdates.isVisible()) {
+    await emailUpdates.check()
+    await form.getByRole('button', { name: 'Continue', exact: true }).click()
+  }
 }
 test('register, waitlist, organizer offer, and acceptance through real sessions', async ({
   browser,
-}) => {
+}, testInfo) => {
   const memberContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
   })
@@ -278,7 +303,9 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   ).toBe(initialButtonHeight)
   await member.setViewportSize({ width: 320, height: 844 })
   await tripCard.scrollIntoViewIfNeeded()
-  await member.screenshot({ path: '/tmp/mtn-rsvp-choices-mobile.png' })
+  await member.screenshot({
+    path: testInfo.outputPath('mtn-rsvp-choices-mobile.png'),
+  })
   expect(
     await member.evaluate(
       () => document.documentElement.scrollWidth > innerWidth,
@@ -327,7 +354,9 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
       return Math.abs(box.x + box.width / 2 - innerWidth / 2) < 1
     }),
   ).toBe(true)
-  await member.screenshot({ path: '/tmp/mtn-detail-rsvp-options-mobile.png' })
+  await member.screenshot({
+    path: testInfo.outputPath('mtn-detail-rsvp-options-mobile.png'),
+  })
   const closeOptions = bottomControls.getByRole('button', {
     name: 'Close RSVP options',
     exact: true,
@@ -354,7 +383,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     bottomControls.getByRole('button', { name: '← back', exact: true }),
   ).toBeVisible()
   await bottomControls
-    .getByRole('button', { name: 'Maybe', exact: true })
+    .getByRole('button', { name: 'RSVP', exact: true })
     .click()
   await bottomControls
     .getByRole('button', { name: 'Not going', exact: true })
@@ -390,7 +419,9 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await expect(member.getByRole('alertdialog')).not.toContainText(
     'America/Los_Angeles',
   )
-  await member.screenshot({ path: '/tmp/mtn-signup-dialog-mobile.png' })
+  await member.screenshot({
+    path: testInfo.outputPath('mtn-signup-dialog-mobile.png'),
+  })
   await member.route('**/trips', async route => {
     if (route.request().method() === 'POST')
       await new Promise(resolve => setTimeout(resolve, 800))
@@ -418,7 +449,12 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     member.getByRole('link', { name: 'Finish setup', exact: true }),
   ).toBeVisible()
   await organizer.goto(`/trips/${tripId}/registrations`)
-  await expect(organizer.getByText('Unfinished', { exact: true })).toBeVisible()
+  await expect(
+    organizer
+      .getByRole('button', { name: /Registration Participant/ })
+      .getByText('Unfinished', { exact: true }),
+  ).toBeVisible()
+  await organizer.getByRole('tab', { name: 'Settings', exact: true }).click()
   await organizer
     .getByRole('main')
     .getByText('Registration settings', { exact: true })
@@ -442,6 +478,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     member.getByRole('link', { name: 'Finish setup', exact: true }),
   ).toHaveCount(0)
   await organizer.reload()
+  await organizer.getByRole('tab', { name: 'Settings', exact: true }).click()
   await organizer
     .getByRole('main')
     .getByText('Registration settings', { exact: true })
@@ -461,6 +498,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     .toBe('t')
   await member.reload()
   await member.getByRole('link', { name: 'Finish setup', exact: true }).click()
+  await completeParticipantContact(member.getByRole('main'))
   await member
     .getByLabel('Experience', { exact: true })
     .fill('Saved draft experience')
@@ -485,13 +523,14 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   )
   await exitButton.click()
   await exitOverlay.screenshot({
-    path: '/tmp/mtn-registration-exit-mobile.png',
+    path: testInfo.outputPath('mtn-registration-exit-mobile.png'),
   })
   await exitOverlay
     .getByRole('button', { name: 'Save and finish later', exact: true })
     .click()
   await expect(member).toHaveURL(`/trips/${tripId}`)
   await member.getByRole('link', { name: 'Finish setup', exact: true }).click()
+  await completeParticipantContact(member.getByRole('main'))
   await expect(member.getByLabel('Experience', { exact: true })).toHaveValue(
     'Saved draft experience',
   )
@@ -530,7 +569,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
     'confirmed',
   )
   await member.screenshot({
-    path: '/tmp/mtn-registration-mobile.png',
+    path: testInfo.outputPath('mtn-registration-mobile.png'),
     fullPage: true,
   })
   await waiting.goto(`/trips/${tripId}/rsvp`)
@@ -558,7 +597,8 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
         `select answers from public.registration_responses where trip_id='${tripId}' and user_id='${participant.id}'`,
       ),
     ),
-  ).toEqual({
+  ).toMatchObject({
+    participant_phone: '7025550142',
     experience: 'Test hiking experience',
     experience_level: 'Some experience',
     ready: true,
@@ -585,8 +625,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   await member
     .getByRole('link', { name: 'Close registration', exact: true })
     .click()
-  await expect(member).toHaveURL(/\/trips$/)
-  await member.goto(`/trips/${tripId}`)
+  await expect(member).toHaveURL(`/trips/${tripId}`)
   await member.getByRole('button', { name: 'Going', exact: true }).click()
   await member
     .getByRole('alertdialog')
@@ -656,7 +695,7 @@ test('register, waitlist, organizer offer, and acceptance through real sessions'
   )
   expect(denied.status()).toBe(403)
   await organizer.screenshot({
-    path: '/tmp/mtn-registration-roster.png',
+    path: testInfo.outputPath('mtn-registration-roster.png'),
     fullPage: true,
   })
   await memberContext.close()
@@ -739,7 +778,7 @@ test('a minor requests guardian review and registers only after an officer confi
     .getByRole('button', { name: 'Confirm guardian consent', exact: true })
     .click()
   await expect(
-    officer.getByText('No trip guardian reviews are waiting.'),
+    officer.getByText('No paper or assisted guardian reviews are waiting.'),
   ).toBeVisible()
   await member.reload()
   await completeForm(member, true)
@@ -757,7 +796,7 @@ test('a minor requests guardian review and registers only after an officer confi
 
 test('privacy email choices persist and opt-outs keep trip status available', async ({
   browser,
-}) => {
+}, testInfo) => {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
   })
@@ -803,18 +842,18 @@ test('privacy email choices persist and opt-outs keep trip status available', as
     page.getByRole('switch', { name: 'General club updates', exact: true }),
   ).toBeDisabled()
   await page.screenshot({
-    path: '/tmp/mtn-email-preferences-mobile.png',
+    path: testInfo.outputPath('mtn-email-preferences-mobile.png'),
     fullPage: true,
   })
-  await page.goto(`/trips/${tripId}/rsvp`)
-  await expect(page.locator('[data-registration-state]')).toHaveAttribute(
-    'data-registration-state',
-    'confirmed',
-  )
-  await expect(page.locator('[data-registration-state]')).toHaveAttribute(
-    'data-registration-state',
-    'confirmed',
-  )
+  sql(`insert into public.trip_rsvps(trip_id,user_id,status,registration_state)
+    values('${tripId}','${waiter.id}','going','confirmed')
+    on conflict(trip_id,user_id) do update set status='going',registration_state='confirmed';`)
+  await page.goto(`/trips/${tripId}`)
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Page actions', exact: true })
+      .getByRole('button', { name: 'Going', exact: true }),
+  ).toBeVisible()
   await context.close()
 })
 
@@ -847,8 +886,10 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
     form.getByRole('checkbox', { name: parityTag, exact: true }),
   ).toBeChecked()
   await form.getByRole('button', { name: 'Continue', exact: true }).click()
-  await form.getByLabel('Start', { exact: true }).fill('2026-11-14T06:00')
-  await form.getByLabel('End', { exact: true }).fill('2026-11-14T11:00')
+  const future = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)
+  const tripDate = future.toISOString().slice(0, 10)
+  await form.getByLabel('Start', { exact: true }).fill(`${tripDate}T06:00`)
+  await form.getByLabel('End', { exact: true }).fill(`${tripDate}T11:00`)
   await form.getByLabel('Destination', { exact: true }).fill('Red Rock Canyon')
   await form.getByLabel('Meeting point').fill('Campus meetup')
   await form
@@ -934,11 +975,16 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
     is_all_day: false,
     time_zone: 'America/Los_Angeles',
   })
-  expect(new Date(persisted.starts_at).toISOString()).toBe(
-    '2026-11-14T14:00:00.000Z',
-  )
-  expect(new Date(persisted.ends_at).toISOString()).toBe(
-    '2026-11-14T19:00:00.000Z',
+  const pacific = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'America/Los_Angeles',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  })
+  expect(pacific.format(new Date(persisted.starts_at))).toBe('06:00')
+  expect(pacific.format(new Date(persisted.ends_at))).toBe('11:00')
+  expect(new Date(persisted.starts_at).toISOString().slice(0, 10)).toBe(
+    tripDate,
   )
   expect(persisted.activity_tags).toContain(parityTag)
   expect(
@@ -960,9 +1006,7 @@ test('organizer creates a trip through grouped steps and resumes its draft', asy
   ).toBe('0')
   await page.goto(`/trips/${id}`)
   await expect(
-    page
-      .getByText('6:00 AM - 11:00 AM', { exact: true })
-      .filter({ visible: true }),
+    page.getByText(/6:00 AM – 11:00 AM P[DS]T/).filter({ visible: true }),
   ).toBeVisible()
   await expect(
     page

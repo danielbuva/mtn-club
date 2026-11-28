@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { galleryImageMimeTypes } from '@/lib/gallery/images'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 
 const headers = {
@@ -26,7 +27,9 @@ export async function GET(
   if (!path || path.startsWith('https://'))
     return new Response(null, { status: 404, headers })
 
-  const image = await db.storage.from('club_gallery').download(path)
+  const image = await createAdminClient()
+    .storage.from('club_gallery')
+    .download(path)
   if (image.error || !galleryImageMimeTypes.has(image.data.type))
     return new Response(null, { status: 404, headers })
 

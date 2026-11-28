@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { discardGalleryUpload, removeGalleryPhoto } from '@/lib/gallery/actions'
 import { galleryUploadExtension } from '@/lib/gallery/images'
 import type { GalleryPhotoRow } from '@/lib/gallery/queries'
 import { createClient } from '@/lib/supabase/client'
@@ -87,7 +88,7 @@ export function GalleryAdminClient({
     if (file) {
       const upload = await supabase.storage
         .from('club_gallery')
-        .upload(storagePath, file)
+        .upload(storagePath, file, { cacheControl: '0' })
       if (upload.error) {
         setMessage('Could not upload the photo. Try again.')
         setIsBusy(false)
@@ -107,8 +108,7 @@ export function GalleryAdminClient({
     })
 
     if (metadata.error) {
-      if (file)
-        await supabase.storage.from('club_gallery').remove([storagePath])
+      if (file) await discardGalleryUpload(storagePath)
       setMessage(
         'Could not save the gallery draft. Check your entries and try again.',
       )
@@ -170,24 +170,10 @@ export function GalleryAdminClient({
     if (!window.confirm(`Remove “${photo.title}” from the gallery?`)) return
     setIsBusy(true)
     setMessage(null)
-    const supabase = createClient()
-    if (!photo.storage_path.startsWith('https://')) {
-      const storageResult = await supabase.storage
-        .from('club_gallery')
-        .remove([photo.storage_path])
-      if (storageResult.error) {
-        setMessage(storageResult.error.message)
-        setIsBusy(false)
-        return
-      }
-    }
-    const metadataResult = await supabase
-      .from('gallery_photos')
-      .delete()
-      .eq('id', photo.id)
+    const result = await removeGalleryPhoto(photo.id)
     setIsBusy(false)
-    if (metadataResult.error) {
-      setMessage(metadataResult.error.message)
+    if (!result.ok) {
+      setMessage(result.message)
       return
     }
     router.refresh()
