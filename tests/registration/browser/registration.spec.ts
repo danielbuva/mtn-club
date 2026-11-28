@@ -851,8 +851,8 @@ test('privacy email choices persist and opt-outs keep trip status available', as
   await page.goto(`/trips/${tripId}`)
   await expect(
     page
-      .getByRole('navigation', { name: 'Page actions', exact: true })
-      .getByRole('button', { name: 'Going', exact: true }),
+      .getByRole('region', { name: 'Trip details', exact: true })
+      .getByText('You’re going', { exact: true }),
   ).toBeVisible()
   await context.close()
 })
