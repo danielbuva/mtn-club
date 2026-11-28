@@ -70,9 +70,22 @@ begin
   perform set_config('request.jwt.claim.role','anon',true);
   perform set_config('request.jwt.claim.sub','',true);
   set local role anon;
-  if (select array_agg(name order by name) from storage.objects where bucket_id='club_gallery')
+  if (select array_agg(storage_path order by storage_path) from public.gallery_photos where storage_path like 'test/%')
     is distinct from array['test/public.jpg']::text[] then
-    raise exception 'Anonymous storage access does not match gallery publication and visibility';
+    raise exception 'Gallery metadata does not match publication and trip visibility';
+  end if;
+  if exists(select 1 from storage.objects where bucket_id='club_gallery') then
+    raise exception 'An anonymous viewer can read gallery originals directly';
+  end if;
+
+  perform set_config('request.jwt.claim.role','authenticated',true);
+  perform set_config('request.jwt.claim.sub',officer::text,true);
+  set local role authenticated;
+  if (select count(*) from public.gallery_photos where storage_path like 'test/%')<>3 then
+    raise exception 'An authorized officer cannot view gallery drafts and restricted trip photos';
+  end if;
+  if exists(select 1 from storage.objects where bucket_id='club_gallery') then
+    raise exception 'An authenticated viewer can read gallery originals directly';
   end if;
 end $$;
 rollback;
